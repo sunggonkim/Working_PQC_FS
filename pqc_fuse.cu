@@ -501,6 +501,19 @@ static void gpu_gen_keystream(const pqc_fd_ctx_t *ctx, off_t base, size_t sz, ui
     EVP_MD_CTX_free(md);
 }
 
+#define USE_GPU 0
+#define USE_CPU 1
+
+/* Adaptive Router: Check system state to decide encryption path */
+static int route_pqc_workload(size_t size) {
+    /* If AI (YOLO) is running, avoid GPU interference */
+    if (access("/tmp/pqc_ai_busy", F_OK) == 0) {
+        return USE_CPU;
+    }
+    /* Otherwise, offload to GPU to prevent CPU lock thrashing */
+    return USE_GPU;
+}
+
 static int do_flush_wbuf_locked(int storage_fd, int idx)
 {
     pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
@@ -515,7 +528,23 @@ static int do_flush_wbuf_locked(int storage_fd, int idx)
     size_t sz   = ctx->wbuf_used;
     off_t  base = ctx->wbuf_base_off;
 
-    /* Phase 4: Async Pipeline — Acquire dedicated stream and buffers */
+    /* --- ADAPTIVE HETEROGENEOUS ROUTING --- */
+    if (route_pqc_workload(sz) == USE_CPU) {
+        /* CPU Fallback: Fast SHAKE128 directly in-place, zero GPU interference */
+        uint8_t *cpu_keystream = (uint8_t *)malloc(sz);
+        if (cpu_keystream) {
+            gpu_gen_keystream(ctx, base, sz, cpu_keystream);
+            for(size_t i=0; i<sz; i++) {
+                ctx->wbuf[i] ^= cpu_keystream[i];
+            }
+            int res = (int)pwrite(storage_fd, ctx->wbuf, sz, base);
+            free(cpu_keystream);
+            ctx->wbuf_used = 0;
+            return res == -1 ? -errno : 0;
+        }
+    }
+
+    /* Phase 4: Async GPU Pipeline — Acquire dedicated stream and buffers */
     int stream_id = acquire_stream();
     gpu_stream_ctx_t *sctx = &g_streams[stream_id];
 
