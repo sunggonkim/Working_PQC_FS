@@ -47,6 +47,7 @@
 
 #include <cuda_runtime.h>
 #include <oqs/oqs.h>   /* CPU-side KEM (encaps/decaps) */
+#include <openssl/evp.h> /* SHAKE128 XOF keystream generation */
 #include <pthread.h>
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -62,8 +63,10 @@ static const char *LOG_FILENAME = "pqc_fuse_gpu_latency.log";
  * Unlike cudaMallocManaged, pinned memory never triggers GPU page faults —
  * the GPU accesses it via DMA directly, giving deterministic low latency.
  */
-#define GPU_BUFFER_SIZE (4 * 1024 * 1024)  /* 4 MB pool */
-static uint8_t *g_pinned_buf = NULL;  /* single in-place pinned buffer */
+#define GPU_BUFFER_SIZE (8 * 1024 * 1024)   /* 8 MB pool */
+#define COALESCE_SIZE   (512 * 1024)          /* 512 KB per-fd write-coalescing buffer */
+static uint8_t *g_pinned_buf       = NULL;  /* in-place encryption buffer (pinned) */
+static uint8_t *g_pinned_keystream = NULL;  /* SHAKE128 keystream buffer (pinned) */
 
 /** CUDA stream for async operations */
 static cudaStream_t g_cuda_stream;
@@ -83,6 +86,10 @@ typedef struct {
     uint8_t  ss[64];
     size_t   ss_len;
     uint64_t file_id;
+    /* write coalescing */
+    uint8_t *wbuf;           /* heap-allocated COALESCE_SIZE bytes */
+    size_t   wbuf_used;
+    off_t    wbuf_base_off;
 } pqc_fd_ctx_t;
 
 static pqc_fd_ctx_t    g_fd_ctx[PQC_MAX_FD];
@@ -213,6 +220,17 @@ __global__ void pqc_ntt_butterfly_kernel(uint8_t *data, size_t data_size,
     words[idx] = val;
 }
 
+/**
+ * Kernel 3 (NEW): Pure SHAKE128-derived stream XOR
+ * data[i] ^= keystream[i] in parallel — reversible (decrypt == encrypt)
+ */
+__global__ void pqc_stream_xor_kernel(uint8_t *data, const uint8_t *keystream, size_t size)
+{
+    size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < size)
+        data[idx] ^= keystream[idx];
+}
+
 /* ════════════════════════════════════════════════════════════════════════════
  *  GPU Buffer Pool Management
  * ════════════════════════════════════════════════════════════════════════════ */
@@ -244,12 +262,14 @@ static int gpu_init(void)
      * that cudaMallocManaged causes on discrete/hybrid GPUs.
      */
     double t0 = get_time_us();
-    CUDA_CHECK(cudaHostAlloc(&g_pinned_buf, GPU_BUFFER_SIZE, cudaHostAllocDefault));
-    CUDA_CHECK(cudaHostAlloc(&g_pqc_key,   PQC_KEY_SIZE,    cudaHostAllocDefault));
+    CUDA_CHECK(cudaHostAlloc(&g_pinned_buf,       GPU_BUFFER_SIZE, cudaHostAllocDefault));
+    CUDA_CHECK(cudaHostAlloc(&g_pinned_keystream, GPU_BUFFER_SIZE, cudaHostAllocDefault));
+    CUDA_CHECK(cudaHostAlloc(&g_pqc_key,          PQC_KEY_SIZE,    cudaHostAllocDefault));
     double t1 = get_time_us();
 
-    pqc_log("Pinned memory allocated: %d MB buf + %d B key (%.2f µs)",
-            GPU_BUFFER_SIZE / (1024 * 1024), PQC_KEY_SIZE, t1 - t0);
+    pqc_log("Pinned memory allocated: %d MB buf + %d MB keystream + %d B key (%.2f µs)",
+            GPU_BUFFER_SIZE / (1024 * 1024), GPU_BUFFER_SIZE / (1024 * 1024),
+            PQC_KEY_SIZE, t1 - t0);
 
     /* Generate stream-cipher key (will be overridden per-file by KEM secret) */
     srand((unsigned)time(NULL));
@@ -279,8 +299,9 @@ static int gpu_init(void)
 
 static void gpu_cleanup(void)
 {
-    if (g_pinned_buf) { cudaFreeHost(g_pinned_buf); g_pinned_buf = NULL; }
-    if (g_pqc_key)    { cudaFreeHost(g_pqc_key);    g_pqc_key    = NULL; }
+    if (g_pinned_buf)       { cudaFreeHost(g_pinned_buf);       g_pinned_buf       = NULL; }
+    if (g_pinned_keystream) { cudaFreeHost(g_pinned_keystream); g_pinned_keystream = NULL; }
+    if (g_pqc_key)          { cudaFreeHost(g_pqc_key);          g_pqc_key          = NULL; }
     cudaStreamDestroy(g_cuda_stream);
     if (g_kem) {
         OQS_MEM_cleanse(g_secret_key, g_kem->length_secret_key);
@@ -303,6 +324,10 @@ static void ctx_set(int fd, const uint8_t *ss, size_t ss_len, uint64_t fid)
     g_fd_ctx[idx].ss_len  = ss_len;
     g_fd_ctx[idx].file_id = fid;
     g_fd_ctx[idx].valid   = 1;
+    if (!g_fd_ctx[idx].wbuf)
+        g_fd_ctx[idx].wbuf = (uint8_t *)malloc(COALESCE_SIZE);
+    g_fd_ctx[idx].wbuf_used     = 0;
+    g_fd_ctx[idx].wbuf_base_off = 0;
     pthread_mutex_unlock(&g_fd_lock);
 }
 
@@ -321,6 +346,12 @@ static void ctx_clear(int fd)
     int idx = fd % PQC_MAX_FD;
     pthread_mutex_lock(&g_fd_lock);
     OQS_MEM_cleanse(g_fd_ctx[idx].ss, sizeof(g_fd_ctx[idx].ss));
+    if (g_fd_ctx[idx].wbuf) {
+        OQS_MEM_cleanse(g_fd_ctx[idx].wbuf, COALESCE_SIZE);
+        free(g_fd_ctx[idx].wbuf);
+        g_fd_ctx[idx].wbuf = NULL;
+    }
+    g_fd_ctx[idx].wbuf_used = 0;
     g_fd_ctx[idx].valid = 0;
     pthread_mutex_unlock(&g_fd_lock);
 }
@@ -384,6 +415,57 @@ static int gpu_pqc_encrypt(int fd, const char *in_buf, size_t in_size,
     return (int)process_size;
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+ *  GPU Write-coalescing flush
+ *  CPU generates SHAKE128 keystream → GPU XOR (parallel) → pwrite.
+ *  MUST be called with g_fd_lock held.  Resets wbuf_used = 0 on success.
+ * -------------------------------------------------------------------------- */
+
+/* Helper: generate SHAKE128 keystream into g_pinned_keystream (locked context) */
+static void gpu_gen_keystream(const pqc_fd_ctx_t *ctx, off_t base, size_t sz)
+{
+    uint8_t seed[80];
+    size_t  seed_len = ctx->ss_len + 16;
+    memcpy(seed, ctx->ss, ctx->ss_len);
+    uint64_t fid = ctx->file_id;
+    uint64_t off = (uint64_t)base;
+    memcpy(seed + ctx->ss_len,     &fid, 8);
+    memcpy(seed + ctx->ss_len + 8, &off, 8);
+    EVP_MD_CTX *md = EVP_MD_CTX_new();
+    if (!md) return;
+    EVP_DigestInit_ex(md, EVP_shake128(), NULL);
+    EVP_DigestUpdate(md, seed, seed_len);
+    EVP_DigestFinalXOF(md, g_pinned_keystream, sz);
+    EVP_MD_CTX_free(md);
+}
+
+static int do_flush_wbuf_locked(int storage_fd, int idx)
+{
+    pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
+    if (ctx->wbuf_used == 0) return 0;
+
+    size_t sz   = ctx->wbuf_used;
+    off_t  base = ctx->wbuf_base_off;
+
+    /* Step 1: CPU → SHAKE128 keystream into pinned memory */
+    gpu_gen_keystream(ctx, base, sz);
+
+    /* Step 2: plaintext wbuf → pinned buffer */
+    memcpy(g_pinned_buf, ctx->wbuf, sz);
+
+    /* Step 3: GPU XOR (plaintext XOR keystream) in parallel */
+    int tpb    = 256;
+    int blocks = (int)((sz + tpb - 1) / tpb);
+    pqc_stream_xor_kernel<<<blocks, tpb, 0, g_cuda_stream>>>(
+        g_pinned_buf, g_pinned_keystream, sz);
+    CUDA_CHECK(cudaStreamSynchronize(g_cuda_stream));
+
+    /* Step 4: write ciphertext from pinned buffer → NVMe (DMA, no extra copy) */
+    int res = (int)pwrite(storage_fd, g_pinned_buf, sz, base);
+    ctx->wbuf_used = 0;
+    return res == -1 ? -errno : 0;
+}
+
 /* ════════════════════════════════════════════════════════════════════════════
  *  FUSE Operations
  * ════════════════════════════════════════════════════════════════════════════ */
@@ -426,6 +508,23 @@ static int pqc_open(const char *path, struct fuse_file_info *fi)
     int fd = open(phys, fi->flags);
     if (fd == -1) return -errno;
     fi->fh = (uint64_t)fd;
+
+    /* Load per-file key sidecar (.pqckey) for read-decryption if it exists */
+    char key_path[4096 + 8];
+    snprintf(key_path, sizeof(key_path), "%s.pqckey", phys);
+    int kfd = open(key_path, O_RDONLY);
+    if (kfd >= 0) {
+        uint64_t fid = 0, ss_len = 0;
+        uint8_t  ss[64] = {0};
+        if (read(kfd, &fid,    8) == 8 &&
+            read(kfd, &ss_len, 8) == 8 &&
+            ss_len <= sizeof(ss) &&
+            (size_t)read(kfd, ss, ss_len) == ss_len) {
+            ctx_set(fd, ss, (size_t)ss_len, fid);
+        }
+        OQS_MEM_cleanse(ss, sizeof(ss));
+        close(kfd);
+    }
     return 0;
 }
 
@@ -433,8 +532,42 @@ static int pqc_read(const char *path, char *buf, size_t size, off_t offset,
                      struct fuse_file_info *fi)
 {
     (void)path;
-    int res = (int)pread((int)fi->fh, buf, size, offset);
-    return res == -1 ? -errno : res;
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
+
+    int res = (int)pread(fd, buf, size, offset);
+    if (res <= 0) return res == -1 ? -errno : 0;
+
+    /* Decrypt in-place — SHAKE128 XOR is symmetric (encrypt == decrypt) */
+    pthread_mutex_lock(&g_fd_lock);
+    if (g_fd_ctx[idx].valid) {
+        pqc_fd_ctx_t snap = g_fd_ctx[idx];
+        pthread_mutex_unlock(&g_fd_lock);
+        uint8_t *ks = (uint8_t *)malloc((size_t)res);
+        if (ks) {
+            /* Reuse generate_keystream logic inline */
+            uint8_t seed[80];
+            size_t  seed_len = snap.ss_len + 16;
+            memcpy(seed, snap.ss, snap.ss_len);
+            uint64_t fid = snap.file_id;
+            uint64_t off = (uint64_t)offset;
+            memcpy(seed + snap.ss_len,     &fid, 8);
+            memcpy(seed + snap.ss_len + 8, &off, 8);
+            EVP_MD_CTX *md = EVP_MD_CTX_new();
+            if (md) {
+                EVP_DigestInit_ex(md, EVP_shake128(), NULL);
+                EVP_DigestUpdate(md, seed, seed_len);
+                EVP_DigestFinalXOF(md, ks, (size_t)res);
+                EVP_MD_CTX_free(md);
+                for (int i = 0; i < res; i++)
+                    buf[i] ^= ks[i];
+            }
+            free(ks);
+        }
+    } else {
+        pthread_mutex_unlock(&g_fd_lock);
+    }
+    return res;
 }
 
 static int pqc_create(const char *path, mode_t mode, struct fuse_file_info *fi)
@@ -455,6 +588,17 @@ static int pqc_create(const char *path, mode_t mode, struct fuse_file_info *fi)
             pthread_mutex_unlock(&g_fd_lock);
             ctx_set(fd, ss, g_kem->length_shared_secret, fid);
             pqc_log("CREATE %s fd=%d fid=%llu", path, fd, (unsigned long long)fid);
+            /* Persist key sidecar for read-back decryption across mounts */
+            char key_path[4096 + 8];
+            snprintf(key_path, sizeof(key_path), "%s.pqckey", phys);
+            int kfd = open(key_path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+            if (kfd >= 0) {
+                uint64_t ss_len64 = (uint64_t)g_kem->length_shared_secret;
+                (void)(write(kfd, &fid,     8) +
+                       write(kfd, &ss_len64, 8) +
+                       write(kfd, ss, (size_t)ss_len64));
+                close(kfd);
+            }
         }
         OQS_MEM_cleanse(ss, g_kem->length_shared_secret);
         free(ct); free(ss);
@@ -475,20 +619,88 @@ static int pqc_write(const char *path, const char *buf, size_t size,
                       off_t offset, struct fuse_file_info *fi)
 {
     (void)path;
-    int fd = (int)fi->fh;
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
 
-    double cpu_us = 0, gpu_us = 0, total_us = 0;
-    int enc_len = gpu_pqc_encrypt(fd, buf, size, offset,
-                                   &cpu_us, &gpu_us, &total_us);
-    if (enc_len < 0) {
-        pqc_log("WRITE ERROR: GPU encrypt failed %zu bytes", size);
+    pthread_mutex_lock(&g_fd_lock);
+    pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
+
+    /* No context → passthrough */
+    if (!ctx->valid) {
+        pthread_mutex_unlock(&g_fd_lock);
         int res = (int)pwrite(fd, buf, size, offset);
-        return res == -1 ? -errno : res;
+        return res == -1 ? -errno : (int)size;
     }
 
-    /* pwrite directly from pinned buffer — no extra memcpy! */
-    int res = (int)pwrite(fd, g_pinned_buf, (size_t)enc_len, offset);
-    return (res == -1) ? -errno : res;
+    /* No coalescing buffer → direct GPU encrypt (SHAKE128 + XOR kernel) */
+    if (!ctx->wbuf) {
+        pqc_fd_ctx_t snap = *ctx;
+        pthread_mutex_unlock(&g_fd_lock);
+        size_t proc = (size <= (size_t)GPU_BUFFER_SIZE) ? size : (size_t)GPU_BUFFER_SIZE;
+        gpu_gen_keystream(&snap, offset, proc);
+        memcpy(g_pinned_buf, buf, proc);
+        int tpb = 256, blocks = (int)((proc + tpb - 1) / tpb);
+        pqc_stream_xor_kernel<<<blocks, tpb, 0, g_cuda_stream>>>(
+            g_pinned_buf, g_pinned_keystream, proc);
+        CUDA_CHECK(cudaStreamSynchronize(g_cuda_stream));
+        int res = (int)pwrite(fd, g_pinned_buf, proc, offset);
+        return res == -1 ? -errno : (int)proc;
+    }
+
+    /* Non-contiguous write: flush pending data */
+    int is_cont = (ctx->wbuf_used == 0) ||
+                  (offset == ctx->wbuf_base_off + (off_t)ctx->wbuf_used);
+    if (!is_cont) {
+        int fr = do_flush_wbuf_locked(fd, idx);
+        if (fr < 0) { pthread_mutex_unlock(&g_fd_lock); return fr; }
+    }
+
+    /* Large write (≥ COALESCE_SIZE): flush + direct GPU encrypt */
+    if (size >= COALESCE_SIZE) {
+        do_flush_wbuf_locked(fd, idx);
+        pqc_fd_ctx_t snap = *ctx;
+        pthread_mutex_unlock(&g_fd_lock);
+        size_t proc = (size <= (size_t)GPU_BUFFER_SIZE) ? size : (size_t)GPU_BUFFER_SIZE;
+        gpu_gen_keystream(&snap, offset, proc);
+        memcpy(g_pinned_buf, buf, proc);
+        int tpb = 256, blocks = (int)((proc + tpb - 1) / tpb);
+        pqc_stream_xor_kernel<<<blocks, tpb, 0, g_cuda_stream>>>(
+            g_pinned_buf, g_pinned_keystream, proc);
+        CUDA_CHECK(cudaStreamSynchronize(g_cuda_stream));
+        int res = (int)pwrite(fd, g_pinned_buf, proc, offset);
+        return res == -1 ? -errno : (int)proc;
+    }
+
+    /* Initialize base offset when buffer is freshly empty */
+    if (ctx->wbuf_used == 0)
+        ctx->wbuf_base_off = offset;
+
+    /* Append to coalescing buffer */
+    memcpy(ctx->wbuf + ctx->wbuf_used, buf, size);
+    ctx->wbuf_used += size;
+
+    /* Auto-flush when buffer fills up */
+    if (ctx->wbuf_used >= COALESCE_SIZE) {
+        int fr = do_flush_wbuf_locked(fd, idx);
+        if (fr < 0) { pthread_mutex_unlock(&g_fd_lock); return fr; }
+    }
+
+    pthread_mutex_unlock(&g_fd_lock);
+    return (int)size;
+}
+
+static int pqc_fsync(const char *path, int datasync, struct fuse_file_info *fi)
+{
+    (void)path; (void)datasync;
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
+
+    pthread_mutex_lock(&g_fd_lock);
+    if (g_fd_ctx[idx].valid && g_fd_ctx[idx].wbuf)
+        do_flush_wbuf_locked(fd, idx);
+    pthread_mutex_unlock(&g_fd_lock);
+
+    return fdatasync(fd) == -1 ? -errno : 0;
 }
 
 static int pqc_truncate(const char *path, off_t size, struct fuse_file_info *fi)
@@ -503,6 +715,10 @@ static int pqc_unlink(const char *path)
 {
     char phys[4096];
     resolve_physical_path(phys, sizeof(phys), path);
+    /* Remove key sidecar if it exists */
+    char key_path[4096 + 8];
+    snprintf(key_path, sizeof(key_path), "%s.pqckey", phys);
+    unlink(key_path);
     return unlink(phys) == -1 ? -errno : 0;
 }
 
@@ -523,8 +739,17 @@ static int pqc_rmdir(const char *path)
 static int pqc_release(const char *path, struct fuse_file_info *fi)
 {
     (void)path;
-    ctx_clear((int)fi->fh);
-    close((int)fi->fh);
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
+
+    /* Flush any remaining coalesced data before closing */
+    pthread_mutex_lock(&g_fd_lock);
+    if (g_fd_ctx[idx].valid && g_fd_ctx[idx].wbuf && g_fd_ctx[idx].wbuf_used > 0)
+        do_flush_wbuf_locked(fd, idx);
+    pthread_mutex_unlock(&g_fd_lock);
+
+    ctx_clear(fd);
+    close(fd);
     return 0;
 }
 
@@ -556,6 +781,7 @@ static struct fuse_operations make_pqc_oper() {
     ops.open     = pqc_open;
     ops.read     = pqc_read;
     ops.write    = pqc_write;
+    ops.fsync    = pqc_fsync;
     ops.release  = pqc_release;
     ops.utimens  = pqc_utimens;
     ops.create   = pqc_create;

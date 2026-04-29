@@ -67,13 +67,18 @@ static uint8_t *g_secret_key  = NULL;
  * All subsequent writes use SHAKE128 XOF to expand that secret into a
  * keystream — no repeated KEM calls on the write hot path.
  */
-#define PQC_MAX_FD 4096
+#define PQC_MAX_FD    4096
+#define COALESCE_SIZE (512 * 1024)  /* 512 KB per-fd write-coalescing buffer */
 
 typedef struct {
     int      valid;
-    uint8_t  ss[64];     /* shared secret (ML-KEM-512 = 32 B) */
+    uint8_t  ss[64];
     size_t   ss_len;
-    uint64_t file_id;    /* unique counter for keystream domain separation */
+    uint64_t file_id;
+    /* write coalescing */
+    uint8_t *wbuf;           /* heap-allocated COALESCE_SIZE bytes */
+    size_t   wbuf_used;      /* bytes currently buffered */
+    off_t    wbuf_base_off;  /* file offset of wbuf[0] */
 } pqc_fd_ctx_t;
 
 static pqc_fd_ctx_t      g_fd_ctx[PQC_MAX_FD];
@@ -146,6 +151,10 @@ static void ctx_set(int fd, const uint8_t *ss, size_t ss_len, uint64_t fid)
     g_fd_ctx[idx].ss_len  = ss_len;
     g_fd_ctx[idx].file_id = fid;
     g_fd_ctx[idx].valid   = 1;
+    if (!g_fd_ctx[idx].wbuf)
+        g_fd_ctx[idx].wbuf = (uint8_t *)malloc(COALESCE_SIZE);
+    g_fd_ctx[idx].wbuf_used     = 0;
+    g_fd_ctx[idx].wbuf_base_off = 0;
     pthread_mutex_unlock(&g_fd_lock);
 }
 
@@ -167,6 +176,12 @@ static void ctx_clear(int fd)
     int idx = fd % PQC_MAX_FD;
     pthread_mutex_lock(&g_fd_lock);
     OQS_MEM_cleanse(g_fd_ctx[idx].ss, sizeof(g_fd_ctx[idx].ss));
+    if (g_fd_ctx[idx].wbuf) {
+        OQS_MEM_cleanse(g_fd_ctx[idx].wbuf, COALESCE_SIZE);
+        free(g_fd_ctx[idx].wbuf);
+        g_fd_ctx[idx].wbuf = NULL;
+    }
+    g_fd_ctx[idx].wbuf_used = 0;
     g_fd_ctx[idx].valid = 0;
     pthread_mutex_unlock(&g_fd_lock);
 }
@@ -307,6 +322,32 @@ static void pqc_cleanup(void)
     }
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+ *  Write-coalescing flush
+ *  Encrypts ctx->wbuf[0..wbuf_used) with SHAKE128 XOR and pwrite to storage.
+ *  MUST be called with g_fd_lock held.  Resets wbuf_used = 0 on success.
+ * -------------------------------------------------------------------------- */
+static int do_flush_wbuf_locked(int storage_fd, int idx)
+{
+    pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
+    if (ctx->wbuf_used == 0) return 0;
+
+    size_t sz   = ctx->wbuf_used;
+    off_t  base = ctx->wbuf_base_off;
+
+    char *enc = (char *)malloc(sz);
+    if (!enc) { ctx->wbuf_used = 0; return -ENOMEM; }
+
+    double lat = 0.0;
+    pqc_stream_encrypt(ctx, (const char *)ctx->wbuf, sz, base, enc, &lat);
+
+    int res = (int)pwrite(storage_fd, enc, sz, base);
+    OQS_MEM_cleanse(enc, sz);
+    free(enc);
+    ctx->wbuf_used = 0;
+    return res == -1 ? -errno : 0;
+}
+
 /* ════════════════════════════════════════════════════════════════════════════
  *  FUSE Operations
  * ════════════════════════════════════════════════════════════════════════════ */
@@ -365,6 +406,23 @@ static int pqc_open(const char *path, struct fuse_file_info *fi)
         return -errno;
 
     fi->fh = (uint64_t)fd;
+
+    /* Load per-file key sidecar (.pqckey) for read-decryption if it exists */
+    char key_path[4096 + 8];
+    snprintf(key_path, sizeof(key_path), "%s.pqckey", phys_path);
+    int kfd = open(key_path, O_RDONLY);
+    if (kfd >= 0) {
+        uint64_t fid = 0, ss_len = 0;
+        uint8_t  ss[64] = {0};
+        if (read(kfd, &fid,    8) == 8 &&
+            read(kfd, &ss_len, 8) == 8 &&
+            ss_len <= sizeof(ss) &&
+            (size_t)read(kfd, ss, ss_len) == ss_len) {
+            ctx_set(fd, ss, (size_t)ss_len, fid);
+        }
+        OQS_MEM_cleanse(ss, sizeof(ss));
+        close(kfd);
+    }
     return 0;
 }
 
@@ -372,12 +430,28 @@ static int pqc_read(const char *path, char *buf, size_t size, off_t offset,
                      struct fuse_file_info *fi)
 {
     (void)path;
-    int fd = (int)fi->fh;
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
 
     int res = (int)pread(fd, buf, size, offset);
-    if (res == -1)
-        return -errno;
+    if (res <= 0) return res == -1 ? -errno : 0;
 
+    /* Decrypt in-place — SHAKE128 XOR is symmetric (encrypt == decrypt) */
+    pthread_mutex_lock(&g_fd_lock);
+    if (g_fd_ctx[idx].valid) {
+        pqc_fd_ctx_t snap = g_fd_ctx[idx];
+        pthread_mutex_unlock(&g_fd_lock);
+        char *tmp = (char *)malloc((size_t)res);
+        if (tmp) {
+            double lat = 0.0;
+            pqc_stream_encrypt(&snap, buf, (size_t)res, offset, tmp, &lat);
+            memcpy(buf, tmp, (size_t)res);
+            OQS_MEM_cleanse(tmp, (size_t)res);
+            free(tmp);
+        }
+    } else {
+        pthread_mutex_unlock(&g_fd_lock);
+    }
     return res;
 }
 
@@ -406,6 +480,17 @@ static int pqc_create(const char *path, mode_t mode,
                 ctx_set(fd, ss, g_kem->length_shared_secret, fid);
                 pqc_log("CREATE %s: KEM encaps %.1fµs fd=%d fid=%llu",
                         path, get_time_us() - t0, fd, (unsigned long long)fid);
+                /* Persist key sidecar for read-back decryption across mounts */
+                char key_path[4096 + 8];
+                snprintf(key_path, sizeof(key_path), "%s.pqckey", phys_path);
+                int kfd = open(key_path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+                if (kfd >= 0) {
+                    uint64_t ss_len64 = (uint64_t)g_kem->length_shared_secret;
+                    (void)(write(kfd, &fid,     8) +
+                           write(kfd, &ss_len64, 8) +
+                           write(kfd, ss, (size_t)ss_len64));
+                    close(kfd);
+                }
             } else {
                 pqc_log("CREATE %s: KEM encaps FAILED", path);
             }
@@ -432,35 +517,85 @@ static int pqc_write(const char *path, const char *buf, size_t size,
                       off_t offset, struct fuse_file_info *fi)
 {
     (void)path;
-    int fd = (int)fi->fh;
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
 
-    char *enc_buf = malloc(size);
-    if (!enc_buf)
-        return -ENOMEM;
+    pthread_mutex_lock(&g_fd_lock);
+    pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
 
-    double latency_us = 0.0;
-    pqc_fd_ctx_t ctx;
-
-    if (ctx_get(fd, &ctx) == 0) {
-        /* Fast path: SHAKE128 stream cipher (KEM already done in create) */
-        pqc_stream_encrypt(&ctx, buf, size, offset, enc_buf, &latency_us);
-    } else {
-        /* Fallback: no per-file context (e.g., opened without create) */
-        memcpy(enc_buf, buf, size);
+    /* No context → passthrough (file opened without create, e.g. sidecar) */
+    if (!ctx->valid) {
+        pthread_mutex_unlock(&g_fd_lock);
+        int res = (int)pwrite(fd, buf, size, offset);
+        return res == -1 ? -errno : (int)size;
     }
 
-    /* Log every 256 writes to avoid I/O spam */
-    static _Atomic uint64_t wcount = 0;
-    if (__atomic_fetch_add(&wcount, 1, __ATOMIC_RELAXED) % 256 == 0) {
-        double mbps = (size > 0 && latency_us > 0)
-            ? ((double)size / 1048576.0) / (latency_us / 1e6) : 0.0;
-        pqc_log("WRITE fd=%d off=%lld sz=%zu enc=%.1fµs (%.0f MB/s)",
-                fd, (long long)offset, size, latency_us, mbps);
+    /* No coalescing buffer (malloc failed) → encrypt directly */
+    if (!ctx->wbuf) {
+        pqc_fd_ctx_t snap = *ctx;
+        pthread_mutex_unlock(&g_fd_lock);
+        char *enc = (char *)malloc(size);
+        if (!enc) return -ENOMEM;
+        double lat = 0.0;
+        pqc_stream_encrypt(&snap, buf, size, offset, enc, &lat);
+        int res = (int)pwrite(fd, enc, size, offset);
+        free(enc);
+        return res == -1 ? -errno : (int)size;
     }
 
-    int res = (int)pwrite(fd, enc_buf, size, offset);
-    free(enc_buf);
-    return (res == -1) ? -errno : res;
+    /* Non-contiguous write: flush pending buffer first */
+    int is_cont = (ctx->wbuf_used == 0) ||
+                  (offset == ctx->wbuf_base_off + (off_t)ctx->wbuf_used);
+    if (!is_cont) {
+        int fr = do_flush_wbuf_locked(fd, idx);
+        if (fr < 0) { pthread_mutex_unlock(&g_fd_lock); return fr; }
+    }
+
+    /* Large write (≥ COALESCE_SIZE): encrypt directly, bypass buffering */
+    if (size >= COALESCE_SIZE) {
+        do_flush_wbuf_locked(fd, idx);
+        pqc_fd_ctx_t snap = *ctx;
+        pthread_mutex_unlock(&g_fd_lock);
+        char *enc = (char *)malloc(size);
+        if (!enc) return -ENOMEM;
+        double lat = 0.0;
+        pqc_stream_encrypt(&snap, buf, size, offset, enc, &lat);
+        int res = (int)pwrite(fd, enc, size, offset);
+        free(enc);
+        return res == -1 ? -errno : (int)size;
+    }
+
+    /* Initialize base offset when buffer is freshly empty */
+    if (ctx->wbuf_used == 0)
+        ctx->wbuf_base_off = offset;
+
+    /* Append to coalescing buffer */
+    memcpy(ctx->wbuf + ctx->wbuf_used, buf, size);
+    ctx->wbuf_used += size;
+
+    /* Auto-flush when buffer fills up */
+    if (ctx->wbuf_used >= COALESCE_SIZE) {
+        int fr = do_flush_wbuf_locked(fd, idx);
+        if (fr < 0) { pthread_mutex_unlock(&g_fd_lock); return fr; }
+    }
+
+    pthread_mutex_unlock(&g_fd_lock);
+    return (int)size;
+}
+
+static int pqc_fsync(const char *path, int datasync,
+                     struct fuse_file_info *fi)
+{
+    (void)path; (void)datasync;
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
+
+    pthread_mutex_lock(&g_fd_lock);
+    if (g_fd_ctx[idx].valid && g_fd_ctx[idx].wbuf)
+        do_flush_wbuf_locked(fd, idx);
+    pthread_mutex_unlock(&g_fd_lock);
+
+    return fdatasync(fd) == -1 ? -errno : 0;
 }
 
 static int pqc_truncate(const char *path, off_t size,
@@ -481,6 +616,11 @@ static int pqc_unlink(const char *path)
 {
     char phys_path[4096];
     resolve_physical_path(phys_path, sizeof(phys_path), path);
+
+    /* Remove key sidecar if it exists */
+    char key_path[4096 + 8];
+    snprintf(key_path, sizeof(key_path), "%s.pqckey", phys_path);
+    unlink(key_path);
 
     int res = unlink(phys_path);
     if (res == -1)
@@ -516,8 +656,17 @@ static int pqc_rmdir(const char *path)
 static int pqc_release(const char *path, struct fuse_file_info *fi)
 {
     (void)path;
-    ctx_clear((int)fi->fh);
-    close((int)fi->fh);
+    int fd  = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
+
+    /* Flush any remaining coalesced data before closing */
+    pthread_mutex_lock(&g_fd_lock);
+    if (g_fd_ctx[idx].valid && g_fd_ctx[idx].wbuf && g_fd_ctx[idx].wbuf_used > 0)
+        do_flush_wbuf_locked(fd, idx);
+    pthread_mutex_unlock(&g_fd_lock);
+
+    ctx_clear(fd);
+    close(fd);
     return 0;
 }
 
@@ -553,6 +702,7 @@ static const struct fuse_operations pqc_oper = {
     .open     = pqc_open,
     .read     = pqc_read,
     .write    = pqc_write,
+    .fsync    = pqc_fsync,
     .create   = pqc_create,
     .truncate = pqc_truncate,
     .unlink   = pqc_unlink,

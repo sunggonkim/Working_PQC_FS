@@ -36,11 +36,13 @@
 
 ### 핵심 기여
 
-> ❌ **Naive CPU PQC는 실사용 불가** — 쓰기마다 KEM 반복 호출 시 2.1 MB/s (Raw 대비 57×)
+> ❌ **Naive CPU PQC는 실사용 불가** — 쓰기마다 KEM 반복 호출 시 2.1 MB/s (Raw 대비 470×)
 >
-> ✅ **올바른 Hybrid 설계** — KEM은 파일 생성 시 1회, SHAKE128 XOF 스트림 암호로 벌크 처리 → CPU 147 MB/s (Raw 대비 6.7×)
+> ✅ **올바른 Hybrid 설계 (v2)** — KEM은 파일 생성 시 1회, SHAKE128 XOF 스트림 암호로 벌크 처리 → CPU 147 MB/s
 >
-> 🔬 **GPU 가속 연구** — Pinned Memory + CUDA 커널 → 84 MB/s (향후 파이프라인 최적화 가능)
+> 🚀 **v3 최적 구조** — 512KB Write Coalescing + Read Decrypt + 사이드카 키 지속성 → GPU **156 MB/s** (v2 대비 86% 향상)
+>
+> 📸 **실제 카메라 워크로드** — 30fps 1280×720 JPEG, CPU/GPU PQC 모두 프레임 드롭 0 달성 (P95 < 2.1ms)
 
 ---
 
@@ -50,68 +52,94 @@
 >
 > **기준 I/O**: `/dev/zero` 사용 (CPU 엔트로피 병목 제거) → NVMe 실속도 측정
 
-### 3-way 비교표 (v2 — 올바른 설계)
+### 3-way 비교표 (v3 — 512KB 코얼레싱 + Read Decrypt + 사이드카 키)
+
+> 100 MB 순차 쓰기 (4 KB × 25,600), NVIDIA Thor / WD SN5000S NVMe 1TB
 
 | 조건 | 시간 | Throughput | Raw 대비 | 비고 |
 |:-----|-----:|----------:|:-------:|:-----|
 | 🟢 **Raw NVMe I/O** | 101 ms | 990 MB/s | — 기준 | WD SN5000S, 4K 블록 |
-| 🔵 **CPU PQC v2** (ML-KEM + SHAKE128) | 680 ms | 147 MB/s | **6.7× slow** | KEM 1회/파일, XOF 스트림 |
-| 🟡 **GPU PQC v2** (CUDA + Pinned) | 1,187 ms | 84 MB/s | **11.8× slow** | 커널 launch 오버헤드 |
+| 🔵 **CPU PQC v3** (ML-KEM + SHAKE128 + coalescing) | 621 ms | 161 MB/s | **6.1× slow** | v2 대비 +9% |
+| 🟡 **GPU PQC v3** (CUDA XOR + SHAKE128 + coalescing) | 637 ms | 156 MB/s | **6.3× slow** | v2 대비 **+86%** 🎉 |
 
-### 구 버전 vs 신 버전 (설계 오류 수정 효과)
+### 카메라 워크로드 결과 (30fps, 1280×720 JPEG, 10초)
 
-| 버전 | CPU PQC | GPU PQC | 원인 |
-|:-----|--------:|--------:|:-----|
-| **v1 (버그 있음)** | 4,973 ms / **2.1 MB/s** | 883 ms / **11.9 MB/s** | CPU: 32바이트마다 KEM 호출; GPU: cudaMallocManaged page fault |
-| **v2 (수정됨)** | 680 ms / **147 MB/s** | 1,187 ms / **84 MB/s** | CPU: KEM 1회/파일 + SHAKE128 XOF; GPU: cudaHostAlloc pinned |
-| **개선** | **7.3× 빨라짐** | 벤치마크 정상화 | — |
+> **실제 Physical AI 시나리오**: 카메라 프레임을 암호화 파일시스템에 저장
+
+| 조건 | 실제 FPS | 처리량 | P50 레이턴시 | P95 레이턴시 | 드롭 |
+|:-----|--------:|------:|------------:|------------:|----:|
+| 🟢 **NVMe Raw** | 30.0 ✅ | 7.0 MB/s | 0.9 ms | 1.0 ms | 0 |
+| 🔵 **CPU PQC v3** | 30.0 ✅ | 7.0 MB/s | 1.7 ms | 1.9 ms | 0 |
+| 🟡 **GPU PQC v3** | 30.0 ✅ | 7.0 MB/s | 2.0 ms | 2.1 ms | 0 |
+
+> **핵심**: CPU/GPU PQC v3 모두 30fps를 프레임 드롭 없이 달성. P95 레이턴시 < 2.1ms — 실시간 카메라 암호화 실용적.
+
+### 버전별 성능 비교 (CPU + GPU)
+
+| 버전 | CPU PQC | GPU PQC | 주요 변경 |
+|:-----|--------:|--------:|:---------|
+| **v1 (설계 버그)** | 2.1 MB/s | 11.9 MB/s | CPU: 32B마다 KEM; GPU: cudaMallocManaged |
+| **v2 (버그 수정)** | 147 MB/s | 84 MB/s | KEM 1회/파일 + SHAKE128; cudaHostAlloc pinned |
+| **v3 (최적 구조)** | **161 MB/s** | **156 MB/s** | 512KB 코얼레싱; CUDA XOR 커널; Read Decrypt; 사이드카 키 |
 
 ### I/O 시간 시각화 (100 MB 기준)
 
 ```
   101 ms |=                                           | Raw NVMe    (990 MB/s)
+  621 ms |======                                      | CPU PQC v3  (161 MB/s)
+  637 ms |======                                      | GPU PQC v3  (156 MB/s)
   680 ms |=======                                     | CPU PQC v2  (147 MB/s)
 1,187 ms |============                                | GPU PQC v2  ( 84 MB/s)
          0 ms                                 1,200 ms
 ```
 
-### GPU가 CPU보다 느린 이유
+### v3 핵심 개선사항: 512KB Write Coalescing
 
-GPU PQC v2가 CPU v2보다 느린 것은 **FUSE의 4K write 분할** 때문입니다:
+v2 GPU가 CPU보다 느렸던 이유와 해결:
 
 ```
-100 MB / 4 KB = 25,600번의 FUSE write() 호출
-         |
-각 호출마다 GPU 커널 launch = ~20-50 µs overhead
-         |
-25,600 × ~45 µs = ~1,150 ms kernel launch 오버헤드만 발생
+[v2 문제] FUSE 4K write 분할 → 커널 launch 오버헤드
+  100 MB / 4 KB = 25,600 FUSE write() 호출
+  각 호출마다 CUDA 커널 launch ≈ 45µs
+  → 25,600 × 45µs = 1,152ms 오버헤드만 발생
 
-반면 CPU SHAKE128 XOF는 메모리 연속 처리 → I/O 바운드
+[v3 해결] 512KB 코얼레싱 버퍼
+  4K × 128 = 512KB 단위로 배치 처리
+  → 25,600 → ~200 CUDA 커널 launch (128× 감소)
+  GPU v2: 1,187ms → GPU v3: 637ms (86% 개선)
 ```
-
-> 대용량 배치 처리(파일 단위 암호화) 시나리오에서는 GPU가 유리하며, 비동기 I/O 파이프라인으로 개선 가능합니다.
 
 ---
 
 ## 🏗️ 시스템 아키텍처
 
-### Hybrid 암호화 설계 (v2)
+### Hybrid 암호화 설계 (v3)
 
-핵심 원칙: **KEM은 비싸지만 1회만. 스트림 암호는 싸고 빠름.**
+핵심 원칙: **KEM은 비싸지만 1회만. 스트림 암호는 싸고 빠름. 쓰기는 배치로.**
 
 ```
 파일 create() 시:
-┌─────────────────────────────────────────────────────┐
-│  ML-KEM-512.Encaps(pk)  →  shared_secret (32B)      │
-│  (1회 실행, ~15 µs)         파일 컨텍스트에 저장        │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  ML-KEM-512.Encaps(pk) → shared_secret (32B)                │
+│  (1회 실행, ~15µs)  → per-fd ctx 저장 + .pqckey 사이드카 저장 │
+└─────────────────────────────────────────────────────────────┘
 
-파일 write() 시 (핫 패스):
-┌─────────────────────────────────────────────────────┐
-│  seed = shared_secret || file_id || write_offset    │
-│  keystream = SHAKE128_XOF(seed, len)  ← ~1 GB/s    │
-│  ciphertext = plaintext XOR keystream               │
-└─────────────────────────────────────────────────────┘
+파일 write() 시 (핫 패스 — v3 코얼레싱):
+┌─────────────────────────────────────────────────────────────┐
+│  4K 쓰기 × N → 512KB 코얼레싱 버퍼에 누적                    │
+│                                                             │
+│  버퍼 가득 차면 flush:                                        │
+│    seed = shared_secret || file_id || base_offset           │
+│    keystream = SHAKE128_XOF(seed, 512KB)  ← ~1 GB/s        │
+│    ciphertext = plaintext XOR keystream                     │
+│    pwrite(storage_fd, ciphertext, 512KB)                    │
+└─────────────────────────────────────────────────────────────┘
+
+파일 open() 시 (read-back 복호화):
+┌─────────────────────────────────────────────────────────────┐
+│  .pqckey 사이드카 로드 → shared_secret 복원                   │
+│  pread → SHAKE128 XOR 복호화 (암호화와 동일 연산)             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### CPU 버전 (pqc_fuse.c)
@@ -181,11 +209,13 @@ cudaHostAlloc(&g_pinned_buf, PQC_MAX_WRITE, cudaHostAllocDefault);
 
 ```
 .
-├── CMakeLists.txt        # 빌드 시스템 (C + CUDA, OpenSSL, liboqs)
-├── pqc_fuse.c            # CPU 버전: ML-KEM-512 + SHAKE128 XOF
-├── pqc_fuse.cu           # GPU 버전: CUDA Pinned Memory + per-file KEM
-├── run_experiment.sh     # 자동화 실험 스크립트
-├── run_benchmark_3way.sh # 3-way 벤치마크 스크립트
+├── CMakeLists.txt           # 빌드 시스템 (C + CUDA, OpenSSL, liboqs)
+├── pqc_fuse.c               # CPU 버전: ML-KEM-512 + SHAKE128 XOF + 512KB coalescing
+├── pqc_fuse.cu              # GPU 버전: CUDA XOR 커널 + SHAKE128 keystream + coalescing
+├── camera_capture_test.py   # 카메라 워크로드 시뮬레이션 (V4L2 or 합성 JPEG)
+├── run_camera_benchmark.sh  # 3-way 카메라 벤치마크 (NVMe/CPU-PQC/GPU-PQC)
+├── run_experiment.sh        # 자동화 실험 스크립트
+├── run_benchmark_3way.sh    # 순차 쓰기 3-way 벤치마크
 └── README.md
 ```
 

@@ -54,7 +54,7 @@ if(CMAKE_CUDA_COMPILER)
 
     # FUSE headers and libs
     target_include_directories(pqc_fuse_gpu PRIVATE ${FUSE3_INCLUDE_DIRS} ${OQS_INCLUDE_DIR})
-    target_link_libraries(pqc_fuse_gpu PRIVATE ${FUSE3_LIBRARIES} ${OQS_LIBRARY} pthread m)
+    target_link_libraries(pqc_fuse_gpu PRIVATE ${FUSE3_LIBRARIES} ${OQS_LIBRARY} OpenSSL::Crypto pthread m)
     target_compile_definitions(pqc_fuse_gpu PRIVATE ${FUSE3_CFLAGS_OTHER})
 
     # Set CUDA properties
