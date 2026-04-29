@@ -1,0 +1,751 @@
+time_s,phase,c_cpu,c_gpu,thermal
+0.0001957416534423828,Idle,0,0,0
+0.1004338264465332,Idle,0,0,0
+0.20060205459594727,Idle,0,0,0
+0.3009653091430664,Idle,0,0,0
+0.4011869430541992,Idle,0,0,0
+0.5013501644134521,Idle,0,0,0
+0.6014862060546875,Idle,0,0,0
+0.7016212940216064,Idle,0,0,0
+0.8017568588256836,Idle,0,0,0
+0.9019012451171875,Idle,0,0,0
+1.0020430088043213,Idle,0,0,0
+1.102278232574463,Idle,0,0,0
+1.2025036811828613,Idle,0,0,0
+1.303130865097046,Idle,0,0,0
+1.40338134765625,Idle,0,0,0
+1.5035607814788818,Idle,0,0,0
+1.6037108898162842,Idle,0,0,0
+1.7039434909820557,Idle,0,0,0
+1.8041095733642578,Idle,0,0,0
+1.9043350219726562,Idle,0,0,0
+2.0045084953308105,Idle,0,0,0
+2.104667901992798,Idle,0,0,0
+2.204810619354248,Idle,0,0,0
+2.304948329925537,Idle,0,0,0
+2.4050843715667725,Idle,0,0,0
+2.5053932666778564,Idle,0,0,0
+2.6056177616119385,Idle,0,0,0
+2.7058372497558594,Idle,0,0,0
+2.8060452938079834,Idle,0,0,0
+2.9082820415496826,Idle,0,0,0
+3.008579730987549,Idle,0,0,0
+3.108860731124878,Idle,0,0,0
+3.2091238498687744,Idle,0,0,0
+3.309390068054199,Idle,0,0,0
+3.40967059135437,Idle,0,0,0
+3.5099096298217773,Idle,0,0,0
+3.6101233959198,Idle,0,0,0
+3.710339069366455,Idle,0,0,0
+3.810556173324585,Idle,0,0,0
+3.911170244216919,Idle,0,0,0
+4.011416912078857,Idle,0,0,0
+4.111644983291626,Idle,0,0,0
+4.21185302734375,Idle,0,0,0
+4.312036037445068,Idle,0,0,0
+4.41229510307312,Idle,0,0,0
+4.512505531311035,Idle,0,0,0
+4.612686395645142,Idle,0,0,0
+4.712924480438232,Idle,0,0,0
+4.81314754486084,Idle,0,0,0
+4.913374423980713,Idle,0,0,0
+5.013608932495117,Idle,0,0,0
+5.11383056640625,Idle,0,0,0
+5.214059591293335,Idle,0,0,0
+5.31427788734436,Idle,0,0,0
+5.414507865905762,Idle,0,0,0
+5.514744758605957,Idle,0,0,0
+5.614974021911621,Idle,0,0,0
+5.7151830196380615,Idle,0,0,0
+5.815473556518555,Idle,0,0,0
+5.9157116413116455,Idle,0,0,0
+6.015926122665405,Idle,0,0,0
+6.116159439086914,Idle,0,0,0
+6.216647624969482,Idle,0,0,0
+6.316877365112305,Idle,0,0,0
+6.4171142578125,Idle,0,0,0
+6.517371654510498,Idle,0,0,0
+6.617628335952759,Idle,0,0,0
+6.717877626419067,Idle,0,0,0
+6.818142890930176,Idle,0,0,0
+6.91839599609375,Idle,0,0,0
+7.018664360046387,Idle,0,0,0
+7.118924856185913,Idle,0,0,0
+7.219177961349487,Idle,0,0,0
+7.319447040557861,Idle,0,0,0
+7.4197163581848145,Idle,0,0,0
+7.519967317581177,Idle,0,0,0
+7.6202332973480225,Idle,0,0,0
+7.720486164093018,Idle,0,0,0
+7.820729494094849,Idle,0,0,0
+7.92098069190979,Idle,0,0,0
+8.021246671676636,Idle,0,0,0
+8.121516466140747,Idle,0,0,0
+8.221760749816895,Idle,0,0,0
+8.322028160095215,Idle,0,0,0
+8.422277212142944,Idle,0,0,0
+8.522538423538208,Idle,0,0,0
+8.622779369354248,Idle,0,0,0
+8.723190069198608,Idle,0,0,0
+8.823437213897705,Idle,0,0,0
+8.92367434501648,Idle,0,0,0
+9.024143695831299,Idle,0,0,0
+9.124442338943481,Idle,0,0,0
+9.224685907363892,Idle,0,0,0
+9.324865102767944,Idle,0,0,0
+9.425034761428833,Idle,0,0,0
+9.525207757949829,Idle,0,0,0
+9.625383138656616,Idle,0,0,0
+9.725536823272705,Idle,0,0,0
+9.825721740722656,Idle,0,0,0
+9.92587399482727,Idle,0,0,0
+10.026053428649902,Normal Autonomous Driving,1,1,1
+10.126202583312988,Normal Autonomous Driving,1,1,1
+10.226354598999023,Normal Autonomous Driving,1,1,1
+10.326494455337524,Normal Autonomous Driving,1,1,1
+10.426735877990723,Normal Autonomous Driving,1,1,1
+10.526947498321533,Normal Autonomous Driving,1,1,1
+10.627216577529907,Normal Autonomous Driving,1,1,1
+10.727400302886963,Normal Autonomous Driving,1,1,1
+10.827680826187134,Normal Autonomous Driving,1,1,1
+10.927942752838135,Normal Autonomous Driving,1,1,1
+11.028131008148193,Normal Autonomous Driving,1,1,1
+11.128398180007935,Normal Autonomous Driving,1,1,1
+11.228684663772583,Normal Autonomous Driving,1,1,1
+11.32897424697876,Normal Autonomous Driving,1,1,1
+11.429269075393677,Normal Autonomous Driving,1,1,1
+11.529572248458862,Normal Autonomous Driving,1,1,1
+11.62987995147705,Normal Autonomous Driving,1,1,1
+11.730179071426392,Normal Autonomous Driving,1,1,1
+11.830472946166992,Normal Autonomous Driving,1,1,1
+11.930767059326172,Normal Autonomous Driving,1,1,1
+12.031054973602295,Normal Autonomous Driving,1,1,1
+12.131367683410645,Normal Autonomous Driving,1,1,1
+12.231659889221191,Normal Autonomous Driving,1,1,1
+12.331873655319214,Normal Autonomous Driving,1,1,1
+12.432076454162598,Normal Autonomous Driving,1,1,1
+12.532286167144775,Normal Autonomous Driving,1,1,1
+12.632574796676636,Normal Autonomous Driving,1,1,1
+12.73287320137024,Normal Autonomous Driving,1,1,1
+12.833164930343628,Normal Autonomous Driving,1,1,1
+12.933444738388062,Normal Autonomous Driving,1,1,1
+13.033720254898071,Normal Autonomous Driving,1,1,1
+13.134008646011353,Normal Autonomous Driving,1,1,1
+13.234290361404419,Normal Autonomous Driving,1,1,1
+13.334544897079468,Normal Autonomous Driving,1,1,1
+13.434791326522827,Normal Autonomous Driving,1,1,1
+13.535226345062256,Normal Autonomous Driving,1,1,1
+13.63565731048584,Normal Autonomous Driving,1,1,1
+13.7359459400177,Normal Autonomous Driving,1,1,1
+13.836247205734253,Normal Autonomous Driving,1,1,1
+13.93652606010437,Normal Autonomous Driving,1,1,1
+14.036803007125854,Normal Autonomous Driving,1,1,1
+14.13708782196045,Normal Autonomous Driving,1,1,1
+14.237400531768799,Normal Autonomous Driving,1,1,1
+14.337687492370605,Normal Autonomous Driving,1,1,1
+14.437971353530884,Normal Autonomous Driving,1,1,1
+14.538260459899902,Normal Autonomous Driving,1,1,1
+14.638554334640503,Normal Autonomous Driving,1,1,1
+14.738859415054321,Normal Autonomous Driving,1,1,1
+14.839156150817871,Normal Autonomous Driving,1,1,1
+14.939436912536621,Normal Autonomous Driving,1,1,1
+15.03971552848816,Normal Autonomous Driving,1,1,1
+15.14000940322876,Normal Autonomous Driving,1,1,1
+15.240299463272095,Normal Autonomous Driving,1,1,1
+15.340590953826904,Normal Autonomous Driving,1,1,1
+15.441173076629639,Normal Autonomous Driving,1,1,1
+15.541477680206299,Normal Autonomous Driving,1,1,1
+15.641738891601562,Normal Autonomous Driving,1,1,1
+15.742018222808838,Normal Autonomous Driving,1,1,1
+15.842268466949463,Normal Autonomous Driving,1,1,1
+15.942548751831055,Normal Autonomous Driving,1,1,1
+16.04282855987549,Normal Autonomous Driving,1,1,1
+16.143185138702393,Normal Autonomous Driving,1,1,1
+16.243456602096558,Normal Autonomous Driving,1,1,1
+16.343700885772705,Normal Autonomous Driving,1,1,1
+16.443946838378906,Normal Autonomous Driving,1,1,1
+16.54418635368347,Normal Autonomous Driving,1,1,1
+16.644476890563965,Normal Autonomous Driving,1,1,1
+16.74474000930786,Normal Autonomous Driving,1,1,1
+16.845061540603638,Normal Autonomous Driving,1,1,1
+16.94532299041748,Normal Autonomous Driving,1,1,1
+17.04549765586853,Normal Autonomous Driving,1,1,1
+17.145742416381836,Normal Autonomous Driving,1,1,1
+17.245943307876587,Normal Autonomous Driving,1,1,1
+17.346113681793213,Normal Autonomous Driving,1,1,1
+17.446393489837646,Normal Autonomous Driving,1,1,1
+17.546595335006714,Normal Autonomous Driving,1,1,1
+17.64685082435608,Normal Autonomous Driving,1,1,1
+17.74704146385193,Normal Autonomous Driving,1,1,1
+17.847190141677856,Normal Autonomous Driving,1,1,1
+17.94740581512451,Normal Autonomous Driving,1,1,1
+18.047569274902344,Normal Autonomous Driving,1,1,1
+18.147794485092163,Normal Autonomous Driving,1,1,1
+18.248088598251343,Normal Autonomous Driving,1,1,1
+18.34838032722473,Normal Autonomous Driving,1,1,1
+18.448662757873535,Normal Autonomous Driving,1,1,1
+18.548922777175903,Normal Autonomous Driving,1,1,1
+18.64918303489685,Normal Autonomous Driving,1,1,1
+18.749417304992676,Normal Autonomous Driving,1,1,1
+18.849725008010864,Normal Autonomous Driving,1,1,1
+18.95004415512085,Normal Autonomous Driving,1,1,1
+19.050239086151123,Normal Autonomous Driving,1,1,1
+19.1505286693573,Normal Autonomous Driving,1,1,1
+19.250731229782104,Normal Autonomous Driving,1,1,1
+19.35093665122986,Normal Autonomous Driving,1,1,1
+19.45123815536499,Normal Autonomous Driving,1,1,1
+19.5514235496521,Normal Autonomous Driving,1,1,1
+19.651679277420044,Normal Autonomous Driving,1,1,1
+19.751861810684204,Normal Autonomous Driving,1,1,1
+19.852030277252197,Normal Autonomous Driving,1,1,1
+19.952245473861694,Normal Autonomous Driving,1,1,1
+20.052440404891968,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.152721405029297,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.25298810005188,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.353160858154297,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.453440189361572,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.55361580848694,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.65375590324402,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.75401020050049,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.854180097579956,Disruption: YOLO Burst (GPU=Max),1,3,1
+20.95448637008667,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.05475378036499,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.155036211013794,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.255325317382812,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.35550093650818,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.455808401107788,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.5560040473938,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.656269073486328,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.756452798843384,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.85664200782776,Disruption: YOLO Burst (GPU=Max),1,3,1
+21.956880569458008,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.05709409713745,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.15736150741577,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.257564544677734,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.35772466659546,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.45802879333496,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.558327674865723,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.658626556396484,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.758844137191772,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.859054565429688,Disruption: YOLO Burst (GPU=Max),1,3,1
+22.95992946624756,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.060215711593628,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.16041350364685,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.26055359840393,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.36072063446045,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.46099853515625,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.561357736587524,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.661633014678955,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.76185441017151,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.862035512924194,Disruption: YOLO Burst (GPU=Max),1,3,1
+23.96221375465393,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.06253957748413,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.16284441947937,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.263150930404663,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.363454818725586,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.463765621185303,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.56404447555542,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.6643488407135,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.76465606689453,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.86491823196411,Disruption: YOLO Burst (GPU=Max),1,3,1
+24.96519184112549,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.06546974182129,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.165759086608887,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.266055583953857,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.36634135246277,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.4666166305542,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.566903114318848,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.667157888412476,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.76744532585144,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.86767554283142,Disruption: YOLO Burst (GPU=Max),1,3,1
+25.96795892715454,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.068224668502808,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.16850233078003,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.268763065338135,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.369045972824097,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.469314575195312,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.569620370864868,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.669895887374878,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.770163536071777,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.87040424346924,Disruption: YOLO Burst (GPU=Max),1,3,1
+26.97067403793335,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.070953369140625,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.171222686767578,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.271493434906006,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.37175178527832,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.472026824951172,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.572291374206543,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.67255187034607,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.773348808288574,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.873608112335205,Disruption: YOLO Burst (GPU=Max),1,3,1
+27.973874807357788,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.07413387298584,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.174397945404053,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.274641036987305,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.374887228012085,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.475152730941772,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.575419187545776,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.67566990852356,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.775915145874023,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.87617301940918,Disruption: YOLO Burst (GPU=Max),1,3,1
+28.976405382156372,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.076671600341797,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.176918506622314,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.27716302871704,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.37742781639099,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.477705717086792,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.577972173690796,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.678348541259766,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.77986741065979,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.880126953125,Disruption: YOLO Burst (GPU=Max),1,3,1
+29.980392456054688,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.080652475357056,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.180967569351196,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.281297206878662,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.381556749343872,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.48181915283203,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.58210039138794,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.682366609573364,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.782612085342407,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.882882833480835,Disruption: YOLO Burst (GPU=Max),1,3,1
+30.983203649520874,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.083486557006836,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.183751583099365,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.284080028533936,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.384371042251587,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.48467469215393,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.58495855331421,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.685354471206665,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.78564190864563,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.885884761810303,Disruption: YOLO Burst (GPU=Max),1,3,1
+31.98616600036621,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.08638095855713,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.186620473861694,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.286864042282104,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.38703751564026,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.48722505569458,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.587393283843994,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.68762159347534,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.78891444206238,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.88920068740845,Disruption: YOLO Burst (GPU=Max),1,3,1
+32.98959922790527,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.089887857437134,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.190160036087036,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.29055380821228,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.39084553718567,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.49109983444214,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.59136486053467,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.69165372848511,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.79192113876343,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.89214849472046,Disruption: YOLO Burst (GPU=Max),1,3,1
+33.99240446090698,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.09264039993286,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.192901611328125,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.293275356292725,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.39362096786499,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.49390625953674,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.594215631484985,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.69460582733154,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.7948579788208,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.89514112472534,Disruption: YOLO Burst (GPU=Max),1,3,1
+34.995518922805786,Disruption: YOLO Burst (GPU=Max),1,3,1
+35.095866680145264,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.19614601135254,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.296483516693115,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.39679932594299,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.49830365180969,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.59862422943115,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.69893956184387,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.79925990104675,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.89955234527588,Disruption: SLAM Burst (CPU=Max),3,1,1
+35.99989676475525,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.100178480148315,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.20053720474243,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.300862073898315,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.401196241378784,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.50148940086365,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.60174226760864,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.701964378356934,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.802218437194824,Disruption: SLAM Burst (CPU=Max),3,1,1
+36.902501583099365,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.00286626815796,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.10309600830078,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.20338249206543,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.303645610809326,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.40389132499695,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.50417876243591,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.604509353637695,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.70488405227661,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.80511522293091,Disruption: SLAM Burst (CPU=Max),3,1,1
+37.90532064437866,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.005714654922485,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.10614323616028,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.20651650428772,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.306885719299316,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.407177686691284,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.50762128829956,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.607996463775635,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.708444356918335,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.808791399002075,Disruption: SLAM Burst (CPU=Max),3,1,1
+38.90911293029785,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.009432554244995,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.10975909233093,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.210076570510864,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.31051516532898,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.41080045700073,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.5110719203949,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.6113977432251,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.71170997619629,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.81199526786804,Disruption: SLAM Burst (CPU=Max),3,1,1
+39.91228795051575,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.01259469985962,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.112913608551025,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.213194131851196,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.313498735427856,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.413732290267944,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.5140814781189,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.61453151702881,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.714839458465576,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.81526708602905,Disruption: SLAM Burst (CPU=Max),3,1,1
+40.91561985015869,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.015973806381226,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.11678504943848,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.21714544296265,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.317479372024536,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.41780996322632,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.51812553405762,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.61845564842224,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.7188138961792,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.8191499710083,Disruption: SLAM Burst (CPU=Max),3,1,1
+41.91952872276306,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.01983451843262,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.120166063308716,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.22067832946777,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.32098722457886,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.421289920806885,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.52159070968628,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.62191033363342,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.722233295440674,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.82255411148071,Disruption: SLAM Burst (CPU=Max),3,1,1
+42.92286014556885,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.023247480392456,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.12356448173523,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.22390389442444,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.32589077949524,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.426185846328735,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.52649211883545,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.626782178878784,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.72710132598877,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.82740545272827,Disruption: SLAM Burst (CPU=Max),3,1,1
+43.92778563499451,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.02815103530884,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.128599643707275,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.2289936542511,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.32933855056763,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.42968678474426,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.53002333641052,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.63037467002869,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.73083782196045,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.83225965499878,Disruption: SLAM Burst (CPU=Max),3,1,1
+44.9326171875,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.03294277191162,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.13333582878113,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.23366951942444,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.334033250808716,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.43431806564331,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.53463292121887,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.63493084907532,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.73540806770325,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.835752725601196,Disruption: SLAM Burst (CPU=Max),3,1,1
+45.93606090545654,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.03646755218506,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.13684296607971,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.23720455169678,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.33748745918274,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.43779397010803,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.53821921348572,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.63853430747986,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.73884296417236,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.83917474746704,Disruption: SLAM Burst (CPU=Max),3,1,1
+46.939489126205444,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.03981423377991,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.14006686210632,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.240450382232666,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.340821981430054,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.441149950027466,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.5415153503418,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.64183330535889,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.742148876190186,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.842456340789795,Disruption: SLAM Burst (CPU=Max),3,1,1
+47.94278335571289,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.04309058189392,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.14437556266785,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.24469470977783,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.345017433166504,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.44534969329834,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.545665979385376,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.64592671394348,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.74621605873108,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.84652256965637,Disruption: SLAM Burst (CPU=Max),3,1,1
+48.94681739807129,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.047088861465454,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.147398471832275,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.2476851940155,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.34797167778015,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.44836187362671,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.54865527153015,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.64895176887512,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.749385833740234,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.849679470062256,Disruption: SLAM Burst (CPU=Max),3,1,1
+49.94992470741272,Disruption: SLAM Burst (CPU=Max),3,1,1
+50.05018162727356,Disruption: SLAM Burst (CPU=Max),3,1,1
+50.15058779716492,Disruption: Thermal Warning,1,1,3
+50.2508659362793,Disruption: Thermal Warning,1,1,3
+50.35126543045044,Disruption: Thermal Warning,1,1,3
+50.451499938964844,Disruption: Thermal Warning,1,1,3
+50.55192565917969,Disruption: Thermal Warning,1,1,3
+50.652220726013184,Disruption: Thermal Warning,1,1,3
+50.75250554084778,Disruption: Thermal Warning,1,1,3
+50.85278677940369,Disruption: Thermal Warning,1,1,3
+50.95305824279785,Disruption: Thermal Warning,1,1,3
+51.05349898338318,Disruption: Thermal Warning,1,1,3
+51.15379738807678,Disruption: Thermal Warning,1,1,3
+51.254111766815186,Disruption: Thermal Warning,1,1,3
+51.35441827774048,Disruption: Thermal Warning,1,1,3
+51.454718589782715,Disruption: Thermal Warning,1,1,3
+51.55498743057251,Disruption: Thermal Warning,1,1,3
+51.65529751777649,Disruption: Thermal Warning,1,1,3
+51.755553007125854,Disruption: Thermal Warning,1,1,3
+51.85581707954407,Disruption: Thermal Warning,1,1,3
+51.956056118011475,Disruption: Thermal Warning,1,1,3
+52.05637860298157,Disruption: Thermal Warning,1,1,3
+52.15659141540527,Disruption: Thermal Warning,1,1,3
+52.25685381889343,Disruption: Thermal Warning,1,1,3
+52.357141733169556,Disruption: Thermal Warning,1,1,3
+52.457435607910156,Disruption: Thermal Warning,1,1,3
+52.557743310928345,Disruption: Thermal Warning,1,1,3
+52.65811324119568,Disruption: Thermal Warning,1,1,3
+52.75839853286743,Disruption: Thermal Warning,1,1,3
+52.858845233917236,Disruption: Thermal Warning,1,1,3
+52.95908784866333,Disruption: Thermal Warning,1,1,3
+53.059346437454224,Disruption: Thermal Warning,1,1,3
+53.15963649749756,Disruption: Thermal Warning,1,1,3
+53.25988793373108,Disruption: Thermal Warning,1,1,3
+53.360180377960205,Disruption: Thermal Warning,1,1,3
+53.46044611930847,Disruption: Thermal Warning,1,1,3
+53.56068825721741,Disruption: Thermal Warning,1,1,3
+53.66094899177551,Disruption: Thermal Warning,1,1,3
+53.76122426986694,Disruption: Thermal Warning,1,1,3
+53.86148190498352,Disruption: Thermal Warning,1,1,3
+53.961808919906616,Disruption: Thermal Warning,1,1,3
+54.06225252151489,Disruption: Thermal Warning,1,1,3
+54.16250991821289,Disruption: Thermal Warning,1,1,3
+54.26288342475891,Disruption: Thermal Warning,1,1,3
+54.363269567489624,Disruption: Thermal Warning,1,1,3
+54.463703870773315,Disruption: Thermal Warning,1,1,3
+54.5640184879303,Disruption: Thermal Warning,1,1,3
+54.66430926322937,Disruption: Thermal Warning,1,1,3
+54.764610290527344,Disruption: Thermal Warning,1,1,3
+54.864893198013306,Disruption: Thermal Warning,1,1,3
+54.965182065963745,Disruption: Thermal Warning,1,1,3
+55.06548833847046,Disruption: Thermal Warning,1,1,3
+55.16579055786133,Disruption: Thermal Warning,1,1,3
+55.2661030292511,Disruption: Thermal Warning,1,1,3
+55.36647009849548,Disruption: Thermal Warning,1,1,3
+55.46677899360657,Disruption: Thermal Warning,1,1,3
+55.567095041275024,Disruption: Thermal Warning,1,1,3
+55.667351484298706,Disruption: Thermal Warning,1,1,3
+55.76756453514099,Disruption: Thermal Warning,1,1,3
+55.868162631988525,Disruption: Thermal Warning,1,1,3
+55.9686222076416,Disruption: Thermal Warning,1,1,3
+56.06884145736694,Disruption: Thermal Warning,1,1,3
+56.16907286643982,Disruption: Thermal Warning,1,1,3
+56.26939940452576,Disruption: Thermal Warning,1,1,3
+56.36983823776245,Disruption: Thermal Warning,1,1,3
+56.4701087474823,Disruption: Thermal Warning,1,1,3
+56.57031750679016,Disruption: Thermal Warning,1,1,3
+56.6705424785614,Disruption: Thermal Warning,1,1,3
+56.7708797454834,Disruption: Thermal Warning,1,1,3
+56.87114691734314,Disruption: Thermal Warning,1,1,3
+56.97158169746399,Disruption: Thermal Warning,1,1,3
+57.07332992553711,Disruption: Thermal Warning,1,1,3
+57.17360210418701,Disruption: Thermal Warning,1,1,3
+57.27387452125549,Disruption: Thermal Warning,1,1,3
+57.374157190322876,Disruption: Thermal Warning,1,1,3
+57.474462032318115,Disruption: Thermal Warning,1,1,3
+57.57476258277893,Disruption: Thermal Warning,1,1,3
+57.67502284049988,Disruption: Thermal Warning,1,1,3
+57.775455474853516,Disruption: Thermal Warning,1,1,3
+57.87659168243408,Disruption: Thermal Warning,1,1,3
+57.976884603500366,Disruption: Thermal Warning,1,1,3
+58.07738161087036,Disruption: Thermal Warning,1,1,3
+58.17764377593994,Disruption: Thermal Warning,1,1,3
+58.27786993980408,Disruption: Thermal Warning,1,1,3
+58.37816095352173,Disruption: Thermal Warning,1,1,3
+58.478533029556274,Disruption: Thermal Warning,1,1,3
+58.57893347740173,Disruption: Thermal Warning,1,1,3
+58.67922353744507,Disruption: Thermal Warning,1,1,3
+58.779492139816284,Disruption: Thermal Warning,1,1,3
+58.87974405288696,Disruption: Thermal Warning,1,1,3
+58.97993469238281,Disruption: Thermal Warning,1,1,3
+59.08018779754639,Disruption: Thermal Warning,1,1,3
+59.18045210838318,Disruption: Thermal Warning,1,1,3
+59.28086256980896,Disruption: Thermal Warning,1,1,3
+59.38145327568054,Disruption: Thermal Warning,1,1,3
+59.48172354698181,Disruption: Thermal Warning,1,1,3
+59.582006216049194,Disruption: Thermal Warning,1,1,3
+59.68238568305969,Disruption: Thermal Warning,1,1,3
+59.782918214797974,Disruption: Thermal Warning,1,1,3
+59.883254289627075,Disruption: Thermal Warning,1,1,3
+59.983543157577515,Disruption: Thermal Warning,1,1,3
+60.08383917808533,Disruption: Thermal Warning,1,1,3
+60.18410897254944,Disruption: Thermal Warning,1,1,3
+60.28438997268677,Disruption: Thermal Warning,1,1,3
+60.385414838790894,Disruption: Thermal Warning,1,1,3
+60.485681772232056,Disruption: Thermal Warning,1,1,3
+60.58597373962402,Disruption: Thermal Warning,1,1,3
+60.6862428188324,Disruption: Thermal Warning,1,1,3
+60.78650712966919,Disruption: Thermal Warning,1,1,3
+60.88685607910156,Disruption: Thermal Warning,1,1,3
+60.987085819244385,Disruption: Thermal Warning,1,1,3
+61.08729338645935,Disruption: Thermal Warning,1,1,3
+61.1874897480011,Disruption: Thermal Warning,1,1,3
+61.287750005722046,Disruption: Thermal Warning,1,1,3
+61.3880615234375,Disruption: Thermal Warning,1,1,3
+61.48845362663269,Disruption: Thermal Warning,1,1,3
+61.58875012397766,Disruption: Thermal Warning,1,1,3
+61.68938326835632,Disruption: Thermal Warning,1,1,3
+61.78965616226196,Disruption: Thermal Warning,1,1,3
+61.889936685562134,Disruption: Thermal Warning,1,1,3
+61.99023723602295,Disruption: Thermal Warning,1,1,3
+62.090638160705566,Disruption: Thermal Warning,1,1,3
+62.190969944000244,Disruption: Thermal Warning,1,1,3
+62.29128551483154,Disruption: Thermal Warning,1,1,3
+62.39158535003662,Disruption: Thermal Warning,1,1,3
+62.49185657501221,Disruption: Thermal Warning,1,1,3
+62.5921266078949,Disruption: Thermal Warning,1,1,3
+62.69243788719177,Disruption: Thermal Warning,1,1,3
+62.79274654388428,Disruption: Thermal Warning,1,1,3
+62.89302706718445,Disruption: Thermal Warning,1,1,3
+62.993282318115234,Disruption: Thermal Warning,1,1,3
+63.09358024597168,Disruption: Thermal Warning,1,1,3
+63.19391894340515,Disruption: Thermal Warning,1,1,3
+63.29424715042114,Disruption: Thermal Warning,1,1,3
+63.394540309906006,Disruption: Thermal Warning,1,1,3
+63.494818925857544,Disruption: Thermal Warning,1,1,3
+63.59512233734131,Disruption: Thermal Warning,1,1,3
+63.69538354873657,Disruption: Thermal Warning,1,1,3
+63.79564571380615,Disruption: Thermal Warning,1,1,3
+63.89589285850525,Disruption: Thermal Warning,1,1,3
+63.99607014656067,Disruption: Thermal Warning,1,1,3
+64.09626126289368,Disruption: Thermal Warning,1,1,3
+64.19643592834473,Disruption: Thermal Warning,1,1,3
+64.29658818244934,Disruption: Thermal Warning,1,1,3
+64.39673328399658,Disruption: Thermal Warning,1,1,3
+64.49687838554382,Disruption: Thermal Warning,1,1,3
+64.59702372550964,Disruption: Thermal Warning,1,1,3
+64.69717025756836,Disruption: Thermal Warning,1,1,3
+64.79732394218445,Disruption: Thermal Warning,1,1,3
+64.89758229255676,Disruption: Thermal Warning,1,1,3
+64.99777793884277,Disruption: Thermal Warning,1,1,3
+65.09793043136597,Disruption: Thermal Warning,1,1,3
+65.19810461997986,Cooldown,0,0,0
+65.29826712608337,Cooldown,0,0,0
+65.39840078353882,Cooldown,0,0,0
+65.49852156639099,Cooldown,0,0,0
+65.59866309165955,Cooldown,0,0,0
+65.69880294799805,Cooldown,0,0,0
+65.79893946647644,Cooldown,0,0,0
+65.8990797996521,Cooldown,0,0,0
+65.99922299385071,Cooldown,0,0,0
+66.09935975074768,Cooldown,0,0,0
+66.19950270652771,Cooldown,0,0,0
+66.29976010322571,Cooldown,0,0,0
+66.39996838569641,Cooldown,0,0,0
+66.50022053718567,Cooldown,0,0,0
+66.60048460960388,Cooldown,0,0,0
+66.70069003105164,Cooldown,0,0,0
+66.80086755752563,Cooldown,0,0,0
+66.9011619091034,Cooldown,0,0,0
+67.0014271736145,Cooldown,0,0,0
+67.10164093971252,Cooldown,0,0,0
+67.20187520980835,Cooldown,0,0,0
+67.30213499069214,Cooldown,0,0,0
+67.4023916721344,Cooldown,0,0,0
+67.5026421546936,Cooldown,0,0,0
+67.60289978981018,Cooldown,0,0,0
+67.70315384864807,Cooldown,0,0,0
+67.80340814590454,Cooldown,0,0,0
+67.9036374092102,Cooldown,0,0,0
+68.00388932228088,Cooldown,0,0,0
+68.1041648387909,Cooldown,0,0,0
+68.204430103302,Cooldown,0,0,0
+68.30463600158691,Cooldown,0,0,0
+68.40490198135376,Cooldown,0,0,0
+68.50516939163208,Cooldown,0,0,0
+68.60545015335083,Cooldown,0,0,0
+68.70571804046631,Cooldown,0,0,0
+68.80599284172058,Cooldown,0,0,0
+68.90627074241638,Cooldown,0,0,0
+69.00711750984192,Cooldown,0,0,0
+69.1073808670044,Cooldown,0,0,0
+69.2076518535614,Cooldown,0,0,0
+69.30792713165283,Cooldown,0,0,0
+69.4081814289093,Cooldown,0,0,0
+69.5084342956543,Cooldown,0,0,0
+69.60865879058838,Cooldown,0,0,0
+69.70892405509949,Cooldown,0,0,0
+69.80917453765869,Cooldown,0,0,0
+69.90945339202881,Cooldown,0,0,0
+70.00972127914429,Cooldown,0,0,0
+70.10997295379639,Cooldown,0,0,0
+70.21027207374573,Cooldown,0,0,0
+70.31058406829834,Cooldown,0,0,0
+70.41077017784119,Cooldown,0,0,0
+70.51091527938843,Cooldown,0,0,0
+70.6111707687378,Cooldown,0,0,0
+70.71140646934509,Cooldown,0,0,0
+70.81158399581909,Cooldown,0,0,0
+70.91174364089966,Cooldown,0,0,0
+71.01189374923706,Cooldown,0,0,0
+71.11222529411316,Cooldown,0,0,0
+71.21243977546692,Cooldown,0,0,0
+71.31259179115295,Cooldown,0,0,0
+71.4127745628357,Cooldown,0,0,0
+71.51294946670532,Cooldown,0,0,0
+71.61325788497925,Cooldown,0,0,0
+71.7138819694519,Cooldown,0,0,0
+71.81418776512146,Cooldown,0,0,0
+71.9146831035614,Cooldown,0,0,0
+72.01504349708557,Cooldown,0,0,0
+72.11539268493652,Cooldown,0,0,0
+72.21574664115906,Cooldown,0,0,0
+72.31607031822205,Cooldown,0,0,0
+72.41643834114075,Cooldown,0,0,0
+72.5167908668518,Cooldown,0,0,0
+72.61710906028748,Cooldown,0,0,0
+72.7174870967865,Cooldown,0,0,0
+72.81781339645386,Cooldown,0,0,0
+72.91811728477478,Cooldown,0,0,0
+73.01844477653503,Cooldown,0,0,0
+73.11903429031372,Cooldown,0,0,0
+73.2194299697876,Cooldown,0,0,0
+73.31974935531616,Cooldown,0,0,0
+73.42006087303162,Cooldown,0,0,0
+73.52038311958313,Cooldown,0,0,0
+73.62073397636414,Cooldown,0,0,0
+73.7210476398468,Cooldown,0,0,0
+73.82134485244751,Cooldown,0,0,0
+73.92167520523071,Cooldown,0,0,0
+74.02197194099426,Cooldown,0,0,0
+74.12231040000916,Cooldown,0,0,0
+74.22260522842407,Cooldown,0,0,0
+74.32294416427612,Cooldown,0,0,0
+74.42325615882874,Cooldown,0,0,0
+74.52355194091797,Cooldown,0,0,0
+74.6238784790039,Cooldown,0,0,0
+74.72426700592041,Cooldown,0,0,0
+74.82458186149597,Cooldown,0,0,0
+74.92489433288574,Cooldown,0,0,0
+75.02519655227661,Cooldown,0,0,0
+75.12553906440735,Cooldown,0,0,0

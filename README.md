@@ -279,21 +279,20 @@ fusermount3 -u ~/pqc_edge_workspace/mnt_secure
 
 ---
 
-## 📈 Evaluation: Adaptive Heterogeneous Orchestration
+## 📈 Evaluation: Q-Learning based Dynamic Orchestration
 
-제안 시스템은 AI 워크로드(YOLO)와 I/O 버스트 상황을 실시간으로 인지하여 부하를 동적 분배함으로써, 최고 수준의 보안을 유지하면서도 자율주행 AI 프레임과 I/O 대역폭을 모두 완벽하게 방어해냅니다.
+제안 시스템은 단순한 정적 분배(Static Heuristic)를 넘어, CITADEL에서 영감을 받은 **L1-Cache 기반 Tabular Q-Learning**을 FUSE 데몬 내부에 탑재하여, 마이크로초(µs) 단위의 오버헤드로 Multi-tenant AI 환경의 Dynamic Disruptions를 완벽히 방어합니다. 
 
-### 1. Adaptive Resource Routing (AI Interference 방어)
-Figure 1은 AI-Heavy 상황(Scenario A)과 I/O-Heavy 상황(Scenario B)에서 시스템이 암호화 워크로드를 어떻게 동적으로 우회시키는지를 보여줍니다. YOLO 추론이 활발한 상황에서는 GPU 자원을 100% AI에 양보하고 CPU로 암호화를 폴백(Fallback)하여 간섭(Interference)을 원천 차단합니다. 반면 I/O가 폭주할 때는 16-Stream GPU 파이프라인으로 전환하여 CPU 락 경합을 회피합니다. Jetson의 Unified Memory(Zero-copy) 덕분에 이 전환 비용은 0에 수렴합니다.
+### 1. Resilience to Dynamic Disruptions (Multi-tenant AI)
+자율주행 환경의 복합 워크로드(ROS2 기반 YOLO, SLAM 등)가 유발하는 예측 불가능한 스파이크 상황을 시뮬레이션한 결과입니다. Figure 1은 시간이 지남에 따라 AI 부하(GPU Max), 경로 탐색 부하(CPU Max), 그리고 발열 경고(Thermal Warning)가 연이어 발생하는 **극한의 Dynamic Disruption 시나리오**를 보여줍니다.
+우리의 Q-Learning 컨트롤러는 매 순간 I/O, CPU, GPU, Thermal 4D-State를 감지하여 CPU ↔ GPU 라우팅을 즉각적으로(O(1)) 전환함으로써, 어떠한 장애 상황에서도 목표 I/O Throughput을 견고하게 유지해 냅니다.
 
-![Figure 1: Adaptive Resource Routing](./figures/fig1_adaptive_routing.png)
+![Figure 1: Dynamic Disruptions Resilience](./figures/fig10_citadel_disruptions.png)
 
-### 2. Seamless Throughput Maintenance
-Figure 2는 라우팅 경로가 극단적으로 바뀌는 상황에서도 I/O 성능이 완벽하게 유지됨을 증명합니다. 가벼운 1대의 카메라 워크로드(7 MB/s)는 물론, 4대의 카메라 동시 로깅(28 MB/s) 상황에서도 목표 대역폭을 한 치의 프레임 드랍 없이 달성했습니다. 
+### 2. Multi-dimensional Stress Analysis
+Figure 2는 각 Disruption 구간별 평균 I/O 처리량을 보여줍니다. YOLO 추론으로 인해 GPU가 포화된 상황(GPU Busy)이나 SLAM으로 CPU가 포화된 상황(CPU Busy)에서도, Q-Learning은 최적의 우회 경로를 스스로 학습하여 Throughput 저하를 원천 차단합니다. 극단적인 Thermal Warning(온도 상승) 시에도 Thermal Guardrail 보상 함수가 작동하여 시스템 셧다운을 방지하면서 I/O 처리를 지속합니다.
 
-> **System Bottleneck & The True Value of Co-design:** 극단적인 시스템 백업/로그 덤프 등 100MB/s 이상의 I/O Saturation 환경에서는 CPU 글로벌 락 구조가 무너지며 0.04 MB/s로 마비됩니다. 그러나 본 논문의 Adaptive 아키텍처는 이러한 극한 상황을 즉각 감지하여 GPU로 우회, 최대 **208 MB/s**까지 선형 스케일링하며 시스템 생존성을 보장하는 강력함을 지니고 있습니다.
-
-![Figure 2: Seamless Throughput Maintenance](./figures/fig2_adaptive_throughput.png)
+![Figure 2: Stress Resilience Analysis](./figures/fig8_stress_analysis.png)
 
 ## ⚠️ 참고사항
 

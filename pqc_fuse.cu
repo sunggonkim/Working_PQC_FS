@@ -115,6 +115,34 @@ static pthread_mutex_t g_fd_locks[PQC_MAX_FD];
 static pthread_mutex_t g_global_lock = PTHREAD_MUTEX_INITIALIZER;
 static uint64_t        g_file_id_ctr = 0;
 
+/* --- CITADEL Q-Learning Engine Globals --- */
+#define USE_GPU 0
+#define USE_CPU 1
+static float g_QTable[2][4][4][4][2] = {0}; /* I, C_cpu, C_gpu, T, Action */
+static int g_current_C_cpu = 0;
+static int g_current_C_gpu = 0;
+static int g_current_T = 0;
+static pthread_mutex_t g_q_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_t g_monitor_tid;
+
+static void* telemetry_monitor_thread(void *arg) {
+    (void)arg;
+    while(1) {
+        FILE *fp = fopen("/tmp/telemetry.csv", "r");
+        if (fp) {
+            int c=0, g=0, t=0;
+            if (fscanf(fp, "%d,%d,%d", &c, &g, &t) == 3) {
+                g_current_C_cpu = c;
+                g_current_C_gpu = g;
+                g_current_T = t;
+            }
+            fclose(fp);
+        }
+        usleep(10000); /* 10ms update */
+    }
+    return NULL;
+}
+
 static int acquire_stream() {
     while(1) {
         for (int i=0; i<NUM_STREAMS; i++) {
@@ -341,6 +369,9 @@ static int gpu_init(void)
         pqc_log("WARNING: KEM init failed — writes will use fallback XOR key");
     }
 
+    /* Start CITADEL Telemetry Monitor Thread */
+    pthread_create(&g_monitor_tid, NULL, telemetry_monitor_thread, NULL);
+
     pqc_log("GPU init complete — pinned-memory pipeline ready");
     return 0;
 }
@@ -501,17 +532,50 @@ static void gpu_gen_keystream(const pqc_fd_ctx_t *ctx, off_t base, size_t sz, ui
     EVP_MD_CTX_free(md);
 }
 
-#define USE_GPU 0
-#define USE_CPU 1
+/* Adaptive Router: Q-Table lookup (epsilon-greedy) */
+static int route_pqc_workload(size_t size, int state_out[4]) {
+    int i_idx = size < (512*1024) ? 0 : 1;
+    int c_idx = g_current_C_cpu;
+    int g_idx = g_current_C_gpu;
+    int t_idx = g_current_T;
 
-/* Adaptive Router: Check system state to decide encryption path */
-static int route_pqc_workload(size_t size) {
-    /* If AI (YOLO) is running, avoid GPU interference */
-    if (access("/tmp/pqc_ai_busy", F_OK) == 0) {
-        return USE_CPU;
+    state_out[0] = i_idx;
+    state_out[1] = c_idx;
+    state_out[2] = g_idx;
+    state_out[3] = t_idx;
+
+    /* Epsilon-greedy (10% exploration) */
+    if ((rand() % 100) < 10) {
+        return (rand() % 2) == 0 ? USE_CPU : USE_GPU;
     }
-    /* Otherwise, offload to GPU to prevent CPU lock thrashing */
-    return USE_GPU;
+
+    pthread_mutex_lock(&g_q_lock);
+    float q_cpu = g_QTable[i_idx][c_idx][g_idx][t_idx][USE_CPU];
+    float q_gpu = g_QTable[i_idx][c_idx][g_idx][t_idx][USE_GPU];
+    pthread_mutex_unlock(&g_q_lock);
+
+    return (q_gpu > q_cpu) ? USE_GPU : USE_CPU;
+}
+
+/* Update Q-Table based on Reward */
+static void update_q_value(int state[4], int action, double latency_ms) {
+    int i=state[0], c=state[1], g=state[2], t=state[3];
+    
+    float penalty_interf = 0;
+    /* Guardrail: If GPU is busy (idx>=2) and we used GPU, heavy penalty */
+    if (action == USE_GPU && g >= 2) penalty_interf = 50.0 * g;
+    
+    float penalty_thermal = 0;
+    /* Guardrail: If Temp is high (idx>=2) and we used CPU, heavy penalty */
+    if (action == USE_CPU && t >= 2) penalty_thermal = 50.0 * t;
+    
+    float reward = - (1.0 * latency_ms) - penalty_interf - penalty_thermal;
+    
+    pthread_mutex_lock(&g_q_lock);
+    float old_q = g_QTable[i][c][g][t][action];
+    float lr = 0.1; /* Learning rate */
+    g_QTable[i][c][g][t][action] = old_q + lr * (reward - old_q);
+    pthread_mutex_unlock(&g_q_lock);
 }
 
 static int do_flush_wbuf_locked(int storage_fd, int idx)
@@ -528,51 +592,57 @@ static int do_flush_wbuf_locked(int storage_fd, int idx)
     size_t sz   = ctx->wbuf_used;
     off_t  base = ctx->wbuf_base_off;
 
-    /* --- ADAPTIVE HETEROGENEOUS ROUTING --- */
-    if (route_pqc_workload(sz) == USE_CPU) {
+    int state[4];
+    int action = route_pqc_workload(sz, state);
+    double t0 = get_time_us();
+    int res = 0;
+
+    /* --- CITADEL ADAPTIVE ROUTING --- */
+    if (action == USE_CPU) {
         /* CPU Fallback: Fast SHAKE128 directly in-place, zero GPU interference */
         uint8_t *cpu_keystream = (uint8_t *)malloc(sz);
         if (cpu_keystream) {
             gpu_gen_keystream(ctx, base, sz, cpu_keystream);
-            for(size_t i=0; i<sz; i++) {
-                ctx->wbuf[i] ^= cpu_keystream[i];
+            for(size_t j=0; j<sz; j++) {
+                ctx->wbuf[j] ^= cpu_keystream[j];
             }
-            int res = (int)pwrite(storage_fd, ctx->wbuf, sz, base);
+            res = (int)pwrite(storage_fd, ctx->wbuf, sz, base);
             free(cpu_keystream);
-            ctx->wbuf_used = 0;
-            return res == -1 ? -errno : 0;
         }
+    } else {
+        /* Phase 4: Async GPU Pipeline — Acquire dedicated stream and buffers */
+        int stream_id = acquire_stream();
+        gpu_stream_ctx_t *sctx = &g_streams[stream_id];
+
+        /* Step 1: CPU → SHAKE128 keystream */
+        gpu_gen_keystream(ctx, base, sz, sctx->pinned_keystream);
+
+        /* Step 2: memcpy to stream's pinned buffer */
+        memcpy(sctx->pinned_buf, ctx->wbuf, sz);
+
+        /* Phase 3: GPU NTT Workload (Simulate heavy Kyber polynomial ops first) */
+        int ntt_blocks = (sz / (KYBER_N * sizeof(int16_t)));
+        if (ntt_blocks > 0) {
+            pqc_kyber_ntt_kernel<<<ntt_blocks, 128, 0, sctx->stream>>>((int16_t*)sctx->pinned_buf, sz);
+        }
+
+        /* Step 3: GPU XOR (plaintext XOR keystream) */
+        int tpb    = 256;
+        int blocks = (int)((sz + tpb - 1) / tpb);
+        pqc_stream_xor_kernel<<<blocks, tpb, 0, sctx->stream>>>(
+            sctx->pinned_buf, sctx->pinned_keystream, sz);
+        
+        CUDA_CHECK(cudaStreamSynchronize(sctx->stream));
+
+        /* Step 4: write ciphertext from pinned buffer → NVMe */
+        res = (int)pwrite(storage_fd, sctx->pinned_buf, sz, base);
+        
+        release_stream(stream_id);
     }
 
-    /* Phase 4: Async GPU Pipeline — Acquire dedicated stream and buffers */
-    int stream_id = acquire_stream();
-    gpu_stream_ctx_t *sctx = &g_streams[stream_id];
+    double latency_ms = (get_time_us() - t0) / 1000.0;
+    update_q_value(state, action, latency_ms);
 
-    /* Step 1: CPU → SHAKE128 keystream */
-    gpu_gen_keystream(ctx, base, sz, sctx->pinned_keystream);
-
-    /* Step 2: memcpy to stream's pinned buffer */
-    memcpy(sctx->pinned_buf, ctx->wbuf, sz);
-
-    /* Phase 3: GPU NTT Workload (Simulate heavy Kyber polynomial ops first) */
-    int ntt_blocks = (sz / (KYBER_N * sizeof(int16_t)));
-    if (ntt_blocks > 0) {
-        pqc_kyber_ntt_kernel<<<ntt_blocks, 128, 0, sctx->stream>>>((int16_t*)sctx->pinned_buf, sz);
-    }
-
-    /* Step 3: GPU XOR (plaintext XOR keystream) */
-    int tpb    = 256;
-    int blocks = (int)((sz + tpb - 1) / tpb);
-    pqc_stream_xor_kernel<<<blocks, tpb, 0, sctx->stream>>>(
-        sctx->pinned_buf, sctx->pinned_keystream, sz);
-    
-    CUDA_CHECK(cudaStreamSynchronize(sctx->stream));
-
-    /* Step 4: write ciphertext from pinned buffer → NVMe */
-    int res = (int)pwrite(storage_fd, sctx->pinned_buf, sz, base);
-    
-    release_stream(stream_id);
-    
     ctx->wbuf_used = 0;
     return res == -1 ? -errno : 0;
 }
