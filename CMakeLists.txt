@@ -14,6 +14,9 @@ add_compile_options(-Wall -Wextra -O2)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(FUSE3 REQUIRED IMPORTED_TARGET fuse3)
 
+# ── Find OpenSSL (for SHAKE128 XOF stream cipher) ───────────────────────────
+find_package(OpenSSL REQUIRED)
+
 # ── Find liboqs ─────────────────────────────────────────────────────────────
 find_library(OQS_LIBRARY NAMES oqs PATHS /usr/local/lib /usr/lib)
 find_path(OQS_INCLUDE_DIR NAMES oqs/oqs.h PATHS /usr/local/include /usr/include)
@@ -33,7 +36,7 @@ endif()
 # ── Target 1: CPU Baseline (pqc_fuse) ──────────────────────────────────────
 if(HAS_OQS)
     add_executable(pqc_fuse pqc_fuse.c)
-    target_link_libraries(pqc_fuse PRIVATE PkgConfig::FUSE3 OQS::oqs pthread m)
+    target_link_libraries(pqc_fuse PRIVATE PkgConfig::FUSE3 OQS::oqs OpenSSL::Crypto pthread m)
 endif()
 
 # ── Target 2: GPU Accelerated (pqc_fuse_gpu) ───────────────────────────────
@@ -43,15 +46,15 @@ check_language(CUDA)
 if(CMAKE_CUDA_COMPILER)
     enable_language(CUDA)
 
-    # Auto-detect Jetson GPU architecture
-    set(CMAKE_CUDA_ARCHITECTURES "72;87" CACHE STRING "CUDA architectures")
+    # Auto-detect GPU architecture: include Thor (sm_110, Blackwell) + Jetson legacy
+    set(CMAKE_CUDA_ARCHITECTURES "72;87;110" CACHE STRING "CUDA architectures")
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xcompiler -Wall")
 
     add_executable(pqc_fuse_gpu pqc_fuse.cu)
 
     # FUSE headers and libs
-    target_include_directories(pqc_fuse_gpu PRIVATE ${FUSE3_INCLUDE_DIRS})
-    target_link_libraries(pqc_fuse_gpu PRIVATE ${FUSE3_LIBRARIES} pthread m)
+    target_include_directories(pqc_fuse_gpu PRIVATE ${FUSE3_INCLUDE_DIRS} ${OQS_INCLUDE_DIR})
+    target_link_libraries(pqc_fuse_gpu PRIVATE ${FUSE3_LIBRARIES} ${OQS_LIBRARY} pthread m)
     target_compile_definitions(pqc_fuse_gpu PRIVATE ${FUSE3_CFLAGS_OTHER})
 
     # Set CUDA properties

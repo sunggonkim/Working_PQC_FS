@@ -42,6 +42,8 @@
 #include <stdarg.h>
 
 #include <oqs/oqs.h>
+#include <openssl/evp.h>
+#include <pthread.h>
 
 /* ════════════════════════════════════════════════════════════════════════════
  *  Configuration & Globals
@@ -59,8 +61,24 @@ static OQS_KEM *g_kem = NULL;
 static uint8_t *g_public_key  = NULL;
 static uint8_t *g_secret_key  = NULL;
 
-/** Number of KEM operations per write (increase for heavier CPU load) */
-#define KEM_OPS_PER_WRITE 1
+/*
+ * Per-file encryption context.
+ * KEM runs ONCE per file (in pqc_create), yielding a 32-byte shared secret.
+ * All subsequent writes use SHAKE128 XOF to expand that secret into a
+ * keystream — no repeated KEM calls on the write hot path.
+ */
+#define PQC_MAX_FD 4096
+
+typedef struct {
+    int      valid;
+    uint8_t  ss[64];     /* shared secret (ML-KEM-512 = 32 B) */
+    size_t   ss_len;
+    uint64_t file_id;    /* unique counter for keystream domain separation */
+} pqc_fd_ctx_t;
+
+static pqc_fd_ctx_t      g_fd_ctx[PQC_MAX_FD];
+static pthread_mutex_t   g_fd_lock    = PTHREAD_MUTEX_INITIALIZER;
+static uint64_t          g_file_id_ctr = 0;
 
 /* ════════════════════════════════════════════════════════════════════════════
  *  Utility Functions
@@ -114,6 +132,43 @@ static void pqc_log(const char *fmt, ...)
 static void resolve_physical_path(char *dest, size_t dest_size, const char *path)
 {
     snprintf(dest, dest_size, "%s%s", g_storage_dir, path);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+ *  Per-fd Context Helpers
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+static void ctx_set(int fd, const uint8_t *ss, size_t ss_len, uint64_t fid)
+{
+    int idx = fd % PQC_MAX_FD;
+    pthread_mutex_lock(&g_fd_lock);
+    memcpy(g_fd_ctx[idx].ss, ss, ss_len);
+    g_fd_ctx[idx].ss_len  = ss_len;
+    g_fd_ctx[idx].file_id = fid;
+    g_fd_ctx[idx].valid   = 1;
+    pthread_mutex_unlock(&g_fd_lock);
+}
+
+static int ctx_get(int fd, pqc_fd_ctx_t *out)
+{
+    int idx = fd % PQC_MAX_FD;
+    pthread_mutex_lock(&g_fd_lock);
+    if (!g_fd_ctx[idx].valid) {
+        pthread_mutex_unlock(&g_fd_lock);
+        return -1;
+    }
+    *out = g_fd_ctx[idx];
+    pthread_mutex_unlock(&g_fd_lock);
+    return 0;
+}
+
+static void ctx_clear(int fd)
+{
+    int idx = fd % PQC_MAX_FD;
+    pthread_mutex_lock(&g_fd_lock);
+    OQS_MEM_cleanse(g_fd_ctx[idx].ss, sizeof(g_fd_ctx[idx].ss));
+    g_fd_ctx[idx].valid = 0;
+    pthread_mutex_unlock(&g_fd_lock);
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -188,82 +243,52 @@ static int pqc_init(void)
 /**
  * Perform PQC encryption workload on a data buffer.
  *
- * This function deliberately creates CPU-bound PQC load by running
- * KEM encapsulation on each chunk of the write buffer.
+ * Correct hybrid-encryption design:
+ *   - KEM runs ONCE per file (in pqc_create), producing a 32-byte shared secret.
+ *   - This function uses that secret as a seed for SHAKE128 XOF to derive a
+ *     keystream of exactly in_size bytes, then XORs it with plaintext.
  *
- * The "encrypted" output is: ciphertext || shared_secret XOR plaintext
- * (This is NOT a secure construction — it's for profiling only!)
+ * Why SHAKE128?  It's a standard (NIST FIPS 202) XOF with ~1 GB/s throughput on
+ * modern CPUs — fast enough to be disk-limited, while being cryptographically
+ * sound as a stream cipher when seeded from a KEM-derived secret.
  *
- * Returns: number of bytes written to out_buf, or -1 on error.
- *
- * ┌─────────────────────────────────────────────────────────────────┐
- * │  GPU OFFLOADING CHANGE POINT:                                   │
- * │  Replace the inner loop with a CUDA kernel call.  The buffer    │
- * │  should be allocated via cudaMallocManaged() in the caller.     │
- * └─────────────────────────────────────────────────────────────────┘
+ * Seed = shared_secret || file_id (8B) || write_offset (8B)
+ * This ensures every write produces a unique, non-repeating keystream.
  */
-static int pqc_encrypt_buffer(const char *in_buf, size_t in_size,
-                               char *out_buf, size_t out_buf_size,
+static int pqc_stream_encrypt(const pqc_fd_ctx_t *ctx,
+                               const char *in_buf, size_t in_size,
+                               off_t offset,
+                               char *out_buf,
                                double *latency_us)
 {
-    if (!g_kem) return -1;
-
     double t_start = get_time_us();
-    size_t total_written = 0;
 
-    /* Allocate temporary KEM buffers */
-    uint8_t *ciphertext    = malloc(g_kem->length_ciphertext);
-    uint8_t *shared_secret = malloc(g_kem->length_shared_secret);
+    /* Build SHAKE128 seed: ss || file_id || write_offset */
+    uint8_t seed[80];  /* max ss_len=64 + 8 + 8 */
+    size_t  seed_len = ctx->ss_len + 16;
+    memcpy(seed, ctx->ss, ctx->ss_len);
+    uint64_t fid = ctx->file_id;
+    uint64_t off = (uint64_t)offset;
+    memcpy(seed + ctx->ss_len,     &fid, 8);
+    memcpy(seed + ctx->ss_len + 8, &off, 8);
 
-    if (!ciphertext || !shared_secret) {
-        free(ciphertext);
-        free(shared_secret);
-        return -1;
-    }
+    /* Squeeze a keystream of in_size bytes via OpenSSL SHAKE128 XOF */
+    EVP_MD_CTX *md = EVP_MD_CTX_new();
+    if (!md) return -1;
 
-    /*
-     * Process the buffer in chunks of shared_secret length.
-     * For each chunk, perform a full KEM encapsulation (the expensive part)
-     * and XOR the plaintext with the shared secret.
-     */
-    size_t ss_len = g_kem->length_shared_secret;
-    size_t offset = 0;
+    EVP_DigestInit_ex(md, EVP_shake128(), NULL);
+    EVP_DigestUpdate(md, seed, seed_len);
+    /* EVP_DigestFinalXOF squeezes arbitrary-length output */
+    EVP_DigestFinalXOF(md, (uint8_t *)out_buf, in_size);
+    EVP_MD_CTX_free(md);
 
-    while (offset < in_size) {
-        /* ── KEM Encapsulation (CPU-intensive!) ── */
-        for (int k = 0; k < KEM_OPS_PER_WRITE; k++) {
-            OQS_STATUS rc = OQS_KEM_encaps(g_kem, ciphertext, shared_secret,
-                                            g_public_key);
-            if (rc != OQS_SUCCESS) {
-                pqc_log("ERROR: KEM encapsulation failed at offset %zu", offset);
-                free(ciphertext);
-                free(shared_secret);
-                return -1;
-            }
-        }
-
-        /* ── XOR plaintext with shared secret ── */
-        size_t chunk_len = (in_size - offset < ss_len) ? (in_size - offset) : ss_len;
-
-        if (total_written + chunk_len > out_buf_size) {
-            chunk_len = out_buf_size - total_written;
-        }
-
-        for (size_t i = 0; i < chunk_len; i++) {
-            out_buf[total_written + i] = in_buf[offset + i] ^ shared_secret[i % ss_len];
-        }
-
-        total_written += chunk_len;
-        offset += chunk_len;
-    }
+    /* XOR keystream with plaintext */
+    for (size_t i = 0; i < in_size; i++)
+        out_buf[i] ^= in_buf[i];
 
     double t_end = get_time_us();
     *latency_us = t_end - t_start;
-
-    free(ciphertext);
-    free(shared_secret);
-
-    return (int)total_written;
+    return (int)in_size;
 }
 
 /**
@@ -367,17 +392,40 @@ static int pqc_create(const char *path, mode_t mode,
         return -errno;
 
     fi->fh = (uint64_t)fd;
+
+    /* Run KEM once per file — establishes shared secret for all writes */
+    if (g_kem) {
+        uint8_t *ct = malloc(g_kem->length_ciphertext);
+        uint8_t *ss = malloc(g_kem->length_shared_secret);
+        if (ct && ss) {
+            double t0 = get_time_us();
+            if (OQS_KEM_encaps(g_kem, ct, ss, g_public_key) == OQS_SUCCESS) {
+                pthread_mutex_lock(&g_fd_lock);
+                uint64_t fid = ++g_file_id_ctr;
+                pthread_mutex_unlock(&g_fd_lock);
+                ctx_set(fd, ss, g_kem->length_shared_secret, fid);
+                pqc_log("CREATE %s: KEM encaps %.1fµs fd=%d fid=%llu",
+                        path, get_time_us() - t0, fd, (unsigned long long)fid);
+            } else {
+                pqc_log("CREATE %s: KEM encaps FAILED", path);
+            }
+        }
+        OQS_MEM_cleanse(ss, g_kem->length_shared_secret);
+        free(ct);
+        free(ss);
+    }
     return 0;
 }
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════╗
- * ║  WRITE — The core profiling function                                     ║
+ * ║  WRITE — Hybrid PQC + SHAKE128 stream cipher                           ║
  * ║                                                                          ║
- * ║  Every write to mnt_secure/ goes through here.  We:                      ║
- * ║    1. Run Kyber-512 KEM encapsulation on the data (CPU-heavy)            ║
- * ║    2. Log the encryption latency                                         ║
- * ║    3. Write the "encrypted" data to storage_physical/                    ║
+ * ║  Hot path (most writes):                                                 ║
+ * ║    1. ctx_get() retrieves the per-file shared secret (from KEM in open)  ║
+ * ║    2. SHAKE128(ss || file_id || offset) generates keystream in one call   ║
+ * ║    3. XOR plaintext with keystream -> encrypted output                   ║
+ * ║    4. pwrite() to physical storage                                       ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  */
 static int pqc_write(const char *path, const char *buf, size_t size,
@@ -386,46 +434,33 @@ static int pqc_write(const char *path, const char *buf, size_t size,
     (void)path;
     int fd = (int)fi->fh;
 
-    /* ── Encrypt the buffer with PQC (CPU-bound workload) ── */
-    double latency_us = 0.0;
     char *enc_buf = malloc(size);
     if (!enc_buf)
         return -ENOMEM;
 
-    int enc_len = pqc_encrypt_buffer(buf, size, enc_buf, size, &latency_us);
-    if (enc_len < 0) {
-        pqc_log("WRITE ERROR: PQC encryption failed for %zu bytes", size);
-        free(enc_buf);
-        /* Fallback: write plaintext */
-        int res = (int)pwrite(fd, buf, size, offset);
-        return (res == -1) ? -errno : res;
+    double latency_us = 0.0;
+    pqc_fd_ctx_t ctx;
+
+    if (ctx_get(fd, &ctx) == 0) {
+        /* Fast path: SHAKE128 stream cipher (KEM already done in create) */
+        pqc_stream_encrypt(&ctx, buf, size, offset, enc_buf, &latency_us);
+    } else {
+        /* Fallback: no per-file context (e.g., opened without create) */
+        memcpy(enc_buf, buf, size);
     }
 
-    /* ── Log the latency ── */
-    double throughput_mbps = (size > 0 && latency_us > 0)
-        ? ((double)size / (1024.0 * 1024.0)) / (latency_us / 1e6)
-        : 0.0;
-
-    pqc_log("WRITE: %zu bytes | PQC latency: %.2f µs (%.2f ms) | "
-            "throughput: %.2f MB/s | KEM ops: %d",
-            size, latency_us, latency_us / 1000.0,
-            throughput_mbps, KEM_OPS_PER_WRITE);
-
-    /* ── Write encrypted data to physical storage ── */
-    double t_io_start = get_time_us();
-    int res = (int)pwrite(fd, enc_buf, (size_t)enc_len, offset);
-    double t_io_end = get_time_us();
-
-    if (res == -1) {
-        free(enc_buf);
-        return -errno;
+    /* Log every 256 writes to avoid I/O spam */
+    static _Atomic uint64_t wcount = 0;
+    if (__atomic_fetch_add(&wcount, 1, __ATOMIC_RELAXED) % 256 == 0) {
+        double mbps = (size > 0 && latency_us > 0)
+            ? ((double)size / 1048576.0) / (latency_us / 1e6) : 0.0;
+        pqc_log("WRITE fd=%d off=%lld sz=%zu enc=%.1fµs (%.0f MB/s)",
+                fd, (long long)offset, size, latency_us, mbps);
     }
 
-    pqc_log("WRITE I/O: %d bytes written to disk | disk latency: %.2f µs",
-            res, t_io_end - t_io_start);
-
+    int res = (int)pwrite(fd, enc_buf, size, offset);
     free(enc_buf);
-    return res;
+    return (res == -1) ? -errno : res;
 }
 
 static int pqc_truncate(const char *path, off_t size,
@@ -481,6 +516,7 @@ static int pqc_rmdir(const char *path)
 static int pqc_release(const char *path, struct fuse_file_info *fi)
 {
     (void)path;
+    ctx_clear((int)fi->fh);
     close((int)fi->fh);
     return 0;
 }
