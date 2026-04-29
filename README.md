@@ -298,17 +298,26 @@ fusermount3 -u ~/pqc_edge_workspace/mnt_secure
 
 ---
 
-## 📈 Evaluation: Quality of Service & Scalability
+## 📈 Evaluation: Real Empirical Data & Honest Limitations
 
-Our evaluation results demonstrate that the proposed GPU-accelerated PQC-FUSE architecture successfully guarantees Quality of Service (QoS) for real-time edge workloads, such as Physical AI cameras. As illustrated in Figure 1, the baseline CPU-PQC implementation suffers from severe latency spikes and extreme frame drops when concurrent background I/O operations occur, ultimately crippling the system's availability. In stark contrast, our approach maintains a highly stable framerate—virtually indistinguishable from plaintext I/O—even under heavy concurrent load. This resilience is directly attributed to our asynchronous execution model and zero-copy unified memory design, which effectively bypasses the CPU's cryptographic bottlenecks.
+Our evaluation was conducted exclusively on real hardware (NVIDIA Jetson) using 100% empirical measurements, without any synthesized data. We simulated a realistic edge workload by running concurrent 1280x720 JPEG camera captures at a target rate of 30 FPS.
+
+### 1. QoS Maintenance (Single Camera)
+As shown in Figure 1, the baseline NVMe storage handles 57.8 FPS natively. The **CPU-PQC v3** implementation recorded 56.6 FPS, while the **GPU-PQC v3** architecture recorded 55.5 FPS. 
+> **Limitation (Honest Finding):** In a single-threaded, non-saturated workload, the CPU version slightly outperforms the GPU version. This is because the Kyber key encapsulation happens only once per file, and the subsequent SHAKE128 XOF operation is highly optimized on the CPU. The GPU version incurs an intrinsic CUDA kernel launch and PCI-e (HtoD/DtoH) memory transfer overhead of ~1.7ms per 512KB coalesced flush, resulting in a marginal FPS drop.
 
 ![Figure 1: QoS Maintenance (YOLO FPS)](./figures/fig1_qos_fps.png)
 
-Furthermore, the scalability and resource efficiency of our architecture are validated in Figure 2 and Figure 3. The implementation of a 16-channel CUDA stream pool enables multiple concurrent FUSE threads to overlap their heavy cryptographic workloads without triggering global lock contention. Consequently, our system achieves over 208 MB/s of sustained throughput under highly concurrent conditions, scaling linearly with the workload and outpacing the baseline by more than 5,000×. 
+### 2. Realistic Workload Scalability (1, 2, 4 Cameras)
+Figure 2 demonstrates the system's scalability when handling 1, 2, and 4 concurrent camera workloads. 
+> **Finding:** Both CPU and GPU architectures successfully handle the realistic workload without failure, scaling perfectly to ~28 MB/s (the maximum required throughput for 4 cameras). Because the FUSE daemon's 512KB write coalescing buffers the I/O efficiently, the CPU's global lock does not thrash under this natural, paced workload. 
 
 ![Figure 2: Concurrent I/O Scalability](./figures/fig2_scalability.png)
 
-Additionally, offloading the rigorous Kyber NTT lattice computations to the GPU dramatically reduces CPU utilization to under 15%. This drastic reduction in CPU load is crucial for edge environments, as it reclaims vital computational resources strictly required for latency-sensitive AI inference tasks.
+### 3. CPU Utilization and True System Bottlenecks
+Figure 3 shows the average CPU utilization during the 4-camera concurrent benchmark. The CPU-PQC version used ~4.5% CPU, while the GPU-PQC version used ~11.2%.
+> **Finding:** The GPU version consumes *more* CPU than the CPU version for this specific workload due to the driver overhead of orchestrating asynchronous CUDA streams. 
+> **When does GPU-PQC shine?** As proven in our extreme `fio` benchmark (100MB concurrent raw writes), when the system is absolutely saturated with zero sleep intervals, the CPU-PQC's global lock thrashes violently, collapsing throughput to **0.04 MB/s**. In that exact same extreme scenario, the GPU-PQC's 16-channel asynchronous pipeline bypasses the lock contention completely, scaling linearly to **208 MB/s**. 
 
 ![Figure 3: CPU vs GPU Utilization](./figures/fig3_utilization.png)
 
