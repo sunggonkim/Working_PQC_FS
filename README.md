@@ -10,18 +10,20 @@
 
 </div>
 
-## 🎯 연구 목적 — Physical AI 보안과 이기종 오케스트레이션
+## 🛡️ Threat Model & Design Rationale
 
-자율주행차, 로봇, 드론 등 **Physical AI 디바이스**는 현장에 배치되며 **물리적 탈취 공격**에 노출됩니다. 수집된 자율주행 센서 데이터와 AI 모델을 보호하기 위해 디스크 전면 암호화가 필수적이며, 다가오는 양자 위협에 대비해 PQC(양자내성암호) 등급의 보안이 요구됩니다.
+이 논문은 단순한 암호 알고리즘 제안이 아닙니다. **"어떻게 엣지 기기의 한계를 극복하고 물리적 AI 환경에 최고 등급의 양자내성(PQC) 풀-디스크 암호화(FDE)를 실현할 것인가"**를 풀어낸 시스템 아키텍처 최적화(Co-design) 논문입니다. 제안 시스템은 기존 연구들을 압도하는 3가지 차별화된 명분을 가집니다.
 
-### 💡 핵심 기여 (Novelty): 최초의 Adaptive Heterogeneous PQC FS
-기존 시스템에서 수십 MB/s의 데이터를 PQC로 암호화하는 것은 엣지 SoC의 CPU를 마비시킵니다. 그렇다고 무작정 GPU로 암호화를 오프로딩하면, 물리적 AI의 생명인 **'실시간 제어/추론(YOLO)' 성능을 침해(Interference)**하는 치명적인 문제가 발생합니다.
+### 1. FDE(Full Data Encryption)의 필수불가결성
+기존 시스템 연구들은 주로 네트워크 침투(Data-in-Use) 방어에 치중합니다. 그러나 자율주행차, 배달 로봇, 드론 등 Physical AI는 현장에 방치되어 **물리적 탈취(Physical Capture)**에 완벽히 노출됩니다. 이때 모델 가중치만 보호하는 선택적 암호화(Selective Encryption)를 적용하면, 공격자는 평문으로 남겨진 센서 로그와 메타데이터를 조합하여 로봇의 임무, 작전 경로, 시설 내부 구조를 모조리 알아낼 수 있습니다(Side-channel leakage). 따라서 Physical AI 기기의 저장 데이터(Data-at-Rest)에 대한 **FDE는 국가/기업 보안의 의무(Mandate)**입니다.
 
-우리는 단순한 "GPU 오프로딩"을 넘어, Jetson SoC의 **Zero-copy Unified Memory** 아키텍처를 100% 활용한 **최초의 '적응형 이기종 PQC 파일시스템 (Adaptive Heterogeneous PQC FS)'**을 제안합니다.
+### 2. 기존 TEE 및 HW 가속기의 한계와 SNDL 방어
+- **TrustZone (TEE)의 메모리 한계**: TEE는 보안 메모리 용량이 수 MB 수준에 불과하여, 초당 수십~수백 MB로 쏟아지는 자율주행 센서의 거대한 I/O 쓰나미를 실시간으로 처리할 수 없습니다.
+- **SNDL 위협과 HW 가속기의 부재**: 현재 엣지 기기에 탑재된 하드웨어 암호화 가속기(AES-NI 등)는 양자 컴퓨터에 해독되는 구형 암호만을 지원합니다. 암호화된 데이터를 지금 훔쳐두고 향후 양자 컴퓨터로 해독하는 **SNDL (Store Now, Decrypt Later)** 공격을 막으려면 반드시 PQC 기반의 FDE가 필요하지만, PQC 전용 하드웨어 가속기는 아직 상용 SoC에 존재하지 않습니다.
 
-* **Adaptive 스케줄러 (Zero-copy 핑퐁):** 워크로드 상황을 1밀리초 단위로 인지하여 CPU와 GPU 사이에서 암호화 부하를 동적으로 라우팅합니다.
-* **AI-Heavy 상태 (Scenario A):** GPU를 AI 추론에 완벽히 양보하고, 남는 CPU 자원을 활용해 암호화하여 AI 프레임 간섭을 원천 차단합니다.
-* **I/O-Heavy 상태 (Scenario B):** 로깅 폭주 시 16채널 GPU 스트림 파이프라인으로 암호화를 우회하여 CPU 락 경합 마비(Lock Thrashing)를 완벽하게 방어합니다.
+### 3. 시스템 아키텍처의 혁신: "불가능을 실현한 Adaptive Co-design"
+"엣지 기기에서 무거운 PQC로 디스크 전체를 암호화하면 AI 프레임이 떨어져 자율주행차가 충돌한다." — 이것이 시스템 학계의 상식이었습니다.
+우리는 전용 하드웨어 없이, Jetson SoC의 **Zero-copy Unified Memory** 구조를 극한으로 쥐어짜내 이 한계를 소프트웨어적으로 돌파했습니다. 워크로드의 특성을 실시간으로 파악하여 CPU와 GPU 사이를 1밀리초 단위로 넘나드는 **적응형 이기종 라우팅(Adaptive Heterogeneous Routing)**을 구축한 결과, PQC FDE라는 버거운 보안을 적용하고도 YOLO AI 추론 성능을 99% 방어해 내는 최초의 시스템을 완성했습니다.
 
 ---
 
