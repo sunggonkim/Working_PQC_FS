@@ -1,0 +1,68 @@
+{
+  "seq_idle": {
+    "label": "Sequential 1MB (GPU Idle)",
+    "total_ops": 3731,
+    "total_mb": 3731.0,
+    "elapsed_s": 15.0,
+    "throughput_mbps": 248.72,
+    "iops": 248.7,
+    "lat_avg_ms": 3.616,
+    "lat_p95_ms": 3.753,
+    "lat_p99_ms": 4.377
+  },
+  "rand_idle": {
+    "label": "Random 4KB (GPU Idle)",
+    "total_ops": 64503,
+    "total_mb": 251.96,
+    "elapsed_s": 15.0,
+    "throughput_mbps": 16.8,
+    "iops": 4299.5,
+    "lat_avg_ms": 0.231,
+    "lat_p95_ms": 0.258,
+    "lat_p99_ms": 0.433
+  },
+  "seq_gpu_busy": {
+    "label": "Sequential 1MB (GPU Busy)",
+    "total_ops": 3690,
+    "total_mb": 3690.0,
+    "elapsed_s": 15.0,
+    "throughput_mbps": 245.99,
+    "iops": 246.0,
+    "lat_avg_ms": 3.666,
+    "lat_p95_ms": 3.889,
+    "lat_p99_ms": 4.395
+  },
+  "rand_cpu_busy": {
+    "label": "Random 4KB (CPU Busy)",
+    "total_ops": 64923,
+    "total_mb": 253.61,
+    "elapsed_s": 15.0,
+    "throughput_mbps": 16.91,
+    "iops": 4327.7,
+    "lat_avg_ms": 0.23,
+    "lat_p95_ms": 0.255,
+    "lat_p99_ms": 0.435
+  },
+  "mixed_seq": {
+    "label": "Mixed-Seq 1MB",
+    "total_ops": 3602,
+    "total_mb": 3602.0,
+    "elapsed_s": 15.0,
+    "throughput_mbps": 240.12,
+    "iops": 240.1,
+    "lat_avg_ms": 3.738,
+    "lat_p95_ms": 3.89,
+    "lat_p99_ms": 4.212
+  },
+  "mixed_rand": {
+    "label": "Mixed-Rand 4KB",
+    "total_ops": 59133,
+    "total_mb": 230.99,
+    "elapsed_s": 15.0,
+    "throughput_mbps": 15.4,
+    "iops": 3941.7,
+    "lat_avg_ms": 0.252,
+    "lat_p95_ms": 0.354,
+    "lat_p99_ms": 0.527
+  }
+}
