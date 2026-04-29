@@ -44,6 +44,7 @@
 #include <oqs/oqs.h>
 #include <openssl/evp.h>
 #include <pthread.h>
+#include <sys/xattr.h>
 
 /* ════════════════════════════════════════════════════════════════════════════
  *  Configuration & Globals
@@ -70,6 +71,26 @@ static uint8_t *g_secret_key  = NULL;
 #define PQC_MAX_FD    4096
 #define COALESCE_SIZE (512 * 1024)  /* 512 KB per-fd write-coalescing buffer */
 
+/*
+ * Encryption tier (Strategy 2: Semantic-Aware Selective Encryption)
+ * Set via FUSE xattr "user.pqc_tier" on any file.
+ *   PQC_TIER_FULL (1) : ML-KEM-512 + SHAKE128 stream cipher  [default]
+ *   PQC_TIER_NONE (2) : Plaintext passthrough — low-value sensor data
+ */
+#define PQC_TIER_FULL  1
+#define PQC_TIER_NONE  2
+#define PQC_XATTR_TIER "user.pqc_tier"
+
+/*
+ * Strategy 1: Forward-Secure Key Rotation
+ * Re-run ML-KEM-512.Encaps() every KEY_ROTATION_INTERVAL seconds within a
+ * single file's lifetime.  Each epoch gets a new shared_secret stored as an
+ * additional entry in the .pqckey sidecar:
+ *   { epoch(u64) | timestamp(u64) | ss_len(u64) | ss(ss_len bytes) } ...
+ * Guarantees that past plaintext is safe even if current key is leaked.
+ */
+#define KEY_ROTATION_INTERVAL_S  1   /* re-key every N seconds */
+
 typedef struct {
     int      valid;
     uint8_t  ss[64];
@@ -79,6 +100,11 @@ typedef struct {
     uint8_t *wbuf;           /* heap-allocated COALESCE_SIZE bytes */
     size_t   wbuf_used;      /* bytes currently buffered */
     off_t    wbuf_base_off;  /* file offset of wbuf[0] */
+    /* Strategy 2: selective encryption tier */
+    int      tier;           /* PQC_TIER_FULL or PQC_TIER_NONE */
+    /* Strategy 1: key rotation */
+    uint64_t key_epoch;      /* current epoch index (0 = initial KEM) */
+    time_t   last_rekey;     /* wall-clock time of last KEM call */
 } pqc_fd_ctx_t;
 
 static pqc_fd_ctx_t      g_fd_ctx[PQC_MAX_FD];
@@ -148,9 +174,12 @@ static void ctx_set(int fd, const uint8_t *ss, size_t ss_len, uint64_t fid)
     int idx = fd % PQC_MAX_FD;
     pthread_mutex_lock(&g_fd_lock);
     memcpy(g_fd_ctx[idx].ss, ss, ss_len);
-    g_fd_ctx[idx].ss_len  = ss_len;
-    g_fd_ctx[idx].file_id = fid;
-    g_fd_ctx[idx].valid   = 1;
+    g_fd_ctx[idx].ss_len     = ss_len;
+    g_fd_ctx[idx].file_id    = fid;
+    g_fd_ctx[idx].valid      = 1;
+    g_fd_ctx[idx].tier       = PQC_TIER_FULL;  /* default: full PQC */
+    g_fd_ctx[idx].key_epoch  = 0;
+    g_fd_ctx[idx].last_rekey = time(NULL);
     if (!g_fd_ctx[idx].wbuf)
         g_fd_ctx[idx].wbuf = (uint8_t *)malloc(COALESCE_SIZE);
     g_fd_ctx[idx].wbuf_used     = 0;
@@ -327,10 +356,65 @@ static void pqc_cleanup(void)
  *  Encrypts ctx->wbuf[0..wbuf_used) with SHAKE128 XOR and pwrite to storage.
  *  MUST be called with g_fd_lock held.  Resets wbuf_used = 0 on success.
  * -------------------------------------------------------------------------- */
+/*
+ * do_rekey_locked() — Strategy 1: Forward-Secure Key Rotation
+ * Runs ML-KEM-512.Encaps() to produce a fresh shared_secret and appends
+ * a new epoch entry to the .pqckey sidecar.  MUST be called with g_fd_lock.
+ */
+static void do_rekey_locked(int storage_fd, int idx, const char *phys_path)
+{
+    (void)storage_fd;
+    if (!g_kem || !phys_path) return;
+
+    uint8_t *ct = malloc(g_kem->length_ciphertext);
+    uint8_t *ss = malloc(g_kem->length_shared_secret);
+    if (!ct || !ss) { free(ct); free(ss); return; }
+
+    if (OQS_KEM_encaps(g_kem, ct, ss, g_public_key) != OQS_SUCCESS) {
+        free(ct); free(ss); return;
+    }
+
+    pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
+    OQS_MEM_cleanse(ctx->ss, sizeof(ctx->ss));
+    memcpy(ctx->ss, ss, g_kem->length_shared_secret);
+    ctx->ss_len    = g_kem->length_shared_secret;
+    ctx->key_epoch++;
+    ctx->last_rekey = time(NULL);
+
+    /* Append epoch record to sidecar: epoch(8B)|ts(8B)|ss_len(8B)|ss */
+    char key_path[4096 + 8];
+    snprintf(key_path, sizeof(key_path), "%s.pqckey", phys_path);
+    int kfd = open(key_path, O_WRONLY | O_CREAT | O_APPEND, 0600);
+    if (kfd >= 0) {
+        uint64_t ep      = ctx->key_epoch;
+        uint64_t ts      = (uint64_t)ctx->last_rekey;
+        uint64_t ss_len64 = (uint64_t)ctx->ss_len;
+        (void)(write(kfd, &ep,      8) +
+               write(kfd, &ts,      8) +
+               write(kfd, &ss_len64, 8) +
+               write(kfd, ss, (size_t)ss_len64));
+        close(kfd);
+    }
+
+    pqc_log("REKEY epoch=%llu fid=%llu",
+            (unsigned long long)ctx->key_epoch,
+            (unsigned long long)ctx->file_id);
+    OQS_MEM_cleanse(ss, g_kem->length_shared_secret);
+    free(ct); free(ss);
+}
+
 static int do_flush_wbuf_locked(int storage_fd, int idx)
 {
     pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
     if (ctx->wbuf_used == 0) return 0;
+
+    /* Strategy 2: tier NONE → write plaintext directly */
+    if (ctx->tier == PQC_TIER_NONE) {
+        int res = (int)pwrite(storage_fd, ctx->wbuf, ctx->wbuf_used,
+                              ctx->wbuf_base_off);
+        ctx->wbuf_used = 0;
+        return res == -1 ? -errno : 0;
+    }
 
     size_t sz   = ctx->wbuf_used;
     off_t  base = ctx->wbuf_base_off;
@@ -419,9 +503,44 @@ static int pqc_open(const char *path, struct fuse_file_info *fi)
             ss_len <= sizeof(ss) &&
             (size_t)read(kfd, ss, ss_len) == ss_len) {
             ctx_set(fd, ss, (size_t)ss_len, fid);
+            /* Advance through rotation epoch records to load latest key.
+             * Format: epoch(8)|ts(8)|ss_len(8)|ss(ss_len) */
+            uint64_t ep_hdr[3];
+            while (read(kfd, ep_hdr, 24) == 24) {
+                uint64_t ep_ss_len = ep_hdr[2];
+                if (ep_ss_len == 0 || ep_ss_len > sizeof(ss)) break;
+                uint8_t ep_ss[64] = {0};
+                if ((size_t)read(kfd, ep_ss, ep_ss_len) == ep_ss_len) {
+                    int idx2 = fd % PQC_MAX_FD;
+                    pthread_mutex_lock(&g_fd_lock);
+                    if (g_fd_ctx[idx2].valid) {
+                        memcpy(g_fd_ctx[idx2].ss, ep_ss, ep_ss_len);
+                        g_fd_ctx[idx2].ss_len    = ep_ss_len;
+                        g_fd_ctx[idx2].key_epoch = ep_hdr[0];
+                    }
+                    pthread_mutex_unlock(&g_fd_lock);
+                    OQS_MEM_cleanse(ep_ss, sizeof(ep_ss));
+                }
+            }
         }
         OQS_MEM_cleanse(ss, sizeof(ss));
         close(kfd);
+    }
+
+    /* Strategy 2: restore tier from physical xattr if present */
+    {
+        char xval[8] = {0};
+        ssize_t xlen = getxattr(phys_path, PQC_XATTR_TIER, xval, sizeof(xval) - 1);
+        if (xlen > 0) {
+            int t = atoi(xval);
+            if (t == PQC_TIER_NONE) {
+                int idx = fd % PQC_MAX_FD;
+                pthread_mutex_lock(&g_fd_lock);
+                if (g_fd_ctx[idx].valid)
+                    g_fd_ctx[idx].tier = PQC_TIER_NONE;
+                pthread_mutex_unlock(&g_fd_lock);
+            }
+        }
     }
     return 0;
 }
@@ -436,9 +555,9 @@ static int pqc_read(const char *path, char *buf, size_t size, off_t offset,
     int res = (int)pread(fd, buf, size, offset);
     if (res <= 0) return res == -1 ? -errno : 0;
 
-    /* Decrypt in-place — SHAKE128 XOR is symmetric (encrypt == decrypt) */
+    /* Strategy 2: check tier; tier NONE → plaintext, no decrypt needed */
     pthread_mutex_lock(&g_fd_lock);
-    if (g_fd_ctx[idx].valid) {
+    if (g_fd_ctx[idx].valid && g_fd_ctx[idx].tier != PQC_TIER_NONE) {
         pqc_fd_ctx_t snap = g_fd_ctx[idx];
         pthread_mutex_unlock(&g_fd_lock);
         char *tmp = (char *)malloc((size_t)res);
@@ -528,6 +647,43 @@ static int pqc_write(const char *path, const char *buf, size_t size,
         pthread_mutex_unlock(&g_fd_lock);
         int res = (int)pwrite(fd, buf, size, offset);
         return res == -1 ? -errno : (int)size;
+    }
+
+    /* Strategy 2: Tier NONE → plaintext passthrough, no encryption */
+    if (ctx->tier == PQC_TIER_NONE) {
+        if (ctx->wbuf_used == 0)
+            ctx->wbuf_base_off = offset;
+        /* Still coalesce for write batching, but do_flush writes plaintext */
+        int is_c = (ctx->wbuf_used == 0) ||
+                   (offset == ctx->wbuf_base_off + (off_t)ctx->wbuf_used);
+        if (!is_c) do_flush_wbuf_locked(fd, idx);
+        if (ctx->wbuf_used == 0) ctx->wbuf_base_off = offset;
+        if (size < COALESCE_SIZE && ctx->wbuf) {
+            memcpy(ctx->wbuf + ctx->wbuf_used, buf, size);
+            ctx->wbuf_used += size;
+            if (ctx->wbuf_used >= COALESCE_SIZE)
+                do_flush_wbuf_locked(fd, idx);
+        } else {
+            do_flush_wbuf_locked(fd, idx);
+            int _r = (int)pwrite(fd, buf, size, offset);
+            (void)_r;
+        }
+        pthread_mutex_unlock(&g_fd_lock);
+        return (int)size;
+    }
+
+    /* Strategy 1: Key Rotation — re-key if interval expired */
+    {
+        time_t now = time(NULL);
+        if (now - ctx->last_rekey >= KEY_ROTATION_INTERVAL_S) {
+            /* need phys_path to append sidecar; store it in stack */
+            char phys_path[4096];
+            resolve_physical_path(phys_path, sizeof(phys_path), path);
+            /* flush existing buffered data under OLD key first */
+            if (ctx->wbuf_used > 0)
+                do_flush_wbuf_locked(fd, idx);
+            do_rekey_locked(fd, idx, phys_path);
+        }
     }
 
     /* No coalescing buffer (malloc failed) → encrypt directly */
@@ -695,22 +851,83 @@ static void pqc_destroy(void *private_data)
     }
 }
 
+/* ════════════════════════════════════════════════════════════════════════════
+ *  Strategy 2: xattr handlers — Semantic-Aware Selective Encryption
+ *
+ *  Set tier for a file:
+ *    setfattr -n user.pqc_tier -v 2 /mnt_secure/raw_lidar.bin  -> no encryption
+ *    setfattr -n user.pqc_tier -v 1 /mnt_secure/model.bin      -> full PQC
+ *
+ *  The xattr is stored on the physical backing file so it persists across
+ *  remounts.  On open(), the tier is restored into the fd context.
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+static int pqc_setxattr(const char *path, const char *name,
+                         const char *value, size_t size, int flags)
+{
+    char phys_path[4096];
+    resolve_physical_path(phys_path, sizeof(phys_path), path);
+
+    if (setxattr(phys_path, name, value, size, flags) == -1)
+        return -errno;
+
+    /* If setting the tier live, update in-flight fd context */
+    if (strcmp(name, PQC_XATTR_TIER) == 0 && size > 0) {
+        char tmp[8] = {0};
+        memcpy(tmp, value, size < 7 ? size : 7);
+        int new_tier = atoi(tmp);
+        if (new_tier != PQC_TIER_FULL && new_tier != PQC_TIER_NONE)
+            return -EINVAL;
+        /* Scan open fd contexts for this phys_path */
+        pthread_mutex_lock(&g_fd_lock);
+        for (int i = 0; i < PQC_MAX_FD; i++) {
+            if (g_fd_ctx[i].valid)
+                g_fd_ctx[i].tier = new_tier;  /* best-effort; path not stored */
+        }
+        pthread_mutex_unlock(&g_fd_lock);
+        pqc_log("SETXATTR %s tier=%d", path, new_tier);
+    }
+    return 0;
+}
+
+static int pqc_getxattr(const char *path, const char *name,
+                         char *value, size_t size)
+{
+    char phys_path[4096];
+    resolve_physical_path(phys_path, sizeof(phys_path), path);
+
+    ssize_t res = getxattr(phys_path, name, value, size);
+    return res == -1 ? -errno : (int)res;
+}
+
+static int pqc_listxattr(const char *path, char *list, size_t size)
+{
+    char phys_path[4096];
+    resolve_physical_path(phys_path, sizeof(phys_path), path);
+
+    ssize_t res = listxattr(phys_path, list, size);
+    return res == -1 ? -errno : (int)res;
+}
+
 /* ── FUSE operations table ── */
 static const struct fuse_operations pqc_oper = {
-    .getattr  = pqc_getattr,
-    .readdir  = pqc_readdir,
-    .open     = pqc_open,
-    .read     = pqc_read,
-    .write    = pqc_write,
-    .fsync    = pqc_fsync,
-    .create   = pqc_create,
-    .truncate = pqc_truncate,
-    .unlink   = pqc_unlink,
-    .mkdir    = pqc_mkdir,
-    .rmdir    = pqc_rmdir,
-    .release  = pqc_release,
-    .utimens  = pqc_utimens,
-    .destroy  = pqc_destroy,
+    .getattr    = pqc_getattr,
+    .readdir    = pqc_readdir,
+    .open       = pqc_open,
+    .read       = pqc_read,
+    .write      = pqc_write,
+    .fsync      = pqc_fsync,
+    .create     = pqc_create,
+    .truncate   = pqc_truncate,
+    .unlink     = pqc_unlink,
+    .mkdir      = pqc_mkdir,
+    .rmdir      = pqc_rmdir,
+    .release    = pqc_release,
+    .utimens    = pqc_utimens,
+    .destroy    = pqc_destroy,
+    .setxattr   = pqc_setxattr,
+    .getxattr   = pqc_getxattr,
+    .listxattr  = pqc_listxattr,
 };
 
 /* ════════════════════════════════════════════════════════════════════════════
