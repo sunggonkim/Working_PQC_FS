@@ -1,68 +1,68 @@
 {
   "seq_idle": {
     "label": "Sequential 1MB (GPU Idle)",
-    "total_ops": 3731,
-    "total_mb": 3731.0,
+    "total_ops": 3834,
+    "total_mb": 3834.0,
     "elapsed_s": 15.0,
-    "throughput_mbps": 248.72,
-    "iops": 248.7,
-    "lat_avg_ms": 3.616,
-    "lat_p95_ms": 3.753,
-    "lat_p99_ms": 4.377
+    "throughput_mbps": 255.56,
+    "iops": 255.6,
+    "lat_avg_ms": 3.523,
+    "lat_p95_ms": 3.736,
+    "lat_p99_ms": 4.127
   },
   "rand_idle": {
     "label": "Random 4KB (GPU Idle)",
-    "total_ops": 64503,
-    "total_mb": 251.96,
+    "total_ops": 64655,
+    "total_mb": 252.56,
     "elapsed_s": 15.0,
-    "throughput_mbps": 16.8,
-    "iops": 4299.5,
+    "throughput_mbps": 16.84,
+    "iops": 4309.9,
     "lat_avg_ms": 0.231,
     "lat_p95_ms": 0.258,
-    "lat_p99_ms": 0.433
+    "lat_p99_ms": 0.447
   },
   "seq_gpu_busy": {
     "label": "Sequential 1MB (GPU Busy)",
-    "total_ops": 3690,
-    "total_mb": 3690.0,
+    "total_ops": 3685,
+    "total_mb": 3685.0,
     "elapsed_s": 15.0,
-    "throughput_mbps": 245.99,
-    "iops": 246.0,
-    "lat_avg_ms": 3.666,
-    "lat_p95_ms": 3.889,
-    "lat_p99_ms": 4.395
+    "throughput_mbps": 245.67,
+    "iops": 245.7,
+    "lat_avg_ms": 3.672,
+    "lat_p95_ms": 3.828,
+    "lat_p99_ms": 4.346
   },
   "rand_cpu_busy": {
     "label": "Random 4KB (CPU Busy)",
-    "total_ops": 64923,
-    "total_mb": 253.61,
+    "total_ops": 65087,
+    "total_mb": 254.25,
     "elapsed_s": 15.0,
-    "throughput_mbps": 16.91,
-    "iops": 4327.7,
-    "lat_avg_ms": 0.23,
-    "lat_p95_ms": 0.255,
-    "lat_p99_ms": 0.435
+    "throughput_mbps": 16.95,
+    "iops": 4338.6,
+    "lat_avg_ms": 0.229,
+    "lat_p95_ms": 0.257,
+    "lat_p99_ms": 0.437
   },
   "mixed_seq": {
     "label": "Mixed-Seq 1MB",
-    "total_ops": 3602,
-    "total_mb": 3602.0,
+    "total_ops": 3613,
+    "total_mb": 3613.0,
     "elapsed_s": 15.0,
-    "throughput_mbps": 240.12,
-    "iops": 240.1,
-    "lat_avg_ms": 3.738,
-    "lat_p95_ms": 3.89,
-    "lat_p99_ms": 4.212
+    "throughput_mbps": 240.86,
+    "iops": 240.9,
+    "lat_avg_ms": 3.733,
+    "lat_p95_ms": 3.896,
+    "lat_p99_ms": 4.282
   },
   "mixed_rand": {
     "label": "Mixed-Rand 4KB",
-    "total_ops": 59133,
-    "total_mb": 230.99,
+    "total_ops": 59072,
+    "total_mb": 230.75,
     "elapsed_s": 15.0,
-    "throughput_mbps": 15.4,
-    "iops": 3941.7,
-    "lat_avg_ms": 0.252,
-    "lat_p95_ms": 0.354,
-    "lat_p99_ms": 0.527
+    "throughput_mbps": 15.38,
+    "iops": 3937.6,
+    "lat_avg_ms": 0.253,
+    "lat_p95_ms": 0.369,
+    "lat_p99_ms": 0.563
   }
 }
