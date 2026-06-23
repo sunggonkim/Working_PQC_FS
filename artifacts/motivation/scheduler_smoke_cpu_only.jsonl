@@ -1,0 +1,6 @@
+{"event": "scheduler_smoke_begin", "gpu_min_bytes": 999999999, "coherence_penalty_ns": 25000}
+{"event": "scheduler_smoke_job", "index": 0, "bytes": 4096, "target": "CPU", "coherence_ns": 0, "cpu_queue_depth": 2, "gpu_queue_depth": 0, "gpu_wait_ns": 0}
+{"event": "scheduler_smoke_job", "index": 1, "bytes": 131072, "target": "CPU", "coherence_ns": 1024, "cpu_queue_depth": 1, "gpu_queue_depth": 0, "gpu_wait_ns": 0}
+{"event": "scheduler_smoke_job", "index": 2, "bytes": 262144, "target": "CPU", "coherence_ns": 8192, "cpu_queue_depth": 0, "gpu_queue_depth": 0, "gpu_wait_ns": 0}
+{"event": "scheduler_smoke_pressure_job", "bytes": 131072, "target": "CPU", "gpu_wait_ns": 25001, "gpu_queue_depth": 2}
+{"event": "scheduler_smoke_end", "jobs": 3}

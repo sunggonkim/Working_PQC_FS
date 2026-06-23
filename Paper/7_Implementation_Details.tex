@@ -1,0 +1,6 @@
+\subsection{AEGIS-Q Implementation}
+\label{sec:design_impl}
+
+We implemented AEGIS-Q as a user-space FUSE filesystem in C with GPU acceleration modules in CUDA. The implementation comprises approximately 1,200 lines of code across five core modules: \texttt{pqc\_fuse.c}, \texttt{pqc\_admission.c}, \texttt{pqc\_anchor.c}, \texttt{pqc\_file\_key.c}, and \texttt{pqc\_block\_job.h}.
+
+First, we designed a FUSE Frontend module (\texttt{pqc\_fuse.c}) that implements the core filesystem interface, intercepting read, write, and fsync operations, and routing block jobs. Second, we implemented the Admission Controller (\texttt{pqc\_admission.c}) to dynamically evaluate real-time GPU budgets and queue pressures, ensuring storage operations do not interfere with foreground inference. Third, we implemented the Freshness Anchor (\texttt{pqc\_anchor.c}) utilizing a TPM-backed root of trust to record generation committed-prefix states. Fourth, we developed the File Key Manager (\texttt{pqc\_file\_key.c}) and Job Queue (\texttt{pqc\_block\_job.h}) to handle batch post-quantum key rotations (ML-KEM-768) and asynchronous block I/O scheduling. We open-source the code of AEGIS-Q in the following link: \url{https://github.com/sunggonkim/IoTJ-AEGIS-Q}.

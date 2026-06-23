@@ -1,0 +1,52 @@
+\section*{Appendix A \\ Staging and Telemetry Performance Analysis}
+\label{sec:appendix}
+
+The effectiveness of UVM staging in AEGIS-Q relies on the batch size and queue pressure of block jobs during filesystem updates.
+
+\subsection{Theoretical Basis}
+\label{sec:app_theory}
+
+For an $n$-block write stream initialized to sequential logical blocks, the filesystem writes metadata journal records. Let the effective scheduling overhead be modeled as:
+\begin{equation}
+T_{\text{overhead}} = \alpha + \beta \cdot \frac{N_{\text{blocks}}}{B_{\text{coalesced}}}
+\end{equation}
+where $\alpha$ represents the FUSE context switch latency, $\beta$ represents the NVMe storage block mapping overhead, $N_{\text{blocks}}$ is the total number of blocks, and $B_{\text{coalesced}}$ is the coalesced batch size. This represents the minimum queue delay and maximum throughput. The admission controller collapses small sequential writes, reducing metadata overhead and achieving scaling ratios $>$ 200$\times$ under coalescing.
+
+\subsection{Impact of Batch Size}
+\label{sec:app_batch_size}
+
+When block operations are dispatched to the GPU, a batch size of $M$ blocks is accumulated. Let the dispatch delay be $T_{\text{wait}}$, and the GPU execution time be $T_{\text{compute}}$. The total processing latency per batch is:
+\begin{equation}
+T_{\text{batch}} = T_{\text{wait}}(M) + T_{\text{launch}} + \frac{M \cdot S_{\text{block}}}{R_{\text{gpu}}}
+\end{equation}
+where $R_{\text{gpu}}$ is the GPU cryptographic processing rate, and $T_{\text{launch}}$ is the kernel launch overhead. When $M$ is small, the launch overhead dominates, leading to low throughput. When $M$ is large (e.g. $M \ge 4096$), the launch overhead is amortized, achieving a high processing throughput. Conversely, a full queue of uncoalesced block jobs creates high contention where all slots are occupied, maximizing CPU load and reducing GPU scheduling efficiency. AEGIS-Q exploits sequential block locality. As observed in Table VI, workloads like TPM anchoring (highly structured but sequential) maintain high throughput, whereas Random write workloads rapidly approach the uncacheable I/O limit.
+
+\begin{table}[h]
+\centering
+\caption{Representative secure-storage workloads and typical scheduling behavior.}
+\vspace{-.2cm}
+\scriptsize
+\begin{tabularx}{\columnwidth}{l|c|c|X}
+\toprule
+\textbf{Workload} & \textbf{Workload Sizes} & \textbf{Typical Queue} & \textbf{Typical Staging} \\
+\midrule
+TPM Anchor & 16\,KB--16\,GB & low & High ($\gg$100$\times$) \\
+Integrity Hash & 64\,KB--16\,GB & medium & Moderate (10--50$\times$) \\
+Random I/O & 16\,MB--256\,GB & variable & Low ($\approx$ 1--5$\times$) \\
+\bottomrule
+\end{tabularx}
+\label{tab:workload_behavior}
+\end{table}
+
+\subsection{Memory Traffic Model}
+\label{sec:app_traffic}
+
+The total staging traffic $D_{\text{total}}$ for a workload with $G$ block write updates and effective batching factor $r$ is:
+\begin{equation}
+D_{\text{total}} = \sum_{g=1}^G \frac{S_{\text{block}}}{r_g} \times 2
+\end{equation}
+where $S_{\text{block}}$ is the block size and factor 2 accounts for read/write. When the write rate exceeds the available Unified Memory staging bandwidth ($B_{\text{uma}}$), memory page migration stalls occur:
+\begin{equation}
+\frac{S_{\text{block}}}{r_g \cdot B_{\text{uma}}} > T_{\text{compute}}
+\end{equation}
+causing the system to become I/O bound. Our experiments confirm this transition occurs around 1\,GB to 4\,GB workloads for random writes on the Jetson Orin Nano.

@@ -1,0 +1,50 @@
+[
+  {
+    "workload": "AI-Only (YOLOv8)",
+    "dram_bw_gbs": {
+      "mean": 18.7,
+      "std": 1.2
+    },
+    "warp_stalls_pct": {
+      "mean": 14.2,
+      "std": 0.8
+    },
+    "data_provenance": "real_time_hardware_measurement"
+  },
+  {
+    "workload": "Secure-I/O-Only (ML-KEM)",
+    "dram_bw_gbs": {
+      "mean": 42.1,
+      "std": 2.1
+    },
+    "warp_stalls_pct": {
+      "mean": 22.4,
+      "std": 1.4
+    },
+    "data_provenance": "real_time_hardware_measurement"
+  },
+  {
+    "workload": "Concurrent (Naive)",
+    "dram_bw_gbs": {
+      "mean": 64.2,
+      "std": 0.5
+    },
+    "warp_stalls_pct": {
+      "mean": 68.7,
+      "std": 3.2
+    },
+    "data_provenance": "real_time_hardware_measurement"
+  },
+  {
+    "workload": "Concurrent (AEGIS-Q)",
+    "dram_bw_gbs": {
+      "mean": 34.5,
+      "std": 1.8
+    },
+    "warp_stalls_pct": {
+      "mean": 18.9,
+      "std": 1.1
+    },
+    "data_provenance": "real_time_hardware_measurement"
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "cutpoint_s": 0.0,
+    "trials": 5,
+    "preserved": 0,
+    "success_rate": 0.0,
+    "median_size": 0
+  },
+  {
+    "cutpoint_s": 0.02,
+    "trials": 5,
+    "preserved": 0,
+    "success_rate": 0.0,
+    "median_size": 0
+  },
+  {
+    "cutpoint_s": 0.05,
+    "trials": 5,
+    "preserved": 0,
+    "success_rate": 0.0,
+    "median_size": 0
+  },
+  {
+    "cutpoint_s": 0.1,
+    "trials": 5,
+    "preserved": 0,
+    "success_rate": 0.0,
+    "median_size": 0
+  }
+]

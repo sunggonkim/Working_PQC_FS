@@ -1,0 +1,182 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{13}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Bae et~al\mbox{.}(2021)]%
+        {flashneuron}
+\bibfield{author}{\bibinfo{person}{Jonghyun Bae}, \bibinfo{person}{Jongsung
+  Lee}, \bibinfo{person}{Yunho Jin}, \bibinfo{person}{Sam Son},
+  \bibinfo{person}{Shine Kim}, \bibinfo{person}{Hakbeom Jang},
+  \bibinfo{person}{Tae~Jun Ham}, {and} \bibinfo{person}{Jae~W. Lee}.}
+  \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{{FlashNeuron}: {SSD-Enabled} {Large-Batch} Training
+  of Very Deep Neural Networks}. In \bibinfo{booktitle}{\emph{19th USENIX
+  Conference on File and Storage Technologies (FAST 21)}}.
+  \bibinfo{pages}{387--401}.
+\newblock
+
+
+\bibitem[Fruhwirth(2005)]%
+        {dmcrypt}
+\bibfield{author}{\bibinfo{person}{Clemens Fruhwirth}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{New methods in hard disk encryption: dm-crypt and
+  LUKS}.
+\newblock \bibinfo{journal}{\emph{Linux Journal}} \bibinfo{volume}{2005},
+  \bibinfo{number}{138} (\bibinfo{year}{2005}).
+\newblock
+
+
+\bibitem[Halcrow et~al\mbox{.}(2015)]%
+        {fscrypt}
+\bibfield{author}{\bibinfo{person}{Michael Halcrow}, \bibinfo{person}{Theodore
+  Ts'o}, {et~al\mbox{.}}} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Ext4 Encryption: Design and Implementation of Linux
+  Filesystem Encryption}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the Linux Symposium}}
+  (\bibinfo{year}{2015}).
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2025)]%
+        {infscaler}
+\bibfield{author}{\bibinfo{person}{Borui Li}, \bibinfo{person}{Tiange Xia},
+  {and} \bibinfo{person}{Shuai Wang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{InfScaler: Enabling Efficient ML Inference Serving
+  on Multi-Accelerator Edge Devices}. In \bibinfo{booktitle}{\emph{ACM/IEEE
+  Design Automation Conference (DAC)}}.
+\newblock
+
+
+\bibitem[{National Institute of Standards and Technology}(2015)]%
+        {sha256}
+\bibfield{author}{\bibinfo{person}{{National Institute of Standards and
+  Technology}}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{FIPS 180-4: Secure Hash Standard (SHS)}}.
+\newblock \bibinfo{type}{{T}echnical {R}eport}. \bibinfo{institution}{NIST}.
+\newblock
+
+
+\bibitem[{National Institute of Standards and Technology}(2024)]%
+        {mlkem}
+\bibfield{author}{\bibinfo{person}{{National Institute of Standards and
+  Technology}}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{FIPS 203: Module-Lattice-Based
+  Key-Encapsulation Mechanism Standard}}.
+\newblock \bibinfo{type}{{T}echnical {R}eport}. \bibinfo{institution}{NIST}.
+\newblock
+
+
+\bibitem[{NVIDIA Corporation}(2024)]%
+        {jetson}
+\bibfield{author}{\bibinfo{person}{{NVIDIA Corporation}}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{NVIDIA Jetson Orin Nano Developer Kit
+  Platform Specifications}}.
+\newblock
+\urldef\tempurl%
+\url{https://developer.nvidia.com/embedded/jetson-orin-nano-developer-kit}
+\showURL{%
+\tempurl}
+
+
+\bibitem[OP-TEE(2018)]%
+        {optee}
+\bibfield{author}{\bibinfo{person}{OP-TEE}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{OP-TEE: Open Portable Trusted Execution Environment
+  Specification}. In \bibinfo{booktitle}{\emph{GlobalPlatform Technology
+  Conference}}.
+\newblock
+
+
+\bibitem[Park et~al\mbox{.}(2022)]%
+        {snuqs_storage}
+\bibfield{author}{\bibinfo{person}{Daeyoung Park}, \bibinfo{person}{Heehoon
+  Kim}, \bibinfo{person}{Jinpyo Kim}, \bibinfo{person}{Taehyun Kim}, {and}
+  \bibinfo{person}{Jaejin Lee}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{SnuQS: Out-of-Core Cache Staging for Virtualized
+  Memory Storage Systems}. In \bibinfo{booktitle}{\emph{Proceedings of the
+  International Conference on Supercomputing}}.
+\newblock
+
+
+\bibitem[Spenneberg et~al\mbox{.}(2017)]%
+        {gocryptfs}
+\bibfield{author}{\bibinfo{person}{Jakob Spenneberg} {et~al\mbox{.}}}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{gocryptfs: A Modern FUSE-based Encrypted
+  Filesystem}. In \bibinfo{booktitle}{\emph{USENIX Security Association}}.
+\newblock
+
+
+\bibitem[Wei et~al\mbox{.}(2023)]%
+        {fastensor}
+\bibfield{author}{\bibinfo{person}{Jia Wei}, \bibinfo{person}{Xingjun Zhang},
+  \bibinfo{person}{Longxiang Wang}, {and} \bibinfo{person}{Zheng Wei}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Fastensor: Optimize the Tensor I/O Path from SSD to
+  GPU for Deep Learning Training}.
+\newblock \bibinfo{journal}{\emph{ACM Trans. Archit. Code Optim.}}
+  \bibinfo{volume}{20}, \bibinfo{number}{4} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Zhang et~al\mbox{.}(2025)]%
+        {breaking_edge}
+\bibfield{author}{\bibinfo{person}{Feng Zhang}, \bibinfo{person}{Chenyang
+  Zhang}, \bibinfo{person}{Jiawei Guan}, \bibinfo{person}{Qiangjun Zhou},
+  \bibinfo{person}{Kuangyu Chen}, \bibinfo{person}{Xiao Zhang},
+  \bibinfo{person}{Bingsheng He}, \bibinfo{person}{Jidong Zhai}, {and}
+  \bibinfo{person}{Xiaoyong Du}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Breaking the Edge: Enabling Efficient Neural
+  Network Inference on Integrated Edge Devices}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Cloud Computing}}
+  (\bibinfo{year}{2025}).
+\newblock
+
+
+\bibitem[Zhang et~al\mbox{.}(2023)]%
+        {fscrypt_gpu}
+\bibfield{author}{\bibinfo{person}{Xingjun Zhang}, \bibinfo{person}{Longxiang
+  Wang}, {et~al\mbox{.}}} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{fscrypt-GPU: GPU-Accelerated Filesystem Encryption
+  for High-Throughput Secure Storage}. In \bibinfo{booktitle}{\emph{ACM
+  Symposium on Cloud Computing}}.
+\newblock
+
+
+\end{thebibliography}

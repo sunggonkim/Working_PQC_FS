@@ -1,0 +1,15 @@
+Starting C++ EdgeQuantum with 27 Qubits, 5 Layers/Depth
+Circuit: QV
+Storage: cpp_state_vector.bin
+Mode: native
+[IOBackend] Opened ./cpp_state_vector.bin (fd: 3, O_DIRECT)
+[IOBackend] Opened ./cpp_state_vector.bin (fd: 4, O_DIRECT)
+
+[Mode] native -> Using Native mode (cuQuantum direct)
+
+[Sim] Mode: Native (cuQuantum) | Qubits: 27 | State Size: 1 GB
+[Alloc] cudaMalloc 1024 MB...
+[Circuit] Quantum Volume (Depth=5)
+Total Time: 0.000529024 s
+[IOBackend] Closing fd: 4
+[IOBackend] Closing fd: 3

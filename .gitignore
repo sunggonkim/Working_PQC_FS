@@ -1,0 +1,62 @@
+# Build
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.o
+*.a
+*.so
+pqc_fuse
+pqc_fuse_gpu
+
+# CUDA object / benchmark binaries (root-level)
+cuda_pqc.o
+cuda_integrity.o
+bench_gpu_pqc
+bench_gpu_integrity
+
+# perf binary captures — large, not useful as source artifacts
+*.data
+*.data.old
+
+# Loose result JSON at repo root — results go in artifacts/
+/e1_results.json
+/e2_results.json
+/e3_results.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs & Results
+*.log
+results/
+
+# Runtime mount/storage artifacts
+mnt_secure/
+storage_physical/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+*.onnx
+*.plan
+
+# LaTeX compiler intermediates (the versioned deliverable is Paper/main.pdf)
+*.aux
+*.blg
+*.out
+*.bbl
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz

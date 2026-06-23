@@ -1,0 +1,73 @@
+\section{AEGIS-Q Design}
+\label{sec:design}
+
+In this section, we present the design of AEGIS-Q, a scalable secure storage runtime optimized for edge devices with limited memory and compute resource boundaries. AEGIS-Q does not store the full cryptographic state in host DRAM, but instead partitions the storage path into CPU and GPU lanes, allocating Unified Virtual Memory (UVM) buffers to act as a staging area. This allows for the execution of large-scale post-quantum cryptographic (PQC) operations and integrity verification that exceed CPU limits. To overcome the high latency associated with memory staging and context switching, AEGIS-Q integrates a pipelined execution model that dynamically manages memory access permissions between the CPU and GPU, enabling efficient asynchronous overlap of storage I/O and cryptographic computation.
+
+\subsection{Overall Procedure}
+\label{sec:design_proc}
+
+Figure 3 shows the overall procedure of AEGIS-Q. AEGIS-Q provides two main phases to support QoS-aware secure storage on edge devices: Initialization and Execution phase.
+
+\paragraph{Initialization} When the secure storage runtime starts, Resource Manager queries the available hardware resources on the edge device. It reads metadata including the GPU memory capacity, unified memory size, NVMe storage bandwidth, and CPU core count ($\Pi$). Once the metadata collection is completed, Batch Calculator determines the optimal partitioning strategy based on the request size and queue states (e.g., a 16\,GB write payload). This calculation ensures that 1) the size of each block batch fits within the available UVM buffer space while maximizing GPU occupancy, and 2) the total number of blocks is aligned with the NVMe block size to facilitate efficient I/O operations.
+
+After completing the batch configuration, Buffer Allocator allocates the necessary intermediate buffers using CUDA Unified Virtual Memory. Unlike standard device allocations, Buffer Allocator initializes these buffers with the \texttt{cudaMemAttachHost} flag. This allows the buffers to be immediately accessible by the CPU FUSE threads for file I/O operations before GPU kernel execution begins, establishing the foundation for the pipeline. Finally, Journal Initializer generates the initial filesystem metadata and writes it to the NVMe storage, preparing the system for secure storage execution.
+
+\paragraph{Execution} After Initialization phase is completed, AEGIS-Q enters Execution phase. First, AEGIS-Q constructs a sequence of executable storage tasks, where each task corresponds to a specific read, write, or cryptographic key rotation. For each task, the system processes the block buffer by iterating through the queued batches. AEGIS-Q employs a triple-buffer asynchronous pipeline to process these batches. This pipeline coordinates three distinct operations: loading data from storage, executing cryptographic kernels on the GPU, and storing results back to NVMe. To enable true concurrency between these operations without data races, Pipeline Coordinator dynamically switches the access mode of UVM buffers. It utilizes \texttt{cudaStreamAttachMemAsync} to toggle buffers between \texttt{AttachHost} mode for I/O operations and \texttt{AttachGlobal} mode for GPU computation. By manipulating page table permissions asynchronously, AEGIS-Q eliminates the need for explicit memory copies between host and device. Finally, Cryptographic Executor executes the AES-GCM or ML-KEM logic on the blocks currently in \texttt{AttachGlobal} mode. Once the computation for a batch is complete, the system synchronizes the pipeline and proceeds to the next secure storage operation.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{Figures/fig_architecture.pdf}
+  \caption{Overall procedure of AEGIS-Q.}
+  \label{fig:overall_procedure}
+\end{figure}
+
+\subsection{Unified Memory Architecture Analysis}
+\label{sec:design_uma}
+
+Before defining the memory management strategy, AEGIS-Q analyzes the characteristics of the underlying memory architecture to identify the optimal allocation method for edge devices. Table II summarizes the compatibility of memory types on the Jetson unified memory architecture. We investigated three memory types: Device Memory (\texttt{cudaMalloc}), Pinned Host Memory (\texttt{cudaMallocHost}), and Unified Virtual Memory (\texttt{cudaMallocManaged}).
+
+\begin{table}[t]
+\centering
+\caption{Memory type compatibility on Jetson unified memory architecture.}
+\vspace{-.2cm}
+\scriptsize
+\begin{tabularx}{\columnwidth}{l|c|c|X}
+\toprule
+\textbf{Memory Type} & \textbf{POSIX I/O} & \textbf{GPU Execution} & \textbf{Notes} \\
+\midrule
+Device Memory (\texttt{cudaMalloc}) & No & Yes & Requires explicit \texttt{cudaMemcpy} for I/O \\
+Pinned Host (\texttt{cudaMallocHost}) & Yes & No & GPU kernels reject pointers on Tegra \\
+Unified Memory (\texttt{cudaMallocManaged}) & Yes & Yes & Supports zero-copy via attach modes \\
+\bottomrule
+\end{tabularx}
+\label{tab:memory_compat}
+\end{table}
+
+\paragraph{Limitations of Conventional Allocation} Device memory supports GPU cryptographic execution but fails to support direct POSIX I/O system calls such as \texttt{pread}. This necessitates explicit \texttt{cudaMemcpy} calls to move data between the file system and the GPU, which introduces significant latency and doubles the memory bandwidth requirement. Pinned host memory supports efficient I/O operations including \texttt{O\_DIRECT}. However, our empirical analysis reveals that GPU kernels reject pinned memory pointers on Tegra architectures, preventing its use for computation.
+
+\paragraph{Adoption of UVM} In contrast, UVM proves to be the only memory type that supports both direct POSIX I/O and GPU execution. On Jetson architectures, the CPU and GPU share the same physical LPDDR5 DRAM banks. The memory controller maintains cache coherency through hardware snooping, allowing data written by the CPU via \texttt{pread} to be immediately visible to the GPU without physical data migration. Consequently, AEGIS-Q utilizes UVM to implement a zero-copy data path. This approach reduces the end-to-end processing time for a 256\,KB staging buffer by approximately 2.00$\times$ compared to the conventional pinned memory approach that requires explicit copying.
+
+\subsection{Triple-Buffer Asynchronous Pipeline}
+\label{sec:design_pipeline}
+
+Although UVM enables zero-copy access, naive concurrent access by the CPU and GPU leads to resource conflicts and segmentation faults. To address this, AEGIS-Q implements a triple-buffer asynchronous pipeline that orchestrates memory access permissions. Figure 4 illustrates the structure of the pipeline, which consists of three stages: Load, Compute, and Store.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{Figures/fig_compression_mechanism.pdf}
+  \caption{Triple-buffer asynchronous pipeline (Load, Compute, Store) and UVM attach-mode transitions.}
+  \label{fig:compression_mechanism}
+\end{figure}
+
+\paragraph{Dynamic Access Control} The core mechanism of the pipeline is the dynamic switching of UVM stream attachment. Standard UVM usage allows the driver to manage page migration implicitly, which often results in unpredictable stalling or faults during concurrent I/O. AEGIS-Q creates an explicit barrier between the CPU and GPU views of memory. We allocate three UVM buffers ($B_0$, $B_1$, $B_2$) and initialize them in \texttt{AttachHost} mode. During the Compute stage, Pipeline Coordinator issues \texttt{cudaStreamAttachMemAsync} with the \texttt{AttachGlobal} flag for the specific buffer assigned to the GPU. This operation modifies the GPU page table entries to grant access permissions without moving physical data. Simultaneously, the other two buffers remain in \texttt{AttachHost} mode, allowing worker threads to perform \texttt{pread} and \texttt{pwrite} operations safely.
+
+\paragraph{Pipeline Scheduling} AEGIS-Q schedules the processing of block batches in a round-robin fashion across the three buffers. For a batch $c$, the system assigns buffer $B_i$ where $i = c \bmod 3$. The pipeline ensures that while the GPU computes on batch $c$ in buffer $B_i$, the I/O threads are simultaneously writing the result of batch $c-1$ from buffer $B_{i-1}$ and reading the data for batch $c+1$ into buffer $B_{i+1}$. We optimize this flow by leveraging the asynchronous nature of the attach operation. Specifically, AEGIS-Q does not enforce a synchronization barrier after switching to \texttt{AttachGlobal}, relying on the GPU driver to implicitly wait for the permission update. Conversely, a mandatory synchronization is enforced before switching back to \texttt{AttachHost} to ensure that all GPU writes are committed before the CPU initiates disk I/O. This precise control enables AEGIS-Q to hide the latency of NVMe storage behind the GPU computation time.
+
+\subsection{Edge-Specific Optimization}
+\label{sec:design_opt}
+
+To maximize performance on resource-constrained edge devices, AEGIS-Q applies system-level optimizations that align with the hardware characteristics of the Jetson platform.
+
+\paragraph{Bypassing Page Cache} Standard Linux file I/O utilizes the page cache, which introduces an extra memory copy and pollutes the limited DRAM capacity of edge devices. For cryptographic workloads where the buffer size far exceeds the physical RAM, this caching behavior causes severe thrashing. AEGIS-Q employs the \texttt{O\_DIRECT} flag for all file operations. This instructs the kernel to bypass the operating system's page cache and perform Direct Memory Access (DMA) transfers between the NVMe storage and the UVM buffers. Our design ensures that the UVM buffers are properly aligned to the memory page boundaries required by \texttt{O\_DIRECT}, enabling maximum storage throughput.
+
+\paragraph{Kernel Execution Tuning} On embedded GPUs, the latency of kernel launching and context switching can significantly impact the pipeline efficiency. AEGIS-Q mitigates this by initializing high-priority CUDA streams using \texttt{cudaStreamCreateWithPriority}. This ensures that the secure storage kernels preempt other background graphics or system tasks. Additionally, we enforce a strict batch size selection strategy. Based on empirical testing on the Jetson Orin Nano, AEGIS-Q defaults to a batch size of 256\,KB ($2^{18}$ bytes). This size provides a balance that is large enough to saturate the GPU's compute capability while remaining small enough to fit three pipeline buffers within the 8\,GB unified memory limit, leaving sufficient headroom for the concurrent workloads.

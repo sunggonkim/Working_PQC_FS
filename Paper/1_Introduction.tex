@@ -1,0 +1,52 @@
+\section{Introduction}
+\label{sec:intro}
+
+Post-Quantum Cryptography (PQC) offers a secure storage model designed to resist quantum computing attacks by operating on mathematically hard lattice-based structures rather than standard number-theoretic assumptions. Each security plane in a modern post-quantum storage system is represented by specific cryptographic functions (e.g., ML-KEM key generation and encapsulation~\cite{mlkem}, SHA-256 integrity-tree hashing~\cite{sha256}, and AES-GCM data encryption). These modern primitives utilize high-dimensional vector spaces and parallel operations to adopt a different computational complexity from classical methods. Lattice-based cryptography allows systems to resist quantum computing attacks, enabling long-term security guarantees for sensitive data on edge devices~\cite{mlkem}. State integrity trees enable verification of data correctness, allowing efficient rollback detection and crash recovery in embedded environments~\cite{fscrypt}. These properties offer critical advantages in areas such as remote sensing, secure edge storage, and private machine learning, beyond the capabilities of standard non-authenticated storage systems.
+
+Despite achieving strong security guarantees, edge devices are classified as resource-constrained systems that are susceptible to severe execution contention under concurrent workloads. This limitation makes them highly vulnerable to transient I/O conflicts, preventing them from producing reliable and real-time execution guarantees for foreground applications~\cite{breaking_edge}. To overcome the limitations of edge processors, GPU-accelerated cryptography has emerged as an essential tool for high-throughput secure storage validation. State-of-the-art secure filesystems such as fscrypt~\cite{fscrypt} utilize kernel-level CPU-only routines to perform cryptographic operations. However, such CPU-only approaches are bottlenecked by the heavy computational overhead of PQC key lifecycles and integrity tree maintenance. Furthermore, typical GPU offloading accelerators (e.g., cuCrypto) assume dedicated device access, which is entirely impractical for low-power edge computing scenarios that require concurrent real-time AI inference execution.
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/fig_motivation_contention.pdf}
+    \caption{Memory bus contention}
+    \label{fig:motivation_contention}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/fig_semantic_gap.pdf}
+    \caption{OS-PQC semantic gap}
+    \label{fig:semantic_gap}
+  \end{subfigure}
+  \caption{(a) DRAM bandwidth usage and warp stalls under AI/storage contention. (b) Kernel memory events and cache prefetching waste under PQC workloads.}
+  \label{fig:motivation}
+\end{figure}
+
+This paper addresses a different challenge: Can resource-constrained edge devices, costing under \$500 and consuming only 15W, execute post-quantum secure storage without violating foreground real-time AI inference deadlines? To support post-quantum secure storage on the edge, the fundamental bottleneck is resource contention. Figure 1 illustrates the latency challenge and the physical memory limits under post-quantum workloads. As shown in Figure 1(a), concurrent naive offloading saturates the shared memory bus (pegging DRAM bandwidth at 64.2\,GB/s) and triggers a massive 68.7\% warp dependency stall rate. Furthermore, running PQC on top of native OS virtual memory (UVM) reveals a severe semantic gap, as shown in Figure 1(b): the strided memory access of lattice cryptography causes 655,360 page faults and wastes 91.4\% of OS read-ahead pre-fetched pages. While offline or CPU-only storage can bypass GPU contention, it suffers from low throughput and fails to scale. AEGIS-Q is designed to address this by implementing a telemetry-driven scheduling layer that bypasses FUSE and OS caching. To summarize, addressing the resource contention of edge devices while maintaining low latency is critical for enabling secure and real-time edge intelligence.
+
+\begin{table}[t]
+\centering
+\caption{Comparison with prior work across key capabilities (QoS: QoS-Aware, Telemetry: Telemetry-Driven, Rollback: Rollback Resistance).}
+\vspace{-.2cm}
+\scriptsize
+\begin{tabularx}{\columnwidth}{l|c|c|c|c|r}
+\toprule
+\textbf{Framework} & \textbf{Target} & \textbf{GPU} & \textbf{QoS} & \textbf{Telemetry} & \textbf{Rollback} \\
+\midrule
+fscrypt~\cite{fscrypt} & General & \xmark & \xmark & \xmark & \xmark \\
+gocryptfs~\cite{gocryptfs} & General & \xmark & \xmark & \xmark & \xmark \\
+OP-TEE~\cite{optee} & Mobile/Edge & \xmark & \xmark & \xmark & \cmark \\
+fscrypt-GPU~\cite{fscrypt_gpu} & Datacenter & \cmark & \xmark & \xmark & \xmark \\
+\textbf{AEGIS-Q (Ours)} & \textbf{Edge/IoT} & \cmark & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabularx}
+\label{tab:prior_work}
+\end{table}
+
+Many previous studies, as shown in Table I, have focused on optimizing secure storage from the perspective of CPU-only or non-QoS-aware accelerator offloading. For example, widely used frameworks such as fscrypt~\cite{fscrypt} and OP-TEE~\cite{optee} primarily target CPU-only execution, assuming isolated security domains. While accelerator-focused secure storages such as fscrypt-GPU~\cite{fscrypt_gpu} support GPU offloading to handle large cryptographic operations, they rely on exclusive GPU access unavailable under concurrent workloads. Other works introduce GPU-accelerated algorithms but are optimized for high-performance datacenter GPUs rather than low-power edge SoCs. These existing frameworks typically assume that the GPU is idle or that the security routines have exclusive access. However, this assumption fails on resource-constrained edge devices where the physical memory and compute are shared between inference and secure storage. Consequently, naively offloading security tasks on edge devices leads to deadline misses or severe performance degradation due to accelerator contention.
+
+AEGIS-Q distinguishes itself from previous studies by implementing a QoS-aware secure storage runtime specifically optimized for resource-constrained IoT edge devices. Unlike accelerator-centric approaches that rely on exclusive hardware access, AEGIS-Q adopts a QoS-aware hybrid-execution architecture that effectively separates data, key, integrity, and freshness planes. It utilizes the CPU fast lane as the low-latency path for small requests, and employs the GPU elastic lane for admitted cryptographic batches. By exploiting execution telemetry and integrating adaptive admission control, AEGIS-Q orchestrates overlapped I/O and computation. This design ensures that data is resident in the GPU cache on demand while effectively hiding the latency of storage I/O, enabling the execution of large-scale files that far exceed the physical memory limits of the device.
+
+In this paper, we present AEGIS-Q, a QoS-aware secure storage framework designed for resource-constrained IoT edge devices. AEGIS-Q adopts a hybrid CPU/GPU architecture and integrates three key techniques to achieve security and QoS preservation. The goal of AEGIS-Q is to 1) enable the execution of post-quantum cryptography and integrity verification under strict AI QoS constraints, 2) minimize the performance impact of cryptographic staging through zero-copy UVM memory management, and 3) maximize the freshness guarantees of the storage system using TPM-backed anchors. To achieve these goals, AEGIS-Q 1) classifies secure storage tasks into data, key, integrity, and freshness planes to route them dynamically, 2) employs an asynchronous block job pipeline that overlaps storage I/O with GPU-accelerated PQC kernels to hide scheduling latency, and 3) integrates an adaptive admission control policy to protect real-time AI inference deadlines. Our evaluation on an 8\,GB Jetson Orin Nano shows that AEGIS-Q successfully preserves real-time AI QoS, restoring the YOLOv8 tail latency to 0.91\,ms (from 1.11\,ms under naive offloading) and restoring 100\% of the frame rate. We open-source the code of AEGIS-Q at: \url{https://github.com/sunggonkim/IoTJ-AEGIS-Q}.

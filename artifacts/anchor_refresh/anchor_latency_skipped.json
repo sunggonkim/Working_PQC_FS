@@ -1,0 +1,7 @@
+[
+  {
+    "backend": "hardware",
+    "error": "anchor-self-test failed: 1",
+    "stdout": "PQC-FUSE anchor self-test: FAIL\n"
+  }
+]

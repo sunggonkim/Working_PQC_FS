@@ -1,0 +1,25 @@
+{
+  "rows": [
+    {
+      "backend": "file",
+      "cut_point_s": 0.0,
+      "trials": 1,
+      "preserved": 1,
+      "success_rate": 1.0,
+      "fail_closed": 1,
+      "rollback_accept": 0,
+      "unexpected_error": 0
+    },
+    {
+      "backend": "file",
+      "cut_point_s": 0.02,
+      "trials": 1,
+      "preserved": 1,
+      "success_rate": 1.0,
+      "fail_closed": 1,
+      "rollback_accept": 0,
+      "unexpected_error": 0
+    }
+  ],
+  "skipped": []
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "self_test_rc": 0,
+    "managed_alloc_bytes": 4096,
+    "managed_free_bytes": 4096,
+    "prefetch_to_device_bytes": 4096,
+    "prefetch_to_host_bytes": 4096,
+    "prefetch_device_calls": 1,
+    "prefetch_host_calls": 1
+  }
+]

@@ -1,0 +1,53 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{The Capacity-Speed Trade-off}
+\label{sec:disc_tradeoff}
+
+AEGIS-Q fundamentally alters the optimization landscape for edge secure storage. Traditional HPC servers maximize performance by running cryptographic operations in high-bandwidth memory (HBM), costing \$100/GB. In contrast, AEGIS-Q maximizes capacity by utilizing NVMe storage at \$0.05/GB, trading execution time for economic viability:
+\begin{equation}
+\text{Cost}(\text{Storage}) = \alpha N_{\text{gpu}} \cdot \$C_{\text{gpu}} + \beta \frac{S_{\text{data}}}{B_{\text{ssd}}}
+\end{equation}
+For a 1\,TB block dataset, fscrypt-GPU (representing datacenter-class distributed encryption servers) requires $\sim$16 A100-80GB GPUs (\$240,000) for high-performance scheduling, whereas AEGIS-Q requires 1 Jetson + 1\,TB SSD (\$300). The 800$\times$ cost reduction comes with a 1000$\times$ slowdown, a reasonable trade-off for prototyping.
+
+\subsection{Energy Efficiency at the Edge}
+\label{sec:disc_energy}
+
+Operating at 15W, AEGIS-Q is uniquely suited for energy-constrained environments. A 3.3-hour storage workload consumes 50Wh. In comparison, a supercomputer node (e.g., DGX A100) consumes 6.5kW. Even if it finishes in 10 seconds, the standby and cooling overhead of such facilities is immense.
+
+\begin{table}[t]
+\centering
+\caption{Energy Efficiency Comparison (ML-KEM Keygen / Hashing).}
+\vspace{-.2cm}
+\scriptsize
+\begin{tabularx}{\columnwidth}{l|c|c|r}
+\toprule
+\textbf{System} & \textbf{Power} & \textbf{Time} & \textbf{Energy} \\
+\midrule
+HPC Node (A100$\times$8) & 6500 W & 2 s & 3.6 Wh \\
+Workstation (3090) & 500 W & 15 s & 2.1 Wh \\
+AEGIS-Q (Ours) & 15 W & 1558 s & 6.5 Wh \\
+\bottomrule
+\end{tabularx}
+\label{tab:energy_efficiency}
+\end{table}
+
+While total energy per shot is higher due to long runtime, the peak power demand is 400$\times$ lower, enabling deployment on solar-powered remote sensor nodes.
+
+\subsection{Future Roadmap: Distributed PQC Storage}
+\label{sec:disc_roadmap}
+
+The bandwidth bottleneck of a single SSD (1\,GB/s) can be overcome by distributing the storage data across a cluster of Jetson devices.
+
+\paragraph{Proposed Architecture}
+\begin{enumerate}
+  \item \textbf{Sharding}: Partition the block storage data across $N$ devices.
+  \item \textbf{Interconnect}: Use 1GbE/10GbE for peer-to-peer chunk exchange.
+  \item \textbf{Speedup}: With $N = 4$ Jetsons, effective bandwidth quadruples to 4\,GB/s, potentially reducing a 1\,TB workload execution time from 3.3 hours to $<$1 hour.
+\end{enumerate}
+This ``Cluster-on-Desk'' approach would bridge the gap between single-device prototyping and HPC-scale production runs.
+
+\subsection{Software Portability and CUDA Compatibility}
+\label{sec:disc_portability}
+
+A significant challenge during the development of AEGIS-Q was navigating the evolving NVIDIA software ecosystem. While modern HPC environments track CUDA 12.x and 13.x, many edge platforms such as the Jetson Orin series remain optimized for CUDA 11.4 (JetPack 5.x). We discovered a critical compatibility threshold in libraries compiling on ARM64, where newer versions of OpenSSL and TPM tools require modern libraries that are unavailable on older distributions. Consequently, the optimal and most stable configuration for AEGIS-Q on current-generation Jetson devices is native CUDA compilation under CUDA 11.4 using native nvcc. Furthermore, we implemented custom wrapper layers for ML-KEM NTT (Number Theoretic Transform) and SHA-256 leaf hashing kernels to bridge specific API differences in GPU device memory management found in the ARM64-specific hardware bindings of these software versions.

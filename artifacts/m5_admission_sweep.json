@@ -1,0 +1,30 @@
+[
+  {
+    "budget_ns": 500000,
+    "gpu_jobs": 2,
+    "cpu_jobs": 1,
+    "pressure_target": "CPU",
+    "pressure_gpu_wait_ns": 25001
+  },
+  {
+    "budget_ns": 1000000,
+    "gpu_jobs": 2,
+    "cpu_jobs": 1,
+    "pressure_target": "CPU",
+    "pressure_gpu_wait_ns": 25001
+  },
+  {
+    "budget_ns": 2000000,
+    "gpu_jobs": 2,
+    "cpu_jobs": 1,
+    "pressure_target": "CPU",
+    "pressure_gpu_wait_ns": 25001
+  },
+  {
+    "budget_ns": 5000000,
+    "gpu_jobs": 1,
+    "cpu_jobs": 2,
+    "pressure_target": "CPU",
+    "pressure_gpu_wait_ns": 25001
+  }
+]

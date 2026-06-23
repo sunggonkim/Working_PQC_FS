@@ -1,0 +1,30 @@
+{
+  "rows": [
+    {
+      "backend": "file",
+      "samples_ms": [
+        237.850239,
+        238.532929,
+        238.667144,
+        244.496418,
+        235.572633,
+        238.996506,
+        235.548333,
+        232.576225,
+        236.275429,
+        233.958133
+      ],
+      "median_ms": 237.062834,
+      "p95_ms": 242.02145760000002,
+      "min_ms": 232.576225,
+      "max_ms": 244.496418
+    }
+  ],
+  "skipped": [
+    {
+      "backend": "hardware",
+      "error": "anchor-self-test failed: 1",
+      "stdout": "PQC-FUSE anchor self-test: FAIL\n"
+    }
+  ]
+}

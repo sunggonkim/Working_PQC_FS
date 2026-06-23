@@ -1,0 +1,30 @@
+[
+  {
+    "tier": "full",
+    "requested_mode": "WAL",
+    "actual_mode": "WAL",
+    "sync_mode": "FULL",
+    "fallback_error": null,
+    "integrity_check": "ok",
+    "samples_ms": [
+      0.817704,
+      0.373065
+    ],
+    "median_ms": 0.5953845,
+    "p95_ms": 0.7954720500000001
+  },
+  {
+    "tier": "plain",
+    "requested_mode": "WAL",
+    "actual_mode": "WAL",
+    "sync_mode": "FULL",
+    "fallback_error": null,
+    "integrity_check": "ok",
+    "samples_ms": [
+      0.759769,
+      0.367351
+    ],
+    "median_ms": 0.5635600000000001,
+    "p95_ms": 0.7401481
+  }
+]
