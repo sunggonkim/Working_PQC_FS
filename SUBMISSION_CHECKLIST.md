@@ -73,19 +73,20 @@ graph TD
     UVM -->|Zero-Copy Encryption| GPU
 ```
 
-- [ ] **Task 2.1: FUSE 데몬 의존성 제거 및 io_uring 비동기 I/O 큐 설계**
-  - [ ] [pqc_fuse.c](file:///home/thor/skim/pqc_encrpyted_fs/pqc_fuse.c) 내의 동기식 POSIX 후킹 함수를 대체할 `io_uring` Submit Queue (SQ) 및 Completion Queue (CQ) 인터페이스 설계.
-  - [ ] `O_DIRECT`를 사용하여 커널 페이지 캐시를 건너뛰고 NVMe SSD에서 UVM(Unified Virtual Memory) 물리 주소 공간으로 바로 DMA 전송을 수행하도록 구현.
-- [ ] **Task 2.2: eBPF 기반 Kernel-space GPU 커널 Launching 트리거 구현**
-  - [ ] NVMe 비동기 DMA 쓰기 완료 시 발생하는 커널 I/O 완료 이벤트를 모니터링하는 eBPF 필터 개발.
-  - [ ] eBPF 프로그램 내에서 완료 이벤트를 가로채어, 유저 공간의 FUSE 데몬 개입 없이 커널 내부에서 직접 NVIDIA GPU 드라이버 스트림으로 PQC 암호화(ML-KEM/SHA) 비동기 실행을 트리거하는 제어 흐름 구현.
-- [ ] **Task 2.3: Zero-Copy성능 분해(Tear-down) 벤치마크 설계 및 검증**
-  - [ ] 256KB 블록 단위의 쓰기 작업에 대한 세부 소요 시간(Latency Breakdown) 측정:
+- [x] **Task 2.1: FUSE 데몬 의존성 제거 및 io_uring 비동기 I/O 큐 설계**
+  - [x] [pqc_fuse.c](file:///home/thor/skim/pqc_encrpyted_fs/pqc_fuse.c) 내의 동기식 POSIX 후킹 함수를 대체할 `io_uring` Submit Queue (SQ) 및 Completion Queue (CQ) 인터페이스 설계.
+  - [x] `O_DIRECT`를 사용하여 커널 페이지 캐시를 건너뛰고 NVMe SSD에서 UVM(Unified Virtual Memory) 물리 주소 공간으로 바로 DMA 전송을 수행하도록 구현.
+- [x] **Task 2.2: eBPF 기반 Kernel-space GPU 커널 Launching 트리거 구현**
+  - [x] NVMe 비동기 DMA 쓰기 완료 시 발생하는 커널 I/O 완료 이벤트를 모니터링하는 eBPF 필터 개발.
+  - [x] eBPF 프로그램 내에서 완료 이벤트를 가로채어, 유저 공간의 FUSE 데몬 개입 없이 커널 내부에서 직접 NVIDIA GPU 드라이버 스트림으로 PQC 암호화(ML-KEM/SHA) 비동기 실행을 트리거하는 제어 흐름 구현.
+- [x] **Task 2.3: Zero-Copy성능 분해(Tear-down) 벤치마크 설계 및 검증**
+  - [x] 256KB 블록 단위의 쓰기 작업에 대한 세부 소요 시간(Latency Breakdown) 측정:
     - $T_{switch}$: 커널-유저 공간 간 컨텍스트 스위칭 시간.
     - $T_{attach}$: UVM 메모리 맵핑 및 가상/물리 주소 동기화 시간.
     - $T_{io}$: 순수 NVMe 디스크 I/O 소요 시간.
     - $T_{crypt}$: GPU 가속기 암호화 연산 시간.
-  - [ ] 베이스라인(`dm-crypt`), 기존 구현(`AEGIS-Q FUSE`), 신규 제안(`eBPF + io_uring`) 간의 성능 비교 누적 막대그래프 도출.
+  - [x] 베이스라인(`dm-crypt`), 기존 구현(`AEGIS-Q FUSE`), 신규 제안(`eBPF + io_uring`) 간의 성능 비교 누적 막대그래프 도출.
+
 
 ---
 

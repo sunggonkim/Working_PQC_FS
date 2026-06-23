@@ -122,6 +122,24 @@ To analyze the efficiency of the asynchronous pipeline, Figure 10 presents the e
 
 \paragraph{Pipeline Efficiency} For a non-pipelined execution (Serial GPU Offload), the I/O time accounts for 68\% of the total duration, leaving the GPU idle for the majority of the execution. In AEGIS-Q, the asynchronous pipeline successfully hides a significant portion of this I/O latency. The I/O Wait time is reduced to only 12\% of the total execution time. The Compute phase dominates, accounting for 84\%, which indicates high GPU utilization. This efficiency is achieved by the triple-buffer mechanism; while the GPU processes chunk $i$, the DMA engine simultaneously writes chunk $i-1$ and reads chunk $i+1$. The remaining 4\% corresponds to Overhead, primarily the time required for cryptographic staging and metadata management. Although security overhead introduces computational cost, our dynamic scheduling reduces the effective I/O latency, thereby contributing to the net reduction in total execution time.
 
+\subsection{Bypass I/O Path Performance}
+\label{sec:eval_bypass}
+
+To evaluate the effectiveness of the proposed zero-context-switching bypass path, we measure the micro-architectural latency breakdown of writing a single 256\,KB block. We compare three configurations: 1) \texttt{dm-crypt} (CPU baseline), 2) \texttt{AEGIS-Q FUSE} (user-space daemon loop), and 3) \texttt{eBPF + io\_uring} (proposed bypass). The latency is broken down into context switching overhead ($T_{switch}$), memory mapping/driver attachment ($T_{attach}$), NVMe disk I/O staging ($T_{io}$), and cryptographic execution ($T_{crypt}$).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{Figures/fig_latency_breakdown.pdf}
+  \caption{Latency breakdown ($T_{switch}$, $T_{attach}$, $T_{io}$, $T_{crypt}$) for writing a 256\,KB block under CPU baseline, FUSE, and the proposed eBPF+io\_uring bypass path.}
+  \label{fig:latency_breakdown}
+\end{figure}
+
+Figure~\ref{fig:latency_breakdown} shows the breakdown. For the CPU-only baseline (\texttt{dm-crypt}), the CPU takes a total of 3300\,$\mu$s. While $T_{switch}$ and $T_{attach}$ are zero, the cryptographic execution on the CPU ($T_{crypt}$) takes 2480\,$\mu$s, dominating the runtime and creating a massive computation bottleneck.
+
+By offloading the cryptographic work to the GPU via user-space FUSE (\texttt{AEGIS-Q FUSE}), the cryptographic time is reduced from 2480\,$\mu$s to only 110\,$\mu$s. However, this FUSE path introduces a significant context-switching overhead ($T_{switch} = 85\,\mu$s) due to data crossing the user-kernel boundary multiple times. In addition, staging page maps introduces driver attach latency ($T_{attach} = 24\,\mu$s). 
+
+The proposed bypass path (\texttt{eBPF + io\_uring}) completely eliminates the context-switching overhead ($T_{switch} = 0\,\mu$s) and reduces the driver mapping latency to $T_{attach} = 8\,\mu$s via direct UVM allocations. Furthermore, direct DMA staging via \texttt{io\_uring} decreases the NVMe I/O duration ($T_{io}$) from 620\,$\mu$s to 380\,$\mu$s. Overall, the bypass path reduces the single-block write latency from 839\,$\mu$s in the FUSE path to 498\,$\mu$s, achieving a 1.68$\times$ speedup and validating the zero-context-switching design.
+
 \subsection{Cryptographic Correctness and Parity}
 \label{sec:eval_parity}
 
