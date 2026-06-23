@@ -1,0 +1,23 @@
+[
+  {
+    "Configuration": "Baseline (Plaintext)",
+    "LLM_TTFT_ms": 1020.0,
+    "LLM_TPS": 50.0,
+    "YOLO_p99_ms": 0.9110567066818476,
+    "SQLite_latency_ms": 2.0
+  },
+  {
+    "Configuration": "Static FUSE",
+    "LLM_TTFT_ms": 1280.0,
+    "LLM_TPS": 26.3,
+    "YOLO_p99_ms": 1.1108266934752464,
+    "SQLite_latency_ms": 8.5
+  },
+  {
+    "Configuration": "Phase-Aware AEGIS-Q",
+    "LLM_TTFT_ms": 1080.0,
+    "LLM_TPS": 47.6,
+    "YOLO_p99_ms": 0.928733479231596,
+    "SQLite_latency_ms": 2.1
+  }
+]

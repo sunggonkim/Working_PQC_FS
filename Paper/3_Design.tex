@@ -83,3 +83,21 @@ Rather than relying on synchronous, blocking FUSE hooks that induce multiple con
 \paragraph{eBPF-triggered Kernel GPU Activation}
 To eliminate the overhead of re-entering user-space (e.g., FUSE daemon scheduling) to launch GPU cryptographic kernels upon I/O completion, we implement an eBPF program attached to the block layer's DMA completion events (e.g., kprobes on \texttt{nvme\_complete\_rq}). Upon detecting an asynchronous write completion, the eBPF filter captures the completion event and immediately wakes the associated CUDA stream directly from the kernel space. It accesses the device-driver control structures to launch the PQC (ML-KEM or SHA-256) cryptographic kernels asynchronously on the GPU. Since the data already resides in UVM, this triggering happens with zero-copy and zero-context-switching overhead, creating a direct device-to-device data pipeline.
 
+\subsection{Phase-Aware AI QoS Scheduler}
+\label{sec:design_phase_aware}
+
+Edge environments frequently run heterogeneous workloads where real-time safety-critical AI and heavy generative AI models share resources with secure storage services. To prevent background post-quantum cryptographic (PQC) operations from degrading foreground AI engines, AEGIS-Q implements a telemetry-driven, phase-aware admission controller.
+
+\paragraph{Asymmetric LLM Execution Phases}
+Generative AI workloads such as TinyLLMs (e.g., quantized LLaMA or Qwen) exhibit highly asymmetric execution phases:
+\begin{enumerate}
+    \item \textbf{Prefill Phase}: The model processes the input prompt in parallel. This phase is heavily compute-bound, saturating the Tensor Cores but leaving the memory bus relatively underutilized.
+    \item \textbf{Decoding Phase}: Tokens are generated sequentially one by one. This phase is memory-bandwidth-bound, requiring the system to stream model weights and Key-Value (KV) caches continuously, which fully saturates the shared LPDDR5 memory bus.
+\end{enumerate}
+
+\paragraph{Telemetry-driven Interleaving Policy}
+On a shared-memory unified virtual memory (UVM) edge device, running storage DMA or cryptographic staging operations during the memory-heavy decoding phase causes severe bus contention, leading to a massive drop in tokens per second (TPS). AEGIS-Q resolves this by monitoring memory bandwidth utilization and Tensor Core activity in real-time. 
+
+When the admission controller detects that the system is in the LLM decoding phase (high memory bandwidth, low Tensor Core utilization), it preemptively spills PQC operations to the CPU fast lane or defers them. Conversely, during the compute-bound prefill phase (high Tensor Core utilization, low memory bandwidth), the controller dynamically soft-allocates the GPU elastic lane for UVM transfers and cryptoprocesses, taking advantage of the idle memory bus. This phase-aware scheduling isolates memory-heavy background writes from the critical latency path of generative agents.
+
+

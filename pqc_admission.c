@@ -61,6 +61,12 @@ static struct {
     .uma_bytes_ema = 0,
 };
 
+static struct {
+    double mem_bandwidth_util;
+    double tensor_core_util;
+} g_telemetry = {0.0, 0.0};
+
+
 /* ──────────────────────────────────────────────────────────────────────────
  *  Initialization & Shutdown
  * ────────────────────────────────────────────────────────────────────────── */
@@ -90,6 +96,12 @@ int pqc_admission_init(const char *trace_file_path)
 
     env = getenv("PQC_QUEUE_PRESSURE_THRESHOLD");
     if (env) g_admission.queue_pressure_threshold = strtod(env, NULL);
+
+    env = getenv("PQC_TELEMETRY_MEM_BANDWIDTH");
+    if (env) g_telemetry.mem_bandwidth_util = strtod(env, NULL);
+
+    env = getenv("PQC_TELEMETRY_TENSOR_CORE");
+    if (env) g_telemetry.tensor_core_util = strtod(env, NULL);
 
     /* Write trace header */
     fprintf(g_admission.trace_file,
@@ -213,6 +225,26 @@ int pqc_admit(pqc_admission_context_t *ctx)
     }
 
     /* ─────────────────────────────────────────────────────────────────────
+     * Step 2.5: Phase-Aware Memory Interleaving (Milestone 3)
+     * Detect LLM execution phase using memory bandwidth and Tensor Core telemetry.
+     * ───────────────────────────────────────────────────────────────────── */
+    int is_llm_decoding = (g_telemetry.mem_bandwidth_util > 0.70 && g_telemetry.tensor_core_util < 0.30);
+    int is_llm_prefill  = (g_telemetry.tensor_core_util >= 0.30 && g_telemetry.mem_bandwidth_util <= 0.60);
+
+    if (is_llm_decoding) {
+        /* Force PQC encryption to CPU fast lane to avoid GPU memory staging contention. */
+        ctx->chosen_target = PQC_JOB_CPU;
+        ctx->decision_reason |= PQC_ROUTE_REASON_AI_QOS_EXHAUSTED;
+        ctx->deferral_reason = PQC_ROUTE_REASON_AI_QOS_EXHAUSTED;
+        pthread_mutex_lock(&g_admission.trace_lock);
+        g_admission.stats.total_requests++;
+        g_admission.stats.ai_budget_exhausted_count++;
+        pthread_mutex_unlock(&g_admission.trace_lock);
+        pqc_scheduler_trace_log(ctx);
+        return 0;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────
      * Step 3: Coherence proxy and queue pressure heuristic
      * ───────────────────────────────────────────────────────────────────── */
 
@@ -240,7 +272,12 @@ int pqc_admit(pqc_admission_context_t *ctx)
     double gpu_queue_pressure = (double)ctx->gpu_queue_depth +
                                 ctx->gpu_load_avg * 5.0;
 
-    if (gpu_queue_pressure < cpu_queue_pressure * g_admission.queue_pressure_threshold) {
+    double threshold = g_admission.queue_pressure_threshold;
+    if (is_llm_prefill) {
+        threshold = threshold * 1.5; /* Soften threshold to encourage GPU placement */
+    }
+
+    if (gpu_queue_pressure < cpu_queue_pressure * threshold) {
         /* GPU is less congested; route there */
         ctx->chosen_target = PQC_JOB_GPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_QUEUE_PRESSURE;
@@ -394,3 +431,12 @@ void pqc_admission_record_uma_event(size_t uma_bytes, uint64_t uma_latency_ns)
     }
     pthread_mutex_unlock(&g_admission.trace_lock);
 }
+
+void pqc_admission_update_telemetry(double mem_bandwidth_util, double tensor_core_util)
+{
+    pthread_mutex_lock(&g_admission.trace_lock);
+    g_telemetry.mem_bandwidth_util = mem_bandwidth_util;
+    g_telemetry.tensor_core_util = tensor_core_util;
+    pthread_mutex_unlock(&g_admission.trace_lock);
+}
+

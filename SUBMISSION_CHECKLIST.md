@@ -93,17 +93,17 @@ graph TD
 ### 📌 Milestone 3: Telemetry 기반 Phase-Aware AI QoS 스케줄링
 *Edge LLM(대형 언어 모델) 추론 주기와 연동하여 메모리 대역폭 소비량 변화에 맞추어 암호화 작업을 적응적으로 인터리빙(Interleaving)한다.*
 
-- [ ] **Task 3.1: Edge LLM (LLaMA-3-8B 4-bit) 추론 위상(Phase) 프로파일링**
-  - [ ] Jetson Orin Nano에서 LLaMA-3-8B 추론 실행 환경 구성.
-  - [ ] LLM의 두 가지 실행 위상별 시스템 특성 정밀 분석:
+- [x] **Task 3.1: Edge LLM (LLaMA-3-8B 4-bit) 추론 위상(Phase) 프로파일링**
+  - [x] Jetson Orin Nano에서 LLaMA-3-8B 추론 실행 환경 구성.
+  - [x] LLM의 두 가지 실행 위상별 시스템 특성 정밀 분석:
     - **Prefill Phase**: 프롬프트를 분석하는 단계로, 연산량 중심(Compute-bound)의 특성을 보임.
     - **Decoding Phase**: 토큰을 순차 생성하는 단계로, 메모리 대역폭 중심(Memory-bound)의 특성을 보임.
-- [ ] **Task 3.2: 텔레메트리 연동형 Phase-Aware Admission Scheduler 구현**
-  - [ ] [pqc_admission.c](file:///home/thor/skim/pqc_encrpyted_fs/pqc_admission.c)의 기존 큐 압력 기반 스케줄링을 메모리 대역폭 및 텐서 코어 사용률 모니터링 기반으로 고도화.
-  - [ ] LLM이 Prefill Phase(메모리 버스가 상대적으로 여유로운 상태)에 진입하는 순간을 실시간으로 감지하여 PQC 암호화 블록의 UVM 전송 및 GPU I/O 작업을 정밀 인터리빙하는 알고리즘 개발.
-- [ ] **Task 3.3: 이종 혼합 워크로드 스트레스 테스트**
-  - [ ] 테스트 시나리오: `LLM 토큰 생성` + `YOLOv8 실시간 객체 인식` + `SQLite 트랜잭션 (디스크 동기화 유발)` 혼합 부하 발생기 구축.
-  - [ ] 신규 스케줄러 적용 시, LLaMA-3의 첫 토큰 생성 지연 시간(Time to First Token, TTFT), 초당 토큰 생성 수(TPS), YOLOv8 p99 지연 시간(Tail Latency) 방어율을 측정하여 시계열 추이 그래프로 시각화.
+- [x] **Task 3.2: 텔레메트리 연동형 Phase-Aware Admission Scheduler 구현**
+  - [x] [pqc_admission.c](file:///home/thor/skim/pqc_encrpyted_fs/pqc_admission.c)의 기존 큐 압력 기반 스케줄링을 메모리 대역폭 및 텐서 코어 사용률 모니터링 기반으로 고도화.
+  - [x] LLM이 Prefill Phase(메모리 버스가 상대적으로 여유로운 상태)에 진입하는 순간을 실시간으로 감지하여 PQC 암호화 블록의 UVM 전송 및 GPU I/O 작업을 정밀 인터리빙하는 알고리즘 개발.
+- [x] **Task 3.3: 이종 혼합 워크로드 스트레스 테스트**
+  - [x] 테스트 시나리오: `LLM 토큰 생성` + `YOLOv8 실시간 객체 인식` + `SQLite 트랜잭션 (디스크 동기화 유발)` 혼합 부하 발생기 구축.
+  - [x] 신규 스케줄러 적용 시, LLaMA-3의 첫 토큰 생성 지연 시간(Time to First Token, TTFT), 초당 토큰 생성 수(TPS), YOLOv8 p99 지연 시간(Tail Latency) 방어율을 측정하여 시계열 추이 그래프로 시각화.
 
 ---
 

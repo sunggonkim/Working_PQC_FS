@@ -178,6 +178,36 @@ To demonstrate the real-time AI QoS protection of AEGIS-Q, we co-run the FUSE st
 
 Figure 13 presents the tail-latency distribution. Under the \texttt{Inference-only} baseline, the YOLOv8 model achieves a p99 latency of 0.91\,ms. When CPU-only secure storage is running, the tail latency remains protected at 0.93\,ms. However, under the \texttt{GPU-only} (Naive GPU) offloading policy, the heavy cryptographic kernels occupy the streaming multiprocessors (SMs), causing the YOLOv8 p99 latency to blow up to 5.09\,ms. In contrast, AEGIS-Q's adaptive scheduler detects the GPU pressure and dynamically routes the background cryptographic jobs to the CPU fast lane. As a result, the YOLOv8 p99 tail latency is restored to 0.91\,ms and 100\% of the baseline AI throughput is successfully preserved, demonstrating the effectiveness of our contention-aware admission control.
 
+\subsection{Phase-Aware AI QoS Scheduling}
+\label{sec:eval_phase_aware}
+
+To evaluate the effectiveness of the telemetry-driven, phase-aware scheduler, we construct a heterogeneous, multi-tenant edge scenario on the Jetson Orin Nano. This workload consists of:
+\begin{enumerate}
+    \item \textbf{Generative AI}: A quantized Qwen-1.5B LLM running continuous text generation.
+    \item \textbf{Computer Vision}: YOLOv8 executing real-time object detection at 30\,FPS.
+    \item \textbf{Database I/O}: SQLite commits executing WAL transactions via FUSE (inducing background ML-KEM and SHA-256 operations).
+\end{enumerate}
+
+We measure performance under three configurations: 
+\begin{itemize}
+    \item \textbf{Baseline (Plaintext)}: The multi-tenant workloads run on a plaintext, unencrypted filesystem.
+    \item \textbf{Static FUSE}: The workloads run on a standard GPU-offloaded encrypted FUSE filesystem without phase-aware scheduling, allowing background cryptographic staging tasks to execute on the GPU arbitrarily.
+    \item \textbf{Phase-Aware AEGIS-Q}: The workloads run under our telemetry-driven scheduler, which actively monitors memory bus and Tensor Core utilization to interleave or redirect cryptographic staging.
+\end{itemize}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{Figures/fig_m3_qos.pdf}
+  \caption{System performance under multi-tenant co-running workloads. (a) LLM Time to First Token (TTFT), (b) LLM Token Generation Rate (TPS), (c) YOLOv8 p99 tail latency, and (d) SQLite WAL commit latency. Phase-aware scheduling successfully isolates the LLM and vision execution from cryptographic staging interference.}
+  \label{fig:m3_qos}
+\end{figure}
+
+Figure~\ref{fig:m3_qos} shows the evaluation results. 
+
+\paragraph{Generative AI Impact} As shown in Figure~\ref{fig:m3_qos}(a) and (b), when storage encryption operations are executed statically on the GPU (\texttt{Static FUSE}), the LLM's Time to First Token (TTFT) increases from 1020\,ms to 1280\,ms (a 25.5\% latency penalty). Furthermore, the token generation rate (TPS) degrades severely, dropping by 47.4\% from 50.0 to 26.3 tokens per second. This degradation is caused by severe contention on the unified LPDDR5 memory bus during the LLM's memory-bound decoding phase. Under \texttt{Phase-Aware AEGIS-Q}, the scheduler detects high memory bandwidth and low Tensor Core activity during decoding, and routes background PQC staging to the CPU fast lane. Consequently, the LLM TTFT is protected at 1080\,ms (only a 5.8\% increase), and the token generation rate is preserved at 47.6 tokens per second (less than 5\% degradation from baseline).
+
+\paragraph{Vision \& Storage Performance} As shown in Figure~\ref{fig:m3_qos}(c), the YOLOv8 p99 tail latency spikes from 0.91\,ms in baseline to 1.11\,ms under Static FUSE due to shared resource contention. AEGIS-Q restores the YOLOv8 tail latency to 0.93\,ms. SQLite commit latency (Figure~\ref{fig:m3_qos}(d)) increases from 2.0\,ms to 8.5\,ms under Static FUSE as storage operations queue behind the decoding kernels. By dynamically routing storage jobs to the CPU during decoding and scheduling them on the GPU during the compute-bound prefill phase, Phase-Aware AEGIS-Q maintains SQLite commit latency at 2.1\,ms (virtually identical to the plaintext baseline). This demonstrates that phase-aware telemetry effectively resolves memory-bus interference, enabling secure storage to coexist with heavy edge AI workloads.
+
 \subsection{Performance Stability}
 \label{sec:eval_stability}
 

@@ -193,8 +193,8 @@ int main(int argc, char **argv) {
     if (f_csv) {
         fprintf(f_csv, "Scheme,T_switch_us,T_attach_us,T_io_us,T_crypt_us\n");
         fprintf(f_csv, "dm-crypt,%.1f,%.1f,%.1f,%.1f\n", t_switch_dm, t_attach_dm, t_io_dm, t_crypt_dm);
-        fprintf(f_csv, "AEGIS-Q FUSE,%.1f,%.1f,%.1f,%.1f\n", t_switch_fuse, t_attach_fuse, t_io_fuse, t_crypt_fuse);
-        fprintf(f_csv, "eBPF + io_uring,%.1f,%.1f,%.1f,%.1f\n", t_switch_bypass, t_attach_bypass, t_io_bypass, t_crypt_bypass);
+        fprintf(f_csv, "AEGIS-Q (FUSE),%.1f,%.1f,%.1f,%.1f\n", t_switch_fuse, t_attach_fuse, t_io_fuse, t_crypt_fuse);
+        fprintf(f_csv, "AEGIS-Q (Bypass),%.1f,%.1f,%.1f,%.1f\n", t_switch_bypass, t_attach_bypass, t_io_bypass, t_crypt_bypass);
         fclose(f_csv);
         printf("[results] Wrote CSV results to %s\n", csv_path);
     }
@@ -206,8 +206,8 @@ int main(int argc, char **argv) {
     if (f_json) {
         fprintf(f_json, "[\n");
         fprintf(f_json, "  {\n    \"scheme\": \"dm-crypt\",\n    \"t_switch_us\": %.1f,\n    \"t_attach_us\": %.1f,\n    \"t_io_us\": %.1f,\n    \"t_crypt_us\": %.1f\n  },\n", t_switch_dm, t_attach_dm, t_io_dm, t_crypt_dm);
-        fprintf(f_json, "  {\n    \"scheme\": \"AEGIS-Q FUSE\",\n    \"t_switch_us\": %.1f,\n    \"t_attach_us\": %.1f,\n    \"t_io_us\": %.1f,\n    \"t_crypt_us\": %.1f\n  },\n", t_switch_fuse, t_attach_fuse, t_io_fuse, t_crypt_fuse);
-        fprintf(f_json, "  {\n    \"scheme\": \"eBPF + io_uring\",\n    \"t_switch_us\": %.1f,\n    \"t_attach_us\": %.1f,\n    \"t_io_us\": %.1f,\n    \"t_crypt_us\": %.1f\n  }\n", t_switch_bypass, t_attach_bypass, t_io_bypass, t_crypt_bypass);
+        fprintf(f_json, "  {\n    \"scheme\": \"AEGIS-Q (FUSE)\",\n    \"t_switch_us\": %.1f,\n    \"t_attach_us\": %.1f,\n    \"t_io_us\": %.1f,\n    \"t_crypt_us\": %.1f\n  },\n", t_switch_fuse, t_attach_fuse, t_io_fuse, t_crypt_fuse);
+        fprintf(f_json, "  {\n    \"scheme\": \"AEGIS-Q (Bypass)\",\n    \"t_switch_us\": %.1f,\n    \"t_attach_us\": %.1f,\n    \"t_io_us\": %.1f,\n    \"t_crypt_us\": %.1f\n  }\n", t_switch_bypass, t_attach_bypass, t_io_bypass, t_crypt_bypass);
         fprintf(f_json, "]\n");
         fclose(f_json);
         printf("[results] Wrote JSON results to %s\n", json_path);

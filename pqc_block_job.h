@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 /*
  * AEGIS-Q Placement Model
@@ -178,6 +179,55 @@ static inline int pqc_block_job_gpu_eligible(const pqc_block_job_t *job)
 }
 
 /*
+ * QoS-Aware Admission Control Types & API (Milestone 3)
+ */
+typedef enum {
+    PQC_ROUTE_REASON_GPU_ELIGIBLE           = 0x01,   /* Plane eligible + budget available */
+    PQC_ROUTE_REASON_AI_QOS_EXHAUSTED       = 0x02,   /* AI inference owns GPU; CPU fallback */
+    PQC_ROUTE_REASON_QUEUE_PRESSURE         = 0x04,   /* CPU queue << GPU queue; dispatch to GPU */
+    PQC_ROUTE_REASON_DEADLINE_ELAPSED       = 0x08,   /* Deadline exceeded; must spill to CPU */
+    PQC_ROUTE_REASON_SIZE_TOO_SMALL         = 0x10,   /* Request too small; staging cost dominates */
+    PQC_ROUTE_REASON_COHERENCE_RISK         = 0x20,   /* UVM migration stall risk (M6 CUPTI future) */
+    PQC_ROUTE_REASON_STAGING_COST_HIGH      = 0x40,   /* Expected staging time > execution time */
+} pqc_admission_reason_t;
+
+typedef struct {
+    /* Batch characteristics */
+    size_t batch_count;
+    size_t bytes_total;
+    uint64_t batch_age_ns;              /* Time since job submission */
+    
+    /* Estimated costs */
+    uint64_t gpu_kernel_est_ns;         /* Estimated GPU kernel duration */
+    uint64_t gpu_h2d_staging_ns;        /* Host→Device transfer time */
+    uint64_t gpu_d2h_staging_ns;        /* Device→Host transfer time */
+    uint64_t queue_delay_ns;            /* Estimated queue delay before service */
+    uint64_t service_time_ns;           /* Estimated end-to-end service time */
+    
+    /* Queue & load state */
+    uint64_t cpu_queue_depth;
+    uint64_t gpu_queue_depth;
+    double cpu_load_avg;
+    double gpu_load_avg;
+    
+    /* QoS budget state */
+    uint64_t ai_qos_budget_remaining_ns;
+    uint64_t ai_inference_deadline_ns;
+    
+    /* Coherence & UMA state */
+    uint64_t uma_migration_bytes_est;
+    uint64_t uma_migration_cost_ns;
+    
+    /* Route decision output */
+    pqc_job_target_t chosen_target;
+    pqc_admission_reason_t decision_reason;
+    pqc_admission_reason_t deferral_reason;
+} pqc_admission_context_t;
+
+extern int pqc_admit(pqc_admission_context_t *ctx);
+extern void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx);
+
+/*
  * Core placement decision for the Elastic Lane scheduler.
  *
  * The function implements the research question: "when should a KEY_PLANE or
@@ -203,56 +253,27 @@ static inline pqc_job_target_t pqc_block_job_choose_target(
 {
     if (!job || !policy) return PQC_JOB_CPU;
 
-    /* Rule 1: Plane-level hard constraint */
+    /* Plane eligibility check first (structural constraints) */
     if (!pqc_block_job_gpu_eligible(job)) return PQC_JOB_CPU;
 
-    /* Rule 2: Request too small */
-    if (job->plaintext_length > 0 && job->plaintext_length < (uint32_t)policy->gpu_min_bytes) return PQC_JOB_CPU;
+    /* Delegate the admission decision to the centralized telemetry admission controller */
+    pqc_admission_context_t ctx;
+    memset(&ctx, 0, sizeof(ctx));
+    ctx.batch_count = 1;
+    ctx.bytes_total = job->plaintext_length;
+    ctx.batch_age_ns = job->gpu_wait_ns;
+    ctx.gpu_kernel_est_ns = policy->gpu_min_bytes;
+    ctx.gpu_h2d_staging_ns = job->coherence_cost_ns;
+    ctx.cpu_queue_depth = job->cpu_queue_depth;
+    ctx.gpu_queue_depth = job->gpu_queue_depth;
+    ctx.cpu_load_avg = cpu_load;
+    ctx.gpu_load_avg = gpu_load;
+    ctx.ai_qos_budget_remaining_ns = job->ai_qos_budget_ns;
+    ctx.ai_inference_deadline_ns = policy->ai_qos_min_budget_ns;
+    ctx.uma_migration_cost_ns = job->coherence_cost_ns;
 
-    /* Rule 3: UVM coherence cost too high */
-    if (job->coherence_cost_ns > policy->coherence_penalty_ns) return PQC_JOB_CPU;
-
-    /* Rule 4: Deadline elapsed */
-    if ((job->flags & PQC_JOB_FLAG_DEADLINE) ||
-        job->gpu_wait_ns > policy->gpu_max_wait_ns) return PQC_JOB_CPU;
-
-    /* Rule 5: AI QoS protection — do not starve inference engine.
-     * The elastic lane is admitted only when sufficient GPU slack exists
-     * beyond the AI reservation and the estimated contention cost does not
-     * exceed the remaining budget. */
-    uint64_t estimated_gpu_ns = job->gpu_wait_ns +
-                                 job->coherence_cost_ns +
-                                 policy->gpu_contention_penalty_ns;
-    uint64_t contention_score = estimated_gpu_ns;
-    if (job->gpu_queue_depth > job->cpu_queue_depth) {
-        contention_score += (job->gpu_queue_depth - job->cpu_queue_depth) * policy->gpu_queue_penalty_ns;
-    } else {
-        contention_score += (job->cpu_queue_depth - job->gpu_queue_depth);
-    }
-    if (policy->ai_qos_min_budget_ns > 0) {
-        if (job->ai_qos_budget_ns < policy->ai_qos_min_budget_ns)
-            return PQC_JOB_CPU;
-        if (job->ai_qos_budget_ns <= estimated_gpu_ns ||
-            job->ai_qos_budget_ns <= contention_score)
-            return PQC_JOB_CPU;
-    }
-
-    /* Rule 6: GPU queue pressure vs CPU pressure */
-    double gpu_pressure = (double)job->gpu_queue_depth + gpu_load * policy->gpu_queue_bias;
-    double cpu_pressure = (double)job->cpu_queue_depth + cpu_load * policy->cpu_load_bias;
-    if (gpu_pressure + 0.25 < cpu_pressure)
-        return PQC_JOB_GPU;
-
-    /* Rule 7: contention-aware backoff.
-     * If the estimated GPU contention is already large, spill earlier.
-     * This is intentionally conservative so the policy can recover tail
-     * latency rather than merely observe the violation. */
-    if (contention_score >= policy->contention_score_ns)
-        return PQC_JOB_CPU;
-
-    if (gpu_pressure + 0.05 < cpu_pressure)
-        return PQC_JOB_GPU;
-    return PQC_JOB_CPU;
+    pqc_admit(&ctx);
+    return ctx.chosen_target;
 }
 
 /* ═════════════════════════════════════════════════════════════════════════════
@@ -349,105 +370,7 @@ extern int pqc_file_key_decrypt_shared_secret(
     const pqc_file_key_metadata_t *key_md,
     uint8_t out_shared_secret[32]);
 
-/**
- * pqc_file_key_rotate()
- *   Called periodically or on admin request.
- *   - Generate new ML-KEM-768 keypair.
- *   - Encapsulate new shared secret.
- *   - Increment epoch; store new ciphertext as "current", old as "previous".
- *   - Update next_rotation_deadline_ns.
- *   - Zeroize old key material (document GPU residency policy).
- */
 extern int pqc_file_key_rotate(pqc_file_key_metadata_t *key_md);
-
-/**
- * pqc_file_key_zeroize()
- *   Called on file deletion or archive.
- *   - Destroy all key material (CPU and GPU if applicable).
- *   - Record timestamp; mark state as ZEROIZED.
- *   - Update GPU ops counter to document key residency.
- */
 extern int pqc_file_key_zeroize(pqc_file_key_metadata_t *key_md);
-
-/* ═════════════════════════════════════════════════════════════════════════════
- *  M5 PHASE 1: Explicit Admission Control Framework
- * ═════════════════════════════════════════════════════════════════════════════
- *
- * Replace threshold-only routing with explicit admission control:
- *  - Track batch age, expected service time, queue depth, staging cost.
- *  - Make route decision based on SLO budget, coherence cost, and queue pressure.
- *  - Log route reason for scheduler trace analysis and E3/E4 evaluation.
- */
-
-typedef enum {
-    PQC_ROUTE_REASON_GPU_ELIGIBLE           = 0x01,   /* Plane eligible + budget available */
-    PQC_ROUTE_REASON_AI_QOS_EXHAUSTED       = 0x02,   /* AI inference owns GPU; CPU fallback */
-    PQC_ROUTE_REASON_QUEUE_PRESSURE         = 0x04,   /* CPU queue << GPU queue; dispatch to GPU */
-    PQC_ROUTE_REASON_DEADLINE_ELAPSED       = 0x08,   /* Deadline exceeded; must spill to CPU */
-    PQC_ROUTE_REASON_SIZE_TOO_SMALL         = 0x10,   /* Request too small; staging cost dominates */
-    PQC_ROUTE_REASON_COHERENCE_RISK         = 0x20,   /* UVM migration stall risk (M6 CUPTI future) */
-    PQC_ROUTE_REASON_STAGING_COST_HIGH      = 0x40,   /* Expected staging time > execution time */
-} pqc_admission_reason_t;
-
-/*
- * Route Decision Context (M5 skeleton)
- * ────────────────────────────────────
- * Passed to admission controller to record detailed routing decision.
- */
-typedef struct {
-    /* Batch characteristics */
-    size_t batch_count;
-    size_t bytes_total;
-    uint64_t batch_age_ns;              /* Time since job submission */
-    
-    /* Estimated costs */
-    uint64_t gpu_kernel_est_ns;         /* Estimated GPU kernel duration */
-    uint64_t gpu_h2d_staging_ns;        /* Host→Device transfer time */
-    uint64_t gpu_d2h_staging_ns;        /* Device→Host transfer time */
-    uint64_t queue_delay_ns;            /* Estimated queue delay before service */
-    uint64_t service_time_ns;           /* Estimated end-to-end service time */
-    
-    /* Queue & load state */
-    uint64_t cpu_queue_depth;
-    uint64_t gpu_queue_depth;
-    double cpu_load_avg;
-    double gpu_load_avg;
-    
-    /* QoS budget state */
-    uint64_t ai_qos_budget_remaining_ns;
-    uint64_t ai_inference_deadline_ns;
-    
-    /* Coherence & UMA state (M6 future: CUPTI/Nsight data) */
-    uint64_t uma_migration_bytes_est;
-    uint64_t uma_migration_cost_ns;
-    
-    /* Route decision output */
-    pqc_job_target_t chosen_target;
-    pqc_admission_reason_t decision_reason;
-    pqc_admission_reason_t deferral_reason;
-} pqc_admission_context_t;
-
-/**
- * pqc_admit()
- *   Explicit admission control decision function (M5 skeleton).
- *   - Input:  pqc_admission_context_t with batch characteristics and state
- *   - Output: chosen_target (CPU vs GPU) and decision_reason for logging
- *   - Contract: Decision must be logged to scheduler trace for E3/E4 reproducibility.
- *
- * Implementation (M5 task):
- *   1. Evaluate AI QoS budget first (priority for inference protection).
- *   2. Then evaluate queue pressure and coherence cost.
- *   3. Set decision_reason bitmask to explain choice.
- *   4. Log to scheduler trace: batch_id, reason, route, service_time_est.
- */
-extern int pqc_admit(pqc_admission_context_t *ctx);
-
-/**
- * pqc_scheduler_trace_log()
- *   Record route decision to scheduler trace for E3/E4 analysis.
- *   - Trace file: experiments/scheduler_trace_<run_id>.jsonl
- *   - Each line: { "batch_id", "submit_ns", "chosen_target", "reason", "gpu_ops_ns", ... }
- */
-extern void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx);
 
 #endif

@@ -214,6 +214,16 @@ void pqc_scheduler_trace_stats(pqc_admission_stats_t *out_stats);
 extern void pqc_admission_record_uma_event(size_t uma_bytes,
                                           uint64_t uma_latency_ns);
 
+/**
+ * pqc_admission_update_telemetry()
+ *
+ * Update global telemetry values for memory bandwidth and Tensor Core utilization.
+ * Used by the co-running stress test and profilers to drive phase-aware decisions.
+ */
+extern void pqc_admission_update_telemetry(double mem_bandwidth_util,
+                                           double tensor_core_util);
+
+
 #ifdef __cplusplus
 }
 #endif

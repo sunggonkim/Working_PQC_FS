@@ -55,6 +55,7 @@
 #include "pqc_anchor.h"
 #include "cuda_aead.h"
 #include "cuda_pqc.h"
+#include "pqc_admission.h"
 
 static inline double get_time_us(void);
 static double gpu_load_ewma_read(void);
@@ -1556,6 +1557,7 @@ static void ctx_clear(int fd)
  */
 static int pqc_subsystem_init(void)
 {
+    pqc_admission_init("experiments/scheduler_trace.jsonl");
     update_scheduler_policy_from_env();
     /* Try ML-KEM-768 first (NIST standardized name), fallback to Kyber768 */
     g_kem = OQS_KEM_new(OQS_KEM_alg_ml_kem_768);
@@ -1694,6 +1696,7 @@ static void pqc_cleanup(void)
         g_secret_key = NULL;
         g_kem = NULL;
     }
+    pqc_admission_shutdown();
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
