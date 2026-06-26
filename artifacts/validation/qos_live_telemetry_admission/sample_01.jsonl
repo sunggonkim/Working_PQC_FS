@@ -1,0 +1,4 @@
+# pqc_admission_init: gpu_min_batch=4096 bytes, ai_qos_min_budget=1730000 ns, deadline_margin=100000 ns, queue_threshold=0.80
+# AI_BUDGET_UPDATE: old=0 ns, new=2000000 ns, queue_depth=0
+{"timestamp_ns": 1782376723694837094, "batch_age_ns": 0, "batch_count": 1, "bytes_total": 131072, "queue_delay_ns": 1000, "service_time_ns": 300000, "gpu_kernel_est_ns": 100000, "gpu_h2d_staging_ns": 100000, "gpu_d2h_staging_ns": 100000, "cpu_queue_depth": 1, "gpu_queue_depth": 1, "cpu_load_avg": 0.00, "gpu_load_avg": 0.00, "telemetry_mem_bandwidth_util": 0.7800, "telemetry_tensor_core_util": 0.0000, "ai_qos_budget_remaining_ns": 2000000, "uma_migration_bytes_est": 0, "uma_migration_cost_ns": 0, "chosen_target": "CPU", "deferral_reason": 2, "decision_reason": 2}
+# FINAL STATS: total_requests=1, gpu_admitted=0, cpu_routed=0, ai_budget_exhausted=1, deadline_exceeded=0, size_too_small=0

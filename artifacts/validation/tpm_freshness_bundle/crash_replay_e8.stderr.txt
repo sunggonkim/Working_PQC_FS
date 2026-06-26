@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/thor/skim/pqc_encrpyted_fs/experiments/run_crash_replay_e8.py", line 242, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/thor/skim/pqc_encrpyted_fs/experiments/run_crash_replay_e8.py", line 212, in main
+    rows.append(run_cutpoint_trial(backend, cut_point_s, trial))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thor/skim/pqc_encrpyted_fs/experiments/run_crash_replay_e8.py", line 102, in run_cutpoint_trial
+    proc = start_fuse(storage_dir, mount_dir, backend)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thor/skim/pqc_encrpyted_fs/experiments/run_crash_replay_e8.py", line 72, in start_fuse
+    raise RuntimeError(f"FUSE exited with {proc.returncode} before mounting")
+RuntimeError: FUSE exited with 1 before mounting

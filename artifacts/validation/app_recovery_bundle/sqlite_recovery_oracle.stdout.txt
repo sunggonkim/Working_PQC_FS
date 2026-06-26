@@ -1,0 +1,4 @@
+{
+  "report": "artifacts/validation/sqlite_recovery_oracle/sqlite_recovery_oracle.json",
+  "cut_points": 4
+}

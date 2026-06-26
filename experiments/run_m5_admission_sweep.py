@@ -2,8 +2,10 @@
 """
 run_m5_admission_sweep.py
 
-Drive the scheduler smoke test across multiple AI budget settings and record
-whether the admission policy causally changes route decisions.
+Drive the deterministic scheduler smoke test across supplied AI-slack values.
+This is a controller unit test: it proves only that identical job state is
+routed reproducibly as the supplied slack changes.  It is not an inference-QoS
+measurement and must not be used as a TensorRT latency result.
 
 Output:
   artifacts/m5_admission_sweep.json
@@ -24,10 +26,12 @@ ROOT = Path(__file__).resolve().parent.parent
 BUILD = ROOT / "build" / "pqc_fuse"
 
 
-def run_smoke(ai_budget_ns: int, gpu_min_bytes: int) -> dict:
+def run_smoke(ai_budget_ns: int, gpu_min_bytes: int, cpu_queue_depth: int, gpu_queue_depth: int) -> dict:
     env = os.environ.copy()
-    env["PQC_AI_QOS_MIN_BUDGET_NS"] = str(ai_budget_ns)
+    env["PQC_SCHED_SMOKE_AI_BUDGET_NS"] = str(ai_budget_ns)
     env["PQC_GPU_MIN_BYTES"] = str(gpu_min_bytes)
+    env["PQC_SCHED_SMOKE_CPU_QUEUE_DEPTH"] = str(cpu_queue_depth)
+    env["PQC_SCHED_SMOKE_GPU_QUEUE_DEPTH"] = str(gpu_queue_depth)
 
     proc = subprocess.run(
         [str(BUILD), "--scheduler-smoke"],
@@ -48,6 +52,8 @@ def run_smoke(ai_budget_ns: int, gpu_min_bytes: int) -> dict:
     return {
         "ai_budget_ns": ai_budget_ns,
         "gpu_min_bytes": gpu_min_bytes,
+        "cpu_queue_depth": cpu_queue_depth,
+        "gpu_queue_depth": gpu_queue_depth,
         "jobs": jobs,
         "pressure": pressure,
         "stderr": proc.stderr,
@@ -59,11 +65,13 @@ def main() -> int:
     parser.add_argument("--out-json", default="artifacts/m5_admission_sweep.json")
     parser.add_argument("--out-csv", default="artifacts/m5_admission_sweep.csv")
     parser.add_argument("--gpu-min-bytes", type=int, default=131072)
+    parser.add_argument("--cpu-queue-depths", type=int, nargs="+", default=[0, 1, 2, 4])
+    parser.add_argument("--gpu-queue-depths", type=int, nargs="+", default=[0, 1, 2, 4])
     parser.add_argument(
         "--budgets-ns",
         type=int,
         nargs="+",
-        default=[500000, 1000000, 2000000, 5000000],
+        default=[0, 65536, 131072, 2000000],
     )
     args = parser.parse_args()
 
@@ -72,15 +80,19 @@ def main() -> int:
 
     rows = []
     for budget in args.budgets_ns:
-        result = run_smoke(budget, args.gpu_min_bytes)
-        route_summary = {
-            "budget_ns": budget,
-            "gpu_jobs": sum(1 for j in result["jobs"] if j.get("target") == "GPU"),
-            "cpu_jobs": sum(1 for j in result["jobs"] if j.get("target") == "CPU"),
-            "pressure_target": (result["pressure"] or {}).get("target"),
-            "pressure_gpu_wait_ns": (result["pressure"] or {}).get("gpu_wait_ns"),
-        }
-        rows.append(route_summary)
+        for cpu_q in args.cpu_queue_depths:
+            for gpu_q in args.gpu_queue_depths:
+                result = run_smoke(budget, args.gpu_min_bytes, cpu_q, gpu_q)
+                route_summary = {
+                    "budget_ns": budget,
+                    "cpu_queue_depth": cpu_q,
+                    "gpu_queue_depth": gpu_q,
+                    "gpu_jobs": sum(1 for j in result["jobs"] if j.get("target") == "GPU"),
+                    "cpu_jobs": sum(1 for j in result["jobs"] if j.get("target") == "CPU"),
+                    "pressure_target": (result["pressure"] or {}).get("target"),
+                    "pressure_gpu_wait_ns": (result["pressure"] or {}).get("gpu_wait_ns"),
+                }
+                rows.append(route_summary)
 
     out_json = ROOT / args.out_json
     out_csv = ROOT / args.out_csv
@@ -92,7 +104,7 @@ def main() -> int:
     with out_csv.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["budget_ns", "gpu_jobs", "cpu_jobs", "pressure_target", "pressure_gpu_wait_ns"],
+            fieldnames=["budget_ns", "cpu_queue_depth", "gpu_queue_depth", "gpu_jobs", "cpu_jobs", "pressure_target", "pressure_gpu_wait_ns"],
         )
         writer.writeheader()
         writer.writerows(rows)

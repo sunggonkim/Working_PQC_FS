@@ -1,0 +1,74 @@
+{
+  "note": "Prototype repetition summary only; not a PMU/CUPTI-backed QoS result.",
+  "input_dir": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_repeated_run",
+  "run_count": 3,
+  "latency_ms_median": 5827.10862159729,
+  "latency_ms_min": 4428.278923034668,
+  "latency_ms_max": 5829.685926437378,
+  "runs": [
+    {
+      "run": 1,
+      "returncode": 0,
+      "trace_file": "artifacts/validation/qos_repeated_run/run_1_run_qos_gpu_trace.jsonl",
+      "summary_file": "artifacts/validation/qos_repeated_run/run_1_run_qos_gpu_summary.json",
+      "trace": {
+        "sample_count": 49,
+        "hysteresis_event_counts": {
+          "hold": 47,
+          "enter": 1,
+          "exit": 1
+        },
+        "hysteresis_states": [
+          "open",
+          "throttled"
+        ],
+        "throttle_high_fraction": 0.8163265306122449,
+        "gpu_power_mw_median": 31258.0
+      },
+      "ai_latency_ms": 4428.278923034668,
+      "enabled": true
+    },
+    {
+      "run": 2,
+      "returncode": 0,
+      "trace_file": "artifacts/validation/qos_repeated_run/run_2_run_qos_gpu_trace.jsonl",
+      "summary_file": "artifacts/validation/qos_repeated_run/run_2_run_qos_gpu_summary.json",
+      "trace": {
+        "sample_count": 49,
+        "hysteresis_event_counts": {
+          "hold": 48,
+          "enter": 1
+        },
+        "hysteresis_states": [
+          "open",
+          "throttled"
+        ],
+        "throttle_high_fraction": 0.9591836734693877,
+        "gpu_power_mw_median": 32828.0
+      },
+      "ai_latency_ms": 5829.685926437378,
+      "enabled": true
+    },
+    {
+      "run": 3,
+      "returncode": 0,
+      "trace_file": "artifacts/validation/qos_repeated_run/run_3_run_qos_gpu_trace.jsonl",
+      "summary_file": "artifacts/validation/qos_repeated_run/run_3_run_qos_gpu_summary.json",
+      "trace": {
+        "sample_count": 49,
+        "hysteresis_event_counts": {
+          "hold": 48,
+          "enter": 1
+        },
+        "hysteresis_states": [
+          "open",
+          "throttled"
+        ],
+        "throttle_high_fraction": 0.9795918367346939,
+        "gpu_power_mw_median": 32828.0
+      },
+      "ai_latency_ms": 5827.10862159729,
+      "enabled": true
+    }
+  ]
+}

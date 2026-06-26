@@ -1,59 +1,33 @@
-\section{Case Study: Secure SQLite on Corruption-Prone Edge}
-\label{sec:case_study}
-
-To demonstrate the practical utility of AEGIS-Q, we implemented a secure SQLite transaction database system on the FUSE filesystem to host transactional workloads under high background I/O contention.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/sqlite_performance.pdf}
-  \caption{SQLite transaction throughput cost convergence for 256\,MB database workloads. AEGIS-Q enables local commit validation before cloud database synchronization.}
-  \label{fig:sqlite_convergence}
-\end{figure}
-
-\subsection{Problem Formulation}
-\label{sec:case_problem}
-
-The goal is to optimize the transaction commit log frequency to minimize write amplification and disk latency while ensuring full database durability. We formulate the block access scheduling problem on a dependency graph representing the SQLite WAL (Write-Ahead Logging) and main database blocks:
-\begin{equation}
-H = \sum_{(i,j)\in E} \frac{1}{2} (1 - Z_i Z_j)
-\end{equation}
-where $Z_i \in \{-1, 1\}$ represents the cache-dirty state of block $i$ (dirty or clean). We seek to find the block routing and commit barriers that minimize the cost $H$. We optimize this block layout using adaptive scheduling block sizes and transaction grouping.
-
-\subsection{Implementation}
-\label{sec:case_impl}
-
-We simulated the secure SQLite transaction workflow on the Jetson Orin Nano using AEGIS-Q. The setup involved:
-\begin{itemize}
-  \item File Blocks: 16\,MB to 4\,GB database sizes
-  \item Journals: 2--4 journaling pages
-  \item DB Engine: WAL mode with database rollback recovery
-  \item Transactions: 100
-\end{itemize}
-
-\subsection{Results}
-\label{sec:case_results}
-
-Figure~\ref{fig:sqlite_convergence} shows the convergence of the database transaction latency and commit costs. The filesystem execution achieved a transaction scheduling cost estimation within 1\% of the optimal layout for 256\,MB database files.
-
-\subsection{Edge vs. Cloud}
-\label{sec:case_edge_cloud}
-
-Executing this workflow on the edge offers significant advantages for privacy-sensitive transactional data. By keeping the database schema and operational logs local, applications can optimize database updates without exposing critical secure storage details to third-party cloud database providers:
-\begin{itemize}
-  \item \textbf{Latency}: 9.15\,ms per transaction (AEGIS-Q) vs.\ 1,500\,ms (Cloud database sync).
-  \item \textbf{Privacy}: 100\% local file encryption.
-  \item \textbf{Cost}: Zero network ingress/egress costs vs.\ \$0.01 per database API request on public cloud databases.
-\end{itemize}
-This case study confirms that AEGIS-Q is not just a cryptographic filesystem, but a viable platform for developing privacy-preserving storage-processing hybrid applications.
-
-
-\section{Security Analysis}
+\section{Security and Recovery Scope}
 \label{sec:security}
 
-Security in AEGIS-Q is not just confidentiality. The system must preserve overwrite safety, detect rollback, and maintain remount correctness under interruption. The generation number solves block reuse ambiguity, the journal solves write ordering, and the anchor solves freshness. In particular, the intended implementation uses ML-KEM-768 for file-key provisioning, stores the ciphertext in authenticated metadata, and seals the corresponding device recipient key to the TPM; the TPM is a monotonic storage root, not a PQC-capable signer. 
+\subsection{Threat model}
+\label{sec:case_study}
 
-The attacker model includes offline replay and image restoration. A file-based witness alone is insufficient because the witness can be replayed together with the data. A TPM-backed anchor is stronger, but it is too slow to sit on the hot path, which is why AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage batches anchor commits. The evaluation is therefore framed around replay cut-points and preservation rates rather than a single success/failure sample, because freshness claims are demonstrated across interruption points.
+AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES-GCM protects the confidentiality and authenticity of published block records, while the HMAC-protected key envelope and checkpoint detect unauthenticated metadata changes.  The adversary can still deny service, delete records, replay a complete file-backed snapshot, or exploit vulnerabilities outside the FUSE process.  We make no claim against a privileged local attacker that can read process memory, substitute the CUDA driver, alter the mount executable, or use GPU microarchitectural side channels.
 
-The batching trade-off creates a freshness window, and the paper is explicit about it. The system improves throughput by certifying stable batches rather than every transient write, but it does not pretend that the freshness window disappears. That honesty matters because the alternative is to put the TPM in the foreground path and lose the performance benefits entirely.
+The accepted encrypted state consists of a validated DEK envelope, a complete journal mapping, and ciphertext records referenced by that mapping.  A tag failure causes a read to fail.  A malformed or unauthenticated envelope/checkpoint causes open to fail.  These behaviors are necessary for a safe FUSE format, but they are not a formal proof of crash consistency.  In particular, xattr atomicity and directory durability are delegated to the underlying filesystem.
 
-The paper makes clear that the cryptography is scoped properly. Bulk data uses symmetric authenticated encryption per generation, while PQC is used for trust establishment and freshness binding. In other words, the hot path is not a PQC bulk-encryption engine; it is a generation-scoped AEAD path whose keys and freshness state are rooted in a post-quantum-capable trust channel. That is the right boundary for the threat model in this work.
+\subsection{Freshness is conditional on an external anchor}
+\label{sec:case_problem}
+
+The source tree contains two anchor modes.  The file mode is only an integrity witness; copying the directory copies the witness.  The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \emph{rollback visible}, not as successful protection.  This negative result is important: an HMAC alone does not create freshness when its entire state is replayable.
+
+The hardware mode stores an authenticated prefix record in an administrator-provisioned TPM NV index.  It is deliberately outside the evaluated configuration.  The paper does not assert that an NV index is a signer, does not report an invented TPM latency, and does not claim PCR binding.  To make this mode publishable, future work must document the TPM model/bus, authorization and index attributes, monotonic update protocol, software-update recovery, and a power-fail matrix that distinguishes acknowledged, anchored, and replayed writes.
+
+\subsection{Side channels and application semantics}
+\label{sec:case_impl}
+
+GPU SIMT execution, cache behavior, memory coalescing, occupancy, and contention can all leak information.  The repository contained generators that produced simulated timing and TVLA traces.  Those files are excluded from this paper.  The retained GPU integrity test checks output parity with OpenSSL; it says nothing about constant-time execution, physical power/EM leakage, or cross-tenant GPU channels.
+
+Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary.  It does not certify SQLite WAL, \texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract.  We retain the following labels to make the scope explicit: the prior SQLite case study (Section~\ref{sec:case_results}) and edge/cloud comparison (Section~\ref{sec:case_edge_cloud}) are not claimed by this revision.
+
+\subsection{What the current tests establish}
+\label{sec:case_results}
+
+The final validation runs a FUSE self-test, clean encrypted remount, a managed-memory smoke test, and GPU integrity parity checks.  The round-trip test confirms that after a clean unmount/remount, the original 128~KiB plaintext is recovered and the corresponding \texttt{.pqcdata} sidecar does not contain the whole plaintext byte sequence.  This is evidence of the repaired key-envelope path, not a statistical security proof.
+
+\subsection{Deployment boundary}
+\label{sec:case_edge_cloud}
+
+AEGIS-Q is a prototype for local edge storage.  It makes no edge-versus-cloud cost, latency, or privacy quantification.  The appropriate comparison is deployment-specific and requires a separately measured network/service configuration.  This restriction avoids turning a local microbenchmark into a claim about cloud databases or remote key-management systems.

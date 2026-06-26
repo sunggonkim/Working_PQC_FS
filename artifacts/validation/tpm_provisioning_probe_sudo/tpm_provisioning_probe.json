@@ -1,0 +1,53 @@
+{
+  "note": "Provisioning probe only; does not establish PCR sealing or hardware-backed freshness.",
+  "tpm2_tools": {
+    "tpm2_nvreadpublic": true,
+    "tpm2_nvread": true,
+    "tpm2_nvwrite": true,
+    "tpm2_getcap": true
+  },
+  "configured": {
+    "nv_index": "0x01500010",
+    "tcti": "",
+    "sudo": true,
+    "sudo_password_env": "PQC_SUDO_PASSWORD"
+  },
+  "checks": [
+    {
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_getcap",
+        "properties-fixed"
+      ],
+      "returncode": 0,
+      "stdout": "TPM2_PT_FAMILY_INDICATOR:\n  raw: 0x322E3000\n  value: \"2.0\"\nTPM2_PT_LEVEL:\n  raw: 0\nTPM2_PT_REVISION:\n  raw: 0xB7\n  value: 1.83\nTPM2_PT_DAY_OF_YEAR:\n  raw: 0x19\nTPM2_PT_YEAR:\n  raw: 0x7E8\nTPM2_PT_MANUFACTURER:\n  raw: 0x58595A20\n  value: \"XYZ \"\nTPM2_PT_VENDOR_STRING_1:\n  raw: 0x78434720\n  value: \"xCG\"\nTPM2_PT_VENDOR_STRING_2:\n  raw: 0x6654504D\n  value: \"fTPM\"\nTPM2_PT_VENDOR_STRING_3:\n  raw: 0x0\n  value: \"\"\nTPM2_PT_VENDOR_STRING_4:\n  raw: 0x0\n  value: \"\"\nTPM2_PT_VENDOR_TPM_TYPE:\n  raw: 0x1\nTPM2_PT_FIRMWARE_VERSION_1:\n  raw: 0x20240125\nTPM2_PT_FIRMWARE_VERSION_2:\n  raw: 0x120000\nTPM2_PT_INPUT_BUFFER:\n  raw: 0x400\nTPM2_PT_HR_TRANSIENT_MIN:\n  raw: 0x3\nTPM2_PT_HR_PERSISTENT_MIN:\n  raw: 0x2\nTPM2_PT_HR_LOADED_MIN:\n  raw: 0x3\nTPM2_PT_ACTIVE_SESSIONS_MAX:\n  raw: 0x40\nTPM2_PT_PCR_COUNT:\n  raw: 0x18\nTPM2_PT_PCR_SELECT_MIN:\n  raw: 0x3\nTPM2_PT_CONTEXT_GAP_MAX:\n  raw: 0xFFFF\nTPM2_PT_NV_COUNTERS_MAX:\n  raw: 0x0\nTPM2_PT_NV_INDEX_MAX:\n  raw: 0x800\nTPM2_PT_MEMORY:\n  raw: 0x6\nTPM2_PT_CLOCK_UPDATE:\n  raw: 0x400000\nTPM2_PT_CONTEXT_HASH:\n  raw: 0xD\nTPM2_PT_CONTEXT_SYM:\n  raw: 0x6\nTPM2_PT_CONTEXT_SYM_SIZE:\n  raw: 0x100\nTPM2_PT_ORDERLY_COUNT:\n  raw: 0xFF\nTPM2_PT_MAX_COMMAND_SIZE:\n  raw: 0x1000\nTPM2_PT_MAX_RESPONSE_SIZE:\n  raw: 0x1000\nTPM2_PT_MAX_DIGEST:\n  raw: 0x40\nTPM2_PT_MAX_OBJECT_CONTEXT:\n  raw: 0x8E4\nTPM2_PT_MAX_SESSION_CONTEXT:\n  raw: 0x194\nTPM2_PT_PS_FAMILY_INDICATOR:\n  raw: 0x0\nTPM2_PT_PS_LEVEL:\n  raw: 0x0\nTPM2_PT_PS_REVISION:\n  raw: 0x0\nTPM2_PT_PS_DAY_OF_YEAR:\n  raw: 0x0\nTPM2_PT_PS_YEAR:\n  raw: 0x0\nTPM2_PT_SPLIT_MAX:\n  raw: 0x80\nTPM2_PT_TOTAL_COMMANDS:\n  raw: 0x76\nTPM2_PT_LIBRARY_COMMANDS:\n  raw: 0x75\nTPM2_PT_VENDOR_COMMANDS:\n  raw: 0x1\nTPM2_PT_NV_BUFFER_MAX:\n  raw: 0x400\nTPM2_PT_MODES:\n  raw: 0x1\n  value: TPMA_MODES_FIPS_140_2\n",
+      "stderr": "[sudo] password for thor: ",
+      "tcti": "<default>"
+    },
+    {
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_nvreadpublic",
+        "0x01500010"
+      ],
+      "returncode": 0,
+      "stdout": "0x1500010:\n  name: 000bc7029adb2cd158ef9cb07fd317d316fd1baec2a43cea7cfcf6f32c7060c1353a\n  hash algorithm:\n    friendly: sha256\n    value: 0xB\n  attributes:\n    friendly: ownerwrite|ownerread\n    value: 0x20002\n  size: 88\n\n",
+      "stderr": "",
+      "tcti": "<default>"
+    },
+    {
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_pcrread",
+        "sha256:0,1,2,3,4,5,6,7"
+      ],
+      "returncode": 0,
+      "stdout": "  sha256:\n    0 : 0x03902BA3B5331D85424B80D27C5ADA8929A016BB0947FC061D86A005BFFA7124\n    1 : 0xC25CEBC9AA75A5A76C46F4B0F98AD73EC97ED468140C3CA4176F765220A70796\n    2 : 0x3D458CFE55CC03EA1F443F1562BEEC8DF51C75E14A9FCF9A7234A13F198E7969\n    3 : 0x3D458CFE55CC03EA1F443F1562BEEC8DF51C75E14A9FCF9A7234A13F198E7969\n    4 : 0x27C6AA0C00F4018A8D45B862AC27F7C69F808EACA84A04EFAA399E35BCFF4D9E\n    5 : 0xF4D9C7505522A4A3D8ED03DC5B625082E013E378A7804B29DBC03313CF134042\n    6 : 0x3D458CFE55CC03EA1F443F1562BEEC8DF51C75E14A9FCF9A7234A13F198E7969\n    7 : 0x65CAF8DD1E0EA7A6347B635D2B379C93B9A1351EDC2AFC3ECDA700E534EB3068\n",
+      "stderr": "",
+      "tcti": "<default>"
+    }
+  ]
+}

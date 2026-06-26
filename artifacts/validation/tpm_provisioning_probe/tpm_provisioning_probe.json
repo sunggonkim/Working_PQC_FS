@@ -1,0 +1,47 @@
+{
+  "note": "Provisioning probe only; does not establish PCR sealing or hardware-backed freshness.",
+  "tpm2_tools": {
+    "tpm2_nvreadpublic": true,
+    "tpm2_nvread": true,
+    "tpm2_nvwrite": true,
+    "tpm2_getcap": true
+  },
+  "configured": {
+    "nv_index": "0x01500010",
+    "tcti": "",
+    "sudo": false,
+    "sudo_password_env": ""
+  },
+  "checks": [
+    {
+      "command": [
+        "tpm2_getcap",
+        "properties-fixed"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "ERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpmrm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tcti-swtpm.c:613:Tss2_Tcti_Swtpm_Init() Cannot connect to swtpm TPM socket \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-swtpm.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-mssim.so.0 \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:269:tctildr_get_default() No standard TCTI could be loaded \nERROR:tcti:src/tss2-tcti/tctildr.c:430:Tss2_TctiLdr_Initialize_Ex() Failed to instantiate TCTI \nERROR: Could not load tcti, got: \"(null)\"\n",
+      "tcti": "<default>"
+    },
+    {
+      "command": [
+        "tpm2_nvreadpublic",
+        "0x01500010"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "ERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpmrm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tcti-swtpm.c:613:Tss2_Tcti_Swtpm_Init() Cannot connect to swtpm TPM socket \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-swtpm.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-mssim.so.0 \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:269:tctildr_get_default() No standard TCTI could be loaded \nERROR:tcti:src/tss2-tcti/tctildr.c:430:Tss2_TctiLdr_Initialize_Ex() Failed to instantiate TCTI \nERROR: Could not load tcti, got: \"(null)\"\n",
+      "tcti": "<default>"
+    },
+    {
+      "command": [
+        "tpm2_pcrread",
+        "sha256:0,1,2,3,4,5,6,7"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "ERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpmrm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tcti-swtpm.c:613:Tss2_Tcti_Swtpm_Init() Cannot connect to swtpm TPM socket \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-swtpm.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-mssim.so.0 \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:269:tctildr_get_default() No standard TCTI could be loaded \nERROR:tcti:src/tss2-tcti/tctildr.c:430:Tss2_TctiLdr_Initialize_Ex() Failed to instantiate TCTI \nERROR: Could not load tcti, got: \"(null)\"\n",
+      "tcti": "<default>"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "mode": "nsys",
+  "command": [
+    "sudo",
+    "-S",
+    "/usr/local/cuda-13.0/bin/nsys",
+    "profile",
+    "--trace=cuda,osrt,tegra-accelerators",
+    "--output",
+    "artifacts/validation/uma_storage_dma_profile_root/uma_storage_dma_nsys",
+    "python3",
+    "experiments/run_uma_storage_dma_probe.py",
+    "--nvme-device",
+    "/dev/nvme0n1",
+    "--out-dir",
+    "artifacts/validation/uma_storage_dma_profile_root/probe"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"report\": \"artifacts/validation/uma_storage_dma_profile_root/probe/uma_storage_dma_probe.json\",\n  \"checks\": 2\n}\nCollecting data...\nGenerating '/tmp/nsys-report-5881.qdstrm'\n\n[1/1] [0%                          ] uma_storage_dma_nsys.nsys-rep\n[1/1] [0%                          ] uma_storage_dma_nsys.nsys-rep\n[1/1] [9%                          ] uma_storage_dma_nsys.nsys-rep\n[1/1] [11%                         ] uma_storage_dma_nsys.nsys-rep\n[1/1] [12%                         ] uma_storage_dma_nsys.nsys-rep\n[1/1] [====28%                     ] uma_storage_dma_nsys.nsys-rep\n[1/1] [=========44%                ] uma_storage_dma_nsys.nsys-rep\n[1/1] [=========45%                ] uma_storage_dma_nsys.nsys-rep\n[1/1] [=========46%                ] uma_storage_dma_nsys.nsys-rep\n[1/1] [==========47%               ] uma_storage_dma_nsys.nsys-rep\n[1/1] [==========48%               ] uma_storage_dma_nsys.nsys-rep\n[1/1] [==========49%               ] uma_storage_dma_nsys.nsys-rep\n[1/1] [===========50%              ] uma_storage_dma_nsys.nsys-rep\n[1/1] [===========51%              ] uma_storage_dma_nsys.nsys-rep\n[1/1] [===========53%              ] uma_storage_dma_nsys.nsys-rep\n[1/1] [============54%             ] uma_storage_dma_nsys.nsys-rep\n[1/1] [============55%             ] uma_storage_dma_nsys.nsys-rep\n[1/1] [============56%             ] uma_storage_dma_nsys.nsys-rep\n[1/1] [============57%             ] uma_storage_dma_nsys.nsys-rep\n[1/1] [=============60%            ] uma_storage_dma_nsys.nsys-rep\n[1/1] [==================76%       ] uma_storage_dma_nsys.nsys-rep\n[1/1] [==================77%       ] uma_storage_dma_nsys.nsys-rep\n[1/1] [========================100%] uma_storage_dma_nsys.nsys-rep\n[1/1] [========================100%] uma_storage_dma_nsys.nsys-rep\nGenerated:\n\t/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_root/uma_storage_dma_nsys.nsys-rep\n",
+  "stderr": "[sudo] password for thor: ",
+  "trace": "cuda,osrt,tegra-accelerators",
+  "run_as_root": true,
+  "sudo_password_env": "PQC_SUDO_PASSWORD",
+  "note": "Profiler wrapper only; not a proof of verified NVMe-to-UVM DMA semantics."
+}

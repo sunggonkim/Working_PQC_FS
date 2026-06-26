@@ -1,0 +1,65 @@
+{
+  "note": "TPM freshness bundle only; PCR-policy probe is transient and this is not a full hardware-backed freshness proof.",
+  "checks": [
+    {
+      "name": "tpm_pcr_policy_probe",
+      "command": [
+        "python3",
+        "experiments/run_tpm_pcr_policy_probe.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/tpm_pcr_policy_probe.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/tpm_pcr_policy_probe.stderr.txt"
+    },
+    {
+      "name": "anchor_latency",
+      "command": [
+        "python3",
+        "experiments/benchmark_anchor_latency.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/anchor_latency.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/anchor_latency.stderr.txt"
+    },
+    {
+      "name": "tpm_monotonic_replay",
+      "command": [
+        "python3",
+        "experiments/run_tpm_monotonic_replay.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/tpm_monotonic_replay.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/tpm_monotonic_replay.stderr.txt"
+    },
+    {
+      "name": "power_fail_test",
+      "command": [
+        "python3",
+        "experiments/run_power_fail_test.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/power_fail_test.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/power_fail_test.stderr.txt"
+    },
+    {
+      "name": "crash_replay_e8",
+      "command": [
+        "python3",
+        "experiments/run_crash_replay_e8.py"
+      ],
+      "returncode": 1,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/crash_replay_e8.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/crash_replay_e8.stderr.txt"
+    },
+    {
+      "name": "tpm_recovery_verdict",
+      "command": [
+        "python3",
+        "experiments/build_tpm_recovery_verdict.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/tpm_recovery_verdict.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle/tpm_recovery_verdict.stderr.txt"
+    }
+  ]
+}

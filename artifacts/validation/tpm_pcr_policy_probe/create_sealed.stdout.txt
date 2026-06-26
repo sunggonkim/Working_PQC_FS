@@ -1,0 +1,14 @@
+name-alg:
+  value: sha256
+  raw: 0xb
+attributes:
+  value: fixedtpm|fixedparent
+  raw: 0x12
+type:
+  value: keyedhash
+  raw: 0x8
+algorithm: 
+  value: null
+  raw: 0x10
+keyedhash: 845a93bb395f826902acaa6ce8df1b84159e30e7d62a93877b0c765a9f2cb5f4
+authorization policy: ac2396f88d15fde4fb443c3edc42ad4f649da527145f91efc6e1be79f97a8357

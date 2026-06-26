@@ -1,0 +1,25 @@
+{
+  "note": "Combined durability bundle wrapper; this retains TPM-only and app-only bundles together and does not prove a single shared backing-store campaign.",
+  "checks": [
+    {
+      "name": "tpm_only_bundle",
+      "command": [
+        "python3",
+        "experiments/run_tpm_only_bundle.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/tpm_only_bundle.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/tpm_only_bundle.stderr.txt"
+    },
+    {
+      "name": "app_recovery_bundle",
+      "command": [
+        "python3",
+        "experiments/run_app_recovery_bundle.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/app_recovery_bundle.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/app_recovery_bundle.stderr.txt"
+    }
+  ]
+}

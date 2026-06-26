@@ -1,0 +1,5 @@
+Time (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+99.1,109825145,1,109825145.0,109825145.0,109825145,109825145,0.0,cudaMallocManaged
+0.6,611991,1,611991.0,611991.0,611991,611991,0.0,cudaFree
+0.3,343982,2,171991.0,171991.0,171139,172843,1204.9,cudaMemPrefetchAsync_v12020
+0.0,731,1,731.0,731.0,731,731,0.0,cuModuleGetLoadingMode

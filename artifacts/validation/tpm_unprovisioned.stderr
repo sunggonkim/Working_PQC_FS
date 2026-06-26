@@ -1,0 +1,23 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Kyber-512 Encrypted Filesystem    │
+  │  Edge AI Bottleneck Profiling Tool                  │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-24 21:01:43.635] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-24 21:01:43.635]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-24 21:01:43.635]   Storage dir : /tmp/aegis_tpm_probe.x4YN3V/store
+[PQC-FUSE 2026-06-24 21:01:43.635]   Mount point : /tmp/aegis_tpm_probe.x4YN3V/mnt
+[PQC-FUSE 2026-06-24 21:01:43.635] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-24 21:01:43.635] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-24 21:01:43.635]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-24 21:01:43.635]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-24 21:01:43.635]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-24 21:01:43.635]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-24 21:01:43.637] Keypair generated in 1527.80 µs
+[PQC-FUSE 2026-06-24 21:01:43.807] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-24 21:01:43.807] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-24 21:01:43.807] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE] FATAL: Freshness anchor probe failed: No such device
+[PQC-FUSE] FATAL: PQC initialization failed.

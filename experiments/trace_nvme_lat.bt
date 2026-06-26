@@ -1,0 +1,17 @@
+tracepoint:nvme:nvme_setup_cmd
+{
+    @start[args->cid] = nsecs;
+}
+
+tracepoint:nvme:nvme_complete_rq
+/@start[args->cid]/
+{
+    @usecs = hist((nsecs - @start[args->cid]) / 1000);
+    delete(@start[args->cid]);
+}
+
+interval:s:2
+{
+    print(@usecs);
+    exit();
+}

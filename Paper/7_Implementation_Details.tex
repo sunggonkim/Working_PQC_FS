@@ -1,6 +1,28 @@
-\subsection{AEGIS-Q Implementation}
+\section{Implementation}
 \label{sec:design_impl}
 
-We implemented AEGIS-Q as a user-space FUSE filesystem in C with GPU acceleration modules in CUDA. The implementation comprises approximately 1,200 lines of code across five core modules: \texttt{pqc\_fuse.c}, \texttt{pqc\_admission.c}, \texttt{pqc\_anchor.c}, \texttt{pqc\_file\_key.c}, and \texttt{pqc\_block\_job.h}.
+AEGIS-Q is implemented in C/CUDA on FUSE3.  The secure-storage path is in \texttt{pqc\_fuse.c}; the anchor format and Merkle helper are in \texttt{pqc\_anchor.c}; CUDA AES-GCM, ML-KEM, and integrity executors are separate translation units.  The build enables \texttt{-Wall -Wextra -Werror} for C/C++ and builds CUDA targets only when the required cuPQC libraries are present.  The reported build used liboqs~0.15.0, FUSE3~3.14.0, OpenSSL, CUDA~13.0.48, and cuPQC on the platform in Section~\ref{sec:evaluation}.
 
-First, we designed a FUSE Frontend module (\texttt{pqc\_fuse.c}) that implements the core filesystem interface, intercepting read, write, and fsync operations, and routing block jobs. Second, we implemented the Admission Controller (\texttt{pqc\_admission.c}) to dynamically evaluate real-time GPU budgets and queue pressures, ensuring storage operations do not interfere with foreground inference. Third, we implemented the Freshness Anchor (\texttt{pqc\_anchor.c}) utilizing a TPM-backed root of trust to record generation committed-prefix states. Fourth, we developed the File Key Manager (\texttt{pqc\_file\_key.c}) and Job Queue (\texttt{pqc\_block\_job.h}) to handle batch post-quantum key rotations (ML-KEM-768) and asynchronous block I/O scheduling. We open-source the code of AEGIS-Q in the following link: \url{https://github.com/sunggonkim/IoTJ-AEGIS-Q}.
+The implementation makes several choices that are easy to obscure in a high-level diagram.  First, GPU AES-GCM is format-compatible with the CPU implementation, but failure in the CUDA executor falls back to CPU rather than changing a record format.  Second, the GPU ML-KEM batch executor allocates device buffers internally; it is not an in-place filesystem data path.  Third, the integrity executor has direct parity tests against OpenSSL for leaf hashes, non-power-of-two trees, and the empty-tree case.  These tests check functional equality, not side-channel behavior.
+
+\begin{table}[t]
+\centering
+\caption{Implementation boundaries that are easy to misread without an explicit summary.}
+\begin{tabularx}{\columnwidth}{P{0.28\columnwidth}|Y|Y}
+\toprule
+\textbf{Mechanism} & \textbf{Current implementation} & \textbf{Boundary}\\
+\midrule
+CUDA storage path & Managed allocation with explicit prefetch and stream synchronization & Not a verified NVMe-to-UVM storage-DMA path\\
+CUDA failure policy & CUDA executor falls back to CPU on failure & Does not change the on-disk record format\\
+Anchor backend & File witness plus optional hardware NV index backend & Hardware path requires administrator pre-provisioning\\
+Scheduler fallback & No-slack jobs route to CPU & No optimistic GPU admission without producer-supplied slack\\
+\bottomrule
+\end{tabularx}
+\label{tab:impl_boundaries}
+\end{table}
+
+The key-envelope repair is central to remount correctness.  An earlier experimental metadata design generated a per-file ML-KEM secret key and discarded it, making later decapsulation impossible.  The revised data path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before any ciphertext is read.  Consequently, ML-KEM measurements remain useful for assessing an optional batched provisioning lane, but the FUSE format no longer pretends that a one-time KEM benchmark is a persistent per-file key hierarchy.
+
+The current file-key helper also retains epoch counters and a grace-period rejection path for stale accesses.  That rotation logic is code-backed, but it is not a TPM/PCR-bound freshness proof and should not be read as one.
+
+The implementation also fails closed in two places.  A scheduler job with no producer-supplied AI slack is routed to CPU.  A requested TPM backend with no pre-provisioned NV index causes initialization to fail rather than creating a persistent index with undocumented ownership.  These are conservative operational choices; neither substitutes for a complete inference-telemetry integration or TPM policy design.

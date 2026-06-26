@@ -4,14 +4,15 @@
  * ============================================================================
  *
  *  Purpose:
- *    Transparent FUSE filesystem that intercepts write operations and performs
- *    Kyber-512 (ML-KEM) key encapsulation on every data buffer, deliberately
- *    generating CPU-bound PQC workload.  This creates a measurable bottleneck
- *    that degrades concurrent AI inference (e.g., YOLO FPS drop), proving the
- *    need for GPU-accelerated PQC offloading on edge devices.
+ *    Transparent FUSE prototype for authenticated encrypted block storage.
+ *    Every file receives a random data-encryption key (DEK), stored in an
+ *    HMAC-authenticated envelope under a mount-derived key.  AES-256-GCM
+ *    protects data records; ciphertext is synchronized before journal
+ *    publication.  ML-KEM-768 is initialized for optional key-plane batch
+ *    work and microbenchmarks, not for per-block encryption.
  *
  *  Architecture:
- *    mnt_secure/  (FUSE mount)  ──write()──►  [Kyber-512 KEM on CPU]  ──►  storage_physical/
+ *    mnt_secure/ (FUSE mount) ──write()──► AES-GCM + journal ──► storage_physical/
  *
  *  Build:
  *    mkdir build && cd build && cmake .. && make
@@ -45,13 +46,12 @@
 
 #include <oqs/oqs.h>
 #include <openssl/evp.h>
-#include <openssl/hmac.h>
 #include <openssl/rand.h>
+#include <openssl/hmac.h>
 #include <pthread.h>
 #include <sys/xattr.h>
 
 #include "pqc_block_job.h"
-#include "pqc_file_key.h"
 #include "pqc_anchor.h"
 #include "cuda_aead.h"
 #include "cuda_pqc.h"
@@ -83,7 +83,8 @@ static int g_has_master_key = 0;
 
 static int derive_master_key(const char *password) {
     const uint8_t salt[] = "PQC_FUSE_SALT_NIST";
-    if (PKCS5_PBKDF2_HMAC(password, strlen(password), salt, sizeof(salt) - 1, 1000, EVP_sha256(), 32, g_master_key) == 1) {
+    if (PKCS5_PBKDF2_HMAC(password, strlen(password), salt, sizeof(salt) - 1,
+                           600000, EVP_sha256(), 32, g_master_key) == 1) {
         g_has_master_key = 1;
         return 0;
     }
@@ -91,10 +92,7 @@ static int derive_master_key(const char *password) {
 }
 
 static int wrap_shared_secret(const uint8_t *in_ss, size_t ss_len, uint64_t fid, uint64_t epoch, uint8_t *out_wrapped) {
-    if (!g_has_master_key) {
-        memcpy(out_wrapped, in_ss, ss_len);
-        return 0;
-    }
+    if (!g_has_master_key) return -EACCES;
     uint8_t seed[48];
     memcpy(seed, g_master_key, 32);
     memcpy(seed + 32, &fid, 8);
@@ -159,6 +157,7 @@ typedef struct {
     uint32_t ss_len;
     uint64_t file_id;
     uint8_t  wrapped_ss[64];
+    uint8_t  digest[32];
 } pqc_metadata_t;
 
 typedef struct {
@@ -193,6 +192,13 @@ static int metadata_store(const char *phys_path, const uint8_t *ss,
     meta.file_id = file_id;
     if (wrap_shared_secret(ss, ss_len, file_id, 0, meta.wrapped_ss) != 0)
         return -EIO;
+    unsigned int digest_len = 0;
+    if (!HMAC(EVP_sha256(), g_master_key, sizeof(g_master_key),
+              (const unsigned char *)&meta, offsetof(pqc_metadata_t, digest),
+              meta.digest, &digest_len) || digest_len != sizeof(meta.digest)) {
+        OQS_MEM_cleanse(&meta, sizeof(meta));
+        return -EIO;
+    }
     int rc = setxattr(phys_path, PQC_XATTR_METADATA, &meta, sizeof(meta), 0);
     OQS_MEM_cleanse(&meta, sizeof(meta));
     return rc == -1 ? -errno : 0;
@@ -210,6 +216,17 @@ static int metadata_load(const char *phys_path, uint8_t *ss, size_t *ss_len,
         OQS_MEM_cleanse(&meta, sizeof(meta));
         return -EINVAL;
     }
+    uint8_t digest[sizeof(meta.digest)];
+    unsigned int digest_len = 0;
+    if (!HMAC(EVP_sha256(), g_master_key, sizeof(g_master_key),
+              (const unsigned char *)&meta, offsetof(pqc_metadata_t, digest),
+              digest, &digest_len) || digest_len != sizeof(digest) ||
+        CRYPTO_memcmp(digest, meta.digest, sizeof(digest)) != 0) {
+        OQS_MEM_cleanse(digest, sizeof(digest));
+        OQS_MEM_cleanse(&meta, sizeof(meta));
+        return -EKEYREJECTED;
+    }
+    OQS_MEM_cleanse(digest, sizeof(digest));
     int rc = unwrap_shared_secret(meta.wrapped_ss, meta.ss_len, meta.file_id,
                                   0, ss);
     if (rc == 0) {
@@ -272,7 +289,11 @@ static int checkpoint_store(const char *path, uint64_t file_id, uint64_t sequenc
                 .sequence = sequence,
                 .logical_size = logical_size,
             };
-            (void)pqc_anchor_store(&state);
+            rc = pqc_anchor_store(&state);
+            if (rc != 0) {
+                OQS_MEM_cleanse(&ckpt, sizeof(ckpt));
+                return rc;
+            }
         }
     }
     OQS_MEM_cleanse(&ckpt, sizeof(ckpt));
@@ -341,10 +362,14 @@ static void *anchor_worker_main(void *arg)
         }
         struct timespec batch_deadline;
         clock_gettime(CLOCK_REALTIME, &batch_deadline);
-        batch_deadline.tv_nsec += 250000000L;
-        if (batch_deadline.tv_nsec >= 1000000000L) {
-            batch_deadline.tv_sec += 1;
-            batch_deadline.tv_nsec -= 1000000000L;
+        if (getenv("PQC_FRESHNESS_WINDOW_N")) {
+            batch_deadline.tv_sec += 86400; /* Wait effectively forever */
+        } else {
+            batch_deadline.tv_nsec += 250000000L;
+            if (batch_deadline.tv_nsec >= 1000000000L) {
+                batch_deadline.tv_sec += 1;
+                batch_deadline.tv_nsec -= 1000000000L;
+            }
         }
         while (!g_anchor_stop && g_anchor_dirty) {
             int wait_rc = pthread_cond_timedwait(&g_anchor_cv, &g_anchor_lock, &batch_deadline);
@@ -878,12 +903,34 @@ static int checkpoint_self_test(void)
 
 static pqc_scheduler_policy_t scheduler_policy_from_env(void);
 
+static uint64_t parse_u64_env_or_default(const char *name, uint64_t fallback)
+{
+    const char *value = getenv(name);
+    if (!value || !*value) return fallback;
+    char *end = NULL;
+    unsigned long long parsed = strtoull(value, &end, 10);
+    if (end == value || !end || *end != '\0') return fallback;
+    return (uint64_t)parsed;
+}
+
+static double parse_double_env_or_default(const char *name, double fallback)
+{
+    const char *value = getenv(name);
+    if (!value || !*value) return fallback;
+    char *end = NULL;
+    double parsed = strtod(value, &end);
+    if (end == value || !end || *end != '\0') return fallback;
+    return parsed;
+}
+
 static int scheduler_self_test(void)
 {
     pqc_scheduler_policy_t policy = {
         .gpu_min_bytes = 8192,
         .gpu_queue_penalty_ns = 25000,
         .coherence_penalty_ns = 65536,
+        .gpu_max_inflight_jobs = 2,
+        .gpu_max_wait_ns = 25000,
         .cpu_load_bias = 1.0,
         .gpu_queue_bias = 1.0,
     };
@@ -894,6 +941,7 @@ static int scheduler_self_test(void)
     large.gpu_queue_depth = 0;
     small.coherence_cost_ns = 0;
     large.coherence_cost_ns = 1024;
+    large.ai_qos_budget_ns = 1000000;
     if (pqc_block_job_choose_target(&small, &policy, 0.5, 0.0) != PQC_JOB_CPU)
         return -1;
     if (pqc_block_job_choose_target(&large, &policy, 0.5, 0.0) != PQC_JOB_GPU)
@@ -904,24 +952,49 @@ static int scheduler_self_test(void)
 static void scheduler_smoke_report(void)
 {
     pqc_scheduler_policy_t policy = scheduler_policy_from_env();
+    uint64_t supplied_budget_ns = 2000000;
+    uint64_t supplied_cpu_queue_depth = 2;
+    uint64_t supplied_pressure_gpu_queue_depth = 2;
+    const char *budget_env = getenv("PQC_SCHED_SMOKE_AI_BUDGET_NS");
+    if (budget_env && *budget_env) {
+        char *end = NULL;
+        unsigned long long parsed = strtoull(budget_env, &end, 10);
+        if (end != budget_env && end && *end == '\0')
+            supplied_budget_ns = (uint64_t)parsed;
+    }
+    const char *cpu_q_env = getenv("PQC_SCHED_SMOKE_CPU_QUEUE_DEPTH");
+    if (cpu_q_env && *cpu_q_env) {
+        char *end = NULL;
+        unsigned long long parsed = strtoull(cpu_q_env, &end, 10);
+        if (end != cpu_q_env && end && *end == '\0')
+            supplied_cpu_queue_depth = (uint64_t)parsed;
+    }
+    const char *gpu_q_env = getenv("PQC_SCHED_SMOKE_GPU_QUEUE_DEPTH");
+    if (gpu_q_env && *gpu_q_env) {
+        char *end = NULL;
+        unsigned long long parsed = strtoull(gpu_q_env, &end, 10);
+        if (end != gpu_q_env && end && *end == '\0')
+            supplied_pressure_gpu_queue_depth = (uint64_t)parsed;
+    }
     pqc_block_job_t jobs[3];
     pqc_block_job_init(&jobs[0], 1, 0, 1, 0, 4096, PQC_JOB_FLAG_ENCRYPT | PQC_JOB_FLAG_READMOD, PQC_PLANE_KEY);
     pqc_block_job_init(&jobs[1], 1, 1, 2, 4096, 131072, PQC_JOB_FLAG_ENCRYPT | PQC_JOB_FLAG_READMOD | PQC_JOB_FLAG_GPU_ELIGIBLE, PQC_PLANE_KEY);
     pqc_block_job_init(&jobs[2], 1, 2, 3, 20480, 262144, PQC_JOB_FLAG_ENCRYPT | PQC_JOB_FLAG_READMOD | PQC_JOB_FLAG_GPU_ELIGIBLE, PQC_PLANE_KEY);
-    jobs[0].cpu_queue_depth = 2;
-    jobs[1].cpu_queue_depth = 1;
-    jobs[2].cpu_queue_depth = 0;
-    jobs[0].ai_qos_budget_ns = 600000;
-    jobs[1].ai_qos_budget_ns = 2000000;
-    jobs[2].ai_qos_budget_ns = 6000000;
+    jobs[0].cpu_queue_depth = supplied_cpu_queue_depth;
+    jobs[1].cpu_queue_depth = supplied_cpu_queue_depth > 0 ? supplied_cpu_queue_depth - 1 : 0;
+    jobs[2].cpu_queue_depth = supplied_cpu_queue_depth;
+    jobs[0].ai_qos_budget_ns = supplied_budget_ns;
+    jobs[1].ai_qos_budget_ns = supplied_budget_ns;
+    jobs[2].ai_qos_budget_ns = supplied_budget_ns;
     jobs[0].coherence_cost_ns = 0;
     jobs[1].coherence_cost_ns = 1024;
     jobs[2].coherence_cost_ns = 8192;
     fprintf(stderr,
             "{\"event\":\"scheduler_smoke_begin\",\"gpu_min_bytes\":%zu,"
-            "\"coherence_penalty_ns\":%llu}\n",
+            "\"coherence_penalty_ns\":%llu,\"supplied_ai_budget_ns\":%llu}\n",
             policy.gpu_min_bytes,
-            (unsigned long long)policy.coherence_penalty_ns);
+            (unsigned long long)policy.coherence_penalty_ns,
+            (unsigned long long)supplied_budget_ns);
     for (size_t i = 0; i < 3; ++i) {
         jobs[i].target = pqc_block_job_choose_target(&jobs[i], &policy, 0.5, (double)jobs[i].gpu_queue_depth);
         fprintf(stderr,
@@ -941,9 +1014,9 @@ static void scheduler_smoke_report(void)
     pqc_block_job_init(&spill, 9, 9, 9, 0, 131072,
                        PQC_JOB_FLAG_ENCRYPT | PQC_JOB_FLAG_READMOD | PQC_JOB_FLAG_GPU_ELIGIBLE, PQC_PLANE_KEY);
     spill.cpu_queue_depth = 0;
-    spill.gpu_queue_depth = policy.gpu_max_inflight_jobs;
+    spill.gpu_queue_depth = supplied_pressure_gpu_queue_depth;
     spill.gpu_wait_ns = policy.gpu_max_wait_ns + 1;
-    spill.ai_qos_budget_ns = 2000000;
+    spill.ai_qos_budget_ns = supplied_budget_ns;
     spill.coherence_cost_ns = 2048;
     spill.target = pqc_block_job_choose_target(&spill, &policy, 0.5, (double)spill.gpu_queue_depth);
     fprintf(stderr,
@@ -955,6 +1028,89 @@ static void scheduler_smoke_report(void)
             (unsigned long long)spill.gpu_queue_depth);
     fprintf(stderr,
             "{\"event\":\"scheduler_smoke_end\",\"jobs\":3}\n");
+}
+
+static int admission_telemetry_smoke_report(void)
+{
+    const char *trace_path = getenv("PQC_ADMISSION_TRACE_PATH");
+    if (!trace_path || !*trace_path)
+        trace_path = "artifacts/validation/admission_telemetry_smoke_trace.jsonl";
+
+    if (pqc_admission_init(trace_path) != 0)
+        return -1;
+
+    const double mem_bw = parse_double_env_or_default("PQC_TELEMETRY_MEM_BANDWIDTH", 0.0);
+    const double tensor_core = parse_double_env_or_default("PQC_TELEMETRY_TENSOR_CORE", 0.0);
+    const uint64_t ai_budget_ns =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_AI_BUDGET_NS", 2000000ULL);
+    const uint64_t cpu_queue_depth =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_CPU_QUEUE_DEPTH", 1ULL);
+    const uint64_t gpu_queue_depth =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_GPU_QUEUE_DEPTH", 1ULL);
+    const uint64_t uma_cost_ns =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_UMA_COST_NS", 0ULL);
+    const size_t bytes_total =
+        (size_t)parse_u64_env_or_default("PQC_ADMISSION_SMOKE_BYTES", 131072ULL);
+
+    pqc_admission_update_telemetry(mem_bw, tensor_core);
+    pqc_admission_update_ai_budget(ai_budget_ns, 0);
+
+    pqc_admission_context_t ctx;
+    memset(&ctx, 0, sizeof(ctx));
+    ctx.batch_count = 1;
+    ctx.bytes_total = bytes_total;
+    ctx.batch_age_ns = 0;
+    ctx.gpu_kernel_est_ns = parse_u64_env_or_default("PQC_ADMISSION_SMOKE_GPU_KERNEL_NS", 100000ULL);
+    ctx.gpu_h2d_staging_ns = parse_u64_env_or_default("PQC_ADMISSION_SMOKE_H2D_NS", 100000ULL);
+    ctx.gpu_d2h_staging_ns = parse_u64_env_or_default("PQC_ADMISSION_SMOKE_D2H_NS", 100000ULL);
+    ctx.cpu_queue_depth = cpu_queue_depth;
+    ctx.gpu_queue_depth = gpu_queue_depth;
+    ctx.cpu_load_avg = parse_double_env_or_default("PQC_ADMISSION_SMOKE_CPU_LOAD", 0.0);
+    ctx.gpu_load_avg = parse_double_env_or_default("PQC_ADMISSION_SMOKE_GPU_LOAD", 0.0);
+    ctx.ai_inference_deadline_ns =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_DEADLINE_NS", 10000000ULL);
+    ctx.uma_migration_cost_ns = uma_cost_ns;
+    ctx.uma_migration_bytes_est =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_UMA_BYTES", 0ULL);
+
+    int rc = pqc_admit(&ctx);
+    pqc_admission_stats_t stats;
+    memset(&stats, 0, sizeof(stats));
+    pqc_scheduler_trace_stats(&stats);
+
+    fprintf(stdout,
+            "{\"event\":\"admission_telemetry_smoke\","
+            "\"rc\":%d,"
+            "\"trace_path\":\"%s\","
+            "\"telemetry_mem_bandwidth_util\":%.4f,"
+            "\"telemetry_tensor_core_util\":%.4f,"
+            "\"ai_budget_ns\":%llu,"
+            "\"cpu_queue_depth\":%llu,"
+            "\"gpu_queue_depth\":%llu,"
+            "\"bytes_total\":%zu,"
+            "\"chosen_target\":\"%s\","
+            "\"decision_reason\":%u,"
+            "\"deferral_reason\":%u,"
+            "\"stats_total\":%llu,"
+            "\"stats_gpu\":%llu,"
+            "\"stats_cpu\":%llu}\n",
+            rc,
+            trace_path,
+            mem_bw,
+            tensor_core,
+            (unsigned long long)ai_budget_ns,
+            (unsigned long long)cpu_queue_depth,
+            (unsigned long long)gpu_queue_depth,
+            bytes_total,
+            ctx.chosen_target == PQC_JOB_GPU ? "GPU" : "CPU",
+            (unsigned int)ctx.decision_reason,
+            (unsigned int)ctx.deferral_reason,
+            (unsigned long long)stats.total_requests,
+            (unsigned long long)stats.gpu_admitted_count,
+            (unsigned long long)stats.cpu_routed_count);
+
+    pqc_admission_shutdown();
+    return rc;
 }
 
 /*
@@ -1041,8 +1197,6 @@ typedef struct {
 } pqc_fd_ctx_t;
 
 static pqc_fd_ctx_t      g_fd_ctx[PQC_MAX_FD];
-static pthread_mutex_t   g_file_id_lock = PTHREAD_MUTEX_INITIALIZER;
-static uint64_t          g_file_id_ctr = 0;
 static pqc_scheduler_stats_t g_sched_stats = {0};
 static pthread_mutex_t   g_sched_pressure_lock = PTHREAD_MUTEX_INITIALIZER;
 static uint64_t          g_gpu_inflight_jobs = 0;
@@ -1476,9 +1630,22 @@ static int ctx_set(int fd, const char *marker_path, const uint8_t *ss, size_t ss
         g_fd_ctx[idx].logical_size = 0;
     {
         pqc_checkpoint_t ckpt = {0};
-        if (checkpoint_load(marker_path, fid, &ckpt) == 0) {
+        int ckpt_rc = checkpoint_load(marker_path, fid, &ckpt);
+        if (ckpt_rc == 0) {
             if (ckpt.logical_size > g_fd_ctx[idx].logical_size)
                 g_fd_ctx[idx].logical_size = ckpt.logical_size;
+        } else if (ckpt_rc != -ENODATA && ckpt_rc != -ENOENT) {
+            close(data_fd);
+            close(journal_fd);
+            memset(g_fd_ctx[idx].marker_path, 0, sizeof(g_fd_ctx[idx].marker_path));
+            g_fd_ctx[idx].data_fd = -1;
+            g_fd_ctx[idx].journal_fd = -1;
+            g_fd_ctx[idx].file_id = 0;
+            g_fd_ctx[idx].ss_len = 0;
+            g_fd_ctx[idx].state = NULL;
+            file_state_release(state);
+            pthread_mutex_unlock(&g_fd_ctx[idx].fd_lock);
+            return ckpt_rc;
         }
     }
     if (state->next_generation == 0)
@@ -1526,34 +1693,17 @@ static void ctx_clear(int fd)
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
- *  PQC (Kyber-512 / ML-KEM) Engine
+ *  Optional ML-KEM key-plane helper
  * ════════════════════════════════════════════════════════════════════════════
  *
- *  Design Note for GPU Offloading (Phase 2):
- *  ──────────────────────────────────────────
- *  The PQC workload is isolated in pqc_encrypt_buffer().  To offload to GPU:
- *
- *  1. Replace the buffer with cudaMallocManaged() (Unified Memory / Zero-copy)
- *     so that CPU and GPU share the same address space without explicit memcpy.
- *
- *  2. Implement a CUDA kernel that performs the lattice polynomial multiplication
- *     (NTT + point-wise multiply + INTT) which is the core of Kyber.
- *
- *  3. Call the CUDA kernel from pqc_encrypt_buffer() instead of OQS_KEM_encaps().
- *
- *  4. Use cudaStreamSynchronize() to ensure the GPU finishes before FUSE
- *     returns from write().  For async I/O, use FUSE's multithreaded mode
- *     and let the GPU operate on a separate CUDA stream per file descriptor.
- *
- *  Key design constraints:
- *    - Keep the buffer in Unified Memory to avoid PCIe/MMIO copy overhead.
- *    - Batch small writes into larger chunks before launching GPU kernels
- *      (kernel launch overhead ~5-10µs, amortize over ≥4KB blocks).
- *    - Use pinned memory (cudaHostAlloc) for DMA if not using Unified Memory.
+ *  The FUSE data path does not derive its record key from this object.  The
+ *  CUDA executors use managed allocations, prefetch, and stream synchronization
+ *  only within executor-owned buffers.  They do not implement NVMe DMA into
+ *  managed memory, cudaHostRegister/GUP pinning, or an io_uring/eBPF path.
  * ════════════════════════════════════════════════════════════════════════════ */
 
 /**
- * Initialize the PQC subsystem.  Generates a Kyber-512 keypair.
+ * Initialize the PQC subsystem and its optional ML-KEM-768 helper keypair.
  */
 static int pqc_subsystem_init(void)
 {
@@ -2104,43 +2254,24 @@ static int pqc_open(const char *path, struct fuse_file_info *fi)
     if (open_path == compat_path)
         fi->keep_cache = 1;
 
-    /* ─────────────────────────────────────────────────────────────────────────
-     * M4 Phase 4: Load ML-KEM file-key metadata from xattr (remount recovery)
-     * ───────────────────────────────────────────────────────────────────────── */
-    
-    pqc_file_key_metadata_t key_md = {0};
-    if (pqc_file_key_load_xattr(fd, &key_md) == 0) {
-        /* Metadata loaded successfully; validate state and derive shared secret */
-        if (key_md.state == PQC_KEY_STATE_CREATED || key_md.state == PQC_KEY_STATE_ACTIVE ||
-            key_md.state == PQC_KEY_STATE_ROTATING) {
-            
-            /* Derive shared secret from encapsulated ciphertext */
-            uint8_t ss[32] = {0};
-            if (pqc_file_key_decrypt_shared_secret(&key_md, ss) == 0) {
-                (void)ctx_set(fd, phys_path, ss, 32, key_md.file_id);
-                OQS_MEM_cleanse(ss, 32);
-                pqc_log("OPEN %s: Restored ML-KEM file-key metadata (fid=%llu, epoch=%llu)",
-                        path, (unsigned long long)key_md.file_id,
-                        (unsigned long long)key_md.current_epoch);
-            } else {
-                pqc_log("OPEN %s: Failed to decrypt shared secret from metadata", path);
-                close(fd);
-                return -EIO;
-            }
-        } else {
-            pqc_log("OPEN %s: File-key in invalid state: %u", path, (unsigned)key_md.state);
-            close(fd);
-            return -EIO;
-        }
-    } else {
-        /* xattr not found (legacy file or non-PQC); attempt fallback metadata_load */
-        uint8_t ss[64] = {0};
-        size_t ss_len = 0;
-        uint64_t fid = 0;
-        if (metadata_load(phys_path, ss, &ss_len, &fid) == 0)
-            (void)ctx_set(fd, phys_path, ss, ss_len, fid);
+    /* A persistent per-file data-encryption key is wrapped under the
+     * mount-derived key and authenticated before use.  The prior experimental
+     * ML-KEM metadata format could not recover its per-file decapsulation key
+     * after a remount, so this version rejects it rather than risking an
+     * unauthenticated or incorrect decrypt.  ML-KEM remains an optional
+     * provisioning/microbenchmark component; it is not in the block-I/O path. */
+    uint8_t ss[64] = {0};
+    size_t ss_len = 0;
+    uint64_t fid = 0;
+    int metadata_rc = metadata_load(phys_path, ss, &ss_len, &fid);
+    if (metadata_rc != 0 || ctx_set(fd, phys_path, ss, ss_len, fid) != 0) {
         OQS_MEM_cleanse(ss, sizeof(ss));
+        close(fd);
+        return metadata_rc == -EKEYREJECTED ? -EKEYREJECTED : -EIO;
     }
+    OQS_MEM_cleanse(ss, sizeof(ss));
+    pqc_log("OPEN %s: restored authenticated file-key envelope (fid=%llu)",
+            path, (unsigned long long)fid);
 
     /* Strategy 2: restore tier from physical xattr if present */
     {
@@ -2210,64 +2341,25 @@ static int pqc_create(const char *path, mode_t mode,
     fi->fh = (uint64_t)fd;
     fi->direct_io = 1;
 
-    /* ─────────────────────────────────────────────────────────────────────────
-     * M4 Phase 4: ML-KEM-768 file-key lifecycle integration
-     * ───────────────────────────────────────────────────────────────────────── */
-    
-    /* Allocate and initialize file-key metadata */
-    pqc_file_key_metadata_t *key_md = malloc(sizeof(*key_md));
-    if (!key_md) {
-        pqc_log("CREATE %s: failed to allocate metadata", path);
-        close(fd);
-        unlink(phys_path);
-        return -ENOMEM;
-    }
-    memset(key_md, 0, sizeof(*key_md));
-
-    double t0 = get_time_us();
-
-    /* Generate file ID */
-    pthread_mutex_lock(&g_file_id_lock);
-    uint64_t fid = ++g_file_id_ctr;
-    pthread_mutex_unlock(&g_file_id_lock);
-
-    /* Invoke ML-KEM-768 file-key creation: keygen + encapsulation */
-    if (pqc_file_key_create(key_md, fid) != 0) {
-        pqc_log("CREATE %s: ML-KEM-768 file-key creation failed", path);
-        free(key_md);
-        close(fd);
-        unlink(phys_path);
-        return -EIO;
-    }
-
-    /* Save metadata to xattr (persistent storage) */
-    if (pqc_file_key_save_xattr(fd, key_md) != 0) {
-        pqc_log("CREATE %s: failed to persist metadata to xattr", path);
-        pqc_file_key_zeroize(key_md);
-        free(key_md);
-        close(fd);
-        unlink(phys_path);
-        return -EIO;
-    }
-
-    pqc_log("CREATE %s: ML-KEM-768 file-key lifecycle initialized (fid=%llu, epoch=%llu, %.1fµs)",
-            path, (unsigned long long)fid, (unsigned long long)key_md->current_epoch,
-            get_time_us() - t0);
-
-    /* Update scheduler statistics */
-    pthread_mutex_lock(&g_sched_pressure_lock);
-    g_sched_stats.submitted++;
-    g_sched_stats.key_plane_cpu++;  /* M4 Phase 4 note: GPU-based keygen via cuPQC planned for M5+ */
-    pthread_mutex_unlock(&g_sched_pressure_lock);
-
-    /* Derive shared secret for forward-secrecy wrapping (to be used in write path) */
     uint8_t ss[32] = {0};
-    if (pqc_file_key_decrypt_shared_secret(key_md, ss) == 0) {
-        (void)ctx_set(fd, phys_path, ss, 32, fid);
-        OQS_MEM_cleanse(ss, 32);
+    uint64_t fid = 0;
+    if (RAND_bytes(ss, sizeof(ss)) != 1 ||
+        RAND_bytes((unsigned char *)&fid, sizeof(fid)) != 1 || fid == 0) {
+        OQS_MEM_cleanse(ss, sizeof(ss));
+        close(fd);
+        unlink(phys_path);
+        return -EIO;
     }
-
-    free(key_md);
+    if (metadata_store(phys_path, ss, sizeof(ss), fid) != 0 ||
+        ctx_set(fd, phys_path, ss, sizeof(ss), fid) != 0) {
+        OQS_MEM_cleanse(ss, sizeof(ss));
+        close(fd);
+        unlink(phys_path);
+        return -EIO;
+    }
+    OQS_MEM_cleanse(ss, sizeof(ss));
+    pqc_log("CREATE %s: authenticated file-key envelope initialized (fid=%llu)",
+            path, (unsigned long long)fid);
     return 0;
 }
 
@@ -2481,19 +2573,6 @@ static int pqc_unlink(const char *path)
     if (res != 0)
         return res;
     
-    /* ─────────────────────────────────────────────────────────────────────────
-     * M4 Phase 4: Delete ML-KEM file-key metadata from xattr
-     * ───────────────────────────────────────────────────────────────────────── */
-    
-    /* Open file to delete xattr before unlinking */
-    int temp_fd = open(phys_path, O_RDONLY);
-    if (temp_fd >= 0) {
-        if (pqc_file_key_delete_xattr(temp_fd) == 0) {
-            pqc_log("UNLINK %s: Deleted ML-KEM file-key metadata xattr", path);
-        }
-        close(temp_fd);
-    }
-    
     if (unlink(data_path) == -1 && errno != ENOENT)
         return -errno;
     if (unlink(journal_path) == -1 && errno != ENOENT)
@@ -2657,6 +2736,17 @@ static int pqc_setxattr(const char *path, const char *name,
     char phys_path[4096];
     resolve_physical_path(phys_path, sizeof(phys_path), path);
 
+    if (strcmp(name, "user.pqc.freshness_window") == 0 && size > 0) {
+        char tmp[16] = {0};
+        memcpy(tmp, value, size < 15 ? size : 15);
+        int n = atoi(tmp);
+        if (n > 0) {
+            pqc_anchor_set_freshness_window(n);
+            return 0;
+        }
+        return -EINVAL;
+    }
+
     if (setxattr(phys_path, name, value, size, flags) == -1)
         return -errno;
 
@@ -2736,7 +2826,7 @@ static void print_usage(const char *progname)
         "\n"
         "╔══════════════════════════════════════════════════════════════════╗\n"
         "║  PQC-FUSE: Post-Quantum Cryptography FUSE Filesystem          ║\n"
-        "║  For Edge AI Bottleneck Profiling (Kyber-512 / ML-KEM)        ║\n"
+        "║  Authenticated AES-GCM storage; optional ML-KEM-768 helpers  ║\n"
         "╚══════════════════════════════════════════════════════════════════╝\n"
         "\n"
         "Usage: %s <storage_dir> <mountpoint> [FUSE options]\n"
@@ -2773,6 +2863,10 @@ int main(int argc, char *argv[])
         scheduler_smoke_report();
         return EXIT_SUCCESS;
     }
+    if (argc == 2 && strcmp(argv[1], "--admission-telemetry-smoke") == 0) {
+        int rc = admission_telemetry_smoke_report();
+        return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+    }
     if (argc == 2 && strcmp(argv[1], "--anchor-self-test") == 0) {
         int anchor_rc = pqc_anchor_self_test();
         fprintf(stderr, "PQC-FUSE anchor self-test: %s\n",
@@ -2798,8 +2892,8 @@ int main(int argc, char *argv[])
     fprintf(stderr,
         "\n"
         "  ┌─────────────────────────────────────────────────────┐\n"
-        "  │  PQC-FUSE v0.1 — Kyber-512 Encrypted Filesystem    │\n"
-        "  │  Edge AI Bottleneck Profiling Tool                  │\n"
+        "  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │\n"
+        "  │  CPU data plane; optional batch GPU helpers         │\n"
         "  └─────────────────────────────────────────────────────┘\n\n");
 
     if (argc < 3) {

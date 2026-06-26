@@ -1,0 +1,27 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-26 17:45:58.482] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-26 17:45:58.482]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-26 17:45:58.482]   Storage dir : /tmp/aegis_qos_store_3xo7fbpb
+[PQC-FUSE 2026-06-26 17:45:58.482]   Mount point : /tmp/aegis_qos_mnt_dcpybnc_
+[PQC-FUSE 2026-06-26 17:45:58.482] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-26 17:45:58.482] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-26 17:45:58.482]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-26 17:45:58.482]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-26 17:45:58.482]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-26 17:45:58.482]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-26 17:45:58.484] Keypair generated in 1451.32 µs
+[PQC-FUSE 2026-06-26 17:45:58.654] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-26 17:45:58.654] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-26 17:45:58.654] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-26 17:45:58.816] PQC background rekey worker started
+[PQC-FUSE 2026-06-26 17:45:58.816] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-26 17:45:58.889] CREATE /stream.bin: authenticated file-key envelope initialized (fid=5529218376442798368)
+[PQC-FUSE 2026-06-26 17:45:59.103] REKEY WORKER: batched 1 files 66954.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-06-26 17:45:59.103] REKEY WORKER: batched 1 files 136.2µs (target=CPU, run=CPU)

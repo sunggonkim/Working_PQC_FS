@@ -1,0 +1,459 @@
+{
+  "note": "Counter-availability audit only; not a migration-suppression proof.",
+  "input_dir": "artifacts/validation/uma_storage_dma_profile_combined",
+  "nsys_available": true,
+  "nsys_runs": [
+    {
+      "name": "raw_probe",
+      "rep_path": "artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep",
+      "exists": true,
+      "reports": [
+        {
+          "report": "um_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite does not contain CUDA Unified Memory CPU page faults data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite does not contain CUDA Unified Memory CPU page faults data."
+          ]
+        },
+        {
+          "report": "um_total_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_total_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_total_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite does not contain CUDA Unified Memory CPU page faults data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite does not contain CUDA Unified Memory CPU page faults data."
+          ]
+        },
+        {
+          "report": "um_cpu_page_faults_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_cpu_page_faults_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_cpu_page_faults_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite does not contain CUDA Unified Memory CPU page faults data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite does not contain CUDA Unified Memory CPU page faults data."
+          ]
+        },
+        {
+          "report": "cuda_api_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "cuda_api_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/cuda_api_sum.py]... \nTime (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name\n99.6,214071156,2,107035578.0,107035578.0,102148562,111922594,6911284.3,cudaHostRegister\n0.1,225166,1,225166.0,225166.0,225166,225166,0.0,cudaLaunchKernel\n0.1,174102,1,174102.0,174102.0,174102,174102,0.0,cudaDeviceSynchronize\n0.1,132973,1,132973.0,132973.0,132973,132973,0.0,cudaFree\n0.0,105481,1,105481.0,105481.0,105481,105481,0.0,cudaMalloc\n0.0,68676,1,68676.0,68676.0,68676,68676,0.0,cudaMemcpy\n0.0,28648,1,28648.0,28648.0,28648,28648,0.0,cuLibraryLoadData\n0.0,21712,1,21712.0,21712.0,21712,21712,0.0,cudaMemset\n0.0,21676,1,21676.0,21676.0,21676,21676,0.0,cudaHostUnregister\n0.0,898,2,449.0,449.0,306,592,202.2,cuModuleGetLoadingMode\n0.0,352,1,352.0,352.0,352,352,0.0,cuKernelGetName\n0.0,278,1,278.0,278.0,278,278,0.0,cuLibraryGetKernel\n\n",
+          "stderr": "",
+          "data_line_count": 13,
+          "skipped_messages": []
+        }
+      ],
+      "sqlite": {
+        "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.sqlite",
+        "exists": true,
+        "table_count": 51,
+        "matched_tables": [
+          "ENUM_CUDA_DEV_MEM_EVENT_OPER",
+          "ENUM_CUDA_FUNC_CACHE_CONFIG",
+          "ENUM_CUDA_KERNEL_LAUNCH_TYPE",
+          "ENUM_CUDA_MEMCPY_OPER",
+          "ENUM_CUDA_MEMPOOL_OPER",
+          "ENUM_CUDA_MEMPOOL_TYPE",
+          "ENUM_CUDA_MEM_KIND",
+          "ENUM_CUDA_SHARED_MEM_LIMIT_CONFIG",
+          "ENUM_CUDA_UNIF_MEM_ACCESS_TYPE",
+          "ENUM_CUDA_UNIF_MEM_MIGRATION",
+          "ENUM_CUPTI_STREAM_TYPE",
+          "ENUM_CUPTI_SYNC_TYPE",
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL",
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE",
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE",
+          "ENUM_NSYS_EVENT_CLASS",
+          "ENUM_NSYS_EVENT_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_FLAGS",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_PROPERTY",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_GROUP",
+          "ENUM_NSYS_GENERIC_EVENT_SOURCE",
+          "ENUM_SAMPLING_THREAD_STATE",
+          "ENUM_SCHEDULING_THREAD_BLOCK",
+          "ENUM_STACK_UNWIND_METHOD"
+        ],
+        "matched_event_tables": [],
+        "matched_table_counts": {
+          "ENUM_CUDA_DEV_MEM_EVENT_OPER": 2,
+          "ENUM_CUDA_FUNC_CACHE_CONFIG": 4,
+          "ENUM_CUDA_KERNEL_LAUNCH_TYPE": 4,
+          "ENUM_CUDA_MEMCPY_OPER": 14,
+          "ENUM_CUDA_MEMPOOL_OPER": 4,
+          "ENUM_CUDA_MEMPOOL_TYPE": 3,
+          "ENUM_CUDA_MEM_KIND": 8,
+          "ENUM_CUDA_SHARED_MEM_LIMIT_CONFIG": 2,
+          "ENUM_CUDA_UNIF_MEM_ACCESS_TYPE": 5,
+          "ENUM_CUDA_UNIF_MEM_MIGRATION": 6,
+          "ENUM_CUPTI_STREAM_TYPE": 4,
+          "ENUM_CUPTI_SYNC_TYPE": 5,
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL": 5,
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE": 4,
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE": 3,
+          "ENUM_NSYS_EVENT_CLASS": 89,
+          "ENUM_NSYS_EVENT_TYPE": 150,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_FLAGS": 7,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_PROPERTY": 8,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_TYPE": 22,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_TYPE": 4,
+          "ENUM_NSYS_GENERIC_EVENT_GROUP": 5,
+          "ENUM_NSYS_GENERIC_EVENT_SOURCE": 4,
+          "ENUM_SAMPLING_THREAD_STATE": 11,
+          "ENUM_SCHEDULING_THREAD_BLOCK": 53,
+          "ENUM_STACK_UNWIND_METHOD": 10
+        }
+      }
+    },
+    {
+      "name": "um_smoke",
+      "rep_path": "artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep",
+      "exists": true,
+      "reports": [
+        {
+          "report": "um_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite does not contain CUDA memory transfers data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite does not contain CUDA memory transfers data."
+          ]
+        },
+        {
+          "report": "um_total_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_total_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_total_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite does not contain CUDA memory transfers data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite does not contain CUDA memory transfers data."
+          ]
+        },
+        {
+          "report": "um_cpu_page_faults_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_cpu_page_faults_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_cpu_page_faults_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite does not contain CUDA Unified Memory CPU page faults data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite does not contain CUDA Unified Memory CPU page faults data."
+          ]
+        },
+        {
+          "report": "cuda_api_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "cuda_api_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/cuda_api_sum.py]... \nTime (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name\n97.8,101974572,1,101974572.0,101974572.0,101974572,101974572,0.0,cudaMallocManaged\n1.2,1227824,1,1227824.0,1227824.0,1227824,1227824,0.0,cudaFree\n0.5,495315,2,247657.5,247657.5,1584,493731,348000.5,cudaDeviceSynchronize\n0.3,362509,1,362509.0,362509.0,362509,362509,0.0,cudaLaunchKernel\n0.1,121148,1,121148.0,121148.0,121148,121148,0.0,cuLibraryLoadData\n0.1,87897,2,43948.5,43948.5,29833,58064,19962.3,cudaMemPrefetchAsync_v12020\n0.0,880,1,880.0,880.0,880,880,0.0,cuModuleGetLoadingMode\n0.0,639,1,639.0,639.0,639,639,0.0,cuLibraryGetKernel\n0.0,537,1,537.0,537.0,537,537,0.0,cuKernelGetName\n\n",
+          "stderr": "",
+          "data_line_count": 10,
+          "skipped_messages": []
+        }
+      ],
+      "sqlite": {
+        "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.sqlite",
+        "exists": true,
+        "table_count": 49,
+        "matched_tables": [
+          "ENUM_CUDA_DEV_MEM_EVENT_OPER",
+          "ENUM_CUDA_FUNC_CACHE_CONFIG",
+          "ENUM_CUDA_KERNEL_LAUNCH_TYPE",
+          "ENUM_CUDA_MEMCPY_OPER",
+          "ENUM_CUDA_MEMPOOL_OPER",
+          "ENUM_CUDA_MEMPOOL_TYPE",
+          "ENUM_CUDA_MEM_KIND",
+          "ENUM_CUDA_SHARED_MEM_LIMIT_CONFIG",
+          "ENUM_CUDA_UNIF_MEM_ACCESS_TYPE",
+          "ENUM_CUDA_UNIF_MEM_MIGRATION",
+          "ENUM_CUPTI_STREAM_TYPE",
+          "ENUM_CUPTI_SYNC_TYPE",
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL",
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE",
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE",
+          "ENUM_NSYS_EVENT_CLASS",
+          "ENUM_NSYS_EVENT_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_FLAGS",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_PROPERTY",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_GROUP",
+          "ENUM_NSYS_GENERIC_EVENT_SOURCE",
+          "ENUM_SAMPLING_THREAD_STATE",
+          "ENUM_SCHEDULING_THREAD_BLOCK",
+          "ENUM_STACK_UNWIND_METHOD"
+        ],
+        "matched_event_tables": [],
+        "matched_table_counts": {
+          "ENUM_CUDA_DEV_MEM_EVENT_OPER": 2,
+          "ENUM_CUDA_FUNC_CACHE_CONFIG": 4,
+          "ENUM_CUDA_KERNEL_LAUNCH_TYPE": 4,
+          "ENUM_CUDA_MEMCPY_OPER": 14,
+          "ENUM_CUDA_MEMPOOL_OPER": 4,
+          "ENUM_CUDA_MEMPOOL_TYPE": 3,
+          "ENUM_CUDA_MEM_KIND": 8,
+          "ENUM_CUDA_SHARED_MEM_LIMIT_CONFIG": 2,
+          "ENUM_CUDA_UNIF_MEM_ACCESS_TYPE": 5,
+          "ENUM_CUDA_UNIF_MEM_MIGRATION": 6,
+          "ENUM_CUPTI_STREAM_TYPE": 4,
+          "ENUM_CUPTI_SYNC_TYPE": 5,
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL": 5,
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE": 4,
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE": 3,
+          "ENUM_NSYS_EVENT_CLASS": 89,
+          "ENUM_NSYS_EVENT_TYPE": 150,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_FLAGS": 7,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_PROPERTY": 8,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_TYPE": 22,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_TYPE": 4,
+          "ENUM_NSYS_GENERIC_EVENT_GROUP": 5,
+          "ENUM_NSYS_GENERIC_EVENT_SOURCE": 4,
+          "ENUM_SAMPLING_THREAD_STATE": 11,
+          "ENUM_SCHEDULING_THREAD_BLOCK": 53,
+          "ENUM_STACK_UNWIND_METHOD": 10
+        }
+      }
+    },
+    {
+      "name": "managed_storage_probe",
+      "rep_path": "artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep",
+      "exists": true,
+      "reports": [
+        {
+          "report": "um_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite does not contain CUDA Unified Memory CPU page faults data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite does not contain CUDA Unified Memory CPU page faults data."
+          ]
+        },
+        {
+          "report": "um_total_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_total_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_total_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite does not contain CUDA Unified Memory CPU page faults data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite does not contain CUDA Unified Memory CPU page faults data."
+          ]
+        },
+        {
+          "report": "um_cpu_page_faults_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "um_cpu_page_faults_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/um_cpu_page_faults_sum.py]... \nSKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite does not contain CUDA Unified Memory CPU page faults data.\n\n",
+          "stderr": "",
+          "data_line_count": 0,
+          "skipped_messages": [
+            "SKIPPED: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite does not contain CUDA Unified Memory CPU page faults data."
+          ]
+        },
+        {
+          "report": "cuda_api_sum",
+          "command": [
+            "/usr/local/cuda-13.0/bin/nsys",
+            "stats",
+            "--force-export=true",
+            "--report",
+            "cuda_api_sum",
+            "--format",
+            "csv",
+            "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep"
+          ],
+          "returncode": 0,
+          "stdout": "Generating SQLite file /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite from /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep\nProcessing [/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite] with [/opt/nvidia/nsight-systems/2025.3.2/host-linux-armv8/reports/cuda_api_sum.py]... \nTime (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name\n99.0,108927326,1,108927326.0,108927326.0,108927326,108927326,0.0,cudaMallocManaged\n0.4,456185,2,228092.5,228092.5,127778,328407,141866.1,cudaFree\n0.2,232389,1,232389.0,232389.0,232389,232389,0.0,cudaLaunchKernel\n0.1,128139,3,42713.0,11074.0,1065,116000,63665.4,cudaDeviceSynchronize\n0.1,113592,1,113592.0,113592.0,113592,113592,0.0,cudaMalloc\n0.0,52667,2,26333.5,26333.5,15787,36880,14915.0,cudaMemPrefetchAsync_v12020\n0.0,41473,1,41473.0,41473.0,41473,41473,0.0,cudaMemcpy\n0.0,33250,1,33250.0,33250.0,33250,33250,0.0,cuLibraryLoadData\n0.0,12287,1,12287.0,12287.0,12287,12287,0.0,cudaMemset\n0.0,389,1,389.0,389.0,389,389,0.0,cuLibraryGetKernel\n0.0,389,1,389.0,389.0,389,389,0.0,cuKernelGetName\n0.0,343,1,343.0,343.0,343,343,0.0,cuModuleGetLoadingMode\n\n",
+          "stderr": "",
+          "data_line_count": 13,
+          "skipped_messages": []
+        }
+      ],
+      "sqlite": {
+        "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.sqlite",
+        "exists": true,
+        "table_count": 51,
+        "matched_tables": [
+          "ENUM_CUDA_DEV_MEM_EVENT_OPER",
+          "ENUM_CUDA_FUNC_CACHE_CONFIG",
+          "ENUM_CUDA_KERNEL_LAUNCH_TYPE",
+          "ENUM_CUDA_MEMCPY_OPER",
+          "ENUM_CUDA_MEMPOOL_OPER",
+          "ENUM_CUDA_MEMPOOL_TYPE",
+          "ENUM_CUDA_MEM_KIND",
+          "ENUM_CUDA_SHARED_MEM_LIMIT_CONFIG",
+          "ENUM_CUDA_UNIF_MEM_ACCESS_TYPE",
+          "ENUM_CUDA_UNIF_MEM_MIGRATION",
+          "ENUM_CUPTI_STREAM_TYPE",
+          "ENUM_CUPTI_SYNC_TYPE",
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL",
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE",
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE",
+          "ENUM_NSYS_EVENT_CLASS",
+          "ENUM_NSYS_EVENT_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_FLAGS",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_PROPERTY",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_TYPE",
+          "ENUM_NSYS_GENERIC_EVENT_GROUP",
+          "ENUM_NSYS_GENERIC_EVENT_SOURCE",
+          "ENUM_SAMPLING_THREAD_STATE",
+          "ENUM_SCHEDULING_THREAD_BLOCK",
+          "ENUM_STACK_UNWIND_METHOD"
+        ],
+        "matched_event_tables": [],
+        "matched_table_counts": {
+          "ENUM_CUDA_DEV_MEM_EVENT_OPER": 2,
+          "ENUM_CUDA_FUNC_CACHE_CONFIG": 4,
+          "ENUM_CUDA_KERNEL_LAUNCH_TYPE": 4,
+          "ENUM_CUDA_MEMCPY_OPER": 14,
+          "ENUM_CUDA_MEMPOOL_OPER": 4,
+          "ENUM_CUDA_MEMPOOL_TYPE": 3,
+          "ENUM_CUDA_MEM_KIND": 8,
+          "ENUM_CUDA_SHARED_MEM_LIMIT_CONFIG": 2,
+          "ENUM_CUDA_UNIF_MEM_ACCESS_TYPE": 5,
+          "ENUM_CUDA_UNIF_MEM_MIGRATION": 6,
+          "ENUM_CUPTI_STREAM_TYPE": 4,
+          "ENUM_CUPTI_SYNC_TYPE": 5,
+          "ENUM_DIAGNOSTIC_SEVERITY_LEVEL": 5,
+          "ENUM_DIAGNOSTIC_SOURCE_TYPE": 4,
+          "ENUM_DIAGNOSTIC_TIMESTAMP_SOURCE": 3,
+          "ENUM_NSYS_EVENT_CLASS": 89,
+          "ENUM_NSYS_EVENT_TYPE": 150,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_FLAGS": 7,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_PROPERTY": 8,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_ETW_TYPE": 22,
+          "ENUM_NSYS_GENERIC_EVENT_FIELD_TYPE": 4,
+          "ENUM_NSYS_GENERIC_EVENT_GROUP": 5,
+          "ENUM_NSYS_GENERIC_EVENT_SOURCE": 4,
+          "ENUM_SAMPLING_THREAD_STATE": 11,
+          "ENUM_SCHEDULING_THREAD_BLOCK": 53,
+          "ENUM_STACK_UNWIND_METHOD": 10
+        }
+      }
+    }
+  ],
+  "ncu_metric_query": {
+    "available": true,
+    "command": [
+      "/usr/local/cuda-13.0/bin/ncu",
+      "--query-metrics"
+    ],
+    "returncode": 0,
+    "matched_line_count": 0,
+    "matched_lines": [],
+    "stderr": ""
+  }
+}

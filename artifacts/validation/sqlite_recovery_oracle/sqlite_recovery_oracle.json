@@ -1,0 +1,270 @@
+{
+  "note": "Oracle-definition artifact only; not a crash-certification claim.",
+  "workload": {
+    "path": "artifacts/motivation/sqlite_latency.csv",
+    "sha256": "46fb07eb56fc20cb07b715cf849ba2ad79ce4d2b23af75002370e031687b54f3",
+    "row_count": 2,
+    "rows": [
+      {
+        "tier": "full",
+        "requested_mode": "WAL",
+        "actual_mode": "WAL",
+        "sync_mode": "FULL",
+        "integrity_check": "ok",
+        "sample_count": 20,
+        "median_ms": "0.4067825",
+        "p95_ms": "0.9885337499999999",
+        "fallback_error": "",
+        "error": ""
+      },
+      {
+        "tier": "plain",
+        "requested_mode": "WAL",
+        "actual_mode": "WAL",
+        "sync_mode": "FULL",
+        "integrity_check": "ok",
+        "sample_count": 20,
+        "median_ms": "0.3998935",
+        "p95_ms": "0.98093315",
+        "fallback_error": "",
+        "error": ""
+      }
+    ]
+  },
+  "contention": {
+    "path": "artifacts/motivation/sqlite_contention_latency.csv",
+    "sha256": "31d74f1a4131d2be683357f3189b2c6bc385ff0db6074429553cd9a1c00c394f",
+    "row_count": 2,
+    "rows": [
+      {
+        "tier": "full",
+        "requested_mode": "WAL",
+        "actual_mode": "WAL",
+        "sync_mode": "FULL",
+        "integrity_check": "ok",
+        "sample_count": 2,
+        "median_ms": "0.5953845",
+        "p95_ms": "0.7954720500000001",
+        "fallback_error": "",
+        "error": ""
+      },
+      {
+        "tier": "plain",
+        "requested_mode": "WAL",
+        "actual_mode": "WAL",
+        "sync_mode": "FULL",
+        "integrity_check": "ok",
+        "sample_count": 2,
+        "median_ms": "0.5635600000000001",
+        "p95_ms": "0.7401481",
+        "fallback_error": "",
+        "error": ""
+      }
+    ]
+  },
+  "strace": {
+    "path": "artifacts/sqlite_strace.log",
+    "line_count": 3226,
+    "interesting_count": 33,
+    "counts": {
+      "open_db": 1,
+      "open_journal": 1,
+      "open_wal": 1,
+      "open_shm": 1,
+      "fdatasync": 4,
+      "fsync": 0,
+      "pwrite": 12,
+      "unlink_journal": 1
+    },
+    "fd_paths": {
+      "3": "/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db",
+      "4": "/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-wal",
+      "5": "/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-shm"
+    },
+    "interesting_excerpt": [
+      {
+        "line": 678,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db\", 0xffffebc67c10, AT_SYMLINK_NOFOLLOW) = -1 ENOENT (No such file or directory)"
+      },
+      {
+        "line": 681,
+        "text": "1349855 openat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db\", O_RDWR|O_CREAT|O_NOFOLLOW|O_CLOEXEC, 0644) = 3"
+      },
+      {
+        "line": 684,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db\", {st_mode=S_IFREG|0644, st_size=0, ...}, 0) = 0"
+      },
+      {
+        "line": 689,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-journal\", 0xffffebc69568, 0) = -1 ENOENT (No such file or directory)"
+      },
+      {
+        "line": 690,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-wal\", 0xffffebc69568, 0) = -1 ENOENT (No such file or directory)"
+      },
+      {
+        "line": 697,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-journal\", 0xffffebc69c18, 0) = -1 ENOENT (No such file or directory)"
+      },
+      {
+        "line": 699,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-wal\", 0xffffebc69c18, 0) = -1 ENOENT (No such file or directory)"
+      },
+      {
+        "line": 705,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db\", {st_mode=S_IFREG|0644, st_size=0, ...}, 0) = 0"
+      },
+      {
+        "line": 706,
+        "text": "1349855 openat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-journal\", O_RDWR|O_CREAT|O_NOFOLLOW|O_CLOEXEC, 0644) = 4"
+      },
+      {
+        "line": 713,
+        "text": "1349855 pwrite64(4, \"\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0A\\226S9\\0\\0\\0\\0\\0\\0\\2\\0\\0\\0\\20\\0\\0\\0\\0\\0\"..., 512, 0) = 512"
+      },
+      {
+        "line": 715,
+        "text": "1349855 fdatasync(4)                    = 0"
+      },
+      {
+        "line": 717,
+        "text": "1349855 fdatasync(5)                    = 0"
+      },
+      {
+        "line": 719,
+        "text": "1349855 pwrite64(4, \"\\331\\325\\5\\371 \\241c\\327\\0\\0\\0\\0\", 12, 0) = 12"
+      },
+      {
+        "line": 720,
+        "text": "1349855 fdatasync(4)                    = 0"
+      },
+      {
+        "line": 721,
+        "text": "1349855 pwrite64(3, \"SQLite format 3\\0\\20\\0\\2\\2\\0@  \\0\\0\\0\\1\\0\\0\\0\\1\"..., 4096, 0) = 4096"
+      },
+      {
+        "line": 722,
+        "text": "1349855 fdatasync(3)                    = 0"
+      },
+      {
+        "line": 724,
+        "text": "1349855 unlinkat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-journal\", 0) = 0"
+      },
+      {
+        "line": 731,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-journal\", 0xffffebc69c58, 0) = -1 ENOENT (No such file or directory)"
+      },
+      {
+        "line": 733,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-wal\", 0xffffebc69c58, 0) = -1 ENOENT (No such file or directory)"
+      },
+      {
+        "line": 736,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db\", {st_mode=S_IFREG|0644, st_size=4096, ...}, 0) = 0"
+      },
+      {
+        "line": 737,
+        "text": "1349855 openat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-wal\", O_RDWR|O_CREAT|O_NOFOLLOW|O_CLOEXEC, 0644) = 4"
+      },
+      {
+        "line": 741,
+        "text": "1349855 openat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db-shm\", O_RDWR|O_CREAT|O_NOFOLLOW|O_CLOEXEC, 0644) = 5"
+      },
+      {
+        "line": 751,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 4095)      = 1"
+      },
+      {
+        "line": 752,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 8191)      = 1"
+      },
+      {
+        "line": 753,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 12287)     = 1"
+      },
+      {
+        "line": 754,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 16383)     = 1"
+      },
+      {
+        "line": 755,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 20479)     = 1"
+      },
+      {
+        "line": 756,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 24575)     = 1"
+      },
+      {
+        "line": 757,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 28671)     = 1"
+      },
+      {
+        "line": 758,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 32767)     = 1"
+      },
+      {
+        "line": 3210,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db\", {st_mode=S_IFREG|0644, st_size=4096, ...}, 0) = 0"
+      },
+      {
+        "line": 3214,
+        "text": "1349855 pwrite64(5, \"\\0\", 1, 32767)     = 1"
+      },
+      {
+        "line": 3221,
+        "text": "1349855 newfstatat(AT_FDCWD, \"/tmp/skim_sqlite_probe_mnt_6sk9kpnl/x.db\", {st_mode=S_IFREG|0644, st_size=4096, ...}, 0) = 0"
+      }
+    ]
+  },
+  "cut_points": [
+    {
+      "id": "before_sqlite_journal_header_sync",
+      "observed_basis": "journal file open + pwrite64 + first fdatasync",
+      "required_observation": "open_journal>0, pwrite>0, fdatasync>0",
+      "permitted_recovery": "previous committed DB state or fail closed",
+      "bug_signal": "new DB contents reachable without durable journal header",
+      "observed_in_strace": "True"
+    },
+    {
+      "id": "after_journal_header_before_db_sync",
+      "observed_basis": "journal fdatasync before database fdatasync",
+      "required_observation": "multiple fdatasync calls including journal and db fds",
+      "permitted_recovery": "previous state, latest fully committed state, or fail closed",
+      "bug_signal": "SQLite integrity_check != ok or unexpected row digest",
+      "observed_in_strace": "True"
+    },
+    {
+      "id": "after_db_fsync_before_journal_unlink",
+      "observed_basis": "database pwrite/fdatasync followed by journal unlink",
+      "required_observation": "fdatasync and unlink_journal",
+      "permitted_recovery": "latest committed state or fail closed",
+      "bug_signal": "journal removed while DB content is partial",
+      "observed_in_strace": "True"
+    },
+    {
+      "id": "wal_file_created_before_checkpoint",
+      "observed_basis": "WAL and SHM sidecar open after journal bootstrap",
+      "required_observation": "open_wal>0 and open_shm>0",
+      "permitted_recovery": "SQLite WAL recovery to a state with integrity_check=ok",
+      "bug_signal": "WAL exists but integrity_check fails or expected rows disappear silently",
+      "observed_in_strace": "True"
+    }
+  ],
+  "oracle": {
+    "post_replay_checks": [
+      "Open SQLite database read-only and read-write.",
+      "Run PRAGMA integrity_check and require result exactly 'ok'.",
+      "Record expected table names, row counts, and ORDER BY primary-key content digest before the fault.",
+      "After replay, accept only previous committed digest, latest committed digest, or explicit fail-closed error.",
+      "Classify any other readable digest as silent corruption."
+    ],
+    "retained_sample_integrity_values": [
+      "ok"
+    ],
+    "retained_sample_rows": 4,
+    "retained_sample_digests": {
+      "sqlite_latency_csv": "46fb07eb56fc20cb07b715cf849ba2ad79ce4d2b23af75002370e031687b54f3",
+      "sqlite_contention_latency_csv": "31d74f1a4131d2be683357f3189b2c6bc385ff0db6074429553cd9a1c00c394f"
+    }
+  }
+}

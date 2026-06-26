@@ -1,0 +1,25 @@
+{
+  "note": "TPM-only bundle wrapper; monotonic freshness update remains open evidence, while the recovery verdict is retained separately.",
+  "checks": [
+    {
+      "name": "tpm_freshness_bundle",
+      "command": [
+        "python3",
+        "experiments/run_tpm_freshness_bundle.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_only_bundle/tpm_freshness_bundle.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_only_bundle/tpm_freshness_bundle.stderr.txt"
+    },
+    {
+      "name": "tpm_freshness_report",
+      "command": [
+        "python3",
+        "experiments/build_tpm_freshness_report.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_only_bundle/tpm_freshness_report.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_only_bundle/tpm_freshness_report.stderr.txt"
+    }
+  ]
+}

@@ -1,53 +1,24 @@
-\section{Discussion}
+\section{Discussion and Limitations}
 \label{sec:discussion}
 
-\subsection{The Capacity-Speed Trade-off}
+\subsection{Interpretation of the placement result}
 \label{sec:disc_tradeoff}
 
-AEGIS-Q fundamentally alters the optimization landscape for edge secure storage. Traditional HPC servers maximize performance by running cryptographic operations in high-bandwidth memory (HBM), costing \$100/GB. In contrast, AEGIS-Q maximizes capacity by utilizing NVMe storage at \$0.05/GB, trading execution time for economic viability:
-\begin{equation}
-\text{Cost}(\text{Storage}) = \alpha N_{\text{gpu}} \cdot \$C_{\text{gpu}} + \beta \frac{S_{\text{data}}}{B_{\text{ssd}}}
-\end{equation}
-For a 1\,TB block dataset, fscrypt-GPU (representing datacenter-class distributed encryption servers) requires $\sim$16 A100-80GB GPUs (\$240,000) for high-performance scheduling, whereas AEGIS-Q requires 1 Jetson + 1\,TB SSD (\$300). The 800$\times$ cost reduction comes with a 1000$\times$ slowdown, a reasonable trade-off for prototyping.
+The useful result is asymmetry, not an aggregate ``GPU speedup.''  On the measured Thor system, the CPU has a substantial advantage for the implemented AES-GCM data path because it avoids managed-buffer staging and synchronization.  The GPU has a substantial advantage for a batch of independent ML-KEM key generations.  A practical system should therefore expose a narrow elastic lane for workloads that actually have this shape, not move all storage encryption to the GPU.  The current scheduler is only a deterministic policy mechanism; it does not justify an AI-QoS claim in this revision.
 
-\subsection{Energy Efficiency at the Edge}
+\subsection{Security limits}
 \label{sec:disc_energy}
 
-Operating at 15W, AEGIS-Q is uniquely suited for energy-constrained environments. A 3.3-hour storage workload consumes 50Wh. In comparison, a supercomputer node (e.g., DGX A100) consumes 6.5kW. Even if it finishes in 10 seconds, the standby and cooling overhead of such facilities is immense.
+The per-file envelope is authenticated and the block records are AEAD-protected, but the mount password is still the root credential in this prototype.  The implementation has no hardware-backed credential release, no audited key rotation protocol, no protection against a privileged runtime attacker, and no side-channel evaluation.  File-backed anchors are replayable by design.  The TPM mode is disabled unless an administrator pre-provisions a suitable index, and its policy has not been evaluated.  These are not minor implementation details; each changes the security claim.
 
-\begin{table}[t]
-\centering
-\caption{Energy Efficiency Comparison (ML-KEM Keygen / Hashing).}
-\vspace{-.2cm}
-\scriptsize
-\begin{tabularx}{\columnwidth}{l|c|c|r}
-\toprule
-\textbf{System} & \textbf{Power} & \textbf{Time} & \textbf{Energy} \\
-\midrule
-HPC Node (A100$\times$8) & 6500 W & 2 s & 3.6 Wh \\
-Workstation (3090) & 500 W & 15 s & 2.1 Wh \\
-AEGIS-Q (Ours) & 15 W & 1558 s & 6.5 Wh \\
-\bottomrule
-\end{tabularx}
-\label{tab:energy_efficiency}
-\end{table}
-
-While total energy per shot is higher due to long runtime, the peak power demand is 400$\times$ lower, enabling deployment on solar-powered remote sensor nodes.
-
-\subsection{Future Roadmap: Distributed PQC Storage}
+\subsection{Evaluation limits and roadmap}
 \label{sec:disc_roadmap}
 
-The bandwidth bottleneck of a single SSD (1\,GB/s) can be overcome by distributing the storage data across a cluster of Jetson devices.
+The three-run primitive measurements cannot establish steady-state filesystem throughput, tail latency, energy efficiency, or portability.  The repository already retains matched fscrypt and dm-crypt sequential-write baselines, but a broader baseline matrix still needs to be extended if the paper wants to argue more than the current prototype path.  A credible next evaluation still needs: (i) fs-verity or other additional baselines if those claims are added; (ii) an end-to-end workload with exact I/O mode, cache state, CPU/GPU clocks, and confidence intervals; (iii) a TensorRT or LLM telemetry path wired into the actual scheduler; (iv) power-fail injection with a provisioned TPM policy; (v) at least one non-NVIDIA UMA platform; and (vi) physical or microarchitectural side-channel testing if such a security claim is desired.
 
-\paragraph{Proposed Architecture}
-\begin{enumerate}
-  \item \textbf{Sharding}: Partition the block storage data across $N$ devices.
-  \item \textbf{Interconnect}: Use 1GbE/10GbE for peer-to-peer chunk exchange.
-  \item \textbf{Speedup}: With $N = 4$ Jetsons, effective bandwidth quadruples to 4\,GB/s, potentially reducing a 1\,TB workload execution time from 3.3 hours to $<$1 hour.
-\end{enumerate}
-This ``Cluster-on-Desk'' approach would bridge the gap between single-device prototyping and HPC-scale production runs.
+The repository also retains a derived freshness-window tradeoff artifact under \texttt{artifacts/m4\_freshness/}.  It models the throughput/data-loss/recovery-time tension as the window parameter changes, but it is not a substitute for a hardware-backed PCR freshness proof or a recovery protocol evaluation.
 
-\subsection{Software Portability and CUDA Compatibility}
+\subsection{CUDA-specific boundary}
 \label{sec:disc_portability}
 
-A significant challenge during the development of AEGIS-Q was navigating the evolving NVIDIA software ecosystem. While modern HPC environments track CUDA 12.x and 13.x, many edge platforms such as the Jetson Orin series remain optimized for CUDA 11.4 (JetPack 5.x). We discovered a critical compatibility threshold in libraries compiling on ARM64, where newer versions of OpenSSL and TPM tools require modern libraries that are unavailable on older distributions. Consequently, the optimal and most stable configuration for AEGIS-Q on current-generation Jetson devices is native CUDA compilation under CUDA 11.4 using native nvcc. Furthermore, we implemented custom wrapper layers for ML-KEM NTT (Number Theoretic Transform) and SHA-256 leaf hashing kernels to bridge specific API differences in GPU device memory management found in the ARM64-specific hardware bindings of these software versions.
+The implementation currently depends on CUDA managed memory and cuPQC.  It uses \texttt{cudaMemPrefetchAsync} and stream synchronization as locality/ordering operations within the executor, not as storage-DMA registration or permissions.  Porting the policy to another API requires a separate proof of that API's allocation, synchronization, and device-I/O semantics.  This is particularly important on integrated systems, where ``unified memory'' describes several different hardware and driver designs.

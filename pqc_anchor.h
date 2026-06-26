@@ -44,5 +44,6 @@ int pqc_anchor_store(const pqc_anchor_state_t *state);   /* legacy compat */
 int pqc_anchor_load(const pqc_anchor_state_t *expected_state);
 int pqc_anchor_flush(void);
 int pqc_anchor_finalize(void);
+int pqc_anchor_set_freshness_window(int n);
 
 #endif

@@ -1,103 +1,65 @@
 \section{AEGIS-Q Design}
 \label{sec:design}
 
-In this section, we present the design of AEGIS-Q, a scalable secure storage runtime optimized for edge devices with limited memory and compute resource boundaries. AEGIS-Q does not store the full cryptographic state in host DRAM, but instead partitions the storage path into CPU and GPU lanes, allocating Unified Virtual Memory (UVM) buffers to act as a staging area. This allows for the execution of large-scale post-quantum cryptographic (PQC) operations and integrity verification that exceed CPU limits. To overcome the high latency associated with memory staging and context switching, AEGIS-Q integrates a pipelined execution model that dynamically manages memory access permissions between the CPU and GPU, enabling efficient asynchronous overlap of storage I/O and cryptographic computation.
-
-\subsection{Overall Procedure}
+\subsection{Planes and trusted state}
 \label{sec:design_proc}
 
-Figure 3 shows the overall procedure of AEGIS-Q. AEGIS-Q provides two main phases to support QoS-aware secure storage on edge devices: Initialization and Execution phase.
+Figure~\ref{fig:overall_procedure} separates the persistent secure-storage path from optional accelerator work.  The data plane is an AES-256-GCM block format.  The key plane contains optional batched ML-KEM experiments; it does not encrypt ordinary file blocks.  The integrity plane computes SHA-256/Merkle material and falls back to CPU if its CUDA operation fails.  The freshness plane publishes an authenticated checkpoint and can target a pre-provisioned TPM NV index, but hardware-anchor behavior is not an evaluated result in this paper.
 
-\paragraph{Initialization} When the secure storage runtime starts, Resource Manager queries the available hardware resources on the edge device. It reads metadata including the GPU memory capacity, unified memory size, NVMe storage bandwidth, and CPU core count ($\Pi$). Once the metadata collection is completed, Batch Calculator determines the optimal partitioning strategy based on the request size and queue states (e.g., a 16\,GB write payload). This calculation ensures that 1) the size of each block batch fits within the available UVM buffer space while maximizing GPU occupancy, and 2) the total number of blocks is aligned with the NVMe block size to facilitate efficient I/O operations.
-
-After completing the batch configuration, Buffer Allocator allocates the necessary intermediate buffers using CUDA Unified Virtual Memory. Unlike standard device allocations, Buffer Allocator initializes these buffers with the \texttt{cudaMemAttachHost} flag. This allows the buffers to be immediately accessible by the CPU FUSE threads for file I/O operations before GPU kernel execution begins, establishing the foundation for the pipeline. Finally, Journal Initializer generates the initial filesystem metadata and writes it to the NVMe storage, preparing the system for secure storage execution.
-
-\paragraph{Execution} After Initialization phase is completed, AEGIS-Q enters Execution phase. First, AEGIS-Q constructs a sequence of executable storage tasks, where each task corresponds to a specific read, write, or cryptographic key rotation. For each task, the system processes the block buffer by iterating through the queued batches. AEGIS-Q employs a triple-buffer asynchronous pipeline to process these batches. This pipeline coordinates three distinct operations: loading data from storage, executing cryptographic kernels on the GPU, and storing results back to NVMe. To enable true concurrency between these operations without data races, Pipeline Coordinator dynamically switches the access mode of UVM buffers. It utilizes \texttt{cudaStreamAttachMemAsync} to toggle buffers between \texttt{AttachHost} mode for I/O operations and \texttt{AttachGlobal} mode for GPU computation. By manipulating page table permissions asynchronously, AEGIS-Q eliminates the need for explicit memory copies between host and device. Finally, Cryptographic Executor executes the AES-GCM or ML-KEM logic on the blocks currently in \texttt{AttachGlobal} mode. Once the computation for a batch is complete, the system synchronizes the pipeline and proceeds to the next secure storage operation.
-
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_architecture.pdf}
-  \caption{Overall procedure of AEGIS-Q.}
+  \includegraphics[width=0.98\textwidth]{Figures/fig_architecture.pdf}
+  \caption{Implemented AEGIS-Q control and persistence path. Solid arrows are the FUSE format used by the tests; orange dashed arrows denote optional accelerator or externally provisioned hardware paths. The final revision does not claim verified \texttt{O\_DIRECT} UMA pinning, a completed eBPF completion path, or a closed-loop hardware-QoS controller.}
+  \Description{Architecture diagram of the AEGIS-Q FUSE data path, key envelope, checkpoint, optional CUDA executor, and optional externally provisioned TPM path.}
   \label{fig:overall_procedure}
-\end{figure}
+\end{figure*}
 
-\subsection{Unified Memory Architecture Analysis}
+The mount password is expanded with PBKDF2-HMAC-SHA256 in the current prototype.  A new file receives a random 256-bit DEK and a random file identifier.  The DEK is masked under a key derived from the mount key and file identifier; the resulting envelope is authenticated with HMAC-SHA256 before it is accepted on open.  The file identifier, generation, logical block number, and plaintext length form AES-GCM associated data.  These bindings prevent a valid block record from being transplanted to a different logical position within the same mounted format.
+
+The password-derived mount key is a prototype boundary, not a complete device-root-of-trust design.  A production deployment needs a per-volume salt and a protected credential-release policy.  We do not claim PCR-bound key release, device migration support, or recovery across a lost mount credential.
+
+\subsection{Durable encrypted-block publication}
+\label{sec:design_pipeline}
+
+Writes are coalesced only when they are contiguous.  For each affected 4~KiB logical block, AEGIS-Q reads the current authenticated block if necessary, applies the modification, assigns a strictly increasing generation, and derives the GCM nonce from \((\mathit{fileID},\mathit{block},\mathit{generation})\).  The commit order is:
+
+\begin{enumerate}
+  \item write ciphertext records to \texttt{.pqcdata} and call \texttt{fdatasync};
+  \item append generation-to-offset mappings and tags to \texttt{.pqcmeta}, then call \texttt{fdatasync};
+  \item update the logical-size xattr; authenticate and write the checkpoint.
+\end{enumerate}
+
+The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \texttt{fsync} flushes the coalescing buffer, waits for local pending work, and calls \texttt{fdatasync} on both sidecars before returning.  This is an implementation argument for the tested format, not a proof of full POSIX behavior under every FUSE cache mode or an SQLite certification.
+
+\subsection{Managed-memory boundary and scheduler}
 \label{sec:design_uma}
 
-Before defining the memory management strategy, AEGIS-Q analyzes the characteristics of the underlying memory architecture to identify the optimal allocation method for edge devices. Table II summarizes the compatibility of memory types on the Jetson unified memory architecture. We investigated three memory types: Device Memory (\texttt{cudaMalloc}), Pinned Host Memory (\texttt{cudaMallocHost}), and Unified Virtual Memory (\texttt{cudaMallocManaged}).
+Table~\ref{tab:memory_compat} summarizes the claims that the source code actually makes.  CPU/GPU ownership is protected by the FUSE per-file lock and stream completion; CUDA prefetch is used only to influence locality.  No table entry is a statement about NVMe page pinning, cache coherence of a third-party DMA engine, or CUDA attach-mode permissions.
 
 \begin{table}[t]
 \centering
-\caption{Memory type compatibility on Jetson unified memory architecture.}
-\vspace{-.2cm}
+\caption{Memory-path claims and their hardware-verified status.}
 \scriptsize
-\begin{tabularx}{\columnwidth}{l|c|c|X}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{P{0.38\columnwidth}|P{0.20\columnwidth}|Y}
 \toprule
-\textbf{Memory Type} & \textbf{POSIX I/O} & \textbf{GPU Execution} & \textbf{Notes} \\
+\textbf{Mechanism} & \textbf{Status} & \textbf{Claim retained}\\
 \midrule
-Device Memory (\texttt{cudaMalloc}) & No & Yes & Requires explicit \texttt{cudaMemcpy} for I/O \\
-Pinned Host (\texttt{cudaMallocHost}) & Yes & No & GPU kernels reject pointers on Tegra \\
-Unified Memory (\texttt{cudaMallocManaged}) & Yes & Yes & Supports zero-copy via attach modes \\
+\texttt{cudaMallocManaged} + prefetch & Verified & Managed allocation and explicit device/host prefetch complete.\\
+\texttt{posix\_memalign} + \texttt{cudaHostRegister} & Prototype-only & Host-memory pinning and executor-local access checks; not a verified storage-DMA path.\\
+\texttt{pread}/\texttt{pwrite} sidecars & Verified & Backing ciphertext and journal use ordinary POSIX I/O.\\
+eBPF tracepoint notification & Not claimed & No final eBPF notification path is part of the verified implementation.\\
+Hardware QoS (\texttt{tegrastats}) & Prototype-only & Scheduler logic exists, but no end-to-end telemetry/QoS claim is made.\\
 \bottomrule
 \end{tabularx}
 \label{tab:memory_compat}
 \end{table}
 
-\paragraph{Limitations of Conventional Allocation} Device memory supports GPU cryptographic execution but fails to support direct POSIX I/O system calls such as \texttt{pread}. This necessitates explicit \texttt{cudaMemcpy} calls to move data between the file system and the GPU, which introduces significant latency and doubles the memory bandwidth requirement. Pinned host memory supports efficient I/O operations including \texttt{O\_DIRECT}. However, our empirical analysis reveals that GPU kernels reject pinned memory pointers on Tegra architectures, preventing its use for computation.
+The placement function balances workloads between the ARM CPUs and the Jetson GPU. The current revision does not expose a verified \texttt{O\_DIRECT} storage path into GPU memory.  The CUDA executor instead uses managed allocation, explicit prefetch, and stream synchronization as locality and ordering controls.
 
-\paragraph{Adoption of UVM} In contrast, UVM proves to be the only memory type that supports both direct POSIX I/O and GPU execution. On Jetson architectures, the CPU and GPU share the same physical LPDDR5 DRAM banks. The memory controller maintains cache coherency through hardware snooping, allowing data written by the CPU via \texttt{pread} to be immediately visible to the GPU without physical data migration. Consequently, AEGIS-Q utilizes UVM to implement a zero-copy data path. This approach reduces the end-to-end processing time for a 256\,KB staging buffer by approximately 2.00$\times$ compared to the conventional pinned memory approach that requires explicit copying.
+For Quality of Service (QoS), the repository includes a scheduler prototype and telemetry-oriented scripts, but the paper does not claim a validated hardware-telemetry admission controller or a completed fast-notification bypass path.  Any such extension would need its own measured workload, trace capture, and failure analysis.
 
-\subsection{Triple-Buffer Asynchronous Pipeline}
-\label{sec:design_pipeline}
+\subsection{Freshness boundary}
+\label{sec:design_security}
 
-Although UVM enables zero-copy access, naive concurrent access by the CPU and GPU leads to resource conflicts and segmentation faults. To address this, AEGIS-Q implements a triple-buffer asynchronous pipeline that orchestrates memory access permissions. Figure 4 illustrates the structure of the pipeline, which consists of three stages: Load, Compute, and Store.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_compression_mechanism.pdf}
-  \caption{Triple-buffer asynchronous pipeline (Load, Compute, Store) and UVM attach-mode transitions.}
-  \label{fig:compression_mechanism}
-\end{figure}
-
-\paragraph{Dynamic Access Control} The core mechanism of the pipeline is the dynamic switching of UVM stream attachment. Standard UVM usage allows the driver to manage page migration implicitly, which often results in unpredictable stalling or faults during concurrent I/O. AEGIS-Q creates an explicit barrier between the CPU and GPU views of memory. We allocate three UVM buffers ($B_0$, $B_1$, $B_2$) and initialize them in \texttt{AttachHost} mode. During the Compute stage, Pipeline Coordinator issues \texttt{cudaStreamAttachMemAsync} with the \texttt{AttachGlobal} flag for the specific buffer assigned to the GPU. This operation modifies the GPU page table entries to grant access permissions without moving physical data. Simultaneously, the other two buffers remain in \texttt{AttachHost} mode, allowing worker threads to perform \texttt{pread} and \texttt{pwrite} operations safely.
-
-\paragraph{Pipeline Scheduling} AEGIS-Q schedules the processing of block batches in a round-robin fashion across the three buffers. For a batch $c$, the system assigns buffer $B_i$ where $i = c \bmod 3$. The pipeline ensures that while the GPU computes on batch $c$ in buffer $B_i$, the I/O threads are simultaneously writing the result of batch $c-1$ from buffer $B_{i-1}$ and reading the data for batch $c+1$ into buffer $B_{i+1}$. We optimize this flow by leveraging the asynchronous nature of the attach operation. Specifically, AEGIS-Q does not enforce a synchronization barrier after switching to \texttt{AttachGlobal}, relying on the GPU driver to implicitly wait for the permission update. Conversely, a mandatory synchronization is enforced before switching back to \texttt{AttachHost} to ensure that all GPU writes are committed before the CPU initiates disk I/O. This precise control enables AEGIS-Q to hide the latency of NVMe storage behind the GPU computation time.
-
-\subsection{Edge-Specific Optimization}
-\label{sec:design_opt}
-
-To maximize performance on resource-constrained edge devices, AEGIS-Q applies system-level optimizations that align with the hardware characteristics of the Jetson platform.
-
-\paragraph{Bypassing Page Cache} Standard Linux file I/O utilizes the page cache, which introduces an extra memory copy and pollutes the limited DRAM capacity of edge devices. For cryptographic workloads where the buffer size far exceeds the physical RAM, this caching behavior causes severe thrashing. AEGIS-Q employs the \texttt{O\_DIRECT} flag for all file operations. This instructs the kernel to bypass the operating system's page cache and perform Direct Memory Access (DMA) transfers between the NVMe storage and the UVM buffers. Our design ensures that the UVM buffers are properly aligned to the memory page boundaries required by \texttt{O\_DIRECT}, enabling maximum storage throughput.
-
-\paragraph{Kernel Execution Tuning} On embedded GPUs, the latency of kernel launching and context switching can significantly impact the pipeline efficiency. AEGIS-Q mitigates this by initializing high-priority CUDA streams using \texttt{cudaStreamCreateWithPriority}. This ensures that the secure storage kernels preempt other background graphics or system tasks. Additionally, we enforce a strict batch size selection strategy. Based on empirical testing on the Jetson Orin Nano, AEGIS-Q defaults to a batch size of 256\,KB ($2^{18}$ bytes). This size provides a balance that is large enough to saturate the GPU's compute capability while remaining small enough to fit three pipeline buffers within the 8\,GB unified memory limit, leaving sufficient headroom for the concurrent workloads.
-
-\subsection{Zero-Context-Switching Bypass Path}
-\label{sec:design_bypass}
-
-To overcome the performance bottlenecks of the user-space FUSE daemon and POSIX context switches, AEGIS-Q implements a kernel-level bypass path utilizing \texttt{io\_uring} and \texttt{eBPF}. This bypass directly pipes data transfer events from the hardware storage layer to the GPU runtime environment without crossing the user-kernel boundary.
-
-\paragraph{io\_uring Asynchronous Queue Interface}
-Rather than relying on synchronous, blocking FUSE hooks that induce multiple context switches per I/O transaction, the bypass architecture implements a unified Submit Queue (SQ) and Completion Queue (CQ) model. The application prepares I/O requests as Submit Queue Entries (SQEs) with the \texttt{O\_DIRECT} flag. By bypassing the kernel page cache, the NVMe SSD initiates direct DMA transfers straight into the pre-allocated Unified Virtual Memory (UVM) pages. The CPU thread writes to the SQ tail and notifies the kernel via the \texttt{io\_uring\_enter} system call, allowing the execution to proceed asynchronously.
-
-\paragraph{eBPF-triggered Kernel GPU Activation}
-To eliminate the overhead of re-entering user-space (e.g., FUSE daemon scheduling) to launch GPU cryptographic kernels upon I/O completion, we implement an eBPF program attached to the block layer's DMA completion events (e.g., kprobes on \texttt{nvme\_complete\_rq}). Upon detecting an asynchronous write completion, the eBPF filter captures the completion event and immediately wakes the associated CUDA stream directly from the kernel space. It accesses the device-driver control structures to launch the PQC (ML-KEM or SHA-256) cryptographic kernels asynchronously on the GPU. Since the data already resides in UVM, this triggering happens with zero-copy and zero-context-switching overhead, creating a direct device-to-device data pipeline.
-
-\subsection{Phase-Aware AI QoS Scheduler}
-\label{sec:design_phase_aware}
-
-Edge environments frequently run heterogeneous workloads where real-time safety-critical AI and heavy generative AI models share resources with secure storage services. To prevent background post-quantum cryptographic (PQC) operations from degrading foreground AI engines, AEGIS-Q implements a telemetry-driven, phase-aware admission controller.
-
-\paragraph{Asymmetric LLM Execution Phases}
-Generative AI workloads such as TinyLLMs (e.g., quantized LLaMA or Qwen) exhibit highly asymmetric execution phases:
-\begin{enumerate}
-    \item \textbf{Prefill Phase}: The model processes the input prompt in parallel. This phase is heavily compute-bound, saturating the Tensor Cores but leaving the memory bus relatively underutilized.
-    \item \textbf{Decoding Phase}: Tokens are generated sequentially one by one. This phase is memory-bandwidth-bound, requiring the system to stream model weights and Key-Value (KV) caches continuously, which fully saturates the shared LPDDR5 memory bus.
-\end{enumerate}
-
-\paragraph{Telemetry-driven Interleaving Policy}
-On a shared-memory unified virtual memory (UVM) edge device, running storage DMA or cryptographic staging operations during the memory-heavy decoding phase causes severe bus contention, leading to a massive drop in tokens per second (TPS). AEGIS-Q resolves this by monitoring memory bandwidth utilization and Tensor Core activity in real-time. 
-
-When the admission controller detects that the system is in the LLM decoding phase (high memory bandwidth, low Tensor Core utilization), it preemptively spills PQC operations to the CPU fast lane or defers them. Conversely, during the compute-bound prefill phase (high Tensor Core utilization, low memory bandwidth), the controller dynamically soft-allocates the GPU elastic lane for UVM transfers and cryptoprocesses, taking advantage of the idle memory bus. This phase-aware scheduling isolates memory-heavy background writes from the critical latency path of generative agents.
-
-
+The file anchor is an authenticated on-disk record.  Because an attacker able to restore the backing directory can restore that record as well, it is explicitly \emph{not} rollback protection.  The crash/replay harness treats this behavior as a negative control.  The optional hardware backend refuses to mount when its TPM NV index was not provisioned by an administrator; it never creates persistent TPM state implicitly.  A true rollback-resistance claim requires a separately protected TPM policy, defined NV authorization, a recovery protocol, and fault-injection results for that exact configuration.

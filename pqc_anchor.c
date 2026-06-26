@@ -80,6 +80,17 @@ static pqc_prefix_anchor_t g_pending_anchor;
 static int                  g_pending_anchor_valid = 0;
 static pthread_mutex_t      g_pending_anchor_lock = PTHREAD_MUTEX_INITIALIZER;
 
+static int s_freshness_window = -1;
+
+int pqc_anchor_set_freshness_window(int n)
+{
+    if (n > 0) {
+        s_freshness_window = n;
+        return 0;
+    }
+    return -EINVAL;
+}
+
 /* ── Environment helpers ────────────────────────────────────────────────── */
 
 static const char *anchor_path(void)
@@ -106,10 +117,9 @@ static uint32_t tpm_nv_index(void)
 
 pqc_anchor_backend_t pqc_anchor_backend(void)
 {
-    const char *path = anchor_path();
-    if (!path) return PQC_ANCHOR_BACKEND_DISABLED;
-    return anchor_path_is_hardware() ? PQC_ANCHOR_BACKEND_HARDWARE
-                                     : PQC_ANCHOR_BACKEND_FILE;
+    if (anchor_path_is_hardware()) return PQC_ANCHOR_BACKEND_HARDWARE;
+    return anchor_path() ? PQC_ANCHOR_BACKEND_FILE
+                         : PQC_ANCHOR_BACKEND_DISABLED;
 }
 
 /* ── SHA-256 prefix root computation ────────────────────────────────────── */
@@ -314,11 +324,10 @@ static int ensure_tpm_nv_defined(void)
 {
     char cmd[256];
     snprintf(cmd, sizeof(cmd), "tpm2_nvreadpublic 0x%08x >/dev/null 2>&1", tpm_nv_index());
-    if (system(cmd) == 0) return 0;
-    snprintf(cmd, sizeof(cmd),
-             "tpm2_nvdefine -C o -s 64 -a \"ownerwrite|ownerread\" 0x%08x >/dev/null 2>&1",
-             tpm_nv_index());
-    return system(cmd) == 0 ? 0 : -EIO;
+    /* NV provisioning is an administrative action.  Creating a persistent
+     * index implicitly would make ownership, authorization, and lifecycle
+     * opaque, so an unprovisioned device fails closed instead. */
+    return system(cmd) == 0 ? 0 : -ENODEV;
 }
 
 static int write_anchor_file(const pqc_prefix_anchor_t *anchor)
@@ -326,11 +335,37 @@ static int write_anchor_file(const pqc_prefix_anchor_t *anchor)
     const char *path = anchor_path();
     if (!path) return 0;
     if (anchor_path_is_hardware()) return -ENOTSUP;
-    int fd = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0600);
+    char tmpname[4096];
+    int n = snprintf(tmpname, sizeof(tmpname), "%s.tmp.XXXXXX", path);
+    if (n < 0 || (size_t)n >= sizeof(tmpname)) return -ENAMETOOLONG;
+
+    int fd = mkstemp(tmpname);
     if (fd < 0) return -errno;
-    ssize_t wr = write(fd, anchor, sizeof(*anchor));
-    int rc = (wr == (ssize_t)sizeof(*anchor)) ? 0 : -EIO;
-    close(fd);
+    int rc = 0;
+    if (fchmod(fd, 0600) != 0) {
+        rc = -errno;
+    } else {
+        const uint8_t *cursor = (const uint8_t *)anchor;
+        size_t remaining = sizeof(*anchor);
+        while (remaining > 0) {
+            ssize_t written = write(fd, cursor, remaining);
+            if (written < 0) {
+                if (errno == EINTR) continue;
+                rc = -errno;
+                break;
+            }
+            if (written == 0) {
+                rc = -EIO;
+                break;
+            }
+            cursor += (size_t)written;
+            remaining -= (size_t)written;
+        }
+        if (rc == 0 && fdatasync(fd) != 0) rc = -errno;
+    }
+    if (close(fd) != 0 && rc == 0) rc = -errno;
+    if (rc == 0 && rename(tmpname, path) != 0) rc = -errno;
+    if (rc != 0) unlink(tmpname);
     return rc;
 }
 
@@ -399,7 +434,7 @@ int pqc_anchor_probe(void)
         OPENSSL_cleanse(&anchor, sizeof(anchor));
         return (rc == 0) ? 0 : rc;
     }
-    return 0;
+    return ensure_tpm_nv_defined();
 }
 
 /*
@@ -418,6 +453,17 @@ int pqc_anchor_store(const pqc_anchor_state_t *state)
     (void)pqc_anchor_record_file(0, state->epoch, state->sequence,
                                   state->logical_size);
 
+    /* Check freshness window N */
+    static int s_blocks_since_commit = 0;
+    if (s_freshness_window < 0) {
+        const char *env = getenv("PQC_FRESHNESS_WINDOW_N");
+        s_freshness_window = env ? atoi(env) : 100; // Default 100
+        if (s_freshness_window <= 0) s_freshness_window = 1;
+    }
+
+    s_blocks_since_commit++;
+    int should_flush = (s_blocks_since_commit >= s_freshness_window);
+
     if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_HARDWARE) {
         /* Build prefix anchor and stage for background flush */
         pqc_prefix_anchor_t anchor = {0};
@@ -435,15 +481,24 @@ int pqc_anchor_store(const pqc_anchor_state_t *state)
         g_pending_anchor_valid = 1;
         pthread_mutex_unlock(&g_pending_anchor_lock);
         OPENSSL_cleanse(&anchor, sizeof(anchor));
+
+        if (should_flush) {
+            s_blocks_since_commit = 0;
+            return pqc_anchor_flush();
+        }
         return 0;
     }
 
-    /* file backend: write immediately */
-    pqc_prefix_anchor_t anchor = {0};
-    int rc = build_prefix_anchor(&anchor);
-    if (rc == 0) rc = write_anchor_file(&anchor);
-    OPENSSL_cleanse(&anchor, sizeof(anchor));
-    return rc;
+    /* file backend: write when window is met */
+    if (should_flush) {
+        pqc_prefix_anchor_t anchor = {0};
+        int rc = build_prefix_anchor(&anchor);
+        if (rc == 0) rc = write_anchor_file(&anchor);
+        OPENSSL_cleanse(&anchor, sizeof(anchor));
+        s_blocks_since_commit = 0;
+        return rc;
+    }
+    return 0;
 }
 
 int pqc_anchor_flush(void)

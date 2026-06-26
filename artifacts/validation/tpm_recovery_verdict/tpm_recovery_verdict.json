@@ -1,0 +1,397 @@
+{
+  "note": "Recovery verdict artifact only; combine it with the separate monotonic replay artifact for freshness claims.",
+  "inputs": {
+    "crash_replay_e8_summary": "/home/thor/skim/pqc_encrpyted_fs/artifacts/crash_replay_e8_test_summary.json",
+    "crash_replay_e8_matrix": "/home/thor/skim/pqc_encrpyted_fs/artifacts/crash_replay_e8_test_matrix.json",
+    "hardware_anchor_latency": "/home/thor/skim/pqc_encrpyted_fs/artifacts/anchor_refresh/hardware_anchor_latency.json"
+  },
+  "hardware_rows": [
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 0,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 1,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 2,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 3,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 4,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 5,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 6,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 7,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 8,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trial": 9,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 0,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 1,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 2,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 3,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 4,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 5,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 6,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 7,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 8,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trial": 9,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 0,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 1,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 2,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 3,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 4,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 5,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 6,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 7,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 8,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trial": 9,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 0,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 1,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 2,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 3,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 4,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 5,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 6,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 7,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 8,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trial": 9,
+      "preserved": true,
+      "mode": "fail_closed",
+      "detail": "errno=74"
+    }
+  ],
+  "hardware_summary_rows": [
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.0,
+      "trials": 10,
+      "preserved": 10,
+      "success_rate": 1.0,
+      "fail_closed": 10,
+      "rollback_accept": 0,
+      "unexpected_error": 0
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.02,
+      "trials": 10,
+      "preserved": 10,
+      "success_rate": 1.0,
+      "fail_closed": 10,
+      "rollback_accept": 0,
+      "unexpected_error": 0
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.05,
+      "trials": 10,
+      "preserved": 10,
+      "success_rate": 1.0,
+      "fail_closed": 10,
+      "rollback_accept": 0,
+      "unexpected_error": 0
+    },
+    {
+      "backend": "hardware",
+      "cut_point_s": 0.1,
+      "trials": 10,
+      "preserved": 10,
+      "success_rate": 1.0,
+      "fail_closed": 10,
+      "rollback_accept": 0,
+      "unexpected_error": 0
+    }
+  ],
+  "hardware_anchor_latency": {
+    "rows": [
+      {
+        "backend": "hardware",
+        "samples_ms": [
+          32.772267,
+          9.415056,
+          9.099343,
+          8.848546,
+          9.450527
+        ],
+        "median_ms": 9.415056,
+        "p95_ms": 28.107919,
+        "min_ms": 8.848546,
+        "max_ms": 32.772267
+      }
+    ]
+  },
+  "verdict": {
+    "hardware_backend_present": true,
+    "hardware_backend_fail_closed_count": 40,
+    "hardware_backend_rollback_accept_count": 0,
+    "hardware_backend_success_rate_min": 1.0,
+    "hardware_backend_success_rate_max": 1.0
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "note": "Profile report only; not a proof of NVMe-to-UVM DMA semantics.",
+  "input_dir": "artifacts/uma_storage_dma_nsys",
+  "nsys_rep": "artifacts/uma_storage_dma_nsys/io_uring_uvm.nsys-rep",
+  "sqlite": "artifacts/uma_storage_dma_nsys/io_uring_uvm.sqlite",
+  "cuda_api_sum": [
+    {
+      "Time (%)": "100.0",
+      "Total Time (ns)": "106859530",
+      "Num Calls": "1",
+      "Avg (ns)": "106859530.0",
+      "Med (ns)": "106859530.0",
+      "Min (ns)": "106859530",
+      "Max (ns)": "106859530",
+      "StdDev (ns)": "0.0",
+      "Name": "cudaHostRegister"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "40796",
+      "Num Calls": "1",
+      "Avg (ns)": "40796.0",
+      "Med (ns)": "40796.0",
+      "Min (ns)": "40796",
+      "Max (ns)": "40796",
+      "StdDev (ns)": "0.0",
+      "Name": "cudaHostUnregister"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "574",
+      "Num Calls": "1",
+      "Avg (ns)": "574.0",
+      "Med (ns)": "574.0",
+      "Min (ns)": "574",
+      "Max (ns)": "574",
+      "StdDev (ns)": "0.0",
+      "Name": "cuModuleGetLoadingMode"
+    }
+  ],
+  "osrt_sum": [
+    {
+      "Time (%)": "56.0",
+      "Total Time (ns)": "151848821",
+      "Num Calls": "13",
+      "Avg (ns)": "11680678.5",
+      "Med (ns)": "4542982.0",
+      "Min (ns)": "2204",
+      "Max (ns)": "51648492",
+      "StdDev (ns)": "17922027.3",
+      "Name": "poll"
+    },
+    {
+      "Time (%)": "41.6",
+      "Total Time (ns)": "112647753",
+      "Num Calls": "441",
+      "Avg (ns)": "255437.1",
+      "Med (ns)": "11203.0",
+      "Min (ns)": "1038",
+      "Max (ns)": "9624083",
+      "StdDev (ns)": "768516.8",
+      "Name": "ioctl"
+    },
+    {
+      "Time (%)": "1.8",
+      "Total Time (ns)": "4766380",
+      "Num Calls": "10",
+      "Avg (ns)": "476638.0",
+      "Med (ns)": "48199.0",
+      "Min (ns)": "25417",
+      "Max (ns)": "3769352",
+      "StdDev (ns)": "1174021.9",
+      "Name": "sem_timedwait"
+    },
+    {
+      "Time (%)": "0.2",
+      "Total Time (ns)": "466861",
+      "Num Calls": "15",
+      "Avg (ns)": "31124.1",
+      "Med (ns)": "11426.0",
+      "Min (ns)": "3046",
+      "Max (ns)": "140037",
+      "StdDev (ns)": "36238.9",
+      "Name": "mmap64"
+    },
+    {
+      "Time (%)": "0.1",
+      "Total Time (ns)": "307268",
+      "Num Calls": "20",
+      "Avg (ns)": "15363.4",
+      "Med (ns)": "10533.0",
+      "Min (ns)": "2954",
+      "Max (ns)": "108871",
+      "StdDev (ns)": "22387.3",
+      "Name": "mmap"
+    },
+    {
+      "Time (%)": "0.1",
+      "Total Time (ns)": "181510",
+      "Num Calls": "3",
+      "Avg (ns)": "60503.3",
+      "Med (ns)": "62028.0",
+      "Min (ns)": "56343",
+      "Max (ns)": "63139",
+      "StdDev (ns)": "3645.5",
+      "Name": "pthread_create"
+    },
+    {
+      "Time (%)": "0.1",
+      "Total Time (ns)": "158667",
+      "Num Calls": "36",
+      "Avg (ns)": "4407.4",
+      "Med (ns)": "4166.5",
+      "Min (ns)": "1176",
+      "Max (ns)": "14176",
+      "StdDev (ns)": "2724.1",
+      "Name": "open64"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "122213",
+      "Num Calls": "27",
+      "Avg (ns)": "4526.4",
+      "Med (ns)": "2509.0",
+      "Min (ns)": "1018",
+      "Max (ns)": "21630",
+      "StdDev (ns)": "4710.9",
+      "Name": "fopen"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "102443",
+      "Num Calls": "8",
+      "Avg (ns)": "12805.4",
+      "Med (ns)": "4023.0",
+      "Min (ns)": "1416",
+      "Max (ns)": "48592",
+      "StdDev (ns)": "17586.5",
+      "Name": "fgets"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "87201",
+      "Num Calls": "24",
+      "Avg (ns)": "3633.4",
+      "Med (ns)": "2634.5",
+      "Min (ns)": "1101",
+      "Max (ns)": "10787",
+      "StdDev (ns)": "2385.6",
+      "Name": "open"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "73148",
+      "Num Calls": "1",
+      "Avg (ns)": "73148.0",
+      "Med (ns)": "73148.0",
+      "Min (ns)": "73148",
+      "Max (ns)": "73148",
+      "StdDev (ns)": "0.0",
+      "Name": "pthread_cond_wait"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "38396",
+      "Num Calls": "20",
+      "Avg (ns)": "1919.8",
+      "Med (ns)": "1491.0",
+      "Min (ns)": "1027",
+      "Max (ns)": "5120",
+      "StdDev (ns)": "1133.5",
+      "Name": "fclose"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "37553",
+      "Num Calls": "10",
+      "Avg (ns)": "3755.3",
+      "Med (ns)": "3819.0",
+      "Min (ns)": "1055",
+      "Max (ns)": "7222",
+      "StdDev (ns)": "2082.0",
+      "Name": "close"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "26843",
+      "Num Calls": "4",
+      "Avg (ns)": "6710.8",
+      "Med (ns)": "4695.0",
+      "Min (ns)": "2453",
+      "Max (ns)": "15000",
+      "StdDev (ns)": "5850.2",
+      "Name": "pipe2"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "26372",
+      "Num Calls": "10",
+      "Avg (ns)": "2637.2",
+      "Med (ns)": "3019.0",
+      "Min (ns)": "1370",
+      "Max (ns)": "4000",
+      "StdDev (ns)": "1058.0",
+      "Name": "write"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "24248",
+      "Num Calls": "12",
+      "Avg (ns)": "2020.7",
+      "Med (ns)": "1805.5",
+      "Min (ns)": "1083",
+      "Max (ns)": "3907",
+      "StdDev (ns)": "944.2",
+      "Name": "read"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "23675",
+      "Num Calls": "2",
+      "Avg (ns)": "11837.5",
+      "Med (ns)": "11837.5",
+      "Min (ns)": "9638",
+      "Max (ns)": "14037",
+      "StdDev (ns)": "3110.6",
+      "Name": "socket"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "12518",
+      "Num Calls": "1",
+      "Avg (ns)": "12518.0",
+      "Med (ns)": "12518.0",
+      "Min (ns)": "12518",
+      "Max (ns)": "12518",
+      "StdDev (ns)": "0.0",
+      "Name": "connect"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "4008",
+      "Num Calls": "2",
+      "Avg (ns)": "2004.0",
+      "Med (ns)": "2004.0",
+      "Min (ns)": "1314",
+      "Max (ns)": "2694",
+      "StdDev (ns)": "975.8",
+      "Name": "fwrite"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "3019",
+      "Num Calls": "1",
+      "Avg (ns)": "3019.0",
+      "Med (ns)": "3019.0",
+      "Min (ns)": "3019",
+      "Max (ns)": "3019",
+      "StdDev (ns)": "0.0",
+      "Name": "bind"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "2639",
+      "Num Calls": "1",
+      "Avg (ns)": "2639.0",
+      "Med (ns)": "2639.0",
+      "Min (ns)": "2639",
+      "Max (ns)": "2639",
+      "StdDev (ns)": "0.0",
+      "Name": "pthread_cond_broadcast"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "2362",
+      "Num Calls": "2",
+      "Avg (ns)": "1181.0",
+      "Med (ns)": "1181.0",
+      "Min (ns)": "1010",
+      "Max (ns)": "1352",
+      "StdDev (ns)": "241.8",
+      "Name": "fcntl"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "1296",
+      "Num Calls": "1",
+      "Avg (ns)": "1296.0",
+      "Med (ns)": "1296.0",
+      "Min (ns)": "1296",
+      "Max (ns)": "1296",
+      "StdDev (ns)": "0.0",
+      "Name": "fdopen"
+    },
+    {
+      "Time (%)": "0.0",
+      "Total Time (ns)": "1222",
+      "Num Calls": "1",
+      "Avg (ns)": "1222.0",
+      "Med (ns)": "1222.0",
+      "Min (ns)": "1222",
+      "Max (ns)": "1222",
+      "StdDev (ns)": "0.0",
+      "Name": "listen"
+    }
+  ],
+  "um_sum": [],
+  "um_cpu_page_faults_sum": []
+}

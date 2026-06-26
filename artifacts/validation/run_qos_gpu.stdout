@@ -1,0 +1,11 @@
+=== Real Telemetry Admission Control Experiment ===
+
+--- RUN: Telemetry ENABLED (AEGIS-Q QoS) ---
+[I/O Worker] Started background I/O processing...
+
+[I/O Worker] Finished 50 MB in 0.26 s (194.59 MB/s)
+[AI Worker] Launching Heavy CUDA GPU Burner (YOLOv8 simulation)...
+[Telemetry] Daemon started, parsing REAL tegrastats...
+[Result] AI Heavy Workload Latency (Enabled): 5825.91 ms
+
+Experiment Complete. Telemetry/QoS prototype run finished; this is not a validated closed-loop controller.

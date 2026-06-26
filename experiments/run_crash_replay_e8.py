@@ -4,16 +4,18 @@ experiments/run_crash_replay_e8.py — AEGIS-Q E8 crash/replay matrix
 ====================================================================
 
 This script exercises deterministic cut-points for crash and rollback
-validation.  It emits:
+classification.  It emits:
   - artifacts/crash_replay_matrix.json
   - artifacts/crash_replay_matrix.csv
   - artifacts/crash_replay_summary.json
   - artifacts/crash_replay_summary.csv
 
-The script supports both the file-backed anchor path and, when explicitly
-available, the hardware-backed anchor path.  The hardware path is not assumed
-to exist on every machine; if it is unavailable, the run is reported as a
-skipped configuration rather than being treated as evidence.
+The file-backed anchor is a negative control: because it is copied with the
+storage image, it cannot establish rollback resistance.  A restored baseline
+that mounts successfully is therefore reported as ``rollback_visible``, not
+as a protected outcome.  A hardware-backed run is meaningful only when the
+operator has pre-provisioned an external TPM NV index; unavailable hardware is
+reported as skipped rather than being treated as evidence.
 """
 
 from __future__ import annotations
@@ -41,7 +43,7 @@ class TrialResult:
     backend: str
     cut_point_s: float
     trial: int
-    preserved: bool
+    rollback_blocked: bool
     mode: str
     detail: str
 
@@ -135,14 +137,19 @@ def run_cutpoint_trial(backend: str, cut_point_s: float, trial: int) -> TrialRes
             with open(test_file, "rb") as f:
                 data = f.read()
             if data == b"baseline-v1\n":
-                return TrialResult(backend, cut_point_s, trial, True, "rollback_reject", "stale_image_blocked")
+                return TrialResult(backend, cut_point_s, trial, False,
+                                   "rollback_visible", "restored_baseline_readable")
             if data == payload:
-                return TrialResult(backend, cut_point_s, trial, False, "rollback_accept", "stale_image_visible")
-            return TrialResult(backend, cut_point_s, trial, False, "rollback_accept", "unexpected_content")
+                return TrialResult(backend, cut_point_s, trial, False,
+                                   "rollback_visible", "restored_image_did_not_replace_updated_payload")
+            return TrialResult(backend, cut_point_s, trial, False,
+                               "rollback_visible", "unexpected_content")
         except OSError as exc:
             if exc.errno in (74, 116, 129):
-                return TrialResult(backend, cut_point_s, trial, True, "fail_closed", f"errno={exc.errno}")
-            return TrialResult(backend, cut_point_s, trial, False, "unexpected_error", f"errno={exc.errno}")
+                return TrialResult(backend, cut_point_s, trial, True,
+                                   "fail_closed", f"errno={exc.errno}")
+            return TrialResult(backend, cut_point_s, trial, False,
+                               "unexpected_error", f"errno={exc.errno}")
         finally:
             if proc:
                 stop_fuse(proc, mount_dir)
@@ -169,15 +176,15 @@ def summarize(rows: list[TrialResult]) -> list[dict]:
 
     summary = []
     for (backend, cut_point_s), trials in sorted(grouped.items()):
-        preserved = sum(1 for t in trials if t.preserved)
+        rollback_blocked = sum(1 for t in trials if t.rollback_blocked)
         summary.append({
             "backend": backend,
             "cut_point_s": cut_point_s,
             "trials": len(trials),
-            "preserved": preserved,
-            "success_rate": preserved / max(1, len(trials)),
+            "rollback_blocked": rollback_blocked,
+            "rollback_block_rate": rollback_blocked / max(1, len(trials)),
             "fail_closed": sum(1 for t in trials if t.mode == "fail_closed"),
-            "rollback_accept": sum(1 for t in trials if t.mode == "rollback_accept"),
+            "rollback_visible": sum(1 for t in trials if t.mode == "rollback_visible"),
             "unexpected_error": sum(1 for t in trials if t.mode == "unexpected_error"),
         })
     return summary
@@ -217,13 +224,13 @@ def main() -> int:
 
     matrix_json.write_text(json.dumps({"rows": matrix, "skipped": skipped}, indent=2))
     with matrix_csv.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["backend", "cut_point_s", "trial", "preserved", "mode", "detail"])
+        writer = csv.DictWriter(f, fieldnames=["backend", "cut_point_s", "trial", "rollback_blocked", "mode", "detail"])
         writer.writeheader()
         writer.writerows(matrix)
 
     summary_json.write_text(json.dumps({"rows": summary, "skipped": skipped}, indent=2))
     with summary_csv.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["backend", "cut_point_s", "trials", "preserved", "success_rate", "fail_closed", "rollback_accept", "unexpected_error"])
+        writer = csv.DictWriter(f, fieldnames=["backend", "cut_point_s", "trials", "rollback_blocked", "rollback_block_rate", "fail_closed", "rollback_visible", "unexpected_error"])
         writer.writeheader()
         writer.writerows(summary)
 

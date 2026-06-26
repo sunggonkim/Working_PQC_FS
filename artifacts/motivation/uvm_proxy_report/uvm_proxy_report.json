@@ -1,0 +1,33 @@
+{
+  "um_counters": [
+    {
+      "self_test_rc": 0,
+      "managed_alloc_bytes": 16777216,
+      "managed_free_bytes": 16777216,
+      "prefetch_to_device_bytes": 16777216,
+      "prefetch_to_host_bytes": 16777216,
+      "prefetch_device_calls": 1,
+      "prefetch_host_calls": 1
+    }
+  ],
+  "semantic_gap": [
+    {
+      "workload": "Sequential I/O (fscrypt)",
+      "page_faults": 2560,
+      "page_migrations": 1280,
+      "read_ahead_waste_pct": 0.2,
+      "data_provenance": "emulated_projection_jetson_orin_nano (eBPF failed: debugfs missing)"
+    },
+    {
+      "workload": "Lattice PQC NTT (UVM)",
+      "page_faults": 655360,
+      "page_migrations": 327680,
+      "read_ahead_waste_pct": 91.4,
+      "data_provenance": "emulated_projection_jetson_orin_nano (eBPF failed: debugfs missing)"
+    }
+  ],
+  "interpretation": {
+    "um_counters": "managed-memory smoke evidence only; not a storage-DMA proof",
+    "semantic_gap": "emulated projection because eBPF/trace collection was unavailable"
+  }
+}

@@ -106,7 +106,6 @@ extern "C" int skim_cuda_mlkem768_keygen_batch(const uint8_t *seeds,
 
     const size_t pk_total  = MLKEM768Key::public_key_size  * count;
     const size_t sk_total  = MLKEM768Key::secret_key_size  * count;
-    const size_t ent_total = MLKEM768Key::entropy_size     * count;
 
     uint8_t *d_pk = nullptr, *d_sk = nullptr;
     uint8_t *workspace   = make_workspace<MLKEM768Key>((unsigned)count);

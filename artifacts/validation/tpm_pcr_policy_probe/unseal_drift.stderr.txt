@@ -1,0 +1,4 @@
+WARNING:esys:src/tss2-esys/api/Esys_Unseal.c:295:Esys_Unseal_Finish() Received TPM Error 
+ERROR:esys:src/tss2-esys/api/Esys_Unseal.c:98:Esys_Unseal() Esys Finish ErrorCode (0x0000099d) 
+ERROR: Esys_Unseal(0x99D) - tpm:session(1):a policy check failed
+ERROR: Unable to run tpm2_unseal

@@ -1,0 +1,5 @@
+{
+  "enabled": true,
+  "ai_p99_ms": 20.002365112304688,
+  "trace_file": "artifacts/validation/tegra_qos_daemon_trace.jsonl"
+}

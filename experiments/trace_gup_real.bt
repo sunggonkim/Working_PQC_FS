@@ -1,0 +1,16 @@
+kprobe:pin_user_pages_remote
+{
+    printf("pin_user_pages_remote called by %s (pid %d)\n", comm, pid);
+}
+kprobe:pin_user_pages
+{
+    printf("pin_user_pages called by %s (pid %d)\n", comm, pid);
+}
+kprobe:get_user_pages
+{
+    printf("get_user_pages called by %s (pid %d)\n", comm, pid);
+}
+kprobe:get_user_pages_remote
+{
+    printf("get_user_pages_remote called by %s (pid %d)\n", comm, pid);
+}

@@ -1,0 +1,87 @@
+{
+  "source": "artifacts/m3_qos/m3_qos_results.json",
+  "bootstrap": {
+    "trials": 10000,
+    "alpha": 0.05,
+    "statistic": "median",
+    "seed": 11
+  },
+  "metrics": [
+    "LLM_TTFT_ms",
+    "LLM_TPS"
+  ],
+  "rows": [
+    {
+      "Configuration": "adaptive",
+      "trials": 3,
+      "LLM_TTFT_ms": {
+        "median": 71.85743036706235,
+        "ci95_low": 71.70838217766592,
+        "ci95_high": 72.071869167035,
+        "samples": [
+          72.071869167035,
+          71.70838217766592,
+          71.85743036706235
+        ]
+      },
+      "LLM_TPS": {
+        "median": 156.76,
+        "ci95_low": 135.4,
+        "ci95_high": 162.84,
+        "samples": [
+          162.84,
+          156.76,
+          135.4
+        ]
+      }
+    },
+    {
+      "Configuration": "gpu_only",
+      "trials": 3,
+      "LLM_TTFT_ms": {
+        "median": 73.29887904253339,
+        "ci95_low": 72.78289374550438,
+        "ci95_high": 74.41471085815277,
+        "samples": [
+          73.29887904253339,
+          74.41471085815277,
+          72.78289374550438
+        ]
+      },
+      "LLM_TPS": {
+        "median": 124.75,
+        "ci95_low": 99.6,
+        "ci95_high": 124.9,
+        "samples": [
+          124.75,
+          99.6,
+          124.9
+        ]
+      }
+    },
+    {
+      "Configuration": "inference_only",
+      "trials": 3,
+      "LLM_TTFT_ms": {
+        "median": 60.41255165155173,
+        "ci95_low": 60.33011886918734,
+        "ci95_high": 60.66436963558724,
+        "samples": [
+          60.66436963558724,
+          60.41255165155173,
+          60.33011886918734
+        ]
+      },
+      "LLM_TPS": {
+        "median": 216.27,
+        "ci95_low": 213.63,
+        "ci95_high": 216.85,
+        "samples": [
+          216.27,
+          213.63,
+          216.85
+        ]
+      }
+    }
+  ]
+}

@@ -237,13 +237,16 @@ extern void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx);
  *   1. Plane is DATA or FRESHNESS — structural, never GPU.
  *   2. GPU not flagged eligible by the job builder.
  *   3. Request too small for GPU launch overhead to be amortized.
- *   4. Coherence cost exceeds policy limit (UVM migration stall risk).
- *   5. Deadline has elapsed (flag or gpu_wait_ns exceeded limit).
- *   6. AI inference engine holds the GPU (ai_qos_budget_ns < threshold).
- *   7. GPU queue pressure exceeds CPU pressure.
+ *   4. Coherence cost exceeds the configured bound.
+ *   5. The job deadline or GPU queue bound has elapsed.
+ *   6. No explicit AI slack budget is available, or the supplied slack is
+ *      below the configured reserve.
+ *   7. GPU queue pressure is not lower than CPU pressure.
  *
- * This mirrors the evaluation contract for E3/E4: the scheduler must
- * protect inference p99 (Table yolo_baseline) even under elastic PQC load.
+ * The function is deliberately pure: callers must supply the current budget
+ * and queue state.  A missing telemetry feed is represented by a zero budget
+ * and therefore fails closed to the CPU.  This avoids treating a CUDA stream
+ * priority or a UVM hint as evidence of end-to-end AI QoS isolation.
  */
 static inline pqc_job_target_t pqc_block_job_choose_target(
     const pqc_block_job_t *job,
@@ -253,27 +256,23 @@ static inline pqc_job_target_t pqc_block_job_choose_target(
 {
     if (!job || !policy) return PQC_JOB_CPU;
 
-    /* Plane eligibility check first (structural constraints) */
+    /* Structural and safety gates. */
     if (!pqc_block_job_gpu_eligible(job)) return PQC_JOB_CPU;
+    if (job->plaintext_length < policy->gpu_min_bytes) return PQC_JOB_CPU;
+    if (job->coherence_cost_ns > policy->coherence_penalty_ns) return PQC_JOB_CPU;
+    if ((job->flags & PQC_JOB_FLAG_DEADLINE) != 0 ||
+        job->gpu_wait_ns > policy->gpu_max_wait_ns) return PQC_JOB_CPU;
 
-    /* Delegate the admission decision to the centralized telemetry admission controller */
-    pqc_admission_context_t ctx;
-    memset(&ctx, 0, sizeof(ctx));
-    ctx.batch_count = 1;
-    ctx.bytes_total = job->plaintext_length;
-    ctx.batch_age_ns = job->gpu_wait_ns;
-    ctx.gpu_kernel_est_ns = policy->gpu_min_bytes;
-    ctx.gpu_h2d_staging_ns = job->coherence_cost_ns;
-    ctx.cpu_queue_depth = job->cpu_queue_depth;
-    ctx.gpu_queue_depth = job->gpu_queue_depth;
-    ctx.cpu_load_avg = cpu_load;
-    ctx.gpu_load_avg = gpu_load;
-    ctx.ai_qos_budget_remaining_ns = job->ai_qos_budget_ns;
-    ctx.ai_inference_deadline_ns = policy->ai_qos_min_budget_ns;
-    ctx.uma_migration_cost_ns = job->coherence_cost_ns;
+    /* A zero budget means that the producer has no trustworthy slack sample. */
+    if (job->ai_qos_budget_ns == 0 ||
+        job->ai_qos_budget_ns < policy->ai_qos_min_budget_ns) return PQC_JOB_CPU;
+    if (job->gpu_queue_depth >= policy->gpu_max_inflight_jobs) return PQC_JOB_CPU;
 
-    pqc_admit(&ctx);
-    return ctx.chosen_target;
+    const double cpu_pressure =
+        (double)job->cpu_queue_depth + cpu_load * policy->cpu_load_bias;
+    const double gpu_pressure =
+        (double)job->gpu_queue_depth + gpu_load * policy->gpu_queue_bias;
+    return gpu_pressure < cpu_pressure ? PQC_JOB_GPU : PQC_JOB_CPU;
 }
 
 /* ═════════════════════════════════════════════════════════════════════════════

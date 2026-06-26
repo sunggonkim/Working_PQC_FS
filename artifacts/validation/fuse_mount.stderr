@@ -1,0 +1,60 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Kyber-512 Encrypted Filesystem    │
+  │  Edge AI Bottleneck Profiling Tool                  │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-24 21:00:28.702] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-24 21:00:28.702]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-24 21:00:28.702]   Storage dir : /tmp/aegis_validation.x3ijAq/store
+[PQC-FUSE 2026-06-24 21:00:28.702]   Mount point : /tmp/aegis_validation.x3ijAq/mnt
+[PQC-FUSE 2026-06-24 21:00:28.702] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-24 21:00:28.702] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-24 21:00:28.702]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-24 21:00:28.702]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-24 21:00:28.702]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-24 21:00:28.702]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-24 21:00:28.704] Keypair generated in 1448.47 µs
+[PQC-FUSE 2026-06-24 21:00:28.874] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-24 21:00:28.874] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-24 21:00:28.875] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-24 21:00:29.035] PQC background rekey worker started
+[PQC-FUSE 2026-06-24 21:00:29.035] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-24 21:00:29.078] CREATE /check.bin: authenticated file-key envelope initialized (fid=18244147362132260136)
+[PQC-FUSE 2026-06-24 21:00:29.097] OPEN /check.bin: restored authenticated file-key envelope (fid=18244147362132260136)
+[PQC-FUSE 2026-06-24 21:00:29.102] OPEN /check.bin: restored authenticated file-key envelope (fid=18244147362132260136)
+[PQC-FUSE 2026-06-24 21:00:29.104] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-24 21:00:29.105] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-24 21:00:29.105] Scheduler stats: submitted=1 cpu=1 gpu=0 bytes_cpu=0 bytes_gpu=131072 migration_ns=8388608
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0
+[PQC-FUSE 2026-06-24 21:00:29.105] Scheduler stats: submitted=1 cpu=1 gpu=0 bytes_cpu=0 bytes_gpu=131072 migration_ns=8388608
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Kyber-512 Encrypted Filesystem    │
+  │  Edge AI Bottleneck Profiling Tool                  │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-24 21:00:29.184] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-24 21:00:29.184]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-24 21:00:29.184]   Storage dir : /tmp/aegis_validation.x3ijAq/store
+[PQC-FUSE 2026-06-24 21:00:29.184]   Mount point : /tmp/aegis_validation.x3ijAq/mnt
+[PQC-FUSE 2026-06-24 21:00:29.184] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-24 21:00:29.184] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-24 21:00:29.184]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-24 21:00:29.184]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-24 21:00:29.184]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-24 21:00:29.184]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-24 21:00:29.186] Keypair generated in 1481.74 µs
+[PQC-FUSE 2026-06-24 21:00:29.356] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-24 21:00:29.356] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-24 21:00:29.356] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-24 21:00:29.515] PQC background rekey worker started
+[PQC-FUSE 2026-06-24 21:00:29.515] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-24 21:00:29.565] OPEN /check.bin: restored authenticated file-key envelope (fid=18244147362132260136)
+[PQC-FUSE 2026-06-24 21:00:29.673] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-24 21:00:29.673] PQC background rekey worker stopped

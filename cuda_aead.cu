@@ -189,6 +189,13 @@ __global__ static void aes256_expand_key_kernel(const unsigned char *key, unsign
         aes_expand_256(key, round_keys);
 }
 
+__global__ static void um_smoke_touch_kernel(unsigned char *buf, size_t size)
+{
+    size_t i = (size_t)blockIdx.x * blockDim.x + threadIdx.x;
+    if (i < size)
+        buf[i] = (unsigned char)(buf[i] ^ 0x5aU);
+}
+
 __global__ static void aes256_ctr_batch_kernel(const unsigned char *round_keys,
                                                const unsigned char *nonces,
                                                const unsigned char *in,
@@ -333,13 +340,34 @@ int skim_cuda_um_self_test(void)
     if (!skim_cuda_aead_available())
         return -1;
     skim_cuda_um_stats_reset();
-    void *buf = skim_cuda_managed_alloc(4096);
+    const size_t size = 16U * 1024U * 1024U;
+    unsigned char *buf = (unsigned char *)skim_cuda_managed_alloc(size);
     if (!buf)
         return -1;
+    for (size_t i = 0; i < size; ++i)
+        buf[i] = (unsigned char)(i & 0xffU);
     int dev = skim_cuda_current_device();
-    int rc = skim_cuda_mem_prefetch(buf, 4096, dev);
-    if (rc == 0)
-        rc = skim_cuda_mem_prefetch_host(buf, 4096);
+    int rc = skim_cuda_mem_prefetch(buf, size, dev);
+    if (rc == 0) {
+        const int threads = 256;
+        const int blocks = (int)((size + (size_t)threads - 1U) / (size_t)threads);
+        um_smoke_touch_kernel<<<blocks, threads>>>(buf, size);
+        rc = cudaDeviceSynchronize() == cudaSuccess ? 0 : -1;
+    }
+    if (rc == 0) {
+        rc = skim_cuda_mem_prefetch_host(buf, size);
+        if (rc == 0)
+            rc = cudaDeviceSynchronize() == cudaSuccess ? 0 : -1;
+    }
+    if (rc == 0) {
+        for (size_t i = 0; i < size; i += 4096U) {
+            unsigned char expected = (unsigned char)((i & 0xffU) ^ 0x5aU);
+            if (buf[i] != expected) {
+                rc = -1;
+                break;
+            }
+        }
+    }
     skim_cuda_managed_free(buf);
     return rc;
 }

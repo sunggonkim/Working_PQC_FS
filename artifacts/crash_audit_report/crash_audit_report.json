@@ -1,0 +1,491 @@
+{
+  "source_artifacts": {
+    "file_replay": "artifacts/validation/replay_file_summary.json",
+    "file_replay_final": "artifacts/validation/replay_file_final_summary.json",
+    "file_replay_after_keyfix": "artifacts/validation/replay_file_after_keyfix_summary.json",
+    "e8_crash_replay": "artifacts/crash_replay_e8_test_summary.json",
+    "tpm_unprovisioned": "artifacts/validation/tpm_unprovisioned.json",
+    "hardware_anchor_latency": "artifacts/anchor_refresh/hardware_anchor_latency.json",
+    "sqlite_probe": "artifacts/sqlite_strace.log",
+    "sqlite_fault_campaign": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json"
+  },
+  "retained_evidence": {
+    "file_replay": {
+      "rows": [
+        {
+          "backend": "file",
+          "cut_point_s": 0.0,
+          "trials": 2,
+          "rollback_blocked": 0,
+          "rollback_block_rate": 0.0,
+          "fail_closed": 0,
+          "rollback_visible": 2,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "file",
+          "cut_point_s": 0.05,
+          "trials": 2,
+          "rollback_blocked": 0,
+          "rollback_block_rate": 0.0,
+          "fail_closed": 0,
+          "rollback_visible": 2,
+          "unexpected_error": 0
+        }
+      ],
+      "skipped": []
+    },
+    "file_replay_final": {
+      "rows": [
+        {
+          "backend": "file",
+          "cut_point_s": 0.0,
+          "trials": 2,
+          "rollback_blocked": 0,
+          "rollback_block_rate": 0.0,
+          "fail_closed": 0,
+          "rollback_visible": 2,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "file",
+          "cut_point_s": 0.05,
+          "trials": 2,
+          "rollback_blocked": 0,
+          "rollback_block_rate": 0.0,
+          "fail_closed": 0,
+          "rollback_visible": 2,
+          "unexpected_error": 0
+        }
+      ],
+      "skipped": []
+    },
+    "file_replay_after_keyfix": {
+      "rows": [
+        {
+          "backend": "file",
+          "cut_point_s": 0.0,
+          "trials": 2,
+          "preserved": 2,
+          "success_rate": 1.0,
+          "fail_closed": 0,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "file",
+          "cut_point_s": 0.05,
+          "trials": 2,
+          "preserved": 2,
+          "success_rate": 1.0,
+          "fail_closed": 0,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        }
+      ],
+      "skipped": []
+    },
+    "e8_crash_replay": {
+      "rows": [
+        {
+          "backend": "file",
+          "cut_point_s": 0.0,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "file",
+          "cut_point_s": 0.02,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "file",
+          "cut_point_s": 0.05,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "file",
+          "cut_point_s": 0.1,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "hardware",
+          "cut_point_s": 0.0,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "hardware",
+          "cut_point_s": 0.02,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "hardware",
+          "cut_point_s": 0.05,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        },
+        {
+          "backend": "hardware",
+          "cut_point_s": 0.1,
+          "trials": 10,
+          "preserved": 10,
+          "success_rate": 1.0,
+          "fail_closed": 10,
+          "rollback_accept": 0,
+          "unexpected_error": 0
+        }
+      ],
+      "skipped": []
+    },
+    "tpm_unprovisioned": {
+      "hardware_anchor_without_preprovisioning_exit": 1
+    },
+    "hardware_anchor_latency": {
+      "rows": [
+        {
+          "backend": "hardware",
+          "samples_ms": [
+            32.772267,
+            9.415056,
+            9.099343,
+            8.848546,
+            9.450527
+          ],
+          "median_ms": 9.415056,
+          "p95_ms": 28.107919,
+          "min_ms": 8.848546,
+          "max_ms": 32.772267
+        }
+      ]
+    },
+    "sqlite_probe_present": true,
+    "sqlite_fault_campaign": {
+      "note": "SQLite-only file-state fault campaign; not full app crash certification.",
+      "trials_per_cutpoint": 5,
+      "previous_state": {
+        "label": "previous",
+        "row_count": 1,
+        "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+        "rows": [
+          [
+            1,
+            "baseline"
+          ]
+        ]
+      },
+      "latest_state": {
+        "label": "latest",
+        "row_count": 2,
+        "digest": "283eaf711d14e229b9323ace640c3d6c64ff0abf7e57f1b0f4f85bd29a87ff0d",
+        "rows": [
+          [
+            1,
+            "baseline"
+          ],
+          [
+            2,
+            "latest"
+          ]
+        ]
+      },
+      "rows": [
+        {
+          "cut_point": "before_sqlite_journal_header_sync",
+          "trial": 0,
+          "mutation": "truncate_wal_and_journal_to_zero",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "before_sqlite_journal_header_sync",
+          "trial": 1,
+          "mutation": "truncate_wal_and_journal_to_zero",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "before_sqlite_journal_header_sync",
+          "trial": 2,
+          "mutation": "truncate_wal_and_journal_to_zero",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "before_sqlite_journal_header_sync",
+          "trial": 3,
+          "mutation": "truncate_wal_and_journal_to_zero",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "before_sqlite_journal_header_sync",
+          "trial": 4,
+          "mutation": "truncate_wal_and_journal_to_zero",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_journal_header_before_db_sync",
+          "trial": 0,
+          "mutation": "retain_wal_header_only",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_journal_header_before_db_sync",
+          "trial": 1,
+          "mutation": "retain_wal_header_only",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_journal_header_before_db_sync",
+          "trial": 2,
+          "mutation": "retain_wal_header_only",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_journal_header_before_db_sync",
+          "trial": 3,
+          "mutation": "retain_wal_header_only",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_journal_header_before_db_sync",
+          "trial": 4,
+          "mutation": "retain_wal_header_only",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_db_fsync_before_journal_unlink",
+          "trial": 0,
+          "mutation": "flip_main_db_byte_128",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_db_fsync_before_journal_unlink",
+          "trial": 1,
+          "mutation": "flip_main_db_byte_128",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_db_fsync_before_journal_unlink",
+          "trial": 2,
+          "mutation": "flip_main_db_byte_128",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_db_fsync_before_journal_unlink",
+          "trial": 3,
+          "mutation": "flip_main_db_byte_128",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "after_db_fsync_before_journal_unlink",
+          "trial": 4,
+          "mutation": "flip_main_db_byte_128",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "wal_file_created_before_checkpoint",
+          "trial": 0,
+          "mutation": "drop_shm_and_truncate_wal_midpoint",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "wal_file_created_before_checkpoint",
+          "trial": 1,
+          "mutation": "drop_shm_and_truncate_wal_midpoint",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "wal_file_created_before_checkpoint",
+          "trial": 2,
+          "mutation": "drop_shm_and_truncate_wal_midpoint",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "wal_file_created_before_checkpoint",
+          "trial": 3,
+          "mutation": "drop_shm_and_truncate_wal_midpoint",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        },
+        {
+          "cut_point": "wal_file_created_before_checkpoint",
+          "trial": 4,
+          "mutation": "drop_shm_and_truncate_wal_midpoint",
+          "verdict": "previous_committed",
+          "detail": "digest_matches_previous",
+          "integrity_check": "ok",
+          "row_count": 1,
+          "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+          "acceptable": true
+        }
+      ],
+      "summary": [
+        {
+          "cut_point": "after_db_fsync_before_journal_unlink",
+          "trials": 5,
+          "acceptable": 5,
+          "silent_corruption": 0,
+          "verdicts": {
+            "previous_committed": 5
+          }
+        },
+        {
+          "cut_point": "after_journal_header_before_db_sync",
+          "trials": 5,
+          "acceptable": 5,
+          "silent_corruption": 0,
+          "verdicts": {
+            "previous_committed": 5
+          }
+        },
+        {
+          "cut_point": "before_sqlite_journal_header_sync",
+          "trials": 5,
+          "acceptable": 5,
+          "silent_corruption": 0,
+          "verdicts": {
+            "previous_committed": 5
+          }
+        },
+        {
+          "cut_point": "wal_file_created_before_checkpoint",
+          "trials": 5,
+          "acceptable": 5,
+          "silent_corruption": 0,
+          "verdicts": {
+            "previous_committed": 5
+          }
+        }
+      ]
+    }
+  },
+  "gap": {
+    "app_level_recovery": "SQLite-only selected-boundary campaign exists; full multi-workload recovery remains open",
+    "fault_injection_across_durable_boundaries": "SQLite selected-boundary campaign exists; syscall-exact crash timing remains out of scope",
+    "broader_workload_family": "second application workload remains open"
+  }
+}

@@ -1,0 +1,16 @@
+[*] Pinning memory via cudaHostRegister...
+[+] Memory pinned and mapped to device pointer: 0xffff8a510000
+[+] POINTER_ATTR host_ptr type=host device=0 host_ptr=0xffff8a510000 device_ptr=0xffff8a510000
+[+] HOST_FLAGS host_ptr raw=0xa portable=0 mapped=1 writecombined=0
+[!] RANGE_ATTR host_ptr preferred_location_type error=invalid argument
+[!] RANGE_ATTR host_ptr preferred_location_id error=invalid argument
+[!] RANGE_ATTR host_ptr last_prefetch_location_type error=invalid argument
+[!] RANGE_ATTR host_ptr last_prefetch_location_id error=invalid argument
+[+] POINTER_ATTR device_alias type=host device=0 host_ptr=0xffff8a510000 device_ptr=0xffff8a510000
+[*] Submitting io_uring read request...
+[*] Polling for completion...
+[+] Async read completed: 4194304 bytes
+[*] Launching GPU checksum over the same storage-filled mapped buffer...
+[+] CPU checksum over storage buffer: 0x0000000cd9141bd5
+[+] GPU mapped-buffer checksum:      0x0000000cd9141bd5
+[+] CHECKSUM_MATCH: GPU observed the same O_DIRECT storage-filled pinned buffer

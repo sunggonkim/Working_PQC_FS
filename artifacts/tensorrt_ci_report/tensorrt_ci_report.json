@@ -1,0 +1,211 @@
+{
+  "source": "artifacts/motivation/tensorrt_interference.json",
+  "bootstrap": {
+    "trials": 10000,
+    "alpha": 0.05,
+    "statistic": "median",
+    "seed": 19
+  },
+  "rows": [
+    {
+      "mode": "yolov8:adaptive",
+      "mode_label": "adaptive",
+      "trials": 3,
+      "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+      "duration_s": 5.0,
+      "sample_count_total": 9361,
+      "median_of_trial_medians_ms": 0.834356527775526,
+      "median_ci95_low_ms": 0.8291760459542274,
+      "median_ci95_high_ms": 0.8349674753844738,
+      "pooled_median_ms": 0.8333427831530571,
+      "trial_summaries": [
+        {
+          "trial": 0,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3134,
+          "sample_count": 3134,
+          "median_ms": 0.834356527775526,
+          "median_ci95_low_ms": 0.8338522166013718,
+          "median_ci95_high_ms": 0.8349213749170303,
+          "p95_ms": 2.637804299592972,
+          "p99_ms": 2.804909572005272
+        },
+        {
+          "trial": 1,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3143,
+          "sample_count": 3143,
+          "median_ms": 0.8291760459542274,
+          "median_ci95_low_ms": 0.8287038654088974,
+          "median_ci95_high_ms": 0.8297041058540344,
+          "p95_ms": 2.639871556311846,
+          "p99_ms": 2.853055540472269
+        },
+        {
+          "trial": 2,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3084,
+          "sample_count": 3084,
+          "median_ms": 0.8349674753844738,
+          "median_ci95_low_ms": 0.8343514055013657,
+          "median_ci95_high_ms": 0.8356478065252304,
+          "p95_ms": 2.6405971962958574,
+          "p99_ms": 2.8414591774344444
+        }
+      ]
+    },
+    {
+      "mode": "yolov8:cpu_only",
+      "mode_label": "cpu_only",
+      "trials": 3,
+      "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+      "duration_s": 5.0,
+      "sample_count_total": 11914,
+      "median_of_trial_medians_ms": 0.83199143409729,
+      "median_ci95_low_ms": 0.8274633437395096,
+      "median_ci95_high_ms": 0.834527425467968,
+      "pooled_median_ms": 0.8317045867443085,
+      "trial_summaries": [
+        {
+          "trial": 0,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3969,
+          "sample_count": 3969,
+          "median_ms": 0.834527425467968,
+          "median_ci95_low_ms": 0.8342964574694633,
+          "median_ci95_high_ms": 0.8347779512405396,
+          "p95_ms": 0.893872044980526,
+          "p99_ms": 0.9102912992238998
+        },
+        {
+          "trial": 1,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3958,
+          "sample_count": 3958,
+          "median_ms": 0.83199143409729,
+          "median_ci95_low_ms": 0.8317409083247185,
+          "median_ci95_high_ms": 0.8322307839989662,
+          "p95_ms": 0.904399435967207,
+          "p99_ms": 0.9206379484385252
+        },
+        {
+          "trial": 2,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3987,
+          "sample_count": 3987,
+          "median_ms": 0.8274633437395096,
+          "median_ci95_low_ms": 0.8271941915154457,
+          "median_ci95_high_ms": 0.8278153836727142,
+          "p95_ms": 0.8906237781047821,
+          "p99_ms": 0.9114225022494793
+        }
+      ]
+    },
+    {
+      "mode": "yolov8:gpu_only",
+      "mode_label": "gpu_only",
+      "trials": 3,
+      "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+      "duration_s": 5.0,
+      "sample_count_total": 6402,
+      "median_of_trial_medians_ms": 0.9388523176312447,
+      "median_ci95_low_ms": 0.9016674011945724,
+      "median_ci95_high_ms": 0.9464025497436523,
+      "pooled_median_ms": 0.9322916157543659,
+      "trial_summaries": [
+        {
+          "trial": 0,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 2151,
+          "sample_count": 2151,
+          "median_ms": 0.9388523176312447,
+          "median_ci95_low_ms": 0.9226575493812561,
+          "median_ci95_high_ms": 0.9537311270833015,
+          "p95_ms": 4.8615094274282455,
+          "p99_ms": 5.458448547869921
+        },
+        {
+          "trial": 1,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 2109,
+          "sample_count": 2109,
+          "median_ms": 0.9016674011945724,
+          "median_ci95_low_ms": 0.8889259770512581,
+          "median_ci95_high_ms": 0.9174719452857971,
+          "p95_ms": 4.784870520234108,
+          "p99_ms": 4.9503616988658905
+        },
+        {
+          "trial": 2,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 2142,
+          "sample_count": 2142,
+          "median_ms": 0.9464025497436523,
+          "median_ci95_low_ms": 0.9335177019238472,
+          "median_ci95_high_ms": 0.9532785043120384,
+          "p95_ms": 3.0032275710254908,
+          "p99_ms": 3.959701070562005
+        }
+      ]
+    },
+    {
+      "mode": "yolov8:inference_only",
+      "mode_label": "inference_only",
+      "trials": 3,
+      "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+      "duration_s": 5.0,
+      "sample_count_total": 11866,
+      "median_of_trial_medians_ms": 0.8372310549020767,
+      "median_ci95_low_ms": 0.8300933986902237,
+      "median_ci95_high_ms": 0.8434820920228958,
+      "pooled_median_ms": 0.8373428136110306,
+      "trial_summaries": [
+        {
+          "trial": 0,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3930,
+          "sample_count": 3930,
+          "median_ms": 0.8434820920228958,
+          "median_ci95_low_ms": 0.8431011810898781,
+          "median_ci95_high_ms": 0.8438569493591785,
+          "p95_ms": 0.9162877220660448,
+          "p99_ms": 1.0814527329057455
+        },
+        {
+          "trial": 1,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3971,
+          "sample_count": 3971,
+          "median_ms": 0.8372310549020767,
+          "median_ci95_low_ms": 0.8368520066142082,
+          "median_ci95_high_ms": 0.8375281468033791,
+          "p95_ms": 0.8983239531517029,
+          "p99_ms": 0.9160312823951244
+        },
+        {
+          "trial": 2,
+          "duration_s": 5.0,
+          "engine": "/home/thor/skim/pqc_encrpyted_fs/artifacts/yolov8n.plan",
+          "count": 3965,
+          "sample_count": 3965,
+          "median_ms": 0.8300933986902237,
+          "median_ci95_low_ms": 0.8298149332404137,
+          "median_ci95_high_ms": 0.8303150534629822,
+          "p95_ms": 0.8929327130317688,
+          "p99_ms": 0.9111105278134346
+        }
+      ]
+    }
+  ]
+}

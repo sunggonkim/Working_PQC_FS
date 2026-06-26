@@ -1,19 +1,6 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We presented AEGIS-Q, the first GPU-accelerated secure storage runtime optimized for resource-constrained IoT edge devices. By integrating a tiered execution and memory hierarchy (GPU VRAM $\to$ CPU DRAM $\to$ NVMe SSD) with adaptive admission control, AEGIS-Q enables secure storage scales previously limited to dedicated hardware cryptosystems.
+AEGIS-Q is an evidence-first hybrid cryptographic-storage prototype.  Its verified contribution is a remountable FUSE encrypted-block format, CPU-first AES-GCM data path, optional batched GPU primitive path, and retained raw artifacts on a Jetson AGX Thor.  The measurements show why the placement decision must be primitive-specific: CPU wins for the measured AES-GCM data path, while GPU wins for large-batch ML-KEM key generation.
 
-\paragraph{Key Results}
-\begin{itemize}
-  \item \textbf{High-Throughput Cryptographic Staging}: 1 TB raw data block processing on an 8 GB Jetson Orin Nano (\$200, 15W) --- a 128$\times$ capacity expansion through zero-copy tiered staging.
-  \item \textbf{Multi-Workload Benchmarks}: Across ML-KEM, SHA-256 leaf hashing, and TPM anchoring, demonstrating consistent scaling across diverse secure storage structures.
-  \item \textbf{100\% AI QoS Preservation}: On TensorRT YOLOv8 inference under heavy concurrent I/O pressure, fully restoring the tail latency (0.91\,ms) and frame rate.
-\end{itemize}
-
-\paragraph{Honest Performance Comparison} Datacenter cryptosystems achieve massive throughput using hundreds of GPUs. In contrast, AEGIS-Q requires 3.3 hours for a 1 TB block sequential PQC key rotation and staging. This performance difference is expected --- our contribution is demonstrating that high-security post-quantum secure storage can be integrated into resource-constrained edge systems without violating foreground real-time AI QoS.
-
-\paragraph{Limitations} (1) Execution time scales super-linearly due to scheduling overhead; (2) Admission efficiency degrades when the inference workload is highly dynamic; (3) Single-device execution limits throughput.
-
-\paragraph{Future Work} Multi-device Jetson clusters for distributed secure storage; hardware-aware PQC compilation; hybrid edge-cloud secure database execution.
-
-\paragraph{Availability} AEGIS-Q is open-source at \url{https://github.com/sunggonkim/IoTJ-AEGIS-Q}.
+Equally important, this revision removes unsupported claims.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\_uring completion bypass, GPU constant-time behavior, file-anchor rollback resistance, end-to-end AI QoS, or portability beyond the tested stack.  A future submission can make those stronger claims only after implementing and independently validating the required driver, telemetry, TPM, fault-injection, baseline, and side-channel evidence.

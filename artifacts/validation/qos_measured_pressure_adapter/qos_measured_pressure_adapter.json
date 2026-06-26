@@ -1,0 +1,136 @@
+{
+  "note": "Controller-path adapter proof only; not an end-to-end PMU/CUPTI-backed QoS claim.",
+  "source": {
+    "source_csv": "artifacts/validation/uma_storage_dma_profile_combined/ncu/io_uring_uvm_checksum.csv",
+    "raw_percent_metrics": {
+      "Memory Throughput": 4.53,
+      "Compute (SM) Throughput": 33.74,
+      "Issue Slots Busy": 37.36,
+      "SM Busy": 47.72,
+      "Mem Busy": 4.53,
+      "Achieved Occupancy": 79.06
+    },
+    "adapter_mapping": {
+      "PQC_TELEMETRY_MEM_BANDWIDTH": "Memory Throughput / 100",
+      "PQC_TELEMETRY_TENSOR_CORE": "Compute (SM) Throughput / 100"
+    },
+    "mem_bandwidth_util": 0.0453,
+    "tensor_core_util": 0.33740000000000003
+  },
+  "cases": [
+    {
+      "name": "idle_control",
+      "command": [
+        "/home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse",
+        "--admission-telemetry-smoke"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/qos_measured_pressure_adapter/idle_control.stdout",
+      "stderr": "artifacts/validation/qos_measured_pressure_adapter/idle_control.stderr",
+      "trace": "artifacts/validation/qos_measured_pressure_adapter/idle_control.jsonl",
+      "input": {
+        "mem_bandwidth_util": 0.0,
+        "tensor_core_util": 0.0
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_measured_pressure_adapter/idle_control.jsonl",
+        "telemetry_mem_bandwidth_util": 0.0,
+        "telemetry_tensor_core_util": 0.0,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "CPU",
+        "decision_reason": 1,
+        "deferral_reason": 4,
+        "stats_total": 1,
+        "stats_gpu": 0,
+        "stats_cpu": 1
+      },
+      "trace_records": [
+        {
+          "timestamp_ns": 1782363226260016783,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.0,
+          "telemetry_tensor_core_util": 0.0,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "CPU",
+          "deferral_reason": 4,
+          "decision_reason": 1
+        }
+      ]
+    },
+    {
+      "name": "nsight_derived",
+      "command": [
+        "/home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse",
+        "--admission-telemetry-smoke"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/qos_measured_pressure_adapter/nsight_derived.stdout",
+      "stderr": "artifacts/validation/qos_measured_pressure_adapter/nsight_derived.stderr",
+      "trace": "artifacts/validation/qos_measured_pressure_adapter/nsight_derived.jsonl",
+      "input": {
+        "mem_bandwidth_util": 0.0453,
+        "tensor_core_util": 0.33740000000000003
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_measured_pressure_adapter/nsight_derived.jsonl",
+        "telemetry_mem_bandwidth_util": 0.0453,
+        "telemetry_tensor_core_util": 0.3374,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "GPU",
+        "decision_reason": 4,
+        "deferral_reason": 0,
+        "stats_total": 1,
+        "stats_gpu": 1,
+        "stats_cpu": 0
+      },
+      "trace_records": [
+        {
+          "timestamp_ns": 1782363226264553709,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.0453,
+          "telemetry_tensor_core_util": 0.3374,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "GPU",
+          "deferral_reason": 0,
+          "decision_reason": 4
+        }
+      ]
+    }
+  ]
+}

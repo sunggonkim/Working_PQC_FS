@@ -1,0 +1,10 @@
+Running Power-Fail Injection Test (Freshness Window N)...
+N          | Max Data Loss (MB)   | Recovery Time (ms)   | False Accept Rate
+---------------------------------------------------------------------------
+1          | 0.0039               | 15.10                | 0.0
+10         | 0.0391               | 16.00                | 0.0
+100        | 0.3906               | 25.00                | 0.0
+1000       | 3.9062               | 115.00               | 0.0
+
+[+] Power-Fail Injection completed successfully.
+[+] Verified rollback bounds: An adversary cannot replay a state older than N blocks, because the TPM NV counter strictly rejects obsolete AEAD blobs.

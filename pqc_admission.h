@@ -18,7 +18,7 @@
  *    CPU fast-lane p99 remains bounded under a saturated elastic queue."
  *
  *   This requires:
- *   - Route decision is 100% deterministic given input state.
+ *   - Route decision is deterministic given input state.
  *   - Trace records exact state at decision time.
  *   - E4 can replay traces and verify SLO protection causality.
  *

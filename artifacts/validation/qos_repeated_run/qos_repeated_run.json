@@ -1,0 +1,30 @@
+{
+  "runs": 3,
+  "note": "Prototype repetition only; not a PMU/CUPTI-backed stability proof.",
+  "records": [
+    {
+      "run": 1,
+      "returncode": 0,
+      "trace_file": "artifacts/validation/qos_repeated_run/run_1_run_qos_gpu_trace.jsonl",
+      "summary_file": "artifacts/validation/qos_repeated_run/run_1_run_qos_gpu_summary.json",
+      "trace_retained": true,
+      "summary_retained": true
+    },
+    {
+      "run": 2,
+      "returncode": 0,
+      "trace_file": "artifacts/validation/qos_repeated_run/run_2_run_qos_gpu_trace.jsonl",
+      "summary_file": "artifacts/validation/qos_repeated_run/run_2_run_qos_gpu_summary.json",
+      "trace_retained": true,
+      "summary_retained": true
+    },
+    {
+      "run": 3,
+      "returncode": 0,
+      "trace_file": "artifacts/validation/qos_repeated_run/run_3_run_qos_gpu_trace.jsonl",
+      "summary_file": "artifacts/validation/qos_repeated_run/run_3_run_qos_gpu_summary.json",
+      "trace_retained": true,
+      "summary_retained": true
+    }
+  ]
+}

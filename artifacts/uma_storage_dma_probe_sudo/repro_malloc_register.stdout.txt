@@ -1,0 +1,6 @@
+[*] Starting repro_malloc_register...
+[+] posix_memalign allocated 16MB at 0xffffbb15f000
+[*] Attempting cudaHostRegister on CPU memory...
+[+] cudaHostRegister SUCCESS! The memory is pinned.
+[+] cudaHostGetDevicePointer SUCCESS! Device ptr: 0xffffbb15f000
+[*] Done.

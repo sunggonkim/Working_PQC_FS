@@ -1,0 +1,20 @@
+{
+  "verified_artifact_maps": {
+    "crash_audit_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/crash_audit_report/crash_audit_report.json",
+    "platform_inventory_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/platform_inventory_report/platform_inventory_report.json",
+    "tpm_freshness_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_report/tpm_freshness_report.json",
+    "qos_repeated_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_repeated_report/qos_repeated_report.json",
+    "uma_storage_dma_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_report/uma_storage_dma_report.json",
+    "sqlite_fault_campaign": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json"
+  },
+  "status": {
+    "storage_dma": "open",
+    "qos_pmu_hysteresis": "open",
+    "tpm_freshness_hardware": "open",
+    "sqlite_app_recovery_campaign": "partial",
+    "full_multi_workload_app_recovery": "open",
+    "second_platform": "open",
+    "combined_durability": "open"
+  },
+  "note": "Dashboard only; all open items remain open until concrete evidence is retained."
+}

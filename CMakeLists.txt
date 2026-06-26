@@ -26,6 +26,10 @@ pkg_check_modules(FUSE3 REQUIRED IMPORTED_TARGET fuse3)
 # ── Find OpenSSL ────────────────────────────────────────────────────────────
 find_package(OpenSSL REQUIRED)
 
+# ── Find liburing ───────────────────────────────────────────────────────────
+find_library(URING_LIBRARY NAMES uring PATHS /usr/local/lib /usr/lib)
+find_path(URING_INCLUDE_DIR NAMES liburing.h PATHS /usr/local/include /usr/include)
+
 # ── Find liboqs ─────────────────────────────────────────────────────────────
 find_library(OQS_LIBRARY NAMES oqs PATHS /usr/local/lib /usr/lib)
 find_path(OQS_INCLUDE_DIR NAMES oqs/oqs.h PATHS /usr/local/include /usr/include)
@@ -59,7 +63,7 @@ endif()
 
 # ── Target 1: CPU Baseline (pqc_fuse) ──────────────────────────────────────
 if(HAS_OQS)
-    set(PQC_FUSE_SOURCES pqc_fuse.c pqc_anchor.c pqc_file_key.c pqc_admission.c)
+    set(PQC_FUSE_SOURCES pqc_fuse.c pqc_anchor.c pqc_admission.c)
     add_executable(pqc_fuse ${PQC_FUSE_SOURCES})
     target_link_libraries(pqc_fuse PRIVATE PkgConfig::FUSE3 OQS::oqs OpenSSL::Crypto pthread m dl)
 endif()
@@ -172,6 +176,29 @@ endif()
 
 # ── Microbenchmark / utility targets (existing) ─────────────────────────────
 if(CMAKE_CUDA_COMPILER AND HAS_OQS)
+    if(URING_LIBRARY AND URING_INCLUDE_DIR)
+        # repro_malloc_register — conservative cudaHostRegister smoke
+        add_executable(repro_malloc_register experiments/repro_malloc_register.cu)
+        set_target_properties(repro_malloc_register PROPERTIES
+            CUDA_SEPARABLE_COMPILATION ON
+            CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}"
+            INTERPROCEDURAL_OPTIMIZATION ON
+        )
+        target_link_libraries(repro_malloc_register PRIVATE OpenSSL::Crypto pthread)
+
+        # io_uring_uvm — conservative O_DIRECT + pinned-buffer smoke
+        add_executable(io_uring_uvm experiments/io_uring_uvm.cu)
+        set_target_properties(io_uring_uvm PROPERTIES
+            CUDA_SEPARABLE_COMPILATION ON
+            CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}"
+            INTERPROCEDURAL_OPTIMIZATION ON
+        )
+        target_include_directories(io_uring_uvm PRIVATE ${URING_INCLUDE_DIR})
+        target_link_libraries(io_uring_uvm PRIVATE ${URING_LIBRARY} OpenSSL::Crypto pthread)
+    else()
+        message(WARNING "liburing not found — UMA smoke executables will not be built")
+    endif()
+
     # workload_map_bench: fills CPU rows in artifacts/workload_map.csv
     if(EXISTS "${CMAKE_SOURCE_DIR}/experiments/workload_map_bench.cpp")
         add_executable(workload_map_bench experiments/workload_map_bench.cpp)

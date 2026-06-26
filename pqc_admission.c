@@ -24,10 +24,11 @@
 #include <pthread.h>
 #include <time.h>
 
-/* Global state (protected by mutex) */
+/* Global state (protected by state_lock, trace_file protected by trace_lock) */
 static struct {
     FILE *trace_file;
     pthread_mutex_t trace_lock;
+    pthread_mutex_t state_lock;
     uint64_t ai_budget_ns;
     uint64_t ai_queue_depth;
 
@@ -47,6 +48,7 @@ static struct {
 } g_admission __attribute__((unused)) = {
     .trace_file = NULL,
     .trace_lock = PTHREAD_MUTEX_INITIALIZER,
+    .state_lock = PTHREAD_MUTEX_INITIALIZER,
     .ai_budget_ns = 0,
     .ai_queue_depth = 0,
     .stats = {0},
@@ -126,8 +128,11 @@ void pqc_admission_shutdown(void)
 {
     if (g_admission.trace_file) {
         pqc_admission_stats_t stats_snapshot;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         memcpy(&stats_snapshot, &g_admission.stats, sizeof(stats_snapshot));
+        pthread_mutex_unlock(&g_admission.state_lock);
+
+        pthread_mutex_lock(&g_admission.trace_lock);
         /* Write final statistics */
         fprintf(g_admission.trace_file,
                 "# FINAL STATS: "
@@ -177,6 +182,15 @@ int pqc_admit(pqc_admission_context_t *ctx)
     ctx->queue_delay_ns = ctx->cpu_queue_depth * 1000ULL;
 
     /* ─────────────────────────────────────────────────────────────────────
+     * Step 0: Read dynamic telemetry under lock
+     * ───────────────────────────────────────────────────────────────────── */
+    pthread_mutex_lock(&g_admission.state_lock);
+    ctx->ai_qos_budget_remaining_ns = g_admission.ai_budget_ns;
+    double mem_bw = g_telemetry.mem_bandwidth_util;
+    double tc_util = g_telemetry.tensor_core_util;
+    pthread_mutex_unlock(&g_admission.state_lock);
+
+    /* ─────────────────────────────────────────────────────────────────────
      * Step 1: Hard constraints (size and deadline)
      * ───────────────────────────────────────────────────────────────────── */
 
@@ -184,10 +198,10 @@ int pqc_admit(pqc_admission_context_t *ctx)
         ctx->chosen_target = PQC_JOB_CPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_SIZE_TOO_SMALL;
         ctx->deferral_reason = PQC_ROUTE_REASON_SIZE_TOO_SMALL;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.size_too_small_count++;
-        pthread_mutex_unlock(&g_admission.trace_lock);
+        pthread_mutex_unlock(&g_admission.state_lock);
         pqc_scheduler_trace_log(ctx);
         return 0;
     }
@@ -196,10 +210,10 @@ int pqc_admit(pqc_admission_context_t *ctx)
         ctx->chosen_target = PQC_JOB_CPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_DEADLINE_ELAPSED;
         ctx->deferral_reason = PQC_ROUTE_REASON_DEADLINE_ELAPSED;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.deadline_exceeded_count++;
-        pthread_mutex_unlock(&g_admission.trace_lock);
+        pthread_mutex_unlock(&g_admission.state_lock);
         pqc_scheduler_trace_log(ctx);
         return 0;
     }
@@ -216,10 +230,10 @@ int pqc_admit(pqc_admission_context_t *ctx)
         ctx->chosen_target = PQC_JOB_CPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_AI_QOS_EXHAUSTED;
         ctx->deferral_reason = PQC_ROUTE_REASON_AI_QOS_EXHAUSTED;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.ai_budget_exhausted_count++;
-        pthread_mutex_unlock(&g_admission.trace_lock);
+        pthread_mutex_unlock(&g_admission.state_lock);
         pqc_scheduler_trace_log(ctx);
         return 0;
     }
@@ -228,18 +242,18 @@ int pqc_admit(pqc_admission_context_t *ctx)
      * Step 2.5: Phase-Aware Memory Interleaving (Milestone 3)
      * Detect LLM execution phase using memory bandwidth and Tensor Core telemetry.
      * ───────────────────────────────────────────────────────────────────── */
-    int is_llm_decoding = (g_telemetry.mem_bandwidth_util > 0.70 && g_telemetry.tensor_core_util < 0.30);
-    int is_llm_prefill  = (g_telemetry.tensor_core_util >= 0.30 && g_telemetry.mem_bandwidth_util <= 0.60);
+    int is_llm_decoding = (mem_bw > 0.70 && tc_util < 0.30);
+    int is_llm_prefill  = (tc_util >= 0.30 && mem_bw <= 0.60);
 
     if (is_llm_decoding) {
         /* Force PQC encryption to CPU fast lane to avoid GPU memory staging contention. */
         ctx->chosen_target = PQC_JOB_CPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_AI_QOS_EXHAUSTED;
         ctx->deferral_reason = PQC_ROUTE_REASON_AI_QOS_EXHAUSTED;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.ai_budget_exhausted_count++;
-        pthread_mutex_unlock(&g_admission.trace_lock);
+        pthread_mutex_unlock(&g_admission.state_lock);
         pqc_scheduler_trace_log(ctx);
         return 0;
     }
@@ -259,10 +273,10 @@ int pqc_admit(pqc_admission_context_t *ctx)
         ctx->chosen_target = PQC_JOB_CPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_COHERENCE_RISK;
         ctx->deferral_reason = PQC_ROUTE_REASON_COHERENCE_RISK;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.coherence_risk_count++;
-        pthread_mutex_unlock(&g_admission.trace_lock);
+        pthread_mutex_unlock(&g_admission.state_lock);
         pqc_scheduler_trace_log(ctx);
         return 0;
     }
@@ -281,21 +295,21 @@ int pqc_admit(pqc_admission_context_t *ctx)
         /* GPU is less congested; route there */
         ctx->chosen_target = PQC_JOB_GPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_QUEUE_PRESSURE;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.gpu_admitted_count++;
         g_admission.stats.queue_pressure_count++;
-        pthread_mutex_unlock(&g_admission.trace_lock);
+        pthread_mutex_unlock(&g_admission.state_lock);
     } else {
         /* CPU is better utilized */
         ctx->chosen_target = PQC_JOB_CPU;
         ctx->decision_reason |= PQC_ROUTE_REASON_GPU_ELIGIBLE;
         ctx->deferral_reason = PQC_ROUTE_REASON_QUEUE_PRESSURE;
-        pthread_mutex_lock(&g_admission.trace_lock);
+        pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.cpu_routed_count++;
         g_admission.stats.queue_pressure_count++;
-        pthread_mutex_unlock(&g_admission.trace_lock);
+        pthread_mutex_unlock(&g_admission.state_lock);
     }
 
     /* ─────────────────────────────────────────────────────────────────────
@@ -310,23 +324,24 @@ int pqc_admit(pqc_admission_context_t *ctx)
 void pqc_admission_update_ai_budget(uint64_t ai_budget_ns,
                                    uint64_t ai_inference_queue_depth)
 {
-    pthread_mutex_lock(&g_admission.trace_lock);
+    pthread_mutex_lock(&g_admission.state_lock);
 
     uint64_t old_budget = g_admission.ai_budget_ns;
     g_admission.ai_budget_ns = ai_budget_ns;
     g_admission.ai_queue_depth = ai_inference_queue_depth;
+    pthread_mutex_unlock(&g_admission.state_lock);
 
     /* Log budget transition */
     if (old_budget != ai_budget_ns && g_admission.trace_file) {
+        pthread_mutex_lock(&g_admission.trace_lock);
         fprintf(g_admission.trace_file,
                 "# AI_BUDGET_UPDATE: old=%llu ns, new=%llu ns, queue_depth=%llu\n",
                 (unsigned long long)old_budget,
                 (unsigned long long)ai_budget_ns,
                 (unsigned long long)ai_inference_queue_depth);
         fflush(g_admission.trace_file);
+        pthread_mutex_unlock(&g_admission.trace_lock);
     }
-
-    pthread_mutex_unlock(&g_admission.trace_lock);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -341,6 +356,11 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
     uint64_t now_ns = ts.tv_sec * 1000000000ULL + ts.tv_nsec;
+
+    pthread_mutex_lock(&g_admission.state_lock);
+    double mem_bandwidth_util = g_telemetry.mem_bandwidth_util;
+    double tensor_core_util = g_telemetry.tensor_core_util;
+    pthread_mutex_unlock(&g_admission.state_lock);
 
     /* Format JSON record (JSONL format) */
     char json_buf[2048];
@@ -359,12 +379,14 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
         "\"gpu_queue_depth\": %llu, "
         "\"cpu_load_avg\": %.2f, "
         "\"gpu_load_avg\": %.2f, "
+        "\"telemetry_mem_bandwidth_util\": %.4f, "
+        "\"telemetry_tensor_core_util\": %.4f, "
         "\"ai_qos_budget_remaining_ns\": %llu, "
         "\"uma_migration_bytes_est\": %llu, "
         "\"uma_migration_cost_ns\": %llu, "
         "\"chosen_target\": \"%s\", "
-        "\"deferral_reason\": 0x%02x, "
-        "\"decision_reason\": 0x%02x"
+        "\"deferral_reason\": %u, "
+        "\"decision_reason\": %u"
         "}\n",
         (unsigned long long)now_ns,
         (unsigned long long)ctx->batch_age_ns,
@@ -379,6 +401,8 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
         (unsigned long long)ctx->gpu_queue_depth,
         ctx->cpu_load_avg,
         ctx->gpu_load_avg,
+        mem_bandwidth_util,
+        tensor_core_util,
         (unsigned long long)ctx->ai_qos_budget_remaining_ns,
         (unsigned long long)ctx->uma_migration_bytes_est,
         (unsigned long long)ctx->uma_migration_cost_ns,
@@ -389,16 +413,17 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
     uint64_t total_requests;
 
     /* Write with lock to ensure atomicity and a consistent counter snapshot. */
-    pthread_mutex_lock(&g_admission.trace_lock);
+    pthread_mutex_lock(&g_admission.state_lock);
     total_requests = g_admission.stats.total_requests;
+    pthread_mutex_unlock(&g_admission.state_lock);
 
+    pthread_mutex_lock(&g_admission.trace_lock);
     fprintf(g_admission.trace_file, "%s", json_buf);
 
-    /* Periodic flush (every 10 records) */
-    if ((total_requests % 10) == 0) {
+    /* Periodic flush (every 100 records) */
+    if ((total_requests % 100) == 0) {
         fflush(g_admission.trace_file);
     }
-
     pthread_mutex_unlock(&g_admission.trace_lock);
 }
 
@@ -406,9 +431,9 @@ void pqc_scheduler_trace_stats(pqc_admission_stats_t *out_stats)
 {
     if (!out_stats) return;
 
-    pthread_mutex_lock(&g_admission.trace_lock);
+    pthread_mutex_lock(&g_admission.state_lock);
     memcpy(out_stats, &g_admission.stats, sizeof(*out_stats));
-    pthread_mutex_unlock(&g_admission.trace_lock);
+    pthread_mutex_unlock(&g_admission.state_lock);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -417,7 +442,7 @@ void pqc_scheduler_trace_stats(pqc_admission_stats_t *out_stats)
 
 void pqc_admission_record_uma_event(size_t uma_bytes, uint64_t uma_latency_ns)
 {
-    pthread_mutex_lock(&g_admission.trace_lock);
+    pthread_mutex_lock(&g_admission.state_lock);
     g_admission.uma_sample_count++;
     g_admission.uma_window_bytes += uma_bytes;
     g_admission.uma_window_latency_ns += uma_latency_ns;
@@ -429,14 +454,13 @@ void pqc_admission_record_uma_event(size_t uma_bytes, uint64_t uma_latency_ns)
         g_admission.uma_latency_ema_ns =
             ((g_admission.uma_latency_ema_ns * 7u) + uma_latency_ns) / 8u;
     }
-    pthread_mutex_unlock(&g_admission.trace_lock);
+    pthread_mutex_unlock(&g_admission.state_lock);
 }
 
 void pqc_admission_update_telemetry(double mem_bandwidth_util, double tensor_core_util)
 {
-    pthread_mutex_lock(&g_admission.trace_lock);
+    pthread_mutex_lock(&g_admission.state_lock);
     g_telemetry.mem_bandwidth_util = mem_bandwidth_util;
     g_telemetry.tensor_core_util = tensor_core_util;
-    pthread_mutex_unlock(&g_admission.trace_lock);
+    pthread_mutex_unlock(&g_admission.state_lock);
 }
-

@@ -1,0 +1,107 @@
+{
+  "trace": "cuda,osrt,tegra-accelerators",
+  "run_as_root": true,
+  "sudo_password_env": "PQC_SUDO_PASSWORD",
+  "include_um_smoke": true,
+  "include_managed_storage": true,
+  "include_ncu": true,
+  "ncu_set": "detailed",
+  "runs": [
+    {
+      "name": "raw_probe",
+      "mode": "nsys",
+      "command": [
+        "sudo",
+        "-S",
+        "/usr/local/cuda-13.0/bin/nsys",
+        "profile",
+        "--trace=cuda,osrt,tegra-accelerators",
+        "--output",
+        "artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe",
+        "python3",
+        "experiments/run_uma_storage_dma_probe.py",
+        "--nvme-device",
+        "/dev/nvme0n1",
+        "--out-dir",
+        "artifacts/validation/uma_storage_dma_profile_combined/probe"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"report\": \"artifacts/validation/uma_storage_dma_profile_combined/probe/uma_storage_dma_probe.json\",\n  \"checks\": 2\n}\nCollecting data...\nGenerating '/tmp/nsys-report-6750.qdstrm'\n\n[1/1] [0%                          ] nsys-report-d8f2.nsys-rep\n[1/1] [0%                          ] nsys-report-d8f2.nsys-rep\n[1/1] [10%                         ] nsys-report-d8f2.nsys-rep\n[1/1] [13%                         ] nsys-report-d8f2.nsys-rep\n[1/1] [=====30%                    ] nsys-report-d8f2.nsys-rep\n[1/1] [=========46%                ] nsys-report-d8f2.nsys-rep\n[1/1] [==========47%               ] nsys-report-d8f2.nsys-rep\n[1/1] [==========48%               ] nsys-report-d8f2.nsys-rep\n[1/1] [==========49%               ] nsys-report-d8f2.nsys-rep\n[1/1] [===========50%              ] nsys-report-d8f2.nsys-rep\n[1/1] [===========51%              ] nsys-report-d8f2.nsys-rep\n[1/1] [===========53%              ] nsys-report-d8f2.nsys-rep\n[1/1] [============54%             ] nsys-report-d8f2.nsys-rep\n[1/1] [============55%             ] nsys-report-d8f2.nsys-rep\n[1/1] [============56%             ] nsys-report-d8f2.nsys-rep\n[1/1] [============57%             ] nsys-report-d8f2.nsys-rep\n[1/1] [=============58%            ] nsys-report-d8f2.nsys-rep\n[1/1] [=============59%            ] nsys-report-d8f2.nsys-rep\n[1/1] [==============61%           ] nsys-report-d8f2.nsys-rep\n[1/1] [==================77%       ] nsys-report-d8f2.nsys-rep\n[1/1] [========================100%] nsys-report-d8f2.nsys-rep\n[1/1] [========================100%] nsys-report-d8f2.nsys-rep\nGenerated:\n\t/tmp/nsys-report-d8f2.nsys-rep\n",
+      "stderr": "[sudo] password for thor: Failed to create '/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe.nsys-rep': File exists.\nUse `--force-overwrite true` to overwrite existing files.\n",
+      "output_base": "artifacts/validation/uma_storage_dma_profile_combined/probe/raw_probe"
+    },
+    {
+      "name": "um_smoke",
+      "mode": "nsys",
+      "command": [
+        "sudo",
+        "-S",
+        "/usr/local/cuda-13.0/bin/nsys",
+        "profile",
+        "--trace=cuda,osrt,tegra-accelerators",
+        "--output",
+        "artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke",
+        "/home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse",
+        "--um-smoke"
+      ],
+      "returncode": 0,
+      "stdout": "{\"self_test_rc\":0,\"managed_alloc_bytes\":16777216,\"managed_free_bytes\":16777216,\"prefetch_to_device_bytes\":16777216,\"prefetch_to_host_bytes\":16777216,\"prefetch_device_calls\":1,\"prefetch_host_calls\":1}\nCollecting data...\nGenerating '/tmp/nsys-report-e886.qdstrm'\n\n[1/1] [0%                          ] nsys-report-5275.nsys-rep\n[1/1] [0%                          ] nsys-report-5275.nsys-rep\n[1/1] [6%                          ] nsys-report-5275.nsys-rep\n[1/1] [7%                          ] nsys-report-5275.nsys-rep\n[1/1] [======35%                   ] nsys-report-5275.nsys-rep\n[1/1] [==============63%           ] nsys-report-5275.nsys-rep\n[1/1] [==============64%           ] nsys-report-5275.nsys-rep\n[1/1] [===============65%          ] nsys-report-5275.nsys-rep\n[1/1] [===============67%          ] nsys-report-5275.nsys-rep\n[1/1] [================68%         ] nsys-report-5275.nsys-rep\n[1/1] [=================72%        ] nsys-report-5275.nsys-rep\n[1/1] [====================84%     ] nsys-report-5275.nsys-rep\n[1/1] [========================100%] nsys-report-5275.nsys-rep\n[1/1] [========================100%] nsys-report-5275.nsys-rep\nGenerated:\n\t/tmp/nsys-report-5275.nsys-rep\n",
+      "stderr": "Failed to create '/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke.nsys-rep': File exists.\nUse `--force-overwrite true` to overwrite existing files.\n",
+      "output_base": "artifacts/validation/uma_storage_dma_profile_combined/um_smoke/um_smoke"
+    },
+    {
+      "name": "managed_storage_probe",
+      "mode": "nsys",
+      "command": [
+        "sudo",
+        "-S",
+        "/usr/local/cuda-13.0/bin/nsys",
+        "profile",
+        "--trace=cuda,osrt,tegra-accelerators",
+        "--output",
+        "artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage",
+        "/home/thor/skim/pqc_encrpyted_fs/build/io_uring_uvm",
+        "--managed-buffer",
+        "/dev/nvme0n1"
+      ],
+      "returncode": 0,
+      "stdout": "[*] Allocating managed buffer...\n[+] Managed buffer allocated at: 0xfffd00000000\n[+] POINTER_ATTR managed_ptr_before_read type=managed device=0 host_ptr=0xfffd00000000 device_ptr=0xfffd00000000\n[+] HOST_FLAGS managed_ptr_before_read raw=0x2 portable=0 mapped=1 writecombined=0\n[+] RANGE_ATTR managed_ptr_before_read preferred_location_type=0(invalid)\n[+] RANGE_ATTR managed_ptr_before_read preferred_location_id=4294967294\n[+] RANGE_ATTR managed_ptr_before_read last_prefetch_location_type=0(invalid)\n[+] RANGE_ATTR managed_ptr_before_read last_prefetch_location_id=4294967294\n[*] Issuing buffered pread into managed buffer...\n[+] Buffered pread completed: 4194304 bytes\n[+] POINTER_ATTR managed_ptr_after_read type=managed device=0 host_ptr=0xfffd00000000 device_ptr=0xfffd00000000\n[+] HOST_FLAGS managed_ptr_after_read raw=0x2 portable=0 mapped=1 writecombined=0\n[+] RANGE_ATTR managed_ptr_after_read preferred_location_type=0(invalid)\n[+] RANGE_ATTR managed_ptr_after_read preferred_location_id=4294967294\n[+] RANGE_ATTR managed_ptr_after_read last_prefetch_location_type=0(invalid)\n[+] RANGE_ATTR managed_ptr_after_read last_prefetch_location_id=4294967294\n[*] Prefetching managed storage buffer to device 0...\n[+] POINTER_ATTR managed_ptr_after_prefetch_device type=managed device=0 host_ptr=0xfffd00000000 device_ptr=0xfffd00000000\n[+] HOST_FLAGS managed_ptr_after_prefetch_device raw=0x2 portable=0 mapped=1 writecombined=0\n[+] RANGE_ATTR managed_ptr_after_prefetch_device preferred_location_type=0(invalid)\n[+] RANGE_ATTR managed_ptr_after_prefetch_device preferred_location_id=4294967294\n[+] RANGE_ATTR managed_ptr_after_prefetch_device last_prefetch_location_type=1(device)\n[+] RANGE_ATTR managed_ptr_after_prefetch_device last_prefetch_location_id=0\n[*] Prefetching managed storage buffer back to host...\n[+] POINTER_ATTR managed_ptr_after_prefetch_host type=managed device=0 host_ptr=0xfffd00000000 device_ptr=0xfffd00000000\n[+] HOST_FLAGS managed_ptr_after_prefetch_host raw=0x2 portable=0 mapped=1 writecombined=0\n[+] RANGE_ATTR managed_ptr_after_prefetch_host preferred_location_type=0(invalid)\n[+] RANGE_ATTR managed_ptr_after_prefetch_host preferred_location_id=4294967294\n[+] RANGE_ATTR managed_ptr_after_prefetch_host last_prefetch_location_type=2(host)\n[+] RANGE_ATTR managed_ptr_after_prefetch_host last_prefetch_location_id=4294967295\n[*] Launching GPU checksum over the same storage-filled managed buffer...\n[+] CPU checksum over storage buffer: 0x0000000cd9141bd5\n[+] GPU managed-buffer checksum:      0x0000000cd9141bd5\n[+] CHECKSUM_MATCH: GPU observed the same storage-filled managed buffer\nCollecting data...\nGenerating '/tmp/nsys-report-cc94.qdstrm'\n\n[1/1] [0%                          ] managed_storage.nsys-rep\n[1/1] [0%                          ] managed_storage.nsys-rep\n[1/1] [6%                          ] managed_storage.nsys-rep\n[1/1] [7%                          ] managed_storage.nsys-rep\n[1/1] [======35%                   ] managed_storage.nsys-rep\n[1/1] [==============63%           ] managed_storage.nsys-rep\n[1/1] [==============64%           ] managed_storage.nsys-rep\n[1/1] [===============65%          ] managed_storage.nsys-rep\n[1/1] [===============66%          ] managed_storage.nsys-rep\n[1/1] [================70%         ] managed_storage.nsys-rep\n[1/1] [====================84%     ] managed_storage.nsys-rep\n[1/1] [========================100%] managed_storage.nsys-rep\n[1/1] [========================100%] managed_storage.nsys-rep\nGenerated:\n\t/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage.nsys-rep\n",
+      "stderr": "",
+      "output_base": "artifacts/validation/uma_storage_dma_profile_combined/managed_storage/managed_storage"
+    },
+    {
+      "name": "raw_probe_ncu",
+      "mode": "ncu",
+      "command": [
+        "sudo",
+        "-S",
+        "/usr/local/cuda-13.0/bin/ncu",
+        "--set",
+        "detailed",
+        "--kernel-name",
+        "regex:checksum_kernel",
+        "--target-processes",
+        "all",
+        "--export",
+        "artifacts/validation/uma_storage_dma_profile_combined/ncu/io_uring_uvm_checksum",
+        "--force-overwrite",
+        "/home/thor/skim/pqc_encrpyted_fs/build/io_uring_uvm",
+        "/dev/nvme0n1"
+      ],
+      "returncode": 0,
+      "stdout": "==PROF== Connected to process 2924563 (/home/thor/skim/pqc_encrpyted_fs/build/io_uring_uvm)\n==PROF== Profiling \"checksum_kernel\": 0%....50%....100% - 21 passes\n[*] Pinning memory via cudaHostRegister...\n[+] Memory pinned and mapped to device pointer: 0xffff9c44f000\n[+] POINTER_ATTR host_ptr type=host device=0 host_ptr=0xffff9c44f000 device_ptr=0xffff9c44f000\n[+] HOST_FLAGS host_ptr raw=0xa portable=0 mapped=1 writecombined=0\n[!] RANGE_ATTR host_ptr preferred_location_type error=invalid argument\n[!] RANGE_ATTR host_ptr preferred_location_id error=invalid argument\n[!] RANGE_ATTR host_ptr last_prefetch_location_type error=invalid argument\n[!] RANGE_ATTR host_ptr last_prefetch_location_id error=invalid argument\n[+] POINTER_ATTR device_alias type=host device=0 host_ptr=0xffff9c44f000 device_ptr=0xffff9c44f000\n[*] Submitting io_uring read request...\n[*] Polling for completion...\n[+] Async read completed: 4194304 bytes\n[*] Launching GPU checksum over the same storage-filled mapped buffer...\n[+] CPU checksum over storage buffer: 0x0000000cd9141bd5\n[+] GPU mapped-buffer checksum:      0x0000000cd9141bd5\n[+] CHECKSUM_MATCH: GPU observed the same O_DIRECT storage-filled pinned buffer\n==PROF== Disconnected from process 2924563\n==PROF== Report: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_profile_combined/ncu/io_uring_uvm_checksum.ncu-rep\n",
+      "stderr": "",
+      "output_base": "artifacts/validation/uma_storage_dma_profile_combined/ncu/io_uring_uvm_checksum",
+      "csv_path": "artifacts/validation/uma_storage_dma_profile_combined/ncu/io_uring_uvm_checksum.csv",
+      "import_command": [
+        "/usr/local/cuda-13.0/bin/ncu",
+        "--import",
+        "artifacts/validation/uma_storage_dma_profile_combined/ncu/io_uring_uvm_checksum.ncu-rep",
+        "--csv"
+      ],
+      "import_returncode": 0,
+      "import_stderr": ""
+    }
+  ],
+  "note": "Profiler wrapper only; not a proof of verified NVMe-to-UVM DMA semantics."
+}

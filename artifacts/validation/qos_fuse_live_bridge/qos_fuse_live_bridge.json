@@ -1,0 +1,423 @@
+{
+  "note": "Mounted-FUSE workload plus live tegrastats bridge. This is same-run throttling evidence, not a PMU/CUPTI/Nsight-backed in-daemon controller proof.",
+  "samples_requested": 6,
+  "samples_recorded": 6,
+  "gpu_burner_started": true,
+  "decision_counts": {
+    "CPU": 6
+  },
+  "throttle_state_counts": {
+    "open": 0,
+    "throttled": 6
+  },
+  "writer_stats": {
+    "chunks_written": 48,
+    "bytes_written": 6291456,
+    "throttle_sleeps": 26,
+    "sleep_time_s": 1.3000000000000005,
+    "elapsed_s": 2.1980561101809144,
+    "throughput_mb_s": 2.729684639172455
+  },
+  "mount_logs": {
+    "stdout": "artifacts/validation/qos_fuse_live_bridge/mount_logs/pqc_fuse.stdout.txt",
+    "stderr": "artifacts/validation/qos_fuse_live_bridge/mount_logs/pqc_fuse.stderr.txt"
+  },
+  "samples": [
+    {
+      "sample": 1,
+      "returncode": 0,
+      "telemetry": {
+        "raw": "06-26-2026 17:45:59 RAM 9375/125772MB (lfb 2599x4MB) CPU [6%@2601,62%@2601,18%@2601,3%@2601,8%@2601,12%@2601,14%@2601,0%@2601,3%@2601,25%@2601,3%@2601,3%@2601,3%@2601,46%@2601] EMC_FREQ 0%@4266 GR3D_FREQ @[1574,1574,1574] NVENC0_FREQ @1691 NVENC1_FREQ @1691 NVDEC0_FREQ @1691 NVDEC1_FREQ @1691 NVJPG0_FREQ @1691 VIC off OFA_FREQ @1691 PVA0_FREQ off APE 300 cpu@47.312C tj@49.343C soc012@46.375C gpu@49.343C soc345@48.75C VDD_GPU 28081mW/28081mW VDD_CPU_SOC_MSS 10291mW/10291mW VIN_SYS_5V0 7010mW/7010mW VIN 63694mW/63694mW",
+        "gpu_power_mw": 28081,
+        "gr3d_percent": null,
+        "mem_bandwidth_util": 0.8023142857142858,
+        "tensor_core_util": 0.0
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_fuse_live_bridge/sample_01.jsonl",
+        "telemetry_mem_bandwidth_util": 0.8023,
+        "telemetry_tensor_core_util": 0.0,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "CPU",
+        "decision_reason": 2,
+        "deferral_reason": 2,
+        "stats_total": 1,
+        "stats_gpu": 0,
+        "stats_cpu": 0
+      },
+      "trace": "artifacts/validation/qos_fuse_live_bridge/sample_01.jsonl",
+      "stdout": "artifacts/validation/qos_fuse_live_bridge/sample_01.stdout",
+      "stderr": "artifacts/validation/qos_fuse_live_bridge/sample_01.stderr",
+      "trace_rows": [
+        {
+          "timestamp_ns": 1782463559676426710,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.8023,
+          "telemetry_tensor_core_util": 0.0,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "CPU",
+          "deferral_reason": 2,
+          "decision_reason": 2
+        }
+      ],
+      "throttle_decision": {
+        "state": "throttled",
+        "event": "enter",
+        "throttle": 1,
+        "pressure_value": 28081.0,
+        "enter_threshold": 15000.0,
+        "exit_threshold": 9000.0,
+        "hold_samples": 2,
+        "below_exit_count": 0
+      }
+    },
+    {
+      "sample": 2,
+      "returncode": 0,
+      "telemetry": {
+        "raw": "06-26-2026 17:45:59 RAM 9375/125772MB (lfb 2599x4MB) CPU [0%@2601,37%@2601,3%@2601,3%@2601,0%@2601,7%@2601,0%@2601,3%@2601,3%@2601,0%@2601,17%@2601,0%@2601,14%@2601,16%@2601] EMC_FREQ 0%@4266 GR3D_FREQ @[1574,1574,1574] NVENC0_FREQ @1691 NVENC1_FREQ @1691 NVDEC0_FREQ @1691 NVDEC1_FREQ @1691 NVJPG0_FREQ @1691 VIC off OFA_FREQ @1691 PVA0_FREQ off APE 300 cpu@45.375C tj@49.656C soc012@44.625C gpu@49.656C soc345@48.875C VDD_GPU 30455mW/29268mW VDD_CPU_SOC_MSS 9896mW/10094mW VIN_SYS_5V0 6908mW/6959mW VIN 57402mW/60548mW",
+        "gpu_power_mw": 30455,
+        "gr3d_percent": null,
+        "mem_bandwidth_util": 0.8701428571428571,
+        "tensor_core_util": 0.0
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_fuse_live_bridge/sample_02.jsonl",
+        "telemetry_mem_bandwidth_util": 0.8701,
+        "telemetry_tensor_core_util": 0.0,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "CPU",
+        "decision_reason": 2,
+        "deferral_reason": 2,
+        "stats_total": 1,
+        "stats_gpu": 0,
+        "stats_cpu": 0
+      },
+      "trace": "artifacts/validation/qos_fuse_live_bridge/sample_02.jsonl",
+      "stdout": "artifacts/validation/qos_fuse_live_bridge/sample_02.stdout",
+      "stderr": "artifacts/validation/qos_fuse_live_bridge/sample_02.stderr",
+      "trace_rows": [
+        {
+          "timestamp_ns": 1782463559947135080,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.8701,
+          "telemetry_tensor_core_util": 0.0,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "CPU",
+          "deferral_reason": 2,
+          "decision_reason": 2
+        }
+      ],
+      "throttle_decision": {
+        "state": "throttled",
+        "event": "hold",
+        "throttle": 1,
+        "pressure_value": 30455.0,
+        "enter_threshold": 15000.0,
+        "exit_threshold": 9000.0,
+        "hold_samples": 2,
+        "below_exit_count": 0
+      }
+    },
+    {
+      "sample": 3,
+      "returncode": 0,
+      "telemetry": {
+        "raw": "06-26-2026 17:46:00 RAM 9375/125772MB (lfb 2599x4MB) CPU [3%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,3%@2601,0%@2601] EMC_FREQ 0%@4266 GR3D_FREQ @[1574,1574,1574] NVENC0_FREQ @1691 NVENC1_FREQ @1691 NVDEC0_FREQ @1691 NVDEC1_FREQ @1691 NVJPG0_FREQ @1691 VIC off OFA_FREQ @1691 PVA0_FREQ off APE 300 cpu@45.5C tj@49.906C soc012@44.593C gpu@49.906C soc345@49.25C VDD_GPU 31641mW/30059mW VDD_CPU_SOC_MSS 8708mW/9632mW VIN_SYS_5V0 6807mW/6908mW VIN 56882mW/59326mW",
+        "gpu_power_mw": 31641,
+        "gr3d_percent": null,
+        "mem_bandwidth_util": 0.9040285714285714,
+        "tensor_core_util": 0.0
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_fuse_live_bridge/sample_03.jsonl",
+        "telemetry_mem_bandwidth_util": 0.904,
+        "telemetry_tensor_core_util": 0.0,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "CPU",
+        "decision_reason": 2,
+        "deferral_reason": 2,
+        "stats_total": 1,
+        "stats_gpu": 0,
+        "stats_cpu": 0
+      },
+      "trace": "artifacts/validation/qos_fuse_live_bridge/sample_03.jsonl",
+      "stdout": "artifacts/validation/qos_fuse_live_bridge/sample_03.stdout",
+      "stderr": "artifacts/validation/qos_fuse_live_bridge/sample_03.stderr",
+      "trace_rows": [
+        {
+          "timestamp_ns": 1782463560218518711,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.904,
+          "telemetry_tensor_core_util": 0.0,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "CPU",
+          "deferral_reason": 2,
+          "decision_reason": 2
+        }
+      ],
+      "throttle_decision": {
+        "state": "throttled",
+        "event": "hold",
+        "throttle": 1,
+        "pressure_value": 31641.0,
+        "enter_threshold": 15000.0,
+        "exit_threshold": 9000.0,
+        "hold_samples": 2,
+        "below_exit_count": 0
+      }
+    },
+    {
+      "sample": 4,
+      "returncode": 0,
+      "telemetry": {
+        "raw": "06-26-2026 17:46:00 RAM 9375/125772MB (lfb 2599x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,3%@2601,0%@2601,13%@2601] EMC_FREQ 0%@4266 GR3D_FREQ @[1574,1574,1574] NVENC0_FREQ @1691 NVENC1_FREQ @1691 NVDEC0_FREQ @1691 NVDEC1_FREQ @1691 NVJPG0_FREQ @1691 VIC off OFA_FREQ @1691 PVA0_FREQ off APE 300 cpu@45.531C tj@49.968C soc012@44.562C gpu@49.968C soc345@49.281C VDD_GPU 31641mW/30455mW VDD_CPU_SOC_MSS 8312mW/9302mW VIN_SYS_5V0 6705mW/6858mW VIN 57458mW/58859mW",
+        "gpu_power_mw": 31641,
+        "gr3d_percent": null,
+        "mem_bandwidth_util": 0.9040285714285714,
+        "tensor_core_util": 0.0
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_fuse_live_bridge/sample_04.jsonl",
+        "telemetry_mem_bandwidth_util": 0.904,
+        "telemetry_tensor_core_util": 0.0,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "CPU",
+        "decision_reason": 2,
+        "deferral_reason": 2,
+        "stats_total": 1,
+        "stats_gpu": 0,
+        "stats_cpu": 0
+      },
+      "trace": "artifacts/validation/qos_fuse_live_bridge/sample_04.jsonl",
+      "stdout": "artifacts/validation/qos_fuse_live_bridge/sample_04.stdout",
+      "stderr": "artifacts/validation/qos_fuse_live_bridge/sample_04.stderr",
+      "trace_rows": [
+        {
+          "timestamp_ns": 1782463560490203328,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.904,
+          "telemetry_tensor_core_util": 0.0,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "CPU",
+          "deferral_reason": 2,
+          "decision_reason": 2
+        }
+      ],
+      "throttle_decision": {
+        "state": "throttled",
+        "event": "hold",
+        "throttle": 1,
+        "pressure_value": 31641.0,
+        "enter_threshold": 15000.0,
+        "exit_threshold": 9000.0,
+        "hold_samples": 2,
+        "below_exit_count": 0
+      }
+    },
+    {
+      "sample": 5,
+      "returncode": 0,
+      "telemetry": {
+        "raw": "06-26-2026 17:46:00 RAM 9377/125772MB (lfb 2599x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,3%@2601,0%@2601,0%@2601,0%@2601,0%@2601,3%@2601,0%@2601,0%@2601,4%@2601] EMC_FREQ 0%@4266 GR3D_FREQ @[1574,1574,1574] NVENC0_FREQ @1691 NVENC1_FREQ @1691 NVDEC0_FREQ @1691 NVDEC1_FREQ @1691 NVJPG0_FREQ @1691 VIC off OFA_FREQ @1691 PVA0_FREQ off APE 300 cpu@45.718C tj@50.187C soc012@44.656C gpu@50.187C soc345@49.562C VDD_GPU 32432mW/30850mW VDD_CPU_SOC_MSS 8312mW/9104mW VIN_SYS_5V0 6705mW/6827mW VIN 57536mW/58594mW",
+        "gpu_power_mw": 32432,
+        "gr3d_percent": null,
+        "mem_bandwidth_util": 0.9266285714285715,
+        "tensor_core_util": 0.0
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_fuse_live_bridge/sample_05.jsonl",
+        "telemetry_mem_bandwidth_util": 0.9266,
+        "telemetry_tensor_core_util": 0.0,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "CPU",
+        "decision_reason": 2,
+        "deferral_reason": 2,
+        "stats_total": 1,
+        "stats_gpu": 0,
+        "stats_cpu": 0
+      },
+      "trace": "artifacts/validation/qos_fuse_live_bridge/sample_05.jsonl",
+      "stdout": "artifacts/validation/qos_fuse_live_bridge/sample_05.stdout",
+      "stderr": "artifacts/validation/qos_fuse_live_bridge/sample_05.stderr",
+      "trace_rows": [
+        {
+          "timestamp_ns": 1782463560762514314,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.9266,
+          "telemetry_tensor_core_util": 0.0,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "CPU",
+          "deferral_reason": 2,
+          "decision_reason": 2
+        }
+      ],
+      "throttle_decision": {
+        "state": "throttled",
+        "event": "hold",
+        "throttle": 1,
+        "pressure_value": 32432.0,
+        "enter_threshold": 15000.0,
+        "exit_threshold": 9000.0,
+        "hold_samples": 2,
+        "below_exit_count": 0
+      }
+    },
+    {
+      "sample": 6,
+      "returncode": 0,
+      "telemetry": {
+        "raw": "06-26-2026 17:46:01 RAM 9378/125772MB (lfb 2599x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,3%@2601,0%@2601,13%@2601] EMC_FREQ 0%@4266 GR3D_FREQ @[1574,1574,1574] NVENC0_FREQ @1691 NVENC1_FREQ @1691 NVDEC0_FREQ @1691 NVDEC1_FREQ @1691 NVJPG0_FREQ @1691 VIC off OFA_FREQ @1691 PVA0_FREQ off APE 300 cpu@45.937C tj@50.375C soc012@44.781C gpu@50.375C soc345@49.75C VDD_GPU 32828mW/31180mW VDD_CPU_SOC_MSS 7916mW/8906mW VIN_SYS_5V0 6705mW/6807mW VIN 57898mW/58478mW",
+        "gpu_power_mw": 32828,
+        "gr3d_percent": null,
+        "mem_bandwidth_util": 0.9379428571428572,
+        "tensor_core_util": 0.0
+      },
+      "summary": {
+        "event": "admission_telemetry_smoke",
+        "rc": 0,
+        "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_fuse_live_bridge/sample_06.jsonl",
+        "telemetry_mem_bandwidth_util": 0.9379,
+        "telemetry_tensor_core_util": 0.0,
+        "ai_budget_ns": 2000000,
+        "cpu_queue_depth": 1,
+        "gpu_queue_depth": 1,
+        "bytes_total": 131072,
+        "chosen_target": "CPU",
+        "decision_reason": 2,
+        "deferral_reason": 2,
+        "stats_total": 1,
+        "stats_gpu": 0,
+        "stats_cpu": 0
+      },
+      "trace": "artifacts/validation/qos_fuse_live_bridge/sample_06.jsonl",
+      "stdout": "artifacts/validation/qos_fuse_live_bridge/sample_06.stdout",
+      "stderr": "artifacts/validation/qos_fuse_live_bridge/sample_06.stderr",
+      "trace_rows": [
+        {
+          "timestamp_ns": 1782463561034312627,
+          "batch_age_ns": 0,
+          "batch_count": 1,
+          "bytes_total": 131072,
+          "queue_delay_ns": 1000,
+          "service_time_ns": 300000,
+          "gpu_kernel_est_ns": 100000,
+          "gpu_h2d_staging_ns": 100000,
+          "gpu_d2h_staging_ns": 100000,
+          "cpu_queue_depth": 1,
+          "gpu_queue_depth": 1,
+          "cpu_load_avg": 0.0,
+          "gpu_load_avg": 0.0,
+          "telemetry_mem_bandwidth_util": 0.9379,
+          "telemetry_tensor_core_util": 0.0,
+          "ai_qos_budget_remaining_ns": 2000000,
+          "uma_migration_bytes_est": 0,
+          "uma_migration_cost_ns": 0,
+          "chosen_target": "CPU",
+          "deferral_reason": 2,
+          "decision_reason": 2
+        }
+      ],
+      "throttle_decision": {
+        "state": "throttled",
+        "event": "hold",
+        "throttle": 1,
+        "pressure_value": 32828.0,
+        "enter_threshold": 15000.0,
+        "exit_threshold": 9000.0,
+        "hold_samples": 2,
+        "below_exit_count": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+==PROF== Connected to process 2392403 (/home/thor/skim/pqc_encrpyted_fs/build/io_uring_uvm)
+==PROF== Profiling "checksum_kernel": 0%....50%....100% - 21 passes
+[*] Pinning memory via cudaHostRegister...
+[+] Memory pinned and mapped to device pointer: 0xffff7f2af000
+[*] Submitting io_uring read request...
+[*] Polling for completion...
+[+] Async read completed: 4194304 bytes
+[*] Launching GPU checksum over the same storage-filled mapped buffer...
+[+] CPU checksum over storage buffer: 0x0000000cd9141bd5
+[+] GPU mapped-buffer checksum:      0x0000000cd9141bd5
+[+] CHECKSUM_MATCH: GPU observed the same O_DIRECT storage-filled pinned buffer
+==PROF== Disconnected from process 2392403
+==PROF== Report: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_ncu/io_uring_uvm_checksum_detailed.ncu-rep

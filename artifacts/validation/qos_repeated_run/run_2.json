@@ -1,0 +1,10 @@
+{
+  "run": 2,
+  "returncode": 0,
+  "stdout": "=== Real Telemetry Admission Control Experiment ===\n\n--- RUN: Telemetry ENABLED (AEGIS-Q QoS) ---\n[I/O Worker] Started background I/O processing...\n\n[I/O Worker] Finished 50 MB in 0.25 s (198.13 MB/s)\n[AI Worker] Launching Heavy CUDA GPU Burner (YOLOv8 simulation)...\n[Telemetry] Daemon started, parsing REAL tegrastats...\n[Result] AI Heavy Workload Latency (Enabled): 5829.69 ms\n\nExperiment Complete. Telemetry/QoS prototype run finished; this is not a validated closed-loop controller.\n",
+  "stderr": "",
+  "trace_file": "artifacts/validation/qos_repeated_run/run_2_run_qos_gpu_trace.jsonl",
+  "summary_file": "artifacts/validation/qos_repeated_run/run_2_run_qos_gpu_summary.json",
+  "trace_retained": true,
+  "summary_retained": true
+}

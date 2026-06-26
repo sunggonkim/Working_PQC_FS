@@ -1,52 +1,272 @@
-\section*{Appendix A \\ Staging and Telemetry Performance Analysis}
+\section{Artifact Contract and Detailed Validation}
 \label{sec:appendix}
 
-The effectiveness of UVM staging in AEGIS-Q relies on the batch size and queue pressure of block jobs during filesystem updates.
+This appendix is part of the evidence contract for the revised paper.  It lists the exact executable paths, outcomes, and exclusions behind every result.  The goal is not to make the artifact look broader than it is; it is to let a reviewer reproduce, reject, or extend each individual claim without recovering undocumented state from an old figure.
 
-\subsection{Theoretical Basis}
+\subsection{Build and execution protocol}
 \label{sec:app_theory}
 
-For an $n$-block write stream initialized to sequential logical blocks, the filesystem writes metadata journal records. Let the effective scheduling overhead be modeled as:
-\begin{equation}
-T_{\text{overhead}} = \alpha + \beta \cdot \frac{N_{\text{blocks}}}{B_{\text{coalesced}}}
-\end{equation}
-where $\alpha$ represents the FUSE context switch latency, $\beta$ represents the NVMe storage block mapping overhead, $N_{\text{blocks}}$ is the total number of blocks, and $B_{\text{coalesced}}$ is the coalesced batch size. This represents the minimum queue delay and maximum throughput. The admission controller collapses small sequential writes, reducing metadata overhead and achieving scaling ratios $>$ 200$\times$ under coalescing.
+The final binary is configured and built with the following command sequence:
+\begin{verbatim}
+cmake -S . -B build \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build build --parallel 2
+ctest --test-dir build --output-on-failure
+PQC_MASTER_PASSWORD=validation-password \
+  ./build/pqc_fuse --self-test
+\end{verbatim}
+The C and C++ targets use \texttt{-Wall -Wextra -Werror}.  The GPU integrity CTest invokes the same executable used by the paper's parity evidence.  A successful build is not treated as evidence of any unmeasured device-I/O behavior; it only establishes that the code path and linked CUDA/cuPQC libraries are usable on the measured platform.
 
-\subsection{Impact of Batch Size}
+The raw microbenchmark protocol is:
+\begin{verbatim}
+python3 experiments/run_verified_microbench.py \
+  --runs 3 --out artifacts/validation/microbench
+python3 experiments/plot_verified_microbench.py
+\end{verbatim}
+For each repetition, the harness first invokes the integrity-parity executable with its test-only option.  It then captures a complete CSV from \texttt{workload\_map\_bench} and \texttt{bench\_gpu\_pqc}.  The harness writes no model values.  If a command fails, the run fails; if an executor reports \texttt{unsupported}, the plotter refuses to manufacture a value.  The summary contains device model, kernel, CUDA compiler version, CPU count, commands, per-run medians, and observed range.
+
+The CPU AES-GCM benchmark applies OpenSSL AES-256-GCM to 4~KiB logical blocks and reports aggregate wall-clock throughput.  The GPU path uses the repository's managed-buffer executor, including its staging and synchronization.  Thus, the figure is intentionally a data-path placement measurement rather than an isolated kernel throughput comparison.  The ML-KEM comparison uses the same batch size (4,096) for liboqs and cuPQC key generation.  It does not measure key distribution, receiver provisioning, filesystem metadata, or FUSE operations.
+
+\subsection{Format invariants and recovery reasoning}
+
+The secure format maintains the following implementation invariants.
+\begin{enumerate}
+  \item \textbf{Envelope-before-use.} A file context is constructed only after its envelope's magic, version, length, and HMAC validate.  The recovered DEK is then used only with its bound file identifier.
+  \item \textbf{Unique record context.} The AEAD nonce and associated data depend on file identifier, logical block, generation, and logical length.  A rewrite obtains a later generation.
+  \item \textbf{Data before publication.} The ciphertext sidecar is durable before the corresponding journal mapping is durable.  Recovery ignores a ciphertext tail without a complete mapping.
+  \item \textbf{Authenticated checkpoint.} The logical size and latest generation are checked before the file is exposed with its logical length.
+  \item \textbf{No optimistic accelerator admission.} A job without a nonzero supplied slack budget is routed to the CPU.  A positive CUDA capability query alone never admits it to the GPU.
+\end{enumerate}
+
+These invariants describe the code, not a full formal proof.  In particular, the checkpoint and xattrs rely on lower-filesystem semantics, and the current test suite does not enumerate every torn-write interval, concurrent open, rename, \texttt{mmap}, or directory-\texttt{fsync} case.  A complete crash study should inject failure after each durable boundary and compare recovered state against an external oracle.
+
+\subsection{Validation matrix}
 \label{sec:app_batch_size}
 
-When block operations are dispatched to the GPU, a batch size of $M$ blocks is accumulated. Let the dispatch delay be $T_{\text{wait}}$, and the GPU execution time be $T_{\text{compute}}$. The total processing latency per batch is:
-\begin{equation}
-T_{\text{batch}} = T_{\text{wait}}(M) + T_{\text{launch}} + \frac{M \cdot S_{\text{block}}}{R_{\text{gpu}}}
-\end{equation}
-where $R_{\text{gpu}}$ is the GPU cryptographic processing rate, and $T_{\text{launch}}$ is the kernel launch overhead. When $M$ is small, the launch overhead dominates, leading to low throughput. When $M$ is large (e.g. $M \ge 4096$), the launch overhead is amortized, achieving a high processing throughput. Conversely, a full queue of uncoalesced block jobs creates high contention where all slots are occupied, maximizing CPU load and reducing GPU scheduling efficiency. AEGIS-Q exploits sequential block locality. As observed in Table VI, workloads like TPM anchoring (highly structured but sequential) maintain high throughput, whereas Random write workloads rapidly approach the uncacheable I/O limit.
-
-\begin{table}[h]
+\begin{table*}[t]
 \centering
-\caption{Representative secure-storage workloads and typical scheduling behavior.}
-\vspace{-.2cm}
-\scriptsize
-\begin{tabularx}{\columnwidth}{l|c|c|X}
+\caption{Final validation matrix. A pass is narrowly interpreted as the stated observation; no row implies an unlisted systems or security guarantee.}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{P{0.20\textwidth}|P{0.22\textwidth}|Y|P{0.18\textwidth}}
 \toprule
-\textbf{Workload} & \textbf{Workload Sizes} & \textbf{Typical Queue} & \textbf{Typical Staging} \\
+\textbf{Check} & \textbf{Command/artifact} & \textbf{Observed outcome} & \textbf{Excluded claim}\\
 \midrule
-TPM Anchor & 16\,KB--16\,GB & low & High ($\gg$100$\times$) \\
-Integrity Hash & 64\,KB--16\,GB & medium & Moderate (10--50$\times$) \\
-Random I/O & 16\,MB--256\,GB & variable & Low ($\approx$ 1--5$\times$) \\
+Strict build & CMake + \texttt{ctest} & Build succeeds; two integrity CTests pass & Portability or performance\\
+Storage self-test & \texttt{pqc\_fuse --self-test} & Scheduler, checkpoint, anchor, and storage unit checks pass & Full application semantics\\
+Managed-memory smoke & \texttt{pqc\_fuse --um-smoke} & Managed allocation, host/device prefetch, and a managed-buffer kernel touch complete & DMA registration, pinning, or UVM ownership permissions\\
+FUSE remount & \texttt{fuse\_roundtrip.json} & 128~KiB encrypted byte round trip survives clean remount & SQLite/WAL or power-fail correctness\\
+Envelope tamper & \nolinkurl{fuse_tamper_rejection.json} & Altered metadata HMAC is rejected at open (\texttt{EKEYREJECTED}) & Full ciphertext/journal tamper campaign\\
+GPU integrity & \texttt{bench\_gpu\_integrity --only-tests} & SHA-256 leaf/Merkle outputs match OpenSSL cases & Constant-time or leakage resistance\\
+Primitive placement & \texttt{microbench/summary.json} & CPU AES-GCM and GPU ML-KEM asymmetry measured & Filesystem-level speedup\\
+Scheduler smoke & \texttt{admission\_sweep.json} & Zero-slack CPU fallback and deterministic branch changes & AI latency protection\\
+File-anchor replay & \texttt{replay\_file\_summary.json} & Restored snapshots remain visible (negative control) & Rollback resistance\\
+Unprovisioned TPM & \texttt{tpm\_unprovisioned.json} & Mount initialization fails closed & TPM policy correctness or latency\\
 \bottomrule
 \end{tabularx}
 \label{tab:workload_behavior}
-\end{table}
+\end{table*}
 
-\subsection{Memory Traffic Model}
+\subsection{Reproducing the remount and replay checks}
+
+The clean-remount test starts the final FUSE binary with a fixed test-only password, writes 32 random 4~KiB blocks, flushes, cleanly unmounts, remounts with the same password, and byte-compares the recovered file.  It then searches the ciphertext sidecar for the complete original input sequence.  This is intentionally a regression test: it verifies the repaired envelope can recover its DEK after remount and that the sidecar is not simply a duplicate of the complete plaintext.  The result is retained in \nolinkurl{fuse_roundtrip.json}.  It is not a cryptographic indistinguishability test.
+
+The replay harness copies the entire backing directory after a baseline write, writes and flushes an update, restores the copy, and remounts.  For the file anchor, seeing the baseline is the expected negative-control result because the anchor is inside the copied directory.  The harness labels this \texttt{rollback\_visible}.  The previous label, \texttt{rollback\_reject}, was incorrect and is not used by this paper.  Hardware mode is skipped unless a TPM NV index is already provisioned; the test never creates or deletes a persistent TPM resource.
+
+\subsection{Scheduler inputs and non-goals}
 \label{sec:app_traffic}
 
-The total staging traffic $D_{\text{total}}$ for a workload with $G$ block write updates and effective batching factor $r$ is:
-\begin{equation}
-D_{\text{total}} = \sum_{g=1}^G \frac{S_{\text{block}}}{r_g} \times 2
-\end{equation}
-where $S_{\text{block}}$ is the block size and factor 2 accounts for read/write. When the write rate exceeds the available Unified Memory staging bandwidth ($B_{\text{uma}}$), memory page migration stalls occur:
-\begin{equation}
-\frac{S_{\text{block}}}{r_g \cdot B_{\text{uma}}} > T_{\text{compute}}
-\end{equation}
-causing the system to become I/O bound. Our experiments confirm this transition occurs around 1\,GB to 4\,GB workloads for random writes on the Jetson Orin Nano.
+The scheduler smoke test is designed to make policy logic inspectable.  It supplies three jobs: a 4~KiB ineligible job, a 128~KiB eligible job, and a 256~KiB eligible job.  It also supplies a queue-bound eligible job.  The input environment variable \texttt{PQC\_SCHED\_SMOKE\_AI\_BUDGET\_NS} controls the slack value; at zero all jobs are CPU-routed.  At a positive value sufficient for the test policy, the two larger jobs route to GPU and the queue-bound job remains CPU-routed.  The output is JSON Lines with the complete input state and selected target.
+
+This test is deliberately not connected to TensorRT.  The repository now has a retained adapter that maps Nsight-derived memory/SM throughput counters into the admission telemetry inputs, but it still has no validated producer of remaining AI slack during the foreground workload and no measurement showing that a supplied threshold predicts a deadline.  A future implementation should provide a versioned telemetry interface with sampling interval, timestamp source, calibration procedure, hysteresis, stale-sample behavior, and a CPU fallback when that interface fails.  Only then can a scheduler trace become part of an end-to-end QoS argument.
+
+\subsection{Claim-to-evidence rules}
+
+The following rules govern revisions to the paper.  A performance number must identify the raw artifact, operation, batch size, executor, wall-clock boundary, platform, and repetition count.  A security statement must identify the adversary, trusted components, key state, failure behavior, and evidence type.  An implementation statement must identify an actual API call in the source rather than a plausible API sequence.  Finally, an unavailable result is recorded as unavailable or scoped out; it is never filled with a simulator, a sleep-derived estimate, or a number copied from a different machine.
+
+\subsection{Crash-state model and recovery oracle}
+
+The recovery protocol can be expressed as a sequence of persistent states for
+one logical write.  Let $D_i$ be the ciphertext record for generation $i$,
+$J_i$ the complete journal mapping that references it, and $C_i$ the
+checkpoint that reports the committed generation and logical size.  The writer
+attempts the transitions
+\[
+\begin{aligned}
+ (D_{i-1},J_{i-1},C_{i-1}) &\rightarrow (D_i,J_{i-1},C_{i-1}) \\
+ &\rightarrow (D_i,J_i,C_{i-1}) \rightarrow (D_i,J_i,C_i).
+\end{aligned}
+\]
+The first transition becomes recoverable only after the data-sidecar durability
+barrier.  The second becomes visible only after the journal-sidecar barrier.
+The third updates logical length and the authenticated checkpoint.  A correct
+oracle for a fault campaign must retain an independent record of the last
+acknowledged write and, after each injected interruption, classify recovery as
+one of: prior committed state, latest committed state, fail closed, silent
+corruption, or unexpected liveness failure.  A successful mount alone is not
+enough evidence.
+
+The current harness is intentionally smaller.  It covers clean remount and
+whole-directory replay classification, but it does not interrupt the process
+between each $D$, $J$, and $C$ barrier.  The following table identifies the
+expected interpretation of a future crash result.
+
+\begin{table}[t]
+\centering
+\caption{Recovery oracle for a future fault-injection campaign.}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\columnwidth}{P{0.25\columnwidth}|Y|Y}
+\toprule
+\textbf{Interruption point} & \textbf{Permitted recovery} & \textbf{Bug signal}\\
+\midrule
+Before data \texttt{fdatasync} & Previous mapping/value or fail closed & New mapping references absent/truncated ciphertext\\
+After data, before journal barrier & Previous mapping/value or fail closed & New value becomes reachable without a durable mapping\\
+After journal, before checkpoint & New mapping with conservative size, or fail closed & Tag mismatch accepted as plaintext\\
+After checkpoint & Latest acknowledged state, or documented bounded freshness loss & Silent rollback beyond the configured external-anchor policy\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The anchor requires a second oracle.  A directory snapshot can test only file
+integrity, because it restores every file-side witness with the data.  To test
+freshness, the experiment must preserve an independent TPM state while
+restoring an older disk image.  The trace must record the anchor index,
+authorization policy, committed prefix sequence, update acknowledgment, and
+whether the system was expected to fail closed or roll back within a declared
+window.  Without this separation, a ``100\% replay rejection'' result is a
+test-harness classification error rather than a security result.
+
+\subsection{Required end-to-end evaluation campaign}
+
+The remaining evaluation should be driven by three hypotheses: data-path
+placement, scheduler QoS, and system correctness.  A complete campaign would
+sweep request size, queue depth, cache state, and CPU/GPU policy; compare
+inference-only, CPU-only, unconstrained-elastic, and admitted-policy runs with
+a shared timestamp domain; and inject faults at durable boundaries with an
+external recovery oracle.  Any direct-I/O/UVM extension must also retain the
+driver matrix, registration method, GUP/IOMMU/UVM diagnostics, same-buffer data
+checks, and error-path results before making completion-path claims.
+
+\subsection{Review disposition}
+
+The recurring reviewer concerns separate into claims this revision can resolve
+by correction and claims that require new systems evidence.  The first class
+includes incorrect API descriptions, ambiguous ML-KEM placement, simulated
+TVLA wording, stale figures, and falsely labeled replay outcomes; these are
+handled by removal, source changes, and retained artifacts.  The second class
+includes direct UVM DMA safety, eBPF/io\_uring performance, hardware-anchor
+rollback bounds, fair kernel-storage baselines, physical side channels,
+cross-device portability, and end-to-end AI QoS; these remain open.  The
+checklist keeps those categories separate so a checkbox is never marked
+complete merely because the manuscript now admits a limitation.
+
+\subsection{API-to-claim audit}
+
+Table~\ref{tab:api_audit} records the source-level boundary for the most
+important reviewer questions.  It is intentionally phrased as an audit table,
+not a portability table: source inspection can establish which calls exist,
+but it cannot establish undocumented driver behavior or another platform's
+semantics.  This distinction is particularly relevant to CUDA managed memory.
+Managed allocation and prefetch make a region usable by the CUDA executor;
+they do not prove that an NVMe controller has a stable DMA mapping for it.
+
+\begin{table*}[t]
+\centering
+\caption{Source-level audit of central mechanism claims.}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{P{0.22\textwidth}|P{0.28\textwidth}|Y}
+\toprule
+\textbf{Questionable mechanism} & \textbf{What the final source does} & \textbf{Permitted paper claim}\\
+\midrule
+CUDA access ``permission flip'' & \texttt{cudaMallocManaged}, explicit prefetch, and stream synchronization inside CUDA executors & Executor-local locality and ordering; no global CPU/GPU/DMA mutual-exclusion claim\\
+NVMe \texttt{O\_DIRECT} into UVM & FUSE sidecars use POSIX \texttt{pread}/\texttt{pwrite}; auxiliary \texttt{io\_uring\_uvm} validates same-buffer GPU visibility for pinned host memory & Auxiliary evidence only; no final FUSE data-path DMA or migration-suppression claim\\
+\texttt{cudaHostRegister}/GUP pinning & Used in auxiliary probes and retained logs; the final storage path does not depend on it & Host-pinning and mapped-buffer checksum only\\
+eBPF \texttt{nvme\_complete\_rq} trigger & No eBPF program, kprobe, or kernel notification path in the final implementation & Not implemented or evaluated\\
+io\_uring completion path & No io\_uring submission/completion handling in FUSE storage path & Not implemented or evaluated\\
+ML-KEM per-block encryption & AES-GCM protects blocks; ML-KEM executors are optional batch-oriented code & ML-KEM primitive benchmark only\\
+TPM ``signing'' & Optional NV record backend; no signing primitive is claimed & Pre-provisioning requirement and unmeasured experimental path\\
+TVLA/constant time & Synthetic trace generators excluded from paper & No side-channel-resistance claim\\
+\bottomrule
+\end{tabularx}
+\label{tab:api_audit}
+\end{table*}
+
+The corrected source additionally makes failure policy visible.  CUDA executor
+failure falls back to the CPU format-compatible path rather than emitting a
+new record type.  An invalid envelope HMAC causes file open to fail.  A missing
+TPM index causes hardware-anchor initialization to fail.  An absent scheduler
+budget selects CPU.  These are robust default behaviors, but the artifact does
+not claim that they cover device reset, process-memory compromise, or all
+kernel/FUSE error paths.
+
+\subsection{Fair-baseline protocol}
+
+The repository already retains matched fscrypt and dm-crypt sequential-write
+reference runs.  Any added baseline, such as fs-verity or dm-integrity, must
+state its protection property, cache policy, durability point, and key
+lifecycle before the graph is compared.  Reported write latency must say
+whether it ends at \texttt{write}, \texttt{flush}, \texttt{fsync}, or device
+cache persistence.
+
+The same discipline applies to kernel-bypass and GPU-I/O work.  A fair
+comparison must state hardware topology, driver support, I/O alignment, the
+buffer-registration method, polling policy, queue depth, and where device I/O
+completion enters the latency interval.
+
+\subsection{Portability decomposition}
+
+AEGIS-Q has four portability layers.  The encrypted-block format, journal
+ordering, envelope validation, and pure scheduler policy are ordinary C/POSIX
+logic and should transfer subject to filesystem semantics.  The cryptographic
+provider layer depends on OpenSSL and liboqs APIs.  The accelerator layer
+depends on CUDA and cuPQC.  The telemetry and direct-I/O layer is currently
+absent.  Treating these four layers as equally portable would hide the core
+risk: the final two are exactly where drivers, hardware topology, and version
+specific behavior matter most.
+
+Replication should thus begin with the CPU-only format on a second platform,
+then validate accelerator parity, then remeasure primitive placement, and only
+then connect platform-specific telemetry.  No value in this paper should be
+used as a substitute for that replication.
+
+\subsection{Threat-to-mitigation matrix}
+
+The following matrix makes the intended security boundary operational.  It
+also identifies why the prototype cannot inherit stronger claims from a TPM,
+CUDA, or FUSE component merely by linking against it.  A mount credential is
+assumed secret for the lifetime of the process.  The backing store is assumed
+untrusted.  The operating system, CPU cryptographic library, CUDA runtime, and
+GPU driver are trusted computing-base components; their compromise is out of
+scope.
+
+\begin{table}[t]
+\centering
+\caption{Threat boundary and current response.}
+\scriptsize
+\renewcommand{\arraystretch}{0.96}
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\columnwidth}{P{0.24\columnwidth}|P{0.34\columnwidth}|Y}
+\toprule
+\textbf{Event or adversary action} & \textbf{Current response} & \textbf{Residual risk}\\
+\midrule
+Read backing data sidecar & AES-GCM ciphertext; DEK envelope remains wrapped & Weak/reused mount password and offline password guessing remain deployment concerns\\
+Modify ciphertext or journal mapping & GCM tag or HMAC checkpoint/envelope validation fails closed & Denial of service; incomplete fault coverage\\
+Restore all file-backed state & Baseline snapshot remains readable; classified as rollback visible & No freshness protection without external state\\
+Request unconfigured TPM backend & Initialization fails before mounting & No tested provisioning, authorization, or recovery workflow\\
+Omit AI telemetry/slack budget & Scheduler selects CPU & No opportunistic GPU scheduling or measured QoS benefit\\
+Co-resident GPU observer & No mitigation claimed & Timing, cache, occupancy, power, and EM channels out of scope\\
+Compromise FUSE process or CUDA driver & Out of scope & Can access plaintext/keys or alter execution\\
+\bottomrule
+\end{tabularx}
+\renewcommand{\arraystretch}{1}
+\end{table}
+
+The matrix distinguishes authenticity from freshness.  An authenticated file
+witness establishes only that someone with the mount key produced a record; it
+cannot establish newest state when an adversary restores every file-backed bit.
+Freshness needs protected external state, such as a provisioned TPM counter or
+a remote quorum.  Conversely, that state alone does not address process
+compromise, credential release, or GPU side channels.  The paper therefore
+never presents local integrity as a rollback or constant-time guarantee.

@@ -1,0 +1,28 @@
+{
+  "scope": "Evidence harness only; does not itself prove NVMe-to-UVM DMA semantics.",
+  "platform_hint": {
+    "kernel": "6.8.12-tegra",
+    "machine": "aarch64"
+  },
+  "checks": [
+    {
+      "name": "repro_malloc_register",
+      "command": [
+        "/home/thor/skim/pqc_encrpyted_fs/build/repro_malloc_register"
+      ],
+      "returncode": 0,
+      "stdout_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/uma_storage_dma_probe/repro_malloc_register.stdout.txt",
+      "stderr_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/uma_storage_dma_probe/repro_malloc_register.stderr.txt"
+    },
+    {
+      "name": "io_uring_uvm_nvme",
+      "command": [
+        "/home/thor/skim/pqc_encrpyted_fs/build/io_uring_uvm",
+        "/dev/nvme0n1"
+      ],
+      "returncode": 1,
+      "stdout_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/uma_storage_dma_probe/io_uring_uvm_nvme.stdout.txt",
+      "stderr_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/uma_storage_dma_probe/io_uring_uvm_nvme.stderr.txt"
+    }
+  ]
+}

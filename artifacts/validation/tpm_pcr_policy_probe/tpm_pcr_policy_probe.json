@@ -1,0 +1,254 @@
+{
+  "note": "Transient PCR policy probe only; not full filesystem freshness proof.",
+  "config": {
+    "tcti": "device:/dev/tpmrm0",
+    "pcr_list": "sha256:0,1,2,3",
+    "sudo": true
+  },
+  "digests": {
+    "pcr_current_sha256": "8e2f9e17c3352c54386536c5c94166f5a1ac6614358ef204261a3af177c1f49d",
+    "pcr_drift_sha256": "94bbba136c1029b9e9d4f2032fa014ad32f4c5d40d6c8547f12a3f942cabfb05"
+  },
+  "results": {
+    "good_unseal_rc": 0,
+    "good_unseal_matches_secret": true,
+    "drift_policy_rc": 1,
+    "drift_unseal_rc": 1,
+    "drift_rejected": true
+  },
+  "commands": [
+    {
+      "name": "pcrread",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_pcrread",
+        "-o",
+        "pcr.bin",
+        "sha256:0,1,2,3"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/pcrread.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/pcrread.stderr.txt"
+    },
+    {
+      "name": "chown_pcr",
+      "command": [
+        "sudo",
+        "-S",
+        "chown",
+        "1000:1000",
+        "/tmp/aegis_tpm_pcr_4snll8ib/pcr.bin"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/chown_pcr.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/chown_pcr.stderr.txt"
+    },
+    {
+      "name": "createpolicy_current",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_createpolicy",
+        "--policy-pcr",
+        "-l",
+        "sha256:0,1,2,3",
+        "-f",
+        "pcr.bin",
+        "-L",
+        "policy.dat"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/createpolicy_current.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/createpolicy_current.stderr.txt"
+    },
+    {
+      "name": "createprimary",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_createprimary",
+        "-C",
+        "o",
+        "-c",
+        "primary.ctx"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/createprimary.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/createprimary.stderr.txt"
+    },
+    {
+      "name": "create_sealed",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_create",
+        "-C",
+        "primary.ctx",
+        "-i",
+        "secret.dat",
+        "-L",
+        "policy.dat",
+        "-u",
+        "seal.pub",
+        "-r",
+        "seal.priv"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/create_sealed.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/create_sealed.stderr.txt"
+    },
+    {
+      "name": "load_sealed",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_load",
+        "-C",
+        "primary.ctx",
+        "-u",
+        "seal.pub",
+        "-r",
+        "seal.priv",
+        "-c",
+        "seal.ctx"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/load_sealed.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/load_sealed.stderr.txt"
+    },
+    {
+      "name": "start_good_session",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_startauthsession",
+        "--policy-session",
+        "-S",
+        "good.sess"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/start_good_session.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/start_good_session.stderr.txt"
+    },
+    {
+      "name": "policypcr_current",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_policypcr",
+        "-S",
+        "good.sess",
+        "-l",
+        "sha256:0,1,2,3",
+        "-f",
+        "pcr.bin"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/policypcr_current.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/policypcr_current.stderr.txt"
+    },
+    {
+      "name": "unseal_current",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_unseal",
+        "-c",
+        "seal.ctx",
+        "-p",
+        "session:good.sess",
+        "-o",
+        "unsealed.dat"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/unseal_current.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/unseal_current.stderr.txt"
+    },
+    {
+      "name": "chown_unsealed",
+      "command": [
+        "sudo",
+        "-S",
+        "chown",
+        "1000:1000",
+        "/tmp/aegis_tpm_pcr_4snll8ib/unsealed.dat"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/chown_unsealed.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/chown_unsealed.stderr.txt"
+    },
+    {
+      "name": "flush_good",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_flushcontext",
+        "good.sess"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/flush_good.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/flush_good.stderr.txt"
+    },
+    {
+      "name": "start_drift_session",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_startauthsession",
+        "--policy-session",
+        "-S",
+        "drift.sess"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/start_drift_session.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/start_drift_session.stderr.txt"
+    },
+    {
+      "name": "policypcr_drift",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_policypcr",
+        "-S",
+        "drift.sess",
+        "-l",
+        "sha256:0,1,2,3",
+        "-f",
+        "pcr_drift.bin"
+      ],
+      "returncode": 1,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/policypcr_drift.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/policypcr_drift.stderr.txt"
+    },
+    {
+      "name": "unseal_drift",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_unseal",
+        "-c",
+        "seal.ctx",
+        "-p",
+        "session:drift.sess",
+        "-o",
+        "drift_unsealed.dat"
+      ],
+      "returncode": 1,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/unseal_drift.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/unseal_drift.stderr.txt"
+    },
+    {
+      "name": "flush_drift",
+      "command": [
+        "sudo",
+        "-S",
+        "tpm2_flushcontext",
+        "drift.sess"
+      ],
+      "returncode": 0,
+      "stdout": "artifacts/validation/tpm_pcr_policy_probe/flush_drift.stdout.txt",
+      "stderr": "artifacts/validation/tpm_pcr_policy_probe/flush_drift.stderr.txt"
+    }
+  ]
+}

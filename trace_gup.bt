@@ -1,0 +1,20 @@
+kprobe:get_user_pages_fast
+/comm == "repro"/
+{
+    printf("get_user_pages_fast called by %s\n", comm);
+    @gup_calls[comm] = count();
+}
+
+kprobe:get_user_pages
+/comm == "repro"/
+{
+    printf("get_user_pages called by %s\n", comm);
+    @gup_calls[comm] = count();
+}
+
+kprobe:nvidia_p2p_get_pages
+/comm == "repro"/
+{
+    printf("nvidia_p2p_get_pages called by %s\n", comm);
+    @p2p_calls[comm] = count();
+}

@@ -1,0 +1,2 @@
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_measured_pressure_adapter/nsight_derived.jsonl
+[PQC] Admission stats: total=1, gpu=1, cpu=0, ai_exhausted=0, deadline=0, size_small=0

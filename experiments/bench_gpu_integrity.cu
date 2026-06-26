@@ -347,7 +347,7 @@ static void cpu_thread_worker_partitioned(
     start_barrier->wait();
 
     // Stride-based distribution: each thread processes every num_threads-th item
-    // This guarantees no thread is starved even for batch=1
+    // This is an implementation-specific scheduling assumption, not a starvation guarantee.
     for (int it = 0; it < iterations; it++) {
         for (size_t i = thread_id; i < batch; i += num_threads) {
             cpu_sha256_pure(leaf_buf, 17, digest);

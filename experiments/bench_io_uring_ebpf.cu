@@ -99,7 +99,8 @@ __global__ void dummy_pqc_kernel(unsigned char *data, int size) {
 }
 
 int main(int argc, char **argv) {
-    printf("=== Milestone 2: io_uring & eBPF Bypass Evaluation ===\n");
+    printf("=== Milestone 2: io_uring & eBPF Prototype Evaluation ===\n");
+    printf("[warning] This file models a prototype tradeoff surface and does not emit validated bypass evidence.\n");
     
     const char *out_dir = "artifacts/zero_context";
     if (argc > 1) {
@@ -137,7 +138,8 @@ int main(int argc, char **argv) {
     write(fd, host_data, block_size);
     close(fd);
     
-    // Open the file with O_DIRECT for direct hardware DMA staging
+    // Open the file with O_DIRECT for a local prototype read path.
+    // This does not establish a verified NVMe-to-UVM DMA boundary.
     fd = open(temp_file, O_RDONLY | O_DIRECT);
     if (fd < 0) {
         perror("open O_DIRECT failed. Falling back to normal open");
@@ -160,7 +162,7 @@ int main(int argc, char **argv) {
     // Metric averages for 1 block (256 KB) in microseconds
     // 1) dm-crypt (CPU-only baseline)
     // 2) AEGIS-Q FUSE (existing user-space loops with context switches)
-    // 3) eBPF + io_uring (proposed Zero-Context-Switching bypass path)
+    // 3) eBPF + io_uring (illustrative zero-context-switching prototype path)
     
     double t_switch_dm = 0.0;
     double t_attach_dm = 0.0;
@@ -172,10 +174,10 @@ int main(int argc, char **argv) {
     double t_io_fuse = 620.0;     // Standard read through FUSE path
     double t_crypt_fuse = 110.0;  // Fast parallel GPU kernel execution
     
-    double t_switch_bypass = 0.0; // Completely eliminated via kernel bypass
-    double t_attach_bypass = 8.0; // Overlapped/Direct mapping attach
-    double t_io_bypass = 380.0;   // Direct DMA from NVMe to UVM via io_uring
-    double t_crypt_bypass = 110.0;// Parallel GPU kernel triggered via eBPF on CQE
+    double t_switch_bypass = 0.0; // Illustrative placeholder, not a measured bypass result
+    double t_attach_bypass = 8.0; // Illustrative placeholder, not a measured bypass result
+    double t_io_bypass = 380.0;   // Illustrative placeholder, not a measured bypass result
+    double t_crypt_bypass = 110.0;// Illustrative placeholder, not a measured bypass result
     
     // Verify execution of GPU kernels to confirm CUDA functionality
     auto start_gpu = std::chrono::high_resolution_clock::now();
@@ -186,7 +188,7 @@ int main(int argc, char **argv) {
     double live_gpu_ms = std::chrono::duration<double, std::milli>(end_gpu - start_gpu).count();
     printf("[cuda] Verified live PQC GPU kernel execution: %.3f ms\n", live_gpu_ms);
     
-    // Save raw dataset to CSV
+    // Save prototype parameters to CSV for developer inspection.
     char csv_path[512];
     sprintf(csv_path, "%s/latency_breakdown.csv", out_dir);
     FILE *f_csv = fopen(csv_path, "w");
@@ -199,7 +201,7 @@ int main(int argc, char **argv) {
         printf("[results] Wrote CSV results to %s\n", csv_path);
     }
     
-    // Save raw dataset to JSON
+    // Save prototype parameters to JSON for developer inspection.
     char json_path[512];
     sprintf(json_path, "%s/latency_breakdown.json", out_dir);
     FILE *f_json = fopen(json_path, "w");

@@ -1,0 +1,5 @@
+{
+  "enabled": true,
+  "ai_latency_ms": 5829.685926437378,
+  "trace_file": "artifacts/validation/run_qos_gpu_trace.jsonl"
+}

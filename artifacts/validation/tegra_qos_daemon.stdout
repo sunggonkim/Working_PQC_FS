@@ -1,0 +1,11 @@
+=== Real Telemetry Admission Control Experiment ===
+
+--- RUN: Telemetry ENABLED (AEGIS-Q QoS) ---
+[AI Worker] Started foreground AI inference...
+[I/O Worker] Started background I/O processing...
+
+[I/O Worker] Finished 50 MB in 3.31 s (15.11 MB/s)
+[Telemetry] Daemon started, parsing tegrastats output for a prototype throttle loop...
+[Result] AI p99 Latency (Enabled): 20.01 ms
+
+Experiment Complete. tegrastats parsing prototype finished; this is not a validated closed-loop controller.

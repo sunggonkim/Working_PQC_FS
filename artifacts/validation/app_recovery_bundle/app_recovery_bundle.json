@@ -1,0 +1,45 @@
+{
+  "note": "SQLite app recovery bundle only; not a full multi-workload crash-certification claim.",
+  "checks": [
+    {
+      "name": "crash_audit_report",
+      "command": [
+        "python3",
+        "experiments/build_crash_audit_report.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/crash_audit_report.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/crash_audit_report.stderr.txt"
+    },
+    {
+      "name": "sqlite_recovery_oracle",
+      "command": [
+        "python3",
+        "experiments/build_sqlite_recovery_oracle.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/sqlite_recovery_oracle.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/sqlite_recovery_oracle.stderr.txt"
+    },
+    {
+      "name": "sqlite_fault_campaign",
+      "command": [
+        "python3",
+        "experiments/run_sqlite_fault_campaign.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/sqlite_fault_campaign.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/sqlite_fault_campaign.stderr.txt"
+    },
+    {
+      "name": "evidence_dashboard",
+      "command": [
+        "python3",
+        "experiments/build_evidence_dashboard.py"
+      ],
+      "returncode": 0,
+      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/evidence_dashboard.stdout.txt",
+      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle/evidence_dashboard.stderr.txt"
+    }
+  ]
+}

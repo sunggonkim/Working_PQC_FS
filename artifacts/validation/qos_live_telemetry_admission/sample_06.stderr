@@ -1,0 +1,2 @@
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_live_telemetry_admission/sample_06.jsonl
+[PQC] Admission stats: total=1, gpu=0, cpu=0, ai_exhausted=1, deadline=0, size_small=0

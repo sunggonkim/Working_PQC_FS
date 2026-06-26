@@ -1,249 +1,80 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-\subsection{Evaluation Setup}
+\subsection{Methodology and provenance}
 \label{sec:eval_setup}
 
-We evaluate AEGIS-Q on a representative resource-constrained edge device to demonstrate its capability to perform high-throughput secure storage operations without violating foreground real-time AI QoS. The target hardware is the NVIDIA Jetson Orin Nano Developer Kit. The device features an ARM Cortex-A78AE CPU and an NVIDIA Ampere architecture GPU with 1024 CUDA cores. The system is equipped with 8\,GB of LPDDR5 Unified Memory shared between the CPU and GPU, providing a peak bandwidth of 68\,GB/s. For secondary storage, we utilize a 256\,GB NVMe SSD connected via PCIe Gen3 x4. The entire system operates under a strict 15W power envelope (MAXN mode).
+All numbers in this section come from a fresh sequential run of \texttt{experiments/run\_verified\_microbench.py}.  The harness runs the GPU integrity parity test before every sample, captures each benchmark's stdout, and writes a platform manifest plus medians and observed range.  It neither generates values nor converts unsupported configurations into zero-cost results.  The raw captures and summary are under \texttt{artifacts/validation/microbench/}.
 
-We compare AEGIS-Q with four baseline filesystem configurations on the same hardware: 
-\begin{enumerate}
-  \item \textbf{Plaintext}: An unencrypted FUSE passthrough filesystem that represents the performance ceiling.
-  \item \textbf{gocryptfs}~\cite{gocryptfs}: A standard user-space FUSE encrypted filesystem using CPU-only cryptographic routines.
-  \item \textbf{dm-crypt}~\cite{dmcrypt}: A kernel-level block-device encryption target utilizing host CPU cryptography.
-  \item \textbf{Naive GPU}: A GPU-offloading secure filesystem that statically allocates staging buffers on the GPU using device memory (\texttt{cudaMalloc}) and forces all cryptographic requests to the accelerator.
-\end{enumerate}
+The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and the cuPQC libraries found by CMake.  The result is not an Orin Nano result and must not be generalized to other Jetson generations.  We ran three sequential repetitions.  Error bars in Figure~\ref{fig:baseline_comparison} span the observed 5th--95th-percentile run values; with three repetitions they are descriptive variability, not confidence intervals.
 
-To evaluate performance across different cryptographic operations, we run six representative workloads (which correspond to the compiled graphs in Figure 5 and Figure 9):
-\begin{itemize}
-  \item \textbf{KEM Encaps (ML-KEM Keygen \& Encaps)}: Batched post-quantum key encapsulation operations.
-  \item \textbf{KEM Decaps (ML-KEM Decaps)}: Batched post-quantum key decapsulation operations.
-  \item \textbf{Integrity Hashing (SHA-256 Leaf Hashing)}: Merkle-tree leaf digest calculation for integrity validation.
-  \item \textbf{Random Write}: Multi-threaded random block writes.
-  \item \textbf{Sequential Write}: Multi-threaded sequential block writes.
-  \item \textbf{SQLite Database}: Durability-critical transaction commits on SQLite.
-\end{itemize}
-Table III summarizes the complexity and default sizes of these workloads.
+Table~\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The repository retains matched fscrypt and dm-crypt sequential-write baselines under \texttt{artifacts/baselines/}, and we mention them as reference points rather than as a direct apples-to-apples mode comparison.  A broader filesystem-level matrix would still need rerun if the paper wanted to claim more than the current prototype path.
 
 \begin{table}[t]
 \centering
-\caption{Our benchmark workloads and their characteristics.}
-\vspace{-.2cm}
+\caption{Evidence retained for this revision.}
 \scriptsize
-\begin{tabularx}{\columnwidth}{l|c|X}
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\columnwidth}{P{0.25\columnwidth}|Y|Y}
 \toprule
-\textbf{Workload} & \textbf{Complexity} & \textbf{Secure Storage Operation} \\
+\textbf{Experiment} & \textbf{Establishes} & \textbf{Does not establish}\\
 \midrule
-KEM Encaps & Medium & ML-KEM-768 Encapsulation \\
-KEM Decaps & High & ML-KEM-768 Decapsulation \\
-Integrity Hashing & Medium & Merkle-Tree Integrity Leaf Hashing \\
-Random Write & Medium & Random 256\,KB Block Write \\
-Sequential Write & Low & Sequential 256\,KB Block Write \\
-SQLite Database & High & SQLite Database WAL Transactions \\
+FUSE self-test + remount & Format functions after clean remount & Full SQLite/crash certification\\
+GPU integrity parity & CUDA and OpenSSL digests agree & Side-channel resistance\\
+Matched fscrypt/dm-crypt reference runs & Sequential-write baselines with identical block size, job count, and queue depth & Broader mode-aligned filesystem comparison\\
+Managed-memory smoke & Managed allocation and host/device prefetch calls complete & Verified storage-DMA or O\_DIRECT-to-UVM semantics\\
+eBPF Tracepoint Latency & Raw \texttt{nvme\_complete\_rq} histogram artifact is retained & No final eBPF notification path is claimed \\
+Hardware QoS Daemon & Scheduler prototype and telemetry scripts exist & No validated end-to-end AI p99 latency controller\\
+Concurrent-pressure fast-lane stress & 4-writer aggregate tail-latency probe under pressure & End-to-end AI workload or closed-loop controller\\
+TensorRT/YOLO Co-run Artifacts & Interference traces and p99/throughput samples are retained & Validated closed-loop QoS controller\\
+File-anchor replay & File snapshot rollback remains visible & TPM-anchor freshness\\
 \bottomrule
 \end{tabularx}
 \label{tab:benchmark_workloads}
 \end{table}
 
-\subsection{Performance within Memory Limits}
-\label{sec:eval_in_mem}
+\subsection{CPU for bulk data, GPU for batched ML-KEM}
+\label{sec:eval_performance}
 
-Figure 5 shows the performance comparison of Naive GPU, OS-Native UVM, and AEGIS-Q in the range where the storage payload fits within physical memory (represented as workload sizes from 16\,MB to 1\,GB). The X-axis represents the log-scale storage workload size (labeled as Payload Workload Size in the figures), while the Y-axis shows the processing time in seconds (log-scale).
+Figure~\ref{fig:baseline_comparison} reports the central placement result.  For a 16~MiB AES-256-GCM input, CPU/OpenSSL reaches 1.61~GB/s (observed 1.59--1.63~GB/s), whereas the managed-buffer GPU path reaches 0.172~GB/s (0.172--0.172~GB/s).  The GPU result includes managed-buffer staging and stream synchronization.  Smaller requests amplify the same effect.  This is why AEGIS-Q's data plane is CPU-first; a GPU label alone is not a performance result.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_baseline_comparison.pdf}
-  \caption{Baseline in-memory performance comparison for small workloads.}
-  \label{fig:baseline_comparison}
-\end{figure}
-
-\paragraph{Comparison with Native and UVM} As shown in the figure, Naive GPU achieves the lowest latency up to 1\,GB workload size. For a 256\,MB Random write workload, Naive GPU completes in 0.08 seconds, while AEGIS-Q takes 0.14 seconds. This difference is expected because AEGIS-Q incurs overhead from initializing the triple-buffer pipeline and managing block metadata, whereas Naive GPU operates directly on a single contiguous allocation. However, at 1\,GB workload size, the performance gap narrows as memory pressure increases. Crucially, beyond 1\,GB workload size, Naive GPU fails immediately due to Out-Of-Memory (OOM) errors as the storage buffer size approaches the 8\,GB physical limit (considering OS overhead and system workspace). OS-Native UVM continues execution but suffers from severe performance degradation due to page thrashing. At 4\,GB workload size, OS-Native UVM takes 482.1 seconds due to implicit demand paging, while AEGIS-Q completes the operation in 14.5 seconds (estimated), achieving a 33.2$\times$ speedup. This demonstrates that while AEGIS-Q introduces minor overhead for small workloads, it provides essential scalability that native methods lack.
-
-\subsection{Scalability Beyond Memory Limits}
-\label{sec:eval_scalability}
-
-\paragraph{Capacity Expansion} Figure 7 demonstrates the capacity scaling of AEGIS-Q from 64\,MB to 1\,TB workload size. Unlike Naive GPU which crashes at 2\,GB, and OS-Native UVM which becomes unresponsive at 4\,GB due to page-level thrashing, AEGIS-Q successfully scales up to 1\,TB. At 16\,GB workload size, AEGIS-Q utilizes the NVMe SSD as a backing store, seamlessly extending the effective memory capacity. The execution time increases linearly with the number of block chunks, confirming that the I/O pipeline effectively hides the latency. Specifically, doubling the write workload size from 16\,GB to 32\,GB doubles the number of chunks. AEGIS-Q exhibits a corresponding 2.1$\times$ increase in runtime, maintaining a predictable scaling factor close to the theoretical ideal of 2.0$\times$. This linear scaling persists up to 1\,TB, proving that the I/O overhead does not compound exponentially.
+For a batch of 4,096 ML-KEM-768 key generations, liboqs on CPU reaches 64.8~K operations/s (64.3--64.9~K), while cuPQC reaches 1.50~M operations/s (1.49--1.51~M), a 23.2$\times$ ratio of medians.  The comparison is a primitive microbenchmark on one platform, not a claim that a FUSE write becomes 23.2$\times$ faster.  It supports the narrower policy of reserving GPU work for sufficiently large, independent key-plane batches.
 
 \begin{figure*}[t]
   \centering
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/fig_runtime_scaling.pdf}
-    \caption{Execution Time}
-    \label{fig:runtime_scaling_a}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/fig_storage_efficiency.pdf}
-    \caption{Staging Efficiency}
-    \label{fig:runtime_scaling_b}
-  \end{subfigure}
-  \caption{Runtime scaling with log-scale workload size.}
-  \label{fig:runtime_scaling}
+  \includegraphics[width=0.94\textwidth]{Figures/fig_verified_microbench.pdf}
+  \caption{Verified three-run microbenchmarks on the Jetson AGX Thor Developer Kit. Left: CPU AES-GCM exceeds the managed-buffer GPU path at all tested sizes, so the data plane remains CPU-first. Right: cuPQC materially improves a \emph{batched} ML-KEM-768 key-generation primitive. Bars are medians; whiskers show the observed 5th--95th-percentile range across runs. Raw captures: \texttt{artifacts/validation/microbench/}.}
+  \Description{Two bar charts generated from three raw benchmark runs. The first shows CPU AES-GCM throughput exceeding the managed-buffer GPU path. The second shows GPU cuPQC ML-KEM key generation exceeding the CPU liboqs result for a batch of 4,096.}
+  \label{fig:baseline_comparison}
 \end{figure*}
 
-\paragraph{Impact of Chunk Size} Figure 8 analyzes the impact of block chunk size on secure storage performance for a 16\,GB workload. We evaluated chunk sizes of 64\,MB, 128\,MB, 256\,MB, and 512\,MB. Using small chunks (64\,MB) incurs high overhead due to frequent kernel launches and pipeline context switching, resulting in an execution time of 145 seconds. Conversely, large chunks (512\,MB) increase memory pressure and reduce the number of available buffers for the pipeline, leading to pipeline stalls and a time of 132 seconds. The optimal performance is observed at 256\,MB, which balances GPU occupancy with pipeline depth, achieving the lowest execution time of 118 seconds. This confirms our design choice of using 256\,MB chunks for the Jetson Orin architecture.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_storage_efficiency.pdf}
-  \caption{Impact of block chunk size and runtime characteristics.}
-  \label{fig:chunk_size_impact}
-\end{figure}
-
-\subsection{Performance on Diverse Workloads}
+\subsection{Correctness and negative controls}
 \label{sec:eval_workloads}
 
-Figure 9 compares the performance of AEGIS-Q against OS-Native UVM and Serial GPU Offloading across five workload types: KEM Encaps, KEM Decaps, Integrity Hashing, Random Write, and Sequential Write. All experiments were conducted at 16\,GB payload, a scale where the secure storage staging buffer exceeds the physical memory (8\,GB) by a factor of two.
+The GPU integrity test passes leaf parity for 16, 32, and 64-byte inputs; Merkle parity for 1, 2, 3, 4, 15, 16, and 256 leaves; and the empty-tree case.  The FUSE self-test passes the journal/checkpoint/anchor unit checks.  The clean-remount test writes 128~KiB of random data, calls \texttt{fsync}, unmounts, remounts, and byte-compares the recovered plaintext.  It also verifies that the encrypted data sidecar does not contain the complete input sequence; the corresponding regression is retained in \texttt{artifacts/validation/fuse\_roundtrip.json}.  A separate final-binary test flips the final byte of the persisted \texttt{user.pqc\_metadata} HMAC, remounts, and observes file-open rejection with \texttt{EKEYREJECTED} (errno 129); that regression is retained in \texttt{artifacts/validation/fuse\_tamper\_rejection.json}.  These results are regression tests, not a substitute for a systematic fault campaign.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_multicircuit.pdf}
-  \caption{Performance across diverse workload types at 16\,GB.}
-  \label{fig:diverse_workloads}
-\end{figure}
+An auxiliary host-pinning smoke test also succeeds.  \texttt{repro\_malloc\_register} pins CPU memory and obtains a device pointer via \texttt{cudaHostRegister}.  \texttt{io\_uring\_uvm} then issues an \texttt{O\_DIRECT} read against \texttt{/dev/nvme0n1}, launches a CUDA checksum kernel through the mapped pointer, and matches the CPU checksum over the same storage-filled bytes.  The same binary also retains a managed-storage probe: buffered \texttt{pread} into a \texttt{cudaMallocManaged} buffer, \texttt{cudaPointerGetAttributes(type=managed)} on that storage-filled buffer, a device \(\rightarrow\) host last-prefetch-location change on the same allocation, and the same CPU/GPU checksum match.  The profile bundle still exposes no Unified Memory transfer/page-fault rows.  This proves same-buffer GPU visibility plus a managed-buffer driver diagnostic, not UVM migration suppression or final FUSE data-path DMA.
 
-As shown in the figure, AEGIS-Q consistently outperforms the baselines. For the KEM Encaps workload, AEGIS-Q takes 156.4 seconds, whereas OS-Native UVM takes 890.2 seconds, achieving a 5.69$\times$ speedup. The performance gap is even more pronounced for KEM Decaps, where AEGIS-Q achieves a 7.20$\times$ speedup over UVM (112.5s vs. 810.0s). This significant improvement stems from the random access patterns of these workloads. OS-Native UVM relies on the OS page replacement algorithm, which performs poorly under the strided memory accesses of uncoalesced cryptographic blocks. In contrast, AEGIS-Q's chunk-based execution ensures that memory accesses are localized within the loaded buffer, minimizing I/O thrashing.
+The file-backed anchor produces the deliberately negative result: across four cut points and five trials per cut point, restoring an entire backing-directory snapshot leaves the baseline visible and the success rate remains 0.0.  The corrected harness reports it as \texttt{rollback\_visible}; the result remains a negative control rather than rollback resistance.
 
-For simpler workloads like Sequential Write, the speedup is slightly lower (3.10$\times$), as the sequential nature of the workload is more forgiving to the OS prefetcher. However, AEGIS-Q still maintains a clear advantage by utilizing \texttt{O\_DIRECT} to bypass the page cache overhead. Serial GPU Offloading, which uses explicit offloading but lacks the asynchronous pipeline, performs better than OS-Native UVM but still lags behind AEGIS-Q by approximately 1.8$\times$ due to the serialization of I/O and computation.
+Separate anchor round-trip measurements are retained under \texttt{artifacts/anchor\_refresh/}.  A sudo provisioning probe also records the current TPM fixed properties, PCR reads, and NV public attributes for index \texttt{0x01500010}, now reprovisioned to the 88-byte size expected by the current anchor record.  A transient PCR-policy probe further shows that a sealed test value unseals under the current PCR digest and is rejected under a drifted digest.  The replay-after-advance harness under \texttt{artifacts/validation/tpm\_monotonic\_replay/} now restores a stale backing-directory snapshot after the TPM-backed anchor has advanced and observes \texttt{fail\_closed} behavior at payload read time.  This is retained replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed.
 
-\subsection{Time Analysis}
-\label{sec:eval_time}
+The broader crash/replay matrix is also retained under \texttt{artifacts/motivation/crash\_replay\_matrix.json} and \texttt{artifacts/motivation/crash\_replay\_summary.json}.  Its result is fail-closed regression evidence, not proof of complete app-level crash coverage.  A newer E8 matrix under \texttt{artifacts/crash\_replay\_e8\_test\_matrix.*}, \texttt{artifacts/crash\_replay\_e8\_test\_summary.*}, and \texttt{artifacts/e8\_crash\_replay.json} exercises deterministic cut points across file and hardware backends and classifies outcomes as \texttt{rollback\_visible} or \texttt{fail\_closed}.
 
-To analyze the efficiency of the asynchronous pipeline, Figure 10 presents the execution time breakdown for a 128\,GB Random write workload. We categorize the total time into three components: I/O Wait, Compute, and Overhead (initialization and metadata management).
+The SQLite probe trace at \texttt{artifacts/sqlite\_strace.log} shows actual journal and WAL sidecar opens together with \texttt{fdatasync} calls.  A derived oracle report defines four observed cut points and the required \texttt{PRAGMA integrity\_check}, row-count, and digest checks.  A SQLite-only file-state campaign then executes 20 selected-boundary trials and reports zero unacceptable oracle verdicts.  This is selected-boundary evidence, not syscall-exact crash certification.  The artifact bundle also retains the file-anchor round-trip latency measurements in \texttt{artifacts/motivation/anchor\_latency.*} and the separate hardware-anchor round-trip measurements in \texttt{artifacts/anchor\_refresh/hardware\_anchor\_latency.*}.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/timebreakdown.pdf}
-  \caption{Time breakdown (I/O vs compute vs overhead) for a 128\,GB run.}
-  \label{fig:time_breakdown}
-\end{figure}
+A companion report under \texttt{artifacts/sqlite\_ci\_report/} computes bootstrap 95\% median intervals from the retained SQLite samples.
 
-\paragraph{Pipeline Efficiency} For a non-pipelined execution (Serial GPU Offload), the I/O time accounts for 68\% of the total duration, leaving the GPU idle for the majority of the execution. In AEGIS-Q, the asynchronous pipeline successfully hides a significant portion of this I/O latency. The I/O Wait time is reduced to only 12\% of the total execution time. The Compute phase dominates, accounting for 84\%, which indicates high GPU utilization. This efficiency is achieved by the triple-buffer mechanism; while the GPU processes chunk $i$, the DMA engine simultaneously writes chunk $i-1$ and reads chunk $i+1$. The remaining 4\% corresponds to Overhead, primarily the time required for cryptographic staging and metadata management. Although security overhead introduces computational cost, our dynamic scheduling reduces the effective I/O latency, thereby contributing to the net reduction in total execution time.
-
-\subsection{Bypass I/O Path Performance}
-\label{sec:eval_bypass}
-
-To evaluate the effectiveness of the proposed zero-context-switching bypass path, we measure the micro-architectural latency breakdown of writing a single 256\,KB block. We compare three configurations: 1) \texttt{dm-crypt} (CPU baseline), 2) \texttt{AEGIS-Q FUSE} (user-space daemon loop), and 3) \texttt{eBPF + io\_uring} (proposed bypass). The latency is broken down into context switching overhead ($T_{switch}$), memory mapping/driver attachment ($T_{attach}$), NVMe disk I/O staging ($T_{io}$), and cryptographic execution ($T_{crypt}$).
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_latency_breakdown.pdf}
-  \caption{Latency breakdown ($T_{switch}$, $T_{attach}$, $T_{io}$, $T_{crypt}$) for writing a 256\,KB block under CPU baseline, FUSE, and the proposed eBPF+io\_uring bypass path.}
-  \label{fig:latency_breakdown}
-\end{figure}
-
-Figure~\ref{fig:latency_breakdown} shows the breakdown. For the CPU-only baseline (\texttt{dm-crypt}), the CPU takes a total of 3300\,$\mu$s. While $T_{switch}$ and $T_{attach}$ are zero, the cryptographic execution on the CPU ($T_{crypt}$) takes 2480\,$\mu$s, dominating the runtime and creating a massive computation bottleneck.
-
-By offloading the cryptographic work to the GPU via user-space FUSE (\texttt{AEGIS-Q FUSE}), the cryptographic time is reduced from 2480\,$\mu$s to only 110\,$\mu$s. However, this FUSE path introduces a significant context-switching overhead ($T_{switch} = 85\,\mu$s) due to data crossing the user-kernel boundary multiple times. In addition, staging page maps introduces driver attach latency ($T_{attach} = 24\,\mu$s). 
-
-The proposed bypass path (\texttt{eBPF + io\_uring}) completely eliminates the context-switching overhead ($T_{switch} = 0\,\mu$s) and reduces the driver mapping latency to $T_{attach} = 8\,\mu$s via direct UVM allocations. Furthermore, direct DMA staging via \texttt{io\_uring} decreases the NVMe I/O duration ($T_{io}$) from 620\,$\mu$s to 380\,$\mu$s. Overall, the bypass path reduces the single-block write latency from 839\,$\mu$s in the FUSE path to 498\,$\mu$s, achieving a 1.68$\times$ speedup and validating the zero-context-switching design.
-
-\subsection{Cryptographic Correctness and Parity}
-\label{sec:eval_parity}
-
-Unlike quantum simulation which suffers from floating-point accumulation differences between CPU and GPU execution, classical symmetric encryption (AES-GCM) and post-quantum key encapsulation (ML-KEM) are exact, deterministic bit-wise algorithms. Therefore, CPU-based execution and GPU-based execution must yield identical binary outputs. Table IV compares the cryptographic parity between AEGIS-Q and the CPU-only baseline across the target workloads. The parity metric is defined as the matching ratio of block ciphertexts and authentication tags.
-
-\begin{table}[t]
-\centering
-\caption{Cryptographic parity comparison between CPU baseline and AEGIS-Q.}
-\vspace{-.2cm}
-\scriptsize
-\begin{tabularx}{\columnwidth}{l|c|c|c|c|r}
-\toprule
-\textbf{Workload} & \textbf{16 MB} & \textbf{64 MB} & \textbf{256 MB} & \textbf{1 GB} & \textbf{256 GB} \\
-\midrule
-KEM Encaps & 1.0000000 & 1.0000000 & 1.0000000 & 1.0000000 & 1.0000000 \\
-KEM Decaps & 1.0000000 & 1.0000000 & 1.0000000 & 1.0000000 & 1.0000000 \\
-Integrity Hashing & 1.0000000 & 1.0000000 & 1.0000000 & 1.0000000 & 1.0000000 \\
-\bottomrule
-\end{tabularx}
-\label{tab:parity_compare}
-\end{table}
-
-\paragraph{Measured Parity} As shown in Table IV, the cryptographic parity remains exactly $1.0000000$ across all tested payload sizes (from 16\,MB to 256\,GB) for ML-KEM and SHA-256 leaf digest batch operations. This confirms that our GPU acceleration kernels and UVM staging pipeline maintain perfect mathematical alignment with standard CPU implementations. The zero-copy memory transfers do not corrupt the page boundaries or logical structures, ensuring that FUSE file reads can reliably decrypt ciphertext produced on the GPU.
-
-\subsection{Real-time AI QoS Protection}
+\subsection{Telemetry Prototype and Scope Boundaries}
 \label{sec:eval_qos}
 
-To demonstrate the real-time AI QoS protection of AEGIS-Q, we co-run the FUSE storage write workload alongside foreground YOLOv8 object detection inference on the Jetson Orin Nano. We measure the p99 tail latency of the YOLOv8 model under different storage policies.
+The repository contains telemetry scripts, raw tegrastats trace files under \texttt{artifacts/validation/tegra\_qos\_daemon\_trace.jsonl} and \texttt{artifacts/validation/run\_qos\_gpu\_trace.jsonl}, a derived transition report under \texttt{artifacts/validation/telemetry\_trace\_report/}, a three-run hysteresis trace bundle under \texttt{artifacts/validation/qos\_repeated\_report/}, measured TensorRT/YOLO interference artifacts, and a companion confidence-interval report under \texttt{artifacts/tensorrt\_ci\_report/} that summarizes the retained per-trial traces.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/e3_tensorrt_qos_yolov8_heavy.png}
-  \caption{YOLOv8 inference tail-latency distribution under secure I/O pressure. Naive GPU offloading leads to severe tail-latency spikes due to SM contention. AEGIS-Q's adaptive policy falls back to the CPU lane, preserving the baseline QoS.}
-  \label{fig:yolo_qos}
-\end{figure}
+The revision still does not claim a validated end-to-end QoS controller.  The measured traces support only the narrower statement that telemetry and placement can interact with foreground inference.  The deterministic admission sweep under \texttt{artifacts/validation/admission\_sweep.*} and \texttt{artifacts/m5\_admission\_sweep.*} shows route counts changing with AI slack, and the retained queue-depth sweep under \texttt{artifacts/m5\_admission\_sweep\_qdepth.*} extends that same controller-unit-test coverage to queue-pressure variation, but both remain controller unit tests rather than closed-loop workloads.  A separate adapter bundle under \texttt{artifacts/validation/qos\_measured\_pressure\_adapter/} maps retained Nsight Compute memory/SM throughput counters into the existing admission telemetry inputs and records the resulting \texttt{pqc\_admit} trace; live \texttt{tegrastats} bridges feed samples into the same path, and the newest retained run throttles a mounted FUSE writer in that same execution.  These close controller-input wiring and same-run bridge checks, not the end-to-end QoS claim.  The code therefore remains a prototype policy surface, not a completed QoS result.
 
-Figure 13 presents the tail-latency distribution. Under the \texttt{Inference-only} baseline, the YOLOv8 model achieves a p99 latency of 0.91\,ms. When CPU-only secure storage is running, the tail latency remains protected at 0.93\,ms. However, under the \texttt{GPU-only} (Naive GPU) offloading policy, the heavy cryptographic kernels occupy the streaming multiprocessors (SMs), causing the YOLOv8 p99 latency to blow up to 5.09\,ms. In contrast, AEGIS-Q's adaptive scheduler detects the GPU pressure and dynamically routes the background cryptographic jobs to the CPU fast lane. As a result, the YOLOv8 p99 tail latency is restored to 0.91\,ms and 100\% of the baseline AI throughput is successfully preserved, demonstrating the effectiveness of our contention-aware admission control.
+The artifact bundle also retains the primitive latency baseline in \texttt{artifacts/e1\_results.json} and the placement-path latency breakdown in \texttt{artifacts/e6\_breakdown.json}.  These files help separate CPU/GPU primitive cost from staging, journal, and anchor cost, but they do not by themselves establish a full end-to-end storage or QoS claim.
 
-\subsection{Phase-Aware AI QoS Scheduling}
-\label{sec:eval_phase_aware}
-
-To evaluate the effectiveness of the telemetry-driven, phase-aware scheduler, we construct a heterogeneous, multi-tenant edge scenario on the Jetson Orin Nano. This workload consists of:
-\begin{enumerate}
-    \item \textbf{Generative AI}: A quantized Qwen-1.5B LLM running continuous text generation.
-    \item \textbf{Computer Vision}: YOLOv8 executing real-time object detection at 30\,FPS.
-    \item \textbf{Database I/O}: SQLite commits executing WAL transactions via FUSE (inducing background ML-KEM and SHA-256 operations).
-\end{enumerate}
-
-We measure performance under three configurations: 
-\begin{itemize}
-    \item \textbf{Baseline (Plaintext)}: The multi-tenant workloads run on a plaintext, unencrypted filesystem.
-    \item \textbf{Static FUSE}: The workloads run on a standard GPU-offloaded encrypted FUSE filesystem without phase-aware scheduling, allowing background cryptographic staging tasks to execute on the GPU arbitrarily.
-    \item \textbf{Phase-Aware AEGIS-Q}: The workloads run under our telemetry-driven scheduler, which actively monitors memory bus and Tensor Core utilization to interleave or redirect cryptographic staging.
-\end{itemize}
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_m3_qos.pdf}
-  \caption{System performance under multi-tenant co-running workloads. (a) LLM Time to First Token (TTFT), (b) LLM Token Generation Rate (TPS), (c) YOLOv8 p99 tail latency, and (d) SQLite WAL commit latency. Phase-aware scheduling successfully isolates the LLM and vision execution from cryptographic staging interference.}
-  \label{fig:m3_qos}
-\end{figure}
-
-Figure~\ref{fig:m3_qos} shows the evaluation results. 
-
-\paragraph{Generative AI Impact} As shown in Figure~\ref{fig:m3_qos}(a) and (b), when storage encryption operations are executed statically on the GPU (\texttt{Static FUSE}), the LLM's Time to First Token (TTFT) increases from 1020\,ms to 1280\,ms (a 25.5\% latency penalty). Furthermore, the token generation rate (TPS) degrades severely, dropping by 47.4\% from 50.0 to 26.3 tokens per second. This degradation is caused by severe contention on the unified LPDDR5 memory bus during the LLM's memory-bound decoding phase. Under \texttt{Phase-Aware AEGIS-Q}, the scheduler detects high memory bandwidth and low Tensor Core activity during decoding, and routes background PQC staging to the CPU fast lane. Consequently, the LLM TTFT is protected at 1080\,ms (only a 5.8\% increase), and the token generation rate is preserved at 47.6 tokens per second (less than 5\% degradation from baseline).
-
-\paragraph{Vision \& Storage Performance} As shown in Figure~\ref{fig:m3_qos}(c), the YOLOv8 p99 tail latency spikes from 0.91\,ms in baseline to 1.11\,ms under Static FUSE due to shared resource contention. AEGIS-Q restores the YOLOv8 tail latency to 0.93\,ms. SQLite commit latency (Figure~\ref{fig:m3_qos}(d)) increases from 2.0\,ms to 8.5\,ms under Static FUSE as storage operations queue behind the decoding kernels. By dynamically routing storage jobs to the CPU during decoding and scheduling them on the GPU during the compute-bound prefill phase, Phase-Aware AEGIS-Q maintains SQLite commit latency at 2.1\,ms (virtually identical to the plaintext baseline). This demonstrates that phase-aware telemetry effectively resolves memory-bus interference, enabling secure storage to coexist with heavy edge AI workloads.
-
-\subsection{Performance Stability}
+\subsection{What this evaluation leaves open}
 \label{sec:eval_stability}
 
-To evaluate the stability of AEGIS-Q under prolonged execution, we conducted a stress test by executing a 128\,GB Random write workload continuously for 10 iterations. Figure 11 presents the heatmap of execution times.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{Figures/fig_aurora_style.pdf}
-  \caption{Stability and runtime variance across repeated runs.}
-  \label{fig:performance_stability}
-\end{figure}
-
-AEGIS-Q exhibits high stability with a variance of less than 2\% across iterations. Despite the thermal constraints of the fanless edge device, the tiered memory pipeline avoids the thermal throttling often seen in CPU-heavy workloads. In contrast, OS-Native UVM shows increasing instability (up to 15\% variance) in later iterations, likely due to fragmentation in the OS page cache and thermal throttling of the NVMe controller caused by inefficient I/O patterns.
-
-\begin{figure*}[t]
-  \centering
-  \begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/benchmark_1gb.pdf}
-    \caption{1\,GB Workload Performance}
-    \label{fig:scalability_26}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/benchmark_2gb.pdf}
-    \caption{2\,GB Workload Performance}
-    \label{fig:scalability_27}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/benchmark_4gb.pdf}
-    \caption{4\,GB Workload Performance}
-    \label{fig:scalability_28}
-  \end{subfigure}
-  \caption{Scalability analysis of AEGIS-Q under different queue configurations.}
-  \label{fig:scalability_analysis}
-\end{figure*}
+We do not provide a fair fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage baseline; fault injection across a hardware TPM freshness window; physical side-channel measurement; or a second UMA architecture.  The repository retains a conservative crash-audit map under \texttt{artifacts/crash\_audit\_report/} and a SQLite selected-boundary oracle campaign, but it still lacks syscall-exact crash timing and a second application workload.  Those omissions are material. They constrain the paper's contribution to an evidence-backed prototype and placement study rather than a completed systems evaluation.

@@ -1,0 +1,37 @@
+{
+  "rows": [
+    {
+      "backend": "file",
+      "cut_point_s": 0.0,
+      "trial": 0,
+      "rollback_blocked": false,
+      "mode": "rollback_visible",
+      "detail": "restored_baseline_readable"
+    },
+    {
+      "backend": "file",
+      "cut_point_s": 0.0,
+      "trial": 1,
+      "rollback_blocked": false,
+      "mode": "rollback_visible",
+      "detail": "restored_baseline_readable"
+    },
+    {
+      "backend": "file",
+      "cut_point_s": 0.05,
+      "trial": 0,
+      "rollback_blocked": false,
+      "mode": "rollback_visible",
+      "detail": "restored_baseline_readable"
+    },
+    {
+      "backend": "file",
+      "cut_point_s": 0.05,
+      "trial": 1,
+      "rollback_blocked": false,
+      "mode": "rollback_visible",
+      "detail": "restored_baseline_readable"
+    }
+  ],
+  "skipped": []
+}

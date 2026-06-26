@@ -1,0 +1,4 @@
+Time (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+100.0,106859530,1,106859530.0,106859530.0,106859530,106859530,0.0,cudaHostRegister
+0.0,40796,1,40796.0,40796.0,40796,40796,0.0,cudaHostUnregister
+0.0,574,1,574.0,574.0,574,574,0.0,cuModuleGetLoadingMode

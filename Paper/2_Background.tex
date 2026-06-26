@@ -1,51 +1,20 @@
-\begin{figure*}[t]
-  \centering
-  \begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/fig_bg_bandwidth_ladder.pdf}
-    \caption{Storage bandwidth ladder}
-    \label{fig:bg_bandwidth}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/fig_bg_memory_wall.pdf}
-    \caption{PQC execution latency wall}
-    \label{fig:bg_memory_wall}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{Figures/fig_bg_gpu_util_timeline.pdf}
-    \caption{GPU contention timeline}
-    \label{fig:bg_gpu_timeline}
-  \end{subfigure}
-  \caption{Memory hierarchy, bandwidth disparity, and execution timelines in edge secure-storage architectures.}
-  \label{fig:bg_hierarchy}
-\end{figure*}
-
-\section{Background}
+\section{Background and Scope}
 \label{sec:background}
 
-\subsection{Post-Quantum Cryptographic Secure Storage on Edge Devices}
+\subsection{Secure storage primitives}
 \label{sec:bg_sim}
 
-Several approaches have been designed to execute secure storage functions on edge systems, offering various trade-offs between memory efficiency, execution speed, and security~\cite{fscrypt, gocryptfs, dmcrypt, optee}. These storage methodologies are generally categorized into two types: direct CPU cryptographic processing and GPU-accelerated cryptographic offloading.
+Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\cite{fscrypt, gocryptfs, dmcrypt, optee}.  For example, fscrypt~\cite{fscrypt} and OP-TEE~\cite{optee} operate at substantially different boundaries.  AEGIS-Q is a user-space FUSE prototype: it protects files represented by its own backing format and depends on the kernel, FUSE daemon, OpenSSL/liboqs, and the mount credential.  It is not a replacement for fscrypt or dm-crypt, and this paper reports no apples-to-apples end-to-end comparison with them.
 
-\paragraph{CPU cryptographic processing} CPU cryptographic processing represents the standard execution model where symmetric encryption (e.g., AES-GCM) and hashing are processed directly by the host processor. This method is highly effective for workloads with small requests or low queue depths, as it avoids accelerator launch overheads. However, its computational cost grows significantly when integrating post-quantum cryptography (e.g., ML-KEM-768 file-key provisioning) or large integrity trees in the filesystem path, making it unsuitable for processing high-throughput secure storage operations on edge devices with limited CPU resources~\cite{mlkem, sha256}.
+The cryptographic roles are deliberately distinct.  AES-GCM encrypts and authenticates each data block; SHA-256 constructs integrity roots; and ML-KEM-768 is a key-establishment primitive rather than a bulk-data primitive~\cite{mlkem, sha256}.  We use ML-KEM only for the optional batched key-plane experiment.  The production FUSE data path derives a random file data-encryption key (DEK), wraps it under a mount-derived key, and uses that DEK for AES-GCM.  This avoids the atypical and expensive design of performing a KEM operation for every block.
 
-\paragraph{GPU-accelerated cryptographic offloading} GPU-accelerated cryptographic offloading explicitly schedules and executes the heavy cryptographic routines on parallel accelerator threads. It provides high-throughput processing for large data batches and key rotation groups, including ML-KEM key generation and SHA-256 leaf digest calculation, which is essential for maintaining cryptographic performance and scalability~\cite{fscrypt_gpu, flashneuron}. As the most general-purpose and parallel approach, our work focuses on GPU-accelerated cryptographic offloading.
-
-Since post-quantum secure storage must maintain exact cryptographic parity, it requires the same authenticated storage format on both CPU and GPU. However, it suffers from a significant increase in computational overhead as the batch size increases. For example, ML-KEM key generation at small batch sizes is dominated by staging and kernel launch costs. As shown in Figure 2, the memory bandwidth of unified memory on edge devices is highly shared, and NVMe SSD bandwidth remains a bottleneck. Consequently, naively offloading secure storage tasks to the GPU leads to resource conflicts and severe performance degradation of concurrent workloads. AEGIS-Q is designed to address these resource constraints by enabling scalable and QoS-preserving post-quantum secure storage on resource-constrained edge architectures.
-
-\subsection{Memory and Staging Architectures in Edge Computing}
+\subsection{Unified memory is not a DMA contract}
 \label{sec:bg_mem}
 
-To effectively handle data-intensive applications like secure storage on edge devices, it is essential to understand the underlying memory architecture. Unlike HPC clusters that utilize discrete CPUs and GPUs connected via PCIe, edge devices such as the NVIDIA Jetson series employ a System-on-Chip (SoC) design with a Unified Memory Architecture (UMA)~\cite{jetson}. In this architecture, the CPU and GPU share a single physical DRAM pool, eliminating the need for data transfers over a PCIe bus. However, despite this architectural advantage, the total memory capacity remains a hard bottleneck (e.g., 8\,GB to 64\,GB), restricting the memory available for concurrent AI models. When the storage staging buffers exceed the physical memory headroom, the system must resort to page faulting or explicit I/O management.
+On a unified-memory SoC, CPU and GPU share DRAM capacity and bandwidth; Jetson-class systems are a representative deployment setting~\cite{jetson}.  CUDA managed memory makes an allocation accessible to CPU and GPU code, and prefetch is a performance hint; neither API is a permission bit nor a storage-DMA registration protocol.  The present implementation allocates managed buffers only inside the CUDA executor, prefetches them around a GPU operation, and synchronizes the stream before CPU reuse.  The backing files are accessed with ordinary \texttt{pread}/\texttt{pwrite}.  It does \emph{not} call \texttt{cudaHostRegister}, issue \texttt{O\_DIRECT} into managed memory, or rely on \texttt{cudaStreamAttachMemAsync} as mutual exclusion.
 
-Figure 2 illustrates the memory hierarchy of a typical edge device. As depicted, the hierarchy consists of three tiers: on-chip caches, unified DRAM, and external NVMe storage. The unified DRAM offers high bandwidth (e.g., up to 204\,GB/s on Jetson Orin) shared between the CPU and GPU. In contrast, external NVMe storage provides significantly lower bandwidth (e.g., 3-6\,GB/s) and higher latency. Standard secure storage frameworks such as fscrypt~\cite{fscrypt} and OP-TEE~\cite{optee} rely on the operating system's virtual memory management (OS-native swapping) or discrete PCIe copies to handle data. However, this approach suffers from severe performance degradation due to memory-coherence thrashing and the semantic gap between the GPU driver and the OS file system. Specifically, when a GPU kernel accesses a page not present in physical memory, it triggers a page fault that blocks execution until the OS fetches data. Since the OS is unaware of the GPU's memory access patterns, it often makes suboptimal eviction decisions, leading to high latency.
+This scope matters because systems work must separate an API's correctness semantics from an optimization hypothesis.  A future direct-I/O path would need an explicit driver/version matrix, pinning and IOMMU evidence, a fault-injection campaign under memory pressure, and a protocol that excludes DMA, CPU, and GPU concurrent access.  None of those conditions is established here.  The absence of that path is a design constraint, not an unreported optimization.
 
-To address these problems, recent studies in secure storage and deep learning have proposed out-of-core mechanisms~\cite{fastensor, flashneuron} that explicitly manage data movement. These approaches typically employ a user-space buffer manager to prefetch data and overlap I/O with computation. However, applying these techniques to secure storage on unified memory architectures presents unique challenges. Existing out-of-core frameworks often assume discrete memory spaces (Host RAM vs. Device VRAM) and rely on explicit memory copies, which are redundant on UMA systems. Furthermore, generic I/O libraries fail to leverage the specific access patterns of filesystems, where writes are often small and synchronous. Therefore, optimizing secure storage on edge devices requires a specialized memory management strategy that exploits the zero-copy capabilities of UMA. AEGIS-Q overcomes these limitations by implementing a UVM-aware asynchronous pipeline that integrates efficient I/O scheduling with zero-copy computation, ensuring high performance under concurrent workloads.
+\subsection{Why work placement is asymmetric}
 
-To investigate these hardware and operating system limits, we perform a micro-architectural profiling pass on the Jetson Orin Nano. Figure~\ref{fig:motivation_contention} details the DRAM bus utilization and GPU warp stalls under contention. When running real-time YOLOv8 AI inference alongside secure storage, the concurrent naive approach saturates the LPDDR5 shared bus (reaching 64.2\,GB/s, close to the peak 68\,GB/s bandwidth) and triggers a massive 68.7\% warp instruction dependency stall rate due to memory queue resource exhaustion. This confirms that memory contention is the primary source of QoS degradation. Furthermore, Figure~\ref{fig:semantic_gap} exposes the semantic gap in the page cache: running lattice-based PQC (which features non-coalesced, high-dimensional vector strides) on top of standard OS UVM triggers 655,360 page faults and 327,680 page migrations, while wasting 91.4\% of OS read-ahead pre-fetched pages. This proves that standard OS demand paging is fundamentally incompatible with the memory layout of post-quantum cryptography, requiring a bypass scheduling layer.
-
+GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large learning workloads through storage hierarchies~\cite{flashneuron, fastensor}; their complementary staging perspectives are also relevant to the batch boundary considered here~\cite{fastensor, flashneuron}.  GPU-oriented work such as fscrypt-GPU and FlashNeuron further motivates separating batch placement from the storage format~\cite{fscrypt_gpu, flashneuron}.  They do not validate this FUSE format or its durability protocol.  Likewise, storage-oriented systems including SnuQS and InfScaler motivate explicit staging but do not make an NVMe/UVM correctness claim for this prototype~\cite{snuqs_storage, infscaler}.  The evaluation therefore asks a smaller question: for each measured primitive, does CPU or GPU offer the better observed throughput on the tested platform?  Section~\ref{sec:evaluation} reports the answer and retains the raw logs.

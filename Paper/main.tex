@@ -24,11 +24,17 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 
-\setlength{\baselineskip}{8pt}
+% Tables contain capability boundaries and artifact paths.  Ragged columns avoid
+% both misleading word spacing and overfull boxes in the two-column format.
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+
 \captionsetup{font=small}
-\setlength{\textfloatsep}{1pt plus 1.0pt minus 1.0pt}
-\setlength{\floatsep}{1pt plus 1pt minus 1pt}
-\setlength{\intextsep}{1pt plus 1pt minus 1pt}
+\setlength{\textfloatsep}{6pt plus 1.0pt minus 1.0pt}
+\setlength{\floatsep}{5pt plus 1pt minus 1pt}
+\setlength{\intextsep}{5pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
 \DeclareUnicodeCharacter{2713}{\checkmark}
 
 
@@ -51,7 +57,7 @@
 \newcommand{\xmark}{{\color{red!80!black}\ding{55}}}
 \newcommand{\pmark}{{\color{orange!80!black}$\triangle$}}
 
-\title{AEGIS-Q: Post-Quantum Cryptographic Secure Storage Framework for Resource-Constrained Edge Devices}
+\title{AEGIS-Q: Evidence-First Hybrid Cryptographic Storage on Unified-Memory Edge Systems}
 \author{Changjong Kim}
 \email{changjong5238@seoultech.ac.kr}
 \affiliation{\institution{Seoul National University of Science and Technology}\city{Seoul}\country{Republic of Korea}}
@@ -79,23 +85,24 @@
 
 \begin{document}
 \begin{abstract}
-This paper presents AEGIS-Q, a heterogeneity-aware secure storage runtime designed to overcome the post-quantum cryptographic overhead and real-time execution interference limits of resource-constrained edge devices. Its primary strategy is to extend beyond CPU-only cryptographic processing and introduce a QoS-aware hybrid-execution architecture that integrates GPU acceleration, CPU fast paths, and TPM-backed anchors into a unified scheduling framework. With this design, AEGIS-Q schedules cryptographic operations based on dynamic execution budgets, manages memory residency via a Unified Virtual Memory (UVM) zero-copy path, overlaps storage I/O with PQC computations through asynchronous scheduling, and employs adaptive queue-pressure admission control to preserve foreground AI inference quality-of-service (QoS).
-Our evaluation demonstrates that AEGIS-Q maintains execution stability under saturated workloads on an 8 GB NVIDIA Jetson Orin Nano, achieving tail-latency recovery for concurrent GPU-resident TensorRT YOLOv8 inference under stronger contention (median p99 0.9081 ms adaptive versus 5.0875 ms naive GPU offloading, with 0.9113 ms inference-only baseline; bootstrap median CI 0.9020--0.9173 for adaptive and 3.4121--5.2159 for naive GPU). AEGIS-Q achieves high throughput for PQC key operations (up to 23.2$\times$ speedup for ML-KEM) and integrity verification (300.65M leaves/s for SHA-256 leaf batches), while maintaining strict POSIX durability and rollback resistance for secure SQLite transactions on low-power hardware.
+AEGIS-Q is a FUSE secure-storage prototype for unified-memory edge systems that separates a latency-sensitive AES-GCM data path from optional batched GPU work. This revision reports only claims supported by the implementation and retained raw artifacts. The data path creates a random per-file data-encryption key, stores an authenticated envelope under a mount-derived key, writes ciphertext before a durable mapping journal, and validates an HMAC checkpoint on remount. ML-KEM-768 is measured as a batched optional provisioning workload rather than used for per-block encryption. The CUDA path uses managed allocation, explicit prefetch, and stream synchronization; it does not claim direct NVMe DMA into managed memory, \texttt{io\_uring}/eBPF completion bypass, or an end-to-end AI-QoS controller.
+On a Jetson AGX Thor Developer Kit, three retained runs show that the CPU AES-GCM path sustains 1.61~GB/s for 16~MiB blocks while the managed-buffer GPU implementation reaches 0.17~GB/s. Conversely, batched ML-KEM-768 key generation reaches 1.50~M keygens/s on cuPQC versus 64.8~K keygens/s with liboqs at batch size 4,096. We also report clean-remount and GPU integrity-parity tests. The repository additionally retains matched fscrypt and dm-crypt sequential-write baselines with identical block size, job count, and queue depth. The paper still scopes out unmeasured side-channel resistance, hardware-anchor rollback protection, cross-platform portability, and application-level QoS claims.
 \end{abstract}
 
-\keywords{Post-Quantum Cryptography, Edge Computing, Secure Storage, Unified Memory, TPM, FUSE, QoS}
+\keywords{Post-Quantum Cryptography, Edge Computing, Secure Storage, Unified Memory, TPM, FUSE}
 
 \maketitle
 
 \input{1_Introduction.tex}
 \input{2_Background.tex}
+\input{5_Related_Works.tex}
 \input{3_Design.tex}
 \input{7_Implementation_Details.tex}
-\input{4_Evaluation.tex}
 \input{8_Security_Analysis.tex}
-\input{5_Related_Works.tex}
+\input{4_Evaluation.tex}
 \input{10_Discussion_and_Limitations.tex}
 \input{6_Conclusion.tex}
+\appendix
 \input{11_Appendix.tex}
 % ACM bibliography style for conference-format builds
 \bibliographystyle{ACM-Reference-Format}

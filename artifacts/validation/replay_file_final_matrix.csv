@@ -1,0 +1,5 @@
+backend,cut_point_s,trial,rollback_blocked,mode,detail
+file,0.0,0,False,rollback_visible,restored_baseline_readable
+file,0.0,1,False,rollback_visible,restored_baseline_readable
+file,0.05,0,False,rollback_visible,restored_baseline_readable
+file,0.05,1,False,rollback_visible,restored_baseline_readable

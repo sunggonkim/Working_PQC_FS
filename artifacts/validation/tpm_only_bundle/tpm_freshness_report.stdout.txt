@@ -1,0 +1,3 @@
+{
+  "out_dir": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_report"
+}

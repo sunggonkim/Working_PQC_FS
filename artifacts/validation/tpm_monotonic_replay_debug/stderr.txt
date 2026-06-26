@@ -1,0 +1,32 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE] WARNING: Cannot open log file '/tmp/tpm_dbg_store_0yufvaek/../pqc_fuse_latency.log': Permission denied
+[PQC-FUSE 2026-06-26 17:50:28.566] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-26 17:50:28.566]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-26 17:50:28.566]   Storage dir : /tmp/tpm_dbg_store_0yufvaek
+[PQC-FUSE 2026-06-26 17:50:28.566]   Mount point : /tmp/tpm_dbg_mnt_lm5eug1e
+[PQC-FUSE 2026-06-26 17:50:28.566] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-26 17:50:28.566] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-26 17:50:28.566]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-26 17:50:28.566]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-26 17:50:28.566]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-26 17:50:28.566]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-26 17:50:28.569] Keypair generated in 1463.05 µs
+[PQC-FUSE 2026-06-26 17:50:28.739] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-26 17:50:28.739] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-26 17:50:28.739] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-26 17:50:28.745] Freshness anchor worker started
+[PQC-FUSE 2026-06-26 17:50:28.851] PQC background rekey worker started
+[PQC-FUSE 2026-06-26 17:50:28.851] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-26 17:50:43.612] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-26 17:50:43.612] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-26 17:50:43.613] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0
+[PQC-FUSE 2026-06-26 17:50:43.613] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0

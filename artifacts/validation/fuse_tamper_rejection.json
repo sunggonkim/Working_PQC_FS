@@ -1,0 +1,9 @@
+{
+  "test": "authenticated_persistent_envelope_tamper_rejection",
+  "metadata_xattr": "user.pqc_metadata",
+  "expected_errno": 129,
+  "open_rejected": true,
+  "observed_errno": 129,
+  "envelope_bytes": 120,
+  "pass": true
+}

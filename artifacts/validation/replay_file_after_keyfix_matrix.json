@@ -1,0 +1,37 @@
+{
+  "rows": [
+    {
+      "backend": "file",
+      "cut_point_s": 0.0,
+      "trial": 0,
+      "preserved": true,
+      "mode": "rollback_reject",
+      "detail": "stale_image_blocked"
+    },
+    {
+      "backend": "file",
+      "cut_point_s": 0.0,
+      "trial": 1,
+      "preserved": true,
+      "mode": "rollback_reject",
+      "detail": "stale_image_blocked"
+    },
+    {
+      "backend": "file",
+      "cut_point_s": 0.05,
+      "trial": 0,
+      "preserved": true,
+      "mode": "rollback_reject",
+      "detail": "stale_image_blocked"
+    },
+    {
+      "backend": "file",
+      "cut_point_s": 0.05,
+      "trial": 1,
+      "preserved": true,
+      "mode": "rollback_reject",
+      "detail": "stale_image_blocked"
+    }
+  ],
+  "skipped": []
+}

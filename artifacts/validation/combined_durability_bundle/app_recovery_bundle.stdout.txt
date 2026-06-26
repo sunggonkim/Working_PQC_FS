@@ -1,0 +1,4 @@
+{
+  "out_dir": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/app_recovery_bundle",
+  "checks": 4
+}
