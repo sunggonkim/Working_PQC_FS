@@ -13,12 +13,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_OUT = ROOT / "artifacts" / "index_report"
+DEFAULT_OUT = ROOT / "artifacts" / "reports" / "index_report"
 
 
 PACKAGES = {
-    "crash_audit_report": ROOT / "artifacts" / "crash_audit_report" / "crash_audit_report.json",
-    "platform_inventory_report": ROOT / "artifacts" / "platform_inventory_report" / "platform_inventory_report.json",
+    "crash_audit_report": ROOT / "artifacts" / "reports" / "crash_audit_report" / "crash_audit_report.json",
+    "platform_inventory_report": ROOT / "artifacts" / "reports" / "platform_inventory_report" / "platform_inventory_report.json",
     "tpm_freshness_bundle": ROOT / "artifacts" / "validation" / "tpm_freshness_bundle" / "tpm_freshness_bundle.json",
     "tpm_freshness_report": ROOT / "artifacts" / "validation" / "tpm_freshness_report" / "tpm_freshness_report.json",
     "tpm_only_bundle": ROOT / "artifacts" / "validation" / "tpm_only_bundle" / "tpm_only_bundle.json",
@@ -36,8 +36,8 @@ PACKAGES = {
     "combined_durability_bundle": ROOT / "artifacts" / "validation" / "combined_durability_bundle" / "combined_durability_bundle.json",
     "sqlite_recovery_oracle": ROOT / "artifacts" / "validation" / "sqlite_recovery_oracle" / "sqlite_recovery_oracle.json",
     "sqlite_fault_campaign": ROOT / "artifacts" / "validation" / "sqlite_fault_campaign" / "sqlite_fault_campaign.json",
-    "evidence_dashboard": ROOT / "artifacts" / "evidence_dashboard" / "evidence_dashboard.json",
-    "status_register": ROOT / "artifacts" / "status_register" / "status_register.json",
+    "evidence_dashboard": ROOT / "artifacts" / "reports" / "evidence_dashboard" / "evidence_dashboard.json",
+    "status_register": ROOT / "artifacts" / "reports" / "status_register" / "status_register.json",
 }
 
 

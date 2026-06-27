@@ -1,0 +1,29 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-27 07:55:30.525] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-27 07:55:30.525]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-27 07:55:30.525]   Storage dir : /tmp/gen_matrix_partial_store_qowspjhg
+[PQC-FUSE 2026-06-27 07:55:30.525]   Mount point : /tmp/gen_matrix_partial_mnt_xopfjlbv
+[PQC-FUSE 2026-06-27 07:55:30.525] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-27 07:55:30.525] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-27 07:55:30.525]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-27 07:55:30.525]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-27 07:55:30.525]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-27 07:55:30.525]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-27 07:55:30.527] Keypair generated in 1514.92 µs
+[PQC-FUSE 2026-06-27 07:55:30.698] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-27 07:55:30.699] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-27 07:55:30.699] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-27 07:55:30.699] Freshness anchor worker started
+[PQC-FUSE 2026-06-27 07:55:30.811] PQC background rekey worker started
+[PQC-FUSE 2026-06-27 07:55:30.811] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-27 07:55:30.835] CREATE /partial.bin: authenticated file-key envelope initialized (fid=13424498388052380790)
+[PQC-FUSE 2026-06-27 07:55:30.838] OPEN /partial.bin: restored authenticated file-key envelope (fid=13424498388052380790)
+[PQC-FUSE 2026-06-27 07:55:30.840] OPEN /partial.bin: restored authenticated file-key envelope (fid=13424498388052380790)
+[PQC-FUSE 2026-06-27 07:55:30.841] Shutting down PQC-FUSE filesystem...

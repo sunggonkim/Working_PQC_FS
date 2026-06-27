@@ -1,0 +1,69 @@
+{
+  "acceptable": true,
+  "admission": {
+    "ai_qos_exhausted_records": [],
+    "path": "artifacts/validation/keyplane_rekey_workflow/gpu_batch/admission_trace.jsonl",
+    "records": [
+      {
+        "ai_qos_budget_remaining_ns": 100000000,
+        "batch_age_ns": 1000000000,
+        "batch_count": 1024,
+        "bytes_total": 1146880,
+        "chosen_target": "GPU",
+        "cpu_load_avg": 0.62,
+        "cpu_queue_depth": 1024,
+        "decision_reason": 4,
+        "deferral_reason": 0,
+        "gpu_d2h_staging_ns": 32768,
+        "gpu_h2d_staging_ns": 1146880,
+        "gpu_kernel_est_ns": 250000,
+        "gpu_load_avg": 0.0,
+        "gpu_queue_depth": 0,
+        "queue_delay_ns": 1024000,
+        "service_time_ns": 1429648,
+        "telemetry_mem_bandwidth_util": 0.1,
+        "telemetry_tensor_core_util": 0.1,
+        "timestamp_ns": 1782517990514364219,
+        "uma_migration_bytes_est": 0,
+        "uma_migration_cost_ns": 0
+      }
+    ],
+    "targets": {
+      "CPU": 0,
+      "GPU": 1
+    }
+  },
+  "files_requested": 1024,
+  "mode": "gpu_batch",
+  "rekey": {
+    "event_count": 1,
+    "events": [
+      {
+        "budget_ns": 100000000,
+        "decision_reason": 4,
+        "deferral_reason": 0,
+        "detail_line": "[PQC-FUSE 2026-06-27 08:53:10.535] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+        "files": 1024,
+        "line": "[PQC-FUSE 2026-06-27 08:53:10.535] REKEY WORKER: batched 1024 files 21070.4\u00b5s (target=GPU, run=GPU)",
+        "run": "GPU",
+        "target": "GPU",
+        "usec": 21070.4,
+        "work_bytes": 1146880
+      }
+    ],
+    "files_refreshed": 1024,
+    "path": "artifacts/validation/keyplane_rekey_workflow/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+    "run_counts": {
+      "CPU": 0,
+      "GPU": 1
+    },
+    "sha256": "9a4ea377a5b88baba0dd6f4151e9f32b4f1e452408ca9f560c2bb23a77faee2b",
+    "target_counts": {
+      "CPU": 0,
+      "GPU": 1
+    }
+  },
+  "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+  "throughput_files_per_s": 48598.98245880476,
+  "total_rekey_usec": 21070.4
+}

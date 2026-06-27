@@ -1,0 +1,28 @@
+# GPU: NVIDIA Thor  SM11.0  CUDA 13000
+# MLKEM768Key BlockDim=128  shared_memory=3904 bytes
+#
+# op,executor,batch,ops_per_sec,wall_ms
+#
+ml_kem_keygen,gpu,1,10368.6,0.096
+ml_kem_keygen,gpu,4,41897.1,0.095
+ml_kem_keygen,gpu,16,154423.8,0.104
+ml_kem_keygen,gpu,64,583584.9,0.110
+ml_kem_keygen,gpu,256,930249.5,0.275
+ml_kem_keygen,gpu,1024,1325629.8,0.772
+ml_kem_keygen,gpu,4096,1499049.6,2.732
+
+ml_kem_encaps,gpu,1,10252.5,0.098
+ml_kem_encaps,gpu,4,41041.2,0.097
+ml_kem_encaps,gpu,16,150996.1,0.106
+ml_kem_encaps,gpu,64,578024.2,0.111
+ml_kem_encaps,gpu,256,912835.0,0.280
+ml_kem_encaps,gpu,1024,1146115.1,0.893
+ml_kem_encaps,gpu,4096,1178155.5,3.477
+
+ml_kem_decaps,gpu,1,9957.6,0.100
+ml_kem_decaps,gpu,4,39859.7,0.100
+ml_kem_decaps,gpu,16,147226.6,0.109
+ml_kem_decaps,gpu,64,558322.9,0.115
+ml_kem_decaps,gpu,256,855340.5,0.299
+ml_kem_decaps,gpu,1024,1116854.1,0.917
+ml_kem_decaps,gpu,4096,1106401.2,3.702

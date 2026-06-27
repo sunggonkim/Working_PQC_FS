@@ -17,7 +17,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = ROOT / "artifacts" / "m3_qos_ci_report"
+DEFAULT_OUT = ROOT / "artifacts" / "reports" / "m3_qos_ci_report"
 
 
 def bootstrap_ci(samples: list[float], trials: int = 10000, alpha: float = 0.05, seed: int = 11) -> tuple[float, float]:
@@ -68,7 +68,7 @@ def main() -> int:
         report_rows.append(entry)
 
     report = {
-        "source": "artifacts/m3_qos/m3_qos_results.json",
+        "source": "artifacts/results/qos/m3_qos/m3_qos_results.json",
         "bootstrap": {
             "trials": 10000,
             "alpha": 0.05,

@@ -1,0 +1,265 @@
+{
+  "duplicate_closures": [],
+  "figure_table_obligations": [
+    {
+      "label": "fig:first_page_qos",
+      "label_present": true,
+      "obligation": "first-page QoS pressure/hero result",
+      "referenced": true,
+      "source": "Paper/1_Introduction.tex"
+    },
+    {
+      "label": "tab:capability_matrix",
+      "label_present": true,
+      "obligation": "design-gap capability comparison",
+      "referenced": true,
+      "source": "Paper/1_Introduction.tex"
+    },
+    {
+      "label": "tab:design_goals",
+      "label_present": true,
+      "obligation": "formal invariant table",
+      "referenced": true,
+      "source": "Paper/3_Design.tex"
+    },
+    {
+      "label": "fig:overall_procedure",
+      "label_present": true,
+      "obligation": "architecture and plane separation",
+      "referenced": true,
+      "source": "Paper/3_Design.tex"
+    },
+    {
+      "label": "fig:djc_state_machine",
+      "label_present": true,
+      "obligation": "publication protocol state machine",
+      "referenced": true,
+      "source": "Paper/3_Design.tex"
+    },
+    {
+      "label": "tab:memory_compat",
+      "label_present": true,
+      "obligation": "memory/claim boundary",
+      "referenced": true,
+      "source": "Paper/3_Design.tex"
+    },
+    {
+      "label": "tab:impl_boundaries",
+      "label_present": true,
+      "obligation": "implementation boundary summary",
+      "referenced": true,
+      "source": "Paper/7_Implementation_Details.tex"
+    },
+    {
+      "label": "tab:threat_boundary",
+      "label_present": true,
+      "obligation": "security threat boundary",
+      "referenced": true,
+      "source": "Paper/8_Security_Analysis.tex"
+    },
+    {
+      "label": "tab:benchmark_workloads",
+      "label_present": true,
+      "obligation": "evaluation provenance",
+      "referenced": true,
+      "source": "Paper/4_Evaluation.tex"
+    },
+    {
+      "label": "fig:baseline_comparison",
+      "label_present": true,
+      "obligation": "placement evidence",
+      "referenced": true,
+      "source": "Paper/4_Evaluation.tex"
+    },
+    {
+      "label": "tab:recovery_scope",
+      "label_present": true,
+      "obligation": "freshness/recovery interpretation",
+      "referenced": true,
+      "source": "Paper/4_Evaluation.tex"
+    },
+    {
+      "label": "tab:qos_sqlite_recovery",
+      "label_present": true,
+      "obligation": "SQLite QoS hero result",
+      "referenced": true,
+      "source": "Paper/generated_qos_recovery_table.tex"
+    }
+  ],
+  "mapping_text_present": true,
+  "mechanisms": [
+    {
+      "artifacts": [
+        {
+          "path": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+          "present": true
+        },
+        {
+          "path": "artifacts/validation/fuse_tamper_rejection.json",
+          "present": true
+        }
+      ],
+      "artifacts_present": true,
+      "closure_id": "E1-generation-and-envelope-authentication",
+      "design_needles": [
+        "AES-256-GCM block format",
+        "file identifier",
+        "Table~\\ref{tab:design_goals}"
+      ],
+      "design_present": true,
+      "evaluation_needles": [
+        "generation fault matrix",
+        "EKEYREJECTED"
+      ],
+      "evaluation_present": true,
+      "mechanism": "authenticated block format",
+      "rq": "RQ1"
+    },
+    {
+      "artifacts": [
+        {
+          "path": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+          "present": true
+        },
+        {
+          "path": "artifacts/validation/recovery_oracle_audit/recovery_oracle_audit.json",
+          "present": true
+        }
+      ],
+      "artifacts_present": true,
+      "closure_id": "E2-oracle-labeled-publication-cutpoints",
+      "design_needles": [
+        "Figure~\\ref{fig:djc_state_machine}",
+        "Data-before-mapping publication"
+      ],
+      "design_present": true,
+      "evaluation_needles": [
+        "daemon power-fault campaign",
+        "SQLite WAL/FULL selected-boundary",
+        "oracle verdict"
+      ],
+      "evaluation_present": true,
+      "mechanism": "D/J/C publication",
+      "rq": "RQ4"
+    },
+    {
+      "artifacts": [
+        {
+          "path": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+          "present": true
+        },
+        {
+          "path": "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json",
+          "present": true
+        }
+      ],
+      "artifacts_present": true,
+      "closure_id": "E3-hardware-freshness-verdict-matrix",
+      "design_needles": [
+        "TPM NV index",
+        "Freshness boundary"
+      ],
+      "design_present": true,
+      "evaluation_needles": [
+        "hardware-freshness recovery matrix",
+        "TPM replay-after-advance"
+      ],
+      "evaluation_present": true,
+      "mechanism": "TPM freshness",
+      "rq": "RQ4"
+    },
+    {
+      "artifacts": [
+        {
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+          "present": true
+        },
+        {
+          "path": "artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_analysis.json",
+          "present": true
+        }
+      ],
+      "artifacts_present": true,
+      "closure_id": "E4-sqlite-recovery-and-controller-sensitivity",
+      "design_needles": [
+        "user.pqc\\_qos\\_class",
+        "elastic files are throttle-eligible"
+      ],
+      "design_present": true,
+      "evaluation_needles": [
+        "SQLite transaction latency",
+        "sensitivity bundle",
+        "hysteresis trace"
+      ],
+      "evaluation_present": true,
+      "mechanism": "QoS controller",
+      "rq": "RQ3/RQ5"
+    },
+    {
+      "artifacts": [
+        {
+          "path": "artifacts/validation/microbench/summary.json",
+          "present": true
+        },
+        {
+          "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+          "present": true
+        }
+      ],
+      "artifacts_present": true,
+      "closure_id": "E5-data-plane-placement-asymmetry",
+      "design_needles": [
+        "placement function balances",
+        "managed allocation",
+        "stream synchronization"
+      ],
+      "design_present": true,
+      "evaluation_needles": [
+        "CPU/OpenSSL",
+        "managed-buffer GPU path",
+        "data plane is CPU-first"
+      ],
+      "evaluation_present": true,
+      "mechanism": "CPU/GPU placement",
+      "rq": "RQ2/RQ5"
+    },
+    {
+      "artifacts": [
+        {
+          "path": "artifacts/validation/keyplane_rekey_workflow/keyplane_rekey_workflow.json",
+          "present": true
+        },
+        {
+          "path": "artifacts/validation/keyplane_rekey_methodology/keyplane_rekey_workflow.json",
+          "present": true
+        }
+      ],
+      "artifacts_present": true,
+      "closure_id": "E6-mounted-open-file-rekey-workflow",
+      "design_needles": [
+        "optional batched ML-KEM",
+        "key-plane workflow",
+        "producer supplies nonzero relative slack"
+      ],
+      "design_present": true,
+      "evaluation_needles": [
+        "ML-KEM-768",
+        "1.158$\\times$ speedup",
+        "open-file envelope refresh"
+      ],
+      "evaluation_present": true,
+      "mechanism": "optional ML-KEM batch lane",
+      "rq": "RQ5"
+    }
+  ],
+  "overall_pass": true,
+  "pages": 12,
+  "schema_version": 1,
+  "scope": [
+    "six required design mechanisms from SUBMISSION_CHECKLIST.md",
+    "unique evaluation closure id per mechanism",
+    "main-paper figure/table obligation labels",
+    "paper source mapping paragraph and 12-page PDF gate"
+  ],
+  "violations": []
+}

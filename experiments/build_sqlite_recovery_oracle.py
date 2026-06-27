@@ -173,7 +173,7 @@ def write_markdown(report: dict[str, Any], path: Path) -> None:
         "# SQLite recovery oracle",
         "",
         "This report defines durable-boundary cut points and the recovery oracle for a future SQLite fault-injection campaign.",
-        "It is derived from retained SQLite samples and `artifacts/sqlite_strace.log`; it does not claim crash certification.",
+        "It is derived from retained SQLite samples and `artifacts/results/recovery/sqlite_strace.log`; it does not claim crash certification.",
         "",
         "## Retained SQLite samples",
         "",

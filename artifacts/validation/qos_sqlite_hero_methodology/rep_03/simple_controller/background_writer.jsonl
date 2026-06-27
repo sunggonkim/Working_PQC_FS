@@ -1,0 +1,118 @@
+{"chunk_bytes": 65536, "event": "writer_start", "fsync_every": 1, "timestamp_ns": 1782524624105573376, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 65536, "chunk_index": 1, "event": "write", "fsync": true, "timestamp_ns": 1782524624106026654, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 131072, "chunk_index": 2, "event": "write", "fsync": true, "timestamp_ns": 1782524624109667923, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 196608, "chunk_index": 3, "event": "write", "fsync": true, "timestamp_ns": 1782524624112346960, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 262144, "chunk_index": 4, "event": "write", "fsync": true, "timestamp_ns": 1782524624114256877, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 327680, "chunk_index": 5, "event": "write", "fsync": true, "timestamp_ns": 1782524624116870053, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 393216, "chunk_index": 6, "event": "write", "fsync": true, "timestamp_ns": 1782524624119375784, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 458752, "chunk_index": 7, "event": "write", "fsync": true, "timestamp_ns": 1782524624122020979, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 524288, "chunk_index": 8, "event": "write", "fsync": true, "timestamp_ns": 1782524624125722886, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 589824, "chunk_index": 9, "event": "write", "fsync": true, "timestamp_ns": 1782524624130314868, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 655360, "chunk_index": 10, "event": "write", "fsync": true, "timestamp_ns": 1782524624133871173, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 1, "sleep_us": 5000, "timestamp_ns": 1782524624137498507, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 2, "sleep_us": 5000, "timestamp_ns": 1782524624142571479, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 3, "sleep_us": 5000, "timestamp_ns": 1782524624147643488, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 4, "sleep_us": 5000, "timestamp_ns": 1782524624152713118, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 5, "sleep_us": 5000, "timestamp_ns": 1782524624157782627, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 6, "sleep_us": 5000, "timestamp_ns": 1782524624162852118, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 7, "sleep_us": 5000, "timestamp_ns": 1782524624167920627, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 8, "sleep_us": 5000, "timestamp_ns": 1782524624172989544, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 9, "sleep_us": 5000, "timestamp_ns": 1782524624178057507, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 10, "sleep_us": 5000, "timestamp_ns": 1782524624183127294, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 11, "sleep_us": 5000, "timestamp_ns": 1782524624188204183, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 12, "sleep_us": 5000, "timestamp_ns": 1782524624193296109, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 13, "sleep_us": 5000, "timestamp_ns": 1782524624198385378, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 14, "sleep_us": 5000, "timestamp_ns": 1782524624203469896, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 15, "sleep_us": 5000, "timestamp_ns": 1782524624208548035, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 16, "sleep_us": 5000, "timestamp_ns": 1782524624213623758, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 17, "sleep_us": 5000, "timestamp_ns": 1782524624218708749, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 18, "sleep_us": 5000, "timestamp_ns": 1782524624223823925, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 19, "sleep_us": 5000, "timestamp_ns": 1782524624228860925, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 20, "sleep_us": 5000, "timestamp_ns": 1782524624233931341, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 21, "sleep_us": 5000, "timestamp_ns": 1782524624239011638, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 22, "sleep_us": 5000, "timestamp_ns": 1782524624244081369, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 23, "sleep_us": 5000, "timestamp_ns": 1782524624249150434, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 24, "sleep_us": 5000, "timestamp_ns": 1782524624254219129, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 25, "sleep_us": 5000, "timestamp_ns": 1782524624259289712, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 26, "sleep_us": 5000, "timestamp_ns": 1782524624264359221, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 27, "sleep_us": 5000, "timestamp_ns": 1782524624269427481, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 28, "sleep_us": 5000, "timestamp_ns": 1782524624274463185, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 29, "sleep_us": 5000, "timestamp_ns": 1782524624279538370, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 30, "sleep_us": 5000, "timestamp_ns": 1782524624284612101, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 31, "sleep_us": 5000, "timestamp_ns": 1782524624289683463, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 32, "sleep_us": 5000, "timestamp_ns": 1782524624294753129, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 33, "sleep_us": 5000, "timestamp_ns": 1782524624299823657, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 34, "sleep_us": 5000, "timestamp_ns": 1782524624304862379, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 35, "sleep_us": 5000, "timestamp_ns": 1782524624309934639, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 36, "sleep_us": 5000, "timestamp_ns": 1782524624315004454, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 37, "sleep_us": 5000, "timestamp_ns": 1782524624320074417, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 38, "sleep_us": 5000, "timestamp_ns": 1782524624325144574, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 39, "sleep_us": 5000, "timestamp_ns": 1782524624330215843, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 40, "sleep_us": 5000, "timestamp_ns": 1782524624335286019, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 41, "sleep_us": 5000, "timestamp_ns": 1782524624340355121, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 42, "sleep_us": 5000, "timestamp_ns": 1782524624345423519, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 43, "sleep_us": 5000, "timestamp_ns": 1782524624350491741, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 44, "sleep_us": 5000, "timestamp_ns": 1782524624355560019, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 45, "sleep_us": 5000, "timestamp_ns": 1782524624360629223, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 46, "sleep_us": 5000, "timestamp_ns": 1782524624365700242, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 47, "sleep_us": 5000, "timestamp_ns": 1782524624370769075, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 48, "sleep_us": 5000, "timestamp_ns": 1782524624375838427, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 49, "sleep_us": 5000, "timestamp_ns": 1782524624380906640, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 50, "sleep_us": 5000, "timestamp_ns": 1782524624385976483, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 51, "sleep_us": 5000, "timestamp_ns": 1782524624391046186, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 52, "sleep_us": 5000, "timestamp_ns": 1782524624396116335, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 53, "sleep_us": 5000, "timestamp_ns": 1782524624401185761, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 54, "sleep_us": 5000, "timestamp_ns": 1782524624406258585, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 55, "sleep_us": 5000, "timestamp_ns": 1782524624411329798, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 56, "sleep_us": 5000, "timestamp_ns": 1782524624416401131, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 57, "sleep_us": 5000, "timestamp_ns": 1782524624421460326, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 58, "sleep_us": 5000, "timestamp_ns": 1782524624426527770, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 59, "sleep_us": 5000, "timestamp_ns": 1782524624431594650, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 60, "sleep_us": 5000, "timestamp_ns": 1782524624436662057, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 61, "sleep_us": 5000, "timestamp_ns": 1782524624441728409, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 62, "sleep_us": 5000, "timestamp_ns": 1782524624446794928, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 63, "sleep_us": 5000, "timestamp_ns": 1782524624451860530, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 64, "sleep_us": 5000, "timestamp_ns": 1782524624456927178, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 65, "sleep_us": 5000, "timestamp_ns": 1782524624461993771, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 66, "sleep_us": 5000, "timestamp_ns": 1782524624467068947, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 67, "sleep_us": 5000, "timestamp_ns": 1782524624472149363, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 68, "sleep_us": 5000, "timestamp_ns": 1782524624477224901, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 69, "sleep_us": 5000, "timestamp_ns": 1782524624482298975, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 70, "sleep_us": 5000, "timestamp_ns": 1782524624487376725, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 71, "sleep_us": 5000, "timestamp_ns": 1782524624492450632, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 72, "sleep_us": 5000, "timestamp_ns": 1782524624497526419, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 73, "sleep_us": 5000, "timestamp_ns": 1782524624502602142, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 74, "sleep_us": 5000, "timestamp_ns": 1782524624507681003, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 75, "sleep_us": 5000, "timestamp_ns": 1782524624512754966, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 76, "sleep_us": 5000, "timestamp_ns": 1782524624517829475, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 77, "sleep_us": 5000, "timestamp_ns": 1782524624522904142, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 78, "sleep_us": 5000, "timestamp_ns": 1782524624527983911, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 79, "sleep_us": 5000, "timestamp_ns": 1782524624533058068, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 80, "sleep_us": 5000, "timestamp_ns": 1782524624538131402, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 81, "sleep_us": 5000, "timestamp_ns": 1782524624543211865, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 82, "sleep_us": 5000, "timestamp_ns": 1782524624548303994, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 83, "sleep_us": 5000, "timestamp_ns": 1782524624553411244, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 84, "sleep_us": 5000, "timestamp_ns": 1782524624558489004, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 85, "sleep_us": 5000, "timestamp_ns": 1782524624563572874, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 86, "sleep_us": 5000, "timestamp_ns": 1782524624568663967, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 87, "sleep_us": 5000, "timestamp_ns": 1782524624573739356, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 88, "sleep_us": 5000, "timestamp_ns": 1782524624578813198, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 89, "sleep_us": 5000, "timestamp_ns": 1782524624583887874, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 90, "sleep_us": 5000, "timestamp_ns": 1782524624588967875, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 91, "sleep_us": 5000, "timestamp_ns": 1782524624594044384, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 92, "sleep_us": 5000, "timestamp_ns": 1782524624599141875, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 93, "sleep_us": 5000, "timestamp_ns": 1782524624604250782, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 94, "sleep_us": 5000, "timestamp_ns": 1782524624609339236, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 95, "sleep_us": 5000, "timestamp_ns": 1782524624614416440, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 96, "sleep_us": 5000, "timestamp_ns": 1782524624619494606, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 97, "sleep_us": 5000, "timestamp_ns": 1782524624624575060, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 98, "sleep_us": 5000, "timestamp_ns": 1782524624629656431, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 99, "sleep_us": 5000, "timestamp_ns": 1782524624634731264, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 100, "sleep_us": 5000, "timestamp_ns": 1782524624639806357, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 101, "sleep_us": 5000, "timestamp_ns": 1782524624644865755, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 102, "sleep_us": 5000, "timestamp_ns": 1782524624649947653, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 103, "sleep_us": 5000, "timestamp_ns": 1782524624655021866, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 104, "sleep_us": 5000, "timestamp_ns": 1782524624660094783, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 105, "sleep_us": 5000, "timestamp_ns": 1782524624665170172, "writer_id": 0}
+{"event": "harness_throttle_sleep", "sleep_events": 106, "sleep_us": 5000, "timestamp_ns": 1782524624670246079, "writer_id": 0}
+{"bytes_written": 655360, "chunks_written": 10, "elapsed_ns": 570040241, "event": "writer_stop", "harness_throttle_sleep_us_total": 530000, "harness_throttle_sleeps": 106, "throughput_mb_s": 1.0964138231777922, "timestamp_ns": 1782524624675616913, "writer_id": 0}

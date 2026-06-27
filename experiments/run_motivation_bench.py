@@ -404,11 +404,11 @@ def run_contention_bench():
 
 def run_inference_bench():
     model_specs = [
-        ("yolov8", ROOT / "artifacts" / "yolov8n.onnx", [
+        ("yolov8", ROOT / "artifacts" / "models" / "yolov8n.onnx", [
             "https://huggingface.co/cabelo/yolov8/resolve/main/yolov8n.onnx?download=true",
             "https://dl.opencv.org/models/yolov8/yolov8n.onnx",
         ], (1, 3, 640, 640), yolo_infer, yolo_timed_infer),
-        ("squeezenet", ROOT / "artifacts" / "squeezenet1.1.onnx", [
+        ("squeezenet", ROOT / "artifacts" / "models" / "squeezenet1.1.onnx", [
             "https://huggingface.co/qualcomm/SqueezeNet-1.1/resolve/main/SqueezeNet.onnx?download=true",
             "https://huggingface.co/onnxmodelzoo/squeezenet1.0-12/resolve/main/squeezenet1.0-12.onnx?download=true",
         ], (1, 3, 224, 224), squeeze_infer, squeeze_timed_infer),
@@ -551,7 +551,7 @@ def run_pressure_spill_bench():
 
 
 def run_edge_pipeline_bench():
-    model_path = ROOT / "artifacts" / "yolov8n.onnx"
+    model_path = ROOT / "artifacts" / "models" / "yolov8n.onnx"
     model_error = None
     if not model_path.exists():
         model_path.parent.mkdir(parents=True, exist_ok=True)

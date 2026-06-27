@@ -21,11 +21,11 @@ Measurement protocol (per pro-tip):
       nsys profile --stats=true python3 run_e3_interference_hero.py --cupti
 
 Output:
-  artifacts/e3_hero_results.json   — p99 table for each mode
-  artifacts/e3_hero_summary.csv    — CSV for LaTeX pgfplots
+  artifacts/results/qos/e3_hero_results.json   — p99 table for each mode
+  artifacts/results/qos/e3_hero_summary.csv    — CSV for LaTeX pgfplots
 
 Prerequisites:
-  - TensorRT YOLOv8n engine: artifacts/yolov8n.engine  (build once)
+  - TensorRT YOLOv8n engine: artifacts/models/yolov8n.plan  (build once)
   - GPU PQC kernel available: skim_cuda_pqc_available() == 1
     If unsupported, the script falls back to CPU-only PQC and marks
     the GPU PQC rows as "unsupported" (matches workload_map.csv convention).

@@ -51,7 +51,7 @@ def run_tvla_eval():
     ax.legend(loc='upper right')
     ax.grid(True, linestyle=':', alpha=0.6)
     
-    os.makedirs("artifacts/sidechannel", exist_ok=True)
+    os.makedirs("artifacts/probes/sidechannel", exist_ok=True)
     fig.tight_layout()
     plt.savefig("Paper/Figures/fig_tvla_ttest.pdf")
     print("TVLA plot generated and saved to Paper/Figures/fig_tvla_ttest.pdf")

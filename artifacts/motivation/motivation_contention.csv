@@ -1,5 +1,0 @@
-Workload,DRAM_BW_GBs_Mean,DRAM_BW_GBs_Std,Warp_Stalls_Pct_Mean,Warp_Stalls_Pct_Std,Data_Provenance
-AI-Only (YOLOv8),18.7,1.2,14.2,0.8,real_time_hardware_measurement
-Secure-I/O-Only (ML-KEM),42.1,2.1,22.4,1.4,real_time_hardware_measurement
-Concurrent (Naive),64.2,0.5,68.7,3.2,real_time_hardware_measurement
-Concurrent (AEGIS-Q),34.5,1.8,18.9,1.1,real_time_hardware_measurement

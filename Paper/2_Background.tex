@@ -6,7 +6,13 @@
 
 Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\cite{fscrypt, gocryptfs, dmcrypt, optee}.  For example, fscrypt~\cite{fscrypt} and OP-TEE~\cite{optee} operate at substantially different boundaries.  AEGIS-Q is a user-space FUSE prototype: it protects files represented by its own backing format and depends on the kernel, FUSE daemon, OpenSSL/liboqs, and the mount credential.  It is not a replacement for fscrypt or dm-crypt, and this paper reports no apples-to-apples end-to-end comparison with them.
 
-The cryptographic roles are deliberately distinct.  AES-GCM encrypts and authenticates each data block; SHA-256 constructs integrity roots; and ML-KEM-768 is a key-establishment primitive rather than a bulk-data primitive~\cite{mlkem, sha256}.  We use ML-KEM only for the optional batched key-plane experiment.  The production FUSE data path derives a random file data-encryption key (DEK), wraps it under a mount-derived key, and uses that DEK for AES-GCM.  This avoids the atypical and expensive design of performing a KEM operation for every block.
+The cryptographic roles are deliberately distinct.  AES-GCM encrypts and authenticates each data block; SHA-256 constructs the committed-prefix root used by the anchor helper; and ML-KEM-768 is a key-establishment primitive rather than a bulk-data primitive~\cite{mlkem, sha256}.  We use ML-KEM only for the optional batched key-plane experiment.  The production FUSE data path derives a random file data-encryption key (DEK), wraps it under a mount-derived key, and uses that DEK for AES-GCM.  This avoids the atypical and expensive design of performing a KEM operation for every block.
+
+\subsection{Why another user-space prototype?}
+
+The value of AEGIS-Q is not that user-space encryption is inherently preferable to kernel encryption.  In fact, kernel-integrated systems have a clear maturity advantage.  AEGIS-Q is also not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external freshness checks under one evidence contract.  In that setting, the storage layer exposes policy decisions that conventional encryption layers usually hide.  A FUSE daemon can decide whether a particular maintenance job is latency-sensitive, batch-shaped, or freshness-critical; it can also fail closed before exposing a file whose envelope, checkpoint, or external anchor is inconsistent.
+
+The capability matrix on the first page is not a performance ranking.  It explains why the paper evaluates AEGIS-Q as a placement and recovery prototype rather than as a replacement for mature deployed filesystems.
 
 \subsection{Unified memory is not a DMA contract}
 \label{sec:bg_mem}
@@ -15,6 +21,23 @@ On a unified-memory SoC, CPU and GPU share DRAM capacity and bandwidth; Jetson-c
 
 This scope matters because systems work must separate an API's correctness semantics from an optimization hypothesis.  A future direct-I/O path would need an explicit driver/version matrix, pinning and IOMMU evidence, a fault-injection campaign under memory pressure, and a protocol that excludes DMA, CPU, and GPU concurrent access.  None of those conditions is established here.  The absence of that path is a design constraint, not an unreported optimization.
 
+This distinction also affects how to read the retained auxiliary diagnostics.  A successful same-buffer checksum through a mapped host pointer shows that a particular buffer was visible to a CUDA kernel after a storage read.  It does not establish that the production FUSE path can safely register every file-cache page, that the NVMe controller can DMA into managed memory without migration hazards, or that page-fault and coherence counters are available on the deployed driver stack.  AEGIS-Q therefore treats managed memory as an executor-local convenience and treats storage I/O as POSIX sidecar I/O unless a future driver-level campaign proves more.
+
 \subsection{Why work placement is asymmetric}
 
 GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large learning workloads through storage hierarchies~\cite{flashneuron, fastensor}; their complementary staging perspectives are also relevant to the batch boundary considered here~\cite{fastensor, flashneuron}.  GPU-oriented work such as fscrypt-GPU and FlashNeuron further motivates separating batch placement from the storage format~\cite{fscrypt_gpu, flashneuron}.  They do not validate this FUSE format or its durability protocol.  Likewise, storage-oriented systems including SnuQS and InfScaler motivate explicit staging but do not make an NVMe/UVM correctness claim for this prototype~\cite{snuqs_storage, infscaler}.  The evaluation therefore asks a smaller question: for each measured primitive, does CPU or GPU offer the better observed throughput on the tested platform?  Section~\ref{sec:evaluation} reports the answer and retains the raw logs.
+
+The asymmetric answer is useful for system design.  Bulk data encryption is on the critical path of small writes, SQLite commits, and foreground reads.  Those operations are sensitive to launch latency, staging overhead, and CPU/GPU synchronization.  By contrast, key rotation, batch encapsulation, and committed-prefix hash maintenance can produce many independent jobs whose latency can be amortized and whose execution can be deferred when the foreground workload is under pressure.  AEGIS-Q's scheduler therefore does not ask whether the GPU is faster in isolation.  It asks whether a job is large enough, independent enough, and slack-tolerant enough to justify entering the elastic lane.
+
+\subsection{Design requirements}
+
+The resulting system requirements are:
+\begin{enumerate}
+\item \textbf{One storage format.} CPU and GPU execution must produce the same authenticated record format, so fallback does not change recovery semantics.
+\item \textbf{Publication before exposure.} A write is not visible merely because ciphertext bytes exist; a validated journal mapping and checkpoint determine exposure.
+\item \textbf{No optimistic accelerator semantics.} CUDA managed memory and prefetch are local executor mechanisms until storage-DMA behavior is separately proven.
+\item \textbf{Fail-closed freshness.} A file-backed witness is an integrity check, not a freshness root; external anchors must be evaluated separately.
+\item \textbf{Admission before acceleration.} A job with no explicit slack or stale telemetry must take the CPU path even if the GPU is present.
+\end{enumerate}
+
+These requirements shape the rest of the design.  They also explain the paper's evaluation style: negative controls and scoped failures are part of the evidence because they prevent the prototype from inheriting guarantees from mechanisms it does not actually implement.

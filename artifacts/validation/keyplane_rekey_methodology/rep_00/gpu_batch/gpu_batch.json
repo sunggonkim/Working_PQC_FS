@@ -1,0 +1,75 @@
+{
+  "acceptable": true,
+  "admission": {
+    "ai_qos_exhausted_records": [],
+    "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/gpu_batch/admission_trace.jsonl",
+    "records": [
+      {
+        "age_clock": "CLOCK_MONOTONIC",
+        "ai_inference_deadline_ns": 5000000000,
+        "ai_qos_budget_remaining_ns": 100000000,
+        "batch_age_ns": 1000000000,
+        "batch_count": 1024,
+        "bytes_total": 1146880,
+        "chosen_target": "GPU",
+        "cpu_load_avg": 0.83,
+        "cpu_queue_depth": 1024,
+        "decision_reason": 4,
+        "deferral_reason": 0,
+        "gpu_d2h_staging_ns": 32768,
+        "gpu_h2d_staging_ns": 1146880,
+        "gpu_kernel_est_ns": 250000,
+        "gpu_load_avg": 0.0,
+        "gpu_queue_depth": 0,
+        "producer_slack_age_ns": 1311125435,
+        "producer_slack_stale": false,
+        "producer_slack_stale_after_ns": 10000000000,
+        "queue_delay_ns": 1024000,
+        "service_time_ns": 1429648,
+        "telemetry_mem_bandwidth_util": 0.1,
+        "telemetry_tensor_core_util": 0.1,
+        "timestamp_ns": 1782523903731470857,
+        "trace_timestamp_clock": "CLOCK_REALTIME",
+        "uma_migration_bytes_est": 0,
+        "uma_migration_cost_ns": 0
+      }
+    ],
+    "targets": {
+      "CPU": 0,
+      "GPU": 1
+    }
+  },
+  "files_requested": 1024,
+  "mode": "gpu_batch",
+  "rekey": {
+    "event_count": 1,
+    "events": [
+      {
+        "budget_ns": 100000000,
+        "decision_reason": 4,
+        "deferral_reason": 0,
+        "detail_line": "[PQC-FUSE 2026-06-27 10:31:43.752] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+        "files": 1024,
+        "line": "[PQC-FUSE 2026-06-27 10:31:43.752] REKEY WORKER: batched 1024 files 21447.4\u00b5s (target=GPU, run=GPU)",
+        "run": "GPU",
+        "target": "GPU",
+        "usec": 21447.4,
+        "work_bytes": 1146880
+      }
+    ],
+    "files_refreshed": 1024,
+    "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+    "run_counts": {
+      "CPU": 0,
+      "GPU": 1
+    },
+    "sha256": "d3acf7e9059dd6c8a93454143aa719550bb27c8b15d8d6a5f65c92d277969bab",
+    "target_counts": {
+      "CPU": 0,
+      "GPU": 1
+    }
+  },
+  "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+  "throughput_files_per_s": 47744.71497710678,
+  "total_rekey_usec": 21447.4
+}

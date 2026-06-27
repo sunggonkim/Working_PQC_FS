@@ -1,0 +1,510 @@
+{
+  "checks": {
+    "all_figure_table_labels_mapped_once": true,
+    "all_required_rows_present": true,
+    "all_rows_have_paper_scope_anchors": true,
+    "all_rows_have_retained_evidence": true,
+    "figure_table_audit_pass": true,
+    "paper_pages_12": true,
+    "required_rows_have_allowed_status": true
+  },
+  "duplicate_label_mappings": {},
+  "extra_label_mappings": [],
+  "figure_table_labels": [
+    "fig:baseline_comparison",
+    "fig:djc_state_machine",
+    "fig:first_page_qos",
+    "fig:overall_procedure",
+    "tab:benchmark_workloads",
+    "tab:capability_matrix",
+    "tab:design_goals",
+    "tab:impl_boundaries",
+    "tab:memory_compat",
+    "tab:qos_sqlite_recovery",
+    "tab:recovery_scope",
+    "tab:threat_boundary"
+  ],
+  "label_to_matrix_row": {
+    "fig:baseline_comparison": [
+      "time_overhead_breakdown"
+    ],
+    "fig:djc_state_machine": [
+      "protocol_correctness_and_security_obligations"
+    ],
+    "fig:first_page_qos": [
+      "scalability_pressure_behavior"
+    ],
+    "fig:overall_procedure": [
+      "protocol_correctness_and_security_obligations"
+    ],
+    "tab:benchmark_workloads": [
+      "workload_diversity"
+    ],
+    "tab:capability_matrix": [
+      "baseline_sota_comparison"
+    ],
+    "tab:design_goals": [
+      "protocol_correctness_and_security_obligations"
+    ],
+    "tab:impl_boundaries": [
+      "protocol_correctness_and_security_obligations"
+    ],
+    "tab:memory_compat": [
+      "protocol_correctness_and_security_obligations"
+    ],
+    "tab:qos_sqlite_recovery": [
+      "scalability_pressure_behavior"
+    ],
+    "tab:recovery_scope": [
+      "protocol_correctness_and_security_obligations"
+    ],
+    "tab:threat_boundary": [
+      "protocol_correctness_and_security_obligations"
+    ]
+  },
+  "missing_label_mappings": [],
+  "overall_pass": true,
+  "pages": 12,
+  "required_row_ids": [
+    "baseline_sota_comparison",
+    "case_study",
+    "scalability_pressure_behavior",
+    "sensitivity_analysis",
+    "stability_variance",
+    "time_overhead_breakdown",
+    "workload_diversity"
+  ],
+  "rows": [
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/reports/novelty_isolation/novelty_isolation.json",
+          "role": "retained evidence"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [
+        "tab:capability_matrix"
+      ],
+      "id": "baseline_sota_comparison",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/4_Evaluation.tex",
+          "terms": [
+            "plaintext warm-cache row reports",
+            "gocryptfs reports",
+            "AEGIS-Q warm-cache row reports",
+            "broader kernel-encryption rows are discussed"
+          ]
+        },
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "terms": [
+            "not yet a complete fscrypt, dm-crypt",
+            "Historical fscrypt and dm-crypt fio outputs"
+          ]
+        }
+      ],
+      "required": true,
+      "requirement": "baseline/SOTA comparison",
+      "scoped_out": [
+        "fscrypt/dm-crypt/fs-verity/dm-integrity rows are not current matched measurements",
+        "cold-cache rows remain invalid without privileged cache-drop control"
+      ],
+      "status": "scoped_partial"
+    },
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+          "role": "retained evidence"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [
+        "fig:first_page_qos",
+        "tab:qos_sqlite_recovery"
+      ],
+      "id": "scalability_pressure_behavior",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/4_Evaluation.tex",
+          "terms": [
+            "Mounted storage pressure raises SQLite p99 from 6.4~ms to 13.8~ms",
+            "recovers to 8.8~ms p99",
+            "This is SQLite recovery, not general AI-inference QoS"
+          ]
+        }
+      ],
+      "required": true,
+      "requirement": "scalability or pressure behavior",
+      "scoped_out": [
+        "pressure result is mounted SQLite storage pressure, not TensorRT/AI p99 recovery"
+      ],
+      "status": "implemented_scoped"
+    },
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/workload_diversity_matrix/workload_diversity_matrix.json",
+          "role": "retained evidence"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [
+        "tab:benchmark_workloads"
+      ],
+      "id": "workload_diversity",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/4_Evaluation.tex",
+          "terms": [
+            "Table~\\ref{tab:benchmark_workloads}",
+            "SQLite",
+            "\\texttt{dbm.dumb}",
+            "TensorRT"
+          ]
+        },
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "terms": [
+            "broader workloads"
+          ]
+        }
+      ],
+      "required": true,
+      "requirement": "workload diversity",
+      "scoped_out": [
+        "workloads do not establish broad workload generalization or full crash certification"
+      ],
+      "status": "implemented_scoped"
+    },
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/mechanism_ablation_manifest/mechanism_ablation_manifest.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/keyplane_rekey_workflow/keyplane_rekey_workflow.json",
+          "role": "retained evidence"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [
+        "fig:baseline_comparison"
+      ],
+      "id": "time_overhead_breakdown",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/4_Evaluation.tex",
+          "terms": [
+            "CPU/OpenSSL reaches 1.61~GB/s",
+            "cuPQC reaches 1.50~M operations/s",
+            "1.158$\\times$ speedup",
+            "ablation rows attribute observed behavior to four mechanisms"
+          ]
+        }
+      ],
+      "required": true,
+      "requirement": "time/overhead breakdown",
+      "scoped_out": [
+        "primitive placement is not reported as an end-to-end FUSE write speedup"
+      ],
+      "status": "implemented_scoped"
+    },
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_analysis.json",
+          "role": "retained evidence"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [],
+      "id": "sensitivity_analysis",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/4_Evaluation.tex",
+          "terms": [
+            "The sensitivity bundle varies budget",
+            "sampling interval",
+            "queue depth",
+            "writer intensity",
+            "hysteresis"
+          ]
+        }
+      ],
+      "required": true,
+      "requirement": "sensitivity analysis",
+      "scoped_out": [
+        "sensitivity is controller-parameter coverage, not a statistical confidence study"
+      ],
+      "status": "implemented_scoped"
+    },
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/stat_thermal_methodology/stat_thermal_methodology_audit.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": false,
+          "overall_pass": false,
+          "passes": true,
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/qos_sqlite_hero_bundle.json",
+          "role": "negative repeated-run stability artifact"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [],
+      "id": "stability_variance",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/4_Evaluation.tex",
+          "terms": [
+            "observed-range whiskers, not confidence intervals",
+            "single retained workflow artifacts, not statistical confidence claims",
+            "future headline comparisons require warmup, five repetitions, bootstrap 95\\% confidence intervals"
+          ]
+        }
+      ],
+      "required": true,
+      "requirement": "stability/variance",
+      "scoped_out": [
+        "SQLite QoS headline remains a single retained workflow artifact",
+        "future headline comparisons require the methodology gate before generalization"
+      ],
+      "status": "scoped_partial"
+    },
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/reports/case_study_takeaway/case_study_takeaway.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
+          "role": "retained evidence"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [],
+      "id": "case_study",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "terms": [
+            "This case study is the same \\texttt{sqlite-mounted-qos-recovery-2026-06-27} contract",
+            "not a separate anecdotal demo",
+            "does not extend to kernel-encryption replacement"
+          ]
+        }
+      ],
+      "required": true,
+      "requirement": "case study",
+      "scoped_out": [
+        "deployment takeaway is the SQLite/FUSE hero contract, not a separate anecdote"
+      ],
+      "status": "implemented_scoped"
+    },
+    {
+      "evidence": [
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/reports/design_eval_isomorphism/design_eval_isomorphism.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/recovery_oracle_audit/recovery_oracle_audit.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+          "role": "retained evidence"
+        }
+      ],
+      "evidence_pass": true,
+      "figure_table_labels": [
+        "tab:design_goals",
+        "fig:overall_procedure",
+        "fig:djc_state_machine",
+        "tab:memory_compat",
+        "tab:impl_boundaries",
+        "tab:threat_boundary",
+        "tab:recovery_scope"
+      ],
+      "id": "protocol_correctness_and_security_obligations",
+      "paper_anchor_pass": true,
+      "paper_anchors": [
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/3_Design.tex",
+          "terms": [
+            "Figure~\\ref{fig:overall_procedure}",
+            "Table~\\ref{tab:design_goals}",
+            "Figure~\\ref{fig:djc_state_machine}",
+            "Table~\\ref{tab:memory_compat}"
+          ]
+        },
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/7_Implementation_Details.tex",
+          "terms": [
+            "Table~\\ref{tab:impl_boundaries}"
+          ]
+        },
+        {
+          "exists": true,
+          "missing_terms": [],
+          "passes": true,
+          "path": "Paper/8_Security_Analysis.tex",
+          "terms": [
+            "Table~\\ref{tab:threat_boundary}",
+            "not a formal proof of crash consistency"
+          ]
+        }
+      ],
+      "required": false,
+      "requirement": "non-evaluation figure/table protocol obligations",
+      "scoped_out": [
+        "protocol rows close design/security obligations rather than adding evaluation completeness rows"
+      ],
+      "status": "implemented_scoped"
+    }
+  ],
+  "schema_version": 1,
+  "scope": [
+    "seven required evaluation completeness rows",
+    "one supplemental protocol-obligation row for non-evaluation figures/tables",
+    "primary ownership for every retained main-paper figure/table label",
+    "paper scope anchors for implemented rows and explicitly scoped gaps"
+  ],
+  "violations": []
+}

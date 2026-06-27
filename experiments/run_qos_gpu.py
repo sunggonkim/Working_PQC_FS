@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 TRACE_OUT = Path("artifacts/validation/run_qos_gpu_trace.jsonl")
+GPU_BURNER = Path(os.environ.get("PQC_GPU_BURNER", "build/gpu_burner"))
 
 class HysteresisController:
     def __init__(self, enter_threshold, exit_threshold, hold_samples=2):
@@ -69,14 +70,33 @@ def background_io_worker(shared_throttle_flag, total_bytes):
 
 def ai_inference_worker(duration_sec, latencies):
     print("[AI Worker] Launching Heavy CUDA GPU Burner (YOLOv8 simulation)...")
+    if not GPU_BURNER.exists():
+        raise FileNotFoundError(f"{GPU_BURNER} not found; run `cmake --build build --target gpu_burner` first")
     t_start = time.time()
-    subprocess.run(["./experiments/gpu_burner", str(duration_sec)], stdout=subprocess.DEVNULL)
+    subprocess.run([str(GPU_BURNER), str(duration_sec)], stdout=subprocess.DEVNULL, check=True)
     latencies.append((time.time() - t_start) * 1000)
 
 def telemetry_daemon(shared_throttle_flag, duration_sec):
     print("[Telemetry] Daemon started, parsing REAL tegrastats...")
-    cmd = 'echo "1234qwer" | sudo -S tegrastats --interval 100'
-    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    sudo_password = os.environ.get("PQC_SUDO_PASSWORD")
+    if sudo_password:
+        process = subprocess.Popen(
+            ["sudo", "-S", "tegrastats", "--interval", "100"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        assert process.stdin is not None
+        process.stdin.write(sudo_password + "\n")
+        process.stdin.flush()
+    else:
+        process = subprocess.Popen(
+            ["tegrastats", "--interval", "100"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
     TRACE_OUT.parent.mkdir(parents=True, exist_ok=True)
     trace_fp = TRACE_OUT.open("w", encoding="utf-8")
     controller = HysteresisController(

@@ -1,0 +1,126 @@
+{
+  "checks": {
+    "all_case_oracles_pass": true,
+    "all_required_cases_present": true,
+    "all_rows_have_oracle_verdict": true,
+    "all_rows_have_raw_artifacts": true
+  },
+  "overall_pass": true,
+  "required_cases": [
+    "stale_disk_new_tpm",
+    "new_disk_stale_tpm",
+    "missing_index",
+    "changed_pcrs",
+    "authorization_failure",
+    "interrupted_nv_update",
+    "normal_replay_after_advance"
+  ],
+  "rows": [
+    {
+      "case": "stale_disk_new_tpm",
+      "evidence": "restored snapshot mounted but payload read failed closed (rc=1): Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOSError: [Errno 5] Input/output error: '/tmp/tpm_mono_mnt_6z1mogbm/payload.bin'",
+      "oracle_verdict": "fail_closed",
+      "pass": true,
+      "raw_artifacts": [
+        "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json",
+        "artifacts/validation/tpm_monotonic_replay/replay_mount/pqc_fuse.stdout.txt",
+        "artifacts/validation/tpm_monotonic_replay/replay_mount/pqc_fuse.stderr.txt",
+        "artifacts/validation/tpm_monotonic_replay/replay_mount/unmount.stdout.txt",
+        "artifacts/validation/tpm_monotonic_replay/replay_mount/unmount.stderr.txt"
+      ],
+      "raw_artifacts_present": true,
+      "scenario": "restore stale backing-directory snapshot after the TPM-backed anchor has advanced",
+      "scope": "real_tpm_replay_after_advance"
+    },
+    {
+      "case": "new_disk_stale_tpm",
+      "evidence": "anchor load accepts stored.global_sequence <= local sequence; stale TPM lag is not treated as disk rollback",
+      "oracle_verdict": "latest_committed",
+      "pass": true,
+      "raw_artifacts": [
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/new_disk_stale_tpm.json",
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/anchor_self_test.stdout.txt",
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/anchor_self_test.stderr.txt",
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/capture/nvwrite_input.bin",
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/capture/stale_tpm_anchor.bin"
+      ],
+      "raw_artifacts_present": true,
+      "scenario": "local committed prefix is ahead of the TPM anchor fixture",
+      "scope": "final_binary_command_path_fault_injection_no_live_nv_mutation"
+    },
+    {
+      "case": "missing_index",
+      "evidence": "exit=1; stderr contains freshness-anchor ENODEV=True",
+      "oracle_verdict": "fail_closed",
+      "pass": true,
+      "raw_artifacts": [
+        "artifacts/validation/tpm_unprovisioned.json",
+        "artifacts/validation/tpm_unprovisioned.stdout",
+        "artifacts/validation/tpm_unprovisioned.stderr"
+      ],
+      "raw_artifacts_present": true,
+      "scenario": "start hardware-anchor mode when the configured NV index is absent",
+      "scope": "retained_final_binary_startup_probe"
+    },
+    {
+      "case": "changed_pcrs",
+      "evidence": "good_unseal=True; drift_rejected=True",
+      "oracle_verdict": "transient_probe_rejects_drift",
+      "pass": true,
+      "raw_artifacts": [
+        "artifacts/validation/tpm_pcr_policy_probe/tpm_pcr_policy_probe.json",
+        "artifacts/validation/tpm_pcr_policy_probe/unseal_drift.stderr.txt"
+      ],
+      "raw_artifacts_present": true,
+      "scenario": "transient PCR-policy object unseals on current PCR digest and rejects a drifted PCR digest",
+      "scope": "transient_pcr_probe_not_persistent_filesystem_anchor"
+    },
+    {
+      "case": "authorization_failure",
+      "evidence": "TPM tool reports authorization failure without exposing NV data",
+      "oracle_verdict": "fail_closed",
+      "pass": true,
+      "raw_artifacts": [
+        "artifacts/validation/hardware_freshness_recovery_matrix/probes/auth_failure.json",
+        "artifacts/validation/hardware_freshness_recovery_matrix/probes/auth_failure.stdout.txt",
+        "artifacts/validation/hardware_freshness_recovery_matrix/probes/auth_failure.stderr.txt"
+      ],
+      "raw_artifacts_present": true,
+      "scenario": "read the provisioned NV index with deliberate wrong owner authorization",
+      "scope": "real_tpm_non_destructive_wrong_auth_probe"
+    },
+    {
+      "case": "interrupted_nv_update",
+      "evidence": "final binary returns nonzero when the hardware-anchor update command is interrupted",
+      "oracle_verdict": "fail_closed_update_not_committed",
+      "pass": true,
+      "raw_artifacts": [
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/interrupted_nv_update/interrupted_nv_update.json",
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/interrupted_nv_update/anchor_self_test.stdout.txt",
+        "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/interrupted_nv_update/anchor_self_test.stderr.txt"
+      ],
+      "raw_artifacts_present": true,
+      "scenario": "interrupt tpm2_nvwrite before the anchor update commits",
+      "scope": "final_binary_command_path_fault_injection_not_physical_power_loss"
+    },
+    {
+      "case": "normal_replay_after_advance",
+      "evidence": "sqlite=stale snapshot mounted but SQLite read failed closed rc=1; dbm=stale dbm snapshot mounted but dbm read failed closed rc=1",
+      "oracle_verdict": "fail_closed",
+      "pass": true,
+      "raw_artifacts": [
+        "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json",
+        "artifacts/validation/combined_durability_bundle/sqlite_replay_read.stdout.txt",
+        "artifacts/validation/combined_durability_bundle/sqlite_replay_read.stderr.txt",
+        "artifacts/validation/combined_durability_bundle/dbm_replay_read.stdout.txt",
+        "artifacts/validation/combined_durability_bundle/dbm_replay_read.stderr.txt"
+      ],
+      "raw_artifacts_present": true,
+      "scenario": "same-backing-store SQLite and dbm.dumb replay-after-advance campaigns",
+      "scope": "real_tpm_application_replay_after_advance"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Recovery-case matrix for the current hardware-freshness scope.  Real TPM artifacts cover provisioned replay-after-advance, missing index, changed-PCR transient probe behavior, and wrong authorization.  New-disk/stale-TPM and interrupted-NV-update rows use final-binary command-path fault injection and do not model physical power loss.",
+  "timestamp_utc": "2026-06-27T09:03:09.603476+00:00"
+}

@@ -8,6 +8,6 @@ This artifact packages the retained hardware-backend crash/replay rows together 
 - hardware backend rows present: `True`
 - hardware backend fail-closed count: `40`
 - hardware backend rollback-accept count: `0`
-- hardware backend success-rate range: `1.0` .. `1.0`
+- hardware backend fail-closed-rate range: `1.0` .. `1.0`
 
 This artifact should be read together with the separate monotonic replay result; it still does not close the combined durability claim.

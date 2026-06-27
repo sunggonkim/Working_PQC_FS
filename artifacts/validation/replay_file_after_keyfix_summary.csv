@@ -1,3 +1,3 @@
-backend,cut_point_s,trials,preserved,success_rate,fail_closed,rollback_accept,unexpected_error
-file,0.0,2,2,1.0,0,0,0
-file,0.05,2,2,1.0,0,0,0
+backend,cut_point_s,trials,fail_closed,previous_committed,unexpected_liveness_failure,rollback_reject
+file,0.0,2,0,0,0,2
+file,0.05,2,0,0,0,2

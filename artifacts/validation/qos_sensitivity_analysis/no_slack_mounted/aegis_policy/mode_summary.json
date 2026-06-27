@@ -1,0 +1,91 @@
+{
+  "acceptable": true,
+  "admission": {
+    "deferrals": {},
+    "rows": 0,
+    "targets": {}
+  },
+  "background": {
+    "bytes_written": 2162688,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 3.6955201448097763,
+    "write_events": 33,
+    "writer_started": true,
+    "writer_stop_rows": [
+      {
+        "bytes_written": 2162688,
+        "chunks_written": 33,
+        "elapsed_ns": 558108174,
+        "event": "writer_stop",
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 3.6955201448097763,
+        "timestamp_ns": 1782521596296695299,
+        "writer_id": 0
+      }
+    ]
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "mounted_fuse_hysteresis",
+    "daemon_throttle": true,
+    "harness_throttle": false
+  },
+  "daemon_throttle": {
+    "open_rows": 205,
+    "rows": 218,
+    "sleep_us_total": 390000,
+    "throttled_rows": 13
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 40,
+    "deadline_ms": 1.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/foreground_sqlite_latency.jsonl",
+    "max_ms": 7.737908,
+    "mean_ms": 5.44134285,
+    "p50_ms": 5.2806715,
+    "p95_ms": 7.3811975499999996,
+    "p99_ms": 7.59929888,
+    "row_count": 320,
+    "rows_written": 320,
+    "samples": 40
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/background_writer.jsonl",
+    "foreground_csv": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/foreground_sqlite_latency.csv",
+    "foreground_jsonl": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+    "policy_jsonl": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/policy_trace.jsonl",
+    "runtime_fuse_admission_trace": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/runtime_telemetry.txt",
+    "telemetry_jsonl": "artifacts/validation/qos_sensitivity_analysis/no_slack_mounted/aegis_policy/telemetry_trace.jsonl"
+  },
+  "mode": "aegis_policy",
+  "policy": {
+    "events": {
+      "enter": 1,
+      "hold": 25
+    },
+    "rows": 26,
+    "states": {
+      "open": 2,
+      "throttled": 24
+    },
+    "throttle_rows": 24
+  },
+  "telemetry": {
+    "avg_cpu_utilization": 0.06072140120415982,
+    "avg_gpu_utilization": 0.1,
+    "gpu_utilization_sources": [
+      "telemetry_tensor_proxy"
+    ],
+    "high_pressure_rows": 24,
+    "rows": 26,
+    "zero_budget_rows": 25
+  }
+}

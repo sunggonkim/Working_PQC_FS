@@ -1,0 +1,28 @@
+{"chunk_bytes": 65536, "event": "writer_start", "fsync_every": 1, "timestamp_ns": 1782520863072414509, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 65536, "chunk_index": 1, "event": "write", "fsync": true, "timestamp_ns": 1782520863073053453, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 131072, "chunk_index": 2, "event": "write", "fsync": true, "timestamp_ns": 1782520863075097768, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 196608, "chunk_index": 3, "event": "write", "fsync": true, "timestamp_ns": 1782520863076805185, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 262144, "chunk_index": 4, "event": "write", "fsync": true, "timestamp_ns": 1782520863079063639, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 327680, "chunk_index": 5, "event": "write", "fsync": true, "timestamp_ns": 1782520863081364426, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 393216, "chunk_index": 6, "event": "write", "fsync": true, "timestamp_ns": 1782520863083715370, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 458752, "chunk_index": 7, "event": "write", "fsync": true, "timestamp_ns": 1782520863086348916, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 524288, "chunk_index": 8, "event": "write", "fsync": true, "timestamp_ns": 1782520863089332370, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 589824, "chunk_index": 9, "event": "write", "fsync": true, "timestamp_ns": 1782520863092182185, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 655360, "chunk_index": 10, "event": "write", "fsync": true, "timestamp_ns": 1782520863095351278, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 720896, "chunk_index": 11, "event": "write", "fsync": true, "timestamp_ns": 1782520863099099593, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 786432, "chunk_index": 12, "event": "write", "fsync": true, "timestamp_ns": 1782520863133404843, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 851968, "chunk_index": 13, "event": "write", "fsync": true, "timestamp_ns": 1782520863167255824, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 917504, "chunk_index": 14, "event": "write", "fsync": true, "timestamp_ns": 1782520863201443981, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 983040, "chunk_index": 15, "event": "write", "fsync": true, "timestamp_ns": 1782520863235802211, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1048576, "chunk_index": 16, "event": "write", "fsync": true, "timestamp_ns": 1782520863271002516, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1114112, "chunk_index": 17, "event": "write", "fsync": true, "timestamp_ns": 1782520863306634626, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1179648, "chunk_index": 18, "event": "write", "fsync": true, "timestamp_ns": 1782520863341843838, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1245184, "chunk_index": 19, "event": "write", "fsync": true, "timestamp_ns": 1782520863378233133, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1310720, "chunk_index": 20, "event": "write", "fsync": true, "timestamp_ns": 1782520863413416605, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1376256, "chunk_index": 21, "event": "write", "fsync": true, "timestamp_ns": 1782520863448741013, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1441792, "chunk_index": 22, "event": "write", "fsync": true, "timestamp_ns": 1782520863485000477, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1507328, "chunk_index": 23, "event": "write", "fsync": true, "timestamp_ns": 1782520863521197848, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1572864, "chunk_index": 24, "event": "write", "fsync": true, "timestamp_ns": 1782520863557175765, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1638400, "chunk_index": 25, "event": "write", "fsync": true, "timestamp_ns": 1782520863593258571, "writer_id": 0}
+{"bytes": 65536, "bytes_written": 1703936, "chunk_index": 26, "event": "write", "fsync": true, "timestamp_ns": 1782520863629590349, "writer_id": 0}
+{"bytes_written": 1703936, "chunks_written": 26, "elapsed_ns": 593913350, "event": "writer_stop", "harness_throttle_sleep_us_total": 0, "harness_throttle_sleeps": 0, "throughput_mb_s": 2.736089363877744, "timestamp_ns": 1782520863666331128, "writer_id": 0}

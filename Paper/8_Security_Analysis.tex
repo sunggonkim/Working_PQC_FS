@@ -6,14 +6,34 @@
 
 AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES-GCM protects the confidentiality and authenticity of published block records, while the HMAC-protected key envelope and checkpoint detect unauthenticated metadata changes.  The adversary can still deny service, delete records, replay a complete file-backed snapshot, or exploit vulnerabilities outside the FUSE process.  We make no claim against a privileged local attacker that can read process memory, substitute the CUDA driver, alter the mount executable, or use GPU microarchitectural side channels.
 
-The accepted encrypted state consists of a validated DEK envelope, a complete journal mapping, and ciphertext records referenced by that mapping.  A tag failure causes a read to fail.  A malformed or unauthenticated envelope/checkpoint causes open to fail.  These behaviors are necessary for a safe FUSE format, but they are not a formal proof of crash consistency.  In particular, xattr atomicity and directory durability are delegated to the underlying filesystem.
+The accepted encrypted state consists of a validated DEK envelope, a complete journal mapping, and ciphertext records referenced by that mapping.  A tag failure causes a read to fail.  A malformed or unauthenticated envelope/checkpoint causes open to fail.  Table~\ref{tab:threat_boundary} states the threat classes these mechanisms address and the boundaries left outside the paper.  These behaviors are necessary for a safe FUSE format, but they are not a formal proof of crash consistency.  In particular, xattr atomicity and directory durability are delegated to the underlying filesystem.
+
+\begin{table}[t]
+\centering
+\caption{Threat classes and retained mechanism boundaries.}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{P{0.24\columnwidth}|P{0.30\columnwidth}|Y}
+\toprule
+\textbf{Threat} & \textbf{Mechanism} & \textbf{Boundary}\\
+\midrule
+Backing-store read & AES-GCM ciphertext with per-file DEK & Assumes mount credential remains secret\\
+Backing-store tamper & AEAD tags, HMAC envelope, HMAC checkpoint & Denial of service remains possible\\
+Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\
+Crash during update & Ordered publication plus selected daemon/app cutpoint tests & Physical power-loss and drive-cache certification remain open\\
+GPU side channel & No protection mechanism claimed & Integrity parity is not constant-time evidence\\
+Privileged local attacker & Out of scope & Kernel/driver/FUSE process are trusted\\
+\bottomrule
+\end{tabularx}
+\label{tab:threat_boundary}
+\end{table}
 
 \subsection{Freshness is conditional on an external anchor}
 \label{sec:case_problem}
 
 The source tree contains two anchor modes.  The file mode is only an integrity witness; copying the directory copies the witness.  The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \emph{rollback visible}, not as successful protection.  This negative result is important: an HMAC alone does not create freshness when its entire state is replayable.
 
-The hardware mode stores an authenticated prefix record in an administrator-provisioned TPM NV index.  It is deliberately outside the evaluated configuration.  The paper does not assert that an NV index is a signer, does not report an invented TPM latency, and does not claim PCR binding.  To make this mode publishable, future work must document the TPM model/bus, authorization and index attributes, monotonic update protocol, software-update recovery, and a power-fail matrix that distinguishes acknowledged, anchored, and replayed writes.
+The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record.  PCR binding is a transient probe rather than a persistent filesystem policy; a software update or PCR change therefore requires explicit reprovisioning/resealing.  Backup or migration cannot copy only the backing directory; it needs a fresh authorized anchor bootstrap.  Lost mount credentials are unrecoverable.  Missing index, authorization failure, TPM I/O failure, digest mismatch, or a TPM sequence ahead of local state fail closed; a TPM anchor behind local state is treated as a lagging witness and must be refreshed rather than as disk rollback.  The evaluated claim is only replay-after-advance fail-closed behavior, including the SQLite same-store campaign in Section~\ref{sec:eval_workloads}; it does not assert that an NV index is a signer, report invented TPM latency, or claim persistent PCR binding.
 
 \subsection{Side channels and application semantics}
 \label{sec:case_impl}
@@ -21,6 +41,8 @@ The hardware mode stores an authenticated prefix record in an administrator-prov
 GPU SIMT execution, cache behavior, memory coalescing, occupancy, and contention can all leak information.  The repository contained generators that produced simulated timing and TVLA traces.  Those files are excluded from this paper.  The retained GPU integrity test checks output parity with OpenSSL; it says nothing about constant-time execution, physical power/EM leakage, or cross-tenant GPU channels.
 
 Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary.  It does not certify SQLite WAL, \texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract.  We retain the following labels to make the scope explicit: the prior SQLite case study (Section~\ref{sec:case_results}) and edge/cloud comparison (Section~\ref{sec:case_edge_cloud}) are not claimed by this revision.
+
+Application semantics are separated from storage-record integrity.  AEGIS-Q can reject a corrupted block tag, but it cannot infer whether an application-level transaction was acknowledged unless the experiment supplies an external oracle.  The daemon power-fault matrix adds final-binary \texttt{SIGKILL} at selected one-block storage boundaries, while the SQLite WAL/FULL and DELETE/EXTRA rows supply application commit oracles.  A complete database certification would need broader workloads, multiple cache modes, physical power loss, kernel crash, and drive-cache timing.
 
 \subsection{What the current tests establish}
 \label{sec:case_results}

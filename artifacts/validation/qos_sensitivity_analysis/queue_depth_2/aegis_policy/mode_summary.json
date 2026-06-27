@@ -1,0 +1,102 @@
+{
+  "acceptable": true,
+  "admission": {
+    "deferrals": {},
+    "rows": 0,
+    "targets": {}
+  },
+  "background": {
+    "bytes_written": 4063232,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 6.4629547229659465,
+    "write_events": 62,
+    "writer_started": true,
+    "writer_stop_rows": [
+      {
+        "bytes_written": 2031616,
+        "chunks_written": 31,
+        "elapsed_ns": 568198270,
+        "event": "writer_stop",
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 3.4099012656268735,
+        "timestamp_ns": 1782521599441454998,
+        "writer_id": 1
+      },
+      {
+        "bytes_written": 2031616,
+        "chunks_written": 31,
+        "elapsed_ns": 599570965,
+        "event": "writer_stop",
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 3.2314773614829733,
+        "timestamp_ns": 1782521599472868758,
+        "writer_id": 0
+      }
+    ]
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "mounted_fuse_hysteresis",
+    "daemon_throttle": true,
+    "harness_throttle": false
+  },
+  "daemon_throttle": {
+    "open_rows": 220,
+    "rows": 247,
+    "sleep_us_total": 810000,
+    "throttled_rows": 27
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 1,
+    "deadline_ms": 10.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/foreground_sqlite_latency.jsonl",
+    "max_ms": 14.503592,
+    "mean_ms": 5.5669185,
+    "p50_ms": 5.3156205,
+    "p95_ms": 7.546948199999996,
+    "p99_ms": 12.311358709999997,
+    "row_count": 320,
+    "rows_written": 320,
+    "samples": 40
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/background_writer.jsonl",
+    "foreground_csv": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/foreground_sqlite_latency.csv",
+    "foreground_jsonl": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+    "policy_jsonl": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/policy_trace.jsonl",
+    "runtime_fuse_admission_trace": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/runtime_telemetry.txt",
+    "telemetry_jsonl": "artifacts/validation/qos_sensitivity_analysis/queue_depth_2/aegis_policy/telemetry_trace.jsonl"
+  },
+  "mode": "aegis_policy",
+  "policy": {
+    "events": {
+      "enter": 1,
+      "hold": 26
+    },
+    "rows": 27,
+    "states": {
+      "open": 2,
+      "throttled": 25
+    },
+    "throttle_rows": 25
+  },
+  "telemetry": {
+    "avg_cpu_utilization": 0.05409228949273443,
+    "avg_gpu_utilization": 0.1,
+    "gpu_utilization_sources": [
+      "telemetry_tensor_proxy"
+    ],
+    "high_pressure_rows": 25,
+    "rows": 27,
+    "zero_budget_rows": 2
+  }
+}

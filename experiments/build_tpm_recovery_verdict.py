@@ -19,6 +19,24 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUT = ROOT / "artifacts" / "validation" / "tpm_recovery_verdict"
 
 
+def summarize_verdict_row(row: dict[str, object]) -> dict[str, object]:
+    trials = int(row.get("trials", 0) or 0)
+    fail_closed = int(row.get("fail_closed", 0) or 0)
+    rollback_visible = int(row.get("rollback_accept", 0) or 0)
+    unexpected = int(row.get("unexpected_error", 0) or 0)
+    return {
+        "backend": row.get("backend"),
+        "cut_point_s": row.get("cut_point_s"),
+        "trials": trials,
+        "oracle_verdict_counts": {
+            "fail_closed": fail_closed,
+            "previous_committed": rollback_visible,
+            "unexpected_liveness_failure": unexpected,
+        },
+        "fail_closed_rate": fail_closed / trials if trials else None,
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
@@ -43,6 +61,12 @@ def main() -> int:
 
     hardware_rows = [row for row in crash_matrix.get("rows", []) if row.get("backend") == "hardware"]
     hardware_summary_rows = [row for row in crash_summary.get("rows", []) if row.get("backend") == "hardware"]
+    hardware_verdict_summary = [summarize_verdict_row(row) for row in hardware_summary_rows]
+    fail_closed_rates = [
+        row["fail_closed_rate"]
+        for row in hardware_verdict_summary
+        if row["fail_closed_rate"] is not None
+    ]
     verdict = {
         "note": "Recovery verdict artifact only; combine it with the separate monotonic replay artifact for freshness claims.",
         "inputs": {
@@ -51,14 +75,14 @@ def main() -> int:
             "hardware_anchor_latency": str(anchor_path),
         },
         "hardware_rows": hardware_rows,
-        "hardware_summary_rows": hardware_summary_rows,
+        "hardware_verdict_summary": hardware_verdict_summary,
         "hardware_anchor_latency": anchor,
         "verdict": {
             "hardware_backend_present": bool(hardware_rows),
             "hardware_backend_fail_closed_count": sum(1 for row in hardware_rows if row.get("mode") == "fail_closed"),
             "hardware_backend_rollback_accept_count": sum(1 for row in hardware_rows if row.get("mode") == "rollback_visible"),
-            "hardware_backend_success_rate_min": min((row.get("success_rate", 0.0) for row in hardware_summary_rows), default=None),
-            "hardware_backend_success_rate_max": max((row.get("success_rate", 0.0) for row in hardware_summary_rows), default=None),
+            "hardware_backend_fail_closed_rate_min": min(fail_closed_rates, default=None),
+            "hardware_backend_fail_closed_rate_max": max(fail_closed_rates, default=None),
         },
     }
 
@@ -74,7 +98,7 @@ def main() -> int:
         f"- hardware backend rows present: `{verdict['verdict']['hardware_backend_present']}`",
         f"- hardware backend fail-closed count: `{verdict['verdict']['hardware_backend_fail_closed_count']}`",
         f"- hardware backend rollback-accept count: `{verdict['verdict']['hardware_backend_rollback_accept_count']}`",
-        f"- hardware backend success-rate range: `{verdict['verdict']['hardware_backend_success_rate_min']}` .. `{verdict['verdict']['hardware_backend_success_rate_max']}`",
+        f"- hardware backend fail-closed-rate range: `{verdict['verdict']['hardware_backend_fail_closed_rate_min']}` .. `{verdict['verdict']['hardware_backend_fail_closed_rate_max']}`",
         "",
         "This artifact should be read together with the separate monotonic replay result; it still does not close the combined durability claim.",
     ]

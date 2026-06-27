@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_LOG_DIR = ROOT / "artifacts" / "build_all_reports_logs"
+DEFAULT_LOG_DIR = ROOT / "artifacts" / "reports" / "build_logs"
 
 
 SCRIPTS = [

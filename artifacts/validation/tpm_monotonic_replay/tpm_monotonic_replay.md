@@ -11,7 +11,7 @@ This run snapshots the file-backed storage directory, advances the hardware anch
   File "/usr/lib/python3.12/pathlib.py", line 1015, in open
     return io.open(self, mode, buffering, encoding, errors, newline)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-OSError: [Errno 5] Input/output error: '/tmp/tpm_mono_mnt_nh82in01/payload.bin'`
+OSError: [Errno 5] Input/output error: '/tmp/tpm_mono_mnt_6z1mogbm/payload.bin'`
 - Return code: `None`
 
 - Live mount logs: `/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_monotonic_replay/live_mount/pqc_fuse.stderr.txt`

@@ -1,7 +1,7 @@
 {
-  "note": "SQLite-only app recovery report; not evidence of full multi-workload crash certification.",
+  "note": "App recovery report covering SQLite selected-boundary replay, SQLite syscall-exact app-crash timing, and combined SQLite/dbm.dumb stale-snapshot replay. It is not power-loss or FUSE-daemon crash certification.",
   "bundle": {
-    "note": "SQLite app recovery bundle only; not a full multi-workload crash-certification claim.",
+    "note": "SQLite app recovery bundle with selected-boundary and syscall-exact app-crash evidence; not a power-loss or FUSE-daemon crash-certification claim.",
     "checks": [
       {
         "name": "crash_audit_report",
@@ -49,5 +49,18 @@
     "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
     "present": true,
     "unacceptable": 0
+  },
+  "sqlite_syscall_crash_tpm": {
+    "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/sqlite_syscall_crash_tpm/sqlite_syscall_crash_tpm.json",
+    "present": true,
+    "unacceptable": 0
+  },
+  "combined_durability_bundle": {
+    "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/combined_durability_bundle.json",
+    "present": true,
+    "sqlite_replay_verdict": "fail_closed",
+    "sqlite_replay_acceptable": true,
+    "dbm_replay_verdict": "fail_closed",
+    "dbm_replay_acceptable": true
   }
 }

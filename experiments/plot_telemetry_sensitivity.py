@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def plot_admission_sensitivity():
     print("Plotting admission control sensitivity...")
-    with open("artifacts/m5_admission_sweep.json", "r") as f:
+    with open("artifacts/results/qos/m5_admission_sweep.json", "r") as f:
         data = json.load(f)
     
     budgets = [d["budget_ns"] / 1000000 for d in data] # ms

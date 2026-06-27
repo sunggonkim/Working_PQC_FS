@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import hashlib, hmac, os, pathlib, struct, sys
+capture = pathlib.Path(os.environ['AEGIS_FAULT_CAPTURE_DIR'])
+capture.mkdir(parents=True, exist_ok=True)
+input_path = None
+for i, arg in enumerate(sys.argv):
+    if arg == '-i' and i + 1 < len(sys.argv):
+        input_path = pathlib.Path(sys.argv[i + 1])
+if input_path is None:
+    print('missing -i input', file=sys.stderr)
+    sys.exit(2)
+data = bytearray(input_path.read_bytes())
+(capture / 'nvwrite_input.bin').write_bytes(data)
+if len(data) != 88:
+    print(f'unexpected anchor size {len(data)}', file=sys.stderr)
+    sys.exit(3)
+seq = struct.unpack_from('<Q', data, 8)[0]
+struct.pack_into('<Q', data, 8, max(0, seq - 1))
+data[56:88] = hmac.new(bytes(32), bytes(data[:56]), hashlib.sha256).digest()
+(capture / 'stale_tpm_anchor.bin').write_bytes(data)
+print(f'fault-injection captured seq={seq} and staged stale seq={max(0, seq - 1)}', file=sys.stderr)
+sys.exit(0)

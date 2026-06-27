@@ -1,0 +1,91 @@
+{
+  "acceptable": true,
+  "admission": {
+    "deferrals": {},
+    "rows": 0,
+    "targets": {}
+  },
+  "background": {
+    "bytes_written": 1900544,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 2.949499491498151,
+    "write_events": 29,
+    "writer_started": true,
+    "writer_stop_rows": [
+      {
+        "bytes_written": 1900544,
+        "chunks_written": 29,
+        "elapsed_ns": 614511040,
+        "event": "writer_stop",
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 2.949499491498151,
+        "timestamp_ns": 1782524621500960673,
+        "writer_id": 0
+      }
+    ]
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "mounted_fuse_hysteresis",
+    "daemon_throttle": true,
+    "harness_throttle": false
+  },
+  "daemon_throttle": {
+    "open_rows": 235,
+    "rows": 251,
+    "sleep_us_total": 480000,
+    "throttled_rows": 16
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 1,
+    "deadline_ms": 10.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/foreground_sqlite_latency.jsonl",
+    "max_ms": 10.13263,
+    "mean_ms": 5.486006229166667,
+    "p50_ms": 5.247101499999999,
+    "p95_ms": 8.377172049999999,
+    "p99_ms": 10.001156430000002,
+    "row_count": 384,
+    "rows_written": 384,
+    "samples": 48
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/background_writer.jsonl",
+    "foreground_csv": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/foreground_sqlite_latency.csv",
+    "foreground_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+    "policy_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/policy_trace.jsonl",
+    "runtime_fuse_admission_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/runtime_telemetry.txt",
+    "telemetry_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/telemetry_trace.jsonl"
+  },
+  "mode": "aegis_policy",
+  "policy": {
+    "events": {
+      "enter": 1,
+      "hold": 28
+    },
+    "rows": 29,
+    "states": {
+      "open": 1,
+      "throttled": 28
+    },
+    "throttle_rows": 28
+  },
+  "telemetry": {
+    "avg_cpu_utilization": 0.05837510536382299,
+    "avg_gpu_utilization": 0.1,
+    "gpu_utilization_sources": [
+      "telemetry_tensor_proxy"
+    ],
+    "high_pressure_rows": 28,
+    "rows": 29,
+    "zero_budget_rows": 0
+  }
+}

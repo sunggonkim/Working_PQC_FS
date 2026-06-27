@@ -72,11 +72,13 @@ void pqc_admission_shutdown(void);
  *
  * Input:
  *   - ctx->batch_count, bytes_total: job characteristics
- *   - ctx->batch_age_ns: wall-clock time since job submission
+ *   - ctx->batch_age_ns: monotonic relative time since job submission
  *   - ctx->gpu_kernel_est_ns, gpu_h2d_staging_ns, gpu_d2h_staging_ns: cost estimates
  *   - ctx->cpu_queue_depth, gpu_queue_depth: current queue lengths
  *   - ctx->cpu_load_avg, gpu_load_avg: rolling load estimates
+ *   - ctx->ai_inference_deadline_ns: producer-supplied relative deadline/slack
  *   - ctx->ai_qos_budget_remaining_ns: GPU slack after AI inference reservation
+ *   - ctx->producer_slack_age_ns/stale_after_ns/stale: filled by controller
  *   - ctx->uma_migration_cost_ns: UVM stall cost derived from a rolling proxy
  *     when CUPTI counters are unavailable
  *
@@ -84,15 +86,17 @@ void pqc_admission_shutdown(void);
  *   - ctx->chosen_target: PQC_JOB_CPU or PQC_JOB_GPU
  *   - ctx->decision_reason: bitmask of pqc_admission_reason_t
  *
- * Decision Logic (M5 skeleton; to be implemented):
+ * Decision Logic:
  *
  *   1. Hard constraints (force CPU):
  *      - plane not GPU-eligible (done in pqc_block_job_gpu_eligible)
  *      - request too small for GPU overhead amortization
- *      - batch_age > deadline_ns (caller sets deadline via flags)
+ *      - batch_age > ai_inference_deadline_ns
  *
  *   2. AI QoS protection (priority for inference):
- *      - if ai_qos_budget_remaining_ns < gpu_kernel_est_ns + margin:
+ *      - if producer slack is stale:
+ *          → CPU (reason = STALE_TELEMETRY)
+ *      - if ai_qos_budget_remaining_ns < gpu_kernel_est_ns + staging:
  *          → CPU (reason = AI_QOS_EXHAUSTED)
  *      - else: proceed to queue pressure check
  *
@@ -124,7 +128,9 @@ int pqc_admit(pqc_admission_context_t *ctx);
  *   - ai_inference_queue_depth: number of pending AI jobs
  *
  * The admission controller uses this to make QoS-aware decisions.
- * Called ~every 100 ms (tunable).
+ * Called by a foreground producer or telemetry bridge.  The sample is treated
+ * as stale after PQC_PRODUCER_SLACK_STALE_NS (default 250 ms), and missing or
+ * stale slack fails closed to CPU.
  */
 void pqc_admission_update_ai_budget(uint64_t ai_budget_ns,
                                    uint64_t ai_inference_queue_depth);
@@ -141,20 +147,24 @@ void pqc_admission_update_ai_budget(uint64_t ai_budget_ns,
  *
  * Trace record:
  * {
- *   "timestamp_ns": <unix ns>,
- *   "batch_id": <uint64>,
- *   "submit_ns": <uint64>,
- *   "decision_ns": <uint64>,
+ *   "timestamp_ns": <unix ns from CLOCK_REALTIME>,
+ *   "trace_timestamp_clock": "CLOCK_REALTIME",
+ *   "age_clock": "CLOCK_MONOTONIC",
  *   "batch_age_ns": <uint64>,
+ *   "ai_inference_deadline_ns": <uint64>,
  *   "batch_count": <size_t>,
  *   "bytes_total": <size_t>,
  *   "queue_delay_ns": <uint64>,
  *   "service_time_ns": <uint64>,
  *   "gpu_kernel_est_ns": <uint64>,
- *   "gpu_staging_est_ns": <uint64>,
+ *   "gpu_h2d_staging_ns": <uint64>,
+ *   "gpu_d2h_staging_ns": <uint64>,
  *   "cpu_queue_depth": <uint64>,
  *   "gpu_queue_depth": <uint64>,
- *   "ai_budget_ns": <uint64>,
+ *   "ai_qos_budget_remaining_ns": <uint64>,
+ *   "producer_slack_age_ns": <uint64>,
+ *   "producer_slack_stale_after_ns": <uint64>,
+ *   "producer_slack_stale": <bool>,
  *   "chosen_target": "CPU" or "GPU",
  *   "deferral_reason": <hex bitmask>,
  *   "decision_reason": <hex bitmask>,
@@ -189,6 +199,7 @@ typedef struct {
     uint64_t queue_pressure_count;
     uint64_t deadline_exceeded_count;
     uint64_t size_too_small_count;
+    uint64_t stale_telemetry_count;
     uint64_t total_requests;
 } pqc_admission_stats_t;
 

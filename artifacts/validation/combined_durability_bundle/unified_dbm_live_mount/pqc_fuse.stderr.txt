@@ -1,0 +1,48 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE] WARNING: Cannot open log file '/tmp/combined_dbm_store_xwfvsv89/../pqc_fuse_latency.log': Permission denied
+[PQC-FUSE 2026-06-26 21:11:36.535] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-26 21:11:36.535]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-26 21:11:36.535]   Storage dir : /tmp/combined_dbm_store_xwfvsv89
+[PQC-FUSE 2026-06-26 21:11:36.535]   Mount point : /tmp/combined_dbm_mnt_7upy97zx
+[PQC-FUSE 2026-06-26 21:11:36.535] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-26 21:11:36.535] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-26 21:11:36.535]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-26 21:11:36.535]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-26 21:11:36.535]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-26 21:11:36.535]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-26 21:11:36.537] Keypair generated in 1404.17 µs
+[PQC-FUSE 2026-06-26 21:11:36.707] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-26 21:11:36.707] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-26 21:11:36.707] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-26 21:11:36.713] Freshness anchor worker started
+[PQC-FUSE 2026-06-26 21:11:36.829] PQC background rekey worker started
+[PQC-FUSE 2026-06-26 21:11:36.829] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-26 21:11:36.877] CREATE /durability_ndbm.dat: authenticated file-key envelope initialized (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:36.878] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:36.911] CREATE /durability_ndbm.dir: authenticated file-key envelope initialized (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:36.959] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.006] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.053] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.069] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.086] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.190] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.207] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.223] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.272] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.320] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.367] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.415] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.461] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.508] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.525] OPEN /durability_ndbm.dir: restored authenticated file-key envelope (fid=15426571076602745955)
+[PQC-FUSE 2026-06-26 21:11:37.541] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.557] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.573] OPEN /durability_ndbm.dat: restored authenticated file-key envelope (fid=6837934774470381168)
+[PQC-FUSE 2026-06-26 21:11:37.590] Shutting down PQC-FUSE filesystem...

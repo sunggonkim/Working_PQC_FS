@@ -18,7 +18,7 @@ def main() -> int:
         print("[!] bpftrace is not installed.")
         return 1
     print("[*] A real run would look like:")
-    print("    sudo bpftrace -e <trace> -c ./experiments/repro_malloc_register")
+    print("    sudo bpftrace -e <trace> -c ./build/repro_malloc_register")
     print("[*] This helper does not execute the trace automatically.")
     return 0
 

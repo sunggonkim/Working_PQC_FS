@@ -43,6 +43,8 @@
 #include <time.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <signal.h>
+#include <linux/falloc.h>
 
 #include <oqs/oqs.h>
 #include <openssl/evp.h>
@@ -116,9 +118,10 @@ static int unwrap_shared_secret(const uint8_t *in_wrapped, size_t ss_len, uint64
 }
 
 /*
- * Per-file encryption context.  KEM runs once per file to establish the
- * symmetric key material; every data block is then protected by the same
- * AES-256-GCM format regardless of whether CPU or CUDA executes the CTR work.
+ * Per-file encryption context.  The mounted data path uses a random DEK
+ * wrapped in an authenticated envelope under the mount key.  Optional ML-KEM
+ * work is a key-plane maintenance path; every data block is protected by the
+ * same AES-256-GCM format regardless of whether CPU or CUDA executes CTR work.
  */
 #define PQC_MAX_FD    4096
 #define COALESCE_SIZE (512 * 1024)  /* 512 KB per-fd write-coalescing buffer */
@@ -132,15 +135,18 @@ static int unwrap_shared_secret(const uint8_t *in_wrapped, size_t ss_len, uint64
 /*
  * Encryption tier (Strategy 2: Semantic-Aware Selective Encryption)
  * Set via FUSE xattr "user.pqc_tier" on any file.
- *   PQC_TIER_FULL (1) : ML-KEM-derived AES-256-GCM blocks  [default]
+ *   PQC_TIER_FULL (1) : authenticated AES-256-GCM blocks  [default]
  *   PQC_TIER_NONE (2) : Plaintext passthrough — low-value sensor data
  */
 #define PQC_TIER_FULL  1
 #define PQC_TIER_NONE  2
 #define PQC_XATTR_TIER "user.pqc_tier"
+#define PQC_XATTR_QOS_CLASS "user.pqc_qos_class"
 #define PQC_XATTR_METADATA "user.pqc_metadata"
 #define PQC_XATTR_LOGICAL_SIZE "user.pqc_logical_size"
 #define PQC_XATTR_CHECKPOINT "user.pqc_checkpoint"
+#define PQC_QOS_CLASS_ELASTIC 0
+#define PQC_QOS_CLASS_LATENCY 1
 #define PQC_METADATA_MAGIC UINT64_C(0x5043514d45544131) /* "PQC META1" */
 #define PQC_METADATA_VERSION 1U
 #define PQC_CHECKPOINT_MAGIC UINT64_C(0x504351434b505431) /* "PQCCPT1" */
@@ -179,6 +185,40 @@ static int               g_anchor_stop = 0;
 static int               g_anchor_dirty = 0;
 static pqc_anchor_state_t g_anchor_state = {0};
 static time_t            g_anchor_last_commit = 0;
+static pthread_mutex_t   g_fault_lock = PTHREAD_MUTEX_INITIALIZER;
+static int               g_fault_triggered = 0;
+
+static void pqc_fault_cutpoint(const char *name)
+{
+    const char *target = getenv("PQC_FAULT_CUTPOINT");
+    if (!target || strcmp(target, name) != 0)
+        return;
+
+    pthread_mutex_lock(&g_fault_lock);
+    if (g_fault_triggered) {
+        pthread_mutex_unlock(&g_fault_lock);
+        return;
+    }
+    g_fault_triggered = 1;
+    pthread_mutex_unlock(&g_fault_lock);
+
+    const char *marker = getenv("PQC_FAULT_MARKER_PATH");
+    if (marker && marker[0] != '\0') {
+        int fd = open(marker, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0600);
+        if (fd >= 0) {
+            time_t now = time(NULL);
+            (void)dprintf(fd,
+                          "{\"event\":\"fault_cutpoint\",\"name\":\"%s\","
+                          "\"pid\":%ld,\"unix_time\":%lld}\n",
+                          name, (long)getpid(), (long long)now);
+            (void)fsync(fd);
+            (void)close(fd);
+        }
+    }
+
+    raise(SIGKILL);
+    _exit(128 + SIGKILL);
+}
 
 static int metadata_store(const char *phys_path, const uint8_t *ss,
                           size_t ss_len, uint64_t file_id)
@@ -273,6 +313,8 @@ static int checkpoint_store(const char *path, uint64_t file_id, uint64_t sequenc
         return -EIO;
     int rc = setxattr(path, PQC_XATTR_CHECKPOINT, &ckpt, sizeof(ckpt), 0);
     if (rc == 0) {
+        pqc_fault_cutpoint("checkpoint_xattr_after");
+
         /* Register file state to multi-file committed prefix map */
         (void)pqc_anchor_record_file(file_id, max_generation, sequence, logical_size);
 
@@ -404,6 +446,8 @@ static int anchor_flush_now(void)
     g_anchor_dirty = 0;
     pthread_mutex_unlock(&g_anchor_lock);
 
+    pqc_fault_cutpoint("anchor_update_before");
+
     int rc = pqc_anchor_store(&state);
     if (rc == 0) {
         pthread_mutex_lock(&g_anchor_lock);
@@ -463,6 +507,85 @@ static int sqlite_sidecar_redirect_path(char *out, size_t out_size, const char *
                      (unsigned long long)h,
                      (strstr(path, "-shm") != NULL) ? ".shm" : ".wal");
     return n < 0 || (size_t)n >= out_size ? -ENAMETOOLONG : 0;
+}
+
+static int path_has_suffix(const char *path, const char *suffix)
+{
+    size_t path_len = strlen(path);
+    size_t suffix_len = strlen(suffix);
+    return path_len >= suffix_len &&
+           strcmp(path + path_len - suffix_len, suffix) == 0;
+}
+
+static const char *qos_class_name(int qos_class)
+{
+    return qos_class == PQC_QOS_CLASS_LATENCY ? "latency" : "elastic";
+}
+
+static int parse_qos_class_value(const char *value, size_t size, int *out)
+{
+    if (!value || !out || size == 0)
+        return -EINVAL;
+    char tmp[32] = {0};
+    size_t copy = size < sizeof(tmp) - 1 ? size : sizeof(tmp) - 1;
+    memcpy(tmp, value, copy);
+    tmp[copy] = '\0';
+    if (strcmp(tmp, "latency") == 0 ||
+        strcmp(tmp, "foreground") == 0 ||
+        strcmp(tmp, "1") == 0) {
+        *out = PQC_QOS_CLASS_LATENCY;
+        return 0;
+    }
+    if (strcmp(tmp, "elastic") == 0 ||
+        strcmp(tmp, "background") == 0 ||
+        strcmp(tmp, "default") == 0 ||
+        strcmp(tmp, "0") == 0) {
+        *out = PQC_QOS_CLASS_ELASTIC;
+        return 0;
+    }
+    return -EINVAL;
+}
+
+static int load_qos_class_xattr(const char *path, int *out)
+{
+    char value[32] = {0};
+    ssize_t n = getxattr(path, PQC_XATTR_QOS_CLASS, value, sizeof(value) - 1);
+    if (n == -1)
+        return -errno;
+    if (n <= 0)
+        return -EINVAL;
+    return parse_qos_class_value(value, (size_t)n, out);
+}
+
+static int qos_class_load_for_path(const char *phys_path, int *out)
+{
+    if (!phys_path || !out)
+        return -EINVAL;
+    int rc = load_qos_class_xattr(phys_path, out);
+    if (rc == 0)
+        return 0;
+    if (rc != -ENODATA && rc != -ENOENT)
+        return rc;
+
+    char base[4096];
+    const char *suffixes[] = {"-journal", "-wal", "-shm"};
+    for (size_t i = 0; i < sizeof(suffixes) / sizeof(suffixes[0]); ++i) {
+        const char *suffix = suffixes[i];
+        if (!path_has_suffix(phys_path, suffix))
+            continue;
+        size_t len = strlen(phys_path) - strlen(suffix);
+        if (len >= sizeof(base))
+            return -ENAMETOOLONG;
+        memcpy(base, phys_path, len);
+        base[len] = '\0';
+        rc = load_qos_class_xattr(base, out);
+        if (rc == 0)
+            return 0;
+        if (rc != -ENODATA && rc != -ENOENT)
+            return rc;
+    }
+    *out = PQC_QOS_CLASS_ELASTIC;
+    return 0;
 }
 
 /*
@@ -880,6 +1003,61 @@ static int journal_self_test(void)
     return ok ? 0 : -1;
 }
 
+static int generation_replay_self_test(void)
+{
+    FILE *tmp = tmpfile();
+    if (!tmp) return -1;
+    int fd = fileno(tmp);
+
+    block_mapping_t gen1 = { .logical_block = 9, .generation = 1,
+                             .ciphertext_offset = 4096, .plaintext_length = 32,
+                             .algorithm_id = PQC_ALGO_AES_256_GCM };
+    block_mapping_t gen2 = { .logical_block = 9, .generation = 2,
+                             .ciphertext_offset = 8192, .plaintext_length = 32,
+                             .algorithm_id = PQC_ALGO_AES_256_GCM };
+    block_mapping_t replayed_gen1 = { .logical_block = 9, .generation = 1,
+                                      .ciphertext_offset = 12288, .plaintext_length = 32,
+                                      .algorithm_id = PQC_ALGO_AES_256_GCM };
+    block_mapping_t recovered = {0};
+    int ok = journal_append_mapping(fd, &gen1) == 0 &&
+             journal_append_mapping(fd, &gen2) == 0 &&
+             journal_append_mapping(fd, &replayed_gen1) == 0 &&
+             journal_lookup_mapping(fd, 9, &recovered) == 0 &&
+             recovered.generation == gen2.generation &&
+             recovered.ciphertext_offset == gen2.ciphertext_offset &&
+             journal_max_generation(fd) == gen2.generation;
+
+    uint8_t key[32];
+    uint8_t plain[32];
+    uint8_t cipher[32];
+    uint8_t recovered_plain[32];
+    uint8_t tag[PQC_AEAD_TAG_SIZE];
+    for (size_t i = 0; i < sizeof(key); ++i) key[i] = (uint8_t)(0xa0U + i);
+    for (size_t i = 0; i < sizeof(plain); ++i) plain[i] = (uint8_t)(0x30U + i);
+    memset(cipher, 0, sizeof(cipher));
+    memset(recovered_plain, 0, sizeof(recovered_plain));
+    memset(tag, 0, sizeof(tag));
+
+    int enc_rc = crypt_block_gcm(key, sizeof(key), UINT64_C(0xabcdef0123456789),
+                                 9, 2, sizeof(plain), plain, cipher, tag, 1, 0);
+    int wrong_gen_rc = crypt_block_gcm(key, sizeof(key), UINT64_C(0xabcdef0123456789),
+                                       9, 1, sizeof(cipher), cipher, recovered_plain,
+                                       tag, 0, 0);
+    int right_gen_rc = crypt_block_gcm(key, sizeof(key), UINT64_C(0xabcdef0123456789),
+                                       9, 2, sizeof(cipher), cipher, recovered_plain,
+                                       tag, 0, 0);
+    ok = ok && enc_rc == 0 && wrong_gen_rc != 0 && right_gen_rc == 0 &&
+         CRYPTO_memcmp(plain, recovered_plain, sizeof(plain)) == 0;
+
+    OPENSSL_cleanse(key, sizeof(key));
+    OPENSSL_cleanse(plain, sizeof(plain));
+    OPENSSL_cleanse(cipher, sizeof(cipher));
+    OPENSSL_cleanse(recovered_plain, sizeof(recovered_plain));
+    OPENSSL_cleanse(tag, sizeof(tag));
+    fclose(tmp);
+    return ok ? 0 : -1;
+}
+
 static int checkpoint_self_test(void)
 {
     char path[] = "/tmp/skim_ckpt_selftestXXXXXX";
@@ -1051,15 +1229,21 @@ static int admission_telemetry_smoke_report(void)
         parse_u64_env_or_default("PQC_ADMISSION_SMOKE_UMA_COST_NS", 0ULL);
     const size_t bytes_total =
         (size_t)parse_u64_env_or_default("PQC_ADMISSION_SMOKE_BYTES", 131072ULL);
+    const uint64_t batch_age_ns =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_BATCH_AGE_NS", 0ULL);
+    const uint64_t stale_sleep_us =
+        parse_u64_env_or_default("PQC_ADMISSION_SMOKE_STALE_SLEEP_US", 0ULL);
 
     pqc_admission_update_telemetry(mem_bw, tensor_core);
     pqc_admission_update_ai_budget(ai_budget_ns, 0);
+    if (stale_sleep_us > 0)
+        usleep((useconds_t)stale_sleep_us);
 
     pqc_admission_context_t ctx;
     memset(&ctx, 0, sizeof(ctx));
     ctx.batch_count = 1;
     ctx.bytes_total = bytes_total;
-    ctx.batch_age_ns = 0;
+    ctx.batch_age_ns = batch_age_ns;
     ctx.gpu_kernel_est_ns = parse_u64_env_or_default("PQC_ADMISSION_SMOKE_GPU_KERNEL_NS", 100000ULL);
     ctx.gpu_h2d_staging_ns = parse_u64_env_or_default("PQC_ADMISSION_SMOKE_H2D_NS", 100000ULL);
     ctx.gpu_d2h_staging_ns = parse_u64_env_or_default("PQC_ADMISSION_SMOKE_D2H_NS", 100000ULL);
@@ -1085,6 +1269,11 @@ static int admission_telemetry_smoke_report(void)
             "\"telemetry_mem_bandwidth_util\":%.4f,"
             "\"telemetry_tensor_core_util\":%.4f,"
             "\"ai_budget_ns\":%llu,"
+            "\"batch_age_ns\":%llu,"
+            "\"deadline_ns\":%llu,"
+            "\"producer_slack_age_ns\":%llu,"
+            "\"producer_slack_stale_after_ns\":%llu,"
+            "\"producer_slack_stale\":%s,"
             "\"cpu_queue_depth\":%llu,"
             "\"gpu_queue_depth\":%llu,"
             "\"bytes_total\":%zu,"
@@ -1099,6 +1288,11 @@ static int admission_telemetry_smoke_report(void)
             mem_bw,
             tensor_core,
             (unsigned long long)ai_budget_ns,
+            (unsigned long long)ctx.batch_age_ns,
+            (unsigned long long)ctx.ai_inference_deadline_ns,
+            (unsigned long long)ctx.producer_slack_age_ns,
+            (unsigned long long)ctx.producer_slack_stale_after_ns,
+            ctx.producer_slack_stale ? "true" : "false",
             (unsigned long long)cpu_queue_depth,
             (unsigned long long)gpu_queue_depth,
             bytes_total,
@@ -1191,6 +1385,7 @@ typedef struct {
     pthread_cond_t   pending_cv;
     /* Strategy 2: selective encryption tier */
     int             tier;           /* PQC_TIER_FULL or PQC_TIER_NONE */
+    int             qos_class;      /* PQC_QOS_CLASS_ELASTIC or LATENCY */
     /* Strategy 1: key rotation */
     uint64_t        key_epoch;      /* current epoch index (0 = initial KEM) */
     time_t          last_rekey;     /* wall-clock time of last KEM call */
@@ -1206,6 +1401,14 @@ static pthread_t         g_gpu_load_thread;
 static int               g_gpu_load_thread_started = 0;
 static int               g_gpu_load_stop = 0;
 static double            g_gpu_load_ewma = 0.0;
+static pthread_t         g_admission_telemetry_thread;
+static int               g_admission_telemetry_thread_started = 0;
+static int               g_admission_telemetry_stop = 0;
+static pthread_mutex_t   g_qos_throttle_lock = PTHREAD_MUTEX_INITIALIZER;
+static int               g_qos_throttle_state = 0;
+static double            g_qos_pressure_value = 0.0;
+static unsigned          g_qos_below_exit_count = 0;
+static pthread_mutex_t   g_qos_trace_lock = PTHREAD_MUTEX_INITIALIZER;
 static pqc_scheduler_policy_t g_sched_policy = {
     .gpu_min_bytes = 131072,
     .gpu_queue_penalty_ns = 25000,
@@ -1219,6 +1422,159 @@ static pqc_scheduler_policy_t g_sched_policy = {
     .gpu_queue_bias = 1.0,
 };
 
+static void restore_qos_class_for_fd(int fd, const char *phys_path)
+{
+    int qos_class = PQC_QOS_CLASS_ELASTIC;
+    int rc = qos_class_load_for_path(phys_path, &qos_class);
+    if (rc != 0)
+        qos_class = PQC_QOS_CLASS_ELASTIC;
+    int idx = fd % PQC_MAX_FD;
+    pthread_mutex_lock(&g_fd_ctx[idx].fd_lock);
+    if (g_fd_ctx[idx].valid)
+        g_fd_ctx[idx].qos_class = qos_class;
+    pthread_mutex_unlock(&g_fd_ctx[idx].fd_lock);
+}
+
+static long parse_positive_long_env(const char *name, long fallback)
+{
+    const char *env = getenv(name);
+    if (!env || !*env)
+        return fallback;
+    char *end = NULL;
+    long value = strtol(env, &end, 10);
+    return (end != env && value > 0) ? value : fallback;
+}
+
+static double parse_double_env_or_fallback(const char *name, double fallback)
+{
+    const char *env = getenv(name);
+    if (!env || !*env)
+        return fallback;
+    char *end = NULL;
+    double value = strtod(env, &end);
+    return end != env ? value : fallback;
+}
+
+static int qos_runtime_throttle_enabled(void)
+{
+    const char *env = getenv("PQC_ENABLE_QOS_THROTTLE_ON_WRITE");
+    return env && *env && strcmp(env, "0") != 0;
+}
+
+static void qos_update_runtime_pressure(double mem_util, double tensor_util)
+{
+    if (!qos_runtime_throttle_enabled())
+        return;
+
+    const double enter = parse_double_env_or_fallback("PQC_QOS_MEM_ENTER_UTIL", 0.70);
+    const double exit = parse_double_env_or_fallback("PQC_QOS_MEM_EXIT_UTIL", 0.60);
+    const unsigned hold = (unsigned)parse_positive_long_env("PQC_QOS_HOLD_SAMPLES", 2);
+    const double pressure = mem_util > tensor_util ? mem_util : tensor_util;
+
+    pthread_mutex_lock(&g_qos_throttle_lock);
+    g_qos_pressure_value = pressure;
+    if (!g_qos_throttle_state) {
+        g_qos_below_exit_count = 0;
+        if (pressure >= enter)
+            g_qos_throttle_state = 1;
+    } else {
+        if (pressure <= exit) {
+            if (++g_qos_below_exit_count >= hold) {
+                g_qos_throttle_state = 0;
+                g_qos_below_exit_count = 0;
+            }
+        } else {
+            g_qos_below_exit_count = 0;
+        }
+    }
+    pthread_mutex_unlock(&g_qos_throttle_lock);
+}
+
+static void qos_apply_runtime_throttle(size_t bytes, int qos_class)
+{
+    if (!qos_runtime_throttle_enabled())
+        return;
+
+    pthread_mutex_lock(&g_qos_throttle_lock);
+    const int throttled = g_qos_throttle_state;
+    const double pressure = g_qos_pressure_value;
+    pthread_mutex_unlock(&g_qos_throttle_lock);
+
+    const int eligible = qos_class != PQC_QOS_CLASS_LATENCY;
+    const long sleep_us = (throttled && eligible) ?
+        parse_positive_long_env("PQC_QOS_THROTTLE_SLEEP_US", 50000) : 0;
+    if (sleep_us > 0)
+        usleep((useconds_t)sleep_us);
+
+    const char *trace_path = getenv("PQC_QOS_THROTTLE_TRACE_PATH");
+    if (trace_path && *trace_path) {
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME, &ts);
+        const uint64_t now_ns = (uint64_t)ts.tv_sec * 1000000000ULL +
+                                (uint64_t)ts.tv_nsec;
+        pthread_mutex_lock(&g_qos_trace_lock);
+        FILE *fp = fopen(trace_path, "a");
+        if (fp) {
+            fprintf(fp,
+                    "{\"timestamp_ns\":%llu,\"bytes\":%zu,"
+                    "\"pressure\":%.4f,\"qos_class\":\"%s\","
+                    "\"eligible\":%d,\"throttled\":%d,\"sleep_us\":%ld}\n",
+                    (unsigned long long)now_ns, bytes, pressure,
+                    qos_class_name(qos_class), eligible,
+                    throttled && eligible, sleep_us);
+            fclose(fp);
+        }
+        pthread_mutex_unlock(&g_qos_trace_lock);
+    }
+}
+
+static void *admission_telemetry_file_main(void *arg)
+{
+    const char *path = (const char *)arg;
+    const long poll_ms = parse_positive_long_env("PQC_TELEMETRY_POLL_MS", 50);
+    uint64_t last_budget_ns = UINT64_MAX;
+    uint64_t last_queue_depth = UINT64_MAX;
+    double last_mem = -1.0;
+    double last_tensor = -1.0;
+
+    while (!g_admission_telemetry_stop) {
+        FILE *fp = fopen(path, "r");
+        if (fp) {
+            double mem = 0.0;
+            double tensor = 0.0;
+            unsigned long long budget_ns = 0;
+            unsigned long long queue_depth = 0;
+            int fields = fscanf(fp, "%lf %lf %llu %llu",
+                                &mem, &tensor, &budget_ns, &queue_depth);
+            fclose(fp);
+            if (fields >= 2) {
+                if (mem < 0.0) mem = 0.0;
+                if (mem > 1.0) mem = 1.0;
+                if (tensor < 0.0) tensor = 0.0;
+                if (tensor > 1.0) tensor = 1.0;
+                if (mem != last_mem || tensor != last_tensor) {
+                    pqc_admission_update_telemetry(mem, tensor);
+                    qos_update_runtime_pressure(mem, tensor);
+                    last_mem = mem;
+                    last_tensor = tensor;
+                }
+                if (fields >= 3 && budget_ns != last_budget_ns) {
+                    uint64_t qd = (fields >= 4) ? (uint64_t)queue_depth : 0;
+                    pqc_admission_update_ai_budget((uint64_t)budget_ns, qd);
+                    last_budget_ns = (uint64_t)budget_ns;
+                    last_queue_depth = qd;
+                } else if (fields >= 4 && queue_depth != last_queue_depth) {
+                    pqc_admission_update_ai_budget(last_budget_ns == UINT64_MAX ? 0 : last_budget_ns,
+                                                    (uint64_t)queue_depth);
+                    last_queue_depth = (uint64_t)queue_depth;
+                }
+            }
+        }
+        usleep((useconds_t)poll_ms * 1000U);
+    }
+    return NULL;
+}
+
 /*
  * Runtime override for key-rotation interval.
  * - Default: KEY_ROTATION_INTERVAL_S (compile-time)
@@ -1229,7 +1585,7 @@ static pqc_scheduler_policy_t g_sched_policy = {
 /* ────────────────────────────────────────────────────────────────────────────
  *  Background Rekey Batch Queue & Worker
  * ────────────────────────────────────────────────────────────────────────── */
-#define PQC_REKEY_QUEUE_MAX 256
+#define PQC_REKEY_QUEUE_MAX 4096
 
 typedef struct {
     int      fd_list[PQC_REKEY_QUEUE_MAX];
@@ -1251,6 +1607,9 @@ static pqc_rekey_queue_t g_rekey_queue = {
 static int           g_rekey_stop = 0;
 static pthread_t     g_rekey_thread;
 static int           g_rekey_thread_started = 0;
+
+static void scheduler_gpu_admit(uint32_t bytes);
+static void scheduler_gpu_release(uint32_t bytes);
 
 static void rekey_queue_push(int fd)
 {
@@ -1274,8 +1633,11 @@ static void rekey_queue_push(int fd)
 static void *rekey_worker_main(void *arg)
 {
     (void)arg;
-    int fds[64];
+    int fds[PQC_REKEY_QUEUE_MAX];
     while (!g_rekey_stop) {
+        long configured_max_batch = parse_positive_long_env("PQC_REKEY_BATCH_MAX", 64);
+        if (configured_max_batch > PQC_REKEY_QUEUE_MAX)
+            configured_max_batch = PQC_REKEY_QUEUE_MAX;
         pthread_mutex_lock(&g_rekey_queue.lock);
         while (g_rekey_queue.count == 0 && !g_rekey_stop) {
             struct timespec ts;
@@ -1288,29 +1650,58 @@ static void *rekey_worker_main(void *arg)
             break;
         }
         size_t batch_size = 0;
-        while (g_rekey_queue.count > 0 && batch_size < 64) {
+        while (g_rekey_queue.count > 0 && batch_size < (size_t)configured_max_batch) {
             fds[batch_size++] = g_rekey_queue.fd_list[g_rekey_queue.head];
             g_rekey_queue.head = (g_rekey_queue.head + 1) % PQC_REKEY_QUEUE_MAX;
             g_rekey_queue.count--;
         }
         pthread_mutex_unlock(&g_rekey_queue.lock);
 
+        long collect_ms = parse_positive_long_env("PQC_REKEY_BATCH_COLLECT_MS", 0);
+        if (collect_ms > 0 && batch_size < (size_t)configured_max_batch) {
+            usleep((useconds_t)collect_ms * 1000U);
+            pthread_mutex_lock(&g_rekey_queue.lock);
+            while (g_rekey_queue.count > 0 && batch_size < (size_t)configured_max_batch) {
+                fds[batch_size++] = g_rekey_queue.fd_list[g_rekey_queue.head];
+                g_rekey_queue.head = (g_rekey_queue.head + 1) % PQC_REKEY_QUEUE_MAX;
+                g_rekey_queue.count--;
+            }
+            pthread_mutex_unlock(&g_rekey_queue.lock);
+        }
+
         if (batch_size == 0) continue;
 
         double t0 = get_time_us();
-        pqc_scheduler_policy_t policy = scheduler_policy_from_env();
         double load = 0.0;
         if (getloadavg(&load, 1) < 0) load = 0.0;
         double gpu_ewma = gpu_load_ewma_read();
-
-        pqc_block_job_t job;
-        pqc_block_job_init(&job, fds[0], 0, 0, 0, 0, 0, PQC_PLANE_KEY);
+        const size_t key_work_bytes =
+            batch_size * (g_kem->length_ciphertext + g_kem->length_shared_secret);
         const char *gpu_min_batch_env = getenv("PQC_GPU_MIN_BATCH");
         int min_batch = gpu_min_batch_env ? atoi(gpu_min_batch_env) : 16;
-        if ((int)batch_size >= min_batch) {
-            job.flags |= PQC_JOB_FLAG_GPU_ELIGIBLE;
+        pqc_job_target_t target = PQC_JOB_CPU;
+        pqc_admission_context_t admission_ctx;
+        memset(&admission_ctx, 0, sizeof(admission_ctx));
+        admission_ctx.batch_count = batch_size;
+        admission_ctx.bytes_total = key_work_bytes;
+        admission_ctx.batch_age_ns = (uint64_t)collect_ms * 1000000ULL;
+        admission_ctx.gpu_kernel_est_ns =
+            (uint64_t)parse_positive_long_env("PQC_REKEY_GPU_KERNEL_EST_NS", 250000L);
+        admission_ctx.gpu_h2d_staging_ns = key_work_bytes;
+        admission_ctx.gpu_d2h_staging_ns = batch_size * g_kem->length_shared_secret;
+        admission_ctx.cpu_queue_depth = batch_size;
+        pthread_mutex_lock(&g_sched_pressure_lock);
+        admission_ctx.gpu_queue_depth = g_gpu_inflight_jobs;
+        pthread_mutex_unlock(&g_sched_pressure_lock);
+        admission_ctx.cpu_load_avg = load;
+        admission_ctx.gpu_load_avg = gpu_ewma;
+        admission_ctx.ai_inference_deadline_ns =
+            (uint64_t)parse_positive_long_env("PQC_REKEY_DEADLINE_NS", 10000000L);
+        admission_ctx.uma_migration_cost_ns = 0;
+        admission_ctx.uma_migration_bytes_est = 0;
+        if ((int)batch_size >= min_batch && pqc_admit(&admission_ctx) == 0) {
+            target = admission_ctx.chosen_target;
         }
-        pqc_job_target_t target = pqc_block_job_choose_target(&job, &policy, load, gpu_ewma);
 
         uint8_t *ct_batch = malloc(g_kem->length_ciphertext * batch_size);
         uint8_t *ss_batch = malloc(g_kem->length_shared_secret * batch_size);
@@ -1319,6 +1710,7 @@ static void *rekey_worker_main(void *arg)
 
         if (ct_batch && ss_batch) {
             if (target == PQC_JOB_GPU && skim_cuda_pqc_available()) {
+                scheduler_gpu_admit((uint32_t)(key_work_bytes > UINT32_MAX ? UINT32_MAX : key_work_bytes));
                 uint8_t seeds[32] = {0};
                 int rc = 0;
                 int burn_iters = 1;
@@ -1332,6 +1724,7 @@ static void *rekey_worker_main(void *arg)
                     success = 1;
                     gpu_used = 1;
                 }
+                scheduler_gpu_release((uint32_t)(key_work_bytes > UINT32_MAX ? UINT32_MAX : key_work_bytes));
             }
             if (!success) {
                 success = 1;
@@ -1364,6 +1757,11 @@ static void *rekey_worker_main(void *arg)
                     batch_size, get_time_us() - t0,
                     target == PQC_JOB_GPU ? "GPU" : "CPU",
                     gpu_used ? "GPU" : "CPU");
+            pqc_log("REKEY WORKER DETAIL: work_bytes=%zu budget_ns=%llu decision_reason=%u deferral_reason=%u",
+                    key_work_bytes,
+                    (unsigned long long)admission_ctx.ai_qos_budget_remaining_ns,
+                    (unsigned int)admission_ctx.decision_reason,
+                    (unsigned int)admission_ctx.deferral_reason);
 
             pthread_mutex_lock(&g_sched_pressure_lock);
             g_sched_stats.submitted += batch_size;
@@ -1634,6 +2032,7 @@ static int ctx_set(int fd, const char *marker_path, const uint8_t *ss, size_t ss
         if (ckpt_rc == 0) {
             if (ckpt.logical_size > g_fd_ctx[idx].logical_size)
                 g_fd_ctx[idx].logical_size = ckpt.logical_size;
+            pqc_fault_cutpoint("remount_after_checkpoint_load");
         } else if (ckpt_rc != -ENODATA && ckpt_rc != -ENOENT) {
             close(data_fd);
             close(journal_fd);
@@ -1652,6 +2051,7 @@ static int ctx_set(int fd, const char *marker_path, const uint8_t *ss, size_t ss
         state->next_generation = journal_max_generation(journal_fd);
     g_fd_ctx[idx].valid      = 1;
     g_fd_ctx[idx].tier       = PQC_TIER_FULL;  /* default: full PQC */
+    g_fd_ctx[idx].qos_class  = PQC_QOS_CLASS_ELASTIC;
     g_fd_ctx[idx].key_epoch  = 0;
     g_fd_ctx[idx].last_rekey = time(NULL);
     if (!g_fd_ctx[idx].wbuf) {
@@ -1707,7 +2107,11 @@ static void ctx_clear(int fd)
  */
 static int pqc_subsystem_init(void)
 {
-    pqc_admission_init("experiments/scheduler_trace.jsonl");
+    const char *admission_trace = getenv("PQC_ADMISSION_TRACE_PATH");
+    if (!admission_trace || !*admission_trace)
+        admission_trace = "experiments/scheduler_trace.jsonl";
+    if (pqc_admission_init(admission_trace) != 0)
+        return -1;
     update_scheduler_policy_from_env();
     /* Try ML-KEM-768 first (NIST standardized name), fallback to Kyber768 */
     g_kem = OQS_KEM_new(OQS_KEM_alg_ml_kem_768);
@@ -1775,6 +2179,18 @@ static int pqc_subsystem_init(void)
         pqc_log("GPU load monitor disabled: %s", strerror(errno));
     }
 
+    const char *telemetry_path = getenv("PQC_TELEMETRY_FILE");
+    if (telemetry_path && *telemetry_path) {
+        g_admission_telemetry_stop = 0;
+        if (pthread_create(&g_admission_telemetry_thread, NULL,
+                           admission_telemetry_file_main, (void *)telemetry_path) == 0) {
+            g_admission_telemetry_thread_started = 1;
+            pqc_log("Admission telemetry file monitor started: %s", telemetry_path);
+        } else {
+            pqc_log("Admission telemetry file monitor disabled: %s", strerror(errno));
+        }
+    }
+
     int anchor_rc = pqc_anchor_probe();
     if (anchor_rc != 0) {
         fprintf(stderr, "[PQC-FUSE] FATAL: Freshness anchor probe failed: %s\n",
@@ -1819,6 +2235,12 @@ static int pqc_subsystem_init(void)
  */
 static void pqc_cleanup(void)
 {
+    if (g_admission_telemetry_thread_started) {
+        g_admission_telemetry_stop = 1;
+        pthread_join(g_admission_telemetry_thread, NULL);
+        g_admission_telemetry_thread_started = 0;
+        pqc_log("Admission telemetry file monitor stopped");
+    }
     if (g_rekey_thread_started) {
         pthread_mutex_lock(&g_rekey_queue.lock);
         g_rekey_stop = 1;
@@ -1907,8 +2329,33 @@ static void schedule_block_job(pqc_block_job_t *job, const pqc_fd_ctx_t *ctx,
                               inflight_jobs >= g_sched_policy.gpu_max_inflight_jobs) ||
                              (g_sched_policy.gpu_max_inflight_bytes > 0 &&
                               inflight_bytes + length > g_sched_policy.gpu_max_inflight_bytes);
-    job->target = gpu_pressure_spill ? PQC_JOB_CPU :
-                   pqc_block_job_choose_target(job, &g_sched_policy, load, gpu_ewma);
+    if (gpu_pressure_spill) {
+        job->target = PQC_JOB_CPU;
+    } else if (getenv("PQC_ENABLE_ADMISSION_ON_WRITE") &&
+               pqc_block_job_gpu_eligible(job)) {
+        pqc_admission_context_t admission_ctx;
+        memset(&admission_ctx, 0, sizeof(admission_ctx));
+        admission_ctx.batch_count = 1;
+        admission_ctx.bytes_total = length;
+        admission_ctx.batch_age_ns = ((uint64_t)get_time_us() * 1000ULL) - job->submit_ns;
+        admission_ctx.gpu_kernel_est_ns = length / 4ULL + 100000ULL;
+        admission_ctx.gpu_h2d_staging_ns = skim_cuda_aead_is_uma() ? 0ULL : (uint64_t)length * 8ULL;
+        admission_ctx.gpu_d2h_staging_ns = skim_cuda_aead_is_uma() ? 0ULL : (uint64_t)length * 8ULL;
+        admission_ctx.cpu_queue_depth = job->cpu_queue_depth;
+        admission_ctx.gpu_queue_depth = job->gpu_queue_depth;
+        admission_ctx.cpu_load_avg = load;
+        admission_ctx.gpu_load_avg = gpu_ewma;
+        admission_ctx.ai_inference_deadline_ns =
+            (uint64_t)parse_positive_long_env("PQC_ADMISSION_WRITE_DEADLINE_NS", 10000000L);
+        admission_ctx.uma_migration_cost_ns = job->coherence_cost_ns;
+        admission_ctx.uma_migration_bytes_est = skim_cuda_aead_is_uma() ? 0ULL : length;
+        if (pqc_admit(&admission_ctx) == 0)
+            job->target = admission_ctx.chosen_target;
+        else
+            job->target = PQC_JOB_CPU;
+    } else {
+        job->target = pqc_block_job_choose_target(job, &g_sched_policy, load, gpu_ewma);
+    }
     g_sched_stats.submitted++;
     if (job->target == PQC_JOB_GPU) {
         g_sched_stats.gpu_executed++;
@@ -1943,6 +2390,7 @@ static int do_flush_wbuf_locked(int storage_fd, int idx)
     pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
     if (ctx->wbuf_used == 0) return 0;
     if (!ctx->state) return -EIO;
+    qos_apply_runtime_throttle(ctx->wbuf_used, ctx->qos_class);
     pthread_mutex_lock(&ctx->state->commit_lock);
 
     /* Strategy 2: tier NONE → write plaintext directly */
@@ -2102,10 +2550,15 @@ static int do_flush_wbuf_locked(int storage_fd, int idx)
             break;
         }
         blocks[bi].ciphertext_offset = (uint64_t)pos;
+        pqc_fault_cutpoint("data_write_after_pwrite");
     }
     /* Phase 2: establish the data-before-metadata durability boundary once. */
-    if (res == 0 && fdatasync(ctx->data_fd) != 0)
-        res = -errno;
+    if (res == 0) {
+        if (fdatasync(ctx->data_fd) != 0)
+            res = -errno;
+        else
+            pqc_fault_cutpoint("data_fsync_after");
+    }
 
     /* Phase 3: append all committed mappings, then publish them with one
      * journal barrier.  Recovery ignores any torn tail without a full record. */
@@ -2119,17 +2572,25 @@ static int do_flush_wbuf_locked(int storage_fd, int idx)
         };
         memcpy(map.tag, blocks[bi].tag, sizeof(map.tag));
         res = journal_append_mapping_unsynced(ctx->journal_fd, &map);
+        if (res == 0)
+            pqc_fault_cutpoint("journal_append_after");
     }
-    if (res == 0 && fdatasync(ctx->journal_fd) != 0)
-        res = -errno;
+    if (res == 0) {
+        if (fdatasync(ctx->journal_fd) != 0)
+            res = -errno;
+        else
+            pqc_fault_cutpoint("journal_fsync_after");
+    }
     if (res == 0) {
         ctx->state->next_generation += block_count;
         ctx->logical_size = final_size;
         res = logical_size_store(ctx->marker_path, final_size);
-        if (res == 0)
+        if (res == 0) {
+            pqc_fault_cutpoint("logical_size_xattr_after");
             res = checkpoint_store(ctx->marker_path, ctx->file_id,
                                    ctx->state->next_generation,
                                    ctx->logical_size, ctx->state->next_generation);
+        }
         if (res == 0 && ftruncate(storage_fd, (off_t)final_size) != 0)
             res = -errno;
     }
@@ -2288,6 +2749,7 @@ static int pqc_open(const char *path, struct fuse_file_info *fi)
             }
         }
     }
+    restore_qos_class_for_fd(fd, phys_path);
     return 0;
 }
 
@@ -2319,6 +2781,7 @@ static int pqc_read(const char *path, char *buf, size_t size, off_t offset,
         uint64_t to = end < block_start + PQC_LOGICAL_BLOCK_SIZE ? end - block_start : PQC_LOGICAL_BLOCK_SIZE;
         rc = load_authenticated_block(ctx, block, plain);
         if (rc) break;
+        pqc_fault_cutpoint("read_after_auth");
         memcpy(buf + block_start + from - base, plain + from, to - from);
     }
     pthread_mutex_unlock(&ctx->state->commit_lock);
@@ -2358,6 +2821,7 @@ static int pqc_create(const char *path, mode_t mode,
         return -EIO;
     }
     OQS_MEM_cleanse(ss, sizeof(ss));
+    restore_qos_class_for_fd(fd, phys_path);
     pqc_log("CREATE %s: authenticated file-key envelope initialized (fid=%llu)",
             path, (unsigned long long)fid);
     return 0;
@@ -2483,6 +2947,8 @@ static int pqc_fsync(const char *path, int datasync,
     if (anchor_flush_now() != 0)
         return -EIO;
 
+    pqc_fault_cutpoint("fsync_before_return");
+
     return fdatasync(fd) == -1 ? -errno : 0;
 }
 
@@ -2559,6 +3025,68 @@ static int pqc_truncate(const char *path, off_t size,
     return res;
 }
 
+static int pqc_fallocate(const char *path, int mode, off_t offset,
+                         off_t length, struct fuse_file_info *fi)
+{
+    if (is_hidden_sidecar_path(path))
+        return -ENOENT;
+    if (offset < 0 || length < 0)
+        return -EINVAL;
+    if ((uint64_t)offset > UINT64_MAX - (uint64_t)length)
+        return -EFBIG;
+
+    int supported_flags = 0;
+#ifdef FALLOC_FL_KEEP_SIZE
+    supported_flags |= FALLOC_FL_KEEP_SIZE;
+#endif
+    if (mode & ~supported_flags)
+        return -EOPNOTSUPP;
+    if (!fi)
+        return -EOPNOTSUPP;
+
+    int fd = (int)fi->fh;
+    int idx = fd % PQC_MAX_FD;
+    int res = 0;
+
+    pthread_mutex_lock(&g_fd_ctx[idx].fd_lock);
+    pqc_fd_ctx_t *ctx = &g_fd_ctx[idx];
+    if (ctx->valid && ctx->wbuf && ctx->wbuf_used > 0)
+        res = do_flush_wbuf_locked(fd, idx);
+
+    if (res == 0 && ctx->valid) {
+        uint64_t end = (uint64_t)offset + (uint64_t)length;
+        uint64_t logical_size = ctx->logical_size;
+#ifdef FALLOC_FL_KEEP_SIZE
+        if ((mode & FALLOC_FL_KEEP_SIZE) == 0 && end > logical_size)
+            logical_size = end;
+#else
+        if (end > logical_size)
+            logical_size = end;
+#endif
+        pthread_mutex_lock(&ctx->state->commit_lock);
+        ctx->logical_size = logical_size;
+        res = logical_size_store(ctx->marker_path, logical_size);
+        if (res == 0 && ftruncate(fd, (off_t)logical_size) != 0)
+            res = -errno;
+        if (res == 0)
+            res = checkpoint_store(ctx->marker_path, ctx->file_id,
+                                   ctx->state->next_generation,
+                                   ctx->logical_size,
+                                   ctx->state->next_generation);
+        pthread_mutex_unlock(&ctx->state->commit_lock);
+    } else if (res == 0) {
+        off_t end = offset + length;
+#ifdef FALLOC_FL_KEEP_SIZE
+        if ((mode & FALLOC_FL_KEEP_SIZE) != 0)
+            end = 0;
+#endif
+        if (end > 0 && ftruncate(fd, end) != 0)
+            res = -errno;
+    }
+    pthread_mutex_unlock(&g_fd_ctx[idx].fd_lock);
+    return res;
+}
+
 static int pqc_unlink(const char *path)
 {
     if (is_hidden_sidecar_path(path))
@@ -2572,7 +3100,7 @@ static int pqc_unlink(const char *path)
     if (res == 0) res = sidecar_path(journal_path, sizeof(journal_path), phys_path, ".pqcmeta");
     if (res != 0)
         return res;
-    
+
     if (unlink(data_path) == -1 && errno != ENOENT)
         return -errno;
     if (unlink(journal_path) == -1 && errno != ENOENT)
@@ -2647,6 +3175,34 @@ static int pqc_flock(const char *path, struct fuse_file_info *fi, int op)
     return 0;
 }
 
+static int pqc_rename(const char *from, const char *to, unsigned int flags)
+{
+    (void)from;
+    (void)to;
+    (void)flags;
+    /*
+     * Rename must move the marker file, .pqcdata, .pqcmeta, logical-size
+     * state, checkpoint, and external-anchor association atomically.  The
+     * current prototype has no retained crash campaign for that transition, so
+     * reject it explicitly instead of letting the kernel infer ENOSYS.
+     */
+    return -ENOTSUP;
+}
+
+static int pqc_fsyncdir(const char *path, int datasync,
+                         struct fuse_file_info *fi)
+{
+    (void)path;
+    (void)datasync;
+    (void)fi;
+    /*
+     * The publication protocol syncs file sidecars and checkpoint xattrs.  It
+     * does not certify directory-entry durability, so directory fsync is not a
+     * supported durability boundary in this prototype.
+     */
+    return -ENOTSUP;
+}
+
 static int pqc_utimens(const char *path, const struct timespec tv[2],
                         struct fuse_file_info *fi)
 {
@@ -2699,22 +3255,54 @@ static void pqc_destroy(void *private_data)
 
 static void *pqc_fuse_init(struct fuse_conn_info *conn, struct fuse_config *cfg)
 {
-    (void)cfg;
+    if (cfg) {
+        cfg->kernel_cache = 0;
+        cfg->auto_cache = 0;
+    }
     if (!conn)
         return NULL;
 #ifdef FUSE_CAP_WRITEBACK_CACHE
-    if (conn->capable & FUSE_CAP_WRITEBACK_CACHE)
-        conn->want |= FUSE_CAP_WRITEBACK_CACHE;
+    conn->want &= ~FUSE_CAP_WRITEBACK_CACHE;
 #endif
 #ifdef FUSE_CAP_ASYNC_DIO
     if (conn->capable & FUSE_CAP_ASYNC_DIO)
         conn->want |= FUSE_CAP_ASYNC_DIO;
 #endif
 #ifdef FUSE_DIRECT_IO_ALLOW_MMAP
-    if (conn->capable & FUSE_DIRECT_IO_ALLOW_MMAP)
-        conn->want |= FUSE_DIRECT_IO_ALLOW_MMAP;
+    conn->want &= ~FUSE_DIRECT_IO_ALLOW_MMAP;
 #endif
     return NULL;
+}
+
+static int is_internal_xattr_name(const char *name)
+{
+    if (!name)
+        return 0;
+    return strcmp(name, PQC_XATTR_METADATA) == 0 ||
+           strcmp(name, PQC_XATTR_LOGICAL_SIZE) == 0 ||
+           strcmp(name, PQC_XATTR_CHECKPOINT) == 0;
+}
+
+static ssize_t filter_xattr_list(const char *raw, size_t raw_len,
+                                  char *out, size_t out_size)
+{
+    size_t used = 0;
+    for (size_t pos = 0; pos < raw_len;) {
+        size_t name_len = strnlen(raw + pos, raw_len - pos);
+        if (pos + name_len >= raw_len)
+            return -EIO;
+        const char *name = raw + pos;
+        size_t record_len = name_len + 1;
+        if (!is_internal_xattr_name(name)) {
+            if (out && used + record_len <= out_size)
+                memcpy(out + used, name, record_len);
+            used += record_len;
+        }
+        pos += record_len;
+    }
+    if (out && used > out_size)
+        return -ERANGE;
+    return (ssize_t)used;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -2736,6 +3324,9 @@ static int pqc_setxattr(const char *path, const char *name,
     char phys_path[4096];
     resolve_physical_path(phys_path, sizeof(phys_path), path);
 
+    if (is_internal_xattr_name(name))
+        return -EPERM;
+
     if (strcmp(name, "user.pqc.freshness_window") == 0 && size > 0) {
         char tmp[16] = {0};
         memcpy(tmp, value, size < 15 ? size : 15);
@@ -2747,16 +3338,14 @@ static int pqc_setxattr(const char *path, const char *name,
         return -EINVAL;
     }
 
-    if (setxattr(phys_path, name, value, size, flags) == -1)
-        return -errno;
-
-    /* If setting the tier live, update in-flight fd context */
     if (strcmp(name, PQC_XATTR_TIER) == 0 && size > 0) {
         char tmp[8] = {0};
         memcpy(tmp, value, size < 7 ? size : 7);
         int new_tier = atoi(tmp);
         if (new_tier != PQC_TIER_FULL && new_tier != PQC_TIER_NONE)
             return -EINVAL;
+        if (setxattr(phys_path, name, value, size, flags) == -1)
+            return -errno;
         for (int i = 0; i < PQC_MAX_FD; i++) {
             pthread_mutex_lock(&g_fd_ctx[i].fd_lock);
             if (g_fd_ctx[i].valid && strcmp(g_fd_ctx[i].marker_path, phys_path) == 0)
@@ -2764,7 +3353,28 @@ static int pqc_setxattr(const char *path, const char *name,
             pthread_mutex_unlock(&g_fd_ctx[i].fd_lock);
         }
         pqc_log("SETXATTR %s tier=%d", path, new_tier);
+        return 0;
     }
+
+    if (strcmp(name, PQC_XATTR_QOS_CLASS) == 0 && size > 0) {
+        int qos_class = PQC_QOS_CLASS_ELASTIC;
+        int rc = parse_qos_class_value(value, size, &qos_class);
+        if (rc != 0)
+            return rc;
+        if (setxattr(phys_path, name, value, size, flags) == -1)
+            return -errno;
+        for (int i = 0; i < PQC_MAX_FD; i++) {
+            pthread_mutex_lock(&g_fd_ctx[i].fd_lock);
+            if (g_fd_ctx[i].valid && strcmp(g_fd_ctx[i].marker_path, phys_path) == 0)
+                g_fd_ctx[i].qos_class = qos_class;
+            pthread_mutex_unlock(&g_fd_ctx[i].fd_lock);
+        }
+        pqc_log("SETXATTR %s qos_class=%s", path, qos_class_name(qos_class));
+        return 0;
+    }
+
+    if (setxattr(phys_path, name, value, size, flags) == -1)
+        return -errno;
     return 0;
 }
 
@@ -2775,6 +3385,9 @@ static int pqc_getxattr(const char *path, const char *name,
         return -ENOENT;
     char phys_path[4096];
     resolve_physical_path(phys_path, sizeof(phys_path), path);
+
+    if (is_internal_xattr_name(name))
+        return -ENODATA;
 
     ssize_t res = getxattr(phys_path, name, value, size);
     return res == -1 ? -errno : (int)res;
@@ -2787,8 +3400,21 @@ static int pqc_listxattr(const char *path, char *list, size_t size)
     char phys_path[4096];
     resolve_physical_path(phys_path, sizeof(phys_path), path);
 
-    ssize_t res = listxattr(phys_path, list, size);
-    return res == -1 ? -errno : (int)res;
+    ssize_t raw_len = listxattr(phys_path, NULL, 0);
+    if (raw_len <= 0)
+        return raw_len == -1 ? -errno : 0;
+    char *raw = malloc((size_t)raw_len);
+    if (!raw)
+        return -ENOMEM;
+    ssize_t got = listxattr(phys_path, raw, (size_t)raw_len);
+    if (got == -1) {
+        int err = -errno;
+        free(raw);
+        return err;
+    }
+    ssize_t filtered = filter_xattr_list(raw, (size_t)got, list, size);
+    free(raw);
+    return filtered < 0 ? (int)filtered : (int)filtered;
 }
 
 /* ── FUSE operations table ── */
@@ -2803,12 +3429,15 @@ static const struct fuse_operations pqc_oper = {
     .fsync      = pqc_fsync,
     .create     = pqc_create,
     .truncate   = pqc_truncate,
+    .fallocate  = pqc_fallocate,
     .unlink     = pqc_unlink,
     .mkdir      = pqc_mkdir,
     .rmdir      = pqc_rmdir,
     .release    = pqc_release,
     .lock       = pqc_lock,
     .flock      = pqc_flock,
+    .rename     = pqc_rename,
+    .fsyncdir   = pqc_fsyncdir,
     .utimens    = pqc_utimens,
     .destroy    = pqc_destroy,
     .setxattr   = pqc_setxattr,
@@ -2849,9 +3478,12 @@ int main(int argc, char *argv[])
         int sched_rc = scheduler_self_test();
         int ckpt_rc = checkpoint_self_test();
         int anchor_rc = pqc_anchor_self_test();
-        int rc = crypto_self_test() || journal_self_test() || ckpt_rc || sched_rc || anchor_rc;
+        int gen_rc = generation_replay_self_test();
+        int rc = crypto_self_test() || journal_self_test() || gen_rc || ckpt_rc || sched_rc || anchor_rc;
         fprintf(stderr, "PQC-FUSE scheduler self-test: %s\n",
                 sched_rc == 0 ? "PASS" : "FAIL");
+        fprintf(stderr, "PQC-FUSE generation replay self-test: %s\n",
+                gen_rc == 0 ? "PASS" : "FAIL");
         fprintf(stderr, "PQC-FUSE checkpoint self-test: %s\n",
                 ckpt_rc == 0 ? "PASS" : "FAIL");
         fprintf(stderr, "PQC-FUSE anchor self-test: %s\n",

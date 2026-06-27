@@ -1,0 +1,556 @@
+{
+  "artifacts": [
+    {
+      "category": "primitive placement diagnostic",
+      "exists": true,
+      "methodology_status": "diagnostic_scope_gate_passed",
+      "missing_metadata": [],
+      "name": "verified_microbench",
+      "paper_role": "diagnostic only after paper downgrade; not a headline baseline or hero result",
+      "path": "artifacts/validation/microbench/summary.json",
+      "present_metadata": [
+        "raw_stdout_captures",
+        "platform_manifest",
+        "command_list",
+        "run_count",
+        "descriptive_range"
+      ],
+      "retained_summary": {
+        "gpu_mlkem_rows": 21,
+        "manifest_fields": [
+          "commands",
+          "cpu_count",
+          "device_model",
+          "kernel",
+          "machine",
+          "nvcc",
+          "timestamp_utc"
+        ],
+        "runs": 3,
+        "workload_map_rows": 50
+      }
+    },
+    {
+      "category": "methodology-strengthened primitive diagnostic run",
+      "exists": true,
+      "methodology_status": "methodology_progress_host_not_ready",
+      "missing_metadata": [
+        "performance_cpu_governor",
+        "successful_jetson_clocks_capture"
+      ],
+      "name": "verified_microbench_methodology_run",
+      "paper_role": "progress evidence only; not the paper figure source",
+      "path": "artifacts/validation/microbench_methodology/summary.json",
+      "present_metadata": [
+        "warmup",
+        "headline_minimum_repetitions",
+        "bootstrap_ci_over_repetitions",
+        "nvpmodel_capture",
+        "thermal_log",
+        "background_process_snapshot",
+        "outlier_policy",
+        "cache_state_policy",
+        "failure_handling"
+      ],
+      "retained_summary": {
+        "governor_ready": false,
+        "jetson_clocks_returncode": 1,
+        "nvpmodel_returncode": 0,
+        "observed_cpu_governors": {
+          "governor_counts": {
+            "schedutil": 14
+          },
+          "paths_observed": 14
+        },
+        "run_count": {
+          "headline_minimum_repetitions": 5,
+          "measured_runs": 5,
+          "meets_headline_minimum": true
+        },
+        "runs": 5,
+        "thermal_line_count": 967,
+        "thermal_nonempty": true,
+        "warmup_runs": 1
+      }
+    },
+    {
+      "category": "single synchronized mounted-FUSE QoS bundle",
+      "exists": true,
+      "methodology_status": "single_workflow_scope_gate_passed",
+      "missing_metadata": [],
+      "name": "qos_sqlite_hero_bundle",
+      "paper_role": "single-bundle SQLite recovery evidence; statistical metadata is tracked by qos_sqlite_hero_methodology",
+      "path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+      "present_metadata": [
+        "raw_foreground_logs",
+        "raw_background_logs",
+        "policy_trace_logs",
+        "mounted_fuse_logs",
+        "telemetry_logs",
+        "platform_manifest",
+        "workload_arguments",
+        "failure_gate"
+      ],
+      "retained_summary": {
+        "foreground_samples_per_mode": {
+          "aegis_policy": 48,
+          "app_only": 48,
+          "simple_controller": 48,
+          "unthrottled_storage": 48
+        },
+        "has_component_coverage": true,
+        "has_platform": true,
+        "mode_count": 4,
+        "overall_pass": true
+      }
+    },
+    {
+      "category": "methodology-strengthened repeated SQLite QoS workflow run",
+      "exists": true,
+      "methodology_status": "methodology_progress_recovery_unstable",
+      "missing_metadata": [
+        "performance_cpu_governor",
+        "successful_jetson_clocks_capture",
+        "recovery_stability_gate_failed"
+      ],
+      "name": "qos_sqlite_hero_methodology",
+      "paper_role": "progress evidence for repeated SQLite QoS methodology; paper source remains the single workflow bundle",
+      "path": "artifacts/validation/qos_sqlite_hero_methodology/qos_sqlite_hero_bundle.json",
+      "present_metadata": [
+        "warmup",
+        "headline_minimum_repetitions",
+        "bootstrap_ci_over_repetitions",
+        "platform_manifest",
+        "nvpmodel_capture",
+        "thermal_log",
+        "background_process_snapshot",
+        "outlier_policy",
+        "cache_state_policy",
+        "failure_handling"
+      ],
+      "retained_summary": {
+        "governor_ready": false,
+        "jetson_clocks_returncode": 1,
+        "mode_summary_count": 4,
+        "nvpmodel_returncode": 0,
+        "observed_cpu_governors": {
+          "governor_counts": {
+            "schedutil": 14
+          },
+          "paths_observed": 14
+        },
+        "overall_pass": false,
+        "repetitions_measured": 5,
+        "run_count": {
+          "headline_minimum_repetitions": 5,
+          "measured_repetitions": 5,
+          "meets_headline_minimum": true
+        },
+        "thermal_line_count": 250,
+        "thermal_nonempty": true,
+        "unstable_recovery_checks": {
+          "aegis_recovers_p99": {
+            "all_true": false,
+            "runs": 5,
+            "true_runs": 4
+          },
+          "aegis_removes_deadline_misses": {
+            "all_true": false,
+            "runs": 5,
+            "true_runs": 3
+          },
+          "pressure_causes_deadline_miss": {
+            "all_true": false,
+            "runs": 5,
+            "true_runs": 2
+          },
+          "pressure_raises_p99": {
+            "all_true": false,
+            "runs": 5,
+            "true_runs": 3
+          }
+        },
+        "warmup_runs": 1
+      }
+    },
+    {
+      "category": "single mounted maintenance workflow",
+      "exists": true,
+      "methodology_status": "single_workflow_scope_gate_passed",
+      "missing_metadata": [],
+      "name": "keyplane_rekey_workflow",
+      "paper_role": "single-bundle workflow evidence; statistical metadata is tracked by keyplane_rekey_methodology",
+      "path": "artifacts/validation/keyplane_rekey_workflow/keyplane_rekey_workflow.json",
+      "present_metadata": [
+        "mode_logs",
+        "admission_traces",
+        "failure_gate",
+        "files_per_mode",
+        "collect_ms"
+      ],
+      "retained_summary": {
+        "files_per_mode": 1024,
+        "gpu_vs_cpu_speedup": 1.1579561849798767,
+        "mode_count": 3,
+        "overall_pass": true
+      }
+    },
+    {
+      "category": "methodology-strengthened mounted key-plane workflow run",
+      "exists": true,
+      "methodology_status": "methodology_progress_host_not_ready",
+      "missing_metadata": [
+        "performance_cpu_governor",
+        "successful_jetson_clocks_capture"
+      ],
+      "name": "keyplane_rekey_methodology",
+      "paper_role": "progress evidence for repeated key-plane workflow methodology; paper source remains the single workflow bundle",
+      "path": "artifacts/validation/keyplane_rekey_methodology/keyplane_rekey_workflow.json",
+      "present_metadata": [
+        "warmup",
+        "headline_minimum_repetitions",
+        "bootstrap_ci_over_repetitions",
+        "platform_manifest",
+        "nvpmodel_capture",
+        "thermal_log",
+        "background_process_snapshot",
+        "outlier_policy",
+        "cache_state_policy",
+        "failure_handling"
+      ],
+      "retained_summary": {
+        "files_per_mode": 1024,
+        "governor_ready": false,
+        "gpu_vs_cpu_speedup_summary": {
+          "ci95_high": 1.381345986184696,
+          "ci95_low": 1.1445489896211194,
+          "median": 1.1855064353665359,
+          "p05": 1.1445489896211194,
+          "p95": 1.381345986184696,
+          "runs": 5
+        },
+        "jetson_clocks_returncode": 1,
+        "mode_summary_count": 3,
+        "nvpmodel_returncode": 0,
+        "observed_cpu_governors": {
+          "governor_counts": {
+            "schedutil": 14
+          },
+          "paths_observed": 14
+        },
+        "overall_pass": true,
+        "repetitions_measured": 5,
+        "run_count": {
+          "headline_minimum_repetitions": 5,
+          "measured_repetitions": 5,
+          "meets_headline_minimum": true
+        },
+        "thermal_line_count": 987,
+        "thermal_nonempty": true,
+        "warmup_runs": 1
+      }
+    },
+    {
+      "category": "contract, not result",
+      "exists": true,
+      "methodology_status": "contract_complete_not_executed",
+      "missing_metadata": [
+        "current_host_execution_ready_for_benchmark_execution"
+      ],
+      "name": "frozen_workload_contract",
+      "paper_role": "future filesystem comparison contract",
+      "path": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json",
+      "present_metadata": [
+        "request_size",
+        "read_write_mix",
+        "sync_mode",
+        "warm_cold_cache",
+        "queue_depth",
+        "client_count",
+        "file_size",
+        "mount_options",
+        "cpu_governor",
+        "thermal_mode",
+        "storage_device",
+        "lower_filesystem",
+        "repetition_count",
+        "confidence_interval_method"
+      ],
+      "retained_summary": {
+        "contract_complete": true,
+        "contract_sha256": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+        "current_host_execution_ready": false,
+        "overall_pass": true
+      }
+    },
+    {
+      "category": "AEGIS-Q-only frozen filesystem contract row",
+      "exists": true,
+      "methodology_status": "methodology_metadata_retained_cold_invalid",
+      "missing_metadata": [],
+      "name": "frozen_aegisq_contract",
+      "paper_role": "warm-cache AEGIS-Q result only; not a cross-system comparison and not a cold-cache row",
+      "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+      "present_metadata": [
+        "result_json",
+        "contract_id_v2",
+        "file_preparation",
+        "warmup",
+        "five_valid_measured_repetitions",
+        "bootstrap_ci",
+        "csv",
+        "file_preparation_artifact",
+        "fio_raw_dir",
+        "mount_logs",
+        "platform_manifest",
+        "thermal_log",
+        "thermal_interval_at_most_100ms",
+        "cold_cache_invalid_declared",
+        "paper_result_scope"
+      ],
+      "retained_summary": {
+        "cold_cache_status": "invalid_not_run",
+        "comparison_ready": false,
+        "contract_compliant_warm_cache": true,
+        "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+        "file_preparation_method": "posix_fallocate",
+        "file_preparation_valid": true,
+        "overall_pass": true,
+        "paper_mentions_result": true,
+        "thermal_interval_ms": 100,
+        "warm_valid_repetitions": 5
+      }
+    },
+    {
+      "category": "gocryptfs frozen filesystem contract row",
+      "exists": true,
+      "methodology_status": "baseline_metadata_retained_cold_invalid",
+      "missing_metadata": [],
+      "name": "frozen_gocryptfs_contract",
+      "paper_role": "warm-cache gocryptfs baseline row only; not a full filesystem comparison matrix and not a cold-cache row",
+      "path": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+      "present_metadata": [
+        "result_json",
+        "contract_id_v2",
+        "filesystem_mode",
+        "gocryptfs_version",
+        "mount_options",
+        "file_preparation",
+        "warmup",
+        "five_valid_measured_repetitions",
+        "bootstrap_ci",
+        "csv",
+        "file_preparation_artifact",
+        "fio_raw_dir",
+        "mount_logs",
+        "platform_manifest",
+        "thermal_log",
+        "thermal_interval_at_most_100ms",
+        "cold_cache_invalid_declared",
+        "paper_result_scope"
+      ],
+      "retained_summary": {
+        "cold_cache_status": "invalid_not_run",
+        "contract_compliant_warm_cache": true,
+        "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+        "file_preparation_method": "posix_fallocate",
+        "file_preparation_valid": true,
+        "gocryptfs_version": "gocryptfs 2.4.0; go-fuse 2.4.2; 2025-06-24 go1.22.2 linux/arm64",
+        "overall_pass": true,
+        "paper_mentions_result": true,
+        "thermal_interval_ms": 100,
+        "warm_valid_repetitions": 5
+      }
+    },
+    {
+      "category": "plaintext lower-filesystem frozen contract row",
+      "exists": true,
+      "methodology_status": "baseline_metadata_retained_cold_invalid",
+      "missing_metadata": [],
+      "name": "frozen_plaintext_contract",
+      "paper_role": "warm-cache plaintext lowerfs baseline row only; not a full filesystem comparison matrix and not a cold-cache row",
+      "path": "artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json",
+      "present_metadata": [
+        "result_json",
+        "contract_id_v2",
+        "filesystem_mode",
+        "lower_ext4",
+        "file_preparation",
+        "warmup",
+        "five_valid_measured_repetitions",
+        "bootstrap_ci",
+        "csv",
+        "file_preparation_artifact",
+        "fio_raw_dir",
+        "platform_manifest",
+        "thermal_log",
+        "thermal_interval_at_most_100ms",
+        "cold_cache_invalid_declared",
+        "paper_result_scope"
+      ],
+      "retained_summary": {
+        "cold_cache_status": "invalid_not_run",
+        "contract_compliant_warm_cache": true,
+        "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+        "file_preparation_method": "posix_fallocate",
+        "file_preparation_valid": true,
+        "lower_findmnt": "/dev/nvme0n1p1 ext4   /      rw,relatime",
+        "overall_pass": true,
+        "paper_mentions_result": true,
+        "thermal_interval_ms": 100,
+        "warm_valid_repetitions": 5
+      }
+    },
+    {
+      "category": "non-destructive fscrypt/dm-crypt feasibility audit",
+      "exists": true,
+      "methodology_status": "kernel_baseline_feasibility_retained",
+      "missing_metadata": [],
+      "name": "kernel_baseline_feasibility",
+      "paper_role": "explains why fscrypt/dm-crypt frozen rows remain open on this host; not a benchmark result",
+      "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json",
+      "present_metadata": [
+        "result_json",
+        "contract_id_v2",
+        "fscrypt_probe",
+        "dmcrypt_probe",
+        "scope_nonexecuting"
+      ],
+      "retained_summary": {
+        "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+        "dm_crypt_blocking_reasons": [
+          "noninteractive_sudo_unavailable",
+          "dev_mapper_control_not_user_writable",
+          "loop_control_not_user_writable"
+        ],
+        "dm_crypt_runnable_without_interactive_root": false,
+        "fscrypt_blocking_reasons": [
+          "noninteractive_sudo_unavailable",
+          "root_ext4_encrypt_feature_not_enabled",
+          "fscrypt_status_nonzero"
+        ],
+        "fscrypt_runnable_without_interactive_root": false,
+        "overall_pass": true
+      }
+    },
+    {
+      "category": "historical reference-only baseline outputs",
+      "exists": true,
+      "methodology_status": "baseline_scope_gate_passed",
+      "missing_metadata": [],
+      "name": "fscrypt_dmcrypt_reference_fio",
+      "paper_role": "historical repository artifacts only; not current paper comparison evidence",
+      "path": "artifacts/results/baselines",
+      "present_metadata": [
+        "raw_fio_json",
+        "paper_scope_gate"
+      ],
+      "retained_summary": {
+        "forbidden_hits": {
+          "matched_reference_row": false,
+          "reference_points_until_rerun": false,
+          "retained_matched_runs": false
+        },
+        "present_files": [
+          "fscrypt_fio.json",
+          "dm_crypt_fio.json"
+        ],
+        "required_scope_hits": {
+          "historical_traceability_only": true,
+          "no_apples_to_apples": true,
+          "not_current_comparison_evidence": true
+        },
+        "scope_gate_pass": true
+      }
+    }
+  ],
+  "audit_id": "aegisq-stat-thermal-methodology-audit-2026-06-27",
+  "commands": {
+    "enforce_complete": [
+      "python3",
+      "experiments/build_stat_thermal_methodology_audit.py",
+      "--require-complete"
+    ],
+    "generate": [
+      "python3",
+      "experiments/build_stat_thermal_methodology_audit.py"
+    ]
+  },
+  "completion_blockers": [],
+  "git": {
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "2757b23e7e14afd6d597c1534eda7cb6357015b2"
+    },
+    "status_short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "M .gitignore\n M CMakeLists.txt\n M Paper/10_Discussion_and_Limitations.tex\n D Paper/11_Appendix.tex\n M Paper/1_Introduction.tex\n M Paper/2_Background.tex\n M Paper/3_Design.tex\n M Paper/4_Evaluation.tex\n M Paper/5_Related_Works.tex\n M Paper/6_Conclusion.tex\n M Paper/7_Implementation_Details.tex\n M Paper/8_Security_Analysis.tex\n M Paper/main.pdf\n M Paper/main.tex\n D \"Paper/previous paper.pdf\"\n D Paper/previous_paper_text.txt\n M README.md\n M SUBMISSION_CHECKLIST.md\n D artifacts/anchor_refresh/anchor_latency.csv\n D artifacts/anchor_refresh/anchor_latency.json\n D artifacts/anchor_refresh/anchor_latency.png\n D artifacts/anchor_refresh/anchor_latency_skipped.json\n D artifacts/anchor_refresh/anchor_witness.bin\n D artifacts/anchor_refresh/hardware_anchor_latency.csv\n D artifacts/anchor_refresh/hardware_anchor_latency.json\n D artifacts/baselines/cpu_comparison.json\n D artifacts/baselines/dm_crypt_fio.json\n D artifacts/baselines/fscrypt_fio.json\n D artifacts/build_all_reports_logs/experiments_build_app_recovery_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_app_recovery_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_crash_audit_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_crash_audit_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_evidence_dashboard.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_evidence_dashboard.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_index_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_index_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_platform_inventory_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_platform_inventory_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_qos_repeated_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_qos_repeated_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_sqlite_recovery_oracle.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_sqlite_recovery_oracle.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_status_register.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_status_register.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_tpm_freshness_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_tpm_freshness_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_uma_storage_dma_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_uma_storage_dma_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_run_sqlite_fault_campaign.stderr.txt\n D artifacts/build_all_reports_logs/experiments_run_sqlite_fault_campaign.stdout.txt\n D artifacts/crash_audit_report/crash_audit_report.json\n D artifacts/crash_audit_report/crash_audit_report.md\n D artifacts/crash_replay_e8_test_matrix.csv\n D artifacts/crash_replay_e8_test_matrix.json\n D artifacts/crash_replay_e8_test_summary.csv\n D artifacts/crash_replay_e8_test_summary.json\n D artifacts/crash_replay_matrix.csv\n D artifacts/crash_replay_matrix.json\n D artifacts/crash_replay_summary.csv\n D artifacts/crash_replay_summary.json\n D artifacts/e1_results.json\n D artifacts/e3_hero_results.json\n D artifacts/e3_hero_summary.csv\n D artifacts/e6_breakdown.json\n D artifacts/e8_crash_replay.json\n D artifacts/evidence/io_uring_uvm_nvme_sudo.err\n D artifacts/evidence_dashboard/evidence_dashboard.json\n D artifacts/evidence_dashboard/evidence_dashboard.md\n D artifacts/index_report/index_report.json\n D artifacts/index_report/index_report.md\n D artifacts/m3_qos/e4_llm_qos.png\n D artifacts/m3_qos/m3_qos_results.csv\n D artifacts/m3_qos/m3_qos_results.json\n D artifacts/m3_qos/telemetry_ablation.json\n D artifacts/m3_qos_ci_report/m3_qos_ci_report.json\n D artifacts/m3_qos_ci_report/m3_qos_ci_report.md\n D artifacts/m3_qos_results.csv\n D artifacts/m3_qos_results.json\n D artifacts/m4_freshness/m4_tradeoff.csv\n D artifacts/m4_freshness/power_fail_results.json\n D artifacts/m5_admission_sweep.csv\n D artifacts/m5_admission_sweep.json\n D artifacts/m5_admission_sweep_qdepth.csv\n D artifacts/m5_admission_sweep_qdepth.json\n D artifacts/m5_fastlane_stress.csv\n D artifacts/m5_fastlane_stress.json\n D artifacts/m6_tradeoff_yolov8_adaptive_tight/e3_tensorrt_qos.png\n D artifacts/m6_tradeoff_yolov8_adaptive_tight/tensorrt_interference.csv\n D artifacts/m6_tradeoff_yolov8_adaptive_tight/tensorrt_interference.json\n D artifacts/m6_tradeoff_yolov8_elasticcontend/e3_tensorrt_qos.png\n D artifacts/m6_tradeoff_yolov8_elasticcontend/tensorrt_interference.csv\n D artifacts/m6_tradeoff_yolov8_elasticcontend/tensorrt_interference.json\n D artifacts/motivation/anchor_latency.csv\n D artifacts/motivation/anchor_latency.json\n D artifacts/motivation/anchor_latency.png\n D artifacts/motivation/anchor_witness.bin\n D artifacts/motivation/baseline_latency.json\n D artifacts/motivation/baseline_write_latency.png\n D artifacts/motivation/contention_latency.csv\n D artifacts/motivation/contention_latency.json\n D artifacts/motivation/contention_latency.png\n D artifacts/motivation/crash_regression.json\n D artifacts/motivation/crash_regression.txt\n D artifacts/motivation/crash_replay_matrix.json\n D artifacts/motivation/crash_replay_matrix.txt\n D artifacts/motivation/crash_replay_summary.csv\n D artifacts/motivation/crash_replay_summary.json\n D artifacts/motivation/crash_replay_summary.png\n D artifacts/motivation/e1_secure_io_cost.png\n D artifacts/motivation/e3_tensorrt_qos.png\n D artifacts/motivation/fuse_latency.csv\n D artifacts/motivation/fuse_latency.json\n D artifacts/motivation/gocryptfs_latency.csv\n D artifacts/motivation/inference_latency.csv\n D artifacts/motivation/inference_latency.json\n D artifacts/motivation/inference_latency.png\n D artifacts/motivation/motivation_contention.csv\n D artifacts/motivation/motivation_contention.json\n D artifacts/motivation/pipeline_latency.csv\n D artifacts/motivation/pipeline_latency.json\n D artifacts/motivation/pipeline_latency.png\n D artifacts/motivation/scheduler_smoke_coherence_strict.jsonl\n D artifacts/motivation/scheduler_smoke_cpu_only.jsonl\n D artifacts/motivation/scheduler_smoke_decisions.png\n D artifacts/motivation/scheduler_smoke_default.jsonl\n D artifacts/motivation/semantic_gap.csv\n D artifacts/motivation/semantic_gap.json\n D artifacts/motivation/smoke_summary.json\n D artifacts/motivation/spillover_latency.csv\n D artifacts/motivation/spillover_latency.json\n D artifacts/motivation/spillover_latency.png\n D artifacts/motivation/sqlite_contention_latency.csv\n D artifacts/motivation/sqlite_contention_latency.json\n D artifacts/motivation/sqlite_contention_latency.png\n D artifacts/motivation/sqlite_contention_latency.txt\n D artifacts/motivation/sqlite_latency.csv\n D artifacts/motivation/sqlite_latency.json\n D artifacts/motivation/sqlite_latency.png\n D artifacts/motivation/tensorrt_interference.csv\n D artifacts/motivation/tensorrt_interference.json\n D artifacts/motivation/um_counters.json\n D artifacts/motivation/uvm_proxy_report/uvm_proxy_report.json\n D artifacts/motivation/uvm_proxy_report/uvm_proxy_report.md\n D artifacts/platform_inventory_report/platform_inventory_report.json\n D artifacts/platform_inventory_report/platform_inventory_report.md\n D artifacts/platform_inventory_report/second_platform_placeholder_manifest.json\n D artifacts/platform_inventory_report/second_platform_placeholder_manifest.md\n D artifacts/remaining_gap_map/remaining_gap_map.json\n D artifacts/remaining_gap_map/remaining_gap_map.md\n M artifacts/repro_bundle/manifest.json\n M artifacts/repro_bundle/sha256sums.txt\n D artifacts/sidechannel/timing.json\n D artifacts/sqlite_ci_report/sqlite_ci_report.json\n D artifacts/sqlite_ci_report/sqlite_ci_report.md\n D artifacts/status_register/status_register.json\n D artifacts/status_register/status_register.md\n D artifacts/tensorrt_ci_report/tensorrt_ci_report.json\n D artifacts/tensorrt_ci_report/tensorrt_ci_report.md\n D artifacts/uma_storage_dma_nsys/io_uring_uvm.nsys-rep\n D artifacts/uma_storage_dma_nsys/io_uring_uvm.sqlite\n D artifacts/uma_storage_dma_nsys/stats_cuda_api_sum.csv\n D artifacts/uma_storage_dma_nsys/stats_osrt_sum.csv\n D artifacts/uma_storage_dma_nsys/stats_um_cpu_page_faults_sum.csv\n D artifacts/uma_storage_dma_nsys/stats_um_sum.csv\n D artifacts/uma_storage_dma_nsys_report/uma_storage_dma_profile_report.json\n D artifacts/uma_storage_dma_nsys_report/uma_storage_dma_profile_report.md\n D artifacts/uma_storage_dma_probe/io_uring_uvm_nvme.stderr.txt\n D artifacts/uma_storage_dma_probe/io_uring_uvm_nvme.stdout.txt\n D artifacts/uma_storage_dma_probe/repro_malloc_register.stderr.txt\n D artifacts/uma_storage_dma_probe/repro_malloc_register.stdout.txt\n D artifacts/uma_storage_dma_probe/uma_storage_dma_probe.json\n D artifacts/uma_storage_dma_probe_sudo/io_uring_uvm_nvme.stderr.txt\n D artifacts/uma_storage_dma_probe_sudo/io_uring_uvm_nvme.stdout.txt\n D artifacts/uma_storage_dma_probe_sudo/repro_malloc_register.stderr.txt\n D artifacts/uma_storage_dma_probe_sudo/repro_malloc_register.stdout.txt\n D artifacts/uma_storage_dma_probe_sudo/uma_storage_dma_probe.json\n M artifacts/validation/app_recovery_bundle/app_recovery_bundle.json\n M artifacts/validation/app_recovery_bundle/crash_audit_report.stdout.txt\n M artifacts/validation/app_recovery_report/app_recovery_report.json\n M artifacts/validation/app_recovery_report/app_recovery_report.md\n M artifacts/validation/combined_durability_bundle/combined_durability_bundle.json\n M artifacts/validation/qos_fuse_live_bridge/mount_logs/pqc_fuse.stderr.txt\n M artifacts/validation/qos_fuse_live_bridge/qos_fuse_live_bridge.json\n M artifacts/validation/qos_fuse_live_bridge/qos_fuse_live_bridge.md\n M artifacts/validation/qos_fuse_live_bridge/sample_01.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_02.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_03.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_03.stdout\n M artifacts/validation/qos_fuse_live_bridge/sample_04.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_05.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_06.jsonl\n M artifacts/validation/tpm_freshness_bundle/anchor_latency.stdout.txt\n M artifacts/validation/tpm_freshness_bundle/tpm_monotonic_replay.stdout.txt\n M artifacts/validation/tpm_monotonic_replay/live_mount/pqc_fuse.stderr.txt\n M artifacts/validation/tpm_monotonic_replay/replay_mount/pqc_fuse.stderr.txt\n M artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json\n M artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.md\n M artifacts/validation/tpm_only_bundle/tpm_freshness_bundle.stdout.txt\n M artifacts/validation/tpm_pcr_policy_probe/create_sealed.stdout.txt\n M artifacts/validation/tpm_pcr_policy_probe/load_sealed.stdout.txt\n M artifacts/validation/tpm_pcr_policy_probe/tpm_pcr_policy_probe.json\n D artifacts/workload_map.csv\n D artifacts/zero_context/latency_breakdown.csv\n D artifacts/zero_context/latency_breakdown.json\n M experiments/bench_gpu_pqc.cu\n M experiments/bench_io_uring_ebpf.cu\n M experiments/benchmark_m4_freshness_tradeoff.py\n M experiments/benchmark_tensorrt_interference.py\n M experiments/build_all_reports.py\n M experiments/build_app_recovery_report.py\n M experiments/build_crash_audit_report.py\n M experiments/build_evidence_dashboard.py\n M experiments/build_index_report.py\n M experiments/build_m3_qos_ci_report.py\n M experiments/build_platform_inventory_report.py\n M experiments/build_remaining_gap_map.py\n M experiments/build_repro_bundle.py\n M experiments/build_sqlite_ci_report.py\n M experiments/build_sqlite_recovery_oracle.py\n M experiments/build_status_register.py\n M experiments/build_tensorrt_ci_report.py\n M experiments/generate_m4_pareto_data.py\nD  experiments/gpu_burner\n M experiments/gpu_burner.cu\nD  experiments/io_uring_uvm\n M experiments/plot_m4_tradeoff.py\n M experiments/plot_telemetry_ablation.py\n M experiments/plot_telemetry_sensitivity.py\n M experiments/profile_e3_nsys.py\nD  experiments/repro_malloc_register\n M experiments/run_app_recovery_bundle.py\n M experiments/run_baselines.sh\n M experiments/run_combined_durability_bundle.py\n M experiments/run_cpu_baseline.py\n M experiments/run_crash_replay_e8.py\n M experiments/run_e3_interference_hero.py\n M experiments/run_e6_breakdown.py\n M experiments/run_m5_admission_sweep.py\n M experiments/run_m5_fastlane_stress.py\n M experiments/run_motivation_bench.py\n M experiments/run_power_fail_test.py\n M experiments/run_qos_fuse_live_bridge.py\n M experiments/run_qos_gpu.py\n M experiments/run_qos_live_telemetry_admission.py\n M experiments/run_sidechannel_eval.py\n M experiments/run_tvla_leakage_eval.py\n M experiments/run_uma_storage_dma_probe.py\n M experiments/run_verified_microbench.py\n M experiments/scheduler_trace.jsonl\n M experiments/tegra_qos_daemon.py\n M experiments/verify_gup_pinning.py\n D install_bpf.py\n M pqc_admission.c\n M pqc_admission.h\n M pqc_block_job.h\n M pqc_fuse.c\n D trace_gup.bt\n?? Paper/generated_qos_recovery_table.tex\n?? artifacts/README.md\n?? artifacts/probes/\n?? artifacts/reports/\n?? artifacts/validation/admission_interface_audit/\n?? artifacts/validation/combined_durability_bundle/combined_durability_bundle.md\n?? artifacts/validation/combined_durability_bundle/dbm_advance.stderr.txt\n?? artifacts/validation/combined_durability_bundle/dbm_advance.stdout.txt\n?? artifacts/validation/combined_durability_bundle/dbm_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/dbm_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/dbm_replay_read.stderr.txt\n?? artifacts/validation/combined_durability_bundle/dbm_replay_read.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_advance.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_advance.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_replay_read.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_replay_read.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_dbm_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_dbm_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/unified_dbm_live_mount/\n?? artifacts/validation/combined_durability_bundle/unified_dbm_replay_mount/\n?? artifacts/validation/combined_durability_bundle/unified_live_mount/\n?? artifacts/validation/combined_durability_bundle/unified_replay_mount/\n?? artifacts/validation/ebpf_iouring_scope_audit/\n?? artifacts/validation/frozen_aegisq_contract/\n?? artifacts/validation/frozen_gocryptfs_contract/\n?? artifacts/validation/frozen_plaintext_contract/\n?? artifacts/validation/frozen_workload_contract/\n?? artifacts/validation/generation_fault_matrix/\n?? artifacts/validation/generation_replay/\n?? artifacts/validation/integrity_scope_audit/\n?? artifacts/validation/kernel_baseline_feasibility/\n?? artifacts/validation/keyplane_rekey_methodology/\n?? artifacts/validation/keyplane_rekey_workflow/\n?? artifacts/validation/mechanism_ablation_manifest/\n?? artifacts/validation/microbench_methodology/\n?? artifacts/validation/posix_scope_audit/\n?? artifacts/validation/qos_cupti_pm_fuse_bridge/\n?? artifacts/validation/qos_fuse_live_bridge/runtime_fuse_admission_trace.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/runtime_fuse_throttle_trace.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/runtime_telemetry.txt\n?? artifacts/validation/qos_fuse_live_bridge/sample_07.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/sample_07.stderr\n?? artifacts/validation/qos_fuse_live_bridge/sample_07.stdout\n?? artifacts/validation/qos_fuse_live_bridge/sample_08.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/sample_08.stderr\n?? artifacts/validation/qos_fuse_live_bridge/sample_08.stdout\n?? artifacts/validation/qos_sensitivity_analysis/\n?? artifacts/validation/qos_sqlite_hero_bundle/\n?? artifacts/validation/qos_sqlite_hero_methodology/\n?? artifacts/validation/sqlite_syscall_crash_tpm/\n?? artifacts/validation/stat_thermal_methodology/\n?? artifacts/validation/uma_dma_scope_audit/\n?? experiments/build_frozen_workload_contract.py\n?? experiments/build_kernel_baseline_feasibility.py\n?? experiments/build_mechanism_ablation_manifest.py\n?? experiments/build_stat_thermal_methodology_audit.py\n?? experiments/run_admission_interface_audit.py\n?? experiments/run_ebpf_iouring_scope_audit.py\n?? experiments/run_frozen_aegisq_contract.py\n?? experiments/run_frozen_gocryptfs_contract.py\n?? experiments/run_frozen_plaintext_contract.py\n?? experiments/run_generation_fault_matrix.py\n?? experiments/run_integrity_scope_audit.py\n?? experiments/run_keyplane_rekey_workflow.py\n?? experiments/run_posix_scope_audit.py\n?? experiments/run_qos_cupti_pm_fuse_bridge.py\n?? experiments/run_qos_sensitivity_analysis.py\n?? experiments/run_qos_sqlite_hero_bundle.py\n?? experiments/run_sqlite_syscall_crash_tpm.py\n?? experiments/run_uma_dma_scope_audit.py"
+    }
+  },
+  "methodology_complete": true,
+  "methodology_contract": {
+    "background_process_control": {
+      "required": "Record process snapshot and declare unrelated CPU/GPU/storage jobs absent."
+    },
+    "cache_dropping_policy": {
+      "cold": "Cold-cache measurements require sync, unmount/remount or a privileged drop_caches step; if unavailable, mark the cold-cache row invalid.",
+      "warm": "Warm-cache measurements require an untimed priming pass."
+    },
+    "confidence_interval_method": {
+      "confidence_level": 0.95,
+      "name": "nonparametric bootstrap",
+      "resamples": 10000,
+      "unit": "independent repetitions for headline comparisons; transaction samples may be summarized but do not replace independent repetitions"
+    },
+    "cpu_gpu_clocks_or_power_mode": {
+      "clock_state": "record jetson_clocks --show or equivalent; missing capture invalidates headline runs",
+      "cpu_governor": "performance",
+      "jetson_power_mode": "record nvpmodel -q"
+    },
+    "failure_handling": {
+      "rule": "A mode with command failure, missing raw logs, failed integrity check, missing mount log, or missing metadata is invalid. Scripts must not synthesize zeros for unsupported configurations."
+    },
+    "methodology_id": "aegisq-stat-thermal-v1-2026-06-27",
+    "outlier_policy": {
+      "rule": "Retain all completed repetitions. Exclude only predeclared infrastructure failures with raw log, exit status, and reason; do not winsorize or silently drop slow runs."
+    },
+    "run_count": {
+      "diagnostic_exception": "Three-run primitive measurements are allowed only when labeled diagnostic/descriptive and excluded from abstract or baseline-superiority headline claims.",
+      "headline_minimum_repetitions": 5
+    },
+    "thermal_logging": {
+      "failure_rule": "Any thermal-throttle or clock-cap indication invalidates the headline run unless the paper labels it as a thermal-throttled case study.",
+      "required": "tegrastats or equivalent raw thermal/power log for the whole measured interval",
+      "sampling_interval_ms_max": 100
+    },
+    "warmup": {
+      "required": true,
+      "rule": "Each performance mode must run an untimed warmup: at least one full workload pass for fio-style profiles or explicit workload-specific warmup transactions before measured samples."
+    }
+  },
+  "overall_pass": true,
+  "paper_checks": {
+    "abstract_headline_violations": [],
+    "paper_scope_gate_pass": true,
+    "required_phrase_hits": {
+      "diagnostic_placement": true,
+      "future_contract": true,
+      "limitations_three_run": true,
+      "single_workflow_not_statistical": true
+    }
+  },
+  "paper_scope_gate_pass": true,
+  "schema_version": 1
+}

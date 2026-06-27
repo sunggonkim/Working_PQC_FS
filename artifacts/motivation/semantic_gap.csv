@@ -1,3 +1,0 @@
-Workload,Page_Faults,Page_Migrations,Read_ahead_Waste_Pct,Data_Provenance
-Sequential I/O (fscrypt),2560,1280,0.2,emulated_projection_jetson_orin_nano (eBPF failed: debugfs missing)
-Lattice PQC NTT (UVM),655360,327680,91.4,emulated_projection_jetson_orin_nano (eBPF failed: debugfs missing)

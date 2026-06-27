@@ -1,18 +1,54 @@
 \section{Introduction}
 \label{sec:intro}
 
-Long-lived edge data needs confidentiality and integrity without assuming a datacenter-class accelerator.  Post-quantum key establishment is relevant to that lifetime: ML-KEM establishes a shared secret, while symmetric authenticated encryption remains the appropriate mechanism for bulk data~\cite{mlkem}.  SHA-256 can bind integrity-tree material to the persisted format~\cite{sha256}.  In practice, however, a secure-storage prototype must first get the ordinary systems details right: the key hierarchy must survive remount, ciphertext must become durable before it is published by metadata, and every claimed accelerator path must have a reproducible measurement.  Existing filesystem encryption is already mature~\cite{fscrypt}, as are user-space encrypted filesystems~\cite{gocryptfs}; a new user-space design must therefore earn complexity rather than merely restate it.  A trusted execution environment such as OP-TEE supplies a different protection boundary~\cite{optee}, not a substitute for file-format recovery logic.
+Edge devices increasingly run foreground AI inference, local databases, and encrypted storage on a shared DRAM and storage fabric.  This deployment changes the usual secure-storage question.  Confidentiality and integrity remain mandatory, but a storage daemon that treats the integrated GPU as a free accelerator can contend with the very foreground workload it is supposed to protect.  The resulting problem is how to build a durable authenticated storage format whose work-placement policy is explicit, measurable, and safe under unified-memory assumptions.
 
-This paper presents AEGIS-Q, an architecture that redefines edge storage not through theoretical cryptography, but through rigorous systems engineering. While previous work has struggled to balance secure storage with heavy AI inference loads on Unified Memory Architectures (UMA) like the NVIDIA Jetson, AEGIS-Q explores a placement policy that is evaluated only on the retained artifact set. The current revision does not claim guaranteed Quality of Service (QoS) or a verified zero-copy Direct Memory Access (DMA) path.
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.98\columnwidth]{Figures/fig_first_page_qos.pdf}
+  \caption{SQLite pressure result for RQ3; labels show deadline misses and background throughput.}
+  \Description{Bar chart of foreground SQLite p99 latency for app-only, unthrottled pressure, simple-controller, and AEGIS-Q policy modes.}
+  \label{fig:first_page_qos}
+\end{figure}
 
-We intentionally scope out theoretical physical security claims, such as oscilloscope-based side-channel resistance, recognizing that such metrics distract from the core systems challenge: avoiding resource starvation in a multitenant edge environment. Instead, AEGIS-Q focuses on solving real bottleneck problems in the edge data path.
+\begin{table}[t]
+\centering
+\caption{Capability comparison that defines AEGIS-Q's design gap.  ``Policy'' means storage-visible accelerator/QoS/freshness policy, not implementation maturity.}
+\tiny
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\columnwidth}{P{0.27\columnwidth}|P{0.14\columnwidth}|P{0.15\columnwidth}|P{0.15\columnwidth}|Y}
+\toprule
+\textbf{System} & \textbf{File/blk enc.} & \textbf{Fresh root} & \textbf{UMA policy} & \textbf{Boundary}\\
+\midrule
+Plaintext & \xmark & \xmark & \xmark & Lowerfs baseline only\\
+gocryptfs & \cmark & \xmark & \xmark & User-space encryption baseline\\
+fscrypt & \cmark & \xmark & \xmark & In-kernel file encryption\\
+dm-crypt & \cmark & \xmark & \xmark & Block-device encryption\\
+fs-verity/dm-integrity & \pmark & \xmark & \xmark & Read-only file or block integrity\\
+TPM/TEE-backed designs & \pmark & \cmark & \xmark & Hardware trust boundary\\
+GPU-storage systems & \pmark & \xmark & \pmark & Accel. path focus\\
+AEGIS-Q & \cmark & \pmark & \cmark & FUSE prototype with scoped evidence\\
+\bottomrule
+\end{tabularx}
+\label{tab:capability_matrix}
+\end{table}
 
-The paper makes four core systems contributions:
+Post-quantum key establishment is relevant to long-lived edge data, but it does not replace symmetric storage encryption.  ML-KEM establishes shared secrets, whereas AES-GCM remains the appropriate mechanism for bulk data records~\cite{mlkem}.  SHA-256 can bind committed-prefix anchor material to persisted metadata~\cite{sha256}.  The systems challenge is therefore to compose ordinary storage invariants---a key hierarchy that survives remount, nonce/generation state that remains safe across crashes, ciphertext durability before metadata publication, and fail-closed recovery---with accelerator placement and shared-resource control.  Table~\ref{tab:capability_matrix} positions that gap against plaintext, gocryptfs, fscrypt, dm-crypt, fs-verity/dm-integrity, TPM/TEE-backed designs, and GPU-storage systems~\cite{fscrypt, dmcrypt, gocryptfs, optee}.
+
+Figure~\ref{fig:first_page_qos} shows the retained first-page pressure result.  Mounted secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms and introduces one 10~ms deadline miss.  AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with zero misses while retaining 2.7~MB/s of background progress.  This result motivates the paper's spine: policy must be visible at the secure-storage layer, but persistent format correctness must remain independent of the accelerator.
+
+AEGIS-Q explores this gap as a UMA-aware secure-storage runtime.  Its thesis is that secure edge storage should expose one durable authenticated format while separating three operational planes: a CPU-first data plane for latency-sensitive AES-GCM writes, an elastic GPU lane for large independent cryptographic batches, and an external-anchor path that can fail closed when replayed state no longer matches protected freshness state.  The claim is stronger than a microbenchmark-only story because it ties placement decisions to format invariants and recovery behavior.
+
+The key design insight is that accelerator placement must be subordinate to storage correctness.  AEGIS-Q never lets the GPU define the persistent record format.  Data records are AES-GCM blocks bound to file identifier, logical block, generation, and plaintext length.  Metadata publication follows a data/journal/checkpoint order.  Optional GPU work either produces format-compatible results or falls back to the CPU path.  Jobs without producer-supplied slack are routed conservatively.  This makes the accelerator an execution choice, not a new security boundary.
+
+This paper makes four contributions.
 \begin{enumerate}
-\item \textbf{Placement-Scoped GPU Path:} The implementation keeps GPU work inside managed memory with explicit prefetch and stream synchronization. It does not claim verified \texttt{O\_DIRECT} NVMe-to-GPU DMA or a zero-copy storage pipeline.
-\item \textbf{No Verified Fast-Notification Path:} The revised paper does not claim a completed \texttt{eBPF} or \texttt{io\_uring} completion-bypass mechanism, and it does not treat those techniques as evaluated contributions.
-\item \textbf{Telemetry Not Yet Closed:} The repository contains a prototype telemetry-aware scheduler and measured TensorRT/YOLO interference artifacts, but this revision does not claim a validated \texttt{tegrastats}-driven QoS controller.
-\item \textbf{Transparent Scope Boundaries:} The revision explicitly distinguishes verified prototype behavior from the retained matched \texttt{fscrypt} and \texttt{dm-crypt} baselines, while leaving broader baseline expansion as future work.
+\item \textbf{C1: Secure-storage format and placement boundary.}  AEGIS-Q implements authenticated per-file envelopes, generation-bound AEAD context, durable mapping publication, and explicit CPU/GPU placement rules.  Design/evaluation: Section~\ref{sec:design_pipeline} and Section~\ref{sec:eval_workloads}.
+\item \textbf{C2: Scoped placement and workflow evidence on Thor.}  Retained diagnostic primitive runs and a mounted envelope-refresh workflow explain the CPU-first data lane and optional batched GPU lane.  Design/evaluation: Section~\ref{sec:design_uma} and Section~\ref{sec:eval_performance}.
+\item \textbf{C3: Recovery/freshness evidence with failure labels.}  The repository retains clean-remount, tamper-rejection, file-anchor negative-control, TPM replay-after-advance, SQLite/\texttt{dbm.dumb} stale replay, and SQLite syscall-exact app-crash evidence.  Design/evaluation: Section~\ref{sec:design_security} and Section~\ref{sec:eval_workloads}.
+\item \textbf{C4: Telemetry/QoS evidence.}  AEGIS-Q includes deterministic admission traces, same-run \texttt{tegrastats}/CUPTI-to-mounted-FUSE throttling, and the mounted SQLite recovery bundle in Figure~\ref{fig:first_page_qos}.  Design/evaluation: Section~\ref{sec:design_uma} and Section~\ref{sec:eval_qos}.
 \end{enumerate}
 
-By abandoning unverifiable security claims and focusing on the verified prototype behavior, AEGIS-Q establishes an evidence-backed foundation for future edge-storage evaluations.  Section~\ref{sec:background} grounds the storage and UMA assumptions, Section~\ref{sec:related_work} positions the design against nearby storage and accelerator systems, Section~\ref{sec:design} describes the implemented planes and trust boundaries, Section~\ref{sec:design_impl} records the implementation choices that are easy to misread from a diagram, Section~\ref{sec:evaluation} reports the measured primitive placement and negative controls, and the remaining sections discuss limitations, conclusions, and reproducibility artifacts.
+The paper is intentionally conservative about unsupported mechanisms.  It does not claim verified \texttt{O\_DIRECT} NVMe-to-UVM DMA, an \texttt{io\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack.  These exclusions are not a substitute for contributions; they define the boundary within which the measured system should be read.
+
+The rest of the paper follows the structure of a systems design argument.  Section~\ref{sec:background} states the storage and UMA assumptions, Section~\ref{sec:design} presents the format and placement design, Section~\ref{sec:design_impl} records implementation choices that determine the boundary, Section~\ref{sec:security} states the security and recovery model, Section~\ref{sec:evaluation} evaluates the retained claims, and Sections~\ref{sec:discussion}--\ref{sec:conclusion} discuss implications, related work, and limits.

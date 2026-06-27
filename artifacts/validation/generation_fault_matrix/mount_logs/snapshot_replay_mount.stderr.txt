@@ -1,0 +1,27 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-27 07:55:33.573] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-27 07:55:33.573]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-27 07:55:33.573]   Storage dir : /tmp/gen_matrix_snapshot_store_uwug_0rh
+[PQC-FUSE 2026-06-27 07:55:33.573]   Mount point : /tmp/gen_matrix_snapshot_mnt_qzubty19
+[PQC-FUSE 2026-06-27 07:55:33.573] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-27 07:55:33.573] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-27 07:55:33.573]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-27 07:55:33.573]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-27 07:55:33.573]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-27 07:55:33.573]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-27 07:55:33.575] Keypair generated in 1427.13 µs
+[PQC-FUSE 2026-06-27 07:55:33.745] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-27 07:55:33.745] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-27 07:55:33.745] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-27 07:55:33.745] Freshness anchor worker started
+[PQC-FUSE 2026-06-27 07:55:33.854] PQC background rekey worker started
+[PQC-FUSE 2026-06-27 07:55:33.854] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-27 07:55:33.882] OPEN /snapshot.bin: restored authenticated file-key envelope (fid=6468027189288170770)
+[PQC-FUSE 2026-06-27 07:55:33.885] Shutting down PQC-FUSE filesystem...

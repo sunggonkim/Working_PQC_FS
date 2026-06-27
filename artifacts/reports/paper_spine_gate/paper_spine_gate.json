@@ -1,0 +1,119 @@
+{
+  "figure_data": {
+    "csv": "artifacts/results/paper_spine_gate/first_page_qos_figure_data.csv",
+    "json": "artifacts/results/paper_spine_gate/first_page_qos_figure_data.json",
+    "rows": [
+      {
+        "acceptable": true,
+        "background_mb_s": 0.0,
+        "deadline_misses": 0,
+        "deadline_ms": 10.0,
+        "label": "App",
+        "mode": "app_only",
+        "p99_ms": 6.43596154,
+        "telemetry_samples": 28
+      },
+      {
+        "acceptable": true,
+        "background_mb_s": 6.793162736869544,
+        "deadline_misses": 1,
+        "deadline_ms": 10.0,
+        "label": "Pressure",
+        "mode": "unthrottled_storage",
+        "p99_ms": 13.822082770000009,
+        "telemetry_samples": 31
+      },
+      {
+        "acceptable": true,
+        "background_mb_s": 2.268259869303856,
+        "deadline_misses": 0,
+        "deadline_ms": 10.0,
+        "label": "Simple",
+        "mode": "simple_controller",
+        "p99_ms": 8.185088930000001,
+        "telemetry_samples": 28
+      },
+      {
+        "acceptable": true,
+        "background_mb_s": 2.736089363877744,
+        "deadline_misses": 0,
+        "deadline_ms": 10.0,
+        "label": "AEGIS-Q",
+        "mode": "aegis_policy",
+        "p99_ms": 8.75331646,
+        "telemetry_samples": 29
+      }
+    ],
+    "source": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json"
+  },
+  "overall_pass": true,
+  "paper_audit": {
+    "contribution_map": [
+      {
+        "design_present": true,
+        "evaluation_present": true,
+        "id": "C1",
+        "intro_map_present": true,
+        "mapped": true,
+        "title": "Secure-storage format and placement boundary"
+      },
+      {
+        "design_present": true,
+        "evaluation_present": true,
+        "id": "C2",
+        "intro_map_present": true,
+        "mapped": true,
+        "title": "Scoped placement and workflow evidence"
+      },
+      {
+        "design_present": true,
+        "evaluation_present": true,
+        "id": "C3",
+        "intro_map_present": true,
+        "mapped": true,
+        "title": "Recovery/freshness evidence"
+      },
+      {
+        "design_present": true,
+        "evaluation_present": true,
+        "id": "C4",
+        "intro_map_present": true,
+        "mapped": true,
+        "title": "Telemetry-to-storage QoS evidence"
+      }
+    ],
+    "first_page_figure": {
+      "figure": "Paper/Figures/fig_first_page_qos.pdf",
+      "present": true,
+      "source": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+      "values_present": true
+    },
+    "first_page_table": {
+      "all_required_terms_present": true,
+      "present": true,
+      "required_terms": {
+        "AEGIS-Q": true,
+        "GPU-storage": true,
+        "Plaintext": true,
+        "TPM/TEE": true,
+        "dm-crypt": true,
+        "dm-integrity": true,
+        "fs-verity": true,
+        "fscrypt": true,
+        "gocryptfs": true
+      }
+    },
+    "pages": 12,
+    "positive_before_defensive": {
+      "defensive_hits_before_contributions": [],
+      "pass": true
+    }
+  },
+  "schema_version": 1,
+  "scope": [
+    "first-page quantitative figure generated from retained SQLite QoS data",
+    "first-page capability table source/PDF check",
+    "positive-before-defensive ordering and contribution mapping"
+  ],
+  "violations": []
+}

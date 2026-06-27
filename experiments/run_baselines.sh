@@ -2,13 +2,18 @@
 set -e
 
 echo "=== AEGIS-Q Baseline Evaluation ==="
-mkdir -p /home/thor/skim/pqc_encrpyted_fs/artifacts/baselines
-cd /home/thor/skim/pqc_encrpyted_fs/artifacts/baselines
+if [ -z "${PQC_SUDO_PASSWORD:-}" ]; then
+    echo "PQC_SUDO_PASSWORD must be set for loop-device and mount setup" >&2
+    exit 1
+fi
+printf '%s\n' "$PQC_SUDO_PASSWORD" | sudo -S -v
+mkdir -p /home/thor/skim/pqc_encrpyted_fs/artifacts/results/baselines
+cd /home/thor/skim/pqc_encrpyted_fs/artifacts/results/baselines
 
 # 1. dm-crypt setup
 echo "[*] Setting up dm-crypt..."
 fallocate -l 5G dm_crypt.img
-LOOP_DM=$(echo "1234qwer" | sudo -S losetup -f --show dm_crypt.img)
+LOOP_DM=$(printf '%s\n' "$PQC_SUDO_PASSWORD" | sudo -S losetup -f --show dm_crypt.img)
 echo -n "testpass" | sudo cryptsetup luksFormat --batch-mode $LOOP_DM -
 echo -n "testpass" | sudo cryptsetup open $LOOP_DM dmcrypt_test -
 sudo mkfs.ext4 /dev/mapper/dmcrypt_test

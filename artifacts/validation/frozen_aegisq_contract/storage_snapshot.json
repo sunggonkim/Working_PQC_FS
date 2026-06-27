@@ -1,0 +1,24 @@
+{
+  "file_count": 4,
+  "files": [
+    {
+      "bytes": 88,
+      "path": ".anchor"
+    },
+    {
+      "bytes": 1073741824,
+      "path": "contract/frozen_randrw_4k_fdatasync.0.0"
+    },
+    {
+      "bytes": 71852032,
+      "path": "contract/frozen_randrw_4k_fdatasync.0.0.pqcdata"
+    },
+    {
+      "bytes": 1684032,
+      "path": "contract/frozen_randrw_4k_fdatasync.0.0.pqcmeta"
+    }
+  ],
+  "storage_dir": "/tmp/aegisq_frozen_storage_412_tt06",
+  "total_file_bytes": 1147277976,
+  "truncated_to_files": 200
+}

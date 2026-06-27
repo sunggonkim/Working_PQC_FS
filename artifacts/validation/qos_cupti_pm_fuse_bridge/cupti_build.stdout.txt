@@ -1,0 +1,4 @@
+make: Entering directory '/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_cupti_pm_fuse_bridge/cupti_pm_sampling_src'
+"/usr/local/cuda-13.0/bin/nvcc"   -gencode arch=compute_110,code=sm_110 -lineinfo  -c -I"/usr/local/cuda-13.0/include" -I/usr/local/cuda-13.0/extras/CUPTI/include -I/usr/local/cuda-13.0/extras/CUPTI/samples/common pm_sampling.cu
+"/usr/local/cuda-13.0/bin/nvcc"   -o pm_sampling pm_sampling.o -L /usr/local/cuda-13.0/extras/CUPTI/lib64 -lcuda -L /usr/local/cuda-13.0/lib64 -lcupti
+make: Leaving directory '/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_cupti_pm_fuse_bridge/cupti_pm_sampling_src'

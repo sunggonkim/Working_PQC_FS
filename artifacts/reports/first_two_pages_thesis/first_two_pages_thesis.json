@@ -1,0 +1,198 @@
+{
+  "checks": {
+    "compiled_first_two_pages_present": true,
+    "paper_pages_12": true,
+    "positive_contributions_before_defensive_scope": true,
+    "source_anchors_present": true,
+    "support_gates_pass": true
+  },
+  "ordering": {
+    "contributions_index": 4663,
+    "defensive_scope_index": 6008,
+    "positive_before_defensive": true
+  },
+  "overall_pass": true,
+  "pages": 12,
+  "pdf_checks": [
+    {
+      "name": "first_page_pressure_figure",
+      "needles": [
+        "Figure 1",
+        "SQLite p99",
+        "13.8",
+        "8.8",
+        "2.7 MB/s"
+      ],
+      "present": true
+    },
+    {
+      "name": "first_page_capability_table",
+      "needles": [
+        "Table 1",
+        "Capability comparison",
+        "Plaintext",
+        "gocryptfs",
+        "fscrypt",
+        "dm-crypt",
+        "GPU-storage systems",
+        "AEGIS-Q"
+      ],
+      "present": true
+    },
+    {
+      "name": "first_two_pages_gap",
+      "needles": [
+        "systems challenge",
+        "compose ordinary storage invariants",
+        "accelerator placement",
+        "shared-resource control"
+      ],
+      "present": true
+    },
+    {
+      "name": "first_two_pages_thesis",
+      "needles": [
+        "Its thesis is that secure edge storage",
+        "one durable authenticated format",
+        "three operational planes"
+      ],
+      "present": true
+    },
+    {
+      "name": "first_two_pages_contributions",
+      "needles": [
+        "This paper makes four contributions",
+        "C1: Secure-storage",
+        "C2: Scoped placement",
+        "C3: Recovery/freshness",
+        "C4: Telemetry/QoS"
+      ],
+      "present": true
+    },
+    {
+      "name": "first_two_pages_component_stack_answer",
+      "needles": [
+        "not merely",
+        "gocryptfs/fscrypt",
+        "CUDA/TPM",
+        "scripts:",
+        "one mounted",
+        "evidence",
+        "contract"
+      ],
+      "present": true
+    }
+  ],
+  "schema_version": 1,
+  "scope": [
+    "first two compiled PDF pages",
+    "source anchors for pressure figure/table, gap, thesis, contributions, and component-stack answer",
+    "supporting paper-spine, hero-result, novelty-isolation, and accepted-structure gates"
+  ],
+  "source_anchors": [
+    {
+      "line": 38,
+      "name": "pressure_result",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "Figure~\\ref{fig:first_page_qos} shows the retained first-page pressure result. Mounted secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms and introduces one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with zero misses while retaining 2.7~MB/s of background progress. This result motivates the paper's spine: policy must be visible at the secure-storage layer, but persistent format correctness must remain independent of the accelerator."
+    },
+    {
+      "line": 16,
+      "name": "capability_table",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "\\caption{Capability comparison that defines AEGIS-Q's design gap. ``Policy'' means storage-visible accelerator/QoS/freshness policy, not implementation maturity.}"
+    },
+    {
+      "line": 36,
+      "name": "concrete_gap",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "Post-quantum key establishment is relevant to long-lived edge data, but it does not replace symmetric storage encryption. ML-KEM establishes shared secrets, whereas AES-GCM remains the appropriate mechanism for bulk data records~\\cite{mlkem}. SHA-256 can bind committed-prefix anchor material to persisted metadata~\\cite{sha256}. The systems challenge is therefore to compose ordinary storage invariants---a key hierarchy that survives remount, nonce/generation state that remains safe across crashes, ciphertext durability before metadata publication, and fail-closed recovery---with accelerator placement and shared-resource control. Table~\\ref{tab:capability_matrix} positions that gap against plaintext, gocryptfs, fscrypt, dm-crypt, fs-verity/dm-integrity, TPM/TEE-backed designs, and GPU-storage systems~\\cite{fscrypt, dmcrypt, gocryptfs, optee}."
+    },
+    {
+      "line": 40,
+      "name": "central_thesis",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "AEGIS-Q explores this gap as a UMA-aware secure-storage runtime. Its thesis is that secure edge storage should expose one durable authenticated format while separating three operational planes: a CPU-first data plane for latency-sensitive AES-GCM writes, an elastic GPU lane for large independent cryptographic batches, and an external-anchor path that can fail closed when replayed state no longer matches protected freshness state. The claim is stronger than a microbenchmark-only story because it ties placement decisions to format invariants and recovery behavior."
+    },
+    {
+      "line": 42,
+      "name": "design_insight",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "The key design insight is that accelerator placement must be subordinate to storage correctness. AEGIS-Q never lets the GPU define the persistent record format. Data records are AES-GCM blocks bound to file identifier, logical block, generation, and plaintext length. Metadata publication follows a data/journal/checkpoint order. Optional GPU work either produces format-compatible results or falls back to the CPU path. Jobs without producer-supplied slack are routed conservatively. This makes the accelerator an execution choice, not a new security boundary."
+    },
+    {
+      "line": 44,
+      "name": "contribution_intro",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "This paper makes four contributions."
+    },
+    {
+      "line": 46,
+      "name": "contribution_c1",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "\\item \\textbf{C1: Secure-storage format and placement boundary.} AEGIS-Q implements authenticated per-file envelopes, generation-bound AEAD context, durable mapping publication, and explicit CPU/GPU placement rules. Design/evaluation: Section~\\ref{sec:design_pipeline} and Section~\\ref{sec:eval_workloads}."
+    },
+    {
+      "line": 47,
+      "name": "contribution_c2",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "\\item \\textbf{C2: Scoped placement and workflow evidence on Thor.} Retained diagnostic primitive runs and a mounted envelope-refresh workflow explain the CPU-first data lane and optional batched GPU lane. Design/evaluation: Section~\\ref{sec:design_uma} and Section~\\ref{sec:eval_performance}."
+    },
+    {
+      "line": 48,
+      "name": "contribution_c3",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "\\item \\textbf{C3: Recovery/freshness evidence with failure labels.} The repository retains clean-remount, tamper-rejection, file-anchor negative-control, TPM replay-after-advance, SQLite/\\texttt{dbm.dumb} stale replay, and SQLite syscall-exact app-crash evidence. Design/evaluation: Section~\\ref{sec:design_security} and Section~\\ref{sec:eval_workloads}."
+    },
+    {
+      "line": 49,
+      "name": "contribution_c4",
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "\\item \\textbf{C4: Telemetry/QoS evidence.} AEGIS-Q includes deterministic admission traces, same-run \\texttt{tegrastats}/CUPTI-to-mounted-FUSE throttling, and the mounted SQLite recovery bundle in Figure~\\ref{fig:first_page_qos}. Design/evaluation: Section~\\ref{sec:design_uma} and Section~\\ref{sec:eval_qos}."
+    },
+    {
+      "line": 13,
+      "name": "not_weaker_component_stack",
+      "path": "Paper/2_Background.tex",
+      "present": true,
+      "text": "The value of AEGIS-Q is not that user-space encryption is inherently preferable to kernel encryption. In fact, kernel-integrated systems have a clear maturity advantage. AEGIS-Q is also not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external freshness checks under one evidence contract. In that setting, the storage layer exposes policy decisions that conventional encryption layers usually hide. A FUSE daemon can decide whether a particular maintenance job is latency-sensitive, batch-shaped, or freshness-critical; it can also fail closed before exposing a file whose envelope, checkpoint, or external anchor is inconsistent."
+    }
+  ],
+  "support_gates": [
+    {
+      "overall_pass": true,
+      "path": "artifacts/reports/paper_spine_gate/paper_spine_gate.json",
+      "present": true,
+      "violations": 0
+    },
+    {
+      "overall_pass": true,
+      "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
+      "present": true,
+      "violations": 0
+    },
+    {
+      "overall_pass": true,
+      "path": "artifacts/reports/novelty_isolation/novelty_isolation.json",
+      "present": true,
+      "violations": 0
+    },
+    {
+      "overall_pass": true,
+      "path": "artifacts/reports/accepted_paper_structure_audit/accepted_paper_structure_audit.json",
+      "present": true,
+      "violations": 0
+    }
+  ],
+  "violations": []
+}

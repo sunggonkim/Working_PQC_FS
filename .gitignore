@@ -20,6 +20,9 @@ bench_gpu_integrity
 # perf binary captures — large, not useful as source artifacts
 *.data
 *.data.old
+*.nsys-rep
+*.sqlite
+*.sqlite-journal
 
 # Loose result JSON at repo root — results go in artifacts/
 /e1_results.json
@@ -32,6 +35,7 @@ bench_gpu_integrity
 *.swp
 *.swo
 *~
+Paper/Previous paper/
 
 # Logs & Results
 *.log
@@ -40,6 +44,11 @@ results/
 # Runtime mount/storage artifacts
 mnt_secure/
 storage_physical/
+pqc_fuse_latency.log
+trace_gup.bt
+experiments/gpu_burner
+experiments/io_uring_uvm
+experiments/repro_malloc_register
 
 # Python cache
 __pycache__/

@@ -1,0 +1,10 @@
+{"operation": "read_all", "error": "OSError", "errno": 103, "message": "[Errno 103] Software caused connection abort: '/tmp/daemon_fault_remount_mnt_poyhgoff/probe.bin'"}
+Traceback (most recent call last):
+  File "<string>", line 10, in <module>
+  File "/usr/lib/python3.12/pathlib.py", line 1021, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionAbortedError: [Errno 103] Software caused connection abort: '/tmp/daemon_fault_remount_mnt_poyhgoff/probe.bin'

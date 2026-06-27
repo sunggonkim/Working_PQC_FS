@@ -1,0 +1,10 @@
+{"operation": "write_fsync", "error": "OSError", "errno": 107, "message": "[Errno 107] Transport endpoint is not connected"}
+Traceback (most recent call last):
+  File "<string>", line 16, in <module>
+ConnectionAbortedError: [Errno 103] Software caused connection abort
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<string>", line 12, in <module>
+OSError: [Errno 107] Transport endpoint is not connected

@@ -1,0 +1,221 @@
+{
+  "aegis_outline": {
+    "capability_table": {
+      "evidence": "Table 1: Capability comparison that defines AEGIS-",
+      "present": true
+    },
+    "deployment_takeaway": {
+      "present": true,
+      "source": "Paper/10_Discussion_and_Limitations.tex"
+    },
+    "first_page_pressure_result": {
+      "evidence": "SQLite p99 (ms)",
+      "present": true
+    },
+    "known_next_gate_warnings": [],
+    "mechanism_map": [
+      {
+        "design_needles": [
+          "fig:first_page_qos",
+          "tab:capability_matrix"
+        ],
+        "design_present": true,
+        "evaluation_needles": [
+          "sec:evaluation"
+        ],
+        "evaluation_present": true,
+        "mapped": true,
+        "mechanism": "first-page pressure/gap"
+      },
+      {
+        "design_needles": [
+          "tab:design_goals",
+          "fig:djc_state_machine"
+        ],
+        "design_present": true,
+        "evaluation_needles": [
+          "sec:eval_workloads",
+          "generation fault matrix"
+        ],
+        "evaluation_present": true,
+        "mapped": true,
+        "mechanism": "authenticated format and D/J/C publication"
+      },
+      {
+        "design_needles": [
+          "sec:design_uma",
+          "elastic lane"
+        ],
+        "design_present": true,
+        "evaluation_needles": [
+          "sec:eval_performance",
+          "CPU for bulk data"
+        ],
+        "evaluation_present": true,
+        "mapped": true,
+        "mechanism": "CPU-first data lane and elastic key lane"
+      },
+      {
+        "design_needles": [
+          "sec:design_security",
+          "TPM NV index"
+        ],
+        "design_present": true,
+        "evaluation_needles": [
+          "TPM replay-after-advance",
+          "hardware-freshness recovery matrix"
+        ],
+        "evaluation_present": true,
+        "mapped": true,
+        "mechanism": "external freshness boundary"
+      },
+      {
+        "design_needles": [
+          "user.pqc\\_qos\\_class",
+          "mounted-FUSE throttling"
+        ],
+        "design_present": true,
+        "evaluation_needles": [
+          "sec:eval_qos",
+          "SQLite recovery"
+        ],
+        "evaluation_present": true,
+        "mapped": true,
+        "mechanism": "telemetry-to-storage QoS"
+      }
+    ],
+    "pages": 12,
+    "pdf": "Paper/main.pdf",
+    "top_level_order": {
+      "design_before_evaluation": true,
+      "discussion_before_related": true,
+      "matches_required_order": true,
+      "order": [
+        "1_Introduction.tex",
+        "2_Background.tex",
+        "3_Design.tex",
+        "7_Implementation_Details.tex",
+        "8_Security_Analysis.tex",
+        "4_Evaluation.tex",
+        "10_Discussion_and_Limitations.tex",
+        "5_Related_Works.tex",
+        "6_Conclusion.tex"
+      ],
+      "related_after_evaluation": true
+    }
+  },
+  "overall_pass": true,
+  "required_sources": [
+    {
+      "comparison_table_signal": "simulations [19, 23, 29], and quantum machine learning [12, 17, 45, 69, 76], beyond the capabilities",
+      "early_headings": [
+        "1 Introduction",
+        "2 Background"
+      ],
+      "early_result_signal": "Fig. 1. Simulation time of ScaleQsim (Proposed), SOTA (cusvaer, HyQuas, Atlas), and Qsim (Existing), executed",
+      "found": true,
+      "matches": [
+        "Paper/Previous paper/_Accepted___SIGMETRICS_26__ScaleQsim__Highly_Scalable_Quantum_Circuit_Simulation_Framework_for_Exascale_HPC_Systems__KCJ_.pdf"
+      ],
+      "name": "ScaleQsim",
+      "pages": 28,
+      "path": "Paper/Previous paper/_Accepted___SIGMETRICS_26__ScaleQsim__Highly_Scalable_Quantum_Circuit_Simulation_Framework_for_Exascale_HPC_Systems__KCJ_.pdf",
+      "pattern": "*ScaleQsim*.pdf",
+      "sha256": "c9e5d3ba3b35d8fa70bfe0376940b25bd2726c610ed6519d46e2f5c58ff4e585",
+      "text_chars": 129185
+    },
+    {
+      "comparison_table_signal": null,
+      "early_headings": [
+        "II. BACKGROUND caching are required to exploit inherent access patterns."
+      ],
+      "early_result_signal": "computation with data movement through an async execution Fig. 1: Scalability of AURORA-Q (Proposed), SOTA (ScaleQsim,",
+      "found": true,
+      "matches": [
+        "Paper/Previous paper/_Camera_Ready___ICDCS_26__AURORA_Q__Q_Simulation_Offloading__KCJ_.pdf"
+      ],
+      "name": "AURORA-Q",
+      "pages": 11,
+      "path": "Paper/Previous paper/_Camera_Ready___ICDCS_26__AURORA_Q__Q_Simulation_Offloading__KCJ_.pdf",
+      "pattern": "*AURORA_Q*.pdf",
+      "sha256": "33b84ff946cf3fb6fdcbd9e769fff18c51837d97e7f9d01481df5b619517aef4",
+      "text_chars": 100924
+    },
+    {
+      "comparison_table_signal": "throttling, a capability absent in non-learning or stateless against PID control and Lyapunov optimization. PID control",
+      "early_headings": [
+        "103 Algorithmic Heterogeneity at RTT=10ms",
+        "II. BACKGROUND AND M OTIVATION incurs a 2000% latency increase for Kyber (0.5ms local vs.",
+        "250 Break-Even Point Shifts with Network RTT IoT Device",
+        "200 Application",
+        "150 CITADEL",
+        "100 State Monitor Decision Engine",
+        "50 Local",
+        "300 Local Execution"
+      ],
+      "early_result_signal": "Throughput (ops/s)",
+      "found": true,
+      "matches": [
+        "Paper/Previous paper/_Camera_Ready___ICDCS_26__CITADEL.pdf"
+      ],
+      "name": "CITADEL",
+      "pages": 11,
+      "path": "Paper/Previous paper/_Camera_Ready___ICDCS_26__CITADEL.pdf",
+      "pattern": "*CITADEL.pdf",
+      "sha256": "688bf200ea2259ff0a68009b9ee71de4b703a3efe763b613f3f39fa7b783773b",
+      "text_chars": 103518
+    },
+    {
+      "comparison_table_signal": "Table 1: Categories and comparison with previous studies.",
+      "early_headings": [
+        "Abstract",
+        "1. Introduction STL Sort Merge Sort Ips4o Sort Aips2o Sort AS2",
+        "2. Backgrounds 11: p \u2190 SetPivot(A, low, high)"
+      ],
+      "early_result_signal": "has a time complexity of O(N 2 ) at its worst, but performs sort- Figure 1: Performance of sequential sorting algorithms and AS2",
+      "found": true,
+      "matches": [
+        "Paper/Previous paper/_Accepted___FGCS_2024__AS2.pdf"
+      ],
+      "name": "AS2",
+      "pages": 18,
+      "path": "Paper/Previous paper/_Accepted___FGCS_2024__AS2.pdf",
+      "pattern": "*AS2.pdf",
+      "sha256": "7f8d066d366d730081c1459f8bb8257d1d248e82d242f97e50f9fb1af5e0f150",
+      "text_chars": 170065
+    },
+    {
+      "comparison_table_signal": "achieves up to a 242.7\u00d7 storage reduction through compression, TABLE I: Comparison with prior work across key capabilities",
+      "early_headings": [
+        "512 GPUs. However, such HPC resources are inaccessible datacenter or HPC environments. For example, widely used",
+        "II. BACKGROUND"
+      ],
+      "early_result_signal": "Abstract\u2014This paper presents EdgeQuantum, an asyn- Latency comparison",
+      "found": true,
+      "matches": [
+        "Paper/Previous paper/previous paper.pdf"
+      ],
+      "name": "previous paper",
+      "pages": 11,
+      "path": "Paper/Previous paper/previous paper.pdf",
+      "pattern": "previous paper.pdf",
+      "sha256": "934b1534de56cc59cf56a47282983faa265fee164cadce8217b3309ff08b72d4",
+      "text_chars": 97124
+    }
+  ],
+  "schema_version": 1,
+  "scope": [
+    "local accepted-paper PDFs under Paper/Previous paper/",
+    "AEGIS-Q compiled PDF and LaTeX source order",
+    "structure only; no benchmark numbers are inferred from source PDFs"
+  ],
+  "summary": {
+    "mechanisms_mapped": 5,
+    "mechanisms_total": 5,
+    "required_sources_found": 5,
+    "required_sources_text_extractable": 5,
+    "required_sources_total": 5,
+    "violations": 0
+  },
+  "violations": []
+}

@@ -1,0 +1,103 @@
+{
+  "baseline_classes": {
+    "AEGIS-Q": true,
+    "GPU-storage systems": true,
+    "Plaintext": true,
+    "TPM/TEE-backed": true,
+    "dm-crypt": true,
+    "fs-verity/dm-integrity": true,
+    "fscrypt": true,
+    "gocryptfs": true
+  },
+  "checks": {
+    "baseline_classes_present": true,
+    "combined_capability_terms_present": true,
+    "direct_answer_present": true,
+    "evidence_gates_pass": true,
+    "full_kernel_matrix_boundary_present": true,
+    "maturity_boundary_present": true,
+    "no_broad_deployed_superiority_claim": true,
+    "paper_pages_12": true,
+    "related_boundary_present": true
+  },
+  "combined_capability_terms": {
+    "authenticated-block publication": true,
+    "external freshness checks": true,
+    "one evidence contract": true,
+    "optional batched GPU key-plane work": true,
+    "storage-visible QoS/admission": true
+  },
+  "direct_answer": {
+    "line": 13,
+    "path": "Paper/2_Background.tex",
+    "present": true,
+    "text": "The value of AEGIS-Q is not that user-space encryption is inherently preferable to kernel encryption. In fact, kernel-integrated systems have a clear maturity advantage. AEGIS-Q is also not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external freshness checks under one evidence contract. In that setting, the storage layer exposes policy decisions that conventional encryption layers usually hide. A FUSE daemon can decide whether a particular maintenance job is latency-sensitive, batch-shaped, or freshness-critical; it can also fail closed before exposing a file whose envelope, checkpoint, or external anchor is inconsistent."
+  },
+  "evidence_gates": [
+    {
+      "overall_pass": true,
+      "path": "artifacts/reports/paper_spine_gate/paper_spine_gate.json",
+      "present": true,
+      "violations": 0
+    },
+    {
+      "checks_passed": true,
+      "overall_pass": true,
+      "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
+      "present": true,
+      "violations": 0
+    },
+    {
+      "overall_pass": true,
+      "path": "artifacts/reports/design_eval_isomorphism/design_eval_isomorphism.json",
+      "present": true,
+      "violations": 0
+    },
+    {
+      "checks_passed": true,
+      "overall_pass": true,
+      "path": "artifacts/validation/mechanism_ablation_manifest/mechanism_ablation_manifest.json",
+      "present": true
+    },
+    {
+      "checks_passed": true,
+      "overall_pass": true,
+      "path": "artifacts/validation/integrity_comparison_manifest/integrity_comparison_manifest.json",
+      "present": true
+    },
+    {
+      "overall_pass": true,
+      "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json",
+      "present": true
+    },
+    {
+      "overall_pass": true,
+      "path": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+      "present": true
+    },
+    {
+      "overall_pass": true,
+      "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+      "present": true
+    }
+  ],
+  "forbidden_hits": [],
+  "overall_pass": true,
+  "pages": 12,
+  "related_boundary_terms": {
+    "externally anchored replay checks": true,
+    "not a stronger deployed encryption layer": true,
+    "one mounted prototype": true,
+    "optional GPU maintenance with CPU fallback": true,
+    "per-file authenticated FUSE format": true,
+    "storage-visible latency/elastic policy": true
+  },
+  "schema_version": 1,
+  "scope": [
+    "novelty isolation against deployed secure-storage baselines",
+    "direct answer to gocryptfs/fscrypt plus CUDA/TPM script concern",
+    "combined capability and non-superiority boundaries in paper text",
+    "retained artifact gates that support the combined capability"
+  ],
+  "violations": []
+}

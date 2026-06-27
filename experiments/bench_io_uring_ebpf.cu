@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
     printf("=== Milestone 2: io_uring & eBPF Prototype Evaluation ===\n");
     printf("[warning] This file models a prototype tradeoff surface and does not emit validated bypass evidence.\n");
     
-    const char *out_dir = "artifacts/zero_context";
+    const char *out_dir = "artifacts/results/microbench/zero_context";
     if (argc > 1) {
         out_dir = argv[1];
     }

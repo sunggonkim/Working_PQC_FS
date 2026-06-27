@@ -1,0 +1,691 @@
+{
+  "contract": {
+    "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+    "dm_crypt_ext4_mode": {
+      "benchmark_directory": "${DMCRYPT_MOUNT}/contract",
+      "mount_options": {
+        "cryptsetup": "LUKS2, aes-xts-plain64, 512-bit key",
+        "discard": "disabled",
+        "filesystem": "ext4 inside /dev/mapper/${DMCRYPT_NAME}",
+        "mount_command": "cryptsetup open ${DMCRYPT_BLOCK_DEVICE} ${DMCRYPT_NAME}; mount /dev/mapper/${DMCRYPT_NAME} ${DMCRYPT_MOUNT}"
+      },
+      "role": "kernel block-encryption baseline"
+    },
+    "fscrypt_mode": {
+      "benchmark_directory": "${FSCRYPT_ROOT}/contract",
+      "mount_options": {
+        "filesystem": "ext4 with encrypt feature",
+        "lower_device_policy": "same NVMe device class as plaintext and AEGIS-Q",
+        "mount_command": "mount ${FSCRYPT_BLOCK_DEVICE} ${FSCRYPT_ROOT}",
+        "policy": "fscrypt v2 policy with custom passphrase"
+      },
+      "role": "kernel filesystem-encryption baseline"
+    },
+    "path": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json"
+  },
+  "dm_crypt_ext4": {
+    "blocking_reasons": [],
+    "runnable_with_sudo_password": true,
+    "runnable_without_interactive_root": false
+  },
+  "fscrypt": {
+    "blocking_reasons": [
+      "kernel_config_fs_encryption_disabled",
+      "root_ext4_encrypt_feature_not_enabled",
+      "fscrypt_status_nonzero",
+      "disposable_fscrypt_loop_probe_failed"
+    ],
+    "runnable_with_sudo_password": false,
+    "runnable_without_interactive_root": false
+  },
+  "host": {
+    "cryptsetup_version": {
+      "argv": [
+        "cryptsetup",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "cryptsetup 2.7.0 flags: UDEV BLKID KEYRING FIPS KERNEL_CAPI HW_OPAL"
+    },
+    "dev_loop_control": {
+      "exists": true,
+      "gid": 6,
+      "is_block_device": false,
+      "is_char_device": true,
+      "mode_octal": "0o660",
+      "path": "/dev/loop-control",
+      "uid": 0,
+      "user_readable": false,
+      "user_writable": false
+    },
+    "dev_mapper_control": {
+      "exists": true,
+      "gid": 0,
+      "is_block_device": false,
+      "is_char_device": true,
+      "mode_octal": "0o600",
+      "path": "/dev/mapper/control",
+      "uid": 0,
+      "user_readable": false,
+      "user_writable": false
+    },
+    "docker_version": {
+      "argv": [
+        "docker",
+        "version",
+        "--format",
+        "{{.Server.Version}}"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "29.3.0"
+    },
+    "euid": 1000,
+    "findmnt_root": {
+      "argv": [
+        "findmnt",
+        "-T",
+        "/home/thor/skim/pqc_encrpyted_fs",
+        "-no",
+        "SOURCE,FSTYPE,TARGET,OPTIONS"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "/dev/nvme0n1p1 ext4   /      rw,relatime"
+    },
+    "fscrypt_status_repo": {
+      "argv": [
+        "fscrypt",
+        "status",
+        "/home/thor/skim/pqc_encrpyted_fs"
+      ],
+      "available": true,
+      "returncode": 1,
+      "stderr": "[ERROR] fscrypt status: encryption not enabled on filesystem / (/dev/nvme0n1p1).\n\nTo enable encryption support on this filesystem, run:\n\n     sudo tune2fs -O encrypt \"/dev/nvme0n1p1\"\n\nAlso ensure that your kernel has CONFIG_FS_ENCRYPTION=y. See the documentation\nfor more details.",
+      "stdout": ""
+    },
+    "fscrypt_status_root": {
+      "argv": [
+        "fscrypt",
+        "status",
+        "/"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "ext4 filesystem \"/\" has 0 protectors and 0 policies (only including ones owned by thor or root).\nOnly root can create fscrypt metadata on this filesystem."
+    },
+    "fscrypt_version": {
+      "argv": [
+        "fscrypt",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "fscrypt version v0.3.3"
+    },
+    "groups": [
+      4,
+      24,
+      27,
+      29,
+      30,
+      44,
+      46,
+      100,
+      108,
+      111,
+      122,
+      978,
+      979,
+      983,
+      984,
+      993,
+      1000
+    ],
+    "kernel_config": {
+      "source": "/proc/config.gz",
+      "values": {
+        "CONFIG_DM_CRYPT": "y",
+        "CONFIG_DM_INTEGRITY": "not_set",
+        "CONFIG_FS_ENCRYPTION": "not_set",
+        "CONFIG_FS_VERITY": "not_set"
+      }
+    },
+    "loop_nodes": [
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": false,
+        "is_char_device": true,
+        "mode_octal": "0o660",
+        "path": "/dev/loop-control",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop0",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop1",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop10",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop11",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop12",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop2",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop3",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop4",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop5",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop6",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop7",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop8",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      },
+      {
+        "exists": true,
+        "gid": 6,
+        "is_block_device": true,
+        "is_char_device": false,
+        "mode_octal": "0o660",
+        "path": "/dev/loop9",
+        "uid": 0,
+        "user_readable": false,
+        "user_writable": false
+      }
+    ],
+    "losetup_version": {
+      "argv": [
+        "losetup",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "losetup from util-linux 2.39.3"
+    },
+    "mkfs_ext4_version": {
+      "argv": [
+        "mkfs.ext4",
+        "-V"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "mke2fs 1.47.0 (5-Feb-2023)\n\tUsing EXT2FS Library version 1.47.0",
+      "stdout": ""
+    },
+    "sudo_password_probe": {
+      "argv": [
+        "sudo",
+        "-S",
+        "-p",
+        "",
+        "true"
+      ],
+      "available": true,
+      "password_supplied": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "sudo_probe": {
+      "argv": [
+        "sudo",
+        "-n",
+        "true"
+      ],
+      "available": true,
+      "returncode": 1,
+      "stderr": "sudo: a password is required",
+      "stdout": ""
+    },
+    "uid": 1000
+  },
+  "next_required_action": "fscrypt cannot be executed on this kernel while CONFIG_FS_ENCRYPTION is disabled.  A root-controlled LUKS2 dm-crypt/ext4 loop volume is probe-runnable with sudo, but the checklist item remains open until both kernel baseline rows are available under the frozen fio contract.  Do not use the historical sequential fio files as current comparison evidence.",
+  "overall_pass": true,
+  "privileged_loop_probes": {
+    "dm_crypt_loop_probe": {
+      "pass": true,
+      "steps": [
+        {
+          "name": "losetup",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "losetup",
+              "--find",
+              "--show",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/dmcrypt.img"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "/dev/loop9"
+          }
+        },
+        {
+          "name": "luks_format",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "cryptsetup",
+              "--batch-mode",
+              "--type",
+              "luks2",
+              "--cipher",
+              "aes-xts-plain64",
+              "--key-size",
+              "512",
+              "--pbkdf",
+              "pbkdf2",
+              "--pbkdf-force-iterations",
+              "1000",
+              "--key-file",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/luks.key",
+              "luksFormat",
+              "/dev/loop9"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "luks_open",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "cryptsetup",
+              "open",
+              "--key-file",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/luks.key",
+              "/dev/loop9",
+              "aegisq_probe_3429867"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "mkfs_ext4",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "mkfs.ext4",
+              "-q",
+              "/dev/mapper/aegisq_probe_3429867"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "mount",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "mount",
+              "/dev/mapper/aegisq_probe_3429867",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/mnt"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "write_probe",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "bash",
+              "-c",
+              "printf probe > /tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/mnt/probe.txt && sync"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "read_probe",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "cat",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/mnt/probe.txt"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "probe"
+          }
+        }
+      ]
+    },
+    "enabled": true,
+    "fscrypt_loop_probe": {
+      "pass": false,
+      "steps": [
+        {
+          "name": "losetup",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "losetup",
+              "--find",
+              "--show",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/fscrypt.img"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "/dev/loop9"
+          }
+        },
+        {
+          "name": "mkfs_ext4_encrypt",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "mkfs.ext4",
+              "-q",
+              "-O",
+              "encrypt",
+              "/dev/loop9"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "tune2fs_encrypt",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "tune2fs",
+              "-O",
+              "encrypt",
+              "/dev/loop9"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": "tune2fs 1.47.0 (5-Feb-2023)"
+          }
+        },
+        {
+          "name": "e2fsck",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "e2fsck",
+              "-fy",
+              "/dev/loop9"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "e2fsck 1.47.0 (5-Feb-2023)",
+            "stdout": "Pass 1: Checking inodes, blocks, and sizes\nPass 2: Checking directory structure\nPass 3: Checking directory connectivity\nPass 4: Checking reference counts\nPass 5: Checking group summary information\n/dev/loop9: 11/32768 files (9.1% non-contiguous), 6169/32768 blocks"
+          }
+        },
+        {
+          "name": "mount",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "mount",
+              "/dev/loop9",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "fscrypt_setup",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "fscrypt",
+              "setup",
+              "--quiet",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "mkdir_contract",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "mkdir",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt/contract"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        {
+          "name": "fscrypt_encrypt",
+          "result": {
+            "argv": [
+              "sudo",
+              "-S",
+              "-p",
+              "",
+              "fscrypt",
+              "encrypt",
+              "--quiet",
+              "--source=raw_key",
+              "--key=/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/raw.key",
+              "--name=aegisq-probe",
+              "--no-recovery",
+              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt/contract"
+            ],
+            "available": true,
+            "password_supplied": true,
+            "returncode": 1,
+            "stderr": "[ERROR] fscrypt encrypt: encryption not enabled on filesystem\n                         /tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt\n                         (/dev/loop9).\n\nTo enable encryption support on this filesystem, run:\n\n     sudo tune2fs -O encrypt \"/dev/loop9\"\n\nAlso ensure that your kernel has CONFIG_FS_ENCRYPTION=y. See the documentation\nfor more details.",
+            "stdout": ""
+          }
+        }
+      ]
+    }
+  },
+  "schema_version": 1,
+  "scope": "Non-destructive feasibility audit only.  It does not execute fscrypt or dm-crypt benchmark rows and does not close the frozen kernel-baseline matrix item.",
+  "timestamp_utc": "2026-06-27T08:23:31.948129+00:00"
+}

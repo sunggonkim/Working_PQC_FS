@@ -1,6 +1,4 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-AEGIS-Q is an evidence-first hybrid cryptographic-storage prototype.  Its verified contribution is a remountable FUSE encrypted-block format, CPU-first AES-GCM data path, optional batched GPU primitive path, and retained raw artifacts on a Jetson AGX Thor.  The measurements show why the placement decision must be primitive-specific: CPU wins for the measured AES-GCM data path, while GPU wins for large-batch ML-KEM key generation.
-
-Equally important, this revision removes unsupported claims.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\_uring completion bypass, GPU constant-time behavior, file-anchor rollback resistance, end-to-end AI QoS, or portability beyond the tested stack.  A future submission can make those stronger claims only after implementing and independently validating the required driver, telemetry, TPM, fault-injection, baseline, and side-channel evidence.
+AEGIS-Q is an evidence-first secure edge-storage prototype: secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms with one deadline miss; AEGIS-Q recovers 8.8~ms, zero misses, and 2.7~MB/s background progress.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.

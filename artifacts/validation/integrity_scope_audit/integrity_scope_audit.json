@@ -1,0 +1,82 @@
+{
+  "audit": "integrity_scope_audit",
+  "integrity_bench": {
+    "command": [
+      "/home/thor/skim/pqc_encrpyted_fs/build/bench_gpu_integrity",
+      "--only-tests"
+    ],
+    "passed": true,
+    "returncode": 0,
+    "scope": "Parity evidence for SHA-256 leaf/Merkle helper behavior only; not persisted per-file content-integrity protection.",
+    "stderr": "artifacts/validation/integrity_scope_audit/bench_gpu_integrity.stderr.txt",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "artifacts/validation/integrity_scope_audit/bench_gpu_integrity.stdout.txt",
+    "stdout_sha256": "8f57af2d61b95d238d0a304853c0dc8dd9381fef0ae174b350a5c0e885f9faae"
+  },
+  "overall_pass": true,
+  "paper_scan": {
+    "high_risk_mentions": [
+      {
+        "context": "The integrity helper computes SHA-256/Merkle material for parity tests and for the committed-prefix anchor root; AEGIS-Q does not persist a per-file content Merkle tree. The freshness plane publishes an authenticated checkpoint and can target a pre-provisioned TPM NV index; this revision evaluates only fai",
+        "explanation": "Mentions of a per-file content Merkle tree must be explicitly negated or scoped.",
+        "file": "Paper/3_Design.tex",
+        "line": 7,
+        "match": "per-file content Merkle tree",
+        "pattern": "per_file_content_merkle_tree",
+        "scoped": true
+      },
+      {
+        "context": "These tests check functional equality for the helper used by the committed-prefix anchor root; they do not mean the filesystem persists a per-file content Merkle tree or provides side-channel protection. \\begin{table}[t] \\centering \\caption{Implementation boundaries that are easy to misread without an ex",
+        "explanation": "Mentions of a per-file content Merkle tree must be explicitly negated or scoped.",
+        "file": "Paper/7_Implementation_Details.tex",
+        "line": 6,
+        "match": "per-file content Merkle tree",
+        "pattern": "per_file_content_merkle_tree",
+        "scoped": true
+      }
+    ],
+    "paper_files": [
+      "Paper/10_Discussion_and_Limitations.tex",
+      "Paper/1_Introduction.tex",
+      "Paper/2_Background.tex",
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/5_Related_Works.tex",
+      "Paper/6_Conclusion.tex",
+      "Paper/7_Implementation_Details.tex",
+      "Paper/8_Security_Analysis.tex",
+      "Paper/main.tex"
+    ],
+    "paper_scope_pass": true,
+    "required_scope_phrases": [
+      {
+        "found": true,
+        "phrase": "committed-prefix anchor root"
+      },
+      {
+        "found": true,
+        "phrase": "does not persist a per-file content Merkle tree"
+      },
+      {
+        "found": true,
+        "phrase": "do not mean the filesystem persists a per-file content Merkle tree"
+      }
+    ],
+    "unscoped_violations": []
+  },
+  "source_scope": {
+    "checks": [
+      {
+        "file": "pqc_anchor.c",
+        "found": true,
+        "phrase": "Committed-prefix root"
+      },
+      {
+        "file": "cuda_integrity.h",
+        "found": true,
+        "phrase": "committed-prefix root"
+      }
+    ],
+    "source_scope_pass": true
+  }
+}

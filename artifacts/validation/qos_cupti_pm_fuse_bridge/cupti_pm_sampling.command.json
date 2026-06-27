@@ -1,0 +1,15 @@
+[
+  "sudo",
+  "-S",
+  "env",
+  "LD_LIBRARY_PATH=/usr/local/cuda-13.0/extras/CUPTI/lib64:/usr/local/cuda-13.0/lib64:/usr/local/cuda-13.0/targets/sbsa-linux/lib:/usr/local/cuda-13.0/lib64:",
+  "PQC_CUPTI_TELEMETRY_FILE=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_cupti_pm_fuse_bridge/runtime_telemetry.txt",
+  "PQC_CUPTI_TRACE_PATH=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_cupti_pm_fuse_bridge/cupti_pm_samples.jsonl",
+  "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_cupti_pm_fuse_bridge/cupti_pm_sampling_src/pm_sampling",
+  "-d",
+  "0",
+  "-i",
+  "1000000",
+  "-s",
+  "512"
+]

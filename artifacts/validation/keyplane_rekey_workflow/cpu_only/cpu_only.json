@@ -1,0 +1,45 @@
+{
+  "acceptable": true,
+  "admission": {
+    "ai_qos_exhausted_records": [],
+    "path": "artifacts/validation/keyplane_rekey_workflow/cpu_only/admission_trace.jsonl",
+    "records": [],
+    "targets": {
+      "CPU": 0,
+      "GPU": 0
+    }
+  },
+  "files_requested": 1024,
+  "mode": "cpu_only",
+  "rekey": {
+    "event_count": 1,
+    "events": [
+      {
+        "budget_ns": 0,
+        "decision_reason": 0,
+        "deferral_reason": 0,
+        "detail_line": "[PQC-FUSE 2026-06-27 08:52:59.992] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+        "files": 1024,
+        "line": "[PQC-FUSE 2026-06-27 08:52:59.992] REKEY WORKER: batched 1024 files 24398.6\u00b5s (target=CPU, run=CPU)",
+        "run": "CPU",
+        "target": "CPU",
+        "usec": 24398.6,
+        "work_bytes": 1146880
+      }
+    ],
+    "files_refreshed": 1024,
+    "path": "artifacts/validation/keyplane_rekey_workflow/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+    "run_counts": {
+      "CPU": 1,
+      "GPU": 0
+    },
+    "sha256": "c5b890150a0e5ab12101f3f7b40a9ff752ef1d8b8014e6500cfbaf2f4eaee2b6",
+    "target_counts": {
+      "CPU": 1,
+      "GPU": 0
+    }
+  },
+  "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+  "throughput_files_per_s": 41969.62120777422,
+  "total_rekey_usec": 24398.6
+}

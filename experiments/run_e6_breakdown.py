@@ -56,7 +56,7 @@ def measure_anchor_ns(batch_size: int) -> int:
 
 def main():
     parser = argparse.ArgumentParser(description="E6 Pipeline Breakdown")
-    parser.add_argument("--out", default="artifacts/e6_breakdown.json")
+    parser.add_argument("--out", default="artifacts/results/placement/e6_breakdown.json")
     args = parser.parse_args()
 
     print("Running E6 GPU Pipeline Breakdown (Empirical Measurements)...")

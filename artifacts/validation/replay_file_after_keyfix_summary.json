@@ -4,21 +4,23 @@
       "backend": "file",
       "cut_point_s": 0.0,
       "trials": 2,
-      "preserved": 2,
-      "success_rate": 1.0,
-      "fail_closed": 0,
-      "rollback_accept": 0,
-      "unexpected_error": 0
+      "oracle_verdict_counts": {
+        "fail_closed": 0,
+        "previous_committed": 0,
+        "unexpected_liveness_failure": 0,
+        "rollback_reject": 2
+      }
     },
     {
       "backend": "file",
       "cut_point_s": 0.05,
       "trials": 2,
-      "preserved": 2,
-      "success_rate": 1.0,
-      "fail_closed": 0,
-      "rollback_accept": 0,
-      "unexpected_error": 0
+      "oracle_verdict_counts": {
+        "fail_closed": 0,
+        "previous_committed": 0,
+        "unexpected_liveness_failure": 0,
+        "rollback_reject": 2
+      }
     }
   ],
   "skipped": []

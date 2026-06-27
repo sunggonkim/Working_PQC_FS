@@ -85,8 +85,8 @@
 
 \begin{document}
 \begin{abstract}
-AEGIS-Q is a FUSE secure-storage prototype for unified-memory edge systems that separates a latency-sensitive AES-GCM data path from optional batched GPU work. This revision reports only claims supported by the implementation and retained raw artifacts. The data path creates a random per-file data-encryption key, stores an authenticated envelope under a mount-derived key, writes ciphertext before a durable mapping journal, and validates an HMAC checkpoint on remount. ML-KEM-768 is measured as a batched optional provisioning workload rather than used for per-block encryption. The CUDA path uses managed allocation, explicit prefetch, and stream synchronization; it does not claim direct NVMe DMA into managed memory, \texttt{io\_uring}/eBPF completion bypass, or an end-to-end AI-QoS controller.
-On a Jetson AGX Thor Developer Kit, three retained runs show that the CPU AES-GCM path sustains 1.61~GB/s for 16~MiB blocks while the managed-buffer GPU implementation reaches 0.17~GB/s. Conversely, batched ML-KEM-768 key generation reaches 1.50~M keygens/s on cuPQC versus 64.8~K keygens/s with liboqs at batch size 4,096. We also report clean-remount and GPU integrity-parity tests. The repository additionally retains matched fscrypt and dm-crypt sequential-write baselines with identical block size, job count, and queue depth. The paper still scopes out unmeasured side-channel resistance, hardware-anchor rollback protection, cross-platform portability, and application-level QoS claims.
+Unified-memory edge devices co-locate foreground inference, local databases, and encrypted state on shared DRAM/storage.  A secure-storage runtime must place cryptographic work without disrupting latency tenants, publish durable authenticated state without nonce reuse, and bind freshness outside replayable backing directories.  AEGIS-Q explores this point as a FUSE prototype with one authenticated block format, a password-derived mount-key boundary, a CPU-first AES-GCM data plane, an optional batched GPU maintenance lane/rekey fallback, and a fail-closed external-anchor TPM replay-after-advance path.
+On a Jetson AGX Thor Developer Kit, retained mounted artifacts show the intended spine: under secure-storage pressure, foreground SQLite p99 rises from 6.4~ms to 13.8~ms and incurs a deadline miss; AEGIS-Q's policy recovers p99 to 8.8~ms with zero misses while retaining 2.7~MB/s of background progress.  The same evidence set exercises remount/tamper checks, generation/fault matrices, rekey fallback, TPM replay-after-advance, app-crash timing, and telemetry-to-FUSE throttling.  The result is an evidence-first secure edge-storage prototype with explicit scope boundaries, not a claim of deployed-filesystem superiority.
 \end{abstract}
 
 \keywords{Post-Quantum Cryptography, Edge Computing, Secure Storage, Unified Memory, TPM, FUSE}
@@ -95,16 +95,16 @@ On a Jetson AGX Thor Developer Kit, three retained runs show that the CPU AES-GC
 
 \input{1_Introduction.tex}
 \input{2_Background.tex}
-\input{5_Related_Works.tex}
 \input{3_Design.tex}
 \input{7_Implementation_Details.tex}
 \input{8_Security_Analysis.tex}
 \input{4_Evaluation.tex}
 \input{10_Discussion_and_Limitations.tex}
+\input{5_Related_Works.tex}
 \input{6_Conclusion.tex}
-\appendix
-\input{11_Appendix.tex}
 % ACM bibliography style for conference-format builds
+\newcommand{\aegisqsuppressurl}[1]{\unskip}
+\let\showURL\aegisqsuppressurl
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 

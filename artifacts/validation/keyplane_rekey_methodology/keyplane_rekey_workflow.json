@@ -1,0 +1,1958 @@
+{
+  "artifact": "keyplane_rekey_workflow",
+  "collect_ms": 1000,
+  "files_per_mode": 1024,
+  "gpu_vs_cpu_speedup": 1.1855064353665359,
+  "gpu_vs_cpu_speedup_summary": {
+    "ci95_high": 1.381345986184696,
+    "ci95_low": 1.1445489896211194,
+    "median": 1.1855064353665359,
+    "p05": 1.1445489896211194,
+    "p95": 1.381345986184696,
+    "runs": 5
+  },
+  "maintenance_visible_benefit": true,
+  "methodology": {
+    "background_process_control": {
+      "policy": "no unrelated foreground GPU/CPU/storage jobs during measurement",
+      "process_snapshot": {
+        "argv": [
+          "ps",
+          "-eo",
+          "pid,ppid,comm,pcpu,pmem,args",
+          "--sort=-pcpu"
+        ],
+        "available": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "PID    PPID COMMAND         %CPU %MEM COMMAND\n3274236       2 kworker/u28:1-d 19.8  0.0 [kworker/u28:1-devfreq_wq]\n3223564       2 kworker/u28:2-e 15.4  0.0 [kworker/u28:2-ext4-rsv-conversion]\n3226638 3226606 codex            3.7  0.1 /home/thor/.vscode-server/extensions/openai.chatgpt-26.623.31921-linux-arm64/bin/linux-aarch64/codex app-server --analytics-default-enabled\n1692355 1691765 node             2.5  0.2 /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/node --dns-result-order=ipv4first /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/out/bootstrap-fork --type=extensionHost --transformURIs --useHostProxy=false\n   1580       2 disp_eng_share_  1.7  0.0 [disp_eng_share_thread]\n3290470 3226638 python3          1.6  0.0 python3 experiments/run_keyplane_rekey_workflow.py --out artifacts/validation/keyplane_rekey_methodology --files 1024 --wait-s 3 --collect-ms 1000 --warmup-runs 1 --repetitions 5 --thermal-interval-ms 100\n3226606 3171226 MainThread       1.5  0.3 /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/node --dns-result-order=ipv4first /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/out/bootstrap-fork --type=extensionHost --transformURIs --useHostProxy=false\n3238564       1 containerd-shim  0.2  0.0 /usr/bin/containerd-shim-runc-v2 -namespace moby -id b4f4ca7ddc3365086090c62db774251850d40b38ef0c1dac617db428258d8a11 -address /run/containerd/containerd.sock\n   3675       1 dockerd          0.2  0.0 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock\n1692427 1692355 language_server  0.1  0.2 /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/extensions/antigravity/bin/language_server_linux_arm --enable_lsp --csrf_token 7a37dfc6-354d-4789-9aef-59e0ac31a286 --extension_server_port 36219 --extension_server_csrf_token e3b738c9-b2a0-49e8-90ca-a31307d9f86a --workspace_id file_home_thor_skim_pqc_encrpyted_fs --cloud_code_endpoint https://daily-cloudcode-pa.googleapis.com --subclient_type ide --app_data_dir antigravity-ide --parent_pipe_path /tmp/server_ab0a03e4d27cf73d\n3171226 3171216 MainThread       0.1  0.1 /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/node /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/out/server-main.js --start-server --server-data-dir /home/thor/.vscode-server --host=127.0.0.1 --accept-server-license-terms --enable-remote-auto-shutdown --port=0 --telemetry-level all --connection-token-file /home/thor/.vscode-server/.7e7950df89d055b5a378379db9ee14290772148a.token\n3743004     343 (udev-worker)    0.0  0.0 (udev-worker)\n   1043       1 NetworkManager   0.0  0.0 /usr/sbin/NetworkManager --no-daemon\n3287358       2 kworker/9:2-mm_  0.0  0.0 [kworker/9:2-mm_percpu_wq]\n    343       1 systemd-udevd    0.0  0.0 /usr/lib/systemd/systemd-udevd\n3226563 3226523 sshd             0.0  0.0 sshd: thor@notty\n3267626       2 kworker/9:1-eve  0.0  0.0 [kworker/9:1-events]\n2827142       2 kworker/7:2-mm_  0.0  0.0 [kworker/7:2-mm_percpu_wq]\n3271087       2 kworker/1:2-mm_  0.0  0.0 [kworker/1:2-mm_percpu_wq]\n3282058       2 kworker/9:0-mm_  0.0  0.0 [kworker/9:0-mm_percpu_wq]\n    954       1 snapd            0.0  0.0 /usr/lib/snapd/snapd\n   1774       1 containerd       0.0  0.0 /usr/bin/containerd\n1691855 1691765 node             0.0  0.0 /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/node /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/out/bootstrap-fork --type=ptyHost --logsPath /home/thor/.antigravity-ide-server/data/logs/20260624T101517\n3226617 3171226 MainThread       0.0  0.0 /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/node /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/out/bootstrap-fork --type=fileWatcher\n1691765 1691757 node             0.0  0.1 /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/node /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/out/server-main.js --start-server --host=127.0.0.1 --port=0 --connection-token-file /home/thor/.antigravity-ide-server/.e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a.token --telemetry-level off --enable-remote-auto-shutdown --accept-server-license-terms\n3171363 3171226 MainThread       0.0  0.0 /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/node /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/out/bootstrap-fork --type=ptyHost --logsPath /home/thor/.vscode-server/data/logs/20260627T063532\n2439524       2 kworker/5:1-eve  0.0  0.0 [kworker/5:1-events]\n1164166       2 kworker/4:1-mm_  0.0  0.0 [kworker/4:1-mm_percpu_wq]\n2341872       2 kworker/8:1-mm_  0.0  0.0 [kworker/8:1-mm_percpu_wq]\n1941889       2 kworker/6:2-mm_  0.0  0.0 [kworker/6:2-mm_percpu_wq]\n2277598       2 kworker/10:0-mm  0.0  0.0 [kworker/10:0-mm_percpu_wq]\n2914375       2 kworker/0:2-mm_  0.0  0.0 [kworker/0:2-mm_percpu_wq]\n3003598       2 kworker/3:1-mm_  0.0  0.0 [kworker/3:1-mm_percpu_wq]\n1692310 1692278 sshd             0.0  0.0 sshd: thor@notty\n1626275       2 kworker/11:1-mm  0.0  0.0 [kworker/11:1-mm_percpu_wq]\n2918150       1 pqc_fuse         0.0  0.0 /home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse /tmp/tpm_mono_store_jqoielod /tmp/tpm_mono_mnt_mi0_nxc4 -f\n2920203       1 pqc_fuse         0.0  0.0 /home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse /tmp/tpm_mono_store__1ia61zc /tmp/tpm_mono_mnt_pxadplip -f\n2916522       1 pqc_fuse         0.0  0.0 /home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse /tmp/tpm_mono_store_btn9m5co /tmp/tpm_mono_mnt__k5urivg -f\n3106357       2 kworker/12:0-mm  0.0  0.0 [kworker/12:0-mm_percpu_wq]\n3044547       2 kworker/13:0-mm  0.0  0.0 [kworker/13:0-mm_percpu_wq]\n    282       1 systemd-journal  0.0  0.1 /usr/lib/systemd/systemd-journald\n1692362 1691765 node             0.0  0.0 /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/node /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/out/bootstrap-fork --type=fileWatcher\n  25459       1 containerd-shim  0.0  0.0 /usr/bin/containerd-shim-runc-v2 -namespace moby -id a9b42d18d403da7f88b904559b0fb2f15d4ffae367acd89be92c923cf07d1379 -address /run/containerd/containerd.sock\n    884       1 avahi-daemon     0.0  0.0 avahi-daemon: running [thor.local]\n3258881       2 kworker/2:0-mm_  0.0  0.0 [kworker/2:0-mm_percpu_wq]\n3258056       2 kworker/u44:2-E  0.0  0.0 [kworker/u44:2-EVENT_HDL]\n3241703       1 nvfancontrol     0.0  0.0 /usr/sbin/nvfancontrol &\n3277614       2 kworker/u44:0-T  0.0  0.0 [kworker/u44:0-TX_HDL]\n3226942 3226606 MainThread       0.0  0.0 /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/node /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/extensions/json-language-features/server/dist/node/jsonServerMain --node-ipc --clientProcessId=3226606\n2191858 2191835 node             0.0  0.1 /root/.vscode-server/bin/10c8e557c8b9f9ed0a87f61f1c9a44bde731c409/node /root/.vscode-server/bin/10c8e557c8b9f9ed0a87f61f1c9a44bde731c409/out/server-main.js --log debug --force-disable-user-env --server-data-dir /root/.vscode-server --telemetry-level all --accept-server-license-terms --host 127.0.0.1 --port 0 --connection-token-file /root/.vscode-server/data/Machine/.connection-token-10c8e557c8b9f9ed0a87f61f1c9a44bde731c409 --extensions-download-dir /root/.vscode-server/extensionsCache --start-server  --skip-requirements-check\n      1       0 systemd          0.0  0.0 /sbin/init 2\n2943756       1 bash             0.0  0.0 bash -s\n3228063 3226606 MainThread       0.0  0.0 /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/node /home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/extensions/markdown-language-features/dist/serverWorkerMain --node-ipc --clientProcessId=3226606\n1789373       1 bash             0.0  0.0 bash -s\n1692311 1692310 bash             0.0  0.0 bash -s\n1691673       1 bash             0.0  0.0 bash -s\n1802714       1 bash             0.0  0.0 bash -s\n1878291       1 bash             0.0  0.0 bash -s\n1692077       1 bash             0.0  0.0 bash -s\n3617879 3617855 node             0.0  0.1 /root/.vscode-server/bin/8b640eef5a6c6089c029249d48efa5c99adf7d51/node /root/.vscode-server/bin/8b640eef5a6c6089c029249d48efa5c99adf7d51/out/server-main.js --log debug --force-disable-user-env --server-data-dir /root/.vscode-server --telemetry-level all --accept-server-license-terms --host 127.0.0.1 --port 0 --connection-token-file /root/.vscode-server/data/Machine/.connection-token-8b640eef5a6c6089c029249d48efa5c99adf7d51 --extensions-download-dir /root/.vscode-server/extensionsCache --start-server  --skip-requirements-check\n3595577     343 (udev-worker)    0.0  0.0 (udev-worker)\n   1780       1 sshd             0.0  0.0 sshd: /usr/sbin/sshd -D [listener] 1 of 10-100 startups\n   1767       2 nv_queue         0.0  0.0 [nv_queue]\n     16       2 rcu_preempt      0.0  0.0 [rcu_preempt]\n   1064       2 nv_mem_pool_scr  0.0  0.0 [nv_mem_pool_scrubber_queue]\n    127       2 kswapd0          0.0  0.0 [kswapd0]\n   1094       1 rsyslogd         0.0  0.0 /usr/sbin/rsyslogd -n -iNONE\n3287491       2 kworker/u44:3-R  0.0  0.0 [kworker/u44:3-RX_HDL]\n    108       2 khugepaged       0.0  0.0 [khugepaged]\n1692542 1692355 node             0.0  0.0 /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/node /home/thor/.antigravity-ide-server/bin/2.1.1-e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a/extensions/markdown-language-features/dist/serverWorkerMain --node-ipc --clientProcessId=1692355\n2465606 2191858 node             0.0  0.0 /root/.vscode-server/bin/10c8e557c8b9f9ed0a87f61f1c9a44bde731c409/node /root/.vscode-server/bin/10c8e557c8b9f9ed0a87f61f1c9a44bde731c409/out/bootstrap-fork --type=ptyHost --logsPath /root/.vscode-server/data/logs/20260428T003739\n3286954       2 kworker/u30:5-w  0.0  0.0 [kworker/u30:5-writeback]\n3425014       1 fwupd            0.0  0.0 /usr/libexec/fwupd/fwupd\n    725       1 systemd-resolve  0.0  0.0 /usr/lib/systemd/systemd-resolved\n    556       2 8188120000.cryp  0.0  0.0 [8188120000.crypto-engine]\n3985302       1 code-f6cfa2ea24  0.0  0.0 /home/thor/.vscode-server/code-f6cfa2ea2403534de03f069bdf160d06451ed282 --cli-data-dir /home/thor/.vscode-server/cli agent host\n3618330 3617879 node             0.0  0.0 /root/.vscode-server/bin/8b640eef5a6c6089c029249d48efa5c99adf7d51/node /root/.vscode-server/bin/8b640eef5a6c6089c029249d48efa5c99adf7d51/out/bootstrap-fork --type=ptyHost --logsPath /root/.vscode-server/data/logs/20260507T082352\n    106       2 kcompactd0       0.0  0.0 [kcompactd0]\n3214401       2 kworker/u34:3-e  0.0  0.0 [kworker/u34:3-events_unbound]",
+        "truncated_to_lines": 80
+      }
+    },
+    "cache_dropping_policy": {
+      "cold_cache": "not claimed; each repetition uses a fresh temporary lower directory and mount",
+      "scope": "mounted open-file envelope-refresh workflow, not filesystem throughput comparison",
+      "warm_cache": "full workload warmup is retained when --warmup-runs is nonzero"
+    },
+    "confidence_interval_method": {
+      "confidence_level": 0.95,
+      "name": "nonparametric bootstrap",
+      "resamples": 10000,
+      "unit": "independent mounted rekey workflow repetitions per mode"
+    },
+    "cpu_gpu_clocks_or_power_mode": {
+      "cpu_governor_ready": false,
+      "jetson_clocks_show": {
+        "argv": [
+          "jetson_clocks",
+          "--show"
+        ],
+        "available": true,
+        "returncode": 1,
+        "stderr": "",
+        "stdout": "SOC family:tegra264  Machine:NVIDIA Jetson AGX Thor Developer Kit\nError: Run this script(/usr/bin/jetson_clocks) as a root user"
+      },
+      "nvpmodel_q": {
+        "argv": [
+          "nvpmodel",
+          "-q"
+        ],
+        "available": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "NV Power Mode: MAXN\n0"
+      },
+      "observed_cpu_governors": {
+        "governor_counts": {
+          "schedutil": 14
+        },
+        "paths_observed": 14
+      },
+      "required_cpu_governor": "performance"
+    },
+    "failure_handling": {
+      "missing_binary": "fatal",
+      "mode_failure": "fatal",
+      "mount_failure": "fatal",
+      "unsupported_configuration": "not emitted as zero or success"
+    },
+    "methodology_id": "aegisq-keyplane-rekey-methodology-v1",
+    "outlier_policy": {
+      "infrastructure_failure_policy": "fail the harness instead of substituting values",
+      "policy": "retain_all_completed_repetitions",
+      "winsorization": "disabled"
+    },
+    "run_count": {
+      "headline_minimum_repetitions": 5,
+      "measured_repetitions": 5,
+      "meets_headline_minimum": true
+    },
+    "thermal_logging": {
+      "available": true,
+      "command": [
+        "tegrastats",
+        "--interval",
+        "100"
+      ],
+      "line_count": 987,
+      "nonempty": true,
+      "path": "artifacts/validation/keyplane_rekey_methodology/thermal_tegrastats.log",
+      "returncode": -15,
+      "started": true
+    },
+    "warmup": {
+      "artifacts": [
+        "artifacts/validation/keyplane_rekey_methodology/warmup_00"
+      ],
+      "full_workload_warmup": true,
+      "warmup_runs": 1
+    }
+  },
+  "mode_summaries": [
+    {
+      "acceptable_runs": 5,
+      "admission_targets_per_run": [
+        {
+          "CPU": 0,
+          "GPU": 0
+        },
+        {
+          "CPU": 0,
+          "GPU": 0
+        },
+        {
+          "CPU": 0,
+          "GPU": 0
+        },
+        {
+          "CPU": 0,
+          "GPU": 0
+        },
+        {
+          "CPU": 0,
+          "GPU": 0
+        }
+      ],
+      "all_acceptable": true,
+      "files_refreshed_per_run": [
+        1024,
+        1024,
+        1024,
+        1024,
+        1024
+      ],
+      "mode": "cpu_only",
+      "rekey_events_per_run": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "runs": 5,
+      "throughput_files_per_s_ci95_high": 41714.87232967785,
+      "throughput_files_per_s_ci95_low": 41429.478854377805,
+      "throughput_files_per_s_median": 41669.04039129834,
+      "throughput_files_per_s_p05": 41429.478854377805,
+      "throughput_files_per_s_p95": 41714.87232967785,
+      "total_rekey_usec_ci95_high": 24716.7,
+      "total_rekey_usec_ci95_low": 24547.6,
+      "total_rekey_usec_median": 24574.6,
+      "total_rekey_usec_p05": 24547.6,
+      "total_rekey_usec_p95": 24716.7
+    },
+    {
+      "acceptable_runs": 5,
+      "admission_targets_per_run": [
+        {
+          "CPU": 0,
+          "GPU": 1
+        },
+        {
+          "CPU": 0,
+          "GPU": 1
+        },
+        {
+          "CPU": 0,
+          "GPU": 1
+        },
+        {
+          "CPU": 0,
+          "GPU": 1
+        },
+        {
+          "CPU": 0,
+          "GPU": 1
+        }
+      ],
+      "all_acceptable": true,
+      "files_refreshed_per_run": [
+        1024,
+        1024,
+        1024,
+        1024,
+        1024
+      ],
+      "mode": "gpu_batch",
+      "rekey_events_per_run": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "runs": 5,
+      "throughput_files_per_s_ci95_high": 57228.444325218516,
+      "throughput_files_per_s_ci95_low": 47744.71497710678,
+      "throughput_files_per_s_median": 49398.9155394323,
+      "throughput_files_per_s_p05": 47744.71497710678,
+      "throughput_files_per_s_p95": 57228.444325218516,
+      "total_rekey_usec_ci95_high": 21447.4,
+      "total_rekey_usec_ci95_low": 17893.2,
+      "total_rekey_usec_median": 20729.2,
+      "total_rekey_usec_p05": 17893.2,
+      "total_rekey_usec_p95": 21447.4
+    },
+    {
+      "acceptable_runs": 5,
+      "admission_targets_per_run": [
+        {
+          "CPU": 1,
+          "GPU": 0
+        },
+        {
+          "CPU": 1,
+          "GPU": 0
+        },
+        {
+          "CPU": 1,
+          "GPU": 0
+        },
+        {
+          "CPU": 1,
+          "GPU": 0
+        },
+        {
+          "CPU": 1,
+          "GPU": 0
+        }
+      ],
+      "all_acceptable": true,
+      "files_refreshed_per_run": [
+        1024,
+        1024,
+        1024,
+        1024,
+        1024
+      ],
+      "mode": "policy_fallback",
+      "rekey_events_per_run": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "runs": 5,
+      "throughput_files_per_s_ci95_high": 41929.57959863893,
+      "throughput_files_per_s_ci95_low": 41128.627372226125,
+      "throughput_files_per_s_median": 41673.449454663845,
+      "throughput_files_per_s_p05": 41128.627372226125,
+      "throughput_files_per_s_p95": 41929.57959863893,
+      "total_rekey_usec_ci95_high": 24897.5,
+      "total_rekey_usec_ci95_low": 24421.9,
+      "total_rekey_usec_median": 24572.0,
+      "total_rekey_usec_p05": 24421.9,
+      "total_rekey_usec_p95": 24897.5
+    }
+  ],
+  "modes": [
+    {
+      "acceptable": true,
+      "admission": {
+        "ai_qos_exhausted_records": [],
+        "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/cpu_only/admission_trace.jsonl",
+        "records": [],
+        "targets": {
+          "CPU": 0,
+          "GPU": 0
+        }
+      },
+      "files_requested": 1024,
+      "mode": "cpu_only",
+      "rekey": {
+        "event_count": 1,
+        "events": [
+          {
+            "budget_ns": 0,
+            "decision_reason": 0,
+            "deferral_reason": 0,
+            "detail_line": "[PQC-FUSE 2026-06-27 10:31:38.061] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+            "files": 1024,
+            "line": "[PQC-FUSE 2026-06-27 10:31:38.061] REKEY WORKER: batched 1024 files 24547.6\u00b5s (target=CPU, run=CPU)",
+            "run": "CPU",
+            "target": "CPU",
+            "usec": 24547.6,
+            "work_bytes": 1146880
+          }
+        ],
+        "files_refreshed": 1024,
+        "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+        "run_counts": {
+          "CPU": 1,
+          "GPU": 0
+        },
+        "sha256": "ad649349e9006efd04d7c7b0db60910e3645427da9489e5ad20a962ef0222f34",
+        "target_counts": {
+          "CPU": 1,
+          "GPU": 0
+        }
+      },
+      "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+      "throughput_files_per_s": 41714.87232967785,
+      "total_rekey_usec": 24547.6
+    },
+    {
+      "acceptable": true,
+      "admission": {
+        "ai_qos_exhausted_records": [],
+        "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/gpu_batch/admission_trace.jsonl",
+        "records": [
+          {
+            "age_clock": "CLOCK_MONOTONIC",
+            "ai_inference_deadline_ns": 5000000000,
+            "ai_qos_budget_remaining_ns": 100000000,
+            "batch_age_ns": 1000000000,
+            "batch_count": 1024,
+            "bytes_total": 1146880,
+            "chosen_target": "GPU",
+            "cpu_load_avg": 0.83,
+            "cpu_queue_depth": 1024,
+            "decision_reason": 4,
+            "deferral_reason": 0,
+            "gpu_d2h_staging_ns": 32768,
+            "gpu_h2d_staging_ns": 1146880,
+            "gpu_kernel_est_ns": 250000,
+            "gpu_load_avg": 0.0,
+            "gpu_queue_depth": 0,
+            "producer_slack_age_ns": 1311125435,
+            "producer_slack_stale": false,
+            "producer_slack_stale_after_ns": 10000000000,
+            "queue_delay_ns": 1024000,
+            "service_time_ns": 1429648,
+            "telemetry_mem_bandwidth_util": 0.1,
+            "telemetry_tensor_core_util": 0.1,
+            "timestamp_ns": 1782523903731470857,
+            "trace_timestamp_clock": "CLOCK_REALTIME",
+            "uma_migration_bytes_est": 0,
+            "uma_migration_cost_ns": 0
+          }
+        ],
+        "targets": {
+          "CPU": 0,
+          "GPU": 1
+        }
+      },
+      "files_requested": 1024,
+      "mode": "gpu_batch",
+      "rekey": {
+        "event_count": 1,
+        "events": [
+          {
+            "budget_ns": 100000000,
+            "decision_reason": 4,
+            "deferral_reason": 0,
+            "detail_line": "[PQC-FUSE 2026-06-27 10:31:43.752] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+            "files": 1024,
+            "line": "[PQC-FUSE 2026-06-27 10:31:43.752] REKEY WORKER: batched 1024 files 21447.4\u00b5s (target=GPU, run=GPU)",
+            "run": "GPU",
+            "target": "GPU",
+            "usec": 21447.4,
+            "work_bytes": 1146880
+          }
+        ],
+        "files_refreshed": 1024,
+        "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+        "run_counts": {
+          "CPU": 0,
+          "GPU": 1
+        },
+        "sha256": "d3acf7e9059dd6c8a93454143aa719550bb27c8b15d8d6a5f65c92d277969bab",
+        "target_counts": {
+          "CPU": 0,
+          "GPU": 1
+        }
+      },
+      "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+      "throughput_files_per_s": 47744.71497710678,
+      "total_rekey_usec": 21447.4
+    },
+    {
+      "acceptable": true,
+      "admission": {
+        "ai_qos_exhausted_records": [
+          {
+            "age_clock": "CLOCK_MONOTONIC",
+            "ai_inference_deadline_ns": 5000000000,
+            "ai_qos_budget_remaining_ns": 0,
+            "batch_age_ns": 1000000000,
+            "batch_count": 1024,
+            "bytes_total": 1146880,
+            "chosen_target": "CPU",
+            "cpu_load_avg": 0.76,
+            "cpu_queue_depth": 1024,
+            "decision_reason": 2,
+            "deferral_reason": 2,
+            "gpu_d2h_staging_ns": 32768,
+            "gpu_h2d_staging_ns": 1146880,
+            "gpu_kernel_est_ns": 250000,
+            "gpu_load_avg": 0.0,
+            "gpu_queue_depth": 0,
+            "producer_slack_age_ns": 1310333285,
+            "producer_slack_stale": false,
+            "producer_slack_stale_after_ns": 10000000000,
+            "queue_delay_ns": 1024000,
+            "service_time_ns": 1429648,
+            "telemetry_mem_bandwidth_util": 0.9,
+            "telemetry_tensor_core_util": 0.1,
+            "timestamp_ns": 1782523909278719988,
+            "trace_timestamp_clock": "CLOCK_REALTIME",
+            "uma_migration_bytes_est": 0,
+            "uma_migration_cost_ns": 0
+          }
+        ],
+        "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/policy_fallback/admission_trace.jsonl",
+        "records": [
+          {
+            "age_clock": "CLOCK_MONOTONIC",
+            "ai_inference_deadline_ns": 5000000000,
+            "ai_qos_budget_remaining_ns": 0,
+            "batch_age_ns": 1000000000,
+            "batch_count": 1024,
+            "bytes_total": 1146880,
+            "chosen_target": "CPU",
+            "cpu_load_avg": 0.76,
+            "cpu_queue_depth": 1024,
+            "decision_reason": 2,
+            "deferral_reason": 2,
+            "gpu_d2h_staging_ns": 32768,
+            "gpu_h2d_staging_ns": 1146880,
+            "gpu_kernel_est_ns": 250000,
+            "gpu_load_avg": 0.0,
+            "gpu_queue_depth": 0,
+            "producer_slack_age_ns": 1310333285,
+            "producer_slack_stale": false,
+            "producer_slack_stale_after_ns": 10000000000,
+            "queue_delay_ns": 1024000,
+            "service_time_ns": 1429648,
+            "telemetry_mem_bandwidth_util": 0.9,
+            "telemetry_tensor_core_util": 0.1,
+            "timestamp_ns": 1782523909278719988,
+            "trace_timestamp_clock": "CLOCK_REALTIME",
+            "uma_migration_bytes_est": 0,
+            "uma_migration_cost_ns": 0
+          }
+        ],
+        "targets": {
+          "CPU": 1,
+          "GPU": 0
+        }
+      },
+      "files_requested": 1024,
+      "mode": "policy_fallback",
+      "rekey": {
+        "event_count": 1,
+        "events": [
+          {
+            "budget_ns": 0,
+            "decision_reason": 2,
+            "deferral_reason": 2,
+            "detail_line": "[PQC-FUSE 2026-06-27 10:31:49.303] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=2 deferral_reason=2",
+            "files": 1024,
+            "line": "[PQC-FUSE 2026-06-27 10:31:49.303] REKEY WORKER: batched 1024 files 24897.5\u00b5s (target=CPU, run=CPU)",
+            "run": "CPU",
+            "target": "CPU",
+            "usec": 24897.5,
+            "work_bytes": 1146880
+          }
+        ],
+        "files_refreshed": 1024,
+        "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/policy_fallback/mount_logs/pqc_fuse.stderr.txt",
+        "run_counts": {
+          "CPU": 1,
+          "GPU": 0
+        },
+        "sha256": "c8b4fc7724919f7db50ff314ee5abd34af55c27a9351d800247ce814e7ba5018",
+        "target_counts": {
+          "CPU": 1,
+          "GPU": 0
+        }
+      },
+      "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+      "throughput_files_per_s": 41128.627372226125,
+      "total_rekey_usec": 24897.5
+    }
+  ],
+  "modes_schema": "first_measured_repetition",
+  "overall_pass": true,
+  "platform": {
+    "cpu_count": 14,
+    "device_model": "NVIDIA Jetson AGX Thor Developer Kit",
+    "fuse_binary": {
+      "exists": true,
+      "path": "build/pqc_fuse",
+      "sha256": "e355da2bde57dde7d1402da4195d71553c092305b25fb662b75bb6e0d503da45"
+    },
+    "git_head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "2757b23e7e14afd6d597c1534eda7cb6357015b2"
+    },
+    "kernel": "Linux-6.8.12-tegra-aarch64-with-glibc2.39",
+    "machine": "aarch64",
+    "nvcc": {
+      "argv": [
+        "nvcc",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jul_16_07:31:19_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.48\nBuild cuda_13.0.r13.0/compiler.36260728_0"
+    },
+    "timestamp_utc": "2026-06-27T01:33:01.171969+00:00",
+    "uname": {
+      "argv": [
+        "uname",
+        "-a"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Linux thor 6.8.12-tegra #1 SMP PREEMPT Tue Dec 30 15:40:41 PST 2025 aarch64 aarch64 aarch64 GNU/Linux"
+    }
+  },
+  "repetitions": [
+    {
+      "all_modes_acceptable": true,
+      "gpu_vs_cpu_speedup": 1.1445489896211194,
+      "maintenance_visible_benefit": true,
+      "modes": [
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/cpu_only/admission_trace.jsonl",
+            "records": [],
+            "targets": {
+              "CPU": 0,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "cpu_only",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 0,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:31:38.061] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:31:38.061] REKEY WORKER: batched 1024 files 24547.6\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24547.6,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "ad649349e9006efd04d7c7b0db60910e3645427da9489e5ad20a962ef0222f34",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41714.87232967785,
+          "total_rekey_usec": 24547.6
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/gpu_batch/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 100000000,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "GPU",
+                "cpu_load_avg": 0.83,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1311125435,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.1,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523903731470857,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "files_requested": 1024,
+          "mode": "gpu_batch",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 100000000,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:31:43.752] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:31:43.752] REKEY WORKER: batched 1024 files 21447.4\u00b5s (target=GPU, run=GPU)",
+                "run": "GPU",
+                "target": "GPU",
+                "usec": 21447.4,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 0,
+              "GPU": 1
+            },
+            "sha256": "d3acf7e9059dd6c8a93454143aa719550bb27c8b15d8d6a5f65c92d277969bab",
+            "target_counts": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 47744.71497710678,
+          "total_rekey_usec": 21447.4
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.76,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1310333285,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523909278719988,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/policy_fallback/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.76,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1310333285,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523909278719988,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "policy_fallback",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:31:49.303] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=2 deferral_reason=2",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:31:49.303] REKEY WORKER: batched 1024 files 24897.5\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24897.5,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_00/policy_fallback/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "c8b4fc7724919f7db50ff314ee5abd34af55c27a9351d800247ce814e7ba5018",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41128.627372226125,
+          "total_rekey_usec": 24897.5
+        }
+      ],
+      "overall_pass": true,
+      "path": "artifacts/validation/keyplane_rekey_methodology/rep_00",
+      "repetition": 0
+    },
+    {
+      "all_modes_acceptable": true,
+      "gpu_vs_cpu_speedup": 1.165729301560595,
+      "maintenance_visible_benefit": true,
+      "modes": [
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_01/cpu_only/admission_trace.jsonl",
+            "records": [],
+            "targets": {
+              "CPU": 0,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "cpu_only",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 0,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:31:54.927] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:31:54.927] REKEY WORKER: batched 1024 files 24665.2\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24665.2,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_01/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "99c08845e65de74c0637ad44147a9d908812b553d07e9de7afced2c063e8a22a",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41515.98203136402,
+          "total_rekey_usec": 24665.2
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_01/gpu_batch/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 100000000,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "GPU",
+                "cpu_load_avg": 1.02,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309919434,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.1,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523920420546203,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "files_requested": 1024,
+          "mode": "gpu_batch",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 100000000,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:00.441] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:00.441] REKEY WORKER: batched 1024 files 21158.6\u00b5s (target=GPU, run=GPU)",
+                "run": "GPU",
+                "target": "GPU",
+                "usec": 21158.6,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_01/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 0,
+              "GPU": 1
+            },
+            "sha256": "59d0a1c8402b3074dc1bf80057e659a767f628a133a759643d405a3f60e3c571",
+            "target_counts": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 48396.39673702419,
+          "total_rekey_usec": 21158.6
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.94,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309968854,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523926035671991,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_01/policy_fallback/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.94,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309968854,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523926035671991,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "policy_fallback",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:06.060] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=2 deferral_reason=2",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:06.060] REKEY WORKER: batched 1024 files 24711.7\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24711.7,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_01/policy_fallback/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "c3940e678c71fab26a69dbcd25b83e3c1e4b27e0e605b40d96b2d033a280d429",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41437.86141787089,
+          "total_rekey_usec": 24711.7
+        }
+      ],
+      "overall_pass": true,
+      "path": "artifacts/validation/keyplane_rekey_methodology/rep_01",
+      "repetition": 1
+    },
+    {
+      "all_modes_acceptable": true,
+      "gpu_vs_cpu_speedup": 1.2925060138225803,
+      "maintenance_visible_benefit": true,
+      "modes": [
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_02/cpu_only/admission_trace.jsonl",
+            "records": [],
+            "targets": {
+              "CPU": 0,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "cpu_only",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 0,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:11.711] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:11.711] REKEY WORKER: batched 1024 files 24554.9\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24554.9,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_02/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "b60486447ea04a66fd5b09305d231b55ace95abfc03fab6a59577900ef458de7",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41702.470789944164,
+          "total_rekey_usec": 24554.9
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_02/gpu_batch/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 100000000,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "GPU",
+                "cpu_load_avg": 0.87,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1312112408,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.1,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523937276507860,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "files_requested": 1024,
+          "mode": "gpu_batch",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 100000000,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:17.295] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:17.295] REKEY WORKER: batched 1024 files 18997.9\u00b5s (target=GPU, run=GPU)",
+                "run": "GPU",
+                "target": "GPU",
+                "usec": 18997.9,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_02/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 0,
+              "GPU": 1
+            },
+            "sha256": "970326fa372d6081bcc172b3b9c334f3bcacf9baac91f4f57ff1e80785ded4e2",
+            "target_counts": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 53900.69428726332,
+          "total_rekey_usec": 18997.9
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.74,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309609641,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523942983271526,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_02/policy_fallback/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.74,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309609641,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523942983271526,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "policy_fallback",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:23.007] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=2 deferral_reason=2",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:23.007] REKEY WORKER: batched 1024 files 24421.9\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24421.9,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_02/policy_fallback/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "17ac79bd4f20860de95365dbdf94e995e92eb03cd1b672a4e10bb62d37d8ffd2",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41929.57959863893,
+          "total_rekey_usec": 24421.9
+        }
+      ],
+      "overall_pass": true,
+      "path": "artifacts/validation/keyplane_rekey_methodology/rep_02",
+      "repetition": 2
+    },
+    {
+      "all_modes_acceptable": true,
+      "gpu_vs_cpu_speedup": 1.381345986184696,
+      "maintenance_visible_benefit": true,
+      "modes": [
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_03/cpu_only/admission_trace.jsonl",
+            "records": [],
+            "targets": {
+              "CPU": 0,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "cpu_only",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 0,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:28.694] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:28.694] REKEY WORKER: batched 1024 files 24716.7\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24716.7,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_03/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "213d01f5715487383a8064039a5c49514caedc53d04c8f6b6d2bd5e9e5bd8ef6",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41429.478854377805,
+          "total_rekey_usec": 24716.7
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_03/gpu_batch/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 100000000,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "GPU",
+                "cpu_load_avg": 0.7,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1312525518,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.1,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523954291399997,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "files_requested": 1024,
+          "mode": "gpu_batch",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 100000000,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:34.309] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:34.309] REKEY WORKER: batched 1024 files 17893.2\u00b5s (target=GPU, run=GPU)",
+                "run": "GPU",
+                "target": "GPU",
+                "usec": 17893.2,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_03/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 0,
+              "GPU": 1
+            },
+            "sha256": "daf74f13af0b11b117980e9653d608e9eb32a7bdd496fa18b5be67ac83d17f9c",
+            "target_counts": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 57228.444325218516,
+          "total_rekey_usec": 17893.2
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.72,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309331332,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523959928126438,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_03/policy_fallback/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.72,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309331332,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523959928126438,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "policy_fallback",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:39.952] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=2 deferral_reason=2",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:39.952] REKEY WORKER: batched 1024 files 24572.0\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24572.0,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_03/policy_fallback/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "3cfebe6693fc9bf71cf2e1e59d26ecd72320b3e73b17c6aefe74a9f028463fea",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41673.449454663845,
+          "total_rekey_usec": 24572.0
+        }
+      ],
+      "overall_pass": true,
+      "path": "artifacts/validation/keyplane_rekey_methodology/rep_03",
+      "repetition": 3
+    },
+    {
+      "all_modes_acceptable": true,
+      "gpu_vs_cpu_speedup": 1.1855064353665359,
+      "maintenance_visible_benefit": true,
+      "modes": [
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_04/cpu_only/admission_trace.jsonl",
+            "records": [],
+            "targets": {
+              "CPU": 0,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "cpu_only",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 0,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:45.545] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:45.545] REKEY WORKER: batched 1024 files 24574.6\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24574.6,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_04/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "bc3be8bf9c86544b3b4594a991a0312643331b4387bbe6e43f32101afef69773",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41669.04039129834,
+          "total_rekey_usec": 24574.6
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_04/gpu_batch/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 100000000,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "GPU",
+                "cpu_load_avg": 0.83,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1310405138,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.1,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523971157056136,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "files_requested": 1024,
+          "mode": "gpu_batch",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 100000000,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:51.177] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:51.177] REKEY WORKER: batched 1024 files 20729.2\u00b5s (target=GPU, run=GPU)",
+                "run": "GPU",
+                "target": "GPU",
+                "usec": 20729.2,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_04/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 0,
+              "GPU": 1
+            },
+            "sha256": "6ade8f42adf0c7e96fa294ab0d7d0dddb7203d16c31dbac78bf6597e8c3594cc",
+            "target_counts": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 49398.9155394323,
+          "total_rekey_usec": 20729.2
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.76,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1311498388,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523976789092111,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_04/policy_fallback/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.76,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1311498388,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523976789092111,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "policy_fallback",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:32:56.813] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=2 deferral_reason=2",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:32:56.813] REKEY WORKER: batched 1024 files 24531.8\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24531.8,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/rep_04/policy_fallback/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "46a6d09f84f4586be5534804f9bdf1c7076faac159e368641c4e51392cd8cb11",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41741.739293488456,
+          "total_rekey_usec": 24531.8
+        }
+      ],
+      "overall_pass": true,
+      "path": "artifacts/validation/keyplane_rekey_methodology/rep_04",
+      "repetition": 4
+    }
+  ],
+  "repetitions_measured": 5,
+  "wait_s": 3.0,
+  "warmup_runs": 1,
+  "warmups": [
+    {
+      "all_modes_acceptable": true,
+      "gpu_vs_cpu_speedup": 1.1660010044722933,
+      "maintenance_visible_benefit": true,
+      "modes": [
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/warmup_00/cpu_only/admission_trace.jsonl",
+            "records": [],
+            "targets": {
+              "CPU": 0,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "cpu_only",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 0,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:31:21.300] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=0 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:31:21.300] REKEY WORKER: batched 1024 files 24377.0\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24377.0,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/warmup_00/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "83a7364d3393b748e53d98e7bd89ee37abb2b8e7fda8bec94c503442afacd146",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 42006.809697665834,
+          "total_rekey_usec": 24377.0
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [],
+            "path": "artifacts/validation/keyplane_rekey_methodology/warmup_00/gpu_batch/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 100000000,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "GPU",
+                "cpu_load_avg": 0.44,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1309080483,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.1,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523886836545785,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "files_requested": 1024,
+          "mode": "gpu_batch",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 100000000,
+                "decision_reason": 4,
+                "deferral_reason": 0,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:31:26.857] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=100000000 decision_reason=4 deferral_reason=0",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:31:26.857] REKEY WORKER: batched 1024 files 20906.5\u00b5s (target=GPU, run=GPU)",
+                "run": "GPU",
+                "target": "GPU",
+                "usec": 20906.5,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/warmup_00/gpu_batch/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 0,
+              "GPU": 1
+            },
+            "sha256": "9af8cb849d97bff599e60a9b140a67915750bd5cd5b483bce67b4152dbd95873",
+            "target_counts": {
+              "CPU": 0,
+              "GPU": 1
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 48979.98230215483,
+          "total_rekey_usec": 20906.5
+        },
+        {
+          "acceptable": true,
+          "admission": {
+            "ai_qos_exhausted_records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.48,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1312286878,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523892427242368,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "path": "artifacts/validation/keyplane_rekey_methodology/warmup_00/policy_fallback/admission_trace.jsonl",
+            "records": [
+              {
+                "age_clock": "CLOCK_MONOTONIC",
+                "ai_inference_deadline_ns": 5000000000,
+                "ai_qos_budget_remaining_ns": 0,
+                "batch_age_ns": 1000000000,
+                "batch_count": 1024,
+                "bytes_total": 1146880,
+                "chosen_target": "CPU",
+                "cpu_load_avg": 0.48,
+                "cpu_queue_depth": 1024,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "gpu_d2h_staging_ns": 32768,
+                "gpu_h2d_staging_ns": 1146880,
+                "gpu_kernel_est_ns": 250000,
+                "gpu_load_avg": 0.0,
+                "gpu_queue_depth": 0,
+                "producer_slack_age_ns": 1312286878,
+                "producer_slack_stale": false,
+                "producer_slack_stale_after_ns": 10000000000,
+                "queue_delay_ns": 1024000,
+                "service_time_ns": 1429648,
+                "telemetry_mem_bandwidth_util": 0.9,
+                "telemetry_tensor_core_util": 0.1,
+                "timestamp_ns": 1782523892427242368,
+                "trace_timestamp_clock": "CLOCK_REALTIME",
+                "uma_migration_bytes_est": 0,
+                "uma_migration_cost_ns": 0
+              }
+            ],
+            "targets": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "files_requested": 1024,
+          "mode": "policy_fallback",
+          "rekey": {
+            "event_count": 1,
+            "events": [
+              {
+                "budget_ns": 0,
+                "decision_reason": 2,
+                "deferral_reason": 2,
+                "detail_line": "[PQC-FUSE 2026-06-27 10:31:32.451] REKEY WORKER DETAIL: work_bytes=1146880 budget_ns=0 decision_reason=2 deferral_reason=2",
+                "files": 1024,
+                "line": "[PQC-FUSE 2026-06-27 10:31:32.451] REKEY WORKER: batched 1024 files 24445.5\u00b5s (target=CPU, run=CPU)",
+                "run": "CPU",
+                "target": "CPU",
+                "usec": 24445.5,
+                "work_bytes": 1146880
+              }
+            ],
+            "files_refreshed": 1024,
+            "path": "artifacts/validation/keyplane_rekey_methodology/warmup_00/policy_fallback/mount_logs/pqc_fuse.stderr.txt",
+            "run_counts": {
+              "CPU": 1,
+              "GPU": 0
+            },
+            "sha256": "2b434f3f5772370fb9ff6cec11757d173f9e64ec92726486fec4ca31ef3bafa2",
+            "target_counts": {
+              "CPU": 1,
+              "GPU": 0
+            }
+          },
+          "scope": "Mounted open-file envelope refresh; not deployed key lifecycle, persistent KEM hierarchy, or foreground QoS recovery.",
+          "throughput_files_per_s": 41889.100243398585,
+          "total_rekey_usec": 24445.5
+        }
+      ],
+      "overall_pass": true,
+      "path": "artifacts/validation/keyplane_rekey_methodology/warmup_00",
+      "repetition": 0
+    }
+  ]
+}

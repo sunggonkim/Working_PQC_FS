@@ -1,0 +1,15 @@
+{
+  "command": [
+    "./build/pqc_fuse",
+    "--self-test"
+  ],
+  "returncode": 0,
+  "generation_replay_self_test_pass": true,
+  "checkpoint_self_test_pass": true,
+  "anchor_self_test_pass": true,
+  "storage_self_test_pass": true,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "161fce1f8998291ff401a706a6637b8ba765514d589d929be3328b257a0c15bc",
+  "stdout_path": "artifacts/validation/generation_replay/pqc_fuse_self_test.stdout",
+  "stderr_path": "artifacts/validation/generation_replay/pqc_fuse_self_test.stderr"
+}

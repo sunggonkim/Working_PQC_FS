@@ -1,0 +1,16 @@
+# pqc_admission_init: gpu_min_batch=4096 bytes, ai_qos_min_budget=1730000 ns, deadline_margin=100000 ns, producer_slack_stale=250000000 ns, queue_threshold=0.80
+# AI_BUDGET_UPDATE: old=10000000 ns, new=4165041 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=4165041 ns, new=4169497 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=4169497 ns, new=4140261 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=4140261 ns, new=3582989 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=3582989 ns, new=3689459 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=3689459 ns, new=3843963 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=3843963 ns, new=4429780 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=4429780 ns, new=3611785 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=3611785 ns, new=3536817 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=3536817 ns, new=3383250 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=3383250 ns, new=2407113 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=2407113 ns, new=2261408 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=2261408 ns, new=2680074 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=2680074 ns, new=1824874 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=1824874 ns, new=1899394 ns, queue_depth=0

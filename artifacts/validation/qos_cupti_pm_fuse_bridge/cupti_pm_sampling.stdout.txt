@@ -1,0 +1,506 @@
+Num of Passes: 1
+CUDA Device Number: 0
+Compute Capability of Device: 11.0
+Total num of Samples: 1741
+Printing first 50 samples:
+Sample Index: 0
+Timestamps -> Start: [1776746982054425305] 	End: [1782475462483622657]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                3651892.200
+sm__inst_executed_realtime.avg.per_cycle_active                            0.205
+gpu__time_duration.sum                                      5728865412276256.000
+gr__cycles_elapsed.max                                             476885949.000
+gr__cycles_active.avg                                                4071987.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 1
+Timestamps -> Start: [1782475462483622657] 	End: [1782475462484257601]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999865.450
+sm__inst_executed_realtime.avg.per_cycle_active                            0.361
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 2
+Timestamps -> Start: [1782475462484257601] 	End: [1782475462484892481]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999860.800
+sm__inst_executed_realtime.avg.per_cycle_active                            0.353
+gpu__time_duration.sum                                                634880.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 3
+Timestamps -> Start: [1782475462484892481] 	End: [1782475462485527425]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 993988.000
+sm__inst_executed_realtime.avg.per_cycle_active                            0.356
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 997605.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 4
+Timestamps -> Start: [1782475462485527425] 	End: [1782475462486162337]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999811.100
+sm__inst_executed_realtime.avg.per_cycle_active                            0.384
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 5
+Timestamps -> Start: [1782475462486162337] 	End: [1782475462486797249]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999869.300
+sm__inst_executed_realtime.avg.per_cycle_active                            0.361
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 6
+Timestamps -> Start: [1782475462486797249] 	End: [1782475462487432193]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 991313.850
+sm__inst_executed_realtime.avg.per_cycle_active                            0.356
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 996994.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 7
+Timestamps -> Start: [1782475462487432193] 	End: [1782475462488067105]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999813.150
+sm__inst_executed_realtime.avg.per_cycle_active                            0.376
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 8
+Timestamps -> Start: [1782475462488067105] 	End: [1782475462488702049]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999863.950
+sm__inst_executed_realtime.avg.per_cycle_active                            0.366
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 9
+Timestamps -> Start: [1782475462488702049] 	End: [1782475462489336929]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 988769.150
+sm__inst_executed_realtime.avg.per_cycle_active                            0.371
+gpu__time_duration.sum                                                634880.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 997644.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 10
+Timestamps -> Start: [1782475462489336929] 	End: [1782475462489971873]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999854.300
+sm__inst_executed_realtime.avg.per_cycle_active                            0.396
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 11
+Timestamps -> Start: [1782475462489971873] 	End: [1782475462490606785]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999870.650
+sm__inst_executed_realtime.avg.per_cycle_active                            0.360
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 12
+Timestamps -> Start: [1782475462490606785] 	End: [1782475462491241697]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 992069.150
+sm__inst_executed_realtime.avg.per_cycle_active                            0.357
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 998400.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 13
+Timestamps -> Start: [1782475462491241697] 	End: [1782475462491876641]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999819.900
+sm__inst_executed_realtime.avg.per_cycle_active                            0.366
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 14
+Timestamps -> Start: [1782475462491876641] 	End: [1782475462492511553]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999852.200
+sm__inst_executed_realtime.avg.per_cycle_active                            0.350
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 15
+Timestamps -> Start: [1782475462492511553] 	End: [1782475462493146497]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 994844.900
+sm__inst_executed_realtime.avg.per_cycle_active                            0.362
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 999234.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 16
+Timestamps -> Start: [1782475462493146497] 	End: [1782475462493781377]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999813.650
+sm__inst_executed_realtime.avg.per_cycle_active                            0.382
+gpu__time_duration.sum                                                634880.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 17
+Timestamps -> Start: [1782475462493781377] 	End: [1782475462494416321]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 993255.700
+sm__inst_executed_realtime.avg.per_cycle_active                            0.383
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 996792.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 18
+Timestamps -> Start: [1782475462494416321] 	End: [1782475462495051233]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999839.350
+sm__inst_executed_realtime.avg.per_cycle_active                            0.365
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 19
+Timestamps -> Start: [1782475462495051233] 	End: [1782475462495686145]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999846.350
+sm__inst_executed_realtime.avg.per_cycle_active                            0.361
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 20
+Timestamps -> Start: [1782475462495686145] 	End: [1782475462496321089]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 991118.550
+sm__inst_executed_realtime.avg.per_cycle_active                            0.365
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 997024.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 21
+Timestamps -> Start: [1782475462496321089] 	End: [1782475462496956001]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999799.650
+sm__inst_executed_realtime.avg.per_cycle_active                            0.361
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 22
+Timestamps -> Start: [1782475462496956001] 	End: [1782475462497590945]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999866.700
+sm__inst_executed_realtime.avg.per_cycle_active                            0.352
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 23
+Timestamps -> Start: [1782475462497590945] 	End: [1782475462498225857]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 991957.700
+sm__inst_executed_realtime.avg.per_cycle_active                            0.360
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 997895.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 24
+Timestamps -> Start: [1782475462498225857] 	End: [1782475462498860769]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999837.600
+sm__inst_executed_realtime.avg.per_cycle_active                            0.357
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 25
+Timestamps -> Start: [1782475462498860769] 	End: [1782475462499495713]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999832.700
+sm__inst_executed_realtime.avg.per_cycle_active                            0.360
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 26
+Timestamps -> Start: [1782475462499495713] 	End: [1782475462500130625]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 993362.150
+sm__inst_executed_realtime.avg.per_cycle_active                            0.359
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 997927.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 27
+Timestamps -> Start: [1782475462500130625] 	End: [1782475462500765537]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999822.600
+sm__inst_executed_realtime.avg.per_cycle_active                            0.360
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 28
+Timestamps -> Start: [1782475462500765537] 	End: [1782475462501400449]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999844.950
+sm__inst_executed_realtime.avg.per_cycle_active                            0.363
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 29
+Timestamps -> Start: [1782475462501400449] 	End: [1782475462502035393]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 992822.650
+sm__inst_executed_realtime.avg.per_cycle_active                            0.358
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 996874.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 30
+Timestamps -> Start: [1782475462502035393] 	End: [1782475462502670305]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999840.300
+sm__inst_executed_realtime.avg.per_cycle_active                            0.357
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 31
+Timestamps -> Start: [1782475462502670305] 	End: [1782475462503305217]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999817.050
+sm__inst_executed_realtime.avg.per_cycle_active                            0.366
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 32
+Timestamps -> Start: [1782475462503305217] 	End: [1782475462503940129]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 991076.900
+sm__inst_executed_realtime.avg.per_cycle_active                            0.365
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 996953.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 33
+Timestamps -> Start: [1782475462503940129] 	End: [1782475462504575041]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999817.300
+sm__inst_executed_realtime.avg.per_cycle_active                            0.368
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 34
+Timestamps -> Start: [1782475462504575041] 	End: [1782475462505209985]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999843.550
+sm__inst_executed_realtime.avg.per_cycle_active                            0.354
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 35
+Timestamps -> Start: [1782475462505209985] 	End: [1782475462505844897]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 985794.750
+sm__inst_executed_realtime.avg.per_cycle_active                            0.375
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 997878.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 36
+Timestamps -> Start: [1782475462505844897] 	End: [1782475462506479841]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999850.150
+sm__inst_executed_realtime.avg.per_cycle_active                            0.367
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 37
+Timestamps -> Start: [1782475462506479841] 	End: [1782475462507114721]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999859.350
+sm__inst_executed_realtime.avg.per_cycle_active                            0.361
+gpu__time_duration.sum                                                634880.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 38
+Timestamps -> Start: [1782475462507114721] 	End: [1782475462507749665]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 990756.400
+sm__inst_executed_realtime.avg.per_cycle_active                            0.364
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 997989.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 39
+Timestamps -> Start: [1782475462507749665] 	End: [1782475462508384609]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999820.050
+sm__inst_executed_realtime.avg.per_cycle_active                            0.373
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 40
+Timestamps -> Start: [1782475462508384609] 	End: [1782475462509019521]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999848.950
+sm__inst_executed_realtime.avg.per_cycle_active                            0.353
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 41
+Timestamps -> Start: [1782475462509019521] 	End: [1782475462509654433]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 977677.100
+sm__inst_executed_realtime.avg.per_cycle_active                            0.386
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 998925.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 42
+Timestamps -> Start: [1782475462509654433] 	End: [1782475462510289345]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999862.100
+sm__inst_executed_realtime.avg.per_cycle_active                            0.386
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 43
+Timestamps -> Start: [1782475462510289345] 	End: [1782475462510924289]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 994458.150
+sm__inst_executed_realtime.avg.per_cycle_active                            0.369
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 998666.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 44
+Timestamps -> Start: [1782475462510924289] 	End: [1782475462511559201]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999832.950
+sm__inst_executed_realtime.avg.per_cycle_active                            0.361
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 45
+Timestamps -> Start: [1782475462511559201] 	End: [1782475462512194113]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999835.400
+sm__inst_executed_realtime.avg.per_cycle_active                            0.366
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 46
+Timestamps -> Start: [1782475462512194113] 	End: [1782475462512829057]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 994314.150
+sm__inst_executed_realtime.avg.per_cycle_active                            0.355
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 998746.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 47
+Timestamps -> Start: [1782475462512829057] 	End: [1782475462513463937]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999886.350
+sm__inst_executed_realtime.avg.per_cycle_active                            0.361
+gpu__time_duration.sum                                                634880.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 48
+Timestamps -> Start: [1782475462513463937] 	End: [1782475462514098881]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 999781.050
+sm__inst_executed_realtime.avg.per_cycle_active                            0.374
+gpu__time_duration.sum                                                634944.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                1000001.000
+-----------------------------------------------------------------------------------
+
+Sample Index: 49
+Timestamps -> Start: [1782475462514098881] 	End: [1782475462514733793]
+-----------------------------------------------------------------------------------
+sm__cycles_active.avg                                                 994847.750
+sm__inst_executed_realtime.avg.per_cycle_active                            0.379
+gpu__time_duration.sum                                                634912.000
+gr__cycles_elapsed.max                                               1000001.000
+gr__cycles_active.avg                                                 998656.000
+-----------------------------------------------------------------------------------
+
+Result verification passed.

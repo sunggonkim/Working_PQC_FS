@@ -1,0 +1,36 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE] WARNING: Cannot open log file '/tmp/combined_dur_store_mnio8577/../pqc_fuse_latency.log': Permission denied
+[PQC-FUSE 2026-06-26 21:11:34.767] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-26 21:11:34.767]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-26 21:11:34.767]   Storage dir : /tmp/combined_dur_store_mnio8577
+[PQC-FUSE 2026-06-26 21:11:34.767]   Mount point : /tmp/combined_dur_mnt_1v7uoyrz
+[PQC-FUSE 2026-06-26 21:11:34.767] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-26 21:11:34.767] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-26 21:11:34.767]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-26 21:11:34.767]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-26 21:11:34.767]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-26 21:11:34.767]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-26 21:11:34.769] Keypair generated in 1421.03 µs
+[PQC-FUSE 2026-06-26 21:11:34.938] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-26 21:11:34.939] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-26 21:11:34.939] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-26 21:11:34.945] Freshness anchor worker started
+[PQC-FUSE 2026-06-26 21:11:35.052] PQC background rekey worker started
+[PQC-FUSE 2026-06-26 21:11:35.052] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-26 21:11:35.137] CREATE /durability.sqlite: authenticated file-key envelope initialized (fid=9030927488359721087)
+[PQC-FUSE 2026-06-26 21:11:35.138] CREATE /durability.sqlite-journal: authenticated file-key envelope initialized (fid=8647934054580535093)
+[PQC-FUSE 2026-06-26 21:11:35.630] OPEN /durability.sqlite: restored authenticated file-key envelope (fid=9030927488359721087)
+[PQC-FUSE 2026-06-26 21:11:35.631] CREATE /durability.sqlite-journal: authenticated file-key envelope initialized (fid=10812806474391864172)
+[PQC-FUSE 2026-06-26 21:11:35.844] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-26 21:11:35.862] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-26 21:11:35.863] Scheduler stats: submitted=12 cpu=12 gpu=0 bytes_cpu=0 bytes_gpu=62024 migration_ns=3969536
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0
+[PQC-FUSE 2026-06-26 21:11:35.863] Scheduler stats: submitted=12 cpu=12 gpu=0 bytes_cpu=0 bytes_gpu=62024 migration_ns=3969536
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0

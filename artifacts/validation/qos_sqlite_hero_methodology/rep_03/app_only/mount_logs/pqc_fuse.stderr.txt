@@ -1,0 +1,31 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-27 10:43:41.602] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-27 10:43:41.602]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-27 10:43:41.602]   Storage dir : /tmp/aegis_qos_app_only_7cre6yp4/store
+[PQC-FUSE 2026-06-27 10:43:41.602]   Mount point : /tmp/aegis_qos_app_only_7cre6yp4/mnt
+[PQC-FUSE 2026-06-27 10:43:41.602] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/runtime_fuse_admission_trace.jsonl
+[PQC-FUSE 2026-06-27 10:43:41.602] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-27 10:43:41.602]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-27 10:43:41.602]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-27 10:43:41.602]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-27 10:43:41.602]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-27 10:43:41.605] Keypair generated in 1408.80 µs
+[PQC-FUSE 2026-06-27 10:43:41.775] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-27 10:43:41.775] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-27 10:43:41.775] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-27 10:43:41.775] Admission telemetry file monitor started: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/runtime_telemetry.txt
+[PQC-FUSE 2026-06-27 10:43:41.776] Freshness anchor worker started
+[PQC-FUSE 2026-06-27 10:43:41.893] PQC background rekey worker started
+[PQC-FUSE 2026-06-27 10:43:41.893] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-27 10:43:41.913] CREATE /foreground.db: authenticated file-key envelope initialized (fid=4684773115321636241)
+[PQC-FUSE 2026-06-27 10:43:41.943] SETXATTR /foreground.db qos_class=latency
+[PQC-FUSE 2026-06-27 10:43:41.943] OPEN /foreground.db: restored authenticated file-key envelope (fid=4684773115321636241)
+[PQC-FUSE 2026-06-27 10:43:41.944] CREATE /foreground.db-journal: authenticated file-key envelope initialized (fid=17080488451874840875)
+[PQC-FUSE 2026-06-27 10:43:42.523] Shutting down PQC-FUSE filesystem...

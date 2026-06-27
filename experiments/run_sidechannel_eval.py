@@ -31,8 +31,8 @@ def run_sidechannel_eval():
         "random_payload": random_times.tolist()
     }
     
-    os.makedirs("artifacts/sidechannel", exist_ok=True)
-    with open("artifacts/sidechannel/timing.json", "w") as f:
+    os.makedirs("artifacts/probes/sidechannel", exist_ok=True)
+    with open("artifacts/probes/sidechannel/timing.json", "w") as f:
         json.dump(results, f)
         
     # Plotting

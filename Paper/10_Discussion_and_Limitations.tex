@@ -4,21 +4,27 @@
 \subsection{Interpretation of the placement result}
 \label{sec:disc_tradeoff}
 
-The useful result is asymmetry, not an aggregate ``GPU speedup.''  On the measured Thor system, the CPU has a substantial advantage for the implemented AES-GCM data path because it avoids managed-buffer staging and synchronization.  The GPU has a substantial advantage for a batch of independent ML-KEM key generations.  A practical system should therefore expose a narrow elastic lane for workloads that actually have this shape, not move all storage encryption to the GPU.  The current scheduler is only a deterministic policy mechanism; it does not justify an AI-QoS claim in this revision.
+The useful result is asymmetry, not an aggregate ``GPU speedup.''  On Thor, CPU/OpenSSL fits the AES-GCM data path, while the GPU helps independent ML-KEM batches and measured envelope refresh.  AEGIS-Q therefore exposes an elastic maintenance lane; current telemetry can throttle mounted FUSE writes but still does not justify foreground AI-QoS recovery.
 
 \subsection{Security limits}
 \label{sec:disc_energy}
 
-The per-file envelope is authenticated and the block records are AEAD-protected, but the mount password is still the root credential in this prototype.  The implementation has no hardware-backed credential release, no audited key rotation protocol, no protection against a privileged runtime attacker, and no side-channel evaluation.  File-backed anchors are replayable by design.  The TPM mode is disabled unless an administrator pre-provisions a suitable index, and its policy has not been evaluated.  These are not minor implementation details; each changes the security claim.
+The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation.  File anchors are replayable.  TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release under provisioned TPM policy.
 
 \subsection{Evaluation limits and roadmap}
 \label{sec:disc_roadmap}
 
-The three-run primitive measurements cannot establish steady-state filesystem throughput, tail latency, energy efficiency, or portability.  The repository already retains matched fscrypt and dm-crypt sequential-write baselines, but a broader baseline matrix still needs to be extended if the paper wants to argue more than the current prototype path.  A credible next evaluation still needs: (i) fs-verity or other additional baselines if those claims are added; (ii) an end-to-end workload with exact I/O mode, cache state, CPU/GPU clocks, and confidence intervals; (iii) a TensorRT or LLM telemetry path wired into the actual scheduler; (iv) power-fail injection with a provisioned TPM policy; (v) at least one non-NVIDIA UMA platform; and (vi) physical or microarchitectural side-channel testing if such a security claim is desired.
+The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, and AEGIS-Q rows, but it is not yet a complete fscrypt, dm-crypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison.  Historical fscrypt and dm-crypt fio outputs are retained only for traceability, not current comparison evidence, because they do not sweep the same request sizes, cache states, queue depths, sync modes, and application workloads.
 
-The repository also retains a derived freshness-window tradeoff artifact under \texttt{artifacts/m4\_freshness/}.  It models the throughput/data-loss/recovery-time tension as the window parameter changes, but it is not a substitute for a hardware-backed PCR freshness proof or a recovery protocol evaluation.
+The POSIX envelope is also narrow: ordinary read/write/\texttt{fsync} and narrow disjoint writers are evaluated, while shared \texttt{mmap}, rename, directory \texttt{fsync}, and arbitrary conflicting writes are not deployment claims.
+
+The crash story has the same boundary.  The repository retains a conservative crash-audit map, a daemon \texttt{SIGKILL} cutpoint matrix, a SQLite selected-boundary oracle campaign, SQLite/\texttt{dbm.dumb} same-store TPM replay-after-advance runs, and SQLite syscall-exact app-crash timing, but it still lacks physical power-loss, kernel-crash, drive-cache, and evidence across broader workloads.  Stronger claims still need kernel-encryption baseline rows, exact I/O/cache/clock controls, foreground p99 telemetry control, power-fail injection with a provisioned TPM policy, a non-NVIDIA UMA platform for CUDA-independent deployment, and side-channel testing if claimed.
+
+\subsection{Deployment takeaway}
+
+The evaluated deployment envelope is a local edge service whose foreground SQLite database shares mounted secure storage with elastic background writes.  This case study is the same \texttt{sqlite-mounted-qos-recovery-2026-06-27} contract used by Figure~\ref{fig:first_page_qos} and Table~\ref{tab:qos_sqlite_recovery}, not a separate anecdotal demo.  The useful property is policy separation plus TPM replay-after-advance fail-closed behavior; it does not extend to kernel-encryption replacement, TensorRT p99 recovery, unmanaged power loss, or CUDA-independent deployment.
 
 \subsection{CUDA-specific boundary}
 \label{sec:disc_portability}
 
-The implementation currently depends on CUDA managed memory and cuPQC.  It uses \texttt{cudaMemPrefetchAsync} and stream synchronization as locality/ordering operations within the executor, not as storage-DMA registration or permissions.  Porting the policy to another API requires a separate proof of that API's allocation, synchronization, and device-I/O semantics.  This is particularly important on integrated systems, where ``unified memory'' describes several different hardware and driver designs.
+The implementation depends on CUDA managed memory and cuPQC.  It uses \texttt{cudaMemPrefetchAsync} and stream synchronization as executor-local locality and ordering operations, not storage-DMA registration or permissions.  Porting the policy requires a separate proof of the target API's allocation, synchronization, and device-I/O semantics.

@@ -31,8 +31,8 @@ def run_telemetry_ablation():
         "throughput_membw_MBs": throughput_membw
     }
     
-    os.makedirs("artifacts/m3_qos", exist_ok=True)
-    with open("artifacts/m3_qos/telemetry_ablation.json", "w") as f:
+    os.makedirs("artifacts/results/qos/m3_qos", exist_ok=True)
+    with open("artifacts/results/qos/m3_qos/telemetry_ablation.json", "w") as f:
         json.dump(results, f, indent=4)
         
     # Plotting

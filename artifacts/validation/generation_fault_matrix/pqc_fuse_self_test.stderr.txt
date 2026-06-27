@@ -1,0 +1,5 @@
+PQC-FUSE scheduler self-test: PASS
+PQC-FUSE generation replay self-test: PASS
+PQC-FUSE checkpoint self-test: PASS
+PQC-FUSE anchor self-test: PASS
+PQC-FUSE storage self-test: PASS

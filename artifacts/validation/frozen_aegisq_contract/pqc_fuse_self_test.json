@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse",
+    "--self-test"
+  ],
+  "available": true,
+  "returncode": 0,
+  "stderr": "PQC-FUSE scheduler self-test: PASS\nPQC-FUSE generation replay self-test: PASS\nPQC-FUSE checkpoint self-test: PASS\nPQC-FUSE anchor self-test: PASS\nPQC-FUSE storage self-test: PASS",
+  "stdout": ""
+}

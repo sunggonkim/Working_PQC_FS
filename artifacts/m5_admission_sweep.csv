@@ -1,5 +1,0 @@
-budget_ns,gpu_jobs,cpu_jobs,pressure_target,pressure_gpu_wait_ns
-500000,2,1,CPU,25001
-1000000,2,1,CPU,25001
-2000000,2,1,CPU,25001
-5000000,1,2,CPU,25001

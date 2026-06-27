@@ -1,0 +1,983 @@
+{
+  "note": "Daemon SIGKILL and power-loss-equivalent recovery matrix for AEGIS-Q durability claims.",
+  "scope": [
+    "Daemon rows use final build/pqc_fuse with PQC_FAULT_CUTPOINT hooks.",
+    "Application rows are retained SQLite/dbm artifacts with external state or digest oracles.",
+    "Daemon rows use one logical block; multi-block application atomicity is covered only by application journal rows.",
+    "The matrix does not certify physical power loss, kernel crash, drive write-cache behavior, or arbitrary workloads."
+  ],
+  "allowed_verdicts": [
+    "fail_closed",
+    "latest_committed",
+    "previous_committed",
+    "silent_corruption",
+    "unexpected_liveness_failure"
+  ],
+  "acceptable_verdicts": [
+    "fail_closed",
+    "latest_committed",
+    "previous_committed"
+  ],
+  "daemon_rows": [
+    {
+      "case": "data_write",
+      "required_cut_point": "data write",
+      "hook": "data_write_after_pwrite",
+      "operation": "write_latest",
+      "verdict": "previous_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches previous committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/data_write/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "data_write_after_pwrite",
+          "pid": 3445087,
+          "unix_time": 1782551797
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/data_write/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/data_write/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/data_write/fault_write.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/data_write/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 107, \"message\": \"[Errno 107] Transport endpoint is not connected\"}\nTraceback (most recent call last):\n  File \"<string>\", line 16, in <module>\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 12, in <module>\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_data_write_mnt_djbaatuj"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/data_write/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/data_write/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/data_write/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "previous_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches previous committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/data_write/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/data_write/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "journal_append",
+      "required_cut_point": "journal append",
+      "hook": "journal_append_after",
+      "operation": "write_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/journal_append/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "journal_append_after",
+          "pid": 3445149,
+          "unix_time": 1782551799
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_append/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_append/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_append/fault_write.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_append/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 107, \"message\": \"[Errno 107] Transport endpoint is not connected\"}\nTraceback (most recent call last):\n  File \"<string>\", line 16, in <module>\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 12, in <module>\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_journal_append_mnt_v2dp8dfm"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_append/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_append/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/journal_append/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_append/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_append/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "journal_fsync",
+      "required_cut_point": "journal fsync barrier",
+      "hook": "journal_fsync_after",
+      "operation": "write_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "journal_fsync_after",
+          "pid": 3445211,
+          "unix_time": 1782551800
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/fault_write.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 107, \"message\": \"[Errno 107] Transport endpoint is not connected\"}\nTraceback (most recent call last):\n  File \"<string>\", line 16, in <module>\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 12, in <module>\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_journal_fsync_mnt_6cm6zd59"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/journal_fsync/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "xattr_checkpoint_update",
+      "required_cut_point": "xattr/checkpoint update",
+      "hook": "logical_size_xattr_after",
+      "operation": "write_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "logical_size_xattr_after",
+          "pid": 3445273,
+          "unix_time": 1782551802
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/fault_write.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 107, \"message\": \"[Errno 107] Transport endpoint is not connected\"}\nTraceback (most recent call last):\n  File \"<string>\", line 16, in <module>\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 12, in <module>\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_xattr_checkpoint_update_mnt_hwhmh8t4"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "checkpoint_write",
+      "required_cut_point": "checkpoint write",
+      "hook": "checkpoint_xattr_after",
+      "operation": "write_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "checkpoint_xattr_after",
+          "pid": 3445335,
+          "unix_time": 1782551803
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/fault_write.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 107, \"message\": \"[Errno 107] Transport endpoint is not connected\"}\nTraceback (most recent call last):\n  File \"<string>\", line 16, in <module>\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 12, in <module>\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_checkpoint_write_mnt_a4e12an3"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/faulted_storage_scan.json",
+        "entries": 5
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/checkpoint_write/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "anchor_update",
+      "required_cut_point": "anchor update",
+      "hook": "anchor_update_before",
+      "operation": "write_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/anchor_update/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "anchor_update_before",
+          "pid": 3445397,
+          "unix_time": 1782551805
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/anchor_update/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/anchor_update/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/anchor_update/fault_write.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/anchor_update/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 107, \"message\": \"[Errno 107] Transport endpoint is not connected\"}\nTraceback (most recent call last):\n  File \"<string>\", line 16, in <module>\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 12, in <module>\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_anchor_update_mnt_e2ndhf2s"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/anchor_update/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/anchor_update/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/anchor_update/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/anchor_update/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/anchor_update/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "fsync",
+      "required_cut_point": "fsync",
+      "hook": "fsync_before_return",
+      "operation": "write_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/fsync/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "fsync_before_return",
+          "pid": 3445459,
+          "unix_time": 1782551806
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/fsync/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/fsync/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/fsync/fault_write.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/fsync/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 107, \"message\": \"[Errno 107] Transport endpoint is not connected\"}\nTraceback (most recent call last):\n  File \"<string>\", line 16, in <module>\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 12, in <module>\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_fsync_mnt_m8jkzk6z"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/fsync/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/fsync/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/fsync/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/fsync/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/fsync/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "remount",
+      "required_cut_point": "remount",
+      "hook": "remount_after_checkpoint_load",
+      "operation": "read_precommitted_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/remount/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "remount_after_checkpoint_load",
+          "pid": 3445539,
+          "unix_time": 1782551808
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/remount/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/remount/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        },
+        {
+          "phase": "precommit_latest_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/remount/precommit_latest_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/remount/precommit_latest_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/remount/fault_read.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/remount/fault_read.stderr.txt",
+        "stderr_tail": "ll last):\n  File \"<string>\", line 10, in <module>\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nConnectionAbortedError: [Errno 103] Software caused connection abort: '/tmp/daemon_fault_remount_mnt_poyhgoff/probe.bin'"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_remount_mnt_poyhgoff"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/remount/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/remount/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/remount/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/remount/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/remount/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    },
+    {
+      "case": "application_read",
+      "required_cut_point": "application read",
+      "hook": "read_after_auth",
+      "operation": "read_precommitted_latest",
+      "verdict": "latest_committed",
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "fault_triggered": true,
+      "daemon_killed": true,
+      "daemon_returncode": -9,
+      "marker": "artifacts/validation/daemon_power_fault_campaign/application_read/fault_marker.jsonl",
+      "marker_entries": [
+        {
+          "event": "fault_cutpoint",
+          "name": "read_after_auth",
+          "pid": 3445619,
+          "unix_time": 1782551810
+        }
+      ],
+      "setup_steps": [
+        {
+          "phase": "baseline_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/application_read/baseline_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/application_read/baseline_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          }
+        },
+        {
+          "phase": "precommit_latest_write",
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/application_read/precommit_latest_write.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/application_read/precommit_latest_write.stderr.txt",
+          "stdout_json": {
+            "operation": "write_fsync",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      ],
+      "fault_client": {
+        "command": [
+          "python3",
+          "-c",
+          "<inline>"
+        ],
+        "returncode": 1,
+        "timeout": false,
+        "stdout": "artifacts/validation/daemon_power_fault_campaign/application_read/fault_read.stdout.txt",
+        "stderr": "artifacts/validation/daemon_power_fault_campaign/application_read/fault_read.stderr.txt",
+        "stderr_tail": "st recent call last):\n  File \"/usr/lib/python3.12/pathlib.py\", line 1022, in read_bytes\n    return f.read()\n           ^^^^^^^^\nConnectionAbortedError: [Errno 103] Software caused connection abort\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 10, in <module>\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\nOSError: [Errno 107] Transport endpoint is not connected"
+      },
+      "fault_stop": {
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/daemon_fault_application_read_mnt_340bylk5"
+            ],
+            "returncode": 0,
+            "stdout": "artifacts/validation/daemon_power_fault_campaign/application_read/fault_unmount_0.stdout.txt",
+            "stderr": "artifacts/validation/daemon_power_fault_campaign/application_read/fault_unmount_0.stderr.txt"
+          }
+        ],
+        "daemon_returncode": -9
+      },
+      "faulted_storage_scan": {
+        "path": "artifacts/validation/daemon_power_fault_campaign/application_read/faulted_storage_scan.json",
+        "entries": 4
+      },
+      "recovery": {
+        "verdict": "latest_committed",
+        "acceptable": true,
+        "detail": "recovery digest matches latest committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "<inline>"
+          ],
+          "returncode": 0,
+          "timeout": false,
+          "stdout": "artifacts/validation/daemon_power_fault_campaign/application_read/recovery_read.stdout.txt",
+          "stderr": "artifacts/validation/daemon_power_fault_campaign/application_read/recovery_read.stderr.txt",
+          "stdout_json": {
+            "operation": "read_all",
+            "bytes": 4096,
+            "sha256": "c551fa1226e07c678e7bac6b5e2d1085b01680bf266f104e3030e5d5c28934f9"
+          }
+        }
+      },
+      "scope": "final-binary daemon SIGKILL at named cutpoint; not physical power loss"
+    }
+  ],
+  "application_rows": [
+    {
+      "mode": "SQLite WAL/FULL",
+      "coverage": "application-level commit boundary",
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "trials": 20,
+      "verdict_counts": {
+        "previous_committed": 20
+      },
+      "verdict": "previous_committed",
+      "acceptable": true,
+      "detail": "deterministic SQLite WAL/FULL file-state fault campaign"
+    },
+    {
+      "mode": "SQLite rollback DELETE/EXTRA",
+      "coverage": "fdatasync SIGKILL application crash boundary",
+      "source": "artifacts/validation/sqlite_syscall_crash_tpm/sqlite_syscall_crash_tpm.json",
+      "trials": 3,
+      "verdict_counts": {
+        "previous_committed": 3
+      },
+      "verdict": "previous_committed",
+      "acceptable": true,
+      "detail": "SQLite writer killed by strace fdatasync SIGKILL on TPM-backed FUSE"
+    },
+    {
+      "mode": "dbm.dumb key-value",
+      "coverage": "non-SQLite append/key-value workload",
+      "source": "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json",
+      "trials": 1,
+      "verdict_counts": {
+        "fail_closed": 1
+      },
+      "verdict": "fail_closed",
+      "acceptable": true,
+      "detail": "stale dbm snapshot mounted but dbm read failed closed rc=1"
+    },
+    {
+      "mode": "SQLite DELETE/EXTRA TPM replay",
+      "coverage": "same-backing-store stale snapshot after hardware anchor advance",
+      "source": "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json",
+      "trials": 1,
+      "verdict_counts": {
+        "fail_closed": 1
+      },
+      "verdict": "fail_closed",
+      "acceptable": true,
+      "detail": "stale snapshot mounted but SQLite read failed closed rc=1"
+    }
+  ],
+  "coverage": {
+    "required_daemon_cutpoints": [
+      "anchor update",
+      "application read",
+      "checkpoint write",
+      "data write",
+      "fsync",
+      "journal append",
+      "remount",
+      "xattr/checkpoint update"
+    ],
+    "covered_daemon_cutpoints": [
+      "anchor update",
+      "application read",
+      "checkpoint write",
+      "data write",
+      "fsync",
+      "journal append",
+      "remount",
+      "xattr/checkpoint update"
+    ],
+    "missing_daemon_cutpoints": [],
+    "application_modes": {
+      "sqlite_wal_full": true,
+      "sqlite_rollback_or_persistent": true,
+      "non_sqlite_append_or_kv": true
+    },
+    "missing_application_modes": []
+  },
+  "overall_pass": true
+}

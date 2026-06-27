@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = ROOT / "artifacts" / "tensorrt_ci_report"
+DEFAULT_OUT = ROOT / "artifacts" / "reports" / "tensorrt_ci_report"
 
 
 def bootstrap_ci(samples: list[float], trials: int = 10000, alpha: float = 0.05, seed: int = 19) -> tuple[float, float]:
@@ -101,7 +101,7 @@ def main() -> int:
         })
 
     report = {
-        "source": "artifacts/motivation/tensorrt_interference.json",
+        "source": "artifacts/results/motivation/tensorrt_interference.json",
         "bootstrap": {
             "trials": 10000,
             "alpha": 0.05,

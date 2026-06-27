@@ -1,0 +1,299 @@
+{
+  "audit": "uma_dma_scope_audit",
+  "counter_report": {
+    "checks": [
+      {
+        "detail": "artifacts/validation/uma_counter_availability/uma_counter_availability.json",
+        "name": "counter_report_exists",
+        "passed": true
+      },
+      {
+        "detail": "Counter-availability audit only; not a migration-suppression proof.",
+        "name": "counter_report_is_not_suppression_proof",
+        "passed": true
+      },
+      {
+        "detail": [
+          "raw_probe",
+          "um_smoke",
+          "managed_storage_probe"
+        ],
+        "name": "nsys_runs_present",
+        "passed": true
+      },
+      {
+        "detail": [
+          {
+            "all_um_reports_empty_or_skipped": true,
+            "exists": true,
+            "matched_event_tables": [],
+            "name": "raw_probe",
+            "um_report_count": 3
+          },
+          {
+            "all_um_reports_empty_or_skipped": true,
+            "exists": true,
+            "matched_event_tables": [],
+            "name": "um_smoke",
+            "um_report_count": 3
+          },
+          {
+            "all_um_reports_empty_or_skipped": true,
+            "exists": true,
+            "matched_event_tables": [],
+            "name": "managed_storage_probe",
+            "um_report_count": 3
+          }
+        ],
+        "name": "um_reports_empty_or_skipped",
+        "passed": true
+      },
+      {
+        "detail": {
+          "available": true,
+          "command": [
+            "/usr/local/cuda-13.0/bin/ncu",
+            "--query-metrics"
+          ],
+          "matched_line_count": 0,
+          "matched_lines": [],
+          "returncode": 0,
+          "stderr": ""
+        },
+        "name": "ncu_query_has_no_uvm_migration_metric_matches",
+        "passed": true
+      }
+    ],
+    "counter_scope_pass": true,
+    "path": "artifacts/validation/uma_counter_availability/uma_counter_availability.json",
+    "sha256": "b9b592bed4e265a8c0081eab663faff1a2de1ccc4a9469a3178781d187b655f2"
+  },
+  "decision": "accept_critical_path_direct_nvme_to_uvm_dma_scoped_out",
+  "overall_pass": true,
+  "paper_scan": {
+    "high_risk_mentions": [
+      {
+        "context": "on CUDA managed memory and cuPQC. It uses \\texttt{cudaMemPrefetchAsync} and stream synchronization as locality/ordering operations within the executor, not as storage-DMA registration or permissions. Porting the policy to another API requires a separate proof of that API's allocation, synchronization, and device-I/O semantics.",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/10_Discussion_and_Limitations.tex",
+        "line": 24,
+        "match": "storage-DMA",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "ng short of a foreground p99 recovery claim. \\end{enumerate} The paper is intentionally conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability",
+        "explanation": "Direct NVMe-to-UVM DMA is intentionally excluded from the contribution.",
+        "file": "Paper/1_Introduction.tex",
+        "line": 39,
+        "match": "\\texttt{O\\_DIRECT} NVMe-to-UVM DMA",
+        "pattern": "direct_nvme_to_uvm_dma",
+        "scoped": true
+      },
+      {
+        "context": "& Independent ML-KEM batches obtain a large GPU throughput advantage.\\\\ Unified memory & Treat accessibility as DMA proof & Managed memory and prefetch are not storage-DMA registration or mutual exclusion.\\\\ Freshness & Store all witnesses in the backing directory & Whole-directory replay restores file-backed witnesses and remain",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/1_Introduction.tex",
+        "line": 19,
+        "match": "storage-DMA",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "-anchor path that can fail closed when replayed state no longer matches protected freshness state. This is a narrower and more defensible thesis than claiming GPUDirect-like storage, eBPF completion bypass, or physical side-channel resistance. It is also stronger than a microbenchmark-only story because it ties placement decisions",
+        "explanation": "GPUDirect vocabulary must not imply the FUSE path implements that API.",
+        "file": "Paper/1_Introduction.tex",
+        "line": 27,
+        "match": "GPUDirect-like",
+        "pattern": "gpudirect_storage",
+        "scoped": true
+      },
+      {
+        "context": "ite{jetson}. CUDA managed memory makes an allocation accessible to CPU and GPU code, and prefetch is a performance hint; neither API is a permission bit nor a storage-DMA registration protocol. The present implementation allocates managed buffers only inside the CUDA executor, prefetches them around a GPU operation, and synchro",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/2_Background.tex",
+        "line": 39,
+        "match": "storage-DMA",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "ing and checkpoint determine exposure. \\item \\textbf{No optimistic accelerator semantics.} CUDA managed memory and prefetch are local executor mechanisms until storage-DMA behavior is separately proven. \\item \\textbf{Fail-closed freshness.} A file-backed witness is an integrity check, not a freshness root; external anchors must b",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/2_Background.tex",
+        "line": 57,
+        "match": "storage-DMA",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "efetch complete.\\\\ \\texttt{posix\\_memalign} + \\texttt{cudaHostRegister} & Prototype-only & Host-memory pinning and executor-local access checks; not a verified storage-DMA path.\\\\ \\texttt{pread}/\\texttt{pwrite} sidecars & Verified & Backing ciphertext and journal use ordinary POSIX I/O.\\\\ eBPF tracepoint notification & Not claime",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/3_Design.tex",
+        "line": 120,
+        "match": "storage-DMA",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "nt, and queue depth & Broader mode-aligned filesystem comparison\\\\ Managed-memory smoke & Managed allocation and host/device prefetch calls complete & Verified storage-DMA or O\\_DIRECT-to-UVM semantics\\\\ eBPF Tracepoint Latency & Raw \\texttt{nvme\\_complete\\_rq} histogram artifact is retained & No final eBPF notification path is c",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/4_Evaluation.tex",
+        "line": 34,
+        "match": "storage-DMA",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "epth & Broader mode-aligned filesystem comparison\\\\ Managed-memory smoke & Managed allocation and host/device prefetch calls complete & Verified storage-DMA or O\\_DIRECT-to-UVM semantics\\\\ eBPF Tracepoint Latency & Raw \\texttt{nvme\\_complete\\_rq} histogram artifact is retained & No final eBPF notification path is claimed \\\\ Hardware Q",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/4_Evaluation.tex",
+        "line": 34,
+        "match": "O\\_DIRECT-to-UVM",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "esult. \\subsection{What this evaluation leaves open} \\label{sec:eval_stability} We do not provide a fair gocryptfs, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage baseline; physical side-channel measurement; or a second UMA architecture. The repository retains matched fscrypt and dm-crypt sequential-write fio runs, but",
+        "explanation": "GPUDirect vocabulary must not imply the FUSE path implements that API.",
+        "file": "Paper/4_Evaluation.tex",
+        "line": 117,
+        "match": "GPUDirect Storage",
+        "pattern": "gpudirect_storage",
+        "scoped": true
+      },
+      {
+        "context": "ped. The retained host-pinning and managed-storage probes show same-buffer CPU/GPU checksum agreement plus CUDA pointer diagnostics, but they do not prove UVM migration suppression or final FUSE data-path DMA. The file-backed anchor produces the deliberately negative result: across four cut points and five trials per cut point, restoring",
+        "explanation": "Migration/coherence suppression is not proven by retained counters.",
+        "file": "Paper/4_Evaluation.tex",
+        "line": 71,
+        "match": "migration suppression",
+        "pattern": "migration_or_coherence_suppression",
+        "scoped": true
+      },
+      {
+        "context": "inning and managed-storage probes show same-buffer CPU/GPU checksum agreement plus CUDA pointer diagnostics, but they do not prove UVM migration suppression or final FUSE data-path DMA. The file-backed anchor produces the deliberately negative result: across four cut points and five trials per cut point, restoring an entire backing-directory",
+        "explanation": "The final mounted FUSE data path is POSIX sidecar I/O, not DMA into UVM.",
+        "file": "Paper/4_Evaluation.tex",
+        "line": 71,
+        "match": "final FUSE data-path DMA",
+        "pattern": "final_fuse_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "nuqs_storage, infscaler}. SnuQS alone is a storage-capacity example, not a validation of the present filesystem format~\\cite{snuqs_storage}. GPUfs, SPDK, and GPUDirect Storage target APIs and hardware paths that must be assessed separately from an ordinary FUSE \\texttt{pread}/\\texttt{pwrite} path. The initial AEGIS-Q draft incorrect",
+        "explanation": "GPUDirect vocabulary must not imply the FUSE path implements that API.",
+        "file": "Paper/5_Related_Works.tex",
+        "line": 13,
+        "match": "GPUDirect Storage",
+        "pattern": "gpudirect_storage",
+        "scoped": true
+      },
+      {
+        "context": "sured AES-GCM data path, while GPU wins for large-batch ML-KEM key generation. Equally important, this revision removes unsupported claims. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, PCR-bound persistent freshness, power-loss crash certification, foreground AI p99 recovery, or p",
+        "explanation": "Direct NVMe-to-UVM DMA is intentionally excluded from the contribution.",
+        "file": "Paper/6_Conclusion.tex",
+        "line": 6,
+        "match": "direct NVMe-to-UVM DMA",
+        "pattern": "direct_nvme_to_uvm_dma",
+        "scoped": true
+      },
+      {
+        "context": "mentation} & \\textbf{Boundary}\\\\ \\midrule CUDA storage path & Managed allocation with explicit prefetch and stream synchronization & Not a verified NVMe-to-UVM storage-DMA path\\\\ CUDA failure policy & CUDA executor falls back to CPU on failure & Does not change the on-disk record format\\\\ Anchor backend & File witness plus option",
+        "explanation": "Storage-DMA wording must be diagnostic, future work, or explicitly negated.",
+        "file": "Paper/7_Implementation_Details.tex",
+        "line": 15,
+        "match": "storage-DMA",
+        "pattern": "storage_dma_path",
+        "scoped": true
+      },
+      {
+        "context": "} stale-snapshot recovery evidence, SQLite syscall-exact app-crash timing, and CUPTI/tegrastats mounted-throttle wiring. The paper deliberately does not claim direct NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, physical side-channel resistance, PCR-bound persistent freshness, power-loss certification, foreground AI-p99 resto",
+        "explanation": "Direct NVMe-to-UVM DMA is intentionally excluded from the contribution.",
+        "file": "Paper/main.tex",
+        "line": 89,
+        "match": "direct NVMe-to-UVM DMA",
+        "pattern": "direct_nvme_to_uvm_dma",
+        "scoped": true
+      }
+    ],
+    "paper_files": [
+      "Paper/10_Discussion_and_Limitations.tex",
+      "Paper/1_Introduction.tex",
+      "Paper/2_Background.tex",
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/5_Related_Works.tex",
+      "Paper/6_Conclusion.tex",
+      "Paper/7_Implementation_Details.tex",
+      "Paper/8_Security_Analysis.tex",
+      "Paper/main.tex"
+    ],
+    "paper_scope_pass": true,
+    "required_scope_phrases": [
+      {
+        "found": true,
+        "phrase": "does not claim direct NVMe-to-UVM DMA"
+      },
+      {
+        "found": true,
+        "phrase": "does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA"
+      },
+      {
+        "found": true,
+        "phrase": "not a verified NVMe-to-UVM storage-DMA path"
+      },
+      {
+        "found": true,
+        "phrase": "do not prove UVM migration suppression or final FUSE data-path DMA"
+      },
+      {
+        "found": true,
+        "phrase": "ordinary \\texttt{pread}/\\texttt{pwrite}"
+      }
+    ],
+    "unscoped_violations": []
+  },
+  "profile_report": {
+    "checks": [
+      {
+        "detail": "artifacts/validation/uma_storage_dma_profile_combined_report/uma_storage_dma_profile_report.json",
+        "name": "profile_report_exists",
+        "passed": true
+      },
+      {
+        "detail": "Profile report only; not a proof of NVMe-to-UVM DMA semantics.",
+        "name": "report_is_scoped_not_dma_proof",
+        "passed": true
+      },
+      {
+        "detail": "raw pinned-host O_DIRECT diagnostic only",
+        "name": "raw_probe_same_buffer_checksum",
+        "passed": true
+      },
+      {
+        "detail": "storage-filled cudaMallocManaged diagnostic only",
+        "name": "managed_storage_same_buffer_checksum",
+        "passed": true
+      },
+      {
+        "detail": "managed pointer attributes retained",
+        "name": "managed_storage_pointer_attr",
+        "passed": true
+      },
+      {
+        "detail": "device and host prefetch-location diagnostics retained",
+        "name": "managed_storage_prefetch_diagnostics",
+        "passed": true
+      },
+      {
+        "detail": "NCU checksum kernel diagnostic retained",
+        "name": "ncu_same_buffer_checksum",
+        "passed": true
+      }
+    ],
+    "path": "artifacts/validation/uma_storage_dma_profile_combined_report/uma_storage_dma_profile_report.json",
+    "profile_scope_pass": true,
+    "sha256": "13906f7d1ec6ffe9ce01adb288c9b117aaaf93b93abc8fb29657c9cd7ad6b3b7"
+  }
+}

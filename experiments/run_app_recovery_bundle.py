@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Run conservative app-recovery related probes as a single bundle.
 
-This bundle is intentionally limited to the retained SQLite / replay evidence
-and the executable SQLite oracle campaign.  It does not claim complete
-multi-workload crash certification.
+This bundle is intentionally limited to retained SQLite replay evidence,
+SQLite syscall-exact app-crash timing, and the executable SQLite oracle
+campaign.  It does not claim power-loss or FUSE-daemon crash certification.
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ def main() -> int:
     checks.append(run_cmd(["python3", "experiments/build_evidence_dashboard.py"], out_dir, "evidence_dashboard"))
 
     report = {
-        "note": "SQLite app recovery bundle only; not a full multi-workload crash-certification claim.",
+        "note": "SQLite app recovery bundle with selected-boundary and syscall-exact app-crash evidence; not a power-loss or FUSE-daemon crash-certification claim.",
         "checks": checks,
     }
     (out_dir / "app_recovery_bundle.json").write_text(json.dumps(report, indent=2), encoding="utf-8")

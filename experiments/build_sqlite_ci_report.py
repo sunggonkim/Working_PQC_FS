@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = ROOT / "artifacts" / "sqlite_ci_report"
+DEFAULT_OUT = ROOT / "artifacts" / "reports" / "sqlite_ci_report"
 
 
 def bootstrap_ci(samples: list[float], trials: int = 10000, alpha: float = 0.05, seed: int = 7) -> tuple[float, float]:
@@ -84,12 +84,12 @@ def main() -> int:
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     workload_report = {
-        "source": "artifacts/motivation/sqlite_latency.csv",
+        "source": "artifacts/results/motivation/sqlite_latency.csv",
         "description": "End-to-end SQLite workload on the current FUSE mount, preserved as raw samples.",
         "rows": summarize(ROOT / "artifacts" / "motivation" / "sqlite_latency.csv"),
     }
     contention_report = {
-        "source": "artifacts/motivation/sqlite_contention_latency.csv",
+        "source": "artifacts/results/motivation/sqlite_contention_latency.csv",
         "description": "Concurrent reader/writer SQLite contention artifact, preserved as raw samples.",
         "rows": summarize(ROOT / "artifacts" / "motivation" / "sqlite_contention_latency.csv"),
     }

@@ -6,8 +6,8 @@ Exercise the adaptive filesystem under four concurrent writers while the GPU
 lane is artificially constrained, then report the fast-lane tail latency.
 
 Output:
-  artifacts/m5_fastlane_stress.json
-  artifacts/m5_fastlane_stress.csv
+  artifacts/results/qos/m5_fastlane_stress.json
+  artifacts/results/qos/m5_fastlane_stress.csv
 """
 
 from __future__ import annotations

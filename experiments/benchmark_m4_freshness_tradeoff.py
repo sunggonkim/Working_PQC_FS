@@ -130,9 +130,9 @@ def remount_and_check_recovery(n_window):
 def main():
     windows = [1, 10, 100, 1000]
     
-    os.makedirs("artifacts/m4_freshness", exist_ok=True)
+    os.makedirs("artifacts/results/freshness/m4_freshness", exist_ok=True)
     
-    with open("artifacts/m4_freshness/m4_tradeoff.csv", "w", newline="") as f:
+    with open("artifacts/results/freshness/m4_freshness/m4_tradeoff.csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["Window_N", "Seq_Throughput_MBps", "Seq_IOPS", "Rand_Throughput_MBps", "Rand_IOPS", "Written_Blocks", "Recovered_Blocks", "Data_Loss_Bytes"])
         
@@ -165,7 +165,7 @@ def main():
             print(f"Written: {written_blocks}, Recovered: {recovered_blocks}, Empirical Loss: {empirical_loss_bytes} Bytes, Vulnerable Window: {theoretical_loss_bytes} Bytes")
             writer.writerow([N, seq_bw, seq_iops, rand_bw, rand_iops, written_blocks, recovered_blocks, theoretical_loss_bytes])
             
-    print("Done. Results saved to artifacts/m4_freshness/m4_tradeoff.csv")
+    print("Done. Results saved to artifacts/results/freshness/m4_freshness/m4_tradeoff.csv")
 
 if __name__ == "__main__":
     main()

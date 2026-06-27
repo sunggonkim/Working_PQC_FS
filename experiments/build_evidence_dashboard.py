@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_OUT = ROOT / "artifacts" / "evidence_dashboard"
+DEFAULT_OUT = ROOT / "artifacts" / "reports" / "evidence_dashboard"
 
 
 def maybe_load(path: Path):
@@ -31,8 +31,8 @@ def main() -> int:
 
     dashboard = {
         "verified_artifact_maps": {
-            "crash_audit_report": str(ROOT / "artifacts" / "crash_audit_report" / "crash_audit_report.json"),
-            "platform_inventory_report": str(ROOT / "artifacts" / "platform_inventory_report" / "platform_inventory_report.json"),
+            "crash_audit_report": str(ROOT / "artifacts" / "reports" / "crash_audit_report" / "crash_audit_report.json"),
+            "platform_inventory_report": str(ROOT / "artifacts" / "reports" / "platform_inventory_report" / "platform_inventory_report.json"),
             "tpm_freshness_report": str(ROOT / "artifacts" / "validation" / "tpm_freshness_report" / "tpm_freshness_report.json"),
             "qos_repeated_report": str(ROOT / "artifacts" / "validation" / "qos_repeated_report" / "qos_repeated_report.json"),
             "uma_storage_dma_report": str(ROOT / "artifacts" / "validation" / "uma_storage_dma_report" / "uma_storage_dma_report.json"),

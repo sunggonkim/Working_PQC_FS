@@ -80,9 +80,25 @@ def ai_inference_worker(duration_sec, latencies):
 
 def telemetry_daemon(shared_throttle_flag, duration_sec):
     print("[Telemetry] Daemon started, parsing tegrastats output for a prototype throttle loop...")
-    # Read tegrastats output
-    cmd = 'echo "1234qwer" | sudo -S tegrastats --interval 100'
-    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    sudo_password = os.environ.get("PQC_SUDO_PASSWORD")
+    if sudo_password:
+        process = subprocess.Popen(
+            ["sudo", "-S", "tegrastats", "--interval", "100"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        assert process.stdin is not None
+        process.stdin.write(sudo_password + "\n")
+        process.stdin.flush()
+    else:
+        process = subprocess.Popen(
+            ["tegrastats", "--interval", "100"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
     TRACE_OUT.parent.mkdir(parents=True, exist_ok=True)
     trace_fp = TRACE_OUT.open("w", encoding="utf-8")
     controller = HysteresisController(

@@ -19,6 +19,8 @@ add_compile_options(
     $<$<COMPILE_LANGUAGE:CXX>:-O2>
 )
 
+enable_testing()
+
 # ── Find libfuse3 ───────────────────────────────────────────────────────────
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(FUSE3 REQUIRED IMPORTED_TARGET fuse3)
@@ -66,6 +68,12 @@ if(HAS_OQS)
     set(PQC_FUSE_SOURCES pqc_fuse.c pqc_anchor.c pqc_admission.c)
     add_executable(pqc_fuse ${PQC_FUSE_SOURCES})
     target_link_libraries(pqc_fuse PRIVATE PkgConfig::FUSE3 OQS::oqs OpenSSL::Crypto pthread m dl)
+    add_test(NAME pqc_fuse_self_test COMMAND pqc_fuse --self-test)
+    set_tests_properties(pqc_fuse_self_test PROPERTIES
+        PASS_REGULAR_EXPRESSION "generation replay self-test: PASS"
+        FAIL_REGULAR_EXPRESSION "FAIL"
+        TIMEOUT 30
+    )
 endif()
 
 # ── Target 2: CUDA GPU backends ────────────────────────────────────────────
@@ -125,6 +133,14 @@ if(CMAKE_CUDA_COMPILER)
         message(STATUS "  ⚠️  cuPQC not found — GPU PQC elastic lane skipped")
     endif()
 
+    # gpu_burner — standalone GPU pressure generator for QoS experiments.
+    add_executable(gpu_burner experiments/gpu_burner.cu)
+    set_target_properties(gpu_burner PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+        CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}"
+        INTERPROCEDURAL_OPTIMIZATION ON
+    )
+
     # ── 2c: Integrity Plane (BLAKE3/SHA-256 batch) ─────────────────────────
     if(CUPQC_HASH_LIB)
         # Compile cuda_integrity.cu directly into pqc_fuse if HAS_OQS
@@ -149,8 +165,6 @@ if(CMAKE_CUDA_COMPILER)
         target_link_libraries(bench_gpu_integrity PRIVATE ${CUPQC_HASH_LIB} ${CUPQC_PK_LIB} OpenSSL::Crypto pthread)
 
         message(STATUS "  ✅ GPU SHA-256 integrity-plane (cuPQC-HASH) will be built")
-        
-        enable_testing()
         
         # M1 Gate: CTest parity and crash-state tests (no skipped GPU correctness test)
         add_test(NAME integrity_correctness COMMAND bench_gpu_integrity --only-tests)

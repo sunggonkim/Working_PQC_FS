@@ -32,7 +32,7 @@ from typing import Optional
 
 ROOT = Path(__file__).resolve().parent.parent
 BUILD = ROOT / "build"
-DEFAULT_OUT = ROOT / "artifacts" / "uma_storage_dma_probe"
+DEFAULT_OUT = ROOT / "artifacts" / "probes" / "uma_storage_dma_probe"
 
 
 @dataclass

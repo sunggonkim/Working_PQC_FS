@@ -1,0 +1,440 @@
+{
+  "args": {
+    "_background_pressure_pattern_values": [],
+    "background_chunk_bytes": 65536,
+    "background_fsync_every": 1,
+    "background_pressure_pattern": "",
+    "background_pressure_util": 0.85,
+    "background_warmup_ms": 100,
+    "background_writers": 1,
+    "controller_warmup_transactions": 2,
+    "daemon_throttle_sleep_us": 30000,
+    "deadline_ms": 10.0,
+    "enter_util": 0.7,
+    "exit_util": 0.6,
+    "harness_throttle_sleep_us": 5000,
+    "hold_samples": 1,
+    "inter_transaction_sleep_ms": 1.0,
+    "out_dir": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_sqlite_hero_methodology",
+    "post_foreground_drain_ms": 250,
+    "repetitions": 5,
+    "require_daemon_throttle": true,
+    "rows_per_txn": 8,
+    "skip_paper_table": true,
+    "sqlite_payload_bytes": 256,
+    "telemetry_interval_ms": 20,
+    "telemetry_poll_ms": 10,
+    "telemetry_window": 12,
+    "thermal_interval_ms": 100,
+    "transactions": 48,
+    "warmup_runs": 1
+  },
+  "artifact": "qos_sqlite_hero_bundle",
+  "command": [
+    "python3",
+    "experiments/run_qos_sqlite_hero_bundle.py"
+  ],
+  "component_coverage": {
+    "aegis_daemon_throttle_trace": true,
+    "background_secure_writer_logs": true,
+    "foreground_sqlite_logs": true,
+    "mounted_fuse_logs": true,
+    "policy_trace_logs": true,
+    "required_modes_present": true,
+    "simple_controller_trace": true,
+    "telemetry_sampler_logs": true
+  },
+  "modes": [
+    {
+      "acceptable": true,
+      "admission": {
+        "deferrals": {},
+        "rows": 0,
+        "targets": {}
+      },
+      "background": {
+        "bytes_written": 0,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 0.0,
+        "write_events": 0,
+        "writer_started": false,
+        "writer_stop_rows": []
+      },
+      "config": {
+        "background_writer": false,
+        "controller_label": "none",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "daemon_throttle": {
+        "open_rows": 0,
+        "rows": 0,
+        "sleep_us_total": 0,
+        "throttled_rows": 0
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 1,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/foreground_sqlite_latency.jsonl",
+        "max_ms": 15.16363,
+        "mean_ms": 5.4945928125,
+        "p50_ms": 5.403667,
+        "p95_ms": 6.8739082499999995,
+        "p99_ms": 11.361421180000008,
+        "row_count": 384,
+        "rows_written": 384,
+        "samples": 48
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/background_writer.jsonl",
+        "foreground_csv": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/foreground_sqlite_latency.csv",
+        "foreground_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/mount_logs/pqc_fuse.stdout.txt",
+        "policy_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/policy_trace.jsonl",
+        "runtime_fuse_admission_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/runtime_telemetry.txt",
+        "telemetry_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/telemetry_trace.jsonl"
+      },
+      "mode": "app_only",
+      "policy": {
+        "events": {
+          "none": 30
+        },
+        "rows": 30,
+        "states": {
+          "disabled": 30
+        },
+        "throttle_rows": 0
+      },
+      "telemetry": {
+        "avg_cpu_utilization": 0.04880222587119139,
+        "avg_gpu_utilization": 0.1,
+        "gpu_utilization_sources": [
+          "telemetry_tensor_proxy"
+        ],
+        "high_pressure_rows": 4,
+        "rows": 30,
+        "zero_budget_rows": 4
+      }
+    },
+    {
+      "acceptable": true,
+      "admission": {
+        "deferrals": {},
+        "rows": 0,
+        "targets": {}
+      },
+      "background": {
+        "bytes_written": 4521984,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 7.069425245957353,
+        "write_events": 69,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 4521984,
+            "chunks_written": 69,
+            "elapsed_ns": 610021303,
+            "event": "writer_stop",
+            "harness_throttle_sleep_us_total": 0,
+            "harness_throttle_sleeps": 0,
+            "throughput_mb_s": 7.069425245957353,
+            "timestamp_ns": 1782524623617640006,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "none",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "daemon_throttle": {
+        "open_rows": 0,
+        "rows": 0,
+        "sleep_us_total": 0,
+        "throttled_rows": 0
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 1,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/foreground_sqlite_latency.jsonl",
+        "max_ms": 12.823435,
+        "mean_ms": 6.170223104166666,
+        "p50_ms": 5.859018000000001,
+        "p95_ms": 8.832889649999998,
+        "p99_ms": 11.261585520000004,
+        "row_count": 384,
+        "rows_written": 384,
+        "samples": 48
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/background_writer.jsonl",
+        "foreground_csv": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/foreground_sqlite_latency.csv",
+        "foreground_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
+        "policy_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/policy_trace.jsonl",
+        "runtime_fuse_admission_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/runtime_telemetry.txt",
+        "telemetry_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/telemetry_trace.jsonl"
+      },
+      "mode": "unthrottled_storage",
+      "policy": {
+        "events": {
+          "none": 30
+        },
+        "rows": 30,
+        "states": {
+          "disabled": 30
+        },
+        "throttle_rows": 0
+      },
+      "telemetry": {
+        "avg_cpu_utilization": 0.10866744841467714,
+        "avg_gpu_utilization": 0.1,
+        "gpu_utilization_sources": [
+          "telemetry_tensor_proxy"
+        ],
+        "high_pressure_rows": 28,
+        "rows": 30,
+        "zero_budget_rows": 14
+      }
+    },
+    {
+      "acceptable": true,
+      "admission": {
+        "deferrals": {},
+        "rows": 0,
+        "targets": {}
+      },
+      "background": {
+        "bytes_written": 655360,
+        "harness_throttle_sleep_us_total": 530000,
+        "harness_throttle_sleeps": 106,
+        "throughput_mb_s": 1.0964138231777922,
+        "write_events": 10,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 655360,
+            "chunks_written": 10,
+            "elapsed_ns": 570040241,
+            "event": "writer_stop",
+            "harness_throttle_sleep_us_total": 530000,
+            "harness_throttle_sleeps": 106,
+            "throughput_mb_s": 1.0964138231777922,
+            "timestamp_ns": 1782524624675616913,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "harness_hysteresis",
+        "daemon_throttle": false,
+        "harness_throttle": true
+      },
+      "daemon_throttle": {
+        "open_rows": 0,
+        "rows": 0,
+        "sleep_us_total": 0,
+        "throttled_rows": 0
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 0,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/foreground_sqlite_latency.jsonl",
+        "max_ms": 8.411426,
+        "mean_ms": 5.108542062500001,
+        "p50_ms": 5.1220605,
+        "p95_ms": 6.597035999999999,
+        "p99_ms": 7.824026110000002,
+        "row_count": 384,
+        "rows_written": 384,
+        "samples": 48
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/background_writer.jsonl",
+        "foreground_csv": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/foreground_sqlite_latency.csv",
+        "foreground_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+        "policy_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/policy_trace.jsonl",
+        "runtime_fuse_admission_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/runtime_telemetry.txt",
+        "telemetry_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/telemetry_trace.jsonl"
+      },
+      "mode": "simple_controller",
+      "policy": {
+        "events": {
+          "enter": 1,
+          "hold": 27
+        },
+        "rows": 28,
+        "states": {
+          "open": 1,
+          "throttled": 27
+        },
+        "throttle_rows": 27
+      },
+      "telemetry": {
+        "avg_cpu_utilization": 0.04333188894970504,
+        "avg_gpu_utilization": 0.1,
+        "gpu_utilization_sources": [
+          "telemetry_tensor_proxy"
+        ],
+        "high_pressure_rows": 27,
+        "rows": 28,
+        "zero_budget_rows": 0
+      }
+    },
+    {
+      "acceptable": true,
+      "admission": {
+        "deferrals": {},
+        "rows": 0,
+        "targets": {}
+      },
+      "background": {
+        "bytes_written": 1835008,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 3.0160640171203785,
+        "write_events": 28,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 1835008,
+            "chunks_written": 28,
+            "elapsed_ns": 580226411,
+            "event": "writer_stop",
+            "harness_throttle_sleep_us_total": 0,
+            "harness_throttle_sleeps": 0,
+            "throughput_mb_s": 3.0160640171203785,
+            "timestamp_ns": 1782524625755906331,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "mounted_fuse_hysteresis",
+        "daemon_throttle": true,
+        "harness_throttle": false
+      },
+      "daemon_throttle": {
+        "open_rows": 235,
+        "rows": 250,
+        "sleep_us_total": 450000,
+        "throttled_rows": 15
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 0,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/foreground_sqlite_latency.jsonl",
+        "max_ms": 7.209297,
+        "mean_ms": 5.275184645833334,
+        "p50_ms": 5.2246205,
+        "p95_ms": 6.6188417500000005,
+        "p99_ms": 7.04147598,
+        "row_count": 384,
+        "rows_written": 384,
+        "samples": 48
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/background_writer.jsonl",
+        "foreground_csv": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/foreground_sqlite_latency.csv",
+        "foreground_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+        "policy_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/policy_trace.jsonl",
+        "runtime_fuse_admission_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/runtime_telemetry.txt",
+        "telemetry_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/telemetry_trace.jsonl"
+      },
+      "mode": "aegis_policy",
+      "policy": {
+        "events": {
+          "enter": 1,
+          "hold": 28
+        },
+        "rows": 29,
+        "states": {
+          "open": 2,
+          "throttled": 27
+        },
+        "throttle_rows": 27
+      },
+      "telemetry": {
+        "avg_cpu_utilization": 0.045828214605783554,
+        "avg_gpu_utilization": 0.1,
+        "gpu_utilization_sources": [
+          "telemetry_tensor_proxy"
+        ],
+        "high_pressure_rows": 27,
+        "rows": 29,
+        "zero_budget_rows": 0
+      }
+    }
+  ],
+  "overall_pass": false,
+  "platform": {
+    "cpu_count": 14,
+    "device_model": "NVIDIA Jetson AGX Thor Developer Kit",
+    "fuse_binary": {
+      "exists": true,
+      "path": "build/pqc_fuse",
+      "sha256": "e355da2bde57dde7d1402da4195d71553c092305b25fb662b75bb6e0d503da45"
+    },
+    "git_dirty_short": "M .gitignore\n M CMakeLists.txt\n M Paper/10_Discussion_and_Limitations.tex\n D Paper/11_Appendix.tex\n M Paper/1_Introduction.tex\n M Paper/2_Background.tex\n M Paper/3_Design.tex\n M Paper/4_Evaluation.tex\n M Paper/6_Conclusion.tex\n M Paper/7_Implementation_Details.tex\n M Paper/8_Security_Analysis.tex\n M Paper/main.pdf\n M Paper/main.tex\n D \"Paper/previous paper.pdf\"\n D Paper/previous_paper_text.txt\n M README.md\n M SUBMISSION_CHECKLIST.md\n D artifacts/anchor_refresh/anchor_latency.csv\n D artifacts/anchor_refresh/anchor_latency.json\n D artifacts/anchor_refresh/anchor_latency.png\n D artifacts/anchor_refresh/anchor_latency_skipped.json\n D artifacts/anchor_refresh/anchor_witness.bin\n D artifacts/anchor_refresh/hardware_anchor_latency.csv\n D artifacts/anchor_refresh/hardware_anchor_latency.json\n D artifacts/baselines/cpu_comparison.json\n D artifacts/baselines/dm_crypt_fio.json\n D artifacts/baselines/fscrypt_fio.json\n D artifacts/build_all_reports_logs/experiments_build_app_recovery_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_app_recovery_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_crash_audit_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_crash_audit_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_evidence_dashboard.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_evidence_dashboard.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_index_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_index_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_platform_inventory_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_platform_inventory_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_qos_repeated_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_qos_repeated_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_sqlite_recovery_oracle.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_sqlite_recovery_oracle.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_status_register.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_status_register.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_tpm_freshness_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_tpm_freshness_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_build_uma_storage_dma_report.stderr.txt\n D artifacts/build_all_reports_logs/experiments_build_uma_storage_dma_report.stdout.txt\n D artifacts/build_all_reports_logs/experiments_run_sqlite_fault_campaign.stderr.txt\n D artifacts/build_all_reports_logs/experiments_run_sqlite_fault_campaign.stdout.txt\n D artifacts/crash_audit_report/crash_audit_report.json\n D artifacts/crash_audit_report/crash_audit_report.md\n D artifacts/crash_replay_e8_test_matrix.csv\n D artifacts/crash_replay_e8_test_matrix.json\n D artifacts/crash_replay_e8_test_summary.csv\n D artifacts/crash_replay_e8_test_summary.json\n D artifacts/crash_replay_matrix.csv\n D artifacts/crash_replay_matrix.json\n D artifacts/crash_replay_summary.csv\n D artifacts/crash_replay_summary.json\n D artifacts/e1_results.json\n D artifacts/e3_hero_results.json\n D artifacts/e3_hero_summary.csv\n D artifacts/e6_breakdown.json\n D artifacts/e8_crash_replay.json\n D artifacts/evidence/io_uring_uvm_nvme_sudo.err\n D artifacts/evidence_dashboard/evidence_dashboard.json\n D artifacts/evidence_dashboard/evidence_dashboard.md\n D artifacts/index_report/index_report.json\n D artifacts/index_report/index_report.md\n D artifacts/m3_qos/e4_llm_qos.png\n D artifacts/m3_qos/m3_qos_results.csv\n D artifacts/m3_qos/m3_qos_results.json\n D artifacts/m3_qos/telemetry_ablation.json\n D artifacts/m3_qos_ci_report/m3_qos_ci_report.json\n D artifacts/m3_qos_ci_report/m3_qos_ci_report.md\n D artifacts/m3_qos_results.csv\n D artifacts/m3_qos_results.json\n D artifacts/m4_freshness/m4_tradeoff.csv\n D artifacts/m4_freshness/power_fail_results.json\n D artifacts/m5_admission_sweep.csv\n D artifacts/m5_admission_sweep.json\n D artifacts/m5_admission_sweep_qdepth.csv\n D artifacts/m5_admission_sweep_qdepth.json\n D artifacts/m5_fastlane_stress.csv\n D artifacts/m5_fastlane_stress.json\n D artifacts/m6_tradeoff_yolov8_adaptive_tight/e3_tensorrt_qos.png\n D artifacts/m6_tradeoff_yolov8_adaptive_tight/tensorrt_interference.csv\n D artifacts/m6_tradeoff_yolov8_adaptive_tight/tensorrt_interference.json\n D artifacts/m6_tradeoff_yolov8_elasticcontend/e3_tensorrt_qos.png\n D artifacts/m6_tradeoff_yolov8_elasticcontend/tensorrt_interference.csv\n D artifacts/m6_tradeoff_yolov8_elasticcontend/tensorrt_interference.json\n D artifacts/motivation/anchor_latency.csv\n D artifacts/motivation/anchor_latency.json\n D artifacts/motivation/anchor_latency.png\n D artifacts/motivation/anchor_witness.bin\n D artifacts/motivation/baseline_latency.json\n D artifacts/motivation/baseline_write_latency.png\n D artifacts/motivation/contention_latency.csv\n D artifacts/motivation/contention_latency.json\n D artifacts/motivation/contention_latency.png\n D artifacts/motivation/crash_regression.json\n D artifacts/motivation/crash_regression.txt\n D artifacts/motivation/crash_replay_matrix.json\n D artifacts/motivation/crash_replay_matrix.txt\n D artifacts/motivation/crash_replay_summary.csv\n D artifacts/motivation/crash_replay_summary.json\n D artifacts/motivation/crash_replay_summary.png\n D artifacts/motivation/e1_secure_io_cost.png\n D artifacts/motivation/e3_tensorrt_qos.png\n D artifacts/motivation/fuse_latency.csv\n D artifacts/motivation/fuse_latency.json\n D artifacts/motivation/gocryptfs_latency.csv\n D artifacts/motivation/inference_latency.csv\n D artifacts/motivation/inference_latency.json\n D artifacts/motivation/inference_latency.png\n D artifacts/motivation/motivation_contention.csv\n D artifacts/motivation/motivation_contention.json\n D artifacts/motivation/pipeline_latency.csv\n D artifacts/motivation/pipeline_latency.json\n D artifacts/motivation/pipeline_latency.png\n D artifacts/motivation/scheduler_smoke_coherence_strict.jsonl\n D artifacts/motivation/scheduler_smoke_cpu_only.jsonl\n D artifacts/motivation/scheduler_smoke_decisions.png\n D artifacts/motivation/scheduler_smoke_default.jsonl\n D artifacts/motivation/semantic_gap.csv\n D artifacts/motivation/semantic_gap.json\n D artifacts/motivation/smoke_summary.json\n D artifacts/motivation/spillover_latency.csv\n D artifacts/motivation/spillover_latency.json\n D artifacts/motivation/spillover_latency.png\n D artifacts/motivation/sqlite_contention_latency.csv\n D artifacts/motivation/sqlite_contention_latency.json\n D artifacts/motivation/sqlite_contention_latency.png\n D artifacts/motivation/sqlite_contention_latency.txt\n D artifacts/motivation/sqlite_latency.csv\n D artifacts/motivation/sqlite_latency.json\n D artifacts/motivation/sqlite_latency.png\n D artifacts/motivation/tensorrt_interference.csv\n D artifacts/motivation/tensorrt_interference.json\n D artifacts/motivation/um_counters.json\n D artifacts/motivation/uvm_proxy_report/uvm_proxy_report.json\n D artifacts/motivation/uvm_proxy_report/uvm_proxy_report.md\n D artifacts/platform_inventory_report/platform_inventory_report.json\n D artifacts/platform_inventory_report/platform_inventory_report.md\n D artifacts/platform_inventory_report/second_platform_placeholder_manifest.json\n D artifacts/platform_inventory_report/second_platform_placeholder_manifest.md\n D artifacts/remaining_gap_map/remaining_gap_map.json\n D artifacts/remaining_gap_map/remaining_gap_map.md\n M artifacts/repro_bundle/manifest.json\n M artifacts/repro_bundle/sha256sums.txt\n D artifacts/sidechannel/timing.json\n D artifacts/sqlite_ci_report/sqlite_ci_report.json\n D artifacts/sqlite_ci_report/sqlite_ci_report.md\n D artifacts/status_register/status_register.json\n D artifacts/status_register/status_register.md\n D artifacts/tensorrt_ci_report/tensorrt_ci_report.json\n D artifacts/tensorrt_ci_report/tensorrt_ci_report.md\n D artifacts/uma_storage_dma_nsys/io_uring_uvm.nsys-rep\n D artifacts/uma_storage_dma_nsys/io_uring_uvm.sqlite\n D artifacts/uma_storage_dma_nsys/stats_cuda_api_sum.csv\n D artifacts/uma_storage_dma_nsys/stats_osrt_sum.csv\n D artifacts/uma_storage_dma_nsys/stats_um_cpu_page_faults_sum.csv\n D artifacts/uma_storage_dma_nsys/stats_um_sum.csv\n D artifacts/uma_storage_dma_nsys_report/uma_storage_dma_profile_report.json\n D artifacts/uma_storage_dma_nsys_report/uma_storage_dma_profile_report.md\n D artifacts/uma_storage_dma_probe/io_uring_uvm_nvme.stderr.txt\n D artifacts/uma_storage_dma_probe/io_uring_uvm_nvme.stdout.txt\n D artifacts/uma_storage_dma_probe/repro_malloc_register.stderr.txt\n D artifacts/uma_storage_dma_probe/repro_malloc_register.stdout.txt\n D artifacts/uma_storage_dma_probe/uma_storage_dma_probe.json\n D artifacts/uma_storage_dma_probe_sudo/io_uring_uvm_nvme.stderr.txt\n D artifacts/uma_storage_dma_probe_sudo/io_uring_uvm_nvme.stdout.txt\n D artifacts/uma_storage_dma_probe_sudo/repro_malloc_register.stderr.txt\n D artifacts/uma_storage_dma_probe_sudo/repro_malloc_register.stdout.txt\n D artifacts/uma_storage_dma_probe_sudo/uma_storage_dma_probe.json\n M artifacts/validation/app_recovery_bundle/app_recovery_bundle.json\n M artifacts/validation/app_recovery_bundle/crash_audit_report.stdout.txt\n M artifacts/validation/app_recovery_report/app_recovery_report.json\n M artifacts/validation/app_recovery_report/app_recovery_report.md\n M artifacts/validation/combined_durability_bundle/combined_durability_bundle.json\n M artifacts/validation/qos_fuse_live_bridge/mount_logs/pqc_fuse.stderr.txt\n M artifacts/validation/qos_fuse_live_bridge/qos_fuse_live_bridge.json\n M artifacts/validation/qos_fuse_live_bridge/qos_fuse_live_bridge.md\n M artifacts/validation/qos_fuse_live_bridge/sample_01.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_02.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_03.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_03.stdout\n M artifacts/validation/qos_fuse_live_bridge/sample_04.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_05.jsonl\n M artifacts/validation/qos_fuse_live_bridge/sample_06.jsonl\n M artifacts/validation/tpm_freshness_bundle/anchor_latency.stdout.txt\n M artifacts/validation/tpm_freshness_bundle/tpm_monotonic_replay.stdout.txt\n M artifacts/validation/tpm_monotonic_replay/live_mount/pqc_fuse.stderr.txt\n M artifacts/validation/tpm_monotonic_replay/replay_mount/pqc_fuse.stderr.txt\n M artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json\n M artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.md\n M artifacts/validation/tpm_only_bundle/tpm_freshness_bundle.stdout.txt\n M artifacts/validation/tpm_pcr_policy_probe/create_sealed.stdout.txt\n M artifacts/validation/tpm_pcr_policy_probe/load_sealed.stdout.txt\n M artifacts/validation/tpm_pcr_policy_probe/tpm_pcr_policy_probe.json\n D artifacts/workload_map.csv\n D artifacts/zero_context/latency_breakdown.csv\n D artifacts/zero_context/latency_breakdown.json\n M experiments/bench_gpu_pqc.cu\n M experiments/bench_io_uring_ebpf.cu\n M experiments/benchmark_m4_freshness_tradeoff.py\n M experiments/benchmark_tensorrt_interference.py\n M experiments/build_all_reports.py\n M experiments/build_app_recovery_report.py\n M experiments/build_crash_audit_report.py\n M experiments/build_evidence_dashboard.py\n M experiments/build_index_report.py\n M experiments/build_m3_qos_ci_report.py\n M experiments/build_platform_inventory_report.py\n M experiments/build_remaining_gap_map.py\n M experiments/build_repro_bundle.py\n M experiments/build_sqlite_ci_report.py\n M experiments/build_sqlite_recovery_oracle.py\n M experiments/build_status_register.py\n M experiments/build_tensorrt_ci_report.py\n M experiments/generate_m4_pareto_data.py\nD  experiments/gpu_burner\n M experiments/gpu_burner.cu\nD  experiments/io_uring_uvm\n M experiments/plot_m4_tradeoff.py\n M experiments/plot_telemetry_ablation.py\n M experiments/plot_telemetry_sensitivity.py\n M experiments/profile_e3_nsys.py\nD  experiments/repro_malloc_register\n M experiments/run_app_recovery_bundle.py\n M experiments/run_baselines.sh\n M experiments/run_combined_durability_bundle.py\n M experiments/run_cpu_baseline.py\n M experiments/run_crash_replay_e8.py\n M experiments/run_e3_interference_hero.py\n M experiments/run_e6_breakdown.py\n M experiments/run_m5_admission_sweep.py\n M experiments/run_m5_fastlane_stress.py\n M experiments/run_motivation_bench.py\n M experiments/run_power_fail_test.py\n M experiments/run_qos_fuse_live_bridge.py\n M experiments/run_qos_gpu.py\n M experiments/run_qos_live_telemetry_admission.py\n M experiments/run_sidechannel_eval.py\n M experiments/run_tvla_leakage_eval.py\n M experiments/run_uma_storage_dma_probe.py\n M experiments/run_verified_microbench.py\n M experiments/scheduler_trace.jsonl\n M experiments/tegra_qos_daemon.py\n M experiments/verify_gup_pinning.py\n D install_bpf.py\n M pqc_admission.c\n M pqc_admission.h\n M pqc_block_job.h\n M pqc_fuse.c\n D trace_gup.bt\n?? Paper/generated_qos_recovery_table.tex\n?? artifacts/README.md\n?? artifacts/probes/\n?? artifacts/reports/\n?? artifacts/validation/admission_interface_audit/\n?? artifacts/validation/combined_durability_bundle/combined_durability_bundle.md\n?? artifacts/validation/combined_durability_bundle/dbm_advance.stderr.txt\n?? artifacts/validation/combined_durability_bundle/dbm_advance.stdout.txt\n?? artifacts/validation/combined_durability_bundle/dbm_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/dbm_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/dbm_replay_read.stderr.txt\n?? artifacts/validation/combined_durability_bundle/dbm_replay_read.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_advance.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_advance.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_replay_read.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sqlite_replay_read.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_dbm_baseline.stderr.txt\n?? artifacts/validation/combined_durability_bundle/sync_after_dbm_baseline.stdout.txt\n?? artifacts/validation/combined_durability_bundle/unified_dbm_live_mount/\n?? artifacts/validation/combined_durability_bundle/unified_dbm_replay_mount/\n?? artifacts/validation/combined_durability_bundle/unified_live_mount/\n?? artifacts/validation/combined_durability_bundle/unified_replay_mount/\n?? artifacts/validation/ebpf_iouring_scope_audit/\n?? artifacts/validation/frozen_workload_contract/\n?? artifacts/validation/generation_fault_matrix/\n?? artifacts/validation/generation_replay/\n?? artifacts/validation/integrity_scope_audit/\n?? artifacts/validation/keyplane_rekey_methodology/\n?? artifacts/validation/keyplane_rekey_workflow/\n?? artifacts/validation/microbench_methodology/\n?? artifacts/validation/posix_scope_audit/\n?? artifacts/validation/qos_cupti_pm_fuse_bridge/\n?? artifacts/validation/qos_fuse_live_bridge/runtime_fuse_admission_trace.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/runtime_fuse_throttle_trace.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/runtime_telemetry.txt\n?? artifacts/validation/qos_fuse_live_bridge/sample_07.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/sample_07.stderr\n?? artifacts/validation/qos_fuse_live_bridge/sample_07.stdout\n?? artifacts/validation/qos_fuse_live_bridge/sample_08.jsonl\n?? artifacts/validation/qos_fuse_live_bridge/sample_08.stderr\n?? artifacts/validation/qos_fuse_live_bridge/sample_08.stdout\n?? artifacts/validation/qos_sensitivity_analysis/\n?? artifacts/validation/qos_sqlite_hero_bundle/\n?? artifacts/validation/qos_sqlite_hero_methodology/\n?? artifacts/validation/sqlite_syscall_crash_tpm/\n?? artifacts/validation/stat_thermal_methodology/\n?? artifacts/validation/uma_dma_scope_audit/\n?? experiments/build_frozen_workload_contract.py\n?? experiments/build_stat_thermal_methodology_audit.py\n?? experiments/run_admission_interface_audit.py\n?? experiments/run_ebpf_iouring_scope_audit.py\n?? experiments/run_generation_fault_matrix.py\n?? experiments/run_integrity_scope_audit.py\n?? experiments/run_keyplane_rekey_workflow.py\n?? experiments/run_posix_scope_audit.py\n?? experiments/run_qos_cupti_pm_fuse_bridge.py\n?? experiments/run_qos_sensitivity_analysis.py\n?? experiments/run_qos_sqlite_hero_bundle.py\n?? experiments/run_sqlite_syscall_crash_tpm.py\n?? experiments/run_uma_dma_scope_audit.py",
+    "git_head": "2757b23e7e14afd6d597c1534eda7cb6357015b2",
+    "kernel": "Linux thor 6.8.12-tegra #1 SMP PREEMPT Tue Dec 30 15:40:41 PST 2025 aarch64 aarch64 aarch64 GNU/Linux",
+    "machine": "aarch64",
+    "nvcc": {
+      "argv": [
+        "nvcc",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jul_16_07:31:19_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.48\nBuild cuda_13.0.r13.0/compiler.36260728_0"
+    },
+    "python": "3.12.3",
+    "system": "Linux-6.8.12-tegra-aarch64-with-glibc2.39",
+    "timestamp_utc": "2026-06-27T01:43:45.842368+00:00"
+  },
+  "recovery_checks": {
+    "aegis_keeps_more_storage_than_simple": true,
+    "aegis_records_throttle_decisions": true,
+    "aegis_recovers_p99": true,
+    "aegis_removes_deadline_misses": true,
+    "pressure_causes_deadline_miss": true,
+    "pressure_raises_p99": false,
+    "required_modes_available": true,
+    "simple_recovers_p99": true,
+    "simple_removes_deadline_misses": true
+  },
+  "scope": [
+    "Reports synchronized four-mode mounted-FUSE SQLite foreground QoS recovery.",
+    "Does not claim AI inference or TensorRT p99 restoration.",
+    "Uses workload-pressure telemetry derived from foreground SQLite slack plus background storage activity."
+  ]
+}

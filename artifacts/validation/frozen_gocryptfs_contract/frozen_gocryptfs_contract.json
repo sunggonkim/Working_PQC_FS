@@ -1,0 +1,767 @@
+{
+  "abort_reason": null,
+  "artifacts": {
+    "csv": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_repetitions.csv",
+    "file_preparation": "artifacts/validation/frozen_gocryptfs_contract/file_preparation.json",
+    "fio_raw_dir": "artifacts/validation/frozen_gocryptfs_contract/fio_raw",
+    "json": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+    "markdown": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.md",
+    "mount_logs": "artifacts/validation/frozen_gocryptfs_contract/mount_logs",
+    "platform_manifest": "artifacts/validation/frozen_gocryptfs_contract/platform_manifest.json",
+    "storage_snapshot": "artifacts/validation/frozen_gocryptfs_contract/storage_snapshot.json",
+    "thermal_log": "artifacts/validation/frozen_gocryptfs_contract/thermal_tegrastats.log"
+  },
+  "cleanup": {
+    "cipher_dir": "/tmp/gocryptfs_frozen_cipher_ycuvhpze",
+    "mount_dir": "/tmp/gocryptfs_frozen_mnt_jcnxail9",
+    "removed": true,
+    "secret_dir": "/tmp/gocryptfs_frozen_secret_cw6l1071"
+  },
+  "cold_cache": {
+    "reason": "cold-cache contract requires privileged cache dropping after unmount/remount; this run had no noninteractive sudo/root access",
+    "status": "invalid_not_run",
+    "sudo_probe": {
+      "argv": [
+        "sudo",
+        "-n",
+        "true"
+      ],
+      "available": true,
+      "returncode": 1,
+      "stderr": "sudo: a password is required",
+      "stdout": ""
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/gocryptfs_frozen_mnt_jcnxail9/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782544773126576803,
+      "label": "warmup_00",
+      "returncode": 0,
+      "start_realtime_ns": 1782544702851615255,
+      "stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warmup_00.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warmup_00.json",
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "wall_seconds": 70.274961548
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/gocryptfs_frozen_mnt_jcnxail9/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782544843404293355,
+      "label": "warm_rep_00",
+      "returncode": 0,
+      "start_realtime_ns": 1782544773127272396,
+      "stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_00.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_00.json",
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "wall_seconds": 70.277020959
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/gocryptfs_frozen_mnt_jcnxail9/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782544913678422907,
+      "label": "warm_rep_01",
+      "returncode": 0,
+      "start_realtime_ns": 1782544843405032300,
+      "stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_01.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_01.json",
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "wall_seconds": 70.273390607
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/gocryptfs_frozen_mnt_jcnxail9/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782544983952476322,
+      "label": "warm_rep_02",
+      "returncode": 0,
+      "start_realtime_ns": 1782544913679117870,
+      "stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_02.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_02.json",
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "wall_seconds": 70.273358452
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/gocryptfs_frozen_mnt_jcnxail9/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782545054234960794,
+      "label": "warm_rep_03",
+      "returncode": 0,
+      "start_realtime_ns": 1782544983953204637,
+      "stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_03.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_03.json",
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "wall_seconds": 70.281756157
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/gocryptfs_frozen_mnt_jcnxail9/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782545124514890053,
+      "label": "warm_rep_04",
+      "returncode": 0,
+      "start_realtime_ns": 1782545054235656525,
+      "stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_04.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_04.json",
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "wall_seconds": 70.279233528
+    }
+  ],
+  "comparison_ready": false,
+  "contract_compliant_warm_cache": true,
+  "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+  "contract_path_sha256": "9b95b8101944db0dbf31b9202b18f5fac78ec80d4c2e65c6fa20163255eb0a2d",
+  "contract_sha256_recorded": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+  "file_preparation": {
+    "artifact": "artifacts/validation/frozen_gocryptfs_contract/file_preparation.json",
+    "end_realtime_ns": 1782544702851017394,
+    "error": null,
+    "method": "posix_fallocate",
+    "observed_size_bytes": 1073741824,
+    "path": "/tmp/gocryptfs_frozen_mnt_jcnxail9/contract/frozen_randrw_4k_fdatasync.0.0",
+    "requested_size_bytes": 1073741824,
+    "returncode": 0,
+    "start_realtime_ns": 1782544702837515033,
+    "valid": true,
+    "wall_seconds": 0.013502361
+  },
+  "filesystem_mode": "gocryptfs",
+  "fio_command": [
+    "fio",
+    "--name=frozen_randrw_4k_fdatasync",
+    "--ioengine=psync",
+    "--rw=randrw",
+    "--rwmixread=70",
+    "--bs=4k",
+    "--direct=0",
+    "--fdatasync=1",
+    "--iodepth=1",
+    "--numjobs=1",
+    "--size=1G",
+    "--fallocate=none",
+    "--allow_file_create=0",
+    "--overwrite=1",
+    "--time_based",
+    "--runtime=60",
+    "--ramp_time=10",
+    "--directory=${GOCRYPTFS_MOUNT}/contract",
+    "--output-format=json"
+  ],
+  "gocryptfs_init": {
+    "argv": [
+      "/usr/bin/gocryptfs",
+      "-quiet",
+      "-init",
+      "-passfile",
+      "${PASSFILE}",
+      "/tmp/gocryptfs_frozen_cipher_ycuvhpze"
+    ],
+    "artifact": "artifacts/validation/frozen_gocryptfs_contract/mount_logs/gocryptfs_init.command.json",
+    "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+    "end_realtime_ns": 1782544702680890636,
+    "returncode": 0,
+    "start_realtime_ns": 1782544702534005362,
+    "stderr": "artifacts/validation/frozen_gocryptfs_contract/mount_logs/gocryptfs_init.stderr.txt",
+    "stdout": "artifacts/validation/frozen_gocryptfs_contract/mount_logs/gocryptfs_init.stdout.txt",
+    "wall_seconds": 0.146885274
+  },
+  "gocryptfs_mount": {
+    "cipher_directory": "${GOCRYPTFS_CIPHER}",
+    "command": "gocryptfs -quiet -fg -passfile ${PASSFILE} ${GOCRYPTFS_CIPHER} ${GOCRYPTFS_MOUNT}",
+    "plaintext_names": false,
+    "reverse_mode": false
+  },
+  "methodology": {
+    "cache_state_policy": {
+      "cold": "invalid unless privileged drop_caches after unmount/remount is available",
+      "warm": "one full fio warmup pass followed by measured repetitions without cache dropping"
+    },
+    "confidence_interval_method": {
+      "confidence_level": 0.95,
+      "metrics": [
+        "throughput_mib_s",
+        "latency_p50_us",
+        "latency_p95_us",
+        "latency_p99_us",
+        "latency_p99_9_us"
+      ],
+      "name": "nonparametric bootstrap",
+      "random_seed": 12648430,
+      "resamples": 10000,
+      "unit": "per-repetition summary rows"
+    },
+    "failure_handling": {
+      "fio_failure": "invalid row with raw stdout/stderr and return code",
+      "fio_timeout": "invalid row with retained command log and backing-store snapshot",
+      "gocryptfs_init_failure": "invalid run with retained stdout/stderr",
+      "missing_binary": "fatal",
+      "mount_failure": "fatal",
+      "unsupported_cold_cache": "reported as invalid_not_run, not folded into warm-cache results"
+    },
+    "file_preparation": {
+      "observed": {
+        "artifact": "artifacts/validation/frozen_gocryptfs_contract/file_preparation.json",
+        "end_realtime_ns": 1782544702851017394,
+        "error": null,
+        "method": "posix_fallocate",
+        "observed_size_bytes": 1073741824,
+        "path": "/tmp/gocryptfs_frozen_mnt_jcnxail9/contract/frozen_randrw_4k_fdatasync.0.0",
+        "requested_size_bytes": 1073741824,
+        "returncode": 0,
+        "start_realtime_ns": 1782544702837515033,
+        "valid": true,
+        "wall_seconds": 0.013502361
+      },
+      "required": {
+        "filename": "frozen_randrw_4k_fdatasync.0.0",
+        "procedure": "Before each mode's warm-cache sequence, create ${BENCH_DIR}, create ${BENCH_DIR}/frozen_randrw_4k_fdatasync.0.0, and set its logical length to 1 GiB with posix_fallocate or an equivalent sparse truncate path recorded by the harness.  fio then runs with allow_file_create=0, overwrite=1, and fallocate=none so file-layout writes are not folded into the random read/write workload."
+      }
+    },
+    "methodology_id": "gocryptfs-frozen-workload-contract-v1",
+    "outlier_policy": {
+      "infrastructure_failure_policy": "fail/mark invalid with raw log and return code",
+      "policy": "retain_all_completed_repetitions",
+      "winsorization": "disabled"
+    },
+    "run_count": {
+      "contract_repetitions": 5,
+      "matches_contract": true,
+      "measured_repetitions": 5
+    },
+    "warmup": {
+      "full_fio_profile_warmup": true,
+      "warmup_runs": 1
+    }
+  },
+  "non_claims": [
+    "not a complete plaintext/fscrypt/dm-crypt comparison matrix",
+    "not a cold-cache result when drop_caches is unavailable",
+    "not a QoS or SQLite hero result"
+  ],
+  "overall_pass": true,
+  "passfile": {
+    "bytes": 33,
+    "mode_octal": "0o600",
+    "path_recorded": false,
+    "secret_material_retained": false
+  },
+  "platform": {
+    "fio_version": {
+      "argv": [
+        "fio",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "fio-3.36"
+    },
+    "fusermount": {
+      "argv": [
+        "fusermount3",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "fusermount3 version: 3.14.0"
+    },
+    "gocryptfs_version": {
+      "argv": [
+        "/usr/bin/gocryptfs",
+        "-version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "gocryptfs 2.4.0; go-fuse 2.4.2; 2025-06-24 go1.22.2 linux/arm64"
+    }
+  },
+  "platform_manifest": "artifacts/validation/frozen_gocryptfs_contract/platform_manifest.json",
+  "repetitions": [
+    {
+      "cache_state": "warmup",
+      "fio_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warmup_00.json",
+      "fio_stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warmup_00.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warmup_00",
+      "latency_p50_us": 40.704,
+      "latency_p95_us": 51.968,
+      "latency_p99_9_us": 276.48,
+      "latency_p99_us": 67.072,
+      "read_clat_p50_us": 22.144,
+      "read_clat_p95_us": 51.968,
+      "read_clat_p99_9_us": 158.72,
+      "read_clat_p99_us": 65.28,
+      "read_io_bytes": 909680640,
+      "read_iops": 3701.438309,
+      "read_ios": 222090,
+      "repetition": null,
+      "returncode": 0,
+      "throughput_mib_s": 20.671269416809082,
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "total_ios": 317516,
+      "valid": true,
+      "wall_seconds": 70.274961548,
+      "write_clat_p50_us": 40.704,
+      "write_clat_p95_us": 48.896,
+      "write_clat_p99_9_us": 276.48,
+      "write_clat_p99_us": 67.072,
+      "write_io_bytes": 390864896,
+      "write_iops": 1590.406827,
+      "write_ios": 95426
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_00.json",
+      "fio_stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_00.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_00",
+      "latency_p50_us": 39.68,
+      "latency_p95_us": 50.432,
+      "latency_p99_9_us": 284.672,
+      "latency_p99_us": 62.208,
+      "read_clat_p50_us": 21.632,
+      "read_clat_p95_us": 50.432,
+      "read_clat_p99_9_us": 164.864,
+      "read_clat_p99_us": 61.184,
+      "read_io_bytes": 932667392,
+      "read_iops": 3794.970084,
+      "read_ios": 227702,
+      "repetition": 0,
+      "returncode": 0,
+      "throughput_mib_s": 21.189749717712402,
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "total_ios": 325480,
+      "valid": true,
+      "wall_seconds": 70.277020959,
+      "write_clat_p50_us": 39.68,
+      "write_clat_p95_us": 47.872,
+      "write_clat_p99_9_us": 284.672,
+      "write_clat_p99_us": 62.208,
+      "write_io_bytes": 400498688,
+      "write_iops": 1629.606173,
+      "write_ios": 97778
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_01.json",
+      "fio_stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_01.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_01",
+      "latency_p50_us": 38.656,
+      "latency_p95_us": 50.432,
+      "latency_p99_9_us": 191.488,
+      "latency_p99_us": 60.672,
+      "read_clat_p50_us": 21.888,
+      "read_clat_p95_us": 50.432,
+      "read_clat_p99_9_us": 103.936,
+      "read_clat_p99_us": 60.672,
+      "read_io_bytes": 949526528,
+      "read_iops": 3863.568941,
+      "read_ios": 231818,
+      "repetition": 1,
+      "returncode": 0,
+      "throughput_mib_s": 21.579392433166504,
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "total_ios": 331465,
+      "valid": true,
+      "wall_seconds": 70.273390607,
+      "write_clat_p50_us": 38.656,
+      "write_clat_p95_us": 44.8,
+      "write_clat_p99_9_us": 191.488,
+      "write_clat_p99_us": 56.576,
+      "write_io_bytes": 408154112,
+      "write_iops": 1660.755654,
+      "write_ios": 99647
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_02.json",
+      "fio_stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_02.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_02",
+      "latency_p50_us": 38.144,
+      "latency_p95_us": 49.92,
+      "latency_p99_9_us": 179.2,
+      "latency_p99_us": 59.648,
+      "read_clat_p50_us": 21.632,
+      "read_clat_p95_us": 49.92,
+      "read_clat_p99_9_us": 116.224,
+      "read_clat_p99_us": 59.648,
+      "read_io_bytes": 955854848,
+      "read_iops": 3889.318511,
+      "read_ios": 233363,
+      "repetition": 2,
+      "returncode": 0,
+      "throughput_mib_s": 21.720470428466797,
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "total_ios": 333632,
+      "valid": true,
+      "wall_seconds": 70.273358452,
+      "write_clat_p50_us": 38.144,
+      "write_clat_p95_us": 44.8,
+      "write_clat_p99_9_us": 179.2,
+      "write_clat_p99_us": 56.576,
+      "write_io_bytes": 410701824,
+      "write_iops": 1671.122148,
+      "write_ios": 100269
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_03.json",
+      "fio_stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_03.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_03",
+      "latency_p50_us": 37.632,
+      "latency_p95_us": 49.408,
+      "latency_p99_9_us": 173.056,
+      "latency_p99_us": 59.648,
+      "read_clat_p50_us": 21.12,
+      "read_clat_p95_us": 49.408,
+      "read_clat_p99_9_us": 104.96,
+      "read_clat_p99_us": 59.648,
+      "read_io_bytes": 961822720,
+      "read_iops": 3913.60144,
+      "read_ios": 234820,
+      "repetition": 3,
+      "returncode": 0,
+      "throughput_mib_s": 21.858553886413574,
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "total_ios": 335753,
+      "valid": true,
+      "wall_seconds": 70.281756157,
+      "write_clat_p50_us": 37.632,
+      "write_clat_p95_us": 44.8,
+      "write_clat_p99_9_us": 173.056,
+      "write_clat_p99_us": 56.064,
+      "write_io_bytes": 413421568,
+      "write_iops": 1682.18863,
+      "write_ios": 100933
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_04.json",
+      "fio_stderr": "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_04.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_04",
+      "latency_p50_us": 37.632,
+      "latency_p95_us": 49.408,
+      "latency_p99_9_us": 197.632,
+      "latency_p99_us": 60.16,
+      "read_clat_p50_us": 21.376,
+      "read_clat_p95_us": 49.408,
+      "read_clat_p99_9_us": 118.272,
+      "read_clat_p99_us": 60.16,
+      "read_io_bytes": 957894656,
+      "read_iops": 3897.618373,
+      "read_ios": 233861,
+      "repetition": 4,
+      "returncode": 0,
+      "throughput_mib_s": 21.768516540527344,
+      "timed_out": false,
+      "timeout_s": 180.0,
+      "total_ios": 334370,
+      "valid": true,
+      "wall_seconds": 70.279233528,
+      "write_clat_p50_us": 37.632,
+      "write_clat_p95_us": 44.8,
+      "write_clat_p99_9_us": 197.632,
+      "write_clat_p99_us": 56.064,
+      "write_io_bytes": 411684864,
+      "write_iops": 1675.122081,
+      "write_ios": 100509
+    }
+  ],
+  "scope": "gocryptfs-only warm-cache execution of the frozen filesystem workload contract.  It can serve as the user-space encrypted filesystem baseline row once compared with other retained rows.",
+  "storage_snapshot": {
+    "file_count": 4,
+    "files": [
+      {
+        "bytes": 1082130450,
+        "path": "Q8ZpjiquqntFoj1ETlNXow/K8WQ6P2FZg27J8jCsLXd-O2-XpCeKCFTVTU2kWYK59A"
+      },
+      {
+        "bytes": 16,
+        "path": "Q8ZpjiquqntFoj1ETlNXow/gocryptfs.diriv"
+      },
+      {
+        "bytes": 385,
+        "path": "gocryptfs.conf"
+      },
+      {
+        "bytes": 16,
+        "path": "gocryptfs.diriv"
+      }
+    ],
+    "path": "artifacts/validation/frozen_gocryptfs_contract/storage_snapshot.json",
+    "storage_dir": "/tmp/gocryptfs_frozen_cipher_ycuvhpze",
+    "total_file_bytes": 1082130867,
+    "truncated_to_files": 200
+  },
+  "thermal_logging": {
+    "available": true,
+    "command": [
+      "tegrastats",
+      "--interval",
+      "100"
+    ],
+    "line_count": 4116,
+    "nonempty": true,
+    "path": "artifacts/validation/frozen_gocryptfs_contract/thermal_tegrastats.log",
+    "returncode": -15,
+    "started": true
+  },
+  "unmount": {
+    "argv": [
+      "fusermount3",
+      "-u",
+      "/tmp/gocryptfs_frozen_mnt_jcnxail9"
+    ],
+    "gocryptfs_returncode": 0,
+    "returncode": 0
+  },
+  "warm_cache_summary": {
+    "cache_state": "warm",
+    "expected_repetitions": 5,
+    "latency_definition": "latency_pXX_us is the conservative maximum of read and write fio clat_ns percentile values for the mixed 70/30 workload; read/write direction percentiles are retained separately.",
+    "metrics": {
+      "latency_p50_us": {
+        "ci95_high": 39.68,
+        "ci95_low": 37.632,
+        "median": 38.144,
+        "p05": 37.632,
+        "p95": 39.68,
+        "samples": [
+          39.68,
+          38.656,
+          38.144,
+          37.632,
+          37.632
+        ]
+      },
+      "latency_p95_us": {
+        "ci95_high": 50.432,
+        "ci95_low": 49.408,
+        "median": 49.92,
+        "p05": 49.408,
+        "p95": 50.432,
+        "samples": [
+          50.432,
+          50.432,
+          49.92,
+          49.408,
+          49.408
+        ]
+      },
+      "latency_p99_9_us": {
+        "ci95_high": 284.672,
+        "ci95_low": 173.056,
+        "median": 191.488,
+        "p05": 173.056,
+        "p95": 284.672,
+        "samples": [
+          284.672,
+          191.488,
+          179.2,
+          173.056,
+          197.632
+        ]
+      },
+      "latency_p99_us": {
+        "ci95_high": 62.208,
+        "ci95_low": 59.648,
+        "median": 60.16,
+        "p05": 59.648,
+        "p95": 62.208,
+        "samples": [
+          62.208,
+          60.672,
+          59.648,
+          59.648,
+          60.16
+        ]
+      },
+      "read_clat_p99_us": {
+        "ci95_high": 61.184,
+        "ci95_low": 59.648,
+        "median": 60.16,
+        "p05": 59.648,
+        "p95": 61.184,
+        "samples": [
+          61.184,
+          60.672,
+          59.648,
+          59.648,
+          60.16
+        ]
+      },
+      "throughput_mib_s": {
+        "ci95_high": 21.858553886413574,
+        "ci95_low": 21.189749717712402,
+        "median": 21.720470428466797,
+        "p05": 21.189749717712402,
+        "p95": 21.858553886413574,
+        "samples": [
+          21.189749717712402,
+          21.579392433166504,
+          21.720470428466797,
+          21.858553886413574,
+          21.768516540527344
+        ]
+      },
+      "write_clat_p99_us": {
+        "ci95_high": 62.208,
+        "ci95_low": 56.064,
+        "median": 56.576,
+        "p05": 56.064,
+        "p95": 62.208,
+        "samples": [
+          62.208,
+          56.576,
+          56.576,
+          56.064,
+          56.064
+        ]
+      }
+    },
+    "valid_repetitions": 5
+  },
+  "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+}

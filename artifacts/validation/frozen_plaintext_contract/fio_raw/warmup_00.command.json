@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "fio",
+    "--name=frozen_randrw_4k_fdatasync",
+    "--ioengine=psync",
+    "--rw=randrw",
+    "--rwmixread=70",
+    "--bs=4k",
+    "--direct=0",
+    "--fdatasync=1",
+    "--iodepth=1",
+    "--numjobs=1",
+    "--size=1G",
+    "--fallocate=none",
+    "--allow_file_create=0",
+    "--overwrite=1",
+    "--time_based",
+    "--runtime=60",
+    "--ramp_time=10",
+    "--directory=/tmp/plaintext_frozen_root_6o5vb81o/contract",
+    "--output-format=json"
+  ],
+  "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+  "end_realtime_ns": 1782545827291007785,
+  "label": "warmup_00",
+  "returncode": 0,
+  "start_realtime_ns": 1782545757017213015,
+  "stderr": "artifacts/validation/frozen_plaintext_contract/fio_raw/warmup_00.stderr.txt",
+  "stdout_json": "artifacts/validation/frozen_plaintext_contract/fio_raw/warmup_00.json",
+  "timed_out": false,
+  "timeout_s": 180.0,
+  "wall_seconds": 70.27379477
+}

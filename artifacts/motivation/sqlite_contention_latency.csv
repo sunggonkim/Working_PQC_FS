@@ -1,3 +1,0 @@
-tier,requested_mode,actual_mode,sync_mode,fallback_error,integrity_check,samples_ms,median_ms,p95_ms,error
-full,WAL,WAL,FULL,,ok,"[0.817704, 0.373065]",0.5953845,0.7954720500000001,
-plain,WAL,WAL,FULL,,ok,"[0.759769, 0.367351]",0.5635600000000001,0.7401481,

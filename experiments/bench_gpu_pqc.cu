@@ -1,7 +1,7 @@
 /*
  * experiments/bench_gpu_pqc.cu — ML-KEM-768 GPU Batch Benchmark
  *
- * Fills the "unsupported" GPU rows in artifacts/workload_map.csv:
+ * Fills the "unsupported" GPU rows in artifacts/results/placement/workload_map.csv:
  *   ml_kem_keygen, gpu, <batch>, <ops_per_sec>
  *   ml_kem_encaps, gpu, <batch>, <ops_per_sec>
  *   ml_kem_decaps, gpu, <batch>, <ops_per_sec>

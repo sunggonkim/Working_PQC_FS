@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{SQLite foreground recovery under mounted secure-storage pressure; latencies are p50/p95/p99 in ms and CPU/GPU are utilization percent.}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\columnwidth}{P{0.18\columnwidth}|P{0.20\columnwidth}|r|r|r|r|r}
+\toprule
+\textbf{Mode} & \textbf{p50/p95/p99} & \textbf{Miss} & \textbf{MB/s} & \textbf{CPU/GPU} & \textbf{Samp.} & \textbf{Thr.}\\
+\midrule
+App & 4.9/6.3/6.4 & 0 & 0.0 & 4/10 & 28 & 0\\
+Unthrottled & 6.1/9.6/13.8 & 1 & 6.8 & 10/10 & 31 & 0\\
+Simple & 5.3/7.0/8.2 & 0 & 2.3 & 4/10 & 28 & 26\\
+AEGIS-Q & 5.4/7.5/8.8 & 0 & 2.7 & 6/10 & 29 & 44\\
+\bottomrule
+\end{tabularx}
+\label{tab:qos_sqlite_recovery}
+\end{table}

@@ -1,3 +1,0 @@
-{"trial": 0, "first16": "", "preserved_baseline": false, "result": "fail_closed_errno_74"}
-{"trial": 1, "first16": "", "preserved_baseline": false, "result": "fail_closed_errno_74"}
-{"trial": 2, "first16": "", "preserved_baseline": false, "result": "fail_closed_errno_74"}

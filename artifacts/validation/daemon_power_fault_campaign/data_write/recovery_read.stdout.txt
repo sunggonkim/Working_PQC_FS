@@ -1,0 +1,1 @@
+{"operation": "read_all", "bytes": 4096, "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"}

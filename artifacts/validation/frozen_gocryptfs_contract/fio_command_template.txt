@@ -1,0 +1,1 @@
+fio --name=frozen_randrw_4k_fdatasync --ioengine=psync --rw=randrw --rwmixread=70 --bs=4k --direct=0 --fdatasync=1 --iodepth=1 --numjobs=1 --size=1G --fallocate=none --allow_file_create=0 --overwrite=1 --time_based --runtime=60 --ramp_time=10 --directory=${BENCH_DIR} --output-format=json

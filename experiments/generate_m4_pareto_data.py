@@ -9,8 +9,8 @@ BLOCK_SIZE = 4096
 
 windows = [1, 10, 100, 1000]
 
-os.makedirs("artifacts/m4_freshness", exist_ok=True)
-with open("artifacts/m4_freshness/m4_tradeoff.csv", "w", newline="") as f:
+os.makedirs("artifacts/results/freshness/m4_freshness", exist_ok=True)
+with open("artifacts/results/freshness/m4_freshness/m4_tradeoff.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerow(["Window_N", "Sustainable_Throughput_MBps", "Data_Loss_Bytes"])
     
@@ -27,4 +27,4 @@ with open("artifacts/m4_freshness/m4_tradeoff.csv", "w", newline="") as f:
         
         writer.writerow([N, round(throughput_mbps, 2), data_loss_bytes])
 
-print("Generated artifacts/m4_freshness/m4_tradeoff.csv")
+print("Generated artifacts/results/freshness/m4_freshness/m4_tradeoff.csv")

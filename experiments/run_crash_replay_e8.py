@@ -5,10 +5,10 @@ experiments/run_crash_replay_e8.py — AEGIS-Q E8 crash/replay matrix
 
 This script exercises deterministic cut-points for crash and rollback
 classification.  It emits:
-  - artifacts/crash_replay_matrix.json
-  - artifacts/crash_replay_matrix.csv
-  - artifacts/crash_replay_summary.json
-  - artifacts/crash_replay_summary.csv
+  - artifacts/results/recovery/crash_replay_matrix.json
+  - artifacts/results/recovery/crash_replay_matrix.csv
+  - artifacts/results/recovery/crash_replay_summary.json
+  - artifacts/results/recovery/crash_replay_summary.csv
 
 The file-backed anchor is a negative control: because it is copied with the
 storage image, it cannot establish rollback resistance.  A restored baseline

@@ -5,14 +5,16 @@ This harness is intentionally conservative:
 
   * It mounts the real FUSE filesystem and writes through it.
   * It samples live `tegrastats` while optional GPU pressure is active.
-  * Each sample is fed into `pqc_fuse --admission-telemetry-smoke` to retain
-    the controller-path decision under the same live telemetry values.
-  * The same live samples drive a simple hysteresis throttle flag that pauses
-    the background mounted-FUSE writer.
+  * The mounted FUSE process reads the same live samples through
+    `PQC_TELEMETRY_FILE`, so the real write flush path calls `pqc_admit()` with
+    workload-time pressure rather than a separate smoke-process state.
+  * The same live samples are also replayed through
+    `pqc_fuse --admission-telemetry-smoke` to retain per-sample decision
+    diagnostics.
 
-The result is stronger than a pure smoke test because real FUSE work is slowed
-in the same execution. It is still not a full PMU/CUPTI/Nsight-backed in-daemon
-controller proof.
+The result is stronger than a pure smoke test because real FUSE routing changes
+inside the mounted daemon in the same execution. It is still not a full
+PMU/CUPTI/Nsight-backed controller proof; the live source is `tegrastats`.
 """
 
 from __future__ import annotations
@@ -97,9 +99,37 @@ def parse_tegrastats(line: str) -> dict[str, Any]:
     }
 
 
-def start_fuse(storage_dir: Path, mount_dir: Path, log_dir: Path) -> subprocess.Popen[str]:
+def write_runtime_telemetry(path: Path,
+                            telemetry: dict[str, Any],
+                            budget_ns: int = 2_000_000,
+                            queue_depth: int = 0) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(
+        f"{telemetry['mem_bandwidth_util']:.6f} "
+        f"{telemetry['tensor_core_util']:.6f} "
+        f"{budget_ns:d} {queue_depth:d}\n",
+        encoding="utf-8",
+    )
+    tmp.replace(path)
+
+
+def start_fuse(storage_dir: Path,
+               mount_dir: Path,
+               log_dir: Path,
+               telemetry_file: Path,
+               runtime_trace: Path,
+               throttle_trace: Path) -> subprocess.Popen[str]:
     env = os.environ.copy()
     env["PQC_MASTER_PASSWORD"] = env.get("PQC_MASTER_PASSWORD", "test-password")
+    env["PQC_ENABLE_ADMISSION_ON_WRITE"] = "1"
+    env["PQC_ADMISSION_TRACE_PATH"] = str(runtime_trace)
+    env["PQC_TELEMETRY_FILE"] = str(telemetry_file)
+    env["PQC_TELEMETRY_POLL_MS"] = env.get("PQC_TELEMETRY_POLL_MS", "25")
+    env["PQC_ADMISSION_INITIAL_BUDGET_NS"] = env.get("PQC_ADMISSION_INITIAL_BUDGET_NS", "2000000")
+    env["PQC_ADMISSION_WRITE_DEADLINE_NS"] = env.get("PQC_ADMISSION_WRITE_DEADLINE_NS", "10000000")
+    env["PQC_ENABLE_QOS_THROTTLE_ON_WRITE"] = "1"
+    env["PQC_QOS_THROTTLE_TRACE_PATH"] = str(throttle_trace)
+    env["PQC_QOS_THROTTLE_SLEEP_US"] = env.get("PQC_QOS_THROTTLE_SLEEP_US", "50000")
     stdout_fp = (log_dir / "pqc_fuse.stdout.txt").open("w", encoding="utf-8")
     stderr_fp = (log_dir / "pqc_fuse.stderr.txt").open("w", encoding="utf-8")
     proc = subprocess.Popen(
@@ -224,6 +254,20 @@ def run_admission_sample(out_dir: Path, idx: int, telemetry: dict[str, Any]) -> 
     }
 
 
+def load_runtime_trace(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    if not path.exists():
+        return rows
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = line.strip()
+        if line.startswith("{") and line.endswith("}"):
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    return rows
+
+
 def terminate(proc: subprocess.Popen[Any] | None) -> None:
     if proc is None or proc.poll() is not None:
         return
@@ -258,6 +302,16 @@ def main() -> int:
     mount_dir = Path(tempfile.mkdtemp(prefix="aegis_qos_mnt_"))
     mount_log_dir = out_dir / "mount_logs"
     mount_log_dir.mkdir(parents=True, exist_ok=True)
+    telemetry_file = out_dir / "runtime_telemetry.txt"
+    runtime_trace = out_dir / "runtime_fuse_admission_trace.jsonl"
+    throttle_trace = out_dir / "runtime_fuse_throttle_trace.jsonl"
+    write_runtime_telemetry(
+        telemetry_file,
+        {
+            "mem_bandwidth_util": 0.0,
+            "tensor_core_util": 0.0,
+        },
+    )
 
     ctx = mp.get_context("spawn")
     stop_flag = ctx.Event()
@@ -270,7 +324,8 @@ def main() -> int:
     writer_proc: mp.Process | None = None
     samples: list[dict[str, Any]] = []
     try:
-        fuse_proc = start_fuse(storage_dir, mount_dir, mount_log_dir)
+        fuse_proc = start_fuse(storage_dir, mount_dir, mount_log_dir,
+                               telemetry_file, runtime_trace, throttle_trace)
         writer_proc = ctx.Process(
             target=writer_worker,
             args=(str(mount_dir), stop_flag, throttle_flag, result_queue,
@@ -297,7 +352,10 @@ def main() -> int:
             text=True,
         )
         assert tegra.stdin is not None
-        tegra.stdin.write(os.environ.get("PQC_SUDO_PASSWORD", "1234qwer") + "\n")
+        sudo_password = os.environ.get("PQC_SUDO_PASSWORD")
+        if not sudo_password:
+            raise RuntimeError("PQC_SUDO_PASSWORD must be set for sudo tegrastats collection")
+        tegra.stdin.write(sudo_password + "\n")
         tegra.stdin.flush()
         assert tegra.stdout is not None
 
@@ -312,9 +370,13 @@ def main() -> int:
             if not line:
                 break
             telemetry = parse_tegrastats(line)
+            write_runtime_telemetry(telemetry_file, telemetry)
             admission = run_admission_sample(out_dir, idx + 1, telemetry)
             decision = controller.update(telemetry["gpu_power_mw"] or 0)
-            throttle_flag.value = int(decision["throttle"])
+            # Do not pause the writer in the harness.  The retained claim is
+            # now the in-daemon FUSE throttle path, so the mounted writer must
+            # continue issuing writes while the daemon applies any delay.
+            throttle_flag.value = 0
             admission["throttle_decision"] = decision
             samples.append(admission)
     finally:
@@ -337,14 +399,43 @@ def main() -> int:
         state = sample["throttle_decision"]["state"]
         throttle_counts[state] = throttle_counts.get(state, 0) + 1
 
+    runtime_rows = load_runtime_trace(runtime_trace)
+    throttle_rows = load_runtime_trace(throttle_trace)
+    runtime_decision_counts: dict[str, int] = {}
+    runtime_low_pressure_targets: dict[str, int] = {}
+    runtime_high_pressure_targets: dict[str, int] = {}
+    for row in runtime_rows:
+        target = row.get("chosen_target", "missing")
+        runtime_decision_counts[target] = runtime_decision_counts.get(target, 0) + 1
+        mem_util = float(row.get("telemetry_mem_bandwidth_util", 0.0))
+        if mem_util >= 0.70:
+            runtime_high_pressure_targets[target] = runtime_high_pressure_targets.get(target, 0) + 1
+        else:
+            runtime_low_pressure_targets[target] = runtime_low_pressure_targets.get(target, 0) + 1
+    throttle_decision_counts = {
+        "open": sum(1 for row in throttle_rows if int(row.get("throttled", 0)) == 0),
+        "throttled": sum(1 for row in throttle_rows if int(row.get("throttled", 0)) != 0),
+    }
+    throttle_sleep_us_total = sum(int(row.get("sleep_us", 0)) for row in throttle_rows)
+
     report = {
-        "note": "Mounted-FUSE workload plus live tegrastats bridge. This is same-run throttling evidence, not a PMU/CUPTI/Nsight-backed in-daemon controller proof.",
+        "note": "Mounted-FUSE workload plus in-daemon live tegrastats telemetry. This is same-run FUSE throttle evidence, not a PMU/CUPTI/Nsight-backed controller proof.",
         "samples_requested": args.samples,
         "samples_recorded": len(samples),
         "gpu_burner_started": bool(args.start_gpu_burner and GPU_BURNER.exists()),
-        "decision_counts": decision_counts,
+        "smoke_decision_counts": decision_counts,
         "throttle_state_counts": throttle_counts,
+        "runtime_decision_counts": runtime_decision_counts,
+        "runtime_low_pressure_targets": runtime_low_pressure_targets,
+        "runtime_high_pressure_targets": runtime_high_pressure_targets,
+        "runtime_trace_rows": len(runtime_rows),
+        "runtime_throttle_trace_rows": len(throttle_rows),
+        "runtime_throttle_counts": throttle_decision_counts,
+        "runtime_throttle_sleep_us_total": throttle_sleep_us_total,
         "writer_stats": writer_stats,
+        "runtime_telemetry_file": str(telemetry_file.relative_to(ROOT)),
+        "runtime_trace": str(runtime_trace.relative_to(ROOT)),
+        "runtime_throttle_trace": str(throttle_trace.relative_to(ROOT)),
         "mount_logs": {
             "stdout": str((mount_log_dir / "pqc_fuse.stdout.txt").relative_to(ROOT)),
             "stderr": str((mount_log_dir / "pqc_fuse.stderr.txt").relative_to(ROOT)),
@@ -359,14 +450,25 @@ def main() -> int:
         "# QoS mounted-FUSE live bridge",
         "",
         "This bundle writes through a real FUSE mount while sampling live `tegrastats`.",
-        "Each live sample is fed into `pqc_fuse --admission-telemetry-smoke`, and the same sample drives a harness-level hysteresis throttle for the mounted writer.",
-        "This is stronger than a pure smoke path because real FUSE work is slowed in the same execution, but it is still not a PMU/CUPTI/Nsight-backed in-daemon controller proof.",
+        "The mounted daemon reads the live sample stream through `PQC_TELEMETRY_FILE`; the real write flush path applies telemetry-derived throttle and writes `runtime_fuse_throttle_trace.jsonl`.",
+        "The DATA plane is structurally CPU-only in this codebase, so `runtime_fuse_admission_trace.jsonl` can remain empty without invalidating the throttle result.",
+        "The per-sample smoke process is retained only as a diagnostic replay of the same telemetry values.",
+        "This is stronger than a pure smoke path because real FUSE flushes are delayed inside the mounted daemon, but it is still not a PMU/CUPTI/Nsight-backed controller proof.",
         "",
         f"- Samples recorded: `{len(samples)}` / requested `{args.samples}`",
         f"- GPU burner started: `{report['gpu_burner_started']}`",
-        f"- Admission decision counts: `{decision_counts}`",
+        f"- Smoke admission decision counts: `{decision_counts}`",
+        f"- Runtime FUSE admission decision counts: `{runtime_decision_counts}`",
+        f"- Runtime low-pressure targets: `{runtime_low_pressure_targets}`",
+        f"- Runtime high-pressure targets: `{runtime_high_pressure_targets}`",
+        f"- Runtime trace rows: `{len(runtime_rows)}`",
+        f"- Runtime throttle counts: `{throttle_decision_counts}`",
+        f"- Runtime throttle trace rows: `{len(throttle_rows)}`",
+        f"- Runtime throttle sleep total: `{throttle_sleep_us_total}` us",
         f"- Throttle state counts: `{throttle_counts}`",
         f"- Writer stats: `{writer_stats}`",
+        f"- Runtime trace: `{report['runtime_trace']}`",
+        f"- Runtime throttle trace: `{report['runtime_throttle_trace']}`",
         f"- FUSE stderr: `{report['mount_logs']['stderr']}`",
         "",
         "| sample | gpu_power_mw | gr3d_percent | mem_util | tensor_util | admission_target | throttle_state | trace |",

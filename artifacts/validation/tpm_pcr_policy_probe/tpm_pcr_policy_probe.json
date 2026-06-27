@@ -38,7 +38,7 @@
         "-S",
         "chown",
         "1000:1000",
-        "/tmp/aegis_tpm_pcr_4snll8ib/pcr.bin"
+        "/tmp/aegis_tpm_pcr__qggwz6b/pcr.bin"
       ],
       "returncode": 0,
       "stdout": "artifacts/validation/tpm_pcr_policy_probe/chown_pcr.stdout.txt",
@@ -172,7 +172,7 @@
         "-S",
         "chown",
         "1000:1000",
-        "/tmp/aegis_tpm_pcr_4snll8ib/unsealed.dat"
+        "/tmp/aegis_tpm_pcr__qggwz6b/unsealed.dat"
       ],
       "returncode": 0,
       "stdout": "artifacts/validation/tpm_pcr_policy_probe/chown_unsealed.stdout.txt",

@@ -1,0 +1,83 @@
+{
+  "note": "Same-run mounted-FUSE QoS bridge driven by live CUPTI PM sampling telemetry.",
+  "cupti_returncode": 0,
+  "cupti_stdout": "artifacts/validation/qos_cupti_pm_fuse_bridge/cupti_pm_sampling.stdout.txt",
+  "cupti_stderr": "artifacts/validation/qos_cupti_pm_fuse_bridge/cupti_pm_sampling.stderr.txt",
+  "cupti_pm_trace": "artifacts/validation/qos_cupti_pm_fuse_bridge/cupti_pm_samples.jsonl",
+  "cupti_pm_samples": 1741,
+  "runtime_throttle_trace": "artifacts/validation/qos_cupti_pm_fuse_bridge/runtime_fuse_throttle_trace.jsonl",
+  "runtime_throttle_trace_rows": 19,
+  "runtime_throttle_counts": {
+    "open": 14,
+    "throttled": 5
+  },
+  "runtime_throttle_sleep_us_total": 250000,
+  "runtime_admission_trace_rows": 0,
+  "writer_stats": {
+    "chunks_written": 76,
+    "bytes_written": 9961472,
+    "throttle_sleeps": 0,
+    "sleep_time_s": 0.0,
+    "elapsed_s": 2.524104891344905,
+    "throughput_mb_s": 3.7637104672532713
+  },
+  "success_criteria": {
+    "cupti_samples_present": true,
+    "mounted_fuse_throttle_present": true,
+    "writer_harness_throttle_disabled": true,
+    "cupti_returncode_zero": true
+  },
+  "sample_preview": [
+    {
+      "sample_index": 0,
+      "start_timestamp": 1776746982054425305,
+      "end_timestamp": 1782475462483622657,
+      "gr_cycles_active_avg": 4071990.0,
+      "gr_cycles_elapsed_max": 476886000.0,
+      "sm_inst_per_active_cycle": 0.204634,
+      "mem_bandwidth_util": 0.0085387,
+      "tensor_core_util": 0.204634
+    },
+    {
+      "sample_index": 1,
+      "start_timestamp": 1782475462483622657,
+      "end_timestamp": 1782475462484257601,
+      "gr_cycles_active_avg": 1000000.0,
+      "gr_cycles_elapsed_max": 1000000.0,
+      "sm_inst_per_active_cycle": 0.360751,
+      "mem_bandwidth_util": 1,
+      "tensor_core_util": 0.360751
+    },
+    {
+      "sample_index": 0,
+      "start_timestamp": 1782475462484257601,
+      "end_timestamp": 1782475462484892481,
+      "gr_cycles_active_avg": 1000000.0,
+      "gr_cycles_elapsed_max": 1000000.0,
+      "sm_inst_per_active_cycle": 0.352575,
+      "mem_bandwidth_util": 1,
+      "tensor_core_util": 0.352575
+    },
+    {
+      "sample_index": 1,
+      "start_timestamp": 1782475462484892481,
+      "end_timestamp": 1782475462485527425,
+      "gr_cycles_active_avg": 997605,
+      "gr_cycles_elapsed_max": 1000000.0,
+      "sm_inst_per_active_cycle": 0.35608,
+      "mem_bandwidth_util": 0.997604,
+      "tensor_core_util": 0.35608
+    },
+    {
+      "sample_index": 2,
+      "start_timestamp": 1782475462485527425,
+      "end_timestamp": 1782475462486162337,
+      "gr_cycles_active_avg": 1000000.0,
+      "gr_cycles_elapsed_max": 1000000.0,
+      "sm_inst_per_active_cycle": 0.383862,
+      "mem_bandwidth_util": 1,
+      "tensor_core_util": 0.383862
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,16 @@
+==================================================
+ AEGIS-Q GPU Integrity Plane Correctness Verification
+==================================================
+  [PASS] GPU Leaf parity matches OpenSSL (size 16, with 0x00 prefix)
+  [PASS] GPU Leaf parity matches OpenSSL (size 32, with 0x00 prefix)
+  [PASS] GPU Leaf parity matches OpenSSL (size 64, with 0x00 prefix)
+  [PASS] Merkle parity matches for count 1 (Leaves: 1, Tree: 1)
+  [PASS] Merkle parity matches for count 2 (Leaves: 2, Tree: 2)
+  [PASS] Merkle parity matches for count 3 (Leaves: 3, Tree: 4)
+  [PASS] Merkle parity matches for count 4 (Leaves: 4, Tree: 4)
+  [PASS] Merkle parity matches for count 15 (Leaves: 15, Tree: 16)
+  [PASS] Merkle parity matches for count 16 (Leaves: 16, Tree: 16)
+  [PASS] Merkle parity matches for count 256 (Leaves: 256, Tree: 256)
+  [PASS] Empty tree (count=0) matches standard empty SHA-256 string hash
+
+[SUCCESS] All correctness tests passed.

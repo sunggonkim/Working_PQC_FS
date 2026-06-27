@@ -1,0 +1,506 @@
+{
+  "contract": {
+    "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+    "environment_contract": {
+      "background_process_control": "no unrelated foreground GPU/CPU/storage jobs; retain ps/top or equivalent process snapshot with each benchmark bundle",
+      "cpu_governor": "performance",
+      "lower_filesystem": {
+        "filesystem": "ext4",
+        "mount_options": "rw,relatime",
+        "source": "/dev/nvme0n1p1"
+      },
+      "platform": "NVIDIA Jetson AGX Thor Developer Kit",
+      "storage_device": "WD PC SN5000S SDEPNSJ-1T00 NVMe, /dev/nvme0n1",
+      "thermal_mode": "fixed max-performance/power mode with active cooling; tegrastats must be retained and any thermal-throttle indication invalidates the run"
+    },
+    "filesystem_modes": {
+      "aegis_q": {
+        "benchmark_directory": "${AEGIS_MOUNT}/contract",
+        "mount_options": {
+          "file_tier": "default encrypted data path; no latency-sensitive xattr",
+          "fuse": "fuse3",
+          "mount_command": "build/pqc_fuse ${AEGIS_BACKING} ${AEGIS_MOUNT} -f",
+          "required_environment": {
+            "PQC_FRESHNESS_ANCHOR_BACKEND": "file",
+            "PQC_MASTER_PASSWORD": "set by harness secret file",
+            "PQC_QOS_MODE": "disabled for this filesystem-throughput profile"
+          }
+        },
+        "role": "prototype secure-storage path"
+      },
+      "dm_crypt_ext4": {
+        "benchmark_directory": "${DMCRYPT_MOUNT}/contract",
+        "mount_options": {
+          "cryptsetup": "LUKS2, aes-xts-plain64, 512-bit key",
+          "discard": "disabled",
+          "filesystem": "ext4 inside /dev/mapper/${DMCRYPT_NAME}",
+          "mount_command": "cryptsetup open ${DMCRYPT_BLOCK_DEVICE} ${DMCRYPT_NAME}; mount /dev/mapper/${DMCRYPT_NAME} ${DMCRYPT_MOUNT}"
+        },
+        "role": "kernel block-encryption baseline"
+      },
+      "fscrypt": {
+        "benchmark_directory": "${FSCRYPT_ROOT}/contract",
+        "mount_options": {
+          "filesystem": "ext4 with encrypt feature",
+          "lower_device_policy": "same NVMe device class as plaintext and AEGIS-Q",
+          "mount_command": "mount ${FSCRYPT_BLOCK_DEVICE} ${FSCRYPT_ROOT}",
+          "policy": "fscrypt v2 policy with custom passphrase"
+        },
+        "role": "kernel filesystem-encryption baseline"
+      },
+      "gocryptfs": {
+        "benchmark_directory": "${GOCRYPTFS_MOUNT}/contract",
+        "mount_options": {
+          "cipher_directory": "${GOCRYPTFS_CIPHER}",
+          "mount_command": "gocryptfs -fg -passfile ${PASSFILE} ${GOCRYPTFS_CIPHER} ${GOCRYPTFS_MOUNT}",
+          "plaintext_names": false,
+          "reverse_mode": false
+        },
+        "role": "user-space encrypted-filesystem baseline"
+      },
+      "plaintext_lowerfs": {
+        "benchmark_directory": "${LOWER_ROOT}/plaintext_contract",
+        "mount_options": {
+          "encryption": "none",
+          "filesystem": "ext4",
+          "options": "rw,relatime",
+          "source": "/dev/nvme0n1p1"
+        },
+        "role": "raw lower-filesystem control"
+      }
+    },
+    "result_validity_rules": [
+      "Retain raw fio JSON, stdout/stderr, exact command lines, mount logs, and version strings for every mode.",
+      "Do not compare a mode if its warm/cold cache state, queue depth, sync mode, file size, or repetition count deviates from the contract.",
+      "Do not include fio file-layout writes in measured rows; the harness must precreate the 1 GiB file and run fio with allow_file_create=0, overwrite=1, and fallocate=none.",
+      "Report five-repetition medians and bootstrap 95% confidence intervals; label any smaller run as smoke-only.",
+      "Existing sequential fscrypt/dm-crypt fio reference outputs are not contract-compliant until rerun with this profile."
+    ],
+    "scope": "Mode-aligned filesystem comparison contract.  Results may be compared only when every filesystem mode follows this contract.",
+    "workload_profiles": [
+      {
+        "cache_states": [
+          {
+            "procedure": "sparse-create the 1 GiB fio file by the file-preparation procedure, run one untimed fio pass with the same profile, then run the measured repetitions without dropping caches",
+            "state": "warm"
+          },
+          {
+            "procedure": "sync, unmount the tested filesystem mode, drop page cache with /proc/sys/vm/drop_caches when privileged, remount the mode, and run the measured repetition; if this cannot be performed, mark the cold-cache row invalid instead of folding it into warm-cache results",
+            "state": "cold"
+          }
+        ],
+        "client_count": 1,
+        "confidence_interval_method": {
+          "confidence_level": 0.95,
+          "metrics": [
+            "throughput_mib_s",
+            "latency_p50_us",
+            "latency_p95_us",
+            "latency_p99_us",
+            "latency_p99_9_us"
+          ],
+          "name": "nonparametric bootstrap",
+          "random_seed": 12648430,
+          "resamples": 10000,
+          "unit": "per-repetition summary rows"
+        },
+        "file_size_bytes": 1073741824,
+        "mount_options": {
+          "command_template": "fio --name=frozen_randrw_4k_fdatasync --ioengine=psync --rw=randrw --rwmixread=70 --bs=4k --direct=0 --fdatasync=1 --iodepth=1 --numjobs=1 --size=1G --fallocate=none --allow_file_create=0 --overwrite=1 --time_based --runtime=60 --ramp_time=10 --directory=${BENCH_DIR} --output-format=json",
+          "file_preparation": {
+            "filename": "frozen_randrw_4k_fdatasync.0.0",
+            "procedure": "Before each mode's warm-cache sequence, create ${BENCH_DIR}, create ${BENCH_DIR}/frozen_randrw_4k_fdatasync.0.0, and set its logical length to 1 GiB with posix_fallocate or an equivalent sparse truncate path recorded by the harness.  fio then runs with allow_file_create=0, overwrite=1, and fallocate=none so file-layout writes are not folded into the random read/write workload."
+          },
+          "fio_common": {
+            "allow_file_create": 0,
+            "bs": "4k",
+            "direct": 0,
+            "fallocate": "none",
+            "fdatasync": 1,
+            "iodepth": 1,
+            "ioengine": "psync",
+            "numjobs": 1,
+            "output_format": "json",
+            "overwrite": 1,
+            "ramp_time": "10s",
+            "runtime": "60s",
+            "rw": "randrw",
+            "rwmixread": 70,
+            "size": "1G",
+            "time_based": true
+          }
+        },
+        "profile_id": "fio_randrw_4k_70r30w_fdatasync_qd1",
+        "profile_scope": "Primary mode-aligned filesystem comparison profile; it is not a SQLite/QoS workload and is not a result by itself.",
+        "queue_depth": 1,
+        "read_write_mix": {
+          "fio_rw": "randrw",
+          "fio_rwmixread": 70,
+          "read_percent": 70,
+          "write_percent": 30
+        },
+        "repetition_count": 5,
+        "request_size_bytes": 4096,
+        "sync_mode": {
+          "completion_boundary": "record write latency only after fdatasync returns",
+          "data_path": "buffered POSIX I/O",
+          "direct_io": false,
+          "fdatasync_per_write": true,
+          "fio_ioengine": "psync"
+        }
+      }
+    ]
+  },
+  "contract_complete": true,
+  "contract_sha256": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+  "current_host_execution_ready": false,
+  "observed_platform": {
+    "cpu_governors": {
+      "governor_counts": {
+        "schedutil": 14
+      },
+      "paths_observed": 14
+    },
+    "df": {
+      "argv": [
+        "df",
+        "-PT",
+        "/home/thor/skim/pqc_encrpyted_fs"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Filesystem     Type 1024-blocks      Used Available Capacity Mounted on\n/dev/nvme0n1p1 ext4   981422704 346334372 585201616      38% /"
+    },
+    "findmnt": {
+      "parsed": {
+        "fstype": "ext4",
+        "options": "rw,relatime",
+        "source": "/dev/nvme0n1p1",
+        "target": "/"
+      },
+      "raw": {
+        "argv": [
+          "findmnt",
+          "-T",
+          "/home/thor/skim/pqc_encrpyted_fs",
+          "-no",
+          "SOURCE,FSTYPE,TARGET,OPTIONS"
+        ],
+        "available": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "/dev/nvme0n1p1 ext4   /      rw,relatime"
+      }
+    },
+    "jetson_clocks": {
+      "argv": [
+        "jetson_clocks",
+        "--show"
+      ],
+      "available": true,
+      "returncode": 1,
+      "stderr": "",
+      "stdout": "SOC family:tegra264  Machine:NVIDIA Jetson AGX Thor Developer Kit\nError: Run this script(/usr/bin/jetson_clocks) as a root user"
+    },
+    "kernel": "6.8.12-tegra",
+    "lsblk": {
+      "parsed": {
+        "blockdevices": [
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/bare/5"
+            ],
+            "name": "loop0",
+            "size": "4K",
+            "type": "loop"
+          },
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/core22/2293"
+            ],
+            "name": "loop1",
+            "size": "68.9M",
+            "type": "loop"
+          },
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/core22/2340"
+            ],
+            "name": "loop2",
+            "size": "68.9M",
+            "type": "loop"
+          },
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/firefox/7897"
+            ],
+            "name": "loop3",
+            "size": "240M",
+            "type": "loop"
+          },
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/firefox/7965"
+            ],
+            "name": "loop4",
+            "size": "240.4M",
+            "type": "loop"
+          },
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/gtk-common-themes/1535"
+            ],
+            "name": "loop5",
+            "size": "91.7M",
+            "type": "loop"
+          },
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/snapd/25939"
+            ],
+            "name": "loop6",
+            "size": "41.6M",
+            "type": "loop"
+          },
+          {
+            "fstype": null,
+            "model": null,
+            "mountpoints": [
+              "/snap/gnome-42-2204/245"
+            ],
+            "name": "loop7",
+            "size": "503M",
+            "type": "loop"
+          },
+          {
+            "fstype": "crypto_LUKS",
+            "model": null,
+            "mountpoints": [
+              null
+            ],
+            "name": "loop8",
+            "size": "5G",
+            "type": "loop"
+          },
+          {
+            "children": [
+              {
+                "fstype": "ext4",
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "pqc_crypt_9206",
+                "size": "62M",
+                "type": "crypt"
+              }
+            ],
+            "fstype": "crypto_LUKS",
+            "model": null,
+            "mountpoints": [
+              null
+            ],
+            "name": "loop10",
+            "size": "64M",
+            "type": "loop"
+          },
+          {
+            "children": [
+              {
+                "fstype": "ext4",
+                "model": null,
+                "mountpoints": [
+                  "/"
+                ],
+                "name": "nvme0n1p1",
+                "size": "951.2G",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p2",
+                "size": "100M",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p3",
+                "size": "768K",
+                "type": "part"
+              },
+              {
+                "fstype": "vfat",
+                "model": null,
+                "mountpoints": [
+                  "/boot/efi"
+                ],
+                "name": "nvme0n1p4",
+                "size": "512M",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p5",
+                "size": "384.8M",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p6",
+                "size": "100M",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p7",
+                "size": "768K",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p8",
+                "size": "512M",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p9",
+                "size": "384.8M",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p10",
+                "size": "400M",
+                "type": "part"
+              },
+              {
+                "fstype": null,
+                "model": null,
+                "mountpoints": [
+                  null
+                ],
+                "name": "nvme0n1p11",
+                "size": "335M",
+                "type": "part"
+              }
+            ],
+            "fstype": null,
+            "model": "WD PC SN5000S SDEPNSJ-1T00",
+            "mountpoints": [
+              null
+            ],
+            "name": "nvme0n1",
+            "size": "953.9G",
+            "type": "disk"
+          }
+        ]
+      },
+      "raw": {
+        "argv": [
+          "lsblk",
+          "-J",
+          "-o",
+          "NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS,MODEL"
+        ],
+        "available": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "{\n   \"blockdevices\": [\n      {\n         \"name\": \"loop0\",\n         \"type\": \"loop\",\n         \"size\": \"4K\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/bare/5\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop1\",\n         \"type\": \"loop\",\n         \"size\": \"68.9M\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/core22/2293\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop2\",\n         \"type\": \"loop\",\n         \"size\": \"68.9M\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/core22/2340\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop3\",\n         \"type\": \"loop\",\n         \"size\": \"240M\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/firefox/7897\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop4\",\n         \"type\": \"loop\",\n         \"size\": \"240.4M\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/firefox/7965\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop5\",\n         \"type\": \"loop\",\n         \"size\": \"91.7M\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/gtk-common-themes/1535\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop6\",\n         \"type\": \"loop\",\n         \"size\": \"41.6M\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/snapd/25939\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop7\",\n         \"type\": \"loop\",\n         \"size\": \"503M\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             \"/snap/gnome-42-2204/245\"\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop8\",\n         \"type\": \"loop\",\n         \"size\": \"5G\",\n         \"fstype\": \"crypto_LUKS\",\n         \"mountpoints\": [\n             null\n         ],\n         \"model\": null\n      },{\n         \"name\": \"loop10\",\n         \"type\": \"loop\",\n         \"size\": \"64M\",\n         \"fstype\": \"crypto_LUKS\",\n         \"mountpoints\": [\n             null\n         ],\n         \"model\": null,\n         \"children\": [\n            {\n               \"name\": \"pqc_crypt_9206\",\n               \"type\": \"crypt\",\n               \"size\": \"62M\",\n               \"fstype\": \"ext4\",\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            }\n         ]\n      },{\n         \"name\": \"nvme0n1\",\n         \"type\": \"disk\",\n         \"size\": \"953.9G\",\n         \"fstype\": null,\n         \"mountpoints\": [\n             null\n         ],\n         \"model\": \"WD PC SN5000S SDEPNSJ-1T00\",\n         \"children\": [\n            {\n               \"name\": \"nvme0n1p1\",\n               \"type\": \"part\",\n               \"size\": \"951.2G\",\n               \"fstype\": \"ext4\",\n               \"mountpoints\": [\n                   \"/\"\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p2\",\n               \"type\": \"part\",\n               \"size\": \"100M\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p3\",\n               \"type\": \"part\",\n               \"size\": \"768K\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p4\",\n               \"type\": \"part\",\n               \"size\": \"512M\",\n               \"fstype\": \"vfat\",\n               \"mountpoints\": [\n                   \"/boot/efi\"\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p5\",\n               \"type\": \"part\",\n               \"size\": \"384.8M\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p6\",\n               \"type\": \"part\",\n               \"size\": \"100M\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p7\",\n               \"type\": \"part\",\n               \"size\": \"768K\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p8\",\n               \"type\": \"part\",\n               \"size\": \"512M\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p9\",\n               \"type\": \"part\",\n               \"size\": \"384.8M\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p10\",\n               \"type\": \"part\",\n               \"size\": \"400M\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            },{\n               \"name\": \"nvme0n1p11\",\n               \"type\": \"part\",\n               \"size\": \"335M\",\n               \"fstype\": null,\n               \"mountpoints\": [\n                   null\n               ],\n               \"model\": null\n            }\n         ]\n      }\n   ]\n}"
+      }
+    },
+    "machine": "aarch64",
+    "nvpmodel": {
+      "argv": [
+        "nvpmodel",
+        "-q"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NV Power Mode: MAXN\n0"
+    },
+    "python_platform": "Linux-6.8.12-tegra-aarch64-with-glibc2.39"
+  },
+  "overall_pass": true,
+  "schema_version": 1,
+  "validation": {
+    "current_host_warnings": [
+      "current host governor is not uniformly performance; set it before executing the contract",
+      "jetson_clocks state was not captured successfully on this host"
+    ],
+    "missing_fields": [],
+    "required_environment_fields": [
+      "cpu_governor",
+      "thermal_mode",
+      "storage_device",
+      "lower_filesystem"
+    ],
+    "required_filesystem_modes": [
+      "plaintext_lowerfs",
+      "aegis_q",
+      "gocryptfs",
+      "fscrypt",
+      "dm_crypt_ext4"
+    ],
+    "required_workload_fields": [
+      "request_size_bytes",
+      "read_write_mix",
+      "sync_mode",
+      "cache_states",
+      "queue_depth",
+      "client_count",
+      "file_size_bytes",
+      "mount_options",
+      "repetition_count",
+      "confidence_interval_method"
+    ]
+  }
+}

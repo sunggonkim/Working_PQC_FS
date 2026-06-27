@@ -1,0 +1,30 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-26 21:04:20.988] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-26 21:04:20.988]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-26 21:04:20.988]   Storage dir : /tmp/aegis_cupti_qos_store_wnomlx9t
+[PQC-FUSE 2026-06-26 21:04:20.988]   Mount point : /tmp/aegis_cupti_qos_mnt_k6r6fuh3
+[PQC-FUSE 2026-06-26 21:04:20.988] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_cupti_pm_fuse_bridge/runtime_fuse_admission_trace.jsonl
+[PQC-FUSE 2026-06-26 21:04:20.988] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-26 21:04:20.988]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-26 21:04:20.988]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-26 21:04:20.988]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-26 21:04:20.988]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-26 21:04:20.990] Keypair generated in 1414.59 µs
+[PQC-FUSE 2026-06-26 21:04:21.160] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-26 21:04:21.160] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-26 21:04:21.160] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-26 21:04:21.160] Admission telemetry file monitor started: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_cupti_pm_fuse_bridge/runtime_telemetry.txt
+[PQC-FUSE 2026-06-26 21:04:21.263] PQC background rekey worker started
+[PQC-FUSE 2026-06-26 21:04:21.263] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-26 21:04:21.350] CREATE /stream.bin: authenticated file-key envelope initialized (fid=8854099021281818585)
+[PQC-FUSE 2026-06-26 21:04:22.242] REKEY WORKER: batched 1 files 145550.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-06-26 21:04:22.242] REKEY WORKER: batched 1 files 333.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-06-26 21:04:23.058] REKEY WORKER: batched 1 files 156.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-06-26 21:04:23.883] Shutting down PQC-FUSE filesystem...

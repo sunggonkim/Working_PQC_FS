@@ -14,7 +14,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = ROOT / "artifacts" / "platform_inventory_report"
+DEFAULT_OUT = ROOT / "artifacts" / "reports" / "platform_inventory_report"
 
 
 def main() -> int:
@@ -44,12 +44,16 @@ def main() -> int:
                 "python3 experiments/run_verified_microbench.py --runs 3 --out artifacts/validation/microbench",
                 "python3 experiments/run_m5_admission_sweep.py",
                 "python3 experiments/run_app_recovery_bundle.py",
+                "PQC_SUDO_PASSWORD=<password> python3 experiments/run_combined_durability_bundle.py --out-dir artifacts/validation/combined_durability_bundle",
+                "PQC_SUDO_PASSWORD=<password> python3 experiments/run_sqlite_syscall_crash_tpm.py --out-dir artifacts/validation/sqlite_syscall_crash_tpm --when 1 2 3",
             ],
             "required_output_schema": [
                 "platform manifest with device model, kernel, CUDA compiler, and driver identifiers",
                 "microbenchmark summary with per-run medians and observed range",
                 "queue-depth / slack trace rows for admission sweeps",
                 "SQLite selected-boundary oracle verdicts and retained crash-audit bundle",
+                "combined SQLite/dbm.dumb stale-snapshot replay verdicts",
+                "SQLite syscall-exact app-crash verdicts",
             ],
             "required_platform_fields": [
                 "device model",
@@ -89,7 +93,9 @@ def main() -> int:
         "  - `python3 experiments/run_verified_microbench.py --runs 3 --out artifacts/validation/microbench`",
         "  - `python3 experiments/run_m5_admission_sweep.py`",
         "  - `python3 experiments/run_app_recovery_bundle.py`",
-        "- required output schema: platform manifest, per-run medians and observed range, queue-depth / slack traces, SQLite selected-boundary verdicts, and crash-audit bundle",
+        "  - `PQC_SUDO_PASSWORD=<password> python3 experiments/run_combined_durability_bundle.py --out-dir artifacts/validation/combined_durability_bundle`",
+        "  - `PQC_SUDO_PASSWORD=<password> python3 experiments/run_sqlite_syscall_crash_tpm.py --out-dir artifacts/validation/sqlite_syscall_crash_tpm --when 1 2 3`",
+        "- required output schema: platform manifest, per-run medians and observed range, queue-depth / slack traces, SQLite selected-boundary verdicts, crash-audit bundle, combined SQLite/dbm.dumb replay verdicts, and SQLite syscall-exact app-crash verdicts",
         "- required platform fields: device model, kernel, CUDA compiler / runtime, driver / firmware identifiers, accelerator notes",
         "- status: placeholder only; no second-platform raw outputs are retained",
         "",
@@ -106,7 +112,7 @@ def main() -> int:
                 "- platform: none",
                 "- commands:",
                 *[f"  - `{cmd}`" for cmd in report["second_platform_contract"]["minimum_commands"]],
-                "- required output schema: platform manifest, per-run medians and observed range, queue-depth / slack traces, SQLite selected-boundary verdicts, crash-audit bundle",
+                "- required output schema: platform manifest, per-run medians and observed range, queue-depth / slack traces, SQLite selected-boundary verdicts, crash-audit bundle, combined SQLite/dbm.dumb replay verdicts, SQLite syscall-exact app-crash verdicts",
                 "- required platform fields: device model, kernel, CUDA compiler / runtime, driver / firmware identifiers, accelerator notes",
             ]
         )

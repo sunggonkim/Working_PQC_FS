@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse",
+    "--anchor-self-test"
+  ],
+  "returncode": 1,
+  "stderr": "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/interrupted_nv_update/anchor_self_test.stderr.txt",
+  "stdout": "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/interrupted_nv_update/anchor_self_test.stdout.txt"
+}

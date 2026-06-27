@@ -31,6 +31,7 @@ static struct {
     pthread_mutex_t state_lock;
     uint64_t ai_budget_ns;
     uint64_t ai_queue_depth;
+    uint64_t ai_budget_update_mono_ns;
 
     /* Cumulative statistics */
     pqc_admission_stats_t stats;
@@ -39,6 +40,7 @@ static struct {
     uint64_t gpu_min_batch_bytes;
     uint64_t ai_qos_min_budget_ns;
     uint64_t deadline_margin_ns;
+    uint64_t producer_slack_stale_ns;
     double queue_pressure_threshold;  /* ratio: cpu_depth / gpu_depth */
     uint64_t uma_window_bytes;
     uint64_t uma_window_latency_ns;
@@ -51,10 +53,12 @@ static struct {
     .state_lock = PTHREAD_MUTEX_INITIALIZER,
     .ai_budget_ns = 0,
     .ai_queue_depth = 0,
+    .ai_budget_update_mono_ns = 0,
     .stats = {0},
     .gpu_min_batch_bytes = 4096,
     .ai_qos_min_budget_ns = 1730000,  /* TensorRT YOLOv8n p99 + margin */
     .deadline_margin_ns = 100000,      /* 100 µs */
+    .producer_slack_stale_ns = 250000000, /* 250 ms */
     .queue_pressure_threshold = 0.8,
     .uma_window_bytes = 0,
     .uma_window_latency_ns = 0,
@@ -67,6 +71,13 @@ static struct {
     double mem_bandwidth_util;
     double tensor_core_util;
 } g_telemetry = {0.0, 0.0};
+
+static uint64_t monotonic_now_ns(void)
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * 1000000000ULL + (uint64_t)ts.tv_nsec;
+}
 
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -96,6 +107,9 @@ int pqc_admission_init(const char *trace_file_path)
     env = getenv("PQC_DEADLINE_MARGIN_NS");
     if (env) g_admission.deadline_margin_ns = strtoull(env, NULL, 10);
 
+    env = getenv("PQC_PRODUCER_SLACK_STALE_NS");
+    if (env) g_admission.producer_slack_stale_ns = strtoull(env, NULL, 10);
+
     env = getenv("PQC_QUEUE_PRESSURE_THRESHOLD");
     if (env) g_admission.queue_pressure_threshold = strtod(env, NULL);
 
@@ -105,16 +119,29 @@ int pqc_admission_init(const char *trace_file_path)
     env = getenv("PQC_TELEMETRY_TENSOR_CORE");
     if (env) g_telemetry.tensor_core_util = strtod(env, NULL);
 
+    env = getenv("PQC_ADMISSION_INITIAL_BUDGET_NS");
+    if (env) {
+        g_admission.ai_budget_ns = strtoull(env, NULL, 10);
+        g_admission.ai_budget_update_mono_ns = monotonic_now_ns();
+    } else {
+        g_admission.ai_budget_update_mono_ns = 0;
+    }
+
+    env = getenv("PQC_ADMISSION_INITIAL_QUEUE_DEPTH");
+    if (env) g_admission.ai_queue_depth = strtoull(env, NULL, 10);
+
     /* Write trace header */
     fprintf(g_admission.trace_file,
             "# pqc_admission_init: "
             "gpu_min_batch=%zu bytes, "
             "ai_qos_min_budget=%llu ns, "
             "deadline_margin=%llu ns, "
+            "producer_slack_stale=%llu ns, "
             "queue_threshold=%.2f\n",
             g_admission.gpu_min_batch_bytes,
             (unsigned long long)g_admission.ai_qos_min_budget_ns,
             (unsigned long long)g_admission.deadline_margin_ns,
+            (unsigned long long)g_admission.producer_slack_stale_ns,
             g_admission.queue_pressure_threshold);
     fflush(g_admission.trace_file);
 
@@ -141,13 +168,15 @@ void pqc_admission_shutdown(void)
                 "cpu_routed=%llu, "
                 "ai_budget_exhausted=%llu, "
                 "deadline_exceeded=%llu, "
-                "size_too_small=%llu\n",
+                "size_too_small=%llu, "
+                "stale_telemetry=%llu\n",
                 (unsigned long long)stats_snapshot.total_requests,
                 (unsigned long long)stats_snapshot.gpu_admitted_count,
                 (unsigned long long)stats_snapshot.cpu_routed_count,
                 (unsigned long long)stats_snapshot.ai_budget_exhausted_count,
                 (unsigned long long)stats_snapshot.deadline_exceeded_count,
-                (unsigned long long)stats_snapshot.size_too_small_count);
+                (unsigned long long)stats_snapshot.size_too_small_count,
+                (unsigned long long)stats_snapshot.stale_telemetry_count);
         fflush(g_admission.trace_file);
         pthread_mutex_unlock(&g_admission.trace_lock);
         fclose(g_admission.trace_file);
@@ -156,13 +185,14 @@ void pqc_admission_shutdown(void)
 
     fprintf(stderr,
             "[PQC] Admission stats: total=%llu, gpu=%llu, cpu=%llu, "
-            "ai_exhausted=%llu, deadline=%llu, size_small=%llu\n",
+            "ai_exhausted=%llu, deadline=%llu, size_small=%llu, stale=%llu\n",
             (unsigned long long)g_admission.stats.total_requests,
             (unsigned long long)g_admission.stats.gpu_admitted_count,
             (unsigned long long)g_admission.stats.cpu_routed_count,
             (unsigned long long)g_admission.stats.ai_budget_exhausted_count,
             (unsigned long long)g_admission.stats.deadline_exceeded_count,
-            (unsigned long long)g_admission.stats.size_too_small_count);
+            (unsigned long long)g_admission.stats.size_too_small_count,
+            (unsigned long long)g_admission.stats.stale_telemetry_count);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -184,11 +214,27 @@ int pqc_admit(pqc_admission_context_t *ctx)
     /* ─────────────────────────────────────────────────────────────────────
      * Step 0: Read dynamic telemetry under lock
      * ───────────────────────────────────────────────────────────────────── */
+    uint64_t now_mono_ns = monotonic_now_ns();
+    uint64_t budget_update_mono_ns;
+    uint64_t stale_after_ns;
     pthread_mutex_lock(&g_admission.state_lock);
     ctx->ai_qos_budget_remaining_ns = g_admission.ai_budget_ns;
+    budget_update_mono_ns = g_admission.ai_budget_update_mono_ns;
+    stale_after_ns = g_admission.producer_slack_stale_ns;
     double mem_bw = g_telemetry.mem_bandwidth_util;
     double tc_util = g_telemetry.tensor_core_util;
     pthread_mutex_unlock(&g_admission.state_lock);
+
+    ctx->producer_slack_stale_after_ns = stale_after_ns;
+    if (budget_update_mono_ns == 0) {
+        ctx->producer_slack_age_ns = 0;
+        ctx->producer_slack_stale = 0;
+    } else {
+        ctx->producer_slack_age_ns =
+            now_mono_ns >= budget_update_mono_ns ? now_mono_ns - budget_update_mono_ns : 0;
+        ctx->producer_slack_stale =
+            (stale_after_ns > 0 && ctx->producer_slack_age_ns > stale_after_ns) ? 1u : 0u;
+    }
 
     /* ─────────────────────────────────────────────────────────────────────
      * Step 1: Hard constraints (size and deadline)
@@ -213,6 +259,19 @@ int pqc_admit(pqc_admission_context_t *ctx)
         pthread_mutex_lock(&g_admission.state_lock);
         g_admission.stats.total_requests++;
         g_admission.stats.deadline_exceeded_count++;
+        pthread_mutex_unlock(&g_admission.state_lock);
+        pqc_scheduler_trace_log(ctx);
+        return 0;
+    }
+
+    if (ctx->producer_slack_stale) {
+        ctx->chosen_target = PQC_JOB_CPU;
+        ctx->ai_qos_budget_remaining_ns = 0;
+        ctx->decision_reason |= PQC_ROUTE_REASON_STALE_TELEMETRY;
+        ctx->deferral_reason = PQC_ROUTE_REASON_STALE_TELEMETRY;
+        pthread_mutex_lock(&g_admission.state_lock);
+        g_admission.stats.total_requests++;
+        g_admission.stats.stale_telemetry_count++;
         pthread_mutex_unlock(&g_admission.state_lock);
         pqc_scheduler_trace_log(ctx);
         return 0;
@@ -329,6 +388,7 @@ void pqc_admission_update_ai_budget(uint64_t ai_budget_ns,
     uint64_t old_budget = g_admission.ai_budget_ns;
     g_admission.ai_budget_ns = ai_budget_ns;
     g_admission.ai_queue_depth = ai_inference_queue_depth;
+    g_admission.ai_budget_update_mono_ns = monotonic_now_ns();
     pthread_mutex_unlock(&g_admission.state_lock);
 
     /* Log budget transition */
@@ -363,11 +423,14 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
     pthread_mutex_unlock(&g_admission.state_lock);
 
     /* Format JSON record (JSONL format) */
-    char json_buf[2048];
+    char json_buf[4096];
     snprintf(json_buf, sizeof(json_buf),
         "{"
         "\"timestamp_ns\": %llu, "
+        "\"trace_timestamp_clock\": \"CLOCK_REALTIME\", "
+        "\"age_clock\": \"CLOCK_MONOTONIC\", "
         "\"batch_age_ns\": %llu, "
+        "\"ai_inference_deadline_ns\": %llu, "
         "\"batch_count\": %zu, "
         "\"bytes_total\": %zu, "
         "\"queue_delay_ns\": %llu, "
@@ -382,6 +445,9 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
         "\"telemetry_mem_bandwidth_util\": %.4f, "
         "\"telemetry_tensor_core_util\": %.4f, "
         "\"ai_qos_budget_remaining_ns\": %llu, "
+        "\"producer_slack_age_ns\": %llu, "
+        "\"producer_slack_stale_after_ns\": %llu, "
+        "\"producer_slack_stale\": %s, "
         "\"uma_migration_bytes_est\": %llu, "
         "\"uma_migration_cost_ns\": %llu, "
         "\"chosen_target\": \"%s\", "
@@ -390,6 +456,7 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
         "}\n",
         (unsigned long long)now_ns,
         (unsigned long long)ctx->batch_age_ns,
+        (unsigned long long)ctx->ai_inference_deadline_ns,
         ctx->batch_count,
         ctx->bytes_total,
         (unsigned long long)ctx->queue_delay_ns,
@@ -404,6 +471,9 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
         mem_bandwidth_util,
         tensor_core_util,
         (unsigned long long)ctx->ai_qos_budget_remaining_ns,
+        (unsigned long long)ctx->producer_slack_age_ns,
+        (unsigned long long)ctx->producer_slack_stale_after_ns,
+        ctx->producer_slack_stale ? "true" : "false",
         (unsigned long long)ctx->uma_migration_bytes_est,
         (unsigned long long)ctx->uma_migration_cost_ns,
         (ctx->chosen_target == PQC_JOB_GPU ? "GPU" : "CPU"),
@@ -420,10 +490,10 @@ void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx)
     pthread_mutex_lock(&g_admission.trace_lock);
     fprintf(g_admission.trace_file, "%s", json_buf);
 
-    /* Periodic flush (every 100 records) */
-    if ((total_requests % 100) == 0) {
-        fflush(g_admission.trace_file);
-    }
+    /* Retained experiments often contain a single decision; flush every row so
+     * abrupt unmounts cannot erase the only evidence record. */
+    (void)total_requests;
+    fflush(g_admission.trace_file);
     pthread_mutex_unlock(&g_admission.trace_lock);
 }
 

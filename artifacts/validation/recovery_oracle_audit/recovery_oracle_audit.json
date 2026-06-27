@@ -1,0 +1,1083 @@
+{
+  "schema_version": 1,
+  "allowed_verdicts": [
+    "fail_closed",
+    "latest_committed",
+    "previous_committed",
+    "silent_corruption",
+    "unexpected_liveness_failure"
+  ],
+  "normalization": {
+    "previous": "previous_committed",
+    "latest": "latest_committed",
+    "previous_committed": "previous_committed",
+    "latest_committed": "latest_committed",
+    "fail_closed": "fail_closed",
+    "fail_closed_update_not_committed": "fail_closed",
+    "rollback_reject": "fail_closed",
+    "transient_probe_rejects_drift": "fail_closed",
+    "silent_corruption": "silent_corruption",
+    "unexpected_liveness_failure": "unexpected_liveness_failure",
+    "unexpected_error": "unexpected_liveness_failure",
+    "rollback_visible": "previous_committed"
+  },
+  "rows": [
+    {
+      "source": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+      "case": "self_test_older_generation_regression",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": null,
+      "scope": "generation_fault_matrix"
+    },
+    {
+      "source": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+      "case": "partial_update_and_remount",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": null,
+      "scope": "generation_fault_matrix"
+    },
+    {
+      "source": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+      "case": "torn_journal_write",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": null,
+      "scope": "generation_fault_matrix"
+    },
+    {
+      "source": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+      "case": "older_generation_append_after_newer_mapping",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": null,
+      "scope": "generation_fault_matrix"
+    },
+    {
+      "source": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+      "case": "stale_snapshot_replay_file_anchor_negative_control",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": null,
+      "scope": "generation_fault_matrix"
+    },
+    {
+      "source": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+      "case": "stale_snapshot_replay_tpm_anchor_existing_artifact",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored snapshot mounted but payload read failed closed (rc=1): Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOSError: [Errno 5] Input/output error: '/tmp/tpm_mono_mnt_6z1mogbm/payload.bin'",
+      "scope": "generation_fault_matrix"
+    },
+    {
+      "source": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+      "case": "stale_disk_new_tpm",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored snapshot mounted but payload read failed closed (rc=1): Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOSError: [Errno 5] Input/output error: '/tmp/tpm_mono_mnt_6z1mogbm/payload.bin'",
+      "scope": "real_tpm_replay_after_advance"
+    },
+    {
+      "source": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+      "case": "new_disk_stale_tpm",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "anchor load accepts stored.global_sequence <= local sequence; stale TPM lag is not treated as disk rollback",
+      "scope": "final_binary_command_path_fault_injection_no_live_nv_mutation"
+    },
+    {
+      "source": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+      "case": "missing_index",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "exit=1; stderr contains freshness-anchor ENODEV=True",
+      "scope": "retained_final_binary_startup_probe"
+    },
+    {
+      "source": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+      "case": "changed_pcrs",
+      "raw_verdict": "transient_probe_rejects_drift",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "good_unseal=True; drift_rejected=True",
+      "scope": "transient_pcr_probe_not_persistent_filesystem_anchor"
+    },
+    {
+      "source": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+      "case": "authorization_failure",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "TPM tool reports authorization failure without exposing NV data",
+      "scope": "real_tpm_non_destructive_wrong_auth_probe"
+    },
+    {
+      "source": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+      "case": "interrupted_nv_update",
+      "raw_verdict": "fail_closed_update_not_committed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "final binary returns nonzero when the hardware-anchor update command is interrupted",
+      "scope": "final_binary_command_path_fault_injection_not_physical_power_loss"
+    },
+    {
+      "source": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+      "case": "normal_replay_after_advance",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "sqlite=stale snapshot mounted but SQLite read failed closed rc=1; dbm=stale dbm snapshot mounted but dbm read failed closed rc=1",
+      "scope": "real_tpm_application_replay_after_advance"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:data_write",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches previous committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:journal_append",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:journal_fsync",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:xattr_checkpoint_update",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:checkpoint_write",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:anchor_update",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:fsync",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:remount",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "daemon:application_read",
+      "raw_verdict": "latest_committed",
+      "normalized_verdict": "latest_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "recovery digest matches latest committed payload",
+      "scope": "daemon_sigkill_cutpoint"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "application:SQLite WAL/FULL",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "deterministic SQLite WAL/FULL file-state fault campaign",
+      "scope": "application_mode_manifest"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "application:SQLite rollback DELETE/EXTRA",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "SQLite writer killed by strace fdatasync SIGKILL on TPM-backed FUSE",
+      "scope": "application_mode_manifest"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "application:dbm.dumb key-value",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale dbm snapshot mounted but dbm read failed closed rc=1",
+      "scope": "application_mode_manifest"
+    },
+    {
+      "source": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "case": "application:SQLite DELETE/EXTRA TPM replay",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale snapshot mounted but SQLite read failed closed rc=1",
+      "scope": "application_mode_manifest"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "before_sqlite_journal_header_sync#0",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "before_sqlite_journal_header_sync#1",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "before_sqlite_journal_header_sync#2",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "before_sqlite_journal_header_sync#3",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "before_sqlite_journal_header_sync#4",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_journal_header_before_db_sync#0",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_journal_header_before_db_sync#1",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_journal_header_before_db_sync#2",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_journal_header_before_db_sync#3",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_journal_header_before_db_sync#4",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_db_fsync_before_journal_unlink#0",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_db_fsync_before_journal_unlink#1",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_db_fsync_before_journal_unlink#2",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_db_fsync_before_journal_unlink#3",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "after_db_fsync_before_journal_unlink#4",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "wal_file_created_before_checkpoint#0",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "wal_file_created_before_checkpoint#1",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "wal_file_created_before_checkpoint#2",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "wal_file_created_before_checkpoint#3",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_fault_campaign/sqlite_fault_campaign.json",
+      "case": "wal_file_created_before_checkpoint#4",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "digest_matches_previous",
+      "scope": "sqlite_wal_full_selected_boundary"
+    },
+    {
+      "source": "artifacts/validation/sqlite_syscall_crash_tpm/sqlite_syscall_crash_tpm.json",
+      "case": "fdatasync_when_1",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "baseline digest visible after crash",
+      "scope": "sqlite_delete_extra_syscall_kill"
+    },
+    {
+      "source": "artifacts/validation/sqlite_syscall_crash_tpm/sqlite_syscall_crash_tpm.json",
+      "case": "fdatasync_when_2",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "baseline digest visible after crash",
+      "scope": "sqlite_delete_extra_syscall_kill"
+    },
+    {
+      "source": "artifacts/validation/sqlite_syscall_crash_tpm/sqlite_syscall_crash_tpm.json",
+      "case": "fdatasync_when_3",
+      "raw_verdict": "previous_committed",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "baseline digest visible after crash",
+      "scope": "sqlite_delete_extra_syscall_kill"
+    },
+    {
+      "source": "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json",
+      "case": "sqlite_tpm_replay",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale snapshot mounted but SQLite read failed closed rc=1",
+      "scope": "same_backing_store_tpm_replay"
+    },
+    {
+      "source": "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json",
+      "case": "dbm_tpm_replay",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale dbm snapshot mounted but dbm read failed closed rc=1",
+      "scope": "same_backing_store_tpm_replay"
+    },
+    {
+      "source": "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json",
+      "case": "tpm_monotonic_replay",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored snapshot mounted but payload read failed closed (rc=1): Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOSError: [Errno 5] Input/output error: '/tmp/tpm_mono_mnt_6z1mogbm/payload.bin'",
+      "scope": "real_tpm_replay_after_advance"
+    },
+    {
+      "source": "artifacts/validation/replay_file_matrix.json",
+      "case": "file@0.0#0",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_matrix.json",
+      "case": "file@0.0#1",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_matrix.json",
+      "case": "file@0.05#0",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_matrix.json",
+      "case": "file@0.05#1",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_final_matrix.json",
+      "case": "file@0.0#0",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_final_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_final_matrix.json",
+      "case": "file@0.0#1",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_final_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_final_matrix.json",
+      "case": "file@0.05#0",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_final_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_final_matrix.json",
+      "case": "file@0.05#1",
+      "raw_verdict": "rollback_visible",
+      "normalized_verdict": "previous_committed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "restored_baseline_readable",
+      "scope": "file_anchor_final_negative_control"
+    },
+    {
+      "source": "artifacts/validation/replay_file_after_keyfix_matrix.json",
+      "case": "file@0.0#0",
+      "raw_verdict": "rollback_reject",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale_image_blocked",
+      "scope": "post_keyfix_replay_rejection"
+    },
+    {
+      "source": "artifacts/validation/replay_file_after_keyfix_matrix.json",
+      "case": "file@0.0#1",
+      "raw_verdict": "rollback_reject",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale_image_blocked",
+      "scope": "post_keyfix_replay_rejection"
+    },
+    {
+      "source": "artifacts/validation/replay_file_after_keyfix_matrix.json",
+      "case": "file@0.05#0",
+      "raw_verdict": "rollback_reject",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale_image_blocked",
+      "scope": "post_keyfix_replay_rejection"
+    },
+    {
+      "source": "artifacts/validation/replay_file_after_keyfix_matrix.json",
+      "case": "file@0.05#1",
+      "raw_verdict": "rollback_reject",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "stale_image_blocked",
+      "scope": "post_keyfix_replay_rejection"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_0",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_1",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_2",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_3",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_4",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_5",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_6",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_7",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_8",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_9",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_10",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_11",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_12",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_13",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_14",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_15",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_16",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_17",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_18",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_19",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_20",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_21",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_22",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_23",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_24",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_25",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_26",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_27",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_28",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_29",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_30",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_31",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_32",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_33",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_34",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_35",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_36",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_37",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_38",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    },
+    {
+      "source": "artifacts/validation/tpm_recovery_verdict/tpm_recovery_verdict.json",
+      "case": "hardware_e8_row_39",
+      "raw_verdict": "fail_closed",
+      "normalized_verdict": "fail_closed",
+      "allowed": true,
+      "acceptable": true,
+      "detail": "errno=74",
+      "scope": "legacy_hardware_e8_packaging"
+    }
+  ],
+  "violations": [],
+  "forbidden_success_terms": [],
+  "summary": {
+    "row_count": 104,
+    "invalid_rows": 0,
+    "normalized_verdict_counts": {
+      "latest_committed": 13,
+      "previous_committed": 35,
+      "fail_closed": 56
+    }
+  },
+  "scope": [
+    "Audits retained recovery/freshness artifacts cited by the paper and README.",
+    "Does not rerun workloads and does not certify physical power loss or arbitrary workloads.",
+    "Legacy negative-control labels are preserved as raw labels and normalized to the allowed oracle vocabulary."
+  ],
+  "overall_pass": true
+}

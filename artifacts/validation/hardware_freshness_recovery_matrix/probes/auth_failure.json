@@ -1,0 +1,17 @@
+{
+  "command": [
+    "sudo",
+    "-S",
+    "tpm2_nvread",
+    "-C",
+    "o",
+    "-P",
+    "<intentional-wrong-auth>",
+    "-s",
+    "1",
+    "0x01500010"
+  ],
+  "returncode": 1,
+  "stderr": "artifacts/validation/hardware_freshness_recovery_matrix/probes/auth_failure.stderr.txt",
+  "stdout": "artifacts/validation/hardware_freshness_recovery_matrix/probes/auth_failure.stdout.txt"
+}

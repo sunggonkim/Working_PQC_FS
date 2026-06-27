@@ -1,0 +1,157 @@
+{
+  "checks": {
+    "all_sections_have_same_rounded_hero_terms": true,
+    "hero_contract_pass": true,
+    "no_unsupported_positive_claims": true,
+    "paper_pages_12": true,
+    "source_anchors_present": true
+  },
+  "hero_contract": {
+    "displayed_claim": null,
+    "hero_id": "sqlite-mounted-qos-recovery-2026-06-27",
+    "overall_pass": true,
+    "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
+    "present": true,
+    "violations": 0
+  },
+  "overall_pass": true,
+  "pages": 12,
+  "schema_version": 1,
+  "scope": [
+    "abstract, introduction, design, evaluation, and conclusion",
+    "rounded SQLite hero claim terms: 6.4, 13.8, 8.8, 2.7, deadline, background",
+    "unsupported-claim scan for unnegated restored claims",
+    "retained hero-result contract"
+  ],
+  "section_alignment": [
+    {
+      "hero_terms": {
+        "13.8": true,
+        "2.7": true,
+        "6.4": true,
+        "8.8": true,
+        "SQLite": true,
+        "background": true,
+        "deadline": true,
+        "p99": true
+      },
+      "mode_terms": {
+        "AEGIS-Q": true,
+        "secure-storage pressure": true
+      },
+      "passes": true,
+      "path": "Paper/main.tex",
+      "section": "abstract"
+    },
+    {
+      "hero_terms": {
+        "13.8": true,
+        "2.7": true,
+        "6.4": true,
+        "8.8": true,
+        "SQLite": true,
+        "background": true,
+        "deadline": true,
+        "p99": true
+      },
+      "mode_terms": {
+        "AEGIS-Q": true,
+        "secure-storage pressure": true
+      },
+      "passes": true,
+      "path": "Paper/1_Introduction.tex",
+      "section": "introduction"
+    },
+    {
+      "hero_terms": {
+        "13.8": true,
+        "2.7": true,
+        "6.4": true,
+        "8.8": true,
+        "SQLite": true,
+        "background": true,
+        "deadline": true,
+        "p99": true
+      },
+      "mode_terms": {
+        "AEGIS-Q": true,
+        "secure-storage pressure": true
+      },
+      "passes": true,
+      "path": "Paper/3_Design.tex",
+      "section": "design"
+    },
+    {
+      "hero_terms": {
+        "13.8": true,
+        "2.7": true,
+        "6.4": true,
+        "8.8": true,
+        "SQLite": true,
+        "background": true,
+        "deadline": true,
+        "p99": true
+      },
+      "mode_terms": {
+        "AEGIS-Q": true,
+        "secure-storage pressure": true
+      },
+      "passes": true,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "evaluation"
+    },
+    {
+      "hero_terms": {
+        "13.8": true,
+        "2.7": true,
+        "6.4": true,
+        "8.8": true,
+        "SQLite": true,
+        "background": true,
+        "deadline": true,
+        "p99": true
+      },
+      "mode_terms": {
+        "AEGIS-Q": true,
+        "secure-storage pressure": true
+      },
+      "passes": true,
+      "path": "Paper/6_Conclusion.tex",
+      "section": "conclusion"
+    }
+  ],
+  "source_anchors": {
+    "abstract": {
+      "line": 89,
+      "path": "Paper/main.tex",
+      "present": true,
+      "text": "On a Jetson AGX Thor Developer Kit, retained mounted artifacts show the intended spine: under secure-storage pressure, foreground SQLite p99 rises from 6.4~ms to 13.8~ms and incurs a deadline miss; AEGIS-Q's policy recovers p99 to 8.8~ms with zero misses while retaining 2.7~MB/s of background progress. The same evidence set exercises remount/tamper checks, generation/fault matrices, rekey fallback, TPM replay-after-advance, app-crash timing, and telemetry-to-FUSE throttling. The result is an evidence-first secure edge-storage prototype with explicit scope boundaries, not a claim of deployed-filesystem superiority."
+    },
+    "conclusion": {
+      "line": 4,
+      "path": "Paper/6_Conclusion.tex",
+      "present": true,
+      "text": "AEGIS-Q is an evidence-first secure edge-storage prototype: secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms with one deadline miss; AEGIS-Q recovers 8.8~ms, zero misses, and 2.7~MB/s background progress. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability."
+    },
+    "design": {
+      "line": 131,
+      "path": "Paper/3_Design.tex",
+      "present": true,
+      "text": "QoS follows the SQLite contract in Figure~\\ref{fig:first_page_qos}: secure-storage pressure raises AEGIS-Q p99 from 6.4~ms to 13.8~ms; classification recovers 8.8~ms, zero deadline misses, and 2.7~MB/s background progress, not foreground-inference p99 or completion-bypass control."
+    },
+    "evaluation": {
+      "line": 108,
+      "path": "Paper/4_Evaluation.tex",
+      "present": true,
+      "text": "The app-level result uses SQLite transaction latency as the foreground workload. Table~\\ref{tab:qos_sqlite_recovery} is generated from the retained four-mode bundle. Mounted storage pressure raises SQLite p99 from 6.4~ms to 13.8~ms and causes one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with no misses at 2.7~MB/s. The simple controller reaches 8.2~ms p99 at 2.3~MB/s. This is SQLite recovery, not general AI-inference QoS."
+    },
+    "introduction": {
+      "line": 38,
+      "path": "Paper/1_Introduction.tex",
+      "present": true,
+      "text": "Figure~\\ref{fig:first_page_qos} shows the retained first-page pressure result. Mounted secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms and introduces one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with zero misses while retaining 2.7~MB/s of background progress. This result motivates the paper's spine: policy must be visible at the secure-storage layer, but persistent format correctness must remain independent of the accelerator."
+    }
+  },
+  "unsupported_hits": [],
+  "violations": []
+}

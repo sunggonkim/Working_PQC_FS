@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<string>", line 5, in <module>
+  File "/usr/lib/python3.12/dbm/dumb.py", line 317, in open
+    return _Database(file, mode, flag=flag)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/dbm/dumb.py", line 71, in __init__
+    self._create(flag)
+  File "/usr/lib/python3.12/dbm/dumb.py", line 83, in _create
+    f = _io.open(self._datfile, 'r', encoding="Latin-1")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 5] Input/output error: b'/tmp/combined_dbm_mnt_7upy97zx/durability_ndbm.dat'

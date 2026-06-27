@@ -28,8 +28,8 @@ def run_power_fail_test():
         "false_accept_rate": false_accept_rate
     }
     
-    os.makedirs("artifacts/m4_freshness", exist_ok=True)
-    with open("artifacts/m4_freshness/power_fail_results.json", "w") as f:
+    os.makedirs("artifacts/results/freshness/m4_freshness", exist_ok=True)
+    with open("artifacts/results/freshness/m4_freshness/power_fail_results.json", "w") as f:
         json.dump(results, f, indent=4)
         
     print(f"{'N':<10} | {'Max Data Loss (MB)':<20} | {'Recovery Time (ms)':<20} | {'False Accept Rate'}")

@@ -39,8 +39,8 @@ def run_cpu_baseline():
         }
     }
     
-    os.makedirs("artifacts/baselines", exist_ok=True)
-    with open("artifacts/baselines/cpu_comparison.json", "w") as f:
+    os.makedirs("artifacts/results/baselines", exist_ok=True)
+    with open("artifacts/results/baselines/cpu_comparison.json", "w") as f:
         json.dump(results, f, indent=4)
         
     print(f"Absolute Wall-Clock Time for 1GB payload:")

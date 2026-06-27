@@ -1,0 +1,3 @@
+#!/bin/sh
+printf 'fault-injection interrupted tpm2_nvwrite before commit\n' >&2
+exit 130

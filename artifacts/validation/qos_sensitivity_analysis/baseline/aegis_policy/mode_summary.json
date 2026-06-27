@@ -1,0 +1,91 @@
+{
+  "acceptable": true,
+  "admission": {
+    "deferrals": {},
+    "rows": 0,
+    "targets": {}
+  },
+  "background": {
+    "bytes_written": 2228224,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 3.831630441065111,
+    "write_events": 34,
+    "writer_started": true,
+    "writer_stop_rows": [
+      {
+        "bytes_written": 2228224,
+        "chunks_written": 34,
+        "elapsed_ns": 554594195,
+        "event": "writer_stop",
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 3.831630441065111,
+        "timestamp_ns": 1782521594262730508,
+        "writer_id": 0
+      }
+    ]
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "mounted_fuse_hysteresis",
+    "daemon_throttle": true,
+    "harness_throttle": false
+  },
+  "daemon_throttle": {
+    "open_rows": 206,
+    "rows": 219,
+    "sleep_us_total": 390000,
+    "throttled_rows": 13
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 0,
+    "deadline_ms": 10.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/foreground_sqlite_latency.jsonl",
+    "max_ms": 6.432926,
+    "mean_ms": 4.95563935,
+    "p50_ms": 4.9990185,
+    "p95_ms": 5.946424649999998,
+    "p99_ms": 6.43213547,
+    "row_count": 320,
+    "rows_written": 320,
+    "samples": 40
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/background_writer.jsonl",
+    "foreground_csv": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/foreground_sqlite_latency.csv",
+    "foreground_jsonl": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+    "policy_jsonl": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/policy_trace.jsonl",
+    "runtime_fuse_admission_trace": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/runtime_telemetry.txt",
+    "telemetry_jsonl": "artifacts/validation/qos_sensitivity_analysis/baseline/aegis_policy/telemetry_trace.jsonl"
+  },
+  "mode": "aegis_policy",
+  "policy": {
+    "events": {
+      "enter": 1,
+      "hold": 24
+    },
+    "rows": 25,
+    "states": {
+      "open": 1,
+      "throttled": 24
+    },
+    "throttle_rows": 24
+  },
+  "telemetry": {
+    "avg_cpu_utilization": 0.04189586754241927,
+    "avg_gpu_utilization": 0.1,
+    "gpu_utilization_sources": [
+      "telemetry_tensor_proxy"
+    ],
+    "high_pressure_rows": 24,
+    "rows": 25,
+    "zero_budget_rows": 0
+  }
+}

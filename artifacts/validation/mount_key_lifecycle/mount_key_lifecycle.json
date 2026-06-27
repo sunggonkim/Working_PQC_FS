@@ -1,0 +1,111 @@
+{
+  "artifact_checks": {
+    "clean_remount_passes": true,
+    "file_anchor_old_state_is_negative_control": true,
+    "generation_matrix_passes": true,
+    "keyplane_methodology_passes": true,
+    "keyplane_workflow_passes": true,
+    "tampered_envelope_rejected": true,
+    "tpm_old_state_fails_closed": true,
+    "tpm_policy_scopes_no_credential_release": true
+  },
+  "checks": {
+    "all_required_decisions_present": true,
+    "all_rows_have_evidence_and_scope": true,
+    "artifact_checks_pass": true,
+    "paper_covers_all_lifecycle_decisions": true,
+    "source_checks_pass": true
+  },
+  "lifecycle_rows": [
+    {
+      "current_evidence": "pqc_subsystem_init() requires PQC_MASTER_PASSWORD, derives g_master_key with PBKDF2-HMAC-SHA256, and pqc_create() generates a random 256-bit per-file DEK plus file identifier.",
+      "decision": "password_derived_mount_key_boundary",
+      "paper_gate_phrase": "mount key is password-derived and never hardware-released",
+      "policy_or_scope": "The mount key is the prototype root credential.  This closes only the storage-format correctness boundary, not deployed credential protection."
+    },
+    {
+      "current_evidence": "The TPM policy manifest explicitly records no hardware-backed credential release, and the mounted FUSE source has no TPM/PCR release path for g_master_key.",
+      "decision": "hardware_backed_credential_release_plan",
+      "paper_gate_phrase": "no hardware-backed credential release path for the mount key",
+      "policy_or_scope": "Hardware-backed release remains out of scope; TPM evidence is limited to freshness-anchor behavior."
+    },
+    {
+      "current_evidence": "The rekey worker batches open file descriptors, encapsulates fresh key material on the admitted executor, installs it in the open fd context, increments an in-memory key_epoch, and persists a new envelope.",
+      "decision": "key_rotation",
+      "paper_gate_phrase": "rekey is open-file DEK refresh rather than deployed credential rotation",
+      "policy_or_scope": "This is open-file DEK refresh.  It is not deployed mount credential rotation, administrator key rollover, or a persistent KEM hierarchy."
+    },
+    {
+      "current_evidence": "metadata_store() masks the per-file DEK under the mount key and file id and HMAC-authenticates the envelope; metadata_load() verifies the HMAC before unwrapping.  The retained key-plane workflow refreshes 1,024 open files per mode, and the tamper regression rejects a corrupted metadata xattr with EKEYREJECTED.",
+      "decision": "envelope_rewrap",
+      "paper_gate_phrase": "HMAC envelope rewrap for open files",
+      "policy_or_scope": "Envelope rewrap evidence applies to mounted open files and authenticated open/remount behavior only."
+    },
+    {
+      "current_evidence": "The mounted path has an in-memory key_epoch incremented by the rekey worker.  The older pqc_file_key epoch/grace helper is present in source but is not part of the pqc_fuse CMake target.",
+      "decision": "epoch_counter_interaction",
+      "paper_gate_phrase": "runtime key epoch is in-memory bookkeeping, not a persistent anti-rollback journal",
+      "policy_or_scope": "Epochs are runtime bookkeeping for the evaluated path, not a persisted anti-rollback journal or stale-handle proof."
+    },
+    {
+      "current_evidence": "No retained artifact exercises an interrupted envelope rewrap, and the rekey worker does not implement a transactional rewrap journal.  Existing retained evidence covers HMAC fail-closed behavior on later open and clean remount after normal writes.",
+      "decision": "recovery_after_failed_rewrap",
+      "paper_gate_phrase": "no transactional rewrap recovery claim",
+      "policy_or_scope": "The prototype makes no transactional recovery claim for failed rewrap; future work must add a cut-point campaign before making that claim."
+    },
+    {
+      "current_evidence": "The generation fault matrix records file-anchor stale snapshot replay as an expected negative control and records the existing TPM stale snapshot artifact as fail closed.",
+      "decision": "rollback_behavior_for_old_envelopes",
+      "paper_gate_phrase": "password-derived envelope alone is not rollback resistance",
+      "policy_or_scope": "A password-derived envelope by itself is replayable with a whole backing snapshot.  Rollback resistance is claimed only when generation/checkpoint and external-anchor evidence reject stale state."
+    }
+  ],
+  "non_claims": [
+    "no hardware-backed credential release path for the mount key",
+    "no deployed mount credential rotation",
+    "no persistent KEM hierarchy",
+    "no persistent epoch anti-rollback journal in the mounted path",
+    "no transactional rewrap recovery claim",
+    "no credential-only rollback resistance",
+    "no recovery after a lost mount credential"
+  ],
+  "overall_pass": true,
+  "paper_gates": {
+    "envelope_rewrap": true,
+    "epoch_counter_interaction": true,
+    "hardware_backed_credential_release_plan": true,
+    "key_rotation": true,
+    "password_derived_mount_key_boundary": true,
+    "recovery_after_failed_rewrap": true,
+    "rollback_behavior_for_old_envelopes": true
+  },
+  "schema_version": 1,
+  "scope": "Mount-key lifecycle scope artifact.  It supports authenticated storage-format correctness, clean remount, tamper rejection, and mounted open-file envelope refresh.  It does not claim hardware-backed credential release, deployed credential rotation, transactional rewrap recovery, or credential-only rollback resistance.",
+  "source_artifacts": [
+    "pqc_fuse.c",
+    "pqc_file_key.c",
+    "pqc_file_key.h",
+    "CMakeLists.txt",
+    "artifacts/validation/fuse_roundtrip.json",
+    "artifacts/validation/fuse_tamper_rejection.json",
+    "artifacts/validation/keyplane_rekey_workflow/keyplane_rekey_workflow.json",
+    "artifacts/validation/keyplane_rekey_methodology/keyplane_rekey_workflow.json",
+    "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+    "artifacts/validation/tpm_freshness_policy/tpm_freshness_policy.json"
+  ],
+  "source_checks": {
+    "legacy_epoch_helper_is_not_mounted_path": true,
+    "metadata_load_hmac_before_unwrap": true,
+    "metadata_load_rejects_bad_hmac": true,
+    "metadata_store_hmac_authenticates_envelope": true,
+    "metadata_store_wraps_under_mount_key": true,
+    "mount_password_required": true,
+    "mounted_target_excludes_legacy_file_key_helper": true,
+    "pbkdf2_sha256_master_key": true,
+    "random_dek_and_file_id_on_create": true,
+    "rekey_rewrap_not_transactional": true,
+    "rekey_worker_refreshes_open_file_secret": true,
+    "rekey_worker_updates_runtime_epoch": true
+  },
+  "timestamp_utc": "2026-06-27T08:42:53.037961+00:00"
+}

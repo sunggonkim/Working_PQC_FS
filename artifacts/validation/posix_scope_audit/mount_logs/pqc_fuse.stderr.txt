@@ -1,0 +1,32 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-27 08:07:27.116] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-27 08:07:27.116]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-27 08:07:27.116]   Storage dir : /tmp/posix_scope_store_zlm883bh
+[PQC-FUSE 2026-06-27 08:07:27.116]   Mount point : /tmp/posix_scope_mnt_u1kbyr7g
+[PQC-FUSE 2026-06-27 08:07:27.116] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-27 08:07:27.116] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-27 08:07:27.116]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-27 08:07:27.116]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-27 08:07:27.116]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-27 08:07:27.116]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-27 08:07:27.118] Keypair generated in 1418.80 µs
+[PQC-FUSE 2026-06-27 08:07:27.288] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-27 08:07:27.288] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-27 08:07:27.288] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-27 08:07:27.288] Freshness anchor worker started
+[PQC-FUSE 2026-06-27 08:07:27.393] PQC background rekey worker started
+[PQC-FUSE 2026-06-27 08:07:27.393] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-27 08:07:27.428] CREATE /posix.bin: authenticated file-key envelope initialized (fid=2206078362193916086)
+[PQC-FUSE 2026-06-27 08:07:27.430] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
+[PQC-FUSE 2026-06-27 08:07:27.431] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
+[PQC-FUSE 2026-06-27 08:07:27.433] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
+[PQC-FUSE 2026-06-27 08:07:27.433] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
+[PQC-FUSE 2026-06-27 08:07:27.435] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
+[PQC-FUSE 2026-06-27 08:07:27.442] SETXATTR /posix.bin tier=1

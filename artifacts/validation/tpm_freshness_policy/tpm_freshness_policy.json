@@ -1,0 +1,101 @@
+{
+  "checks": {
+    "all_required_topics_present": true,
+    "all_rows_have_evidence_and_policy": true,
+    "paper_covers_all_policy_topics": true,
+    "source_and_artifact_evidence_pass": true
+  },
+  "non_claims": [
+    "no persistent PCR-bound filesystem freshness",
+    "no hardware-backed credential release",
+    "no automatic backup or migration recovery",
+    "no recovery after lost mount credential",
+    "no full power-loss or FUSE-daemon crash certification"
+  ],
+  "overall_pass": true,
+  "paper_gates": {
+    "backup_migration": true,
+    "expected_failure_behavior": true,
+    "index_lifecycle": true,
+    "lost_credentials": true,
+    "nv_authorization_model": true,
+    "pcr_binding_role": true,
+    "reprovisioning": true,
+    "software_update": true
+  },
+  "policy_rows": [
+    {
+      "current_evidence": "The retained provisioning probe observes NV index 0x01500010 with ownerread|ownerwrite attributes, and pqc_anchor.c uses the TPM owner hierarchy for nvread/nvwrite.",
+      "intended_policy": "The prototype treats the NV index as an administrator-owned freshness register.  It reads and writes only the authenticated prefix anchor record and does not claim a deployed TPM authorization policy.",
+      "paper_gate_phrase": "owner-authorized TPM NV index",
+      "topic": "nv_authorization_model"
+    },
+    {
+      "current_evidence": "The transient PCR probe unseals under the current PCR file and rejects a drifted PCR file; it does not provision the persistent filesystem NV index.",
+      "intended_policy": "PCR binding is a future release gate for stronger claims, not a property of the current persistent filesystem anchor.",
+      "paper_gate_phrase": "PCR binding is a transient probe rather than a persistent filesystem policy",
+      "topic": "pcr_binding_role"
+    },
+    {
+      "current_evidence": "pqc_anchor.c checks tpm2_nvreadpublic and refuses to define an index implicitly; the unprovisioned TPM artifact records a nonzero hardware-anchor startup exit.",
+      "intended_policy": "Administrators create and rotate the NV index outside the daemon; the daemon fails closed when the configured index is absent.",
+      "paper_gate_phrase": "administrators create and rotate the index outside the daemon",
+      "topic": "index_lifecycle"
+    },
+    {
+      "current_evidence": "The implementation has no automatic NV define/redefine path and no artifact showing safe automatic anchor migration.",
+      "intended_policy": "Reprovisioning is a deliberate administrative reset or migration step that must be paired with a compatible storage snapshot or a fresh anchor bootstrap.",
+      "paper_gate_phrase": "explicit reprovisioning/resealing",
+      "topic": "reprovisioning"
+    },
+    {
+      "current_evidence": "PCR drift is rejected only in the transient PCR-policy probe; no persistent PCR-sealed filesystem anchor is installed.",
+      "intended_policy": "Software updates or PCR changes require explicit policy renewal before the paper can claim persistent PCR-bound freshness.",
+      "paper_gate_phrase": "software update or PCR change therefore requires explicit reprovisioning/resealing",
+      "topic": "software_update"
+    },
+    {
+      "current_evidence": "The monotonic replay and combined SQLite/dbm.dumb campaigns show that stale backing-store snapshots fail closed against the advanced TPM anchor.",
+      "intended_policy": "Backup and migration are not blind directory copies; a destination needs an authorized anchor bootstrap or the restored state should fail closed.",
+      "paper_gate_phrase": "Backup or migration cannot copy only the backing directory",
+      "topic": "backup_migration"
+    },
+    {
+      "current_evidence": "The paper and code keep the mount password as the root credential; no hardware-backed credential release or recovery artifact exists.",
+      "intended_policy": "Lost mount credentials are unrecoverable in this prototype.",
+      "paper_gate_phrase": "Lost mount credentials are unrecoverable",
+      "topic": "lost_credentials"
+    },
+    {
+      "current_evidence": "The source fails closed on missing NV index, TPM I/O failure, anchor digest mismatch, and stored sequence ahead of local state; retained replay artifacts expose fail-closed read/open behavior.",
+      "intended_policy": "Missing index, authorization failure, TPM I/O failure, digest mismatch, or a TPM sequence ahead of local state must fail closed instead of exposing stale data.",
+      "paper_gate_phrase": "Missing index, authorization failure, TPM I/O failure, digest mismatch, or a TPM sequence ahead of local state fail closed",
+      "topic": "expected_failure_behavior"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Policy-definition artifact only.  It records the intended TPM/freshness lifecycle and gates paper wording; it does not claim persistent PCR-bound freshness or deployed credential recovery.",
+  "source_artifacts": [
+    "artifacts/validation/tpm_provisioning_probe_sudo/tpm_provisioning_probe.json",
+    "artifacts/validation/tpm_pcr_policy_probe/tpm_pcr_policy_probe.json",
+    "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json",
+    "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json",
+    "artifacts/validation/tpm_unprovisioned.json",
+    "pqc_anchor.c"
+  ],
+  "source_checks": {
+    "code_detects_stale_sequence": true,
+    "code_requires_preprovisioned_index": true,
+    "code_uses_owner_hierarchy_nv_ops": true,
+    "dbm_tpm_stale_snapshot_fail_closed": true,
+    "monotonic_replay_fail_closed": true,
+    "nv_index_is_expected": true,
+    "nv_ownerread_ownerwrite_recorded": true,
+    "nv_size_compatible_with_anchor_record": true,
+    "nvreadpublic_succeeds": true,
+    "sqlite_tpm_stale_snapshot_fail_closed": true,
+    "transient_pcr_probe_passes": true,
+    "unprovisioned_tpm_fails_closed": true
+  },
+  "timestamp_utc": "2026-06-27T08:31:51.475394+00:00"
+}

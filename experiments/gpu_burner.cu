@@ -1,5 +1,8 @@
 #include <cuda_runtime.h>
+#include <cmath>
+#include <cstdlib>
 #include <stdio.h>
+#include <ctime>
 
 __global__ void burn_gpu(float *d_out, int iters) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;

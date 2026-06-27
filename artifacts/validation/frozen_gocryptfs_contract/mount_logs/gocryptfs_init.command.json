@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/usr/bin/gocryptfs",
+    "-quiet",
+    "-init",
+    "-passfile",
+    "${PASSFILE}",
+    "/tmp/gocryptfs_frozen_cipher_ycuvhpze"
+  ],
+  "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+  "end_realtime_ns": 1782544702680890636,
+  "returncode": 0,
+  "start_realtime_ns": 1782544702534005362,
+  "stderr": "artifacts/validation/frozen_gocryptfs_contract/mount_logs/gocryptfs_init.stderr.txt",
+  "stdout": "artifacts/validation/frozen_gocryptfs_contract/mount_logs/gocryptfs_init.stdout.txt",
+  "wall_seconds": 0.146885274
+}

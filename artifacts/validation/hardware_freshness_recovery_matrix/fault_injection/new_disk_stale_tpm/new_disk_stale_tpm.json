@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse",
+    "--anchor-self-test"
+  ],
+  "fixture_artifacts": {
+    "nvwrite_input": "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/capture/nvwrite_input.bin",
+    "stale_tpm_anchor": "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/capture/stale_tpm_anchor.bin"
+  },
+  "returncode": 0,
+  "stderr": "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/anchor_self_test.stderr.txt",
+  "stdout": "artifacts/validation/hardware_freshness_recovery_matrix/fault_injection/new_disk_stale_tpm/anchor_self_test.stdout.txt"
+}

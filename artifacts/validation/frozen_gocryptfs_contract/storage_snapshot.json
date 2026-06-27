@@ -1,0 +1,24 @@
+{
+  "file_count": 4,
+  "files": [
+    {
+      "bytes": 1082130450,
+      "path": "Q8ZpjiquqntFoj1ETlNXow/K8WQ6P2FZg27J8jCsLXd-O2-XpCeKCFTVTU2kWYK59A"
+    },
+    {
+      "bytes": 16,
+      "path": "Q8ZpjiquqntFoj1ETlNXow/gocryptfs.diriv"
+    },
+    {
+      "bytes": 385,
+      "path": "gocryptfs.conf"
+    },
+    {
+      "bytes": 16,
+      "path": "gocryptfs.diriv"
+    }
+  ],
+  "storage_dir": "/tmp/gocryptfs_frozen_cipher_ycuvhpze",
+  "total_file_bytes": 1082130867,
+  "truncated_to_files": 200
+}

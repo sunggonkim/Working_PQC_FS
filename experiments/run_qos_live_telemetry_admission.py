@@ -129,7 +129,10 @@ def main() -> int:
         tegra_cmd = ["sudo", "-S", "tegrastats", "--interval", str(args.interval_ms)]
         tegra = subprocess.Popen(tegra_cmd, cwd=ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         assert tegra.stdin is not None
-        tegra.stdin.write(os.environ.get("PQC_SUDO_PASSWORD", "1234qwer") + "\n")
+        sudo_password = os.environ.get("PQC_SUDO_PASSWORD")
+        if not sudo_password:
+            raise RuntimeError("PQC_SUDO_PASSWORD must be set for sudo tegrastats collection")
+        tegra.stdin.write(sudo_password + "\n")
         tegra.stdin.flush()
         assert tegra.stdout is not None
         for idx in range(args.samples):

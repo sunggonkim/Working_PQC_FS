@@ -495,8 +495,8 @@ def plot(rows: list[dict[str, object]], out_dir: Path) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser(description="E3/M6 latency pass for TensorRT interference")
     ap.add_argument("out_dir", nargs="?", default=str(ROOT / "artifacts" / "motivation"))
-    ap.add_argument("--engine", required=False, default=str(ROOT / "artifacts" / "yolov8n.plan"))
-    ap.add_argument("--onnx", required=False, default=str(ROOT / "artifacts" / "yolov8n.onnx"))
+    ap.add_argument("--engine", required=False, default=str(ROOT / "artifacts" / "models" / "yolov8n.plan"))
+    ap.add_argument("--onnx", required=False, default=str(ROOT / "artifacts" / "models" / "yolov8n.onnx"))
     ap.add_argument("--model-name", default=os.environ.get("AEGIS_TRT_MODEL", "yolov8"))
     ap.add_argument("--duration", type=int, default=5)
     ap.add_argument("--input-shape", default="1x3x640x640")

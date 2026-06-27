@@ -1,4 +1,0 @@
-Scheme,T_switch_us,T_attach_us,T_io_us,T_crypt_us
-dm-crypt,0.0,0.0,820.0,2480.0
-AEGIS-Q FUSE,85.0,24.0,620.0,110.0
-eBPF + io_uring,0.0,8.0,380.0,110.0

@@ -1,0 +1,141 @@
+{
+  "command": [
+    "experiments/run_posix_scope_audit.py",
+    "--out-dir",
+    "artifacts/validation/posix_scope_audit"
+  ],
+  "rows": [
+    {
+      "case": "default_mmap_on_encrypted_file",
+      "expected_behavior": "rejected",
+      "observed_errno": 19,
+      "observed_errno_name": "ENODEV",
+      "detail": "[Errno 19] No such device",
+      "acceptable": true,
+      "scope": "Default encrypted files use FUSE direct_io and do not claim shared mmap semantics."
+    },
+    {
+      "case": "concurrent_disjoint_writers",
+      "expected_behavior": "serialized_by_daemon_lock_for_disjoint_write_fsync_path",
+      "errors": [],
+      "result_sha256_prefix": {
+        "first_block_all_A": true,
+        "second_block_all_B": true
+      },
+      "acceptable": true,
+      "scope": "Narrow disjoint write/fsync path only; arbitrary conflicting app-level concurrency is not certified."
+    },
+    {
+      "case": "rename_rejection",
+      "expected_behavior": "rejected_ENOTSUP",
+      "observed_errno": 95,
+      "observed_errno_name": "ENOTSUP",
+      "detail": "[Errno 95] Operation not supported: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin' -> '/tmp/posix_scope_mnt_u1kbyr7g/renamed.bin'",
+      "acceptable": true,
+      "scope": "Rename would need atomic marker/data/journal/checkpoint/anchor transition; not implemented."
+    },
+    {
+      "case": "directory_fsync_rejection",
+      "expected_behavior": "rejected_ENOTSUP",
+      "observed_errno": 95,
+      "observed_errno_name": "ENOTSUP",
+      "detail": "[Errno 95] Operation not supported",
+      "acceptable": true,
+      "scope": "Directory-entry durability is not a supported boundary in this prototype."
+    },
+    {
+      "case": "xattr_policy",
+      "expected_behavior": "user_xattr_roundtrip_internal_xattrs_hidden_invalid_tier_rejected",
+      "user_audit_value": "ok",
+      "listxattr_before_tier": [
+        "user.audit"
+      ],
+      "listxattr_after_tier": [
+        "user.audit",
+        "user.pqc_tier"
+      ],
+      "hidden_internal_xattrs_found": [],
+      "internal_set_results": [
+        {
+          "name": "user.pqc_metadata",
+          "acceptable": true,
+          "observed_errno": 1,
+          "observed_errno_name": "EPERM",
+          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+        },
+        {
+          "name": "user.pqc_logical_size",
+          "acceptable": true,
+          "observed_errno": 1,
+          "observed_errno_name": "EPERM",
+          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+        },
+        {
+          "name": "user.pqc_checkpoint",
+          "acceptable": true,
+          "observed_errno": 1,
+          "observed_errno_name": "EPERM",
+          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+        }
+      ],
+      "internal_get_results": [
+        {
+          "name": "user.pqc_metadata",
+          "acceptable": true,
+          "observed_errno": 61,
+          "observed_errno_name": "ENODATA",
+          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+        },
+        {
+          "name": "user.pqc_logical_size",
+          "acceptable": true,
+          "observed_errno": 61,
+          "observed_errno_name": "ENODATA",
+          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+        },
+        {
+          "name": "user.pqc_checkpoint",
+          "acceptable": true,
+          "observed_errno": 61,
+          "observed_errno_name": "ENODATA",
+          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+        }
+      ],
+      "invalid_tier": {
+        "acceptable": true,
+        "observed_errno": 22,
+        "observed_errno_name": "EINVAL",
+        "detail": "[Errno 22] Invalid argument: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+      },
+      "tier_value": "1",
+      "acceptable": true,
+      "scope": "User xattrs and validated tier control are supported; internal metadata/checkpoint xattrs are not user-visible controls."
+    },
+    {
+      "case": "lower_filesystem_assumptions",
+      "expected_behavior": "recorded_not_certified",
+      "filesystem_type": "ext2/ext3",
+      "stat_stderr": "",
+      "marker_metadata_xattr_bytes": 120,
+      "marker_checkpoint_xattr_bytes": 80,
+      "marker_xattr_error": null,
+      "storage_dir_fsync_ok": true,
+      "storage_dir_fsync_errno": null,
+      "storage_dir_fsync_errno_name": null,
+      "acceptable": true,
+      "scope": "The harness records lower-filesystem type and xattr availability; xattr atomicity and directory durability remain delegated, not certified."
+    },
+    {
+      "case": "fuse_writeback_cache_and_direct_mmap_caps",
+      "expected_behavior": "capabilities_not_requested",
+      "source_disables_writeback_cache": true,
+      "source_requests_writeback_cache": false,
+      "source_disables_direct_io_mmap": true,
+      "source_requests_direct_io_mmap": false,
+      "proc_mounts_line": "pqc_fuse /tmp/posix_scope_mnt_u1kbyr7g fuse.pqc_fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000 0 0",
+      "acceptable": true,
+      "scope": "The daemon avoids FUSE writeback-cache and direct-IO mmap capabilities; no cache-coherence claim is made."
+    }
+  ],
+  "overall_pass": true
+}

@@ -1,5 +1,5 @@
 {
-  "note": "SQLite app recovery bundle only; not a full multi-workload crash-certification claim.",
+  "note": "SQLite app recovery bundle with selected-boundary and syscall-exact app-crash evidence; not a power-loss or FUSE-daemon crash-certification claim.",
   "checks": [
     {
       "name": "crash_audit_report",

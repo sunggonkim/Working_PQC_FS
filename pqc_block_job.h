@@ -189,13 +189,14 @@ typedef enum {
     PQC_ROUTE_REASON_SIZE_TOO_SMALL         = 0x10,   /* Request too small; staging cost dominates */
     PQC_ROUTE_REASON_COHERENCE_RISK         = 0x20,   /* UVM migration stall risk (M6 CUPTI future) */
     PQC_ROUTE_REASON_STAGING_COST_HIGH      = 0x40,   /* Expected staging time > execution time */
+    PQC_ROUTE_REASON_STALE_TELEMETRY        = 0x80,   /* Producer slack sample is stale */
 } pqc_admission_reason_t;
 
 typedef struct {
     /* Batch characteristics */
     size_t batch_count;
     size_t bytes_total;
-    uint64_t batch_age_ns;              /* Time since job submission */
+    uint64_t batch_age_ns;              /* Monotonic relative time since job submission */
     
     /* Estimated costs */
     uint64_t gpu_kernel_est_ns;         /* Estimated GPU kernel duration */
@@ -212,7 +213,10 @@ typedef struct {
     
     /* QoS budget state */
     uint64_t ai_qos_budget_remaining_ns;
-    uint64_t ai_inference_deadline_ns;
+    uint64_t ai_inference_deadline_ns;  /* Producer-supplied relative deadline/slack budget */
+    uint64_t producer_slack_age_ns;     /* Monotonic age of the last producer slack sample */
+    uint64_t producer_slack_stale_after_ns;
+    uint32_t producer_slack_stale;
     
     /* Coherence & UMA state */
     uint64_t uma_migration_bytes_est;

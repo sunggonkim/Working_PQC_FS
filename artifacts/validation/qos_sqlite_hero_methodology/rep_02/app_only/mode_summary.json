@@ -1,0 +1,77 @@
+{
+  "acceptable": true,
+  "admission": {
+    "deferrals": {},
+    "rows": 0,
+    "targets": {}
+  },
+  "background": {
+    "bytes_written": 0,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 0.0,
+    "write_events": 0,
+    "writer_started": false,
+    "writer_stop_rows": []
+  },
+  "config": {
+    "background_writer": false,
+    "controller_label": "none",
+    "daemon_throttle": false,
+    "harness_throttle": false
+  },
+  "daemon_throttle": {
+    "open_rows": 0,
+    "rows": 0,
+    "sleep_us_total": 0,
+    "throttled_rows": 0
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 0,
+    "deadline_ms": 10.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/foreground_sqlite_latency.jsonl",
+    "max_ms": 7.258314,
+    "mean_ms": 5.488343020833334,
+    "p50_ms": 5.6198705,
+    "p95_ms": 6.8398893,
+    "p99_ms": 7.253253040000001,
+    "row_count": 384,
+    "rows_written": 384,
+    "samples": 48
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/background_writer.jsonl",
+    "foreground_csv": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/foreground_sqlite_latency.csv",
+    "foreground_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/mount_logs/pqc_fuse.stdout.txt",
+    "policy_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/policy_trace.jsonl",
+    "runtime_fuse_admission_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/runtime_telemetry.txt",
+    "telemetry_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/telemetry_trace.jsonl"
+  },
+  "mode": "app_only",
+  "policy": {
+    "events": {
+      "none": 30
+    },
+    "rows": 30,
+    "states": {
+      "disabled": 30
+    },
+    "throttle_rows": 0
+  },
+  "telemetry": {
+    "avg_cpu_utilization": 0.05410184863984104,
+    "avg_gpu_utilization": 0.1,
+    "gpu_utilization_sources": [
+      "telemetry_tensor_proxy"
+    ],
+    "high_pressure_rows": 0,
+    "rows": 30,
+    "zero_budget_rows": 0
+  }
+}

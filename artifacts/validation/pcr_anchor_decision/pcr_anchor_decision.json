@@ -1,0 +1,158 @@
+{
+  "artifact_checks": {
+    "pcr_probe_note_is_transient": true,
+    "pcr_probe_passes_current_unseal": true,
+    "pcr_probe_rejects_drift": true,
+    "provisioned_nv_index_recorded": true,
+    "tpm_policy_manifest_passes": true,
+    "tpm_replay_after_advance_fail_closed": true
+  },
+  "checks": {
+    "artifact_checks_pass": true,
+    "decision_rows_present": true,
+    "paper_checks_pass": true,
+    "source_checks_pass": true
+  },
+  "decision": "no_persistent_pcr_bound_filesystem_anchor_in_this_revision",
+  "decision_rows": [
+    {
+      "decision": "no_persistent_pcr_bound_filesystem_anchor_in_this_revision",
+      "evidence": "pqc_anchor.c stores the persistent hardware anchor as an authenticated prefix record in a pre-provisioned TPM NV index using owner-hierarchy nvread/nvwrite commands.  It contains no PCR policy-session, sealed-object, or unseal path.",
+      "paper_gate_phrase": "PCR binding is a transient probe rather than a persistent filesystem policy",
+      "topic": "persistent_anchor_decision"
+    },
+    {
+      "decision": "retain_pcr_only_as_probe",
+      "evidence": "The PCR probe artifact seals a transient object, unseals under the current PCR digest, and rejects a drifted PCR digest; its own note says it is not a filesystem freshness proof.",
+      "paper_gate_phrase": "not a claim that the persistent filesystem anchor itself is PCR-sealed",
+      "topic": "transient_pcr_probe_role"
+    },
+    {
+      "decision": "paper_must_negate_persistent_pcr_binding",
+      "evidence": "The main paper gates the claim in design, evaluation, security, abstract, and conclusion wording; all high-risk PCR mentions are in a negated, transient, or remaining-gap context.",
+      "paper_gate_phrase": "no persistent PCR-bound lifecycle claim",
+      "topic": "paper_claim_boundary"
+    }
+  ],
+  "high_risk_pcr_mentions": [
+    {
+      "accepted_scope_context": "true",
+      "context": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential. The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation. File anchors are replayable. TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release.",
+      "needle": "PCR-policy"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential. The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation. File anchors are replayable. TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release.",
+      "needle": "PCR-bound"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The paper is intentionally conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack. These exclusions are not a substitute for contributions; they define the boundary within which the measured system should be read.",
+      "needle": "PCR-bound"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "\\begin{table*}[t] \\centering \\caption{Formal storage-protocol invariants, implementation loci, retained evidence, and claim boundaries.} \\scriptsize \\setlength{\\tabcolsep}{3pt} \\begin{tabularx}{\\textwidth}{P{0.20\\textwidth}|P{0.27\\textwidth}|P{0.25\\textwidth}|Y} \\toprule \\textbf{Invariant} & \\textbf{Implementation locus} & \\textbf{Retained evidence} & \\textbf{Claim boundary}\\\\ \\midrule Envelope authentication before DEK use & \\texttt{metadata\\_load()} verifies the HMAC-protected envelope before ",
+      "needle": "PCR-bound"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "\\begin{figure*}[t] \\centering \\scriptsize \\begin{tikzpicture}[ node distance=0.45cm and 0.55cm, state/.style={draw, rounded corners, align=center, minimum width=1.65cm, minimum height=0.48cm, inner sep=2pt}, edge/.style={->, thick} ] \\node[state] (clean) {clean\\\\mount}; \\node[state, right=of clean] (data) {data record\\\\durable}; \\node[state, right=of data] (journal) {journal mapping\\\\durable}; \\node[state, right=of journal] (ckpt) {checkpoint/\\\\xattr exposed}; \\node[state, right=of ckpt] (anchor",
+      "needle": "PCR"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The TPM artifacts record anchor latency, fixed properties, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe that unseals under the current PCR digest but rejects a drifted digest. The replay-after-advance harness restores a stale backing-directory snapshot after the TPM-backed anchor advances and observes \\texttt{fail\\_closed} at payload read time. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR",
+      "needle": "PCR"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The TPM artifacts record anchor latency, fixed properties, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe that unseals under the current PCR digest but rejects a drifted digest. The replay-after-advance harness restores a stale backing-directory snapshot after the TPM-backed anchor advances and observes \\texttt{fail\\_closed} at payload read time. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR",
+      "needle": "PCR-policy"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The TPM artifacts record anchor latency, fixed properties, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe that unseals under the current PCR digest but rejects a drifted digest. The replay-after-advance harness restores a stale backing-directory snapshot after the TPM-backed anchor advances and observes \\texttt{fail\\_closed} at payload read time. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR",
+      "needle": "PCR"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The TPM artifacts record anchor latency, fixed properties, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe that unseals under the current PCR digest but rejects a drifted digest. The replay-after-advance harness restores a stale backing-directory snapshot after the TPM-backed anchor advances and observes \\texttt{fail\\_closed} at payload read time. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR",
+      "needle": "PCR-sealed"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "\\begin{table}[t] \\centering \\caption{Recovery/freshness outcomes and their interpretation.} \\scriptsize \\setlength{\\tabcolsep}{3pt} \\begin{tabularx}{\\columnwidth}{P{0.28\\columnwidth}|P{0.30\\columnwidth}|Y} \\toprule \\textbf{Retained result} & \\textbf{Interpretation} & \\textbf{Still missing}\\\\ \\midrule Clean FUSE remount & Envelope/key hierarchy can recover the written file after clean unmount/remount & Crash timing across all D/J/C boundaries\\\\ Metadata HMAC tamper & Unauthenticated envelope meta",
+      "needle": "PCR policy"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "AEGIS-Q is an evidence-first hybrid cryptographic-storage prototype: a remountable FUSE encrypted-block format with CPU-first AES-GCM, optional batched GPU key-plane maintenance, TPM replay-after-advance evidence, SQLite/\\texttt{dbm.dumb} recovery artifacts, and mounted-FUSE throttle traces on a Jetson AGX Thor. It still does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss crash certification, foreground A",
+      "needle": "PCR-bound"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The older \\texttt{pqc\\_file\\_key.*} epoch/grace helper remains source-only and is not linked into \\texttt{pqc\\_fuse}; evaluated epochs are open-file refresh bookkeeping, not stale-handle, rollback, or TPM/PCR-bound freshness proof.",
+      "needle": "PCR-bound"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record. PCR binding is a transient probe rather than a persistent filesystem policy; a software update or PCR change therefore requires explicit reprovisioning/resealing. Backup or migration cannot copy only the backing directory; it needs a fresh authorized anchor bootstrap. Lost mount credentials are un",
+      "needle": "PCR binding"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record. PCR binding is a transient probe rather than a persistent filesystem policy; a software update or PCR change therefore requires explicit reprovisioning/resealing. Backup or migration cannot copy only the backing directory; it needs a fresh authorized anchor bootstrap. Lost mount credentials are un",
+      "needle": "PCR"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record. PCR binding is a transient probe rather than a persistent filesystem policy; a software update or PCR change therefore requires explicit reprovisioning/resealing. Backup or migration cannot copy only the backing directory; it needs a fresh authorized anchor bootstrap. Lost mount credentials are un",
+      "needle": "PCR binding"
+    },
+    {
+      "accepted_scope_context": "true",
+      "context": "\\begin{document} \\begin{abstract} Unified-memory edge devices increasingly co-locate foreground inference, local databases, and long-lived encrypted state on the same DRAM and storage fabric. A secure-storage system for this setting must therefore do more than encrypt blocks: it must place cryptographic work where it does not disrupt latency-sensitive tenants, publish durable authenticated state without nonce reuse, and avoid relying on undocumented accelerator/storage semantics. AEGIS-Q is a FU",
+      "needle": "PCR-bound"
+    }
+  ],
+  "non_claims": [
+    "no persistent PCR-bound filesystem freshness",
+    "no persistent PCR-sealed filesystem anchor",
+    "no PCR-bound key release",
+    "no software-update PCR migration protocol",
+    "no PCR-bound backup or restore protocol"
+  ],
+  "overall_pass": true,
+  "paper_checks": {
+    "all_high_risk_pcr_mentions_scoped": true,
+    "required_paper_gate_phrases_present": true
+  },
+  "paper_gates": {
+    "abstract_nonclaim": true,
+    "conclusion_nonclaim": true,
+    "design_no_persistent_lifecycle": true,
+    "evaluation_not_pcr_sealed": true,
+    "security_transient_policy": true
+  },
+  "schema_version": 1,
+  "scope": "The persistent filesystem anchor is not PCR-bound in this revision. PCR evidence is retained only as a transient policy probe; persistent freshness evidence is limited to pre-provisioned TPM NV replay-after-advance fail-closed behavior.",
+  "source_artifacts": [
+    "pqc_anchor.c",
+    "experiments/run_tpm_pcr_policy_probe.py",
+    "experiments/build_tpm_freshness_policy_manifest.py",
+    "artifacts/validation/tpm_pcr_policy_probe/tpm_pcr_policy_probe.json",
+    "artifacts/validation/tpm_freshness_policy/tpm_freshness_policy.json",
+    "artifacts/validation/tpm_provisioning_probe_sudo/tpm_provisioning_probe.json",
+    "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json"
+  ],
+  "source_checks": {
+    "anchor_source_has_no_persistent_pcr_commands": true,
+    "anchor_uses_owner_hierarchy_nv_ops": true,
+    "anchor_uses_preprovisioned_nv_index": true,
+    "pcr_probe_script_declares_transient_scope": true,
+    "tpm_policy_manifest_declares_nonclaim": true,
+    "tpm_policy_script_preserves_nonclaim": true
+  },
+  "timestamp_utc": "2026-06-27T08:47:58.985257+00:00"
+}

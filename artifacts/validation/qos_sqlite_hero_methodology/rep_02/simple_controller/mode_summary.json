@@ -1,0 +1,91 @@
+{
+  "acceptable": true,
+  "admission": {
+    "deferrals": {},
+    "rows": 0,
+    "targets": {}
+  },
+  "background": {
+    "bytes_written": 917504,
+    "harness_throttle_sleep_us_total": 535000,
+    "harness_throttle_sleeps": 107,
+    "throughput_mb_s": 1.4970013728032954,
+    "write_events": 14,
+    "writer_started": true,
+    "writer_stop_rows": [
+      {
+        "bytes_written": 917504,
+        "chunks_written": 14,
+        "elapsed_ns": 584501802,
+        "event": "writer_stop",
+        "harness_throttle_sleep_us_total": 535000,
+        "harness_throttle_sleeps": 107,
+        "throughput_mb_s": 1.4970013728032954,
+        "timestamp_ns": 1782524620403668227,
+        "writer_id": 0
+      }
+    ]
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "harness_hysteresis",
+    "daemon_throttle": false,
+    "harness_throttle": true
+  },
+  "daemon_throttle": {
+    "open_rows": 0,
+    "rows": 0,
+    "sleep_us_total": 0,
+    "throttled_rows": 0
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 0,
+    "deadline_ms": 10.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/foreground_sqlite_latency.jsonl",
+    "max_ms": 7.60874,
+    "mean_ms": 5.146745395833333,
+    "p50_ms": 5.098273,
+    "p95_ms": 6.57720625,
+    "p99_ms": 7.422589920000001,
+    "row_count": 384,
+    "rows_written": 384,
+    "samples": 48
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/background_writer.jsonl",
+    "foreground_csv": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/foreground_sqlite_latency.csv",
+    "foreground_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+    "policy_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/policy_trace.jsonl",
+    "runtime_fuse_admission_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/runtime_telemetry.txt",
+    "telemetry_jsonl": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/telemetry_trace.jsonl"
+  },
+  "mode": "simple_controller",
+  "policy": {
+    "events": {
+      "enter": 1,
+      "hold": 27
+    },
+    "rows": 28,
+    "states": {
+      "open": 1,
+      "throttled": 27
+    },
+    "throttle_rows": 27
+  },
+  "telemetry": {
+    "avg_cpu_utilization": 0.03785386981199789,
+    "avg_gpu_utilization": 0.1,
+    "gpu_utilization_sources": [
+      "telemetry_tensor_proxy"
+    ],
+    "high_pressure_rows": 27,
+    "rows": 28,
+    "zero_budget_rows": 0
+  }
+}

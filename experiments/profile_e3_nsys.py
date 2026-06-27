@@ -10,7 +10,7 @@ mixing profiling overhead into the latency measurements.
 Typical usage:
 
   python3 experiments/profile_e3_nsys.py \
-    --engine artifacts/yolov8n_fp16.plan \
+    --engine artifacts/models/yolov8n.plan \
     --model-name yolov8 \
     --out-dir artifacts/m6_profile_yolov8
 

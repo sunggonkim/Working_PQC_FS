@@ -1,0 +1,5 @@
+WARNING:esys:src/tss2-esys/api/Esys_NV_Read.c:315:Esys_NV_Read_Finish() Received TPM Error
+ERROR:esys:src/tss2-esys/api/Esys_NV_Read.c:105:Esys_NV_Read() Esys Finish ErrorCode (0x000009a2)
+ERROR: Esys_NV_Read(0x9A2) - tpm:session(1):authorization failure without DA implications
+ERROR: Failed to read NVRAM area at index 0x1500010
+ERROR: Unable to run tpm2_nvread

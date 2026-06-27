@@ -1,0 +1,307 @@
+{
+  "command": [
+    "experiments/run_generation_fault_matrix.py",
+    "--out-dir",
+    "artifacts/validation/generation_fault_matrix"
+  ],
+  "allowed_oracle_verdicts": [
+    "fail_closed",
+    "latest_committed",
+    "previous_committed",
+    "silent_corruption",
+    "unexpected_liveness_failure"
+  ],
+  "rows": [
+    {
+      "case": "self_test_older_generation_regression",
+      "required_cases": [
+        "older-generation append after newer mapping"
+      ],
+      "oracle_verdict": "latest_committed",
+      "detail": null,
+      "acceptable": true,
+      "artifact": {
+        "stdout": "artifacts/validation/generation_fault_matrix/pqc_fuse_self_test.stdout.txt",
+        "stderr": "artifacts/validation/generation_fault_matrix/pqc_fuse_self_test.stderr.txt",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "161fce1f8998291ff401a706a6637b8ba765514d589d929be3328b257a0c15bc"
+      }
+    },
+    {
+      "case": "partial_update_and_remount",
+      "required_cases": [
+        "partial update",
+        "remount"
+      ],
+      "oracle_verdict": "latest_committed",
+      "live_verdict": "latest_committed",
+      "detail": null,
+      "acceptable": true,
+      "previous_sha256": "4348e3b98e8a327b34ced39c1da9e67cdb4cd5e48e4d7960607a3ae403d35f0c",
+      "latest_sha256": "6659339dda128a9ed5999edf84ffce3833740f2aa6f9fe056a4dff3ffdd10d84",
+      "journal": {
+        "path": "/tmp/gen_matrix_partial_store_qowspjhg/partial.bin.pqcmeta",
+        "bytes": 576,
+        "record_size": 96,
+        "full_records": 6,
+        "torn_tail_bytes": 0,
+        "valid_records": 6,
+        "records": [
+          {
+            "index": 0,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 1,
+            "ciphertext_offset": 0,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "38fa658629a1c20bcce68003a6dab049b76083e2b3e71f112df811dab07ac12f"
+          },
+          {
+            "index": 1,
+            "valid": true,
+            "logical_block": 1,
+            "generation": 2,
+            "ciphertext_offset": 4096,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "e54851307b9248bca528ac55916590daf834ada21d6efdf926dbf74790f2e577"
+          },
+          {
+            "index": 2,
+            "valid": true,
+            "logical_block": 2,
+            "generation": 3,
+            "ciphertext_offset": 8192,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "7e95e89d3034036d5cd6e6809f2b74411b86f5ad94827ca699ca9842039e6404"
+          },
+          {
+            "index": 3,
+            "valid": true,
+            "logical_block": 3,
+            "generation": 4,
+            "ciphertext_offset": 12288,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "06c41b1efb3d1131334447eb58eaa34d775bf45d5b96f0934c8fba7fdb5731c6"
+          },
+          {
+            "index": 4,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 5,
+            "ciphertext_offset": 16384,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "35f0e237b2ea0ab2eb82386695b264f342fd23134a736026449cd84f47333baa"
+          },
+          {
+            "index": 5,
+            "valid": true,
+            "logical_block": 1,
+            "generation": 6,
+            "ciphertext_offset": 20480,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "1b80061b1732b924985f5ea3a8c5d2d7131a8bc4487aaf7b772868696818baac"
+          }
+        ],
+        "duplicate_valid_pairs": [],
+        "retained_file": {
+          "path": "artifacts/validation/generation_fault_matrix/journals/partial_update_after_write.pqcmeta",
+          "bytes": 576,
+          "sha256": "140e5aa5a6bd1f00c4e6883843ad266d7228beb4e48860dd43fc9e1924c1f5f2"
+        }
+      },
+      "generated_duplicate_nonce_pairs": []
+    },
+    {
+      "case": "torn_journal_write",
+      "required_cases": [
+        "torn journal write"
+      ],
+      "oracle_verdict": "latest_committed",
+      "detail": null,
+      "acceptable": true,
+      "latest_sha256": "d187ef19f395b6e46071a1e4cb33c42823b249d0c3cea3bea943865c05ca8c67",
+      "journal": {
+        "path": "/tmp/gen_matrix_torn_store_f7bo7hvg/torn.bin.pqcmeta",
+        "bytes": 196,
+        "record_size": 96,
+        "full_records": 2,
+        "torn_tail_bytes": 4,
+        "valid_records": 2,
+        "records": [
+          {
+            "index": 0,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 1,
+            "ciphertext_offset": 0,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "34bc68f43948ee0b185e0db86c643feaee9dcbb2b6856bde268a2e91f5107630"
+          },
+          {
+            "index": 1,
+            "valid": true,
+            "logical_block": 1,
+            "generation": 2,
+            "ciphertext_offset": 4096,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "91a178d0c6708764e64eebdd9bbb26e83170e142f145fab72244e2912eb7e124"
+          }
+        ],
+        "duplicate_valid_pairs": [],
+        "retained_file": {
+          "path": "artifacts/validation/generation_fault_matrix/journals/torn_journal_after_tail.pqcmeta",
+          "bytes": 196,
+          "sha256": "faa18ccf7da1407a980082ed374ff374097fe7a73a86ae99809be5813c4ae2e9"
+        }
+      },
+      "generated_duplicate_nonce_pairs": []
+    },
+    {
+      "case": "older_generation_append_after_newer_mapping",
+      "required_cases": [
+        "older-generation append after newer mapping"
+      ],
+      "oracle_verdict": "latest_committed",
+      "detail": null,
+      "acceptable": true,
+      "previous_sha256": "6896d9ea3f73a4434f5832bc65714e7d066f177373f36f34dc8a6f735daa41b1",
+      "latest_sha256": "725bcd6c66d02acf6ebeab9c92410e010ea22e336876256aaf05a211f4ce1902",
+      "older_generation": 1,
+      "newer_generation": 2,
+      "journal_before_attack": {
+        "path": "/tmp/gen_matrix_replay_store_11h9qu50/replay.bin.pqcmeta",
+        "bytes": 192,
+        "record_size": 96,
+        "full_records": 2,
+        "torn_tail_bytes": 0,
+        "valid_records": 2,
+        "records": [
+          {
+            "index": 0,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 1,
+            "ciphertext_offset": 0,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "d07ccb7e6590dd1a19d885689a81735ebcf3fe3f8a8e4f0f118e96329aae7b44"
+          },
+          {
+            "index": 1,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 2,
+            "ciphertext_offset": 4096,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "d27aa8d1006037c450c174644e472728f9df468819f9e5f5ad02856a3efcc4d6"
+          }
+        ],
+        "duplicate_valid_pairs": [],
+        "retained_file": {
+          "path": "artifacts/validation/generation_fault_matrix/journals/older_generation_before_attack.pqcmeta",
+          "bytes": 192,
+          "sha256": "03768ac9cdda84a9895439458ec1d0ccd61acdb49d7ee1ab8f5b5c2ffee382c1"
+        }
+      },
+      "journal_after_attack": {
+        "path": "/tmp/gen_matrix_replay_store_11h9qu50/replay.bin.pqcmeta",
+        "bytes": 288,
+        "record_size": 96,
+        "full_records": 3,
+        "torn_tail_bytes": 0,
+        "valid_records": 3,
+        "records": [
+          {
+            "index": 0,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 1,
+            "ciphertext_offset": 0,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "d07ccb7e6590dd1a19d885689a81735ebcf3fe3f8a8e4f0f118e96329aae7b44"
+          },
+          {
+            "index": 1,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 2,
+            "ciphertext_offset": 4096,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "d27aa8d1006037c450c174644e472728f9df468819f9e5f5ad02856a3efcc4d6"
+          },
+          {
+            "index": 2,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 1,
+            "ciphertext_offset": 0,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "d07ccb7e6590dd1a19d885689a81735ebcf3fe3f8a8e4f0f118e96329aae7b44"
+          }
+        ],
+        "duplicate_valid_pairs": [
+          {
+            "logical_block": 0,
+            "generation": 1,
+            "count": 2
+          }
+        ],
+        "retained_file": {
+          "path": "artifacts/validation/generation_fault_matrix/journals/older_generation_after_attack.pqcmeta",
+          "bytes": 288,
+          "sha256": "6e4547fc4725bcab8b416b5e0be824531ff926dfdeeea2eb630b21429840c415"
+        }
+      },
+      "generated_duplicate_nonce_pairs": [],
+      "adversarial_replay_duplicate_pairs": [
+        {
+          "logical_block": 0,
+          "generation": 1,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "case": "stale_snapshot_replay_file_anchor_negative_control",
+      "required_cases": [
+        "stale snapshot replay"
+      ],
+      "oracle_verdict": "previous_committed",
+      "detail": null,
+      "acceptable": true,
+      "negative_control": true,
+      "previous_sha256": "681e668c98a5ac4272654c2a14f7dce66f47bf4d1088800a4be9ff27edd8002e",
+      "latest_sha256": "755dcff6f60c2f48278979b55b5ddf4d1dbab1f999f98278e62da19c454e439f",
+      "scope": "file-backed anchor is replayable with the backing directory; previous_committed is expected negative-control behavior, not rollback protection."
+    },
+    {
+      "case": "stale_snapshot_replay_tpm_anchor_existing_artifact",
+      "required_cases": [
+        "stale snapshot replay"
+      ],
+      "oracle_verdict": "fail_closed",
+      "detail": "restored snapshot mounted but payload read failed closed (rc=1): Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOSError: [Errno 5] Input/output error: '/tmp/tpm_mono_mnt_6z1mogbm/payload.bin'",
+      "acceptable": true,
+      "negative_control": false,
+      "artifact": "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json",
+      "scope": "existing hardware-backed TPM replay-after-advance artifact; not rerun by this generation matrix script."
+    }
+  ],
+  "no_generated_nonce_reuse": true,
+  "generated_duplicate_nonce_pairs": [],
+  "no_silent_corruption": true,
+  "unexpected_liveness_failures": 0,
+  "overall_pass": true
+}

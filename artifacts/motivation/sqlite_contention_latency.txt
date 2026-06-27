@@ -1,2 +1,0 @@
-full: unable to open database file
-plain: unable to open database file

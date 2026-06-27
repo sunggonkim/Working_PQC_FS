@@ -1,0 +1,43 @@
+{
+  "storage_dir": "/tmp/daemon_fault_xattr_checkpoint_update_store_p3m6ryus",
+  "entries": [
+    {
+      "path": ".anchor",
+      "mode": 33152,
+      "size": 88,
+      "sha256": "757e2e072258a75bf8c657ddacca471856cc50d6423a3d5d714bb69711661386"
+    },
+    {
+      "path": "probe.bin",
+      "mode": 33204,
+      "size": 4096,
+      "sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+      "xattrs": {
+        "user.pqc_checkpoint": {
+          "bytes": 80,
+          "sha256": "b1a226b7e04355f8b6c37c896d8ffe2c1afb8c058672578108330b04d24f31db"
+        },
+        "user.pqc_logical_size": {
+          "bytes": 8,
+          "sha256": "a02ae51509464de11084e34346a86574191b861de2cb5cf064661b459c9bc9e4"
+        },
+        "user.pqc_metadata": {
+          "bytes": 120,
+          "sha256": "080b51c2a21321fbdd580a14bfb3b75fc2b5dace35f5fa26c64d110e57d98746"
+        }
+      }
+    },
+    {
+      "path": "probe.bin.pqcdata",
+      "mode": 33152,
+      "size": 8192,
+      "sha256": "d6ca5c0a381ff916f30d8299581dc3e49cab6e5bd4cfcd0a03f46b6d600f4c61"
+    },
+    {
+      "path": "probe.bin.pqcmeta",
+      "mode": 33152,
+      "size": 192,
+      "sha256": "170bc3c99ec362fb66bb24b5b373b7514482b59156ea1af9bd3c6a7ef5f675b4"
+    }
+  ]
+}

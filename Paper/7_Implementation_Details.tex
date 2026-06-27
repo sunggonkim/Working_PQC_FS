@@ -3,7 +3,7 @@
 
 AEGIS-Q is implemented in C/CUDA on FUSE3.  The secure-storage path is in \texttt{pqc\_fuse.c}; the anchor format and Merkle helper are in \texttt{pqc\_anchor.c}; CUDA AES-GCM, ML-KEM, and integrity executors are separate translation units.  The build enables \texttt{-Wall -Wextra -Werror} for C/C++ and builds CUDA targets only when the required cuPQC libraries are present.  The reported build used liboqs~0.15.0, FUSE3~3.14.0, OpenSSL, CUDA~13.0.48, and cuPQC on the platform in Section~\ref{sec:evaluation}.
 
-The implementation makes several choices that are easy to obscure in a high-level diagram.  First, GPU AES-GCM is format-compatible with the CPU implementation, but failure in the CUDA executor falls back to CPU rather than changing a record format.  Second, the GPU ML-KEM batch executor allocates device buffers internally; it is not an in-place filesystem data path.  Third, the integrity executor has direct parity tests against OpenSSL for leaf hashes, non-power-of-two trees, and the empty-tree case.  These tests check functional equality, not side-channel behavior.
+The implementation makes several choices that are easy to obscure in a high-level diagram; Table~\ref{tab:impl_boundaries} summarizes the boundary for each one.  First, GPU AES-GCM is format-compatible with the CPU implementation, but failure in the CUDA executor falls back to CPU rather than changing a record format.  Second, the GPU ML-KEM batch executor allocates device buffers internally; it is not an in-place filesystem data path.  Third, the integrity executor has direct parity tests against OpenSSL for leaf hashes, non-power-of-two trees, and the empty-tree case.  These tests check functional equality for the helper used by the committed-prefix anchor root; they do not mean the filesystem persists a per-file content Merkle tree or provides side-channel protection.
 
 \begin{table}[t]
 \centering
@@ -21,8 +21,24 @@ Scheduler fallback & No-slack jobs route to CPU & No optimistic GPU admission wi
 \label{tab:impl_boundaries}
 \end{table}
 
-The key-envelope repair is central to remount correctness.  An earlier experimental metadata design generated a per-file ML-KEM secret key and discarded it, making later decapsulation impossible.  The revised data path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before any ciphertext is read.  Consequently, ML-KEM measurements remain useful for assessing an optional batched provisioning lane, but the FUSE format no longer pretends that a one-time KEM benchmark is a persistent per-file key hierarchy.
+The key-envelope repair is central to remount correctness.  An earlier metadata design generated and discarded a per-file ML-KEM secret key, making later decapsulation impossible.  The revised path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before ciphertext is read.  ML-KEM is only optional batched maintenance: the rekey worker can refresh open-file DEK material and persist new HMAC envelopes, but the format does not pretend that a KEM benchmark is a persistent per-file key hierarchy.
 
-The current file-key helper also retains epoch counters and a grace-period rejection path for stale accesses.  That rotation logic is code-backed, but it is not a TPM/PCR-bound freshness proof and should not be read as one.
+The older \texttt{pqc\_file\_key.*} epoch/grace helper remains source-only and is not linked into \texttt{pqc\_fuse}; evaluated epochs are open-file refresh bookkeeping, not stale-handle, rollback, or TPM/PCR-bound freshness proof.
 
 The implementation also fails closed in two places.  A scheduler job with no producer-supplied AI slack is routed to CPU.  A requested TPM backend with no pre-provisioned NV index causes initialization to fail rather than creating a persistent index with undocumented ownership.  These are conservative operational choices; neither substitutes for a complete inference-telemetry integration or TPM policy design.
+
+\subsection{Persistent-object layout}
+
+Each protected file is represented by ordinary lower-filesystem state rather than an in-kernel extent map.  The data sidecar stores encrypted records; the metadata sidecar stores logical-block to record mappings and authentication material; xattrs store compact metadata such as logical size and the authenticated envelope.  This layout is intentionally inspectable for fault-injection experiments: a harness can copy or corrupt a backing directory, restore an older sidecar, or mutate an xattr without requiring a custom block device.
+
+The layout also creates concrete assumptions.  AEGIS-Q relies on the lower filesystem to honor \texttt{fdatasync} on the data and metadata sidecars and to preserve xattr updates according to its documented semantics.  It does not claim that every directory-entry or rename edge case has been exercised.  The paper therefore separates the implementation invariant---data is synced before a mapping is published---from the stronger certification claim that every possible lower-filesystem crash interleaving has been tested.
+
+\subsection{Concurrency and unsupported modes}
+
+The evaluated path uses ordinary FUSE read, write, flush, fsync, open, and release operations.  Per-file state is serialized through the daemon's state management before records are published.  The coalescing buffer is flushed before sync returns, and pending block jobs are drained before the checkpoint is considered visible.  This is sufficient for the retained remount and SQLite selected-boundary experiments.
+
+The implementation is not presented as a full POSIX conformance layer.  In particular, the paper does not claim validated shared \texttt{mmap} semantics, all possible concurrent-writer races, cross-process byte-range lock compatibility, or arbitrary rename/directory-fsync crash behavior.  Those modes are common sources of filesystem bugs, and the review correctly identified them as missing evidence.  Treating them as unsupported or unvalidated is preferable to silently inheriting a POSIX claim from FUSE.
+
+\subsection{Telemetry plumbing}
+
+The admission logic is implemented as ordinary C state rather than a separate daemon that invents scheduling results.  It records input queue depth, batch size, slack, telemetry freshness, and route decision.  The mounted-FUSE throttle path reads a telemetry file and applies hysteresis before sleeping inside the write-flush path.  The tegrastats and CUPTI harnesses differ only in how they populate that telemetry input.  This shared path is the reason the evaluation can claim same-run telemetry-to-FUSE wiring.  It is also why the paper still requires a separate foreground-inference experiment before making an AI QoS-restoration claim.

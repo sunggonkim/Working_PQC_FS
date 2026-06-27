@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-df = pd.read_csv("artifacts/m4_freshness/m4_tradeoff.csv")
+df = pd.read_csv("artifacts/results/freshness/m4_freshness/m4_tradeoff.csv")
 
 fig, ax1 = plt.subplots(figsize=(8, 6))
 

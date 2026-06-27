@@ -1,0 +1,258 @@
+{
+  "checks": {
+    "all_expected_labels_present": true,
+    "all_figure_tables_have_obligations": true,
+    "no_duplicate_labels": true,
+    "no_rendered_artifact_path_lists": true,
+    "paper_pages_12": true
+  },
+  "duplicate_labels": [],
+  "expected_labels": [
+    "fig:baseline_comparison",
+    "fig:djc_state_machine",
+    "fig:first_page_qos",
+    "fig:overall_procedure",
+    "tab:benchmark_workloads",
+    "tab:capability_matrix",
+    "tab:design_goals",
+    "tab:impl_boundaries",
+    "tab:memory_compat",
+    "tab:qos_sqlite_recovery",
+    "tab:recovery_scope",
+    "tab:threat_boundary"
+  ],
+  "figure_tables": [
+    {
+      "caption": "SQLite pressure result for RQ3; labels show deadline misses and background throughput.",
+      "caption_terms": [
+        "SQLite",
+        "RQ3",
+        "deadline"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure",
+      "extra_labels": [],
+      "kind": "RQ3",
+      "label": "fig:first_page_qos",
+      "line": 6,
+      "obligation": "first-page SQLite pressure/hero result",
+      "passes": true,
+      "path": "Paper/1_Introduction.tex",
+      "reference_count": 4
+    },
+    {
+      "caption": "Capability comparison that defines AEGIS-Q's design gap. ``Policy'' means storage-visible accelerator/QoS/freshness policy, not implementation maturity.",
+      "caption_terms": [
+        "Capability",
+        "design gap"
+      ],
+      "caption_terms_present": true,
+      "environment": "table",
+      "extra_labels": [],
+      "kind": "design",
+      "label": "tab:capability_matrix",
+      "line": 14,
+      "obligation": "capability table defining the design gap",
+      "passes": true,
+      "path": "Paper/1_Introduction.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Formal storage-protocol invariants, implementation loci, retained evidence, and claim boundaries.",
+      "caption_terms": [
+        "invariants",
+        "boundaries"
+      ],
+      "caption_terms_present": true,
+      "environment": "table*",
+      "extra_labels": [],
+      "kind": "design",
+      "label": "tab:design_goals",
+      "line": 11,
+      "obligation": "formal storage-protocol invariant table",
+      "passes": true,
+      "path": "Paper/3_Design.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Implemented AEGIS-Q control and persistence path. Solid arrows are the FUSE format used by the tests; orange dashed arrows denote optional accelerator or externally provisioned hardware paths. The final revision does not claim verified \\texttt{O\\_DIRECT} UMA pinning, a completed eBPF completion path, or a closed-loop hardware-QoS controller.",
+      "caption_terms": [
+        "control",
+        "persistence"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure*",
+      "extra_labels": [],
+      "kind": "design",
+      "label": "fig:overall_procedure",
+      "line": 32,
+      "obligation": "architecture and plane-separation figure",
+      "passes": true,
+      "path": "Paper/3_Design.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "D/J/C/xattr publication state machine and transition audit. D is the durable ciphertext sidecar state, J is the journal mapping state, and C is the authenticated checkpoint/logical-size exposure state.",
+      "caption_terms": [
+        "publication",
+        "state machine"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure*",
+      "extra_labels": [],
+      "kind": "design",
+      "label": "fig:djc_state_machine",
+      "line": 57,
+      "obligation": "D/J/C/xattr publication state machine",
+      "passes": true,
+      "path": "Paper/3_Design.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Memory-path claims and their hardware-verified status.",
+      "caption_terms": [
+        "Memory-path",
+        "hardware"
+      ],
+      "caption_terms_present": true,
+      "environment": "table",
+      "extra_labels": [],
+      "kind": "design/RQ2/RQ5",
+      "label": "tab:memory_compat",
+      "line": 110,
+      "obligation": "memory-path claim boundary",
+      "passes": true,
+      "path": "Paper/3_Design.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Implementation boundaries that are easy to misread without an explicit summary.",
+      "caption_terms": [
+        "Implementation",
+        "boundaries"
+      ],
+      "caption_terms_present": true,
+      "environment": "table",
+      "extra_labels": [],
+      "kind": "design",
+      "label": "tab:impl_boundaries",
+      "line": 8,
+      "obligation": "implementation boundary summary",
+      "passes": true,
+      "path": "Paper/7_Implementation_Details.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Threat classes and retained mechanism boundaries.",
+      "caption_terms": [
+        "Threat",
+        "boundaries"
+      ],
+      "caption_terms_present": true,
+      "environment": "table",
+      "extra_labels": [],
+      "kind": "RQ1/RQ4",
+      "label": "tab:threat_boundary",
+      "line": 11,
+      "obligation": "threat-model and recovery boundary",
+      "passes": true,
+      "path": "Paper/8_Security_Analysis.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Evaluation scope by research question.",
+      "caption_terms": [
+        "Evaluation",
+        "research question"
+      ],
+      "caption_terms_present": true,
+      "environment": "table",
+      "extra_labels": [],
+      "kind": "RQ1-RQ5",
+      "label": "tab:benchmark_workloads",
+      "line": 24,
+      "obligation": "evaluation scope by research question",
+      "passes": true,
+      "path": "Paper/4_Evaluation.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Placement result for RQ2/RQ5. CPU AES-GCM exceeds managed-buffer GPU for the data plane; cuPQC improves batched ML-KEM-768. Bars are medians with observed 5th--95th-percentile whiskers.",
+      "caption_terms": [
+        "RQ2",
+        "RQ5",
+        "Placement"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure*",
+      "extra_labels": [],
+      "kind": "RQ2/RQ5",
+      "label": "fig:baseline_comparison",
+      "line": 58,
+      "obligation": "CPU/GPU placement and batch-lane evidence",
+      "passes": true,
+      "path": "Paper/4_Evaluation.tex",
+      "reference_count": 2
+    },
+    {
+      "caption": "Recovery/freshness outcomes and their interpretation.",
+      "caption_terms": [
+        "Recovery",
+        "freshness"
+      ],
+      "caption_terms_present": true,
+      "environment": "table",
+      "extra_labels": [],
+      "kind": "RQ4",
+      "label": "tab:recovery_scope",
+      "line": 83,
+      "obligation": "recovery/freshness interpretation",
+      "passes": true,
+      "path": "Paper/4_Evaluation.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "SQLite foreground recovery under mounted secure-storage pressure; latencies are p50/p95/p99 in ms and CPU/GPU are utilization percent.",
+      "caption_terms": [
+        "SQLite",
+        "foreground",
+        "p99"
+      ],
+      "caption_terms_present": true,
+      "environment": "table",
+      "extra_labels": [],
+      "kind": "RQ3",
+      "label": "tab:qos_sqlite_recovery",
+      "line": 1,
+      "obligation": "SQLite QoS recovery hero result",
+      "passes": true,
+      "path": "Paper/generated_qos_recovery_table.tex",
+      "reference_count": 2
+    }
+  ],
+  "found_labels": [
+    "fig:baseline_comparison",
+    "fig:djc_state_machine",
+    "fig:first_page_qos",
+    "fig:overall_procedure",
+    "tab:benchmark_workloads",
+    "tab:capability_matrix",
+    "tab:design_goals",
+    "tab:impl_boundaries",
+    "tab:memory_compat",
+    "tab:qos_sqlite_recovery",
+    "tab:recovery_scope",
+    "tab:threat_boundary"
+  ],
+  "overall_pass": true,
+  "pages": 12,
+  "rendered_path_list_hits": [],
+  "schema_version": 1,
+  "scope": [
+    "all figure/table environments in the main paper inputs",
+    "one obligation mapping per figure/table label",
+    "caption text names the RQ/design obligation rather than a raw artifact path",
+    "labels are referenced from the paper and Paper/main.pdf has 12 pages"
+  ],
+  "violations": []
+}

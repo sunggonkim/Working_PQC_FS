@@ -1,0 +1,40 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE] WARNING: Cannot open log file '/tmp/syscall_tpm_store_1_potw3ims/../pqc_fuse_latency.log': Permission denied
+[PQC-FUSE 2026-06-26 21:14:27.035] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-26 21:14:27.035]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-26 21:14:27.035]   Storage dir : /tmp/syscall_tpm_store_1_potw3ims
+[PQC-FUSE 2026-06-26 21:14:27.035]   Mount point : /tmp/syscall_tpm_mnt_1_rkwgq5ya
+[PQC-FUSE 2026-06-26 21:14:27.035] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
+[PQC-FUSE 2026-06-26 21:14:27.036] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-26 21:14:27.036]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-26 21:14:27.036]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-26 21:14:27.036]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-26 21:14:27.036]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-26 21:14:27.038] Keypair generated in 1411.37 µs
+[PQC-FUSE 2026-06-26 21:14:27.208] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-26 21:14:27.208] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-26 21:14:27.208] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-26 21:14:27.215] Freshness anchor worker started
+[PQC-FUSE 2026-06-26 21:14:27.327] PQC background rekey worker started
+[PQC-FUSE 2026-06-26 21:14:27.327] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-26 21:14:27.402] CREATE /syscall_crash.sqlite: authenticated file-key envelope initialized (fid=17998828692021234671)
+[PQC-FUSE 2026-06-26 21:14:27.403] CREATE /syscall_crash.sqlite-journal: authenticated file-key envelope initialized (fid=9669855951706444696)
+[PQC-FUSE 2026-06-26 21:14:27.846] OPEN /syscall_crash.sqlite: restored authenticated file-key envelope (fid=17998828692021234671)
+[PQC-FUSE 2026-06-26 21:14:27.847] CREATE /syscall_crash.sqlite-journal: authenticated file-key envelope initialized (fid=5724433774777384226)
+[PQC-FUSE 2026-06-26 21:14:28.100] OPEN /syscall_crash.sqlite: restored authenticated file-key envelope (fid=17998828692021234671)
+[PQC-FUSE 2026-06-26 21:14:28.101] CREATE /syscall_crash.sqlite-journal: authenticated file-key envelope initialized (fid=13643679932291105181)
+[PQC-FUSE 2026-06-26 21:14:28.365] OPEN /syscall_crash.sqlite: restored authenticated file-key envelope (fid=17998828692021234671)
+[PQC-FUSE 2026-06-26 21:14:28.366] CREATE /syscall_crash.sqlite-journal: authenticated file-key envelope initialized (fid=7921263416620317758)
+[PQC-FUSE 2026-06-26 21:14:28.609] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-26 21:14:28.627] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-26 21:14:28.627] Scheduler stats: submitted=17 cpu=17 gpu=0 bytes_cpu=0 bytes_gpu=105096 migration_ns=6726144
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0
+[PQC-FUSE 2026-06-26 21:14:28.627] Scheduler stats: submitted=17 cpu=17 gpu=0 bytes_cpu=0 bytes_gpu=105096 migration_ns=6726144
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0

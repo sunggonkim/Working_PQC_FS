@@ -1,0 +1,1 @@
+{"phase": "advance", "row_count": 3, "digest": "0a26a827082eb62b37d480b17a9c9bb12c5c1b2a8cfa9403aa08a92e9ce98cea", "rows": [[1, "baseline"], [2, "latest"], [3, "anchor-advanced"]], "integrity_check": "ok"}

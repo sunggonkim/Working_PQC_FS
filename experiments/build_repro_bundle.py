@@ -98,6 +98,10 @@ def collect_files() -> list[Path]:
         for path in root.rglob("*"):
             if not path.is_file():
                 continue
+            if path.is_relative_to(ROOT / "Paper" / "Previous paper"):
+                continue
+            if path == ROOT / "Paper" / "previous paper.pdf":
+                continue
             if path.is_relative_to(ROOT / "artifacts" / "repro_bundle"):
                 continue
             if path.suffix.lower() not in allowed_suffixes and path.name not in {
@@ -164,10 +168,14 @@ def main() -> int:
         "qos": [
             "python3 experiments/run_m5_admission_sweep.py",
             "python3 experiments/run_qos_gpu.py",
+            "PQC_SUDO_PASSWORD=<password> python3 experiments/run_qos_cupti_pm_fuse_bridge.py --out-dir artifacts/validation/qos_cupti_pm_fuse_bridge --samples 8 --cupti-iterations 600 --sampling-interval 1000000 --max-samples 512",
         ],
         "crash_recovery": [
             "python3 experiments/run_crash_replay_e8.py",
             "python3 experiments/run_fuse_tamper_rejection.py",
+            "python3 experiments/run_app_recovery_bundle.py",
+            "PQC_SUDO_PASSWORD=<password> python3 experiments/run_combined_durability_bundle.py --out-dir artifacts/validation/combined_durability_bundle",
+            "PQC_SUDO_PASSWORD=<password> python3 experiments/run_sqlite_syscall_crash_tpm.py --out-dir artifacts/validation/sqlite_syscall_crash_tpm --when 1 2 3",
         ],
     }
 

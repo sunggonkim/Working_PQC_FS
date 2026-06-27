@@ -8,8 +8,8 @@ routed reproducibly as the supplied slack changes.  It is not an inference-QoS
 measurement and must not be used as a TensorRT latency result.
 
 Output:
-  artifacts/m5_admission_sweep.json
-  artifacts/m5_admission_sweep.csv
+  artifacts/results/qos/m5_admission_sweep.json
+  artifacts/results/qos/m5_admission_sweep.csv
 """
 
 from __future__ import annotations
@@ -62,8 +62,8 @@ def run_smoke(ai_budget_ns: int, gpu_min_bytes: int, cpu_queue_depth: int, gpu_q
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out-json", default="artifacts/m5_admission_sweep.json")
-    parser.add_argument("--out-csv", default="artifacts/m5_admission_sweep.csv")
+    parser.add_argument("--out-json", default="artifacts/results/qos/m5_admission_sweep.json")
+    parser.add_argument("--out-csv", default="artifacts/results/qos/m5_admission_sweep.csv")
     parser.add_argument("--gpu-min-bytes", type=int, default=131072)
     parser.add_argument("--cpu-queue-depths", type=int, nargs="+", default=[0, 1, 2, 4])
     parser.add_argument("--gpu-queue-depths", type=int, nargs="+", default=[0, 1, 2, 4])

@@ -1,0 +1,137 @@
+{
+  "defensive_eval_patterns": [
+    "RQ\\d+:\\s*Scope",
+    "Which common systems claims remain unsupported",
+    "\\\\subsection\\{What this evaluation leaves open\\}",
+    "\\\\label\\{sec:eval_stability\\}"
+  ],
+  "defensive_hits": [],
+  "discussion_boundaries": {
+    "Historical fscrypt and dm-crypt fio outputs": true,
+    "\\label{sec:disc_roadmap}": true,
+    "drive-cache": true,
+    "kernel-crash": true,
+    "non-NVIDIA UMA platform": true,
+    "physical power-loss": true,
+    "side-channel testing": true
+  },
+  "overall_pass": true,
+  "pages": 12,
+  "rqs": [
+    {
+      "evidence_needles": [
+        "\\label{sec:eval_workloads}",
+        "generation fault matrix",
+        "EKEYREJECTED"
+      ],
+      "evidence_present": true,
+      "found_id": "RQ1",
+      "found_question": "Does the implemented authenticated format preserve nonce/generation, publication, and metadata-authentication invariants under retained remount, fault, and tamper campaigns?",
+      "found_title": "Correctness",
+      "passes": true,
+      "required_category": "correctness",
+      "required_id": "RQ1",
+      "terms": [
+        "correctness",
+        "authenticated",
+        "nonce",
+        "generation",
+        "tamper"
+      ],
+      "terms_present": true
+    },
+    {
+      "evidence_needles": [
+        "frozen filesystem contract",
+        "plaintext warm-cache row",
+        "gocryptfs reports"
+      ],
+      "evidence_present": true,
+      "found_id": "RQ2",
+      "found_question": "What cost does AEGIS-Q impose relative to retained plaintext and gocryptfs rows under the frozen filesystem contract?",
+      "found_title": "Mode-aligned baselines",
+      "passes": true,
+      "required_category": "mode-aligned baselines",
+      "required_id": "RQ2",
+      "terms": [
+        "mode-aligned",
+        "baselines",
+        "plaintext",
+        "gocryptfs",
+        "frozen"
+      ],
+      "terms_present": true
+    },
+    {
+      "evidence_needles": [
+        "\\label{sec:eval_qos}",
+        "SQLite transaction latency",
+        "simple controller"
+      ],
+      "evidence_present": true,
+      "found_id": "RQ3",
+      "found_question": "Does AEGIS-Q recover foreground SQLite latency under mounted secure-storage pressure relative to unthrottled pressure and a simple controller?",
+      "found_title": "QoS/hero result",
+      "passes": true,
+      "required_category": "QoS/hero result",
+      "required_id": "RQ3",
+      "terms": [
+        "qos",
+        "hero",
+        "sqlite",
+        "foreground",
+        "pressure"
+      ],
+      "terms_present": true
+    },
+    {
+      "evidence_needles": [
+        "hardware-freshness recovery matrix",
+        "daemon power-fault campaign",
+        "oracle verdict"
+      ],
+      "evidence_present": true,
+      "found_id": "RQ4",
+      "found_question": "What oracle-classified recovery and TPM-freshness outcomes are supported by the retained fault campaigns?",
+      "found_title": "Freshness and recovery",
+      "passes": true,
+      "required_category": "freshness and recovery",
+      "required_id": "RQ4",
+      "terms": [
+        "freshness",
+        "recovery",
+        "oracle",
+        "tpm"
+      ],
+      "terms_present": true
+    },
+    {
+      "evidence_needles": [
+        "mechanism-ablation manifest",
+        "sensitivity bundle",
+        "hysteresis"
+      ],
+      "evidence_present": true,
+      "found_id": "RQ5",
+      "found_question": "Which mechanisms account for the measured placement, controller, key-plane, and anchor behavior, and how sensitive is the SQLite controller?",
+      "found_title": "Ablation and sensitivity",
+      "passes": true,
+      "required_category": "ablation and sensitivity",
+      "required_id": "RQ5",
+      "terms": [
+        "ablation",
+        "sensitivity",
+        "mechanisms",
+        "controller"
+      ],
+      "terms_present": true
+    }
+  ],
+  "schema_version": 1,
+  "scope": [
+    "Paper/4_Evaluation.tex research-question structure",
+    "Paper/10_Discussion_and_Limitations.tex boundary retention",
+    "Paper/main.pdf page-count gate"
+  ],
+  "violations": []
+}

@@ -327,46 +327,50 @@
       "detail": "errno=74"
     }
   ],
-  "hardware_summary_rows": [
+  "hardware_verdict_summary": [
     {
       "backend": "hardware",
       "cut_point_s": 0.0,
       "trials": 10,
-      "preserved": 10,
-      "success_rate": 1.0,
-      "fail_closed": 10,
-      "rollback_accept": 0,
-      "unexpected_error": 0
+      "oracle_verdict_counts": {
+        "fail_closed": 10,
+        "previous_committed": 0,
+        "unexpected_liveness_failure": 0
+      },
+      "fail_closed_rate": 1.0
     },
     {
       "backend": "hardware",
       "cut_point_s": 0.02,
       "trials": 10,
-      "preserved": 10,
-      "success_rate": 1.0,
-      "fail_closed": 10,
-      "rollback_accept": 0,
-      "unexpected_error": 0
+      "oracle_verdict_counts": {
+        "fail_closed": 10,
+        "previous_committed": 0,
+        "unexpected_liveness_failure": 0
+      },
+      "fail_closed_rate": 1.0
     },
     {
       "backend": "hardware",
       "cut_point_s": 0.05,
       "trials": 10,
-      "preserved": 10,
-      "success_rate": 1.0,
-      "fail_closed": 10,
-      "rollback_accept": 0,
-      "unexpected_error": 0
+      "oracle_verdict_counts": {
+        "fail_closed": 10,
+        "previous_committed": 0,
+        "unexpected_liveness_failure": 0
+      },
+      "fail_closed_rate": 1.0
     },
     {
       "backend": "hardware",
       "cut_point_s": 0.1,
       "trials": 10,
-      "preserved": 10,
-      "success_rate": 1.0,
-      "fail_closed": 10,
-      "rollback_accept": 0,
-      "unexpected_error": 0
+      "oracle_verdict_counts": {
+        "fail_closed": 10,
+        "previous_committed": 0,
+        "unexpected_liveness_failure": 0
+      },
+      "fail_closed_rate": 1.0
     }
   ],
   "hardware_anchor_latency": {
@@ -391,7 +395,7 @@
     "hardware_backend_present": true,
     "hardware_backend_fail_closed_count": 40,
     "hardware_backend_rollback_accept_count": 0,
-    "hardware_backend_success_rate_min": 1.0,
-    "hardware_backend_success_rate_max": 1.0
+    "hardware_backend_fail_closed_rate_min": 1.0,
+    "hardware_backend_fail_closed_rate_max": 1.0
   }
 }

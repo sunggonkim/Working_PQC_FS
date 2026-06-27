@@ -1,0 +1,12 @@
+{
+  "file_count": 1,
+  "files": [
+    {
+      "bytes": 1073741824,
+      "path": "contract/frozen_randrw_4k_fdatasync.0.0"
+    }
+  ],
+  "storage_dir": "/tmp/plaintext_frozen_root_6o5vb81o",
+  "total_file_bytes": 1073741824,
+  "truncated_to_files": 200
+}

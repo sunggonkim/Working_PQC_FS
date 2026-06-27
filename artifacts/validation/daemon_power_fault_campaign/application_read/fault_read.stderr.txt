@@ -1,0 +1,14 @@
+{"operation": "read_all", "error": "OSError", "errno": 107, "message": "[Errno 107] Transport endpoint is not connected"}
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/pathlib.py", line 1022, in read_bytes
+    return f.read()
+           ^^^^^^^^
+ConnectionAbortedError: [Errno 103] Software caused connection abort
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<string>", line 10, in <module>
+  File "/usr/lib/python3.12/pathlib.py", line 1021, in read_bytes
+    with self.open(mode='rb') as f:
+OSError: [Errno 107] Transport endpoint is not connected

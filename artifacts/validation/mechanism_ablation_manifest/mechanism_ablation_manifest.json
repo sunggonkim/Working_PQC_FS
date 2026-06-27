@@ -1,0 +1,182 @@
+{
+  "checks": {
+    "aegisq_frozen_pass": true,
+    "anchor_required_modes_pass": true,
+    "keyplane_required_modes_pass": true,
+    "paper_scope_gate_pass": true,
+    "plaintext_frozen_pass": true,
+    "qos_required_modes_pass": true
+  },
+  "entries": [
+    {
+      "artifact_paths": [
+        "artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json",
+        "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json"
+      ],
+      "id": "fs_format_total_cost",
+      "interpretation": "The warm-cache frozen-contract gap attributes the fio overhead to the mounted encrypted format as a whole, including FUSE, AEAD, journal, checkpoint, and file-anchor work.  It does not isolate a plaintext-FUSE row or kernel encryption baselines.",
+      "mechanism": "encrypted mounted format and journal/checkpoint path",
+      "metrics": {
+        "aegisq_conservative_p99_ms": {
+          "ci95_high": 13.697023999999999,
+          "ci95_low": 7.70048,
+          "median": 11.206656
+        },
+        "aegisq_throughput_mib_s": {
+          "ci95_high": 0.5469951629638672,
+          "ci95_low": 0.2859630584716797,
+          "median": 0.3583211898803711
+        },
+        "aegisq_vs_plaintext_p99_ratio": 67.97515527950311,
+        "aegisq_vs_plaintext_throughput_ratio": 0.01089791622567165,
+        "plaintext_conservative_p99_ms": {
+          "ci95_high": 0.166912,
+          "ci95_low": 0.156672,
+          "median": 0.164864
+        },
+        "plaintext_throughput_mib_s": {
+          "ci95_high": 36.9555025100708,
+          "ci95_low": 30.15561580657959,
+          "median": 32.87978935241699
+        }
+      },
+      "raw_log_paths": [
+        "artifacts/validation/frozen_plaintext_contract/fio_raw",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw",
+        "artifacts/validation/frozen_aegisq_contract/mount_logs"
+      ],
+      "scope_boundary": "No fscrypt/dm-crypt, cold-cache, or component-only filesystem decomposition.",
+      "variants": [
+        "plaintext_lowerfs",
+        "aegis_q"
+      ]
+    },
+    {
+      "artifact_paths": [
+        "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json"
+      ],
+      "id": "qos_controller_variants",
+      "interpretation": "The controller rows attribute the SQLite recovery to throttling elastic mounted-FUSE writes.  The simple controller has slightly lower p99 in this run, while AEGIS-Q retains more background throughput and records daemon-side throttle evidence.",
+      "mechanism": "SQLite foreground recovery under secure-storage pressure",
+      "metrics": {
+        "aegis_background_mb_s": 2.736089363877744,
+        "aegis_daemon_throttled_rows": 16,
+        "aegis_policy_deadline_misses": 0,
+        "aegis_policy_p99_ms": 8.75331646,
+        "aegis_policy_throttle_rows": 28,
+        "app_only_p99_ms": 6.43596154,
+        "simple_background_mb_s": 2.268259869303856,
+        "simple_controller_deadline_misses": 0,
+        "simple_controller_p99_ms": 8.185088930000001,
+        "simple_policy_throttle_rows": 26,
+        "unthrottled_deadline_misses": 1,
+        "unthrottled_p99_ms": 13.822082770000009
+      },
+      "raw_log_paths": [
+        "artifacts/validation/qos_sqlite_hero_bundle/*/foreground_sqlite_latency.jsonl",
+        "artifacts/validation/qos_sqlite_hero_bundle/*/background_writer.jsonl",
+        "artifacts/validation/qos_sqlite_hero_bundle/*/policy_trace.jsonl",
+        "artifacts/validation/qos_sqlite_hero_bundle/*/runtime_fuse_throttle_trace.jsonl"
+      ],
+      "scope_boundary": "Single retained SQLite workflow; not foreground TensorRT/AI p99 recovery.",
+      "variants": [
+        "app_only",
+        "unthrottled_storage",
+        "simple_controller",
+        "aegis_policy"
+      ]
+    },
+    {
+      "artifact_paths": [
+        "artifacts/validation/keyplane_rekey_methodology/keyplane_rekey_workflow.json"
+      ],
+      "id": "keyplane_cpu_gpu_policy",
+      "interpretation": "The optional batch lane improves this maintenance workflow when slack is present and falls back to CPU under zero slack/high pressure without changing the storage format.",
+      "mechanism": "open-file envelope-refresh placement",
+      "metrics": {
+        "cpu_only_files_per_s": {
+          "ci95_high": 41714.87232967785,
+          "ci95_low": 41429.478854377805,
+          "median": 41669.04039129834
+        },
+        "files_per_mode": 1024,
+        "gpu_batch_files_per_s": {
+          "ci95_high": 57228.444325218516,
+          "ci95_low": 47744.71497710678,
+          "median": 49398.9155394323
+        },
+        "gpu_vs_cpu_speedup": {
+          "ci95_high": 1.381345986184696,
+          "ci95_low": 1.1445489896211194,
+          "median": 1.1855064353665359,
+          "p05": 1.1445489896211194,
+          "p95": 1.381345986184696,
+          "runs": 5
+        },
+        "policy_fallback_files_per_s": {
+          "ci95_high": 41929.57959863893,
+          "ci95_low": 41128.627372226125,
+          "median": 41673.449454663845
+        },
+        "repetitions": 5
+      },
+      "raw_log_paths": [
+        "artifacts/validation/keyplane_rekey_methodology/rep_*/cpu_only/mount_logs/pqc_fuse.stderr.txt",
+        "artifacts/validation/keyplane_rekey_methodology/rep_*/gpu_batch/admission_trace.jsonl",
+        "artifacts/validation/keyplane_rekey_methodology/rep_*/policy_fallback/admission_trace.jsonl"
+      ],
+      "scope_boundary": "Open-file envelope refresh only; not deployed credential lifecycle or data-plane acceleration.",
+      "variants": [
+        "cpu_only",
+        "gpu_batch",
+        "policy_fallback"
+      ]
+    },
+    {
+      "artifact_paths": [
+        "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+        "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json"
+      ],
+      "id": "file_vs_tpm_anchor",
+      "interpretation": "The file-backed anchor is replayable with the backing directory and is therefore a negative control.  The retained TPM replay-after-advance artifact fails closed against stale disk state.",
+      "mechanism": "external freshness boundary",
+      "metrics": {
+        "file_anchor_acceptable": true,
+        "file_anchor_oracle_verdict": "previous_committed",
+        "tpm_anchor_acceptable": true,
+        "tpm_anchor_oracle_verdict": "fail_closed",
+        "tpm_replay_fail_closed": true,
+        "tpm_replay_visible": false
+      },
+      "raw_log_paths": [
+        "artifacts/validation/generation_fault_matrix",
+        "artifacts/validation/tpm_monotonic_replay/live_mount",
+        "artifacts/validation/tpm_monotonic_replay/replay_mount"
+      ],
+      "scope_boundary": "No persistent PCR-bound filesystem freshness, NV authorization lifecycle, or power-loss certification.",
+      "variants": [
+        "file_anchor_negative_control",
+        "tpm_replay_after_advance"
+      ]
+    }
+  ],
+  "non_claims": [
+    "no fscrypt/dm-crypt frozen-contract rows",
+    "no cold-cache filesystem result",
+    "no plaintext-FUSE decomposition row",
+    "no persistent PCR-bound freshness lifecycle",
+    "no foreground TensorRT/AI p99 recovery",
+    "no data-plane GPU acceleration claim"
+  ],
+  "overall_pass": true,
+  "paper_snippets": {
+    "anchor_negative_control_reported": true,
+    "filesystem_gap_reported": true,
+    "keyplane_speedup_reported": true,
+    "mechanism_attribution_mentions_manifest": true,
+    "qos_controller_variants_reported": true
+  },
+  "schema_version": 1,
+  "scope": "Mechanism attribution over existing retained evidence.  This is not a new broad filesystem comparison and does not close fscrypt/dm-crypt, cold-cache, PCR-bound freshness, or AI QoS gaps.",
+  "timestamp_utc": "2026-06-27T07:59:55.813551+00:00"
+}

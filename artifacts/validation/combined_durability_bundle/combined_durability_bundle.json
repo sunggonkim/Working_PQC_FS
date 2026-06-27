@@ -1,5 +1,5 @@
 {
-  "note": "Combined durability bundle wrapper; this retains TPM-only and app-only bundles together and does not prove a single shared backing-store campaign.",
+  "note": "Combined durability bundle with same-backing-store SQLite+TPM and dbm.dumb+TPM campaigns.",
   "checks": [
     {
       "name": "tpm_only_bundle",
@@ -8,8 +8,8 @@
         "experiments/run_tpm_only_bundle.py"
       ],
       "returncode": 0,
-      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/tpm_only_bundle.stdout.txt",
-      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/tpm_only_bundle.stderr.txt"
+      "stdout": "artifacts/validation/combined_durability_bundle/tpm_only_bundle.stdout.txt",
+      "stderr": "artifacts/validation/combined_durability_bundle/tpm_only_bundle.stderr.txt"
     },
     {
       "name": "app_recovery_bundle",
@@ -18,8 +18,140 @@
         "experiments/run_app_recovery_bundle.py"
       ],
       "returncode": 0,
-      "stdout": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/app_recovery_bundle.stdout.txt",
-      "stderr": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/combined_durability_bundle/app_recovery_bundle.stderr.txt"
+      "stdout": "artifacts/validation/combined_durability_bundle/app_recovery_bundle.stdout.txt",
+      "stderr": "artifacts/validation/combined_durability_bundle/app_recovery_bundle.stderr.txt"
     }
-  ]
+  ],
+  "unified_campaign": {
+    "note": "Same-backing-store SQLite + TPM replay-after-advance campaign.",
+    "storage_dir": "/tmp/combined_dur_store_mnio8577",
+    "snapshot_dir": "/tmp/combined_dur_snapshot_4qp68lhp",
+    "mount_dir": "/tmp/combined_dur_mnt_1v7uoyrz",
+    "baseline": {
+      "phase": "baseline",
+      "returncode": 0,
+      "stdout": "artifacts/validation/combined_durability_bundle/sqlite_baseline.stdout.txt",
+      "stderr": "artifacts/validation/combined_durability_bundle/sqlite_baseline.stderr.txt",
+      "state": {
+        "phase": "baseline",
+        "row_count": 1,
+        "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+        "rows": [
+          [
+            1,
+            "baseline"
+          ]
+        ],
+        "integrity_check": "ok"
+      }
+    },
+    "advanced": {
+      "phase": "advance",
+      "returncode": 0,
+      "stdout": "artifacts/validation/combined_durability_bundle/sqlite_advance.stdout.txt",
+      "stderr": "artifacts/validation/combined_durability_bundle/sqlite_advance.stderr.txt",
+      "state": {
+        "phase": "advance",
+        "row_count": 3,
+        "digest": "0a26a827082eb62b37d480b17a9c9bb12c5c1b2a8cfa9403aa08a92e9ce98cea",
+        "rows": [
+          [
+            1,
+            "baseline"
+          ],
+          [
+            2,
+            "latest"
+          ],
+          [
+            3,
+            "anchor-advanced"
+          ]
+        ],
+        "integrity_check": "ok"
+      }
+    },
+    "replay": {
+      "mounted": true,
+      "verdict": "fail_closed",
+      "acceptable": true,
+      "detail": "stale snapshot mounted but SQLite read failed closed rc=1",
+      "read": {
+        "returncode": 1,
+        "stdout": "artifacts/validation/combined_durability_bundle/sqlite_replay_read.stdout.txt",
+        "stderr": "artifacts/validation/combined_durability_bundle/sqlite_replay_read.stderr.txt",
+        "stderr_tail": "Traceback (most recent call last):\n  File \"<string>\", line 4, in <module>\nsqlite3.OperationalError: unable to open database file\n"
+      },
+      "stderr_tail": "\n  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n  \u2502  PQC-FUSE v0.1 \u2014 Authenticated Encrypted Storage   \u2502\n  \u2502  CPU data plane; optional batch GPU helpers         \u2502\n  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n[PQC-FUSE] WARNING: Cannot open log file '/tmp/combined_dur_store_mnio8577/../pqc_fuse_latency.log': Permission denied\n[PQC-FUSE 2026-06-26 21:11:35.973] \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n[PQC-FUSE 2026-06-26 21:11:35.973]   PQC-FUSE Session Started\n[PQC-FUSE 2026-06-26 21:11:35.973]   Storage dir : /tmp/combined_dur_store_mnio8577\n[PQC-FUSE 2026-06-26 21:11:35.973]   Mount point : /tmp/combined_dur_mnt_1v7uoyrz\n[PQC-FUSE 2026-06-26 21:11:35.973] \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl\n[PQC-FUSE 2026-06-26 21:11:35.973] KEM algorithm : ML-KEM-768\n[PQC-FUSE 2026-06-26 21:11:35.973]   public key  : 1184 bytes\n[PQC-FUSE 2026-06-26 21:11:35.973]   secret key  : 2400 bytes\n[PQC-FUSE 2026-06-26 21:11:35.973]   ciphertext  : 1088 bytes\n[PQC-FUSE 2026-06-26 21:11:35.973]   shared secret: 32 bytes\n[PQC-FUSE 2026-06-26 21:11:35.976] Keypair generated in 1382.70 \u00b5s\n[PQC-FUSE 2026-06-26 21:11:36.146] Master Key derived successfully (PBKDF2-SHA256)\n[PQC-FUSE 2026-06-26 21:11:36.146] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000\n[PQC-FUSE 2026-06-26 21:11:36.146] GPU load monitor started: /sys/devices/gpu.0/load\n[PQC-FUSE 2026-06-26 21:11:36.152] Freshness anchor worker started\n[PQC-FUSE 2026-06-26 21:11:36.263] PQC background rekey worker started\n[PQC-FUSE 2026-06-26 21:11:36.263] Starting FUSE main loop...\nIgnoring invalid max threads value 4294967295 > max (100000).\n[PQC-FUSE 2026-06-26 21:11:36.447] Shutting down PQC-FUSE filesystem...\n[PQC-FUSE 2026-06-26 21:11:36.448] PQC background rekey worker stopped\n[PQC-FUSE 2026-06-26 21:11:36.448] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0\n[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0\n[PQC-FUSE 2026-06-26 21:11:36.448] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0\n[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0\n"
+    },
+    "logs": {
+      "live_mount_stderr": "artifacts/validation/combined_durability_bundle/unified_live_mount/pqc_fuse.stderr.txt",
+      "replay_mount_stderr": "artifacts/validation/combined_durability_bundle/unified_replay_mount/pqc_fuse.stderr.txt"
+    }
+  },
+  "unified_dbm_campaign": {
+    "note": "Same-backing-store dbm.dumb + TPM replay-after-advance campaign.",
+    "storage_dir": "/tmp/combined_dbm_store_xwfvsv89",
+    "snapshot_dir": "/tmp/combined_dbm_snapshot_9dynwsxb",
+    "mount_dir": "/tmp/combined_dbm_mnt_7upy97zx",
+    "baseline": {
+      "phase": "baseline",
+      "returncode": 0,
+      "stdout": "artifacts/validation/combined_durability_bundle/dbm_baseline.stdout.txt",
+      "stderr": "artifacts/validation/combined_durability_bundle/dbm_baseline.stderr.txt",
+      "state": {
+        "phase": "baseline",
+        "row_count": 1,
+        "digest": "c36c821190d228587a9f173eee751e801f764fbcdf912466c824aad4e0e650d1",
+        "rows": [
+          [
+            "1",
+            "baseline"
+          ]
+        ]
+      }
+    },
+    "advanced": {
+      "phase": "advance",
+      "returncode": 0,
+      "stdout": "artifacts/validation/combined_durability_bundle/dbm_advance.stdout.txt",
+      "stderr": "artifacts/validation/combined_durability_bundle/dbm_advance.stderr.txt",
+      "state": {
+        "phase": "advance",
+        "row_count": 3,
+        "digest": "0a26a827082eb62b37d480b17a9c9bb12c5c1b2a8cfa9403aa08a92e9ce98cea",
+        "rows": [
+          [
+            "1",
+            "baseline"
+          ],
+          [
+            "2",
+            "latest"
+          ],
+          [
+            "3",
+            "anchor-advanced"
+          ]
+        ]
+      }
+    },
+    "replay": {
+      "mounted": true,
+      "verdict": "fail_closed",
+      "acceptable": true,
+      "detail": "stale dbm snapshot mounted but dbm read failed closed rc=1",
+      "read": {
+        "returncode": 1,
+        "stdout": "artifacts/validation/combined_durability_bundle/dbm_replay_read.stdout.txt",
+        "stderr": "artifacts/validation/combined_durability_bundle/dbm_replay_read.stderr.txt",
+        "stderr_tail": "Traceback (most recent call last):\n  File \"<string>\", line 5, in <module>\n  File \"/usr/lib/python3.12/dbm/dumb.py\", line 317, in open\n    return _Database(file, mode, flag=flag)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/dbm/dumb.py\", line 71, in __init__\n    self._create(flag)\n  File \"/usr/lib/python3.12/dbm/dumb.py\", line 83, in _create\n    f = _io.open(self._datfile, 'r', encoding=\"Latin-1\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOSError: [Errno 5] Input/output error: b'/tmp/combined_dbm_mnt_7upy97zx/durability_ndbm.dat'\n"
+      },
+      "stderr_tail": "\n  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n  \u2502  PQC-FUSE v0.1 \u2014 Authenticated Encrypted Storage   \u2502\n  \u2502  CPU data plane; optional batch GPU helpers         \u2502\n  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n[PQC-FUSE] WARNING: Cannot open log file '/tmp/combined_dbm_store_xwfvsv89/../pqc_fuse_latency.log': Permission denied\n[PQC-FUSE 2026-06-26 21:11:37.708] \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n[PQC-FUSE 2026-06-26 21:11:37.708]   PQC-FUSE Session Started\n[PQC-FUSE 2026-06-26 21:11:37.708]   Storage dir : /tmp/combined_dbm_store_xwfvsv89\n[PQC-FUSE 2026-06-26 21:11:37.708]   Mount point : /tmp/combined_dbm_mnt_7upy97zx\n[PQC-FUSE 2026-06-26 21:11:37.708] \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl\n[PQC-FUSE 2026-06-26 21:11:37.708] KEM algorithm : ML-KEM-768\n[PQC-FUSE 2026-06-26 21:11:37.708]   public key  : 1184 bytes\n[PQC-FUSE 2026-06-26 21:11:37.708]   secret key  : 2400 bytes\n[PQC-FUSE 2026-06-26 21:11:37.708]   ciphertext  : 1088 bytes\n[PQC-FUSE 2026-06-26 21:11:37.708]   shared secret: 32 bytes\n[PQC-FUSE 2026-06-26 21:11:37.710] Keypair generated in 1407.34 \u00b5s\n[PQC-FUSE 2026-06-26 21:11:37.880] Master Key derived successfully (PBKDF2-SHA256)\n[PQC-FUSE 2026-06-26 21:11:37.880] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000\n[PQC-FUSE 2026-06-26 21:11:37.880] GPU load monitor started: /sys/devices/gpu.0/load\n[PQC-FUSE 2026-06-26 21:11:37.887] Freshness anchor worker started\n[PQC-FUSE 2026-06-26 21:11:37.997] PQC background rekey worker started\n[PQC-FUSE 2026-06-26 21:11:37.997] Starting FUSE main loop...\nIgnoring invalid max threads value 4294967295 > max (100000).\n[PQC-FUSE 2026-06-26 21:11:38.143] Shutting down PQC-FUSE filesystem...\n[PQC-FUSE 2026-06-26 21:11:38.143] PQC background rekey worker stopped\n[PQC-FUSE 2026-06-26 21:11:38.143] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0\n[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0\n[PQC-FUSE 2026-06-26 21:11:38.144] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0\n[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0\n"
+    },
+    "logs": {
+      "live_mount_stderr": "artifacts/validation/combined_durability_bundle/unified_dbm_live_mount/pqc_fuse.stderr.txt",
+      "replay_mount_stderr": "artifacts/validation/combined_durability_bundle/unified_dbm_replay_mount/pqc_fuse.stderr.txt"
+    }
+  }
 }
