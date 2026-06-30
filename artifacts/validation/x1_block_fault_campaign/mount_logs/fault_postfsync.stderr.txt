@@ -1,0 +1,28 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-30 18:26:49.496] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 18:26:49.497]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 18:26:49.497]   Storage dir : /tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount/store
+[PQC-FUSE 2026-06-30 18:26:49.498]   Mount point : /tmp/aegisq_x1_block_fault_j7n5feb7/fuse_mount
+[PQC-FUSE 2026-06-30 18:26:49.499] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/x1_block_fault_campaign/fault_postfsync.admission_trace.jsonl
+[PQC-FUSE 2026-06-30 18:26:49.500] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 18:26:49.500]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 18:26:49.501]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 18:26:49.502]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 18:26:49.502]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 18:26:49.506] Keypair generated in 1477.86 µs
+[PQC-FUSE 2026-06-30 18:26:49.564] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 18:26:49.565] Freshness anchor reconstructed 1 committed checkpoint rows
+[PQC-FUSE 2026-06-30 18:26:49.566] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 18:26:49.567] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 18:26:49.567] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 18:26:49.675] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 18:26:49.676] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-30 18:26:49.732] OPEN /probe.bin: restored authenticated file-key envelope (fid=8375390927651610984)
+[PQC-FUSE 2026-06-30 18:26:49.932] Shutting down PQC-FUSE filesystem...

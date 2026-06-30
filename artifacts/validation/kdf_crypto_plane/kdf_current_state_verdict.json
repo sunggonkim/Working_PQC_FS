@@ -1,0 +1,275 @@
+{
+  "benchmark": {
+    "available": true,
+    "build": {
+      "command": [
+        "/usr/bin/cc",
+        "/tmp/aegisq_kdf_bench_mnp7s0y7/kdf_bench.c",
+        "-o",
+        "/tmp/aegisq_kdf_bench_mnp7s0y7/kdf_bench",
+        "-lcrypto"
+      ],
+      "elapsed_ms": 66.152842,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "parameters": {
+      "pbkdf2": {
+        "digest": "SHA256",
+        "iterations": 600000,
+        "output_len": 32,
+        "salt_len": 18
+      },
+      "scrypt_probe": {
+        "N": 32768,
+        "maxmem_bytes": 67108864,
+        "output_len": 32,
+        "p": 1,
+        "r": 8
+      }
+    },
+    "reason": "compile_ok",
+    "rows": [
+      {
+        "failures": [],
+        "kdf": "pbkdf2",
+        "median_ms": 170.220179,
+        "samples_ms": [
+          170.220179,
+          170.001312,
+          171.961831
+        ]
+      },
+      {
+        "failures": [],
+        "kdf": "scrypt",
+        "median_ms": 58.575482,
+        "samples_ms": [
+          59.07064,
+          58.462121,
+          58.575482
+        ]
+      }
+    ]
+  },
+  "benchmark_checks": {
+    "benchmark_compiled": true,
+    "pbkdf2_sampled": true,
+    "scrypt_sampled_if_available": true
+  },
+  "boundary": "This verdict allows only the implemented OpenSSL scrypt new-root path, the explicit PBKDF2 legacy compatibility boundary, and the password/offline-guessing limitation.  It does not claim Argon2id deployment, hardware-backed credential release, full offline-attack resistance, or broader security readiness.",
+  "checks": {
+    "argon2id_probe_completed": true,
+    "benchmark_compiled": true,
+    "kdf_metadata_format_detected": true,
+    "legacy_pbkdf2_compatibility_present": true,
+    "mount_key_function_found": true,
+    "next_step_named": true,
+    "no_unguarded_d1_dangerous_claims": true,
+    "paper_kdf_text_matches_production_boundary": true,
+    "pbkdf2_sampled": true,
+    "per_filesystem_salt_present": true,
+    "random_metadata_salt_present": true,
+    "replacement_path_available": true,
+    "runtime_reports_kdf_name": true,
+    "runtime_requires_password": true,
+    "scrypt_derivation_detected": true,
+    "scrypt_probe_completed": true,
+    "scrypt_sampled_if_available": true
+  },
+  "claim_checks": {
+    "no_unguarded_d1_dangerous_claims": true
+  },
+  "claim_scan": {
+    "candidate_count": 7,
+    "candidates": [
+      {
+        "category": "hardware_backed_credential_release",
+        "guarded": true,
+        "kind": "document",
+        "line": 12,
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation.  File anchors are replayable.  TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release under provisioned TPM policy."
+      },
+      {
+        "category": "hardware_backed_credential_release",
+        "guarded": true,
+        "kind": "document",
+        "line": 20,
+        "path": "Paper/3_Design.tex",
+        "text": "Envelope authentication before DEK use & \\texttt{metadata\\_load()} verifies the HMAC-protected envelope before \\texttt{pqc\\_open()} installs file state & Clean-remount regression and \\texttt{user.pqc\\_metadata} tamper rejection returning \\texttt{EKEYREJECTED} & Remountable authenticated envelope; no hardware-bound credential release\\\\"
+      },
+      {
+        "category": "hardware_backed_credential_release",
+        "guarded": true,
+        "kind": "document",
+        "line": 42,
+        "path": "Paper/3_Design.tex",
+        "text": "The password-derived mount key is never hardware-released; scrypt does not remove weak-password or offline-guessing risk.  There is no hardware-backed credential release path for the mount key.  The rekey is open-file DEK refresh rather than deployed credential rotation: HMAC envelope rewrap for open files; runtime key epoch is in-memory bookkeeping, not a persistent anti-rollback journal.  There is no transactional rewrap recovery claim, and password-derived envelope alone is not rollback resistance; stale old envelopes fail only when generation/checkpoint/external-anchor evidence rejects them."
+      },
+      {
+        "category": "hardware_backed_credential_release",
+        "guarded": true,
+        "kind": "document",
+        "line": 135,
+        "path": "Paper/3_Design.tex",
+        "text": "The evaluated key-plane workflow applies this rule by batching open-file descriptors, encapsulating on the selected executor, installing 32-byte refreshed DEK material, and rewriting the HMAC-authenticated envelope.  It is not a persistent KEM hierarchy or hardware-backed credential lifecycle."
+      },
+      {
+        "category": "hardware_backed_credential_release",
+        "guarded": true,
+        "kind": "document",
+        "line": 54,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "The retained mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-authenticated envelopes.  CPU-only refresh takes 24.399~ms (41,969.6 files/s).  With explicit slack, admission selects the GPU and finishes in 21.070~ms (48,599.0 files/s), a 1.158$\\times$ speedup.  With zero slack and high memory-pressure telemetry, admission falls back to CPU in 24.411~ms with an AI-QoS-exhausted deferral.  This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or foreground AI QoS recovery."
+      },
+      {
+        "category": "hardware_backed_credential_release",
+        "guarded": true,
+        "kind": "document",
+        "line": 190,
+        "path": "README.md",
+        "text": "envelope refresh, not hardware credential release, persistent PCR binding, or"
+      },
+      {
+        "category": "hardware_backed_credential_release",
+        "guarded": true,
+        "kind": "document",
+        "line": 1202,
+        "path": "README.md",
+        "text": "- `artifacts/validation/mount_key_lifecycle/`: source/artifact/paper gate manifest for the mount-key lifecycle boundary; it supports authenticated storage-format correctness and mounted open-file envelope refresh, while scoping out hardware-backed credential release, deployed credential rotation, persistent epoch anti-rollback journaling, transactional rewrap recovery, and credential-only rollback resistance"
+      }
+    ],
+    "unguarded_count": 0
+  },
+  "current_kdf": {
+    "algorithm": "scrypt-with-PBKDF2-legacy-compat",
+    "digest": "SHA256",
+    "function": "pqc_keyring_derive_master_key",
+    "iterations": 600000,
+    "kdf_metadata_format_present": true,
+    "output_len": 32,
+    "pbkdf2_call_present": true,
+    "per_filesystem_salt_present": true,
+    "random_metadata_salt_present": true,
+    "runtime_log_pbkdf2": false,
+    "runtime_reports_kdf_name": true,
+    "runtime_requires_password": true,
+    "runtime_source": "code/pqc_runtime.c",
+    "salt_len": 32,
+    "salt_literal": null,
+    "salt_scope": "per_filesystem_metadata",
+    "scrypt_call_present": true,
+    "source": "code/pqc_keyring.c"
+  },
+  "generated_by": "code/experiments/build_kdf_current_state_verdict.py",
+  "generated_utc": "2026-06-29T08:31:42Z",
+  "overall_pass": true,
+  "paper_checks": {
+    "paper_kdf_text_matches_production_boundary": true
+  },
+  "paper_file_observed": "Paper/3_Design.tex",
+  "paper_kdf_text": {
+    "checks": {
+      "design_states_openssl_scrypt": true,
+      "design_states_pbkdf2_legacy_boundary": true,
+      "design_states_pbkdf2_not_new_root_default": true,
+      "design_states_random_32_byte_per_filesystem_salt": true,
+      "design_states_scrypt_maxmem": true,
+      "design_states_scrypt_n": true,
+      "design_states_scrypt_p": true,
+      "design_states_scrypt_r": true,
+      "design_states_versioned_kdf_record": true,
+      "discussion_keeps_no_hardware_credential_release": true,
+      "no_stale_pbkdf2_default_sentence": true,
+      "paper_states_password_or_offline_guessing_limit": true
+    },
+    "failed_checks": [],
+    "overall_pass": true
+  },
+  "parent_d1_closed": true,
+  "schema_version": 2,
+  "source_checks": {
+    "kdf_metadata_format_detected": true,
+    "legacy_pbkdf2_compatibility_present": true,
+    "mount_key_function_found": true,
+    "per_filesystem_salt_present": true,
+    "random_metadata_salt_present": true,
+    "runtime_reports_kdf_name": true,
+    "runtime_requires_password": true,
+    "scrypt_derivation_detected": true
+  },
+  "source_files": [
+    "code/pqc_keyring.c",
+    "code/pqc_keyring.h",
+    "code/pqc_runtime.c"
+  ],
+  "toolchain": {
+    "argon2_header_compile": {
+      "available": false,
+      "command": [
+        "/usr/bin/cc",
+        "/tmp/aegisq_kdf_probe_hbpdb5db/probe.c",
+        "-o",
+        "/tmp/aegisq_kdf_probe_hbpdb5db/probe",
+        "-largon2"
+      ],
+      "elapsed_ms": 6.903481,
+      "reason": "compile_failed",
+      "returncode": 1,
+      "stderr": "/tmp/aegisq_kdf_probe_hbpdb5db/probe.c:1:10: fatal error: argon2.h: No such file or directory\n    1 | #include <argon2.h>\n      |          ^~~~~~~~~~\ncompilation terminated.\n",
+      "stdout": ""
+    },
+    "cc": "/usr/bin/cc",
+    "openssl_scrypt_compile": {
+      "available": true,
+      "command": [
+        "/usr/bin/cc",
+        "/tmp/aegisq_kdf_probe_tp1hqcuf/probe.c",
+        "-o",
+        "/tmp/aegisq_kdf_probe_tp1hqcuf/probe",
+        "-lcrypto"
+      ],
+      "elapsed_ms": 56.953008,
+      "reason": "compile_ok",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "openssl_version": {
+      "command": [
+        "openssl",
+        "version",
+        "-a"
+      ],
+      "elapsed_ms": 2.468584,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)\nbuilt on: Tue Apr  7 12:05:56 2026 UTC\nplatform: debian-arm64\noptions:  bn(64,64)\ncompiler: gcc -fPIC -pthread -Wa,--noexecstack -Wall -fzero-call-used-regs=used-gpr -DOPENSSL_TLS_SECURITY_LEVEL=2 -Wa,--noexecstack -g -O2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/openssl-A7h8By/openssl-3.0.13=. -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -mbranch-protection=standard -fdebug-prefix-map=/build/openssl-A7h8By/openssl-3.0.13=/usr/src/openssl-3.0.13-0ubuntu3.9 -DOPENSSL_USE_NODELETE -DOPENSSL_PIC -DOPENSSL_BUILDING_OPENSSL -DNDEBUG -Wdate-time -D_FORTIFY_SOURCE=3\nOPENSSLDIR: \"/usr/lib/ssl\"\nENGINESDIR: \"/usr/lib/aarch64-linux-gnu/engines-3\"\nMODULESDIR: \"/usr/lib/aarch64-linux-gnu/ossl-modules\"\nSeeding source: os-specific\nCPUINFO: OPENSSL_armcap=0xfd\n"
+    },
+    "pkg_config_libargon2": {
+      "command": [
+        "pkg-config",
+        "--modversion",
+        "libargon2"
+      ],
+      "elapsed_ms": 4.477305,
+      "returncode": 1,
+      "stderr": "Package libargon2 was not found in the pkg-config search path.\nPerhaps you should add the directory containing `libargon2.pc'\nto the PKG_CONFIG_PATH environment variable\nPackage 'libargon2', required by 'virtual:world', not found\n",
+      "stdout": ""
+    }
+  },
+  "toolchain_checks": {
+    "argon2id_probe_completed": true,
+    "replacement_path_available": true,
+    "scrypt_probe_completed": true
+  },
+  "verdict": {
+    "argon2id_available_for_build": false,
+    "decision": "scrypt_metadata_paper_guard_complete",
+    "next_production_step": "Move to D2-S0: add mounted-path crypto-plane route evidence so data-plane AES-GCM and key-plane PQC remain visibly separated.",
+    "scrypt_available_for_build": true,
+    "smallest_safe_change": "Keep the versioned KDF metadata record and derive the mount key from per-filesystem salt before making any stronger security claim."
+  }
+}

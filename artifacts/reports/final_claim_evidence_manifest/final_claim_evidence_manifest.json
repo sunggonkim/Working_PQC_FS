@@ -1,0 +1,1670 @@
+{
+  "abstract_conclusion_security_recovery_claims": [
+    {
+      "categories": [
+        "claim-spine",
+        "numeric-performance",
+        "security-recovery-claim",
+        "workload-boundary"
+      ],
+      "claim_ids": [
+        "edge_runtime_claim_spine",
+        "tpm_freshness_boundary",
+        "cache_manifest_workload",
+        "foreground_inference_claim_removal"
+      ],
+      "covered": true,
+      "line": 2,
+      "path": "Paper/main.tex",
+      "section": "abstract",
+      "text": "Unified-memory edge devices co-locate local databases, encrypted logs, cache-manifest updates, and encrypted state on shared DRAM/storage. A secure file-encryption runtime must place cryptographic work, not merely accelerate it: GPU work can steal bandwidth from foreground storage and durable publication. Its thesis is that secure edge storage should expose \\mbox{one durable authenticated format} with a CPU-first AES-GCM data plane and an elastic GPU/PQC maintenance lane. AEGIS-Q explores that boundary as a boundary-aware UMA FUSE prototype with optional batched PQC key-plane maintenance, executor-local managed-memory use, and fail-closed external-anchor replay-after-advance checks."
+    },
+    {
+      "categories": [
+        "negative-claim",
+        "numeric-performance",
+        "numeric-platform"
+      ],
+      "claim_ids": [
+        "sqlite_hero_repeated_medians",
+        "primitive_and_keyplane_placement",
+        "platform_and_resource_context",
+        "claim_firewalls"
+      ],
+      "covered": true,
+      "line": 3,
+      "path": "Paper/main.tex",
+      "section": "abstract",
+      "text": "The core result is asymmetric placement under edge pressure. AES-GCM file records remain CPU-first; ML-KEM/cuPQC work uses the GPU only when it is independent, batched, and slack-tolerant; storage-visible QoS throttles elastic writes rather than weakening publication order. On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms. The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling. This is a scoped edge file-encryption runtime result, not deployed-filesystem or peak-throughput superiority."
+    },
+    {
+      "categories": [
+        "negative-claim",
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "sqlite_hero_repeated_medians",
+        "primitive_and_keyplane_placement",
+        "tpm_freshness_boundary",
+        "claim_firewalls"
+      ],
+      "covered": true,
+      "line": 4,
+      "path": "Paper/6_Conclusion.tex",
+      "section": "conclusion",
+      "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem. Its authenticated format keeps AES-GCM data writes on the CPU, admits ML-KEM/cuPQC maintenance only for slack-tolerant batches, uses managed memory only as executor-local locality, and separates replayable file witnesses from externally anchored replay-after-advance checks. On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure. It does not claim direct NVMe-to-UVM DMA, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, non-storage scheduler recovery, or portability. The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary",
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 7,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries. Under that scope, AES-GCM protects the confidentiality and authenticity of published block records, while the HMAC-protected key envelope and checkpoint detect unauthenticated metadata changes. The adversary can still deny service, delete records, replay a complete file-backed snapshot, or exploit vulnerabilities outside the FUSE process. We make no claim against a privileged local attacker that can read process memory, substitute the CUDA driver, alter the mount executable, or use GPU microarchitectural side channels."
+    },
+    {
+      "categories": [
+        "security-boundary"
+      ],
+      "claim_ids": [
+        "integrity_and_sidechannel_boundary"
+      ],
+      "covered": true,
+      "line": 20,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "Backing-store read & AES-GCM ciphertext with per-file DEK & Assumes mount credential remains secret\\\\"
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 21,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "Backing-store tamper & AEAD tags, HMAC envelope, HMAC checkpoint & Denial of service remains possible\\\\"
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "negative-claim",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary",
+        "posix_scope_boundary",
+        "claim_firewalls"
+      ],
+      "covered": true,
+      "line": 22,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\\\"
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "crash_and_recovery_boundary"
+      ],
+      "covered": true,
+      "line": 23,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "Crash during update & Ordered publication plus selected daemon/app cutpoint tests & Physical power-loss and drive-cache certification remain open\\\\"
+    },
+    {
+      "categories": [
+        "security-boundary"
+      ],
+      "claim_ids": [
+        "integrity_and_sidechannel_boundary"
+      ],
+      "covered": true,
+      "line": 24,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "GPU side channel & No protection mechanism claimed & Integrity parity is not constant-time evidence\\\\"
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary",
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 34,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "The source tree contains two anchor modes. The file mode is only an integrity witness; copying the directory copies the witness. The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \\emph{rollback visible}, not as successful protection. This negative result is important: an HMAC alone does not create freshness when its entire state is replayable."
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "telemetry_and_sensitivity",
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 43,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary. It does not certify SQLite WAL, \\texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract. The current security evidence is local to the edge runtime: FUSE self-tests, clean remount, managed-memory smoke, and GPU integrity parity show the implemented boundary, not statistical security, cloud/privacy economics, or remote key-management behavior."
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "crash_and_recovery_boundary"
+      ],
+      "covered": true,
+      "line": 45,
+      "path": "Paper/8_Security_Analysis.tex",
+      "section": "security",
+      "text": "Application semantics are separated from storage-record integrity. AEGIS-Q can reject a corrupted block tag, but it cannot infer whether an application-level transaction was acknowledged unless the experiment supplies an external oracle. The daemon power-fault matrix adds final-binary \\texttt{SIGKILL} at selected one-block storage boundaries, while the SQLite rows supply application commit oracles. A complete database certification would need broader workloads, multiple cache modes, physical power loss, kernel crash, and drive-cache timing."
+    },
+    {
+      "categories": [
+        "claim-spine"
+      ],
+      "claim_ids": [
+        "edge_runtime_claim_spine"
+      ],
+      "covered": true,
+      "line": 7,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The evaluation follows the same spine as the design: RQ2 and RQ3 test the edge-runtime thesis, while RQ1, RQ4, and RQ5 bound the storage and recovery claims that make the placement result meaningful. It answers five research questions:"
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 16,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The design/evaluation contract is one closure per main mechanism: CPU/GPU/PQC placement through data-plane negative controls and key-plane measurements; QoS through SQLite recovery and kernel-control comparisons; managed-memory scope through executor-local diagnostics; format through generation/tamper checks; D/J/C publication through oracle-labeled cut points; and TPM freshness through replay-after-advance."
+    },
+    {
+      "categories": [
+        "baseline-boundary",
+        "numeric-performance",
+        "numeric-platform",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "kernel_baseline_unavailable_rows",
+        "primitive_and_keyplane_placement",
+        "tpm_freshness_boundary",
+        "telemetry_and_sensitivity",
+        "platform_and_resource_context"
+      ],
+      "covered": true,
+      "line": 20,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result. Retained O4 tegrastats logs give same-run power/thermal observations: mean VIN is 29.1~W for SQLite QoS, 27.5~W for key-plane rekey, and 28.4/27.4~W for AEGIS-Q/dm-crypt frozen rows, with max \\texttt{tj}=49.0C. These are observations, not energy-efficiency claims."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "epoch_mode_conditional_amortization",
+        "x6_strict_cost_reduction_model"
+      ],
+      "covered": true,
+      "line": 32,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "X6/O3 answer strict-path practicality without upgrading crash claims. X6 changes marker/checkpoint publication from filesystem-wide \\texttt{syncfs} to marker-file \\texttt{fsync} (1,070 retained A2 calls), leaving data and journal barriers. O3 keeps strict per-write publication as the D/J/C barrier boundary and admits hybrid epoch grouping only for concurrent or batched writes that can share a barrier. The grouped row cuts four-client syncs from eight to six and improves p99 from 47.6 to 40.1~ms and throughput from 9.05 to 9.72~MiB/s; the fault-matrix row cuts syncs from eight to five but worsens p99 to 53.1~ms, so this is conditional admission, not a general fast path. Single-client epoch still pays a data plus epoch-log barrier; kernel-assist remains future work."
+    },
+    {
+      "categories": [
+        "correctness-boundary"
+      ],
+      "claim_ids": [
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 43,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "RQ1 FUSE & Format functions after clean remount & Full SQLite/crash certification\\\\"
+    },
+    {
+      "categories": [
+        "security-boundary"
+      ],
+      "claim_ids": [
+        "integrity_and_sidechannel_boundary"
+      ],
+      "covered": true,
+      "line": 44,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "RQ1 hash & CUDA and OpenSSL digests agree & Side-channel resistance\\\\"
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 47,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "RQ5 eBPF & \\texttt{nvme\\_complete\\_rq} diagnostic histogram & Mounted eBPF/io\\_uring path\\\\"
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "telemetry_and_sensitivity"
+      ],
+      "covered": true,
+      "line": 48,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "RQ3 mounted telemetry & Telemetry reaches the FUSE write-throttle path & Application scheduler or non-storage p99 controller\\\\"
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "workload-boundary"
+      ],
+      "claim_ids": [
+        "second_macrobenchmark",
+        "cache_manifest_workload",
+        "foreground_inference_claim_removal"
+      ],
+      "covered": true,
+      "line": 50,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "RQ3/RQ4 mounted apps & Secure append-log remount plus cache-manifest object publish/remount & Broad workload suite or non-storage p99 recovery\\\\"
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 51,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "RQ4 file anchor & File snapshot rollback remains visible & TPM-anchor freshness\\\\"
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "primitive_and_keyplane_placement"
+      ],
+      "covered": true,
+      "line": 62,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "For a batch of 4,096 ML-KEM-768 key generations, liboqs on CPU reaches 64.8~K operations/s (64.3--64.9~K), while cuPQC reaches 1.50~M operations/s (1.49--1.51~M), a 23.2$\\times$ ratio of medians. The comparison is a primitive microbenchmark on one platform, not a claim that a FUSE write becomes 23.2$\\times$ faster. It supports the narrower policy of reserving GPU work for sufficiently large, independent key-plane batches."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "primitive_and_keyplane_placement",
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 64,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-protected envelopes. In the five-run methodology row, CPU-only refresh takes 24.575~ms (41.7~K files/s); with explicit slack, admission selects the GPU and finishes in 20.729~ms (49.4~K files/s), a 1.186$\\times$ median speedup; with zero slack and high memory-pressure telemetry, fallback remains CPU-equivalent at 24.572~ms. The X11 break-even model explains why the workflow gain is modest: primitive cuPQC is faster by batch~16, but mounted envelope/FUSE/admission overhead shifts the positive workflow break-even to roughly 760--812 refreshed files, and an added 5~ms of UMA or staging pressure shifts it to roughly 1.09--1.10K files. This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or non-storage foreground recovery."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "primitive_and_keyplane_placement"
+      ],
+      "covered": true,
+      "line": 66,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "These measurements produce the main placement rule used by the design: AES-GCM data writes are latency-sensitive and remain CPU-first, while ML-KEM batches are elastic and may use the GPU only when producer slack and telemetry permit it. The result would be weaker if the paper reported only the faster GPU primitive; the important systems observation is the boundary between the data plane and the slack-tolerant maintenance plane."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "generation_and_tamper_safety",
+        "tpm_freshness_boundary",
+        "crash_and_recovery_boundary",
+        "epoch_mode_conditional_amortization"
+      ],
+      "covered": true,
+      "line": 71,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The GPU integrity test passes leaf, Merkle, and empty-tree parity cases against OpenSSL. The FUSE self-test covers journal/checkpoint/anchor units and a generation-replay regression. The retained generation fault matrix covers partial update, clean remount, torn tails, stale snapshots, journal loss, older-generation append, and duplicate-generation replay across strict and epoch modes; every row has an oracle verdict without silent-corruption or unexpected-liveness outcomes. X10 adds \\texttt{UINT64\\_MAX}/\\texttt{EFBIG} near-wrap refusal, publish-ticket reservation, and same-file/disjoint 4-thread/4-process mounted writer stress, but not arbitrary application-level concurrency. Clean remount byte-compares plaintext after \\texttt{fsync}, and envelope tamper returns \\texttt{EKEYREJECTED}."
+    },
+    {
+      "categories": [
+        "correctness-boundary"
+      ],
+      "claim_ids": [
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 73,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The POSIX-scope audit records a narrow mounted-workload interface: ordinary read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, symlinks, open-fd truncate/fallocate, user xattrs, and bounded writer races pass without mixed plaintext. Encrypted-file \\texttt{mmap}/\\texttt{msync}, open-subtree retargeting, arbitrary byte-range transactions, lower-filesystem xattr atomicity, and full crash-time POSIX visibility are rejected, scoped, or delegated."
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "crash_and_recovery_boundary",
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 77,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The file-backed anchor produces the deliberately negative result: restoring an entire backing-directory snapshot is classified as \\texttt{rollback\\_visible}, i.e., the previous committed baseline remains readable. The result remains a negative control rather than rollback resistance."
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 79,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe. The hardware-freshness recovery matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary",
+        "crash_and_recovery_boundary"
+      ],
+      "covered": true,
+      "line": 81,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The broader crash/replay matrices are selected-boundary evidence, not complete app-level crash coverage. The daemon campaign kills the final binary at D/J/C, anchor, \\texttt{fsync}, remount, and authenticated-read cut points; application rows cover SQLite and \\texttt{dbm.dumb} TPM replay. X1 adds three loopback ext4/device-mapper lower-block \\texttt{error} rows; after \\texttt{e2fsck}/remount, pre-commit rows recover the previous committed payload and the post-\\texttt{fsync} row recovers the latest committed payload. This is not physical power-loss, kernel-crash, drive-cache, arbitrary-workload, or multi-block raw-write certification."
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "numeric-performance",
+        "workload-boundary"
+      ],
+      "claim_ids": [
+        "second_macrobenchmark",
+        "epoch_mode_conditional_amortization",
+        "cache_manifest_workload",
+        "foreground_inference_claim_removal",
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 83,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The scoped mounted-application rows are not synthetic fio rows. The secure append-log macro appends ordered 16~KiB records in strict and epoch modes, remounts, and verifies hashes/order; retained p99 is 5.93~ms strict and 4.17~ms epoch. A cache-manifest workload publishes 24 hashed 16~KiB objects with closed-file rename plus directory \\texttt{fsync}, remounts, and verifies all hashes, reporting 4.22/28.09~ms p50/p99 at 2.00~MiB/s. The multi-writer row shows the queue-depth limit: epoch grouping reduces traced syncs from 16 to 1 and replay reconstruction remains sub-ms, but p99.9 worsens to 67.90~ms versus 61.54~ms. These are scoped mounted patterns, not a broad workload suite or non-storage application QoS claim."
+    },
+    {
+      "categories": [
+        "claim-spine"
+      ],
+      "claim_ids": [
+        "edge_runtime_claim_spine"
+      ],
+      "covered": true,
+      "line": 85,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "Recovery/freshness outcomes support the mounted runtime boundary; they are not the paper's central QoS/placement result."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "telemetry_and_sensitivity"
+      ],
+      "covered": true,
+      "line": 90,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The tegrastats/CUPTI runs show platform pressure reaching the mounted daemon: they record 8 and 5 daemon-throttled flushes, respectively. This remains wiring evidence rather than application-level p99 recovery or fast-notification bypass."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "frozen_filesystem_contract_rows",
+        "generation_and_tamper_safety",
+        "telemetry_and_sensitivity"
+      ],
+      "covered": true,
+      "line": 94,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity. The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms slack freshness, and 0.80 queue threshold. Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss). No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips. This keeps the claim on mounted storage-visible control, not an external application scheduler."
+    },
+    {
+      "categories": [
+        "claim-attribution"
+      ],
+      "claim_ids": [
+        "mechanism_ablation_attribution"
+      ],
+      "covered": true,
+      "line": 96,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "The ablation manifest then attributes cost to the authenticated FUSE format, SQLite recovery to elastic-write throttling, key-plane speedup to slack-gated GPU maintenance, and replay refusal to the external anchor."
+    }
+  ],
+  "checks": {
+    "abstract_conclusion_security_recovery_claims_covered": true,
+    "all_evidence_rules_complete": true,
+    "all_numeric_candidates_covered": true,
+    "paper_pages_12": true
+  },
+  "evidence_rules": [
+    {
+      "boundary": "Top-level edge-runtime thesis; supporting correctness rows bound the claim rather than converting it into filesystem certification.",
+      "category": "claim-spine",
+      "claim_id": "edge_runtime_claim_spine",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/paper_spine_gate/paper_spine_gate.json",
+          "present": true,
+          "violations": 0
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/first_two_pages_thesis/first_two_pages_thesis.json",
+          "present": true,
+          "violations": 0
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/architecture_claim_firewall/architecture_claim_firewall.json",
+          "present": true,
+          "violations": 0
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/x9_qos_admission_closeout/x9_qos_admission_closeout.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/x10_generation_robustness_closeout/x10_generation_robustness_closeout.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/x11_mlkem_break_even_model/x11_mlkem_break_even_model.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "secure file-encryption runtime",
+        "edge-runtime thesis",
+        "storage and recovery claims",
+        "one durable authenticated format",
+        "elastic GPU/PQC maintenance lane",
+        "fail-closed replay checks",
+        "placement/QoS runtime",
+        "mounted runtime boundary",
+        "central QoS/placement result"
+      ]
+    },
+    {
+      "boundary": "Mechanism attribution summary; not an independent throughput or recovery expansion.",
+      "category": "claim-attribution",
+      "claim_id": "mechanism_ablation_attribution",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/mechanism_ablation_manifest/mechanism_ablation_manifest.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/x9_qos_admission_closeout/x9_qos_admission_closeout.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/x11_mlkem_break_even_model/x11_mlkem_break_even_model.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/freshness_ladder_claim_guard/freshness_ladder_claim_guard.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "ablation manifest then attributes cost",
+        "SQLite recovery to elastic-write throttling",
+        "key-plane speedup to slack-gated GPU maintenance",
+        "replay refusal to the external anchor"
+      ]
+    },
+    {
+      "boundary": "SQLite foreground storage-visible control only; no non-storage QoS or broad filesystem superiority.",
+      "category": "numeric-performance",
+      "claim_id": "sqlite_hero_repeated_medians",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
+          "present": true,
+          "violations": 0
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/kernel_qos_hero_integration_closeout/kernel_qos_hero_integration_closeout.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "SQLite p99",
+        "App only",
+        "Unthrottled",
+        "Simple ctrl.",
+        "AEGIS-Q & storage class",
+        "ionice",
+        "IOWeight"
+      ]
+    },
+    {
+      "boundary": "Warm-cache frozen-contract cost boundary; not high-throughput/general-purpose claim.",
+      "category": "numeric-performance",
+      "claim_id": "frozen_filesystem_contract_rows",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "Plaintext reports",
+        "gocryptfs reports",
+        "AEGIS-Q reports 0.359",
+        "4~KiB",
+        "1~GiB",
+        "queue depth~1"
+      ]
+    },
+    {
+      "boundary": "Kernel rows are measured or environment-blocked; no fscrypt/dm-crypt speedup claim.",
+      "category": "baseline-boundary",
+      "claim_id": "kernel_baseline_unavailable_rows",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "fscrypt",
+        "dm-crypt",
+        "CONFIG\\_FS\\_ENCRYPTION",
+        "sudo -n true"
+      ]
+    },
+    {
+      "boundary": "Placement asymmetry and mounted key-plane refresh; not bulk-data PQC encryption.",
+      "category": "numeric-performance",
+      "claim_id": "primitive_and_keyplane_placement",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": null,
+          "path": "artifacts/validation/microbench/summary.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/keyplane_rekey_methodology/keyplane_rekey_workflow.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/x11_mlkem_break_even_model/x11_mlkem_break_even_model.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/crypto_plane_separation/crypto_plane_claim_guard.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "AES-256-GCM",
+        "CPU/OpenSSL",
+        "managed-buffer GPU",
+        "ML-KEM-768",
+        "cuPQC",
+        "liboqs",
+        "1.186",
+        "break-even model",
+        "AES-GCM data writes",
+        "ML-KEM batches",
+        "slack-tolerant maintenance plane"
+      ]
+    },
+    {
+      "boundary": "Password-derived mount-key boundary; no hardware-backed credential release or offline-resistance claim.",
+      "category": "security-claim",
+      "claim_id": "kdf_parameters",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/kdf_crypto_plane/kdf_current_state_verdict.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/kdf_crypto_plane/kdf_scrypt_mounted_smoke.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "scrypt",
+        "PBKDF2",
+        "32-byte",
+        "N=32768",
+        "64~MiB",
+        "256-bit DEKs"
+      ]
+    },
+    {
+      "boundary": "Strict/epoch nonce-generation evidence under stated model; no physical power-loss certification.",
+      "category": "security-recovery-claim",
+      "claim_id": "generation_and_tamper_safety",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+          "present": true
+        },
+        {
+          "overall_pass": null,
+          "path": "artifacts/validation/fuse_tamper_rejection.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/nonce_generation_fault_verdict/nonce_generation_fault_verdict.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "generation fault matrix",
+        "EKEYREJECTED",
+        "file identifier",
+        "GCM nonce",
+        "4~KiB"
+      ]
+    },
+    {
+      "boundary": "Replay-after-advance and file-anchor negative control; no persistent PCR-bound rollback resistance.",
+      "category": "security-recovery-claim",
+      "claim_id": "tpm_freshness_boundary",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/freshness_ladder_claim_guard/freshness_ladder_claim_guard.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/pcr_anchor_decision/pcr_anchor_decision.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "TPM",
+        "PCR",
+        "NV",
+        "0x01500010",
+        "replay-after-advance",
+        "rollback visible",
+        "four of four",
+        "File-anchor replay visible",
+        "File-backed witness is a negative control",
+        "External freshness state"
+      ]
+    },
+    {
+      "boundary": "Selected daemon/app cutpoints; no physical power-loss, kernel-crash, or drive-cache certification.",
+      "category": "security-recovery-claim",
+      "claim_id": "crash_and_recovery_boundary",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/x1_block_fault_campaign/x1_block_fault_campaign.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/recovery_oracle_audit/recovery_oracle_audit.json",
+          "present": true,
+          "violations": 0
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/crash_power_loss_claim_guard/crash_power_loss_claim_guard.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "daemon power-fault campaign",
+        "SIGKILL",
+        "SQLite WAL/FULL",
+        "SQLite DELETE/EXTRA",
+        "dbm.dumb",
+        "oracle verdict",
+        "lower-block interruption",
+        "previous committed",
+        "Physical power-loss",
+        "drive-cache certification"
+      ]
+    },
+    {
+      "boundary": "Second scoped mounted workload; not a broad workload suite or non-storage QoS claim.",
+      "category": "numeric-performance",
+      "claim_id": "second_macrobenchmark",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/second_macrobenchmark_closeout/second_macrobenchmark_closeout.json",
+          "present": true
+        },
+        {
+          "overall_pass": null,
+          "path": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "secure append-log",
+        "16~KiB",
+        "5.93",
+        "4.17"
+      ]
+    },
+    {
+      "boundary": "Epoch mode is conditional amortization with explicit p99/throughput wins and loss cases, not dominance across workloads.",
+      "category": "numeric-performance",
+      "claim_id": "epoch_mode_conditional_amortization",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/filesystem_viability_breakdown/epoch_publication_comparison.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/epoch_mode_depth/epoch_mode_depth.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/strict_path_practicality/strict_path_practicality.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "Epoch mode",
+        "hybrid-barrier",
+        "D/J/C barrier",
+        "47.6",
+        "40.1",
+        "9.05",
+        "9.72",
+        "53.1"
+      ]
+    },
+    {
+      "boundary": "Third scoped mounted workload using closed-file rename, directory fsync, remount, and hash verification; not a broad workload suite.",
+      "category": "numeric-performance",
+      "claim_id": "cache_manifest_workload",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/model_cache_manifest_workload/model_cache_manifest_workload.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "cache-manifest",
+        "24 hashed 16~KiB objects",
+        "4.22",
+        "28.09",
+        "2.00"
+      ]
+    },
+    {
+      "boundary": "Strict-path marker/checkpoint sync narrowing model; no throughput, kernel-upstreaming, or physical power-loss claim.",
+      "category": "numeric-performance",
+      "claim_id": "x6_strict_cost_reduction_model",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/x6_strict_cost_reduction/x6_strict_cost_reduction_model.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/strict_path_practicality/strict_path_practicality.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "X6",
+        "marker/checkpoint",
+        "1,070",
+        "syncfs",
+        "marker-file"
+      ]
+    },
+    {
+      "boundary": "O1 closed by removing the inference/TensorRT/AI axis from the submitted paper claim.",
+      "category": "workload-boundary",
+      "claim_id": "foreground_inference_claim_removal",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": null,
+          "path": "artifacts/reports/review_response_strategy/review_response_strategy.json",
+          "present": true
+        },
+        {
+          "overall_pass": null,
+          "path": "artifacts/reports/review_acceptance_structure_audit/review_acceptance_structure_audit.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "local databases",
+        "encrypted logs",
+        "cache-manifest updates",
+        "secure append-log",
+        "application scheduler recovery"
+      ]
+    },
+    {
+      "boundary": "Controller sensitivity and wiring evidence; not external application scheduling.",
+      "category": "numeric-performance",
+      "claim_id": "telemetry_and_sensitivity",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_analysis.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/stat_thermal_methodology/stat_thermal_methodology_audit.json",
+          "present": true
+        },
+        {
+          "overall_pass": null,
+          "path": "artifacts/validation/cuda_qos_contract/cuda_qos_contract.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "tegrastats",
+        "CUPTI",
+        "mounted telemetry",
+        "FUSE write-throttle",
+        "8 and 5",
+        "80~ms",
+        "128~KiB",
+        "12.3",
+        "9 transitions",
+        "8 flips",
+        "Ablation and sensitivity mechanisms"
+      ]
+    },
+    {
+      "boundary": "Narrow FUSE/POSIX envelope; no general-purpose POSIX filesystem claim.",
+      "category": "correctness-boundary",
+      "claim_id": "posix_scope_boundary",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/posix_scope_audit/posix_scope_audit.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json",
+          "present": true,
+          "violations": 0
+        }
+      ],
+      "needles_any": [
+        "POSIX-scope audit",
+        "default encrypted-file",
+        "mmap",
+        "msync",
+        "rename",
+        "directory",
+        "relative symlink",
+        "hard links",
+        "full SQLite/crash certification"
+      ]
+    },
+    {
+      "boundary": "Integrity parity and AES-GCM confidentiality only; no side-channel protection claim.",
+      "category": "security-boundary",
+      "claim_id": "integrity_and_sidechannel_boundary",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/integrity_comparison_manifest/integrity_comparison_manifest.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/attacker_model_claim_guard/attacker_model_claim_guard.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "RQ1 hash",
+        "CUDA and OpenSSL digests agree",
+        "Side-channel resistance",
+        "GPU side channel",
+        "constant-time evidence",
+        "Backing-store read"
+      ]
+    },
+    {
+      "boundary": "Single tested Jetson stack; no portability claim.",
+      "category": "numeric-platform",
+      "claim_id": "platform_and_resource_context",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": null,
+          "path": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json",
+          "present": true
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/jetson_memory_contract/jetson_memory_contract.json",
+          "present": true
+        },
+        {
+          "overall_pass": null,
+          "path": "artifacts/validation/jetson_optimization_ladder/jetson_optimization_ladder.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "Jetson AGX Thor",
+        "14 ARM CPU",
+        "1~TB",
+        "Linux~6.8.12-tegra",
+        "CUDA~13.0.48",
+        "FUSE3~3.14.0"
+      ]
+    },
+    {
+      "boundary": "Unsupported stronger claims remain absent, negated, or scoped.",
+      "category": "negative-claim",
+      "claim_id": "claim_firewalls",
+      "complete": true,
+      "evidence": [
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json",
+          "present": true,
+          "violations": 0
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/reports/architecture_claim_firewall/architecture_claim_firewall.json",
+          "present": true,
+          "violations": 0
+        },
+        {
+          "overall_pass": true,
+          "path": "artifacts/validation/attacker_model_claim_guard/attacker_model_claim_guard.json",
+          "present": true
+        }
+      ],
+      "needles_any": [
+        "does not claim",
+        "not claimed",
+        "not a replacement",
+        "not a universal replacement",
+        "not deployed-filesystem",
+        "not peak-throughput"
+      ]
+    }
+  ],
+  "generated_utc": "2026-06-30T14:33:17Z",
+  "incomplete_evidence_rules": [],
+  "numeric_claim_candidates": [
+    {
+      "categories": [
+        "negative-claim",
+        "numeric-performance",
+        "numeric-platform"
+      ],
+      "claim_ids": [
+        "sqlite_hero_repeated_medians",
+        "primitive_and_keyplane_placement",
+        "platform_and_resource_context",
+        "claim_firewalls"
+      ],
+      "covered": true,
+      "line": null,
+      "numbers": [
+        "9.62",
+        "9 ",
+        "6.98",
+        "8.15",
+        "9",
+        "3.02",
+        "7.25"
+      ],
+      "path": "Paper/main.tex",
+      "text": "The core result is asymmetric placement under edge pressure. AES-GCM file records remain CPU-first; ML-KEM/cuPQC work uses the GPU only when it is independent, batched, and slack-tolerant; storage-visible QoS throttles elastic writes rather than weakening publication order. On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms. The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling. This is a scoped edge file-encryption runtime result, not deployed-filesystem or peak-throughput superiority."
+    },
+    {
+      "categories": [
+        "security-claim",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "kdf_parameters",
+        "generation_and_tamper_safety"
+      ],
+      "covered": true,
+      "line": 40,
+      "numbers": [
+        "32",
+        "32768",
+        "8",
+        "1",
+        "64",
+        "56 ",
+        "256"
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "New roots use OpenSSL scrypt in versioned \\texttt{.pqc\\_kdf} metadata (random 32-byte per-filesystem salt; \\(N=32768\\), \\(r=8\\), \\(p=1\\), 64~MiB max memory); roots lacking it use the legacy PBKDF2-HMAC-SHA256 compatibility path. PBKDF2 is not the new-root default. New files receive random 256-bit DEKs and file identifiers; each DEK is masked under mount-key/file-ID material and HMAC-authenticated before open accepts it. The file identifier, generation, logical block number, and plaintext length are AES-GCM associated data, preventing valid records from moving to different logical positions."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "frozen_filesystem_contract_rows",
+        "generation_and_tamper_safety"
+      ],
+      "covered": true,
+      "line": 47,
+      "numbers": [
+        "4"
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "Writes are coalesced only when they are contiguous. For each affected 4~KiB logical block, AEGIS-Q reads the current authenticated block if necessary, applies the modification, assigns a strictly increasing generation, and derives the GCM nonce from \\((\\mathit{fileID},\\mathit{block},\\mathit{generation})\\). The commit order is:"
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "crash_and_recovery_boundary"
+      ],
+      "covered": true,
+      "line": 69,
+      "numbers": [
+        "4",
+        "1"
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "The generation transition is per-file. A publish-ticket serializes reservation turns; before encryption, near wraparound fails with \\texttt{EFBIG} if the affected block count would pass \\texttt{UINT64\\_MAX}. Otherwise AEGIS-Q reserves \\([\\mathit{next}+1,\\mathit{next}+n]\\) in checkpoint/high-water state, may skip interrupted reservations, advances committed generation only after publication, recovers only mappings reachable through the validated boundary, and rejects duplicate epoch \\((\\mathit{fileID},\\mathit{block},\\mathit{generation})\\) records. Misuse-resistant SIV-style AEAD would trade this state obligation for extra passes; AEGIS-Q instead tests older-generation replay while not claiming physical power-loss, arbitrary application-level concurrency, or broad crash-consistency certification."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "telemetry_and_sensitivity"
+      ],
+      "covered": true,
+      "line": 91,
+      "numbers": [
+        "9 "
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "QoS telemetry & SQLite recovery only & Workload/CUPTI traces can drive mounted-FUSE throttling; no application scheduler or non-storage p99 recovery claim.\\\\"
+    },
+    {
+      "categories": [
+        "security-claim",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "kdf_parameters",
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 103,
+      "numbers": [
+        "32"
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "The evaluated key-plane workflow applies this rule by batching open-file descriptors for ML-KEM envelope refresh, encapsulating on the selected executor, installing 32-byte refreshed DEK material, and rewriting the HMAC-authenticated envelope. It is not a persistent KEM hierarchy or hardware-backed credential lifecycle."
+    },
+    {
+      "categories": [
+        "baseline-boundary",
+        "numeric-performance",
+        "numeric-platform",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "kernel_baseline_unavailable_rows",
+        "primitive_and_keyplane_placement",
+        "tpm_freshness_boundary",
+        "telemetry_and_sensitivity",
+        "platform_and_resource_context"
+      ],
+      "covered": true,
+      "line": 20,
+      "numbers": [
+        "14 ",
+        "1",
+        "6.8",
+        "12",
+        "13.0",
+        "48",
+        "0.15",
+        "0",
+        "3.14",
+        "0",
+        "29.1",
+        "27.5",
+        "28.4",
+        "27.4",
+        "49"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result. Retained O4 tegrastats logs give same-run power/thermal observations: mean VIN is 29.1~W for SQLite QoS, 27.5~W for key-plane rekey, and 28.4/27.4~W for AEGIS-Q/dm-crypt frozen rows, with max \\texttt{tj}=49.0C. These are observations, not energy-efficiency claims."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "epoch_mode_conditional_amortization",
+        "x6_strict_cost_reduction_model"
+      ],
+      "covered": true,
+      "line": 32,
+      "numbers": [
+        "1",
+        "070 ",
+        "9 ",
+        "47.6 ",
+        "40.1",
+        "9.05 ",
+        "9.72",
+        "9 ",
+        "53.1"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "X6/O3 answer strict-path practicality without upgrading crash claims. X6 changes marker/checkpoint publication from filesystem-wide \\texttt{syncfs} to marker-file \\texttt{fsync} (1,070 retained A2 calls), leaving data and journal barriers. O3 keeps strict per-write publication as the D/J/C barrier boundary and admits hybrid epoch grouping only for concurrent or batched writes that can share a barrier. The grouped row cuts four-client syncs from eight to six and improves p99 from 47.6 to 40.1~ms and throughput from 9.05 to 9.72~MiB/s; the fault-matrix row cuts syncs from eight to five but worsens p99 to 53.1~ms, so this is conditional admission, not a general fast path. Single-client epoch still pays a data plus epoch-log barrier; kernel-assist remains future work."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "telemetry_and_sensitivity"
+      ],
+      "covered": true,
+      "line": 48,
+      "numbers": [
+        "9 "
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "RQ3 mounted telemetry & Telemetry reaches the FUSE write-throttle path & Application scheduler or non-storage p99 controller\\\\"
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "workload-boundary"
+      ],
+      "claim_ids": [
+        "second_macrobenchmark",
+        "cache_manifest_workload",
+        "foreground_inference_claim_removal"
+      ],
+      "covered": true,
+      "line": 50,
+      "numbers": [
+        "9 "
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "RQ3/RQ4 mounted apps & Secure append-log remount plus cache-manifest object publish/remount & Broad workload suite or non-storage p99 recovery\\\\"
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "primitive_and_keyplane_placement"
+      ],
+      "covered": true,
+      "line": 62,
+      "numbers": [
+        "4",
+        "096 ",
+        "768 ",
+        "64.8",
+        "64.3",
+        "64.9",
+        "1.50",
+        "1.49",
+        "1.51",
+        "23.2",
+        "23.2"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "For a batch of 4,096 ML-KEM-768 key generations, liboqs on CPU reaches 64.8~K operations/s (64.3--64.9~K), while cuPQC reaches 1.50~M operations/s (1.49--1.51~M), a 23.2$\\times$ ratio of medians. The comparison is a primitive microbenchmark on one platform, not a claim that a FUSE write becomes 23.2$\\times$ faster. It supports the narrower policy of reserving GPU work for sufficiently large, independent key-plane batches."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "primitive_and_keyplane_placement",
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 64,
+      "numbers": [
+        "768 ",
+        "1",
+        "024 ",
+        "24.575",
+        "41.7",
+        "20.729",
+        "49.4",
+        "1.186",
+        "24.572",
+        "1 ",
+        "16",
+        "760",
+        "812 ",
+        "5",
+        "1.09",
+        "1.10K"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-protected envelopes. In the five-run methodology row, CPU-only refresh takes 24.575~ms (41.7~K files/s); with explicit slack, admission selects the GPU and finishes in 20.729~ms (49.4~K files/s), a 1.186$\\times$ median speedup; with zero slack and high memory-pressure telemetry, fallback remains CPU-equivalent at 24.572~ms. The X11 break-even model explains why the workflow gain is modest: primitive cuPQC is faster by batch~16, but mounted envelope/FUSE/admission overhead shifts the positive workflow break-even to roughly 760--812 refreshed files, and an added 5~ms of UMA or staging pressure shifts it to roughly 1.09--1.10K files. This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or non-storage foreground recovery."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "generation_and_tamper_safety",
+        "tpm_freshness_boundary",
+        "crash_and_recovery_boundary",
+        "epoch_mode_conditional_amortization"
+      ],
+      "covered": true,
+      "line": 71,
+      "numbers": [
+        "0 ",
+        "4",
+        "4",
+        "4"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The GPU integrity test passes leaf, Merkle, and empty-tree parity cases against OpenSSL. The FUSE self-test covers journal/checkpoint/anchor units and a generation-replay regression. The retained generation fault matrix covers partial update, clean remount, torn tails, stale snapshots, journal loss, older-generation append, and duplicate-generation replay across strict and epoch modes; every row has an oracle verdict without silent-corruption or unexpected-liveness outcomes. X10 adds \\texttt{UINT64\\_MAX}/\\texttt{EFBIG} near-wrap refusal, publish-ticket reservation, and same-file/disjoint 4-thread/4-process mounted writer stress, but not arbitrary application-level concurrency. Clean remount byte-compares plaintext after \\texttt{fsync}, and envelope tamper returns \\texttt{EKEYREJECTED}."
+    },
+    {
+      "categories": [
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary"
+      ],
+      "covered": true,
+      "line": 79,
+      "numbers": [
+        "1500010"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe. The hardware-freshness recovery matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "numeric-performance",
+        "workload-boundary"
+      ],
+      "claim_ids": [
+        "second_macrobenchmark",
+        "epoch_mode_conditional_amortization",
+        "cache_manifest_workload",
+        "foreground_inference_claim_removal",
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 83,
+      "numbers": [
+        "16",
+        "9 ",
+        "5.93",
+        "4.17",
+        "24 ",
+        "16",
+        "4.22",
+        "28.09",
+        "0",
+        "9 ",
+        "2.00",
+        "16 ",
+        "1 ",
+        "9.9 ",
+        "67.90",
+        "61.54"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The scoped mounted-application rows are not synthetic fio rows. The secure append-log macro appends ordered 16~KiB records in strict and epoch modes, remounts, and verifies hashes/order; retained p99 is 5.93~ms strict and 4.17~ms epoch. A cache-manifest workload publishes 24 hashed 16~KiB objects with closed-file rename plus directory \\texttt{fsync}, remounts, and verifies all hashes, reporting 4.22/28.09~ms p50/p99 at 2.00~MiB/s. The multi-writer row shows the queue-depth limit: epoch grouping reduces traced syncs from 16 to 1 and replay reconstruction remains sub-ms, but p99.9 worsens to 67.90~ms versus 61.54~ms. These are scoped mounted patterns, not a broad workload suite or non-storage application QoS claim."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "telemetry_and_sensitivity"
+      ],
+      "covered": true,
+      "line": 90,
+      "numbers": [
+        "8 ",
+        "5 ",
+        "9 "
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The tegrastats/CUPTI runs show platform pressure reaching the mounted daemon: they record 8 and 5 daemon-throttled flushes, respectively. This remains wiring evidence rather than application-level p99 recovery or fast-notification bypass."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "frozen_filesystem_contract_rows",
+        "generation_and_tamper_safety",
+        "telemetry_and_sensitivity"
+      ],
+      "covered": true,
+      "line": 94,
+      "numbers": [
+        "20",
+        "0.70",
+        "0.60 ",
+        "4",
+        "1.73",
+        "100",
+        "250",
+        "0.80 ",
+        "9 ",
+        "6.4",
+        "80",
+        "128",
+        "7.0",
+        "7.2",
+        "0 ",
+        "8.8",
+        "12.3",
+        "9 transitions",
+        "8 flips"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity. The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms slack freshness, and 0.80 queue threshold. Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss). No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips. This keeps the claim on mounted storage-visible control, not an external application scheduler."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "sqlite_hero_repeated_medians"
+      ],
+      "covered": true,
+      "line": 14,
+      "numbers": [
+        "3",
+        "16.22",
+        "6.00",
+        "7.25",
+        "3"
+      ],
+      "path": "Paper/generated_qos_recovery_table.tex",
+      "text": "Kernel ionice & \\texttt{ionice -c 3} & 16.22 & 6.00 & 7.25 & 3-run proof\\\\"
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "sqlite_hero_repeated_medians"
+      ],
+      "covered": true,
+      "line": 15,
+      "numbers": [
+        "10",
+        "12.57",
+        "7.00",
+        "6.73",
+        "3"
+      ],
+      "path": "Paper/generated_qos_recovery_table.tex",
+      "text": "Kernel IOWeight & \\texttt{IOWeight=10} & 12.57 & 7.00 & 6.73 & 3-run proof\\\\"
+    },
+    {
+      "categories": [
+        "correctness-boundary",
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "telemetry_and_sensitivity",
+        "posix_scope_boundary"
+      ],
+      "covered": true,
+      "line": 43,
+      "numbers": [
+        "128"
+      ],
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary. It does not certify SQLite WAL, \\texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract. The current security evidence is local to the edge runtime: FUSE self-tests, clean remount, managed-memory smoke, and GPU integrity parity show the implemented boundary, not statistical security, cloud/privacy economics, or remote key-management behavior."
+    },
+    {
+      "categories": [
+        "numeric-performance",
+        "security-recovery-claim",
+        "workload-boundary"
+      ],
+      "claim_ids": [
+        "tpm_freshness_boundary",
+        "second_macrobenchmark",
+        "cache_manifest_workload",
+        "foreground_inference_claim_removal"
+      ],
+      "covered": true,
+      "line": 24,
+      "numbers": [
+        "9"
+      ],
+      "path": "Paper/10_Discussion_and_Limitations.tex",
+      "text": "The evaluated envelope is local: SQLite, elastic writes, secure append-log, and cache-manifest remounts under authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies; it is not a general POSIX, PCR-bound freshness, non-storage p99, power-loss, or CUDA-independent deployment claim. Within that envelope, the portable lesson is the policy split: keep latency-sensitive AES-GCM publication on the CPU, admit batched PQC maintenance only with slack and fresh telemetry, and treat managed memory as executor-local locality rather than a storage-DMA contract."
+    },
+    {
+      "categories": [
+        "negative-claim",
+        "numeric-performance",
+        "security-recovery-claim"
+      ],
+      "claim_ids": [
+        "sqlite_hero_repeated_medians",
+        "primitive_and_keyplane_placement",
+        "tpm_freshness_boundary",
+        "claim_firewalls"
+      ],
+      "covered": true,
+      "line": 4,
+      "numbers": [
+        "8.15",
+        "9",
+        "3.02"
+      ],
+      "path": "Paper/6_Conclusion.tex",
+      "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem. Its authenticated format keeps AES-GCM data writes on the CPU, admits ML-KEM/cuPQC maintenance only for slack-tolerant batches, uses managed memory only as executor-local locality, and separates replayable file witnesses from externally anchored replay-after-advance checks. On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure. It does not claim direct NVMe-to-UVM DMA, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, non-storage scheduler recovery, or portability. The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+    }
+  ],
+  "overall_pass": true,
+  "pages": 12,
+  "schema_version": 1,
+  "scope": [
+    "main-paper numeric claim candidates in content files",
+    "abstract, conclusion, security, and recovery claim lines",
+    "retained evidence paths and negative-claim guards",
+    "12-page final PDF gate"
+  ],
+  "uncovered_cross_claims": [],
+  "uncovered_numeric_candidates": [],
+  "violations": []
+}

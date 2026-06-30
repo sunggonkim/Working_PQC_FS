@@ -1,0 +1,5 @@
+include(${CODE_DIR}/tests/self_tests.cmake)
+include(${CODE_DIR}/tests/macro_smokes.cmake)
+include(${CODE_DIR}/tests/cuda_integrity_tests.cmake)
+include(${CODE_DIR}/tests/build_graph_tests.cmake)
+include(${CODE_DIR}/tests/lock_contract_tests.cmake)

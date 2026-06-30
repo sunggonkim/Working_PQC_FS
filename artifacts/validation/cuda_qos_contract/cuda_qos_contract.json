@@ -1,0 +1,599 @@
+{
+  "artifact_verdict": {
+    "overall_pass": true,
+    "paper_claim_guard": "CUDA stream priority, prefetch, attach, Nsight, CUPTI, foreground AI QoS, and GPU isolation language is not paper-mechanism eligible unless this contract is later replaced by same-run mounted-path trace evidence.",
+    "runner_completed": true
+  },
+  "claim_verdicts": [
+    {
+      "claim": "CUDA stream priority availability",
+      "evidence_level": "runtime_probe",
+      "guard": "API availability alone is not a scheduling mechanism. Do not claim stream-priority QoS until a mounted-path executor uses priority streams and a same-run trace proves the path executes.",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_path_uses_feature": false
+    },
+    {
+      "claim": "Managed-memory prefetch scheduling",
+      "evidence_level": "production_source_plus_runtime_probe",
+      "guard": "Production source contains prefetch calls and the probe exercises them, but this is not a mounted-path Nsight/CUPTI trace or a QoS result.",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_path_uses_feature": true
+    },
+    {
+      "claim": "Stream attach scheduling",
+      "evidence_level": "runtime_probe",
+      "guard": "Stream attach remains diagnostic unless production mounted-path code uses it and a retained trace proves execution.",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_path_uses_feature": false
+    },
+    {
+      "claim": "Kernel launch shape accounting",
+      "evidence_level": "source_scan_plus_runtime_probe",
+      "guard": "Kernel launch shapes are implementation evidence only. They are not a CUDA scheduling mechanism until a mounted-path trace proves execution.",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_kernel_launches": 11
+    },
+    {
+      "claim": "Nsight/CUPTI-backed GPU QoS",
+      "evidence_level": "availability_or_unavailable",
+      "guard": "No hardware-counter, SM-occupancy, or foreground AI QoS claim is allowed without retained same-run Nsight/CUPTI traces tied to mounted storage pressure.",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "retained_profiler_trace": false
+    },
+    {
+      "claim": "Foreground AI QoS recovery or GPU isolation",
+      "evidence_level": "negative_claim_guard",
+      "guard": "This contract explicitly does not prove foreground AI QoS recovery, GPU isolation, side-channel defense, or multi-tenant scheduling.",
+      "paper_mechanism_eligible": false,
+      "probe_pass": false,
+      "production_path_uses_feature": false
+    }
+  ],
+  "environment": {
+    "PATH": "/home/thor/.local/bin:/home/thor/.codex/tmp/arg0/codex-arg0G5qAjv:/home/thor/.vscode-server/bin/7e7950df89d055b5a378379db9ee14290772148a/bin/remote-cli:/home/thor/.local/bin:/home/thor/miniconda3/condabin:/usr/local/cuda-13.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/thor/.local/bin:/home/thor/.local/bin:/home/thor/.vscode-server/extensions/openai.chatgpt-26.623.31921-linux-arm64/bin/linux-aarch64:/home/thor/.local/bin"
+  },
+  "generated_by": "code/experiments/run_cuda_qos_contract.py",
+  "generated_utc": "2026-06-29T08:33:12Z",
+  "official_basis": [
+    {
+      "name": "NVIDIA CUDA Runtime API stream management",
+      "url": "https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__STREAM.html",
+      "used_for": [
+        "cudaDeviceGetStreamPriorityRange",
+        "cudaStreamCreateWithPriority",
+        "cudaStreamSynchronize and stream-scoped completion boundaries"
+      ]
+    },
+    {
+      "name": "NVIDIA CUDA Runtime API memory management",
+      "url": "https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__MEMORY.html",
+      "used_for": [
+        "cudaMemPrefetchAsync",
+        "cudaStreamAttachMemAsync",
+        "managed-memory movement and attach claim boundary"
+      ]
+    },
+    {
+      "name": "NVIDIA CUPTI documentation",
+      "url": "https://docs.nvidia.com/cupti/",
+      "used_for": [
+        "CUPTI availability versus retained trace evidence",
+        "non-claim boundary for hardware-counter-backed QoS"
+      ]
+    }
+  ],
+  "probe": {
+    "metadata": {
+      "available": true,
+      "json_parse_error": null,
+      "path": "build/cuda_qos_contract_probe",
+      "returncode": 0,
+      "stderr_path": "artifacts/validation/cuda_qos_contract/cuda_qos_contract_probe.stderr.txt",
+      "stdout_path": "artifacts/validation/cuda_qos_contract/cuda_qos_contract_probe.stdout.txt",
+      "timed_out": false
+    },
+    "payload": {
+      "attach_managed": {
+        "code": 0,
+        "error": "no error",
+        "status": "pass"
+      },
+      "device": {
+        "concurrentKernels": 1,
+        "major": 11,
+        "managedMemory": 1,
+        "minor": 0,
+        "multiProcessorCount": 20,
+        "name": "NVIDIA Thor",
+        "status": "pass",
+        "unifiedAddressing": 1
+      },
+      "device_count": {
+        "code": 0,
+        "error": "no error",
+        "status": "pass",
+        "value": 1
+      },
+      "kernel_launch_shape": {
+        "blocks": 2,
+        "dynamic_shared_bytes": 0,
+        "iterations": 32,
+        "kernel": "qos_contract_kernel",
+        "launch_code": 0,
+        "launch_error": "no error",
+        "launch_status": "pass",
+        "stream": "greatest_priority_stream",
+        "threads_per_block": 128
+      },
+      "managed_alloc": {
+        "bytes": 2048,
+        "code": 0,
+        "error": "no error",
+        "status": "pass"
+      },
+      "overall_pass": true,
+      "prefetch_device": {
+        "code": 0,
+        "error": "no error",
+        "status": "pass"
+      },
+      "prefetch_host": {
+        "code": 0,
+        "error": "no error",
+        "status": "pass"
+      },
+      "schema_version": 1,
+      "set_device": {
+        "code": 0,
+        "device": 0,
+        "error": "no error",
+        "status": "pass"
+      },
+      "stream_create_greatest_priority": {
+        "code": 0,
+        "error": "no error",
+        "status": "pass"
+      },
+      "stream_create_least_priority": {
+        "code": 0,
+        "error": "no error",
+        "status": "pass"
+      },
+      "stream_priority_range": {
+        "code": 0,
+        "distinct_range": true,
+        "error": "no error",
+        "greatest_priority": -5,
+        "least_priority": 0,
+        "status": "pass"
+      },
+      "synchronization": {
+        "device_synchronize": {
+          "code": 0,
+          "error": "no error",
+          "status": "pass"
+        },
+        "event_elapsed": {
+          "code": 0,
+          "elapsed_ms": 4.178528,
+          "error": "no error",
+          "status": "pass"
+        },
+        "stream_synchronize": {
+          "code": 0,
+          "error": "no error",
+          "status": "pass"
+        }
+      },
+      "verification": {
+        "managed_first_value_nonzero": true,
+        "status": "pass"
+      }
+    }
+  },
+  "production_source_scan": {
+    "aggregate_call_counts": {
+      "cudaDeviceGetStreamPriorityRange": 0,
+      "cudaDeviceSynchronize": 8,
+      "cudaEventCreate": 0,
+      "cudaEventElapsedTime": 0,
+      "cudaEventRecord": 0,
+      "cudaEventSynchronize": 0,
+      "cudaLaunchKernel": 0,
+      "cudaMemPrefetchAsync": 18,
+      "cudaMemcpy": 28,
+      "cudaMemcpyAsync": 0,
+      "cudaStreamAttachMemAsync": 0,
+      "cudaStreamCreate": 1,
+      "cudaStreamCreateWithFlags": 1,
+      "cudaStreamCreateWithPriority": 0,
+      "cudaStreamSynchronize": 3
+    },
+    "files_scanned": [
+      "code/cuda_aead.cu",
+      "code/cuda_aead.h",
+      "code/cuda_integrity.cu",
+      "code/cuda_integrity.h",
+      "code/cuda_pqc.cu",
+      "code/cuda_pqc.h",
+      "code/pqc_admission.c",
+      "code/pqc_admission.h",
+      "code/pqc_anchor.c",
+      "code/pqc_anchor.h",
+      "code/pqc_anchor_worker.c",
+      "code/pqc_anchor_worker.h",
+      "code/pqc_block_job.h",
+      "code/pqc_checkpoint.c",
+      "code/pqc_checkpoint.h",
+      "code/pqc_config.c",
+      "code/pqc_config.h",
+      "code/pqc_crypto.c",
+      "code/pqc_crypto.h",
+      "code/pqc_durability.c",
+      "code/pqc_durability.h",
+      "code/pqc_epoch_log.c",
+      "code/pqc_epoch_log.h",
+      "code/pqc_epoch_publish.c",
+      "code/pqc_epoch_publish.h",
+      "code/pqc_fd_context.c",
+      "code/pqc_fd_context.h",
+      "code/pqc_file_io.c",
+      "code/pqc_file_io.h",
+      "code/pqc_file_lock.c",
+      "code/pqc_file_lock.h",
+      "code/pqc_flush_batch.c",
+      "code/pqc_flush_batch.h",
+      "code/pqc_flush_crypto.c",
+      "code/pqc_flush_crypto.h",
+      "code/pqc_format.h",
+      "code/pqc_fuse.c",
+      "code/pqc_fuse.h",
+      "code/pqc_journal.c",
+      "code/pqc_journal.h",
+      "code/pqc_key_lifecycle.c",
+      "code/pqc_key_lifecycle.h",
+      "code/pqc_keyring.c",
+      "code/pqc_keyring.h",
+      "code/pqc_lifecycle.c",
+      "code/pqc_lifecycle.h",
+      "code/pqc_lock_profile.c",
+      "code/pqc_lock_profile.h",
+      "code/pqc_main.c",
+      "code/pqc_metrics.c",
+      "code/pqc_metrics.h",
+      "code/pqc_namespace.c",
+      "code/pqc_namespace.h",
+      "code/pqc_parallel_commit.c",
+      "code/pqc_parallel_commit.h",
+      "code/pqc_plane_trace.c",
+      "code/pqc_plane_trace.h",
+      "code/pqc_posix.c",
+      "code/pqc_posix.h",
+      "code/pqc_publish.c",
+      "code/pqc_publish.h",
+      "code/pqc_qos.c",
+      "code/pqc_qos.h",
+      "code/pqc_recovery.c",
+      "code/pqc_recovery.h",
+      "code/pqc_rekey.c",
+      "code/pqc_rekey.h",
+      "code/pqc_runtime.c",
+      "code/pqc_runtime.h",
+      "code/pqc_scheduler.c",
+      "code/pqc_scheduler.h",
+      "code/pqc_selftest.c",
+      "code/pqc_selftest.h",
+      "code/pqc_state.c",
+      "code/pqc_state.h",
+      "code/pqc_storage_path.c",
+      "code/pqc_storage_path.h",
+      "code/pqc_strict_publish.c",
+      "code/pqc_strict_publish.h",
+      "code/pqc_test_hooks.c",
+      "code/pqc_test_hooks.h",
+      "code/pqc_trace_sink.c",
+      "code/pqc_trace_sink.h",
+      "code/pqc_trust_boundary.c",
+      "code/pqc_trust_boundary.h",
+      "code/pqc_writeback.c",
+      "code/pqc_writeback.h",
+      "code/pqc_xattr.c",
+      "code/pqc_xattr.h"
+    ],
+    "kernel_launches": [
+      {
+        "configuration_text": "blocks, threads",
+        "file": "code/cuda_aead.cu",
+        "kernel": "um_smoke_touch_kernel",
+        "line": 354
+      },
+      {
+        "configuration_text": "1, 1, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_expand_key_kernel",
+        "line": 480
+      },
+      {
+        "configuration_text": "grid, 256, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_ctr_batch_kernel",
+        "line": 484
+      },
+      {
+        "configuration_text": "1, 1, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_expand_key_kernel",
+        "line": 531
+      },
+      {
+        "configuration_text": "grid, 256, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_ctr_batch_kernel",
+        "line": 535
+      },
+      {
+        "configuration_text": "(unsigned int)((count + tag_threads - 1) / tag_threads), tag_threads, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_gcm_tag_batch_kernel",
+        "line": 540
+      },
+      {
+        "configuration_text": "blocks, threads",
+        "file": "code/cuda_integrity.cu",
+        "kernel": "sha256_batch_kernel",
+        "line": 216
+      },
+      {
+        "configuration_text": "blocks, threads",
+        "file": "code/cuda_integrity.cu",
+        "kernel": "merkle_reduce_kernel",
+        "line": 275
+      },
+      {
+        "configuration_text": "(unsigned)count, MLKEM768Key::BlockDim",
+        "file": "code/cuda_pqc.cu",
+        "kernel": "keygen_kernel",
+        "line": 139
+      },
+      {
+        "configuration_text": "(unsigned)count, MLKEM768Encaps::BlockDim",
+        "file": "code/cuda_pqc.cu",
+        "kernel": "encaps_kernel",
+        "line": 189
+      },
+      {
+        "configuration_text": "(unsigned)count, MLKEM768Decaps::BlockDim",
+        "file": "code/cuda_pqc.cu",
+        "kernel": "decaps_kernel",
+        "line": 233
+      }
+    ],
+    "per_file": [
+      {
+        "cuda_calls": {
+          "cudaDeviceSynchronize": [
+            355,
+            360
+          ],
+          "cudaMemPrefetchAsync": [
+            410,
+            422,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477,
+            487,
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            544,
+            545
+          ],
+          "cudaStreamCreate": [
+            71
+          ],
+          "cudaStreamCreateWithFlags": [
+            71
+          ],
+          "cudaStreamSynchronize": [
+            40,
+            488,
+            546
+          ]
+        },
+        "file": "code/cuda_aead.cu",
+        "kernel_launches": [
+          {
+            "configuration_text": "blocks, threads",
+            "file": "code/cuda_aead.cu",
+            "kernel": "um_smoke_touch_kernel",
+            "line": 354
+          },
+          {
+            "configuration_text": "1, 1, 0, g_executor.stream",
+            "file": "code/cuda_aead.cu",
+            "kernel": "aes256_expand_key_kernel",
+            "line": 480
+          },
+          {
+            "configuration_text": "grid, 256, 0, g_executor.stream",
+            "file": "code/cuda_aead.cu",
+            "kernel": "aes256_ctr_batch_kernel",
+            "line": 484
+          },
+          {
+            "configuration_text": "1, 1, 0, g_executor.stream",
+            "file": "code/cuda_aead.cu",
+            "kernel": "aes256_expand_key_kernel",
+            "line": 531
+          },
+          {
+            "configuration_text": "grid, 256, 0, g_executor.stream",
+            "file": "code/cuda_aead.cu",
+            "kernel": "aes256_ctr_batch_kernel",
+            "line": 535
+          },
+          {
+            "configuration_text": "(unsigned int)((count + tag_threads - 1) / tag_threads), tag_threads, 0, g_executor.stream",
+            "file": "code/cuda_aead.cu",
+            "kernel": "aes256_gcm_tag_batch_kernel",
+            "line": 540
+          }
+        ]
+      },
+      {
+        "cuda_calls": {
+          "cudaDeviceSynchronize": [
+            224,
+            226,
+            279
+          ],
+          "cudaMemcpy": [
+            207,
+            209,
+            230,
+            232,
+            262,
+            289
+          ]
+        },
+        "file": "code/cuda_integrity.cu",
+        "kernel_launches": [
+          {
+            "configuration_text": "blocks, threads",
+            "file": "code/cuda_integrity.cu",
+            "kernel": "sha256_batch_kernel",
+            "line": 216
+          },
+          {
+            "configuration_text": "blocks, threads",
+            "file": "code/cuda_integrity.cu",
+            "kernel": "merkle_reduce_kernel",
+            "line": 275
+          }
+        ]
+      },
+      {
+        "cuda_calls": {
+          "cudaDeviceSynchronize": [
+            143,
+            192,
+            236
+          ],
+          "cudaMemcpy": [
+            56,
+            57,
+            146,
+            147,
+            184,
+            194,
+            195,
+            230,
+            231,
+            238
+          ]
+        },
+        "file": "code/cuda_pqc.cu",
+        "kernel_launches": [
+          {
+            "configuration_text": "(unsigned)count, MLKEM768Key::BlockDim",
+            "file": "code/cuda_pqc.cu",
+            "kernel": "keygen_kernel",
+            "line": 139
+          },
+          {
+            "configuration_text": "(unsigned)count, MLKEM768Encaps::BlockDim",
+            "file": "code/cuda_pqc.cu",
+            "kernel": "encaps_kernel",
+            "line": 189
+          },
+          {
+            "configuration_text": "(unsigned)count, MLKEM768Decaps::BlockDim",
+            "file": "code/cuda_pqc.cu",
+            "kernel": "decaps_kernel",
+            "line": 233
+          }
+        ]
+      }
+    ],
+    "production_uses_attach": false,
+    "production_uses_device_sync": true,
+    "production_uses_nonblocking_stream": true,
+    "production_uses_prefetch": true,
+    "production_uses_stream_priority": false,
+    "production_uses_stream_sync": true,
+    "source_root": "code"
+  },
+  "profiler_availability": {
+    "cupti_headers": [],
+    "cupti_libs": [],
+    "cupti_pm_sampling_samples": [
+      "/usr/local/cuda/extras/CUPTI/samples/pm_sampling",
+      "/usr/local/cuda-13.0/extras/CUPTI/samples/pm_sampling"
+    ],
+    "cupti_roots": [
+      "/usr/local/cuda-13.0/extras/CUPTI",
+      "/usr/local/cuda-13/extras/CUPTI",
+      "/usr/local/cuda/extras/CUPTI"
+    ],
+    "ncu_available": true,
+    "ncu_path": "/usr/local/cuda-13.0/bin/ncu",
+    "nsys_available": true,
+    "nsys_path": "/usr/local/cuda-13.0/bin/nsys",
+    "nvprof_available": false,
+    "nvprof_path": null,
+    "retained_profiler_trace": false,
+    "retained_profiler_trace_reason": "This contract records profiler availability only. It does not run Nsight/CUPTI profiling, so it cannot support a hardware-counter or foreground-inference QoS claim.",
+    "version_commands": {
+      "ncu": {
+        "argv": [
+          "/usr/local/cuda-13.0/bin/ncu",
+          "--version"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stderr_path": "artifacts/validation/cuda_qos_contract/ncu_version.stderr.txt",
+        "stdout": "NVIDIA (R) Nsight Compute Command Line Profiler\nCopyright (c) 2018-2025 NVIDIA Corporation\nVersion 2025.3.0.0 (build 36273991) (public-release)\n",
+        "stdout_path": "artifacts/validation/cuda_qos_contract/ncu_version.stdout.txt",
+        "timed_out": false
+      },
+      "nsys": {
+        "argv": [
+          "/usr/local/cuda-13.0/bin/nsys",
+          "--version"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stderr_path": "artifacts/validation/cuda_qos_contract/nsys_version.stderr.txt",
+        "stdout": "NVIDIA Nsight Systems version 2025.3.2.367-253236224375v0\n",
+        "stdout_path": "artifacts/validation/cuda_qos_contract/nsys_version.stdout.txt",
+        "timed_out": false
+      }
+    }
+  },
+  "required_sections_present": {
+    "kernel_launch_shape": true,
+    "non_claim_guards": true,
+    "prefetch_probe": true,
+    "probe_json_parse": true,
+    "probe_metadata": true,
+    "production_source_scan": true,
+    "profiler_availability": true,
+    "stream_attach_probe": true,
+    "stream_priority_probe": true,
+    "synchronization_probe": true
+  },
+  "schema_version": 1,
+  "scope": "Gate 0.12-S0 CUDA scheduling/QoS trace contract without promoting GPU isolation claims."
+}

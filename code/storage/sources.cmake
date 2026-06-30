@@ -1,0 +1,16 @@
+set(PQC_FUSE_STORAGE_SOURCES
+    ${CODE_DIR}/storage/pqc_anchor.c
+    ${CODE_DIR}/storage/pqc_anchor_worker.c
+    ${CODE_DIR}/storage/pqc_checkpoint.c
+    ${CODE_DIR}/storage/pqc_durability.c
+    ${CODE_DIR}/storage/pqc_epoch_log.c
+    ${CODE_DIR}/storage/pqc_epoch_publish.c
+    ${CODE_DIR}/storage/pqc_flush_batch.c
+    ${CODE_DIR}/storage/pqc_journal.c
+    ${CODE_DIR}/storage/pqc_publish.c
+    ${CODE_DIR}/storage/pqc_state.c
+    ${CODE_DIR}/storage/pqc_storage_path.c
+    ${CODE_DIR}/storage/pqc_strict_publish.c
+    ${CODE_DIR}/storage/pqc_writeback.c
+    ${CODE_DIR}/storage/pqc_xattr.c
+)

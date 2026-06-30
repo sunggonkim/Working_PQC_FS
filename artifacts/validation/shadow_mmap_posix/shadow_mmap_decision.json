@@ -1,0 +1,177 @@
+{
+  "checks": {
+    "claim_guard_pass": true,
+    "followup_cases_closed_by_rejection": true,
+    "mounted_probes_pass": true,
+    "posix_audit_boundary_pass": true,
+    "source_boundary_pass": true
+  },
+  "claim_guard": {
+    "checks": {
+      "no_positive_shared_mmap_claim": true,
+      "no_unbacked_shadow_mmap_terms": true,
+      "paper_explains_rejection_or_nonclaim": true
+    },
+    "dangerous_lines": [],
+    "paper_rejection_lines": [
+      {
+        "line": 19,
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "text": "The POSIX envelope is also narrow: ordinary read/write/\\texttt{fsync} and narrow disjoint writers are evaluated, while shared \\texttt{mmap}, rename, directory \\texttt{fsync}, and arbitrary conflicting writes are not deployment claims.  Table~\\ref{tab:applicability_boundary} summarizes the resulting applicability boundary."
+      },
+      {
+        "line": 25,
+        "path": "Paper/3_Design.tex",
+        "text": "Unsupported-mode boundary & \\texttt{pqc\\_open()} defaults to FUSE \\texttt{direct\\_io}; rename and directory \\texttt{fsync} return \\texttt{ENOTSUP}; internal xattrs are hidden & POSIX scope audit plus current remount/SQLite selected-boundary tests & Ordinary read/write/\\texttt{fsync} and narrow disjoint writers only; shared \\texttt{mmap} and directory-entry durability are not claimed\\\\"
+      },
+      {
+        "line": 103,
+        "path": "Paper/3_Design.tex",
+        "text": "Unsupported POSIX modes are part of the design boundary.  The scope audit confirms the implemented contract: ordinary read/write/\\texttt{fsync}, open-fd truncate/fallocate, and narrow disjoint writers are supported; default encrypted-file \\texttt{mmap}/\\texttt{msync}, path-only truncate, rename, directory \\texttt{fsync}, hard links, and symlinks are rejected; internal checkpoint/envelope xattrs are hidden; and FUSE writeback-cache/direct-IO mmap capabilities are not requested.  Arbitrary conflicting concurrency, directory-entry durability, and full crash-time POSIX visibility remain outside the claim."
+      },
+      {
+        "line": 72,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "The POSIX-scope audit records the narrow interface: default encrypted-file \\texttt{mmap}/\\texttt{msync}, path-only truncate, rename, directory \\texttt{fsync}, hard links, and symlinks are rejected; open-fd truncate/fallocate, user xattrs, and disjoint write/\\texttt{fsync} cases pass; internal xattrs are hidden; writeback-cache/direct-IO mmap capabilities are not requested; and lower-filesystem xattr atomicity, directory durability, and full crash-time POSIX visibility remain delegated."
+      },
+      {
+        "line": 40,
+        "path": "Paper/7_Implementation_Details.tex",
+        "text": "The implementation is not presented as a full POSIX conformance layer.  In particular, the paper does not claim validated shared \\texttt{mmap} semantics, all possible concurrent-writer races, cross-process byte-range lock compatibility, or arbitrary rename/directory-fsync crash behavior.  Those modes are common sources of filesystem bugs, and the review correctly identified them as missing evidence.  Treating them as unsupported or unvalidated is preferable to silently inheriting a POSIX claim from FUSE."
+      },
+      {
+        "line": 43,
+        "path": "Paper/8_Security_Analysis.tex",
+        "text": "Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary.  It does not certify SQLite WAL, \\texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract.  The current security evidence is local to the edge runtime: FUSE self-tests, clean remount, managed-memory smoke, and GPU integrity parity show the implemented boundary, not statistical security, cloud/privacy economics, or remote key-management behavior."
+      }
+    ],
+    "pass": true,
+    "positive_mmap_claims": [],
+    "scanned_lines": [
+      {
+        "line": 19,
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "text": "The POSIX envelope is also narrow: ordinary read/write/\\texttt{fsync} and narrow disjoint writers are evaluated, while shared \\texttt{mmap}, rename, directory \\texttt{fsync}, and arbitrary conflicting writes are not deployment claims.  Table~\\ref{tab:applicability_boundary} summarizes the resulting applicability boundary."
+      },
+      {
+        "line": 25,
+        "path": "Paper/3_Design.tex",
+        "text": "Unsupported-mode boundary & \\texttt{pqc\\_open()} defaults to FUSE \\texttt{direct\\_io}; rename and directory \\texttt{fsync} return \\texttt{ENOTSUP}; internal xattrs are hidden & POSIX scope audit plus current remount/SQLite selected-boundary tests & Ordinary read/write/\\texttt{fsync} and narrow disjoint writers only; shared \\texttt{mmap} and directory-entry durability are not claimed\\\\"
+      },
+      {
+        "line": 103,
+        "path": "Paper/3_Design.tex",
+        "text": "Unsupported POSIX modes are part of the design boundary.  The scope audit confirms the implemented contract: ordinary read/write/\\texttt{fsync}, open-fd truncate/fallocate, and narrow disjoint writers are supported; default encrypted-file \\texttt{mmap}/\\texttt{msync}, path-only truncate, rename, directory \\texttt{fsync}, hard links, and symlinks are rejected; internal checkpoint/envelope xattrs are hidden; and FUSE writeback-cache/direct-IO mmap capabilities are not requested.  Arbitrary conflicting concurrency, directory-entry durability, and full crash-time POSIX visibility remain outside the claim."
+      },
+      {
+        "line": 72,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "The POSIX-scope audit records the narrow interface: default encrypted-file \\texttt{mmap}/\\texttt{msync}, path-only truncate, rename, directory \\texttt{fsync}, hard links, and symlinks are rejected; open-fd truncate/fallocate, user xattrs, and disjoint write/\\texttt{fsync} cases pass; internal xattrs are hidden; writeback-cache/direct-IO mmap capabilities are not requested; and lower-filesystem xattr atomicity, directory durability, and full crash-time POSIX visibility remain delegated."
+      },
+      {
+        "line": 40,
+        "path": "Paper/7_Implementation_Details.tex",
+        "text": "The implementation is not presented as a full POSIX conformance layer.  In particular, the paper does not claim validated shared \\texttt{mmap} semantics, all possible concurrent-writer races, cross-process byte-range lock compatibility, or arbitrary rename/directory-fsync crash behavior.  Those modes are common sources of filesystem bugs, and the review correctly identified them as missing evidence.  Treating them as unsupported or unvalidated is preferable to silently inheriting a POSIX claim from FUSE."
+      },
+      {
+        "line": 43,
+        "path": "Paper/8_Security_Analysis.tex",
+        "text": "Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary.  It does not certify SQLite WAL, \\texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract.  The current security evidence is local to the edge runtime: FUSE self-tests, clean remount, managed-memory smoke, and GPU integrity parity show the implemented boundary, not statistical security, cloud/privacy economics, or remote key-management behavior."
+      },
+      {
+        "line": 841,
+        "path": "README.md",
+        "text": "\uc774 \uacb0\uacfc\ub294 AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage \ub9c8\uc6b4\ud2b8 \uc704\uc5d0\uc11c SQLite \ud2b8\ub79c\uc7ad\uc158\uc744 \uc2e4\uc81c\ub85c \uc218\ud589\ud55c \ub9e4\ud06c\ub85c\ubca4\uce58\ub9c8\ud06c\ub2e4. \ud604\uc7ac `run_sqlite_bench()`\ub294 WAL \uc804\ud658\uacfc `locking_mode=NORMAL`\uc744 \ud568\uaed8 \uc0ac\uc6a9\ud574, FUSE mmap \uc81c\uc57d\uc744 \ud53c\ud558\uba74\uc11c\ub3c4 `full` tier\uc5d0\uc11c WAL commit path\uc640 `PRAGMA integrity_check=ok`\ub97c \uc2e4\uc81c\ub85c \uacc4\uce21\ud55c\ub2e4. `plain` tier\ub3c4 \ub3d9\uc77c\ud558\uac8c WAL path\ub97c \uc720\uc9c0\ud55c\ub2e4. \uc911\uc694\ud55c \uc810\uc740 \uc808\ub300\uac12\uc774 \uc544\ub2c8\ub77c \uc560\ud50c\ub9ac\ucf00\uc774\uc158 \uc218\uc900\uc758 commit path\uc640 rollback/WAL \uc815\ud569\uc131\uc774 \uc2e4\uc81c\ub85c \uce21\uc815\ub41c\ub2e4\ub294 \uac83\uc774\ub2e4."
+      }
+    ]
+  },
+  "decision": "formal_rejection_until_shadow_paging_is_implemented",
+  "gate": "C2",
+  "negative_claim_guard": {
+    "general_posix_claim_allowed": false,
+    "out_of_place_update_claim_allowed": false,
+    "shadow_mmap_claim_allowed": false,
+    "shared_mmap_support_claim_allowed": false
+  },
+  "overall_pass": true,
+  "posix_audit": {
+    "checks": {
+      "msync_formally_rejected": true,
+      "posix_audit_pass": true,
+      "shared_mmap_formally_rejected": true
+    },
+    "pass": true,
+    "source_artifact": "artifacts/validation/posix_scope_audit/posix_scope_audit.json"
+  },
+  "probes": [
+    {
+      "acceptable": true,
+      "allow_sqlite_mmap": false,
+      "case": "default_env_encrypted_file",
+      "mmap_msync_rejection": {
+        "accepted": true,
+        "detail": "[Errno 19] No such device",
+        "observed_errno": 19,
+        "observed_errno_name": "ENODEV",
+        "unexpected_success": false
+      },
+      "retained_payload_prefix": true,
+      "scope": "Encrypted data files must reject shared mmap/msync; SQLite WAL sidecar compatibility must not change that boundary.",
+      "size_after": 8192
+    },
+    {
+      "acceptable": true,
+      "allow_sqlite_mmap": true,
+      "case": "sqlite_mmap_env_encrypted_file",
+      "mmap_msync_rejection": {
+        "accepted": true,
+        "detail": "[Errno 19] No such device",
+        "observed_errno": 19,
+        "observed_errno_name": "ENODEV",
+        "unexpected_success": false
+      },
+      "retained_payload_prefix": true,
+      "scope": "Encrypted data files must reject shared mmap/msync; SQLite WAL sidecar compatibility must not change that boundary.",
+      "size_after": 8192
+    }
+  ],
+  "schema_version": 1,
+  "shadow_followup_cases": [
+    {
+      "acceptable": true,
+      "case": "concurrent_dirty_page",
+      "status": "not_applicable_mapping_rejected"
+    },
+    {
+      "acceptable": true,
+      "case": "mmap_truncate_interaction",
+      "status": "not_applicable_mapping_rejected"
+    },
+    {
+      "acceptable": true,
+      "case": "torn_write_after_msync",
+      "status": "not_applicable_mapping_rejected"
+    },
+    {
+      "acceptable": true,
+      "case": "remount_after_mmap_dirtying",
+      "status": "not_applicable_mapping_rejected"
+    },
+    {
+      "acceptable": true,
+      "case": "rollback_after_mmap_dirtying",
+      "status": "not_applicable_mapping_rejected"
+    }
+  ],
+  "source": {
+    "checks": {
+      "fuse_direct_io_mmap_capability_disabled": true,
+      "old_global_allow_mmap_pattern_absent": true,
+      "sqlite_mmap_limited_to_redirected_sidecar": true,
+      "writeback_cache_disabled": true
+    },
+    "pass": true
+  },
+  "submilestone": "C2-S0",
+  "timestamp_utc": "2026-06-30T03:08:03.119476+00:00"
+}

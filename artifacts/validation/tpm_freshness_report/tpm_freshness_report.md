@@ -1,6 +1,6 @@
 # TPM freshness report
 
-This bundle packages the retained PCR-policy, anchor, crash, and power-fail harnesses.
+This bundle packages the retained PCR-policy, anchor, crash-replay, and analytical freshness-window helpers.
 
 - Input directory: `/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_bundle`
 - Checks: `6`
@@ -14,4 +14,4 @@ This bundle packages the retained PCR-policy, anchor, crash, and power-fail harn
 - Hardware backend rows present: `True`
 - Hardware backend fail-closed count: `40`
 
-This report does not claim persistent filesystem PCR sealing or hardware-backed freshness.
+This report does not claim persistent filesystem PCR sealing, hardware-backed freshness, physical power-loss safety, kernel-crash safety, or drive-cache safety.

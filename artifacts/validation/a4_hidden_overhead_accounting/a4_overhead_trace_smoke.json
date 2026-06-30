@@ -1,0 +1,273 @@
+{
+  "durability_mounted_operation_stats": {
+    "anchor_file": 0,
+    "data_sidecar": 1,
+    "epoch_log": 0,
+    "failures": 0,
+    "fdatasync": 2,
+    "fsync": 0,
+    "journal_sidecar": 1,
+    "keyring_metadata": 0,
+    "marker_metadata": 1,
+    "other": 0,
+    "parent_dir": 0,
+    "syncfs": 1,
+    "total_ns": 2722472,
+    "user_file": 0
+  },
+  "error": null,
+  "fuse_binary": "build/pqc_fuse",
+  "fuse_trace": {
+    "exists": true,
+    "operations": [
+      {
+        "calls": 5,
+        "errors": 1,
+        "max_ns": 15935,
+        "op": "getattr",
+        "total_ns": 59630
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 19454,
+        "op": "readdir",
+        "total_ns": 19454
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "open",
+        "total_ns": 0
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 227037,
+        "op": "read",
+        "total_ns": 227037
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 38287,
+        "op": "write",
+        "total_ns": 38287
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 6120,
+        "op": "flush",
+        "total_ns": 6120
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 6801778,
+        "op": "fsync",
+        "total_ns": 6801778
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 1644658,
+        "op": "create",
+        "total_ns": 1644658
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "truncate",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "fallocate",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "unlink",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "mkdir",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "rmdir",
+        "total_ns": 0
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 492296,
+        "op": "release",
+        "total_ns": 492296
+      },
+      {
+        "calls": 1,
+        "errors": 0,
+        "max_ns": 3898,
+        "op": "lock",
+        "total_ns": 3898
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "flock",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "rename",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "link",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "symlink",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "fsyncdir",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "utimens",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "setxattr",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "getxattr",
+        "total_ns": 0
+      },
+      {
+        "calls": 0,
+        "errors": 0,
+        "max_ns": 0,
+        "op": "listxattr",
+        "total_ns": 0
+      }
+    ],
+    "scope": "mounted FUSE operation latency counters",
+    "version": 1
+  },
+  "generated_utc": "2026-06-29T22:54:45Z",
+  "non_claims": [
+    "not proof of eBPF/io_uring bypass",
+    "not a kernel context-switch count",
+    "not a CUDA optimization claim by itself",
+    "not a throughput ranking"
+  ],
+  "overall_pass": true,
+  "plane_trace": {
+    "data_aes_gcm_decrypt_blocks": 16,
+    "data_aes_gcm_decrypt_bytes": 65536,
+    "data_aes_gcm_encrypt_blocks": 16,
+    "data_aes_gcm_encrypt_bytes": 65536,
+    "data_gpu_fallback_events": 0,
+    "data_plane_algorithm": "AES-256-GCM",
+    "data_route_cpu_blocks": 32,
+    "data_route_gpu_blocks": 0,
+    "exists": true,
+    "freshness_anchor_events": 1,
+    "freshness_anchor_failures": 0,
+    "freshness_anchor_file_backend": 1,
+    "freshness_anchor_hardware_backend": 0,
+    "freshness_anchor_successes": 1,
+    "freshness_plane_algorithm": "committed-prefix anchor",
+    "key_plane_algorithm": "ML-KEM-768/Kyber768 envelope refresh",
+    "keyplane_batches": 0,
+    "keyplane_candidate_files": 0,
+    "keyplane_cpu_batches": 0,
+    "keyplane_failed_batches": 0,
+    "keyplane_gpu_batches": 0,
+    "keyplane_gpu_fallback_events": 0,
+    "keyplane_refreshed_files": 0,
+    "keyplane_work_bytes": 0,
+    "version": 1
+  },
+  "proof_checks": {
+    "durability_has_sites": true,
+    "fuse_operations_wrapped": true,
+    "fuse_trace_dump_env": true,
+    "fuse_trace_has_latency": true,
+    "fuse_trace_has_required_ops": true,
+    "fuse_trace_latency_counters": true,
+    "plane_trace_has_data_path": true,
+    "publication_trace_has_timing": true,
+    "runtime_dumps_fuse_trace": true,
+    "workload_passed": true
+  },
+  "publication_trace": {
+    "event_count": 5,
+    "exists": true,
+    "malformed_line_count": 0,
+    "path": "artifacts/validation/a4_hidden_overhead_accounting/publication_trace.jsonl",
+    "publication_count": 5,
+    "publication_data_fsync_count_total": 5,
+    "publication_elapsed_ns_total": 6072629,
+    "publication_epoch_log_fsync_count_total": 0,
+    "publication_journal_fsync_count_total": 5,
+    "publication_sync_count_total": 10
+  },
+  "schema": "a4-overhead-trace-smoke-v1",
+  "scope": "This is daemon-side mounted-path overhead accounting. FUSE operation latency is a daemon-side proxy for the FUSE crossing; it is not a kernel scheduler context-switch trace.",
+  "source_checks": {
+    "fuse_operations_wrapped": true,
+    "fuse_trace_dump_env": true,
+    "fuse_trace_latency_counters": true,
+    "runtime_dumps_fuse_trace": true
+  },
+  "stop": {
+    "fuse_rc": 0,
+    "unmount_rc": 0
+  },
+  "workload": {
+    "listed": true,
+    "payload_bytes": 65536,
+    "read_len": 65536,
+    "readback_matches": true,
+    "written": 65536
+  }
+}

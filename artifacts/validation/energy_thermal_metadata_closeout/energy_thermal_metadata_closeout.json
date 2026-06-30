@@ -1,0 +1,607 @@
+{
+  "artifact": "E5 energy/thermal metadata closeout",
+  "claim_boundary": {
+    "allowed": [
+      "measured filesystem headline rows carry retained platform and thermal logs",
+      "SQLite headline numbers are tied to repeated methodology and retained thermal logs",
+      "second macrobenchmark latency/throughput rows link to Jetson platform-state metadata",
+      "primitive and key-plane numbers remain diagnostic or progress-scoped when thermal methodology is incomplete"
+    ],
+    "forbidden": [
+      "energy-efficiency or power-efficiency claims",
+      "throttling-free or fixed-clock claims without per-run proof",
+      "treating diagnostic primitive results as full headline comparisons",
+      "treating environment-blocked dm-crypt/fscrypt rows as measured"
+    ]
+  },
+  "close_conditions": {
+    "diagnostic_and_keyplane_rows_are_scoped_by_stat_thermal_audit": true,
+    "frozen_rows_have_metadata_or_unavailable_status": true,
+    "jetson_contract_complete": true,
+    "kernel_qos_context_links_sqlite_closeout": true,
+    "paper_guard_passes": true,
+    "second_macro_has_linked_platform_metadata": true,
+    "sqlite_hero_has_thermal_methodology": true
+  },
+  "headline_results": {
+    "frozen_filesystem_rows": {
+      "complete": true,
+      "rows": {
+        "aegisq": {
+          "blocking_reasons": [],
+          "complete": true,
+          "contract_compliant_warm_cache": true,
+          "metrics": {
+            "latency_p50_us": {
+              "ci95_high": 13303.808,
+              "ci95_low": 6914.048,
+              "median": 10551.296,
+              "p05": 6914.048,
+              "p95": 13303.808,
+              "samples": [
+                6914.048,
+                8847.36,
+                10551.296,
+                11993.088,
+                13303.808
+              ]
+            },
+            "latency_p95_us": {
+              "ci95_high": 13828.096,
+              "ci95_low": 7700.48,
+              "median": 11206.656,
+              "p05": 7700.48,
+              "p95": 13828.096,
+              "samples": [
+                7700.48,
+                9633.792,
+                11206.656,
+                12517.376,
+                13828.096
+              ]
+            },
+            "latency_p99_9_us": {
+              "ci95_high": 14221.312,
+              "ci95_low": 7897.088,
+              "median": 11599.872,
+              "p05": 7897.088,
+              "p95": 14221.312,
+              "samples": [
+                7897.088,
+                9764.864,
+                11599.872,
+                12910.592,
+                14221.312
+              ]
+            },
+            "latency_p99_us": {
+              "ci95_high": 13828.096,
+              "ci95_low": 7831.552,
+              "median": 11206.656,
+              "p05": 7831.552,
+              "p95": 13828.096,
+              "samples": [
+                7831.552,
+                9633.792,
+                11206.656,
+                12648.448,
+                13828.096
+              ]
+            },
+            "read_clat_p99_us": {
+              "ci95_high": 13828.096,
+              "ci95_low": 7831.552,
+              "median": 11206.656,
+              "p05": 7831.552,
+              "p95": 13828.096,
+              "samples": [
+                7831.552,
+                9633.792,
+                11206.656,
+                12648.448,
+                13828.096
+              ]
+            },
+            "throughput_mib_s": {
+              "ci95_high": 0.5477485656738281,
+              "ci95_low": 0.28730201721191406,
+              "median": 0.3600606918334961,
+              "p05": 0.28730201721191406,
+              "p95": 0.5477485656738281,
+              "samples": [
+                0.5477485656738281,
+                0.42672061920166016,
+                0.3600606918334961,
+                0.3177671432495117,
+                0.28730201721191406
+              ]
+            },
+            "write_clat_p99_us": {
+              "ci95_high": 21.12,
+              "ci95_low": 19.84,
+              "median": 20.352,
+              "p05": 19.84,
+              "p95": 21.12,
+              "samples": [
+                20.864,
+                20.352,
+                20.096,
+                19.84,
+                21.12
+              ]
+            }
+          },
+          "name": "aegisq",
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+          "platform_manifest": {
+            "bytes": 29955,
+            "exists": true,
+            "path": "artifacts/validation/frozen_aegisq_contract/platform_manifest.json"
+          },
+          "status": "measured",
+          "thermal_log": {
+            "bytes": 283107,
+            "exists": true,
+            "path": "artifacts/validation/frozen_aegisq_contract/thermal_tegrastats.log"
+          },
+          "valid_repetitions": 5
+        },
+        "dmcrypt": {
+          "blocking_reasons": [
+            "noninteractive_root_unavailable",
+            "AEGISQ_SUDO_PASSWORD_not_set"
+          ],
+          "complete": true,
+          "contract_compliant_warm_cache": false,
+          "metrics": {},
+          "name": "dmcrypt",
+          "overall_pass": false,
+          "path": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json",
+          "platform_manifest": {
+            "bytes": 35365,
+            "exists": true,
+            "path": "artifacts/validation/frozen_dmcrypt_contract/platform_manifest.json"
+          },
+          "status": "environment-blocked",
+          "thermal_log": {
+            "exists": false
+          },
+          "valid_repetitions": 0
+        },
+        "gocryptfs": {
+          "blocking_reasons": [],
+          "complete": true,
+          "contract_compliant_warm_cache": true,
+          "metrics": {
+            "latency_p50_us": {
+              "ci95_high": 39.68,
+              "ci95_low": 37.632,
+              "median": 38.144,
+              "p05": 37.632,
+              "p95": 39.68,
+              "samples": [
+                39.68,
+                38.656,
+                38.144,
+                37.632,
+                37.632
+              ]
+            },
+            "latency_p95_us": {
+              "ci95_high": 50.432,
+              "ci95_low": 49.408,
+              "median": 49.92,
+              "p05": 49.408,
+              "p95": 50.432,
+              "samples": [
+                50.432,
+                50.432,
+                49.92,
+                49.408,
+                49.408
+              ]
+            },
+            "latency_p99_9_us": {
+              "ci95_high": 284.672,
+              "ci95_low": 173.056,
+              "median": 191.488,
+              "p05": 173.056,
+              "p95": 284.672,
+              "samples": [
+                284.672,
+                191.488,
+                179.2,
+                173.056,
+                197.632
+              ]
+            },
+            "latency_p99_us": {
+              "ci95_high": 62.208,
+              "ci95_low": 59.648,
+              "median": 60.16,
+              "p05": 59.648,
+              "p95": 62.208,
+              "samples": [
+                62.208,
+                60.672,
+                59.648,
+                59.648,
+                60.16
+              ]
+            },
+            "read_clat_p99_us": {
+              "ci95_high": 61.184,
+              "ci95_low": 59.648,
+              "median": 60.16,
+              "p05": 59.648,
+              "p95": 61.184,
+              "samples": [
+                61.184,
+                60.672,
+                59.648,
+                59.648,
+                60.16
+              ]
+            },
+            "throughput_mib_s": {
+              "ci95_high": 21.858553886413574,
+              "ci95_low": 21.189749717712402,
+              "median": 21.720470428466797,
+              "p05": 21.189749717712402,
+              "p95": 21.858553886413574,
+              "samples": [
+                21.189749717712402,
+                21.579392433166504,
+                21.720470428466797,
+                21.858553886413574,
+                21.768516540527344
+              ]
+            },
+            "write_clat_p99_us": {
+              "ci95_high": 62.208,
+              "ci95_low": 56.064,
+              "median": 56.576,
+              "p05": 56.064,
+              "p95": 62.208,
+              "samples": [
+                62.208,
+                56.576,
+                56.576,
+                56.064,
+                56.064
+              ]
+            }
+          },
+          "name": "gocryptfs",
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+          "platform_manifest": {
+            "bytes": 32985,
+            "exists": true,
+            "path": "artifacts/validation/frozen_gocryptfs_contract/platform_manifest.json"
+          },
+          "status": "measured",
+          "thermal_log": {
+            "bytes": 1382917,
+            "exists": true,
+            "path": "artifacts/validation/frozen_gocryptfs_contract/thermal_tegrastats.log"
+          },
+          "valid_repetitions": 5
+        },
+        "plaintext": {
+          "blocking_reasons": [],
+          "complete": true,
+          "contract_compliant_warm_cache": true,
+          "metrics": {
+            "latency_p50_us": {
+              "ci95_high": 50.944,
+              "ci95_low": 3.344,
+              "median": 50.432,
+              "p05": 3.344,
+              "p95": 50.944,
+              "samples": [
+                3.344,
+                50.432,
+                50.944,
+                50.432,
+                50.432
+              ]
+            },
+            "latency_p95_us": {
+              "ci95_high": 134.144,
+              "ci95_low": 98.816,
+              "median": 132.096,
+              "p05": 98.816,
+              "p95": 134.144,
+              "samples": [
+                98.816,
+                124.416,
+                134.144,
+                132.096,
+                132.096
+              ]
+            },
+            "latency_p99_9_us": {
+              "ci95_high": 305.152,
+              "ci95_low": 272.384,
+              "median": 296.96,
+              "p05": 272.384,
+              "p95": 305.152,
+              "samples": [
+                272.384,
+                296.96,
+                305.152,
+                296.96,
+                301.056
+              ]
+            },
+            "latency_p99_us": {
+              "ci95_high": 166.912,
+              "ci95_low": 156.672,
+              "median": 164.864,
+              "p05": 156.672,
+              "p95": 166.912,
+              "samples": [
+                156.672,
+                162.816,
+                166.912,
+                164.864,
+                166.912
+              ]
+            },
+            "read_clat_p99_us": {
+              "ci95_high": 166.912,
+              "ci95_low": 156.672,
+              "median": 164.864,
+              "p05": 156.672,
+              "p95": 166.912,
+              "samples": [
+                156.672,
+                162.816,
+                166.912,
+                164.864,
+                166.912
+              ]
+            },
+            "throughput_mib_s": {
+              "ci95_high": 36.9555025100708,
+              "ci95_low": 30.15561580657959,
+              "median": 32.87978935241699,
+              "p05": 30.15561580657959,
+              "p95": 36.9555025100708,
+              "samples": [
+                36.9555025100708,
+                30.15561580657959,
+                30.800070762634277,
+                32.87978935241699,
+                32.91585636138916
+              ]
+            },
+            "write_clat_p99_us": {
+              "ci95_high": 7.008,
+              "ci95_low": 5.984,
+              "median": 6.56,
+              "p05": 5.984,
+              "p95": 7.008,
+              "samples": [
+                6.56,
+                7.008,
+                6.816,
+                6.176,
+                5.984
+              ]
+            }
+          },
+          "name": "plaintext",
+          "overall_pass": true,
+          "path": "artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json",
+          "platform_manifest": {
+            "bytes": 32946,
+            "exists": true,
+            "path": "artifacts/validation/frozen_plaintext_contract/platform_manifest.json"
+          },
+          "status": "measured",
+          "thermal_log": {
+            "bytes": 1376522,
+            "exists": true,
+            "path": "artifacts/validation/frozen_plaintext_contract/thermal_tegrastats.log"
+          },
+          "valid_repetitions": 5
+        }
+      }
+    },
+    "jetson_platform_contract": {
+      "artifact_verdict": true,
+      "complete": true,
+      "contract": {
+        "bytes": 48039,
+        "exists": true,
+        "path": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json"
+      },
+      "headline_run_eligible": true,
+      "invalid_reasons": [],
+      "nvpmodel_available": true,
+      "required_sections_present": {
+        "clock_frequency_state": true,
+        "invalid_run_rules": true,
+        "nvpmodel_section": true,
+        "tegrastats_section": true,
+        "thermal_state": true,
+        "throttling_markers": true
+      },
+      "tegrastats_available": true
+    },
+    "kernel_qos_comparison_context": {
+      "artifact": {
+        "bytes": 5267,
+        "exists": true,
+        "path": "artifacts/validation/kernel_qos_hero_integration_closeout/kernel_qos_hero_integration_closeout.json"
+      },
+      "complete": true,
+      "conditions": {
+        "e1_closeout_passes": true,
+        "kernel_rows_are_measured": true,
+        "paper_claim_guard_passes": true
+      },
+      "overall_pass": true
+    },
+    "primitive_and_keyplane_diagnostic_context": {
+      "artifact": {
+        "bytes": 36764,
+        "exists": true,
+        "path": "artifacts/validation/stat_thermal_methodology/stat_thermal_methodology_audit.json"
+      },
+      "checks": {
+        "frozen_aegisq_contract": {
+          "complete": true,
+          "expected_status": "methodology_metadata_retained_cold_invalid",
+          "missing_metadata": [],
+          "paper_role": "warm-cache AEGIS-Q result only; not a cross-system comparison and not a cold-cache row",
+          "present": true,
+          "status": "methodology_metadata_retained_cold_invalid"
+        },
+        "frozen_gocryptfs_contract": {
+          "complete": true,
+          "expected_status": "baseline_metadata_retained_cold_invalid",
+          "missing_metadata": [],
+          "paper_role": "warm-cache gocryptfs baseline row only; not a full filesystem comparison matrix and not a cold-cache row",
+          "present": true,
+          "status": "baseline_metadata_retained_cold_invalid"
+        },
+        "frozen_plaintext_contract": {
+          "complete": true,
+          "expected_status": "baseline_metadata_retained_cold_invalid",
+          "missing_metadata": [],
+          "paper_role": "warm-cache plaintext lowerfs baseline row only; not a full filesystem comparison matrix and not a cold-cache row",
+          "present": true,
+          "status": "baseline_metadata_retained_cold_invalid"
+        },
+        "keyplane_rekey_methodology": {
+          "complete": true,
+          "expected_status": "methodology_progress_host_not_ready",
+          "missing_metadata": [
+            "performance_cpu_governor",
+            "successful_jetson_clocks_capture"
+          ],
+          "paper_role": "progress evidence for repeated key-plane workflow methodology; paper source remains the single workflow bundle",
+          "present": true,
+          "status": "methodology_progress_host_not_ready"
+        },
+        "keyplane_rekey_workflow": {
+          "complete": true,
+          "expected_status": "single_workflow_scope_gate_passed",
+          "missing_metadata": [],
+          "paper_role": "single-bundle workflow evidence; statistical metadata is tracked by keyplane_rekey_methodology",
+          "present": true,
+          "status": "single_workflow_scope_gate_passed"
+        },
+        "qos_sqlite_hero_methodology": {
+          "complete": true,
+          "expected_status": "methodology_progress_recovery_unstable",
+          "missing_metadata": [
+            "performance_cpu_governor",
+            "successful_jetson_clocks_capture",
+            "recovery_stability_gate_failed"
+          ],
+          "paper_role": "progress evidence for repeated SQLite QoS methodology; paper source remains the single workflow bundle",
+          "present": true,
+          "status": "methodology_progress_recovery_unstable"
+        },
+        "verified_microbench": {
+          "complete": true,
+          "expected_status": "diagnostic_scope_gate_passed",
+          "missing_metadata": [],
+          "paper_role": "diagnostic only after paper downgrade; not a headline baseline or hero result",
+          "present": true,
+          "status": "diagnostic_scope_gate_passed"
+        }
+      },
+      "complete": true,
+      "overall_pass": true,
+      "paper_scope_gate_pass": true
+    },
+    "secure_inference_log_second_macro": {
+      "artifact": {
+        "bytes": 7334,
+        "exists": true,
+        "path": "artifacts/validation/second_macrobenchmark_closeout/second_macrobenchmark_closeout.json"
+      },
+      "complete": true,
+      "conditions": {
+        "paper_scope_guard_passes": true,
+        "process_resource_usage_retained": true,
+        "raw_latency_throughput_retained": true,
+        "thermal_metadata_linked": true
+      },
+      "overall_pass": true,
+      "thermal_metadata": {
+        "available": true,
+        "complete": true,
+        "contract": {
+          "bytes": 48039,
+          "exists": true,
+          "path": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json"
+        },
+        "nvpmodel_available": true,
+        "platform_manifest_present": true,
+        "scope": "linked platform-state metadata; macro runner also records per-run process resource usage",
+        "tegrastats_available": true,
+        "tegrastats_samples": 0
+      }
+    },
+    "sqlite_qos_headline": {
+      "artifact": {
+        "bytes": 25799,
+        "exists": true,
+        "path": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json"
+      },
+      "complete": true,
+      "conditions": {
+        "paper_scope_guard_passes": true,
+        "repeated_warmup_and_five_runs": true,
+        "stat_thermal_audit_passes": true,
+        "thermal_log_retained": true
+      },
+      "overall_pass": true,
+      "thermal_and_methodology": {
+        "overall_pass": true,
+        "paper_scope_gate_pass": true,
+        "thermal_log": {
+          "bytes": 84263,
+          "exists": true,
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/thermal_tegrastats.log"
+        }
+      }
+    }
+  },
+  "overall_pass": true,
+  "paper_guard": {
+    "complete": true,
+    "forbidden_hits": [
+      {
+        "file": "Paper/4_Evaluation.tex",
+        "line": 20,
+        "pattern": "fixed_clock_claim",
+        "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC.  The result is not an Orin Nano result.  Figure~\\ref{fig:baseline_comparison} is a diagnostic three-run placement result, not a confidence claim; future headline comparisons require fixed clock/power/thermal capture, outlier policy, cache policy, and fail-closed handling for missing logs or failed modes."
+      }
+    ],
+    "paper_files": [
+      "Paper/main.tex",
+      "Paper/1_Introduction.tex",
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/6_Conclusion.tex"
+    ],
+    "required_phrases": {
+      "diagnostic_placement_scope": true,
+      "frozen_cost_boundary": true,
+      "future_headline_metadata": true,
+      "platform_identified": true,
+      "second_macro_scope": true,
+      "sqlite_scope": true
+    },
+    "unguarded_forbidden_hits": []
+  },
+  "timestamp_utc": "2026-06-30T02:44:04.101264+00:00"
+}

@@ -24,16 +24,18 @@
     "path": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json"
   },
   "dm_crypt_ext4": {
-    "blocking_reasons": [],
-    "runnable_with_sudo_password": true,
+    "blocking_reasons": [
+      "noninteractive_sudo_unavailable"
+    ],
+    "runnable_with_sudo_password": false,
     "runnable_without_interactive_root": false
   },
   "fscrypt": {
     "blocking_reasons": [
+      "noninteractive_sudo_unavailable",
       "kernel_config_fs_encryption_disabled",
       "root_ext4_encrypt_feature_not_enabled",
-      "fscrypt_status_nonzero",
-      "disposable_fscrypt_loop_probe_failed"
+      "fscrypt_status_nonzero"
     ],
     "runnable_with_sudo_password": false,
     "runnable_without_interactive_root": false
@@ -333,20 +335,7 @@
       "stderr": "mke2fs 1.47.0 (5-Feb-2023)\n\tUsing EXT2FS Library version 1.47.0",
       "stdout": ""
     },
-    "sudo_password_probe": {
-      "argv": [
-        "sudo",
-        "-S",
-        "-p",
-        "",
-        "true"
-      ],
-      "available": true,
-      "password_supplied": true,
-      "returncode": 0,
-      "stderr": "",
-      "stdout": ""
-    },
+    "sudo_password_probe": null,
     "sudo_probe": {
       "argv": [
         "sudo",
@@ -363,329 +352,10 @@
   "next_required_action": "fscrypt cannot be executed on this kernel while CONFIG_FS_ENCRYPTION is disabled.  A root-controlled LUKS2 dm-crypt/ext4 loop volume is probe-runnable with sudo, but the checklist item remains open until both kernel baseline rows are available under the frozen fio contract.  Do not use the historical sequential fio files as current comparison evidence.",
   "overall_pass": true,
   "privileged_loop_probes": {
-    "dm_crypt_loop_probe": {
-      "pass": true,
-      "steps": [
-        {
-          "name": "losetup",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "losetup",
-              "--find",
-              "--show",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/dmcrypt.img"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "/dev/loop9"
-          }
-        },
-        {
-          "name": "luks_format",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "cryptsetup",
-              "--batch-mode",
-              "--type",
-              "luks2",
-              "--cipher",
-              "aes-xts-plain64",
-              "--key-size",
-              "512",
-              "--pbkdf",
-              "pbkdf2",
-              "--pbkdf-force-iterations",
-              "1000",
-              "--key-file",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/luks.key",
-              "luksFormat",
-              "/dev/loop9"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "luks_open",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "cryptsetup",
-              "open",
-              "--key-file",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/luks.key",
-              "/dev/loop9",
-              "aegisq_probe_3429867"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "mkfs_ext4",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "mkfs.ext4",
-              "-q",
-              "/dev/mapper/aegisq_probe_3429867"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "mount",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "mount",
-              "/dev/mapper/aegisq_probe_3429867",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/mnt"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "write_probe",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "bash",
-              "-c",
-              "printf probe > /tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/mnt/probe.txt && sync"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "read_probe",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "cat",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/dmcrypt/mnt/probe.txt"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "probe"
-          }
-        }
-      ]
-    },
-    "enabled": true,
-    "fscrypt_loop_probe": {
-      "pass": false,
-      "steps": [
-        {
-          "name": "losetup",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "losetup",
-              "--find",
-              "--show",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/fscrypt.img"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "/dev/loop9"
-          }
-        },
-        {
-          "name": "mkfs_ext4_encrypt",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "mkfs.ext4",
-              "-q",
-              "-O",
-              "encrypt",
-              "/dev/loop9"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "tune2fs_encrypt",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "tune2fs",
-              "-O",
-              "encrypt",
-              "/dev/loop9"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "tune2fs 1.47.0 (5-Feb-2023)"
-          }
-        },
-        {
-          "name": "e2fsck",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "e2fsck",
-              "-fy",
-              "/dev/loop9"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "e2fsck 1.47.0 (5-Feb-2023)",
-            "stdout": "Pass 1: Checking inodes, blocks, and sizes\nPass 2: Checking directory structure\nPass 3: Checking directory connectivity\nPass 4: Checking reference counts\nPass 5: Checking group summary information\n/dev/loop9: 11/32768 files (9.1% non-contiguous), 6169/32768 blocks"
-          }
-        },
-        {
-          "name": "mount",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "mount",
-              "/dev/loop9",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "fscrypt_setup",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "fscrypt",
-              "setup",
-              "--quiet",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "mkdir_contract",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "mkdir",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt/contract"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          }
-        },
-        {
-          "name": "fscrypt_encrypt",
-          "result": {
-            "argv": [
-              "sudo",
-              "-S",
-              "-p",
-              "",
-              "fscrypt",
-              "encrypt",
-              "--quiet",
-              "--source=raw_key",
-              "--key=/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/raw.key",
-              "--name=aegisq-probe",
-              "--no-recovery",
-              "/tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt/contract"
-            ],
-            "available": true,
-            "password_supplied": true,
-            "returncode": 1,
-            "stderr": "[ERROR] fscrypt encrypt: encryption not enabled on filesystem\n                         /tmp/aegis_kernel_baseline_probe_xcl57sgb/fscrypt/mnt\n                         (/dev/loop9).\n\nTo enable encryption support on this filesystem, run:\n\n     sudo tune2fs -O encrypt \"/dev/loop9\"\n\nAlso ensure that your kernel has CONFIG_FS_ENCRYPTION=y. See the documentation\nfor more details.",
-            "stdout": ""
-          }
-        }
-      ]
-    }
+    "enabled": false,
+    "reason": "AEGISQ_SUDO_PASSWORD not set; privileged loop probes skipped"
   },
   "schema_version": 1,
   "scope": "Non-destructive feasibility audit only.  It does not execute fscrypt or dm-crypt benchmark rows and does not close the frozen kernel-baseline matrix item.",
-  "timestamp_utc": "2026-06-27T08:23:31.948129+00:00"
+  "timestamp_utc": "2026-06-29T08:31:41.323479+00:00"
 }

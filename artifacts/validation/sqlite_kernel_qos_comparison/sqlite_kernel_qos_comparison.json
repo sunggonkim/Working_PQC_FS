@@ -1,0 +1,926 @@
+{
+  "timestamp_utc": "2026-06-30T05:15:29.247777+00:00",
+  "artifact": "artifacts/validation/sqlite_kernel_qos_comparison",
+  "overall_pass": true,
+  "b3_code_artifact_ready": true,
+  "parent_b3_gate_closed": true,
+  "two_kernel_baselines_measured": true,
+  "hero_modes_available": true,
+  "paper_compares_both_kernel_baselines": true,
+  "source_artifacts": {
+    "hero": "artifacts/validation/qos_sqlite_hero_methodology/qos_sqlite_hero_bundle.json",
+    "ionice": "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json",
+    "systemd_io_weight": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json"
+  },
+  "hero_summary": {
+    "source": "artifacts/validation/qos_sqlite_hero_methodology/qos_sqlite_hero_bundle.json",
+    "overall_pass": false,
+    "artifact_role": "methodology-strengthened repeated SQLite QoS workflow run",
+    "repetitions_measured": 5,
+    "rows": [
+      {
+        "row_type": "hero_mode",
+        "mode": "app_only",
+        "runs": 5,
+        "acceptable_runs": 5,
+        "all_acceptable": true,
+        "foreground_p99_ms": {
+          "median": 7.253253040000001,
+          "ci95_low": 6.24338126,
+          "ci95_high": 11.361421180000008,
+          "p05": 6.24338126,
+          "p95": 11.361421180000008,
+          "runs": 5
+        },
+        "foreground_p95_ms": {
+          "median": 6.467682199999999,
+          "ci95_low": 5.9213878,
+          "ci95_high": 6.8739082499999995,
+          "p05": 5.9213878,
+          "p95": 6.8739082499999995,
+          "runs": 5
+        },
+        "deadline_misses": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 1.0,
+          "p05": 0.0,
+          "p95": 1.0,
+          "runs": 5
+        },
+        "background_throughput_mb_s": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "policy_throttle_rows": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "daemon_throttle_rows": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "telemetry_rows": {
+          "median": 29.0,
+          "ci95_low": 28.0,
+          "ci95_high": 30.0,
+          "p05": 28.0,
+          "p95": 30.0,
+          "runs": 5
+        }
+      },
+      {
+        "row_type": "hero_mode",
+        "mode": "unthrottled_storage",
+        "runs": 5,
+        "acceptable_runs": 5,
+        "all_acceptable": true,
+        "foreground_p99_ms": {
+          "median": 9.62087615,
+          "ci95_low": 8.27045628,
+          "ci95_high": 11.261585520000004,
+          "p05": 8.27045628,
+          "p95": 11.261585520000004,
+          "runs": 5
+        },
+        "foreground_p95_ms": {
+          "median": 8.692917999999999,
+          "ci95_low": 8.1118915,
+          "ci95_high": 8.832889649999998,
+          "p05": 8.1118915,
+          "p95": 8.832889649999998,
+          "runs": 5
+        },
+        "deadline_misses": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 1.0,
+          "p05": 0.0,
+          "p95": 1.0,
+          "runs": 5
+        },
+        "background_throughput_mb_s": {
+          "median": 6.984360530500289,
+          "ci95_low": 6.858390607540784,
+          "ci95_high": 7.069425245957353,
+          "p05": 6.858390607540784,
+          "p95": 7.069425245957353,
+          "runs": 5
+        },
+        "policy_throttle_rows": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "daemon_throttle_rows": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "telemetry_rows": {
+          "median": 31.0,
+          "ci95_low": 30.0,
+          "ci95_high": 31.0,
+          "p05": 30.0,
+          "p95": 31.0,
+          "runs": 5
+        }
+      },
+      {
+        "row_type": "hero_mode",
+        "mode": "simple_controller",
+        "runs": 5,
+        "acceptable_runs": 5,
+        "all_acceptable": true,
+        "foreground_p99_ms": {
+          "median": 7.544277000000001,
+          "ci95_low": 7.033460830000001,
+          "ci95_high": 8.25166015,
+          "p05": 7.033460830000001,
+          "p95": 8.25166015,
+          "runs": 5
+        },
+        "foreground_p95_ms": {
+          "median": 6.57720625,
+          "ci95_low": 6.3286330500000005,
+          "ci95_high": 7.23346035,
+          "p05": 6.3286330500000005,
+          "p95": 7.23346035,
+          "runs": 5
+        },
+        "deadline_misses": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "background_throughput_mb_s": {
+          "median": 1.4970013728032954,
+          "ci95_low": 1.0964138231777922,
+          "ci95_high": 1.7248485626945593,
+          "p05": 1.0964138231777922,
+          "p95": 1.7248485626945593,
+          "runs": 5
+        },
+        "policy_throttle_rows": {
+          "median": 27.0,
+          "ci95_low": 26.0,
+          "ci95_high": 27.0,
+          "p05": 26.0,
+          "p95": 27.0,
+          "runs": 5
+        },
+        "daemon_throttle_rows": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "telemetry_rows": {
+          "median": 28.0,
+          "ci95_low": 28.0,
+          "ci95_high": 28.0,
+          "p05": 28.0,
+          "p95": 28.0,
+          "runs": 5
+        }
+      },
+      {
+        "row_type": "hero_mode",
+        "mode": "aegis_policy",
+        "runs": 5,
+        "acceptable_runs": 5,
+        "all_acceptable": true,
+        "foreground_p99_ms": {
+          "median": 8.15053043,
+          "ci95_low": 7.04147598,
+          "ci95_high": 10.001156430000002,
+          "p05": 7.04147598,
+          "p95": 10.001156430000002,
+          "runs": 5
+        },
+        "foreground_p95_ms": {
+          "median": 7.223934949999999,
+          "ci95_low": 6.6188417500000005,
+          "ci95_high": 8.377172049999999,
+          "p05": 6.6188417500000005,
+          "p95": 8.377172049999999,
+          "runs": 5
+        },
+        "deadline_misses": {
+          "median": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 1.0,
+          "p05": 0.0,
+          "p95": 1.0,
+          "runs": 5
+        },
+        "background_throughput_mb_s": {
+          "median": 3.0160640171203785,
+          "ci95_low": 2.888516699385721,
+          "ci95_high": 3.1676303493572924,
+          "p05": 2.888516699385721,
+          "p95": 3.1676303493572924,
+          "runs": 5
+        },
+        "policy_throttle_rows": {
+          "median": 27.0,
+          "ci95_low": 27.0,
+          "ci95_high": 28.0,
+          "p05": 27.0,
+          "p95": 28.0,
+          "runs": 5
+        },
+        "daemon_throttle_rows": {
+          "median": 15.0,
+          "ci95_low": 15.0,
+          "ci95_high": 16.0,
+          "p05": 15.0,
+          "p95": 16.0,
+          "runs": 5
+        },
+        "telemetry_rows": {
+          "median": 29.0,
+          "ci95_low": 29.0,
+          "ci95_high": 29.0,
+          "p05": 29.0,
+          "p95": 29.0,
+          "runs": 5
+        }
+      }
+    ],
+    "required_modes_present": true,
+    "missing_modes": []
+  },
+  "kernel_rows": [
+    {
+      "row_type": "kernel_baseline",
+      "source": "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json",
+      "verdict": "measured",
+      "overall_pass": true,
+      "mode": "kernel_ionice_idle",
+      "kernel_control": "ionice",
+      "kernel_control_detail": "ionice class 3",
+      "successful_rows": 3,
+      "writer_start_rows": 3,
+      "foreground_p99_ms": {
+        "median": 16.217910019999998,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "deadline_misses": {
+        "median": 6.0,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "background_throughput_mb_s": {
+        "median": 7.248431018854942,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "raw_rows": [
+        {
+          "acceptable": true,
+          "background_bytes_written": 3670016,
+          "background_throughput_mb_s": 7.0084336827733695,
+          "deadline_misses": 17,
+          "foreground_p95_ms": 13.969959399999995,
+          "foreground_p99_ms": 16.537148539999997,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline/rep_00/kernel_ionice_idle/mode_summary.json",
+          "repetition": 0
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 3538944,
+          "background_throughput_mb_s": 7.36872842829315,
+          "deadline_misses": 5,
+          "foreground_p95_ms": 10.742462249999999,
+          "foreground_p99_ms": 11.325034330000001,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline/rep_01/kernel_ionice_idle/mode_summary.json",
+          "repetition": 1
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 3604480,
+          "background_throughput_mb_s": 7.248431018854942,
+          "deadline_misses": 6,
+          "foreground_p95_ms": 10.937501899999999,
+          "foreground_p99_ms": 16.217910019999998,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline/rep_02/kernel_ionice_idle/mode_summary.json",
+          "repetition": 2
+        }
+      ]
+    },
+    {
+      "row_type": "kernel_baseline",
+      "source": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json",
+      "verdict": "measured",
+      "overall_pass": true,
+      "mode": "kernel_systemd_io_weight",
+      "kernel_control": "systemd_io_weight",
+      "kernel_control_detail": "systemd IOWeight=10",
+      "successful_rows": 3,
+      "writer_start_rows": 3,
+      "foreground_p99_ms": {
+        "median": 12.574790109999999,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "deadline_misses": {
+        "median": 7.0,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "background_throughput_mb_s": {
+        "median": 6.73069491922091,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "raw_rows": [
+        {
+          "acceptable": true,
+          "background_bytes_written": 4063232,
+          "background_throughput_mb_s": 6.685623817701344,
+          "deadline_misses": 10,
+          "foreground_p95_ms": 11.693290399999999,
+          "foreground_p99_ms": 12.65173145,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/mode_summary.json",
+          "repetition": 0
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 4063232,
+          "background_throughput_mb_s": 6.73069491922091,
+          "deadline_misses": 5,
+          "foreground_p95_ms": 10.453361649999998,
+          "foreground_p99_ms": 11.40027003,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/mode_summary.json",
+          "repetition": 1
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 4063232,
+          "background_throughput_mb_s": 6.79095433316294,
+          "deadline_misses": 7,
+          "foreground_p95_ms": 10.75933715,
+          "foreground_p99_ms": 12.574790109999999,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/mode_summary.json",
+          "repetition": 2
+        }
+      ]
+    }
+  ],
+  "comparison_rows": [
+    {
+      "row_type": "hero_mode",
+      "mode": "app_only",
+      "runs": 5,
+      "acceptable_runs": 5,
+      "all_acceptable": true,
+      "foreground_p99_ms": {
+        "median": 7.253253040000001,
+        "ci95_low": 6.24338126,
+        "ci95_high": 11.361421180000008,
+        "p05": 6.24338126,
+        "p95": 11.361421180000008,
+        "runs": 5
+      },
+      "foreground_p95_ms": {
+        "median": 6.467682199999999,
+        "ci95_low": 5.9213878,
+        "ci95_high": 6.8739082499999995,
+        "p05": 5.9213878,
+        "p95": 6.8739082499999995,
+        "runs": 5
+      },
+      "deadline_misses": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 1.0,
+        "p05": 0.0,
+        "p95": 1.0,
+        "runs": 5
+      },
+      "background_throughput_mb_s": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "p05": 0.0,
+        "p95": 0.0,
+        "runs": 5
+      },
+      "policy_throttle_rows": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "p05": 0.0,
+        "p95": 0.0,
+        "runs": 5
+      },
+      "daemon_throttle_rows": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "p05": 0.0,
+        "p95": 0.0,
+        "runs": 5
+      },
+      "telemetry_rows": {
+        "median": 29.0,
+        "ci95_low": 28.0,
+        "ci95_high": 30.0,
+        "p05": 28.0,
+        "p95": 30.0,
+        "runs": 5
+      }
+    },
+    {
+      "row_type": "hero_mode",
+      "mode": "unthrottled_storage",
+      "runs": 5,
+      "acceptable_runs": 5,
+      "all_acceptable": true,
+      "foreground_p99_ms": {
+        "median": 9.62087615,
+        "ci95_low": 8.27045628,
+        "ci95_high": 11.261585520000004,
+        "p05": 8.27045628,
+        "p95": 11.261585520000004,
+        "runs": 5
+      },
+      "foreground_p95_ms": {
+        "median": 8.692917999999999,
+        "ci95_low": 8.1118915,
+        "ci95_high": 8.832889649999998,
+        "p05": 8.1118915,
+        "p95": 8.832889649999998,
+        "runs": 5
+      },
+      "deadline_misses": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 1.0,
+        "p05": 0.0,
+        "p95": 1.0,
+        "runs": 5
+      },
+      "background_throughput_mb_s": {
+        "median": 6.984360530500289,
+        "ci95_low": 6.858390607540784,
+        "ci95_high": 7.069425245957353,
+        "p05": 6.858390607540784,
+        "p95": 7.069425245957353,
+        "runs": 5
+      },
+      "policy_throttle_rows": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "p05": 0.0,
+        "p95": 0.0,
+        "runs": 5
+      },
+      "daemon_throttle_rows": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "p05": 0.0,
+        "p95": 0.0,
+        "runs": 5
+      },
+      "telemetry_rows": {
+        "median": 31.0,
+        "ci95_low": 30.0,
+        "ci95_high": 31.0,
+        "p05": 30.0,
+        "p95": 31.0,
+        "runs": 5
+      }
+    },
+    {
+      "row_type": "hero_mode",
+      "mode": "simple_controller",
+      "runs": 5,
+      "acceptable_runs": 5,
+      "all_acceptable": true,
+      "foreground_p99_ms": {
+        "median": 7.544277000000001,
+        "ci95_low": 7.033460830000001,
+        "ci95_high": 8.25166015,
+        "p05": 7.033460830000001,
+        "p95": 8.25166015,
+        "runs": 5
+      },
+      "foreground_p95_ms": {
+        "median": 6.57720625,
+        "ci95_low": 6.3286330500000005,
+        "ci95_high": 7.23346035,
+        "p05": 6.3286330500000005,
+        "p95": 7.23346035,
+        "runs": 5
+      },
+      "deadline_misses": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "p05": 0.0,
+        "p95": 0.0,
+        "runs": 5
+      },
+      "background_throughput_mb_s": {
+        "median": 1.4970013728032954,
+        "ci95_low": 1.0964138231777922,
+        "ci95_high": 1.7248485626945593,
+        "p05": 1.0964138231777922,
+        "p95": 1.7248485626945593,
+        "runs": 5
+      },
+      "policy_throttle_rows": {
+        "median": 27.0,
+        "ci95_low": 26.0,
+        "ci95_high": 27.0,
+        "p05": 26.0,
+        "p95": 27.0,
+        "runs": 5
+      },
+      "daemon_throttle_rows": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "p05": 0.0,
+        "p95": 0.0,
+        "runs": 5
+      },
+      "telemetry_rows": {
+        "median": 28.0,
+        "ci95_low": 28.0,
+        "ci95_high": 28.0,
+        "p05": 28.0,
+        "p95": 28.0,
+        "runs": 5
+      }
+    },
+    {
+      "row_type": "hero_mode",
+      "mode": "aegis_policy",
+      "runs": 5,
+      "acceptable_runs": 5,
+      "all_acceptable": true,
+      "foreground_p99_ms": {
+        "median": 8.15053043,
+        "ci95_low": 7.04147598,
+        "ci95_high": 10.001156430000002,
+        "p05": 7.04147598,
+        "p95": 10.001156430000002,
+        "runs": 5
+      },
+      "foreground_p95_ms": {
+        "median": 7.223934949999999,
+        "ci95_low": 6.6188417500000005,
+        "ci95_high": 8.377172049999999,
+        "p05": 6.6188417500000005,
+        "p95": 8.377172049999999,
+        "runs": 5
+      },
+      "deadline_misses": {
+        "median": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 1.0,
+        "p05": 0.0,
+        "p95": 1.0,
+        "runs": 5
+      },
+      "background_throughput_mb_s": {
+        "median": 3.0160640171203785,
+        "ci95_low": 2.888516699385721,
+        "ci95_high": 3.1676303493572924,
+        "p05": 2.888516699385721,
+        "p95": 3.1676303493572924,
+        "runs": 5
+      },
+      "policy_throttle_rows": {
+        "median": 27.0,
+        "ci95_low": 27.0,
+        "ci95_high": 28.0,
+        "p05": 27.0,
+        "p95": 28.0,
+        "runs": 5
+      },
+      "daemon_throttle_rows": {
+        "median": 15.0,
+        "ci95_low": 15.0,
+        "ci95_high": 16.0,
+        "p05": 15.0,
+        "p95": 16.0,
+        "runs": 5
+      },
+      "telemetry_rows": {
+        "median": 29.0,
+        "ci95_low": 29.0,
+        "ci95_high": 29.0,
+        "p05": 29.0,
+        "p95": 29.0,
+        "runs": 5
+      }
+    },
+    {
+      "row_type": "kernel_baseline",
+      "source": "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json",
+      "verdict": "measured",
+      "overall_pass": true,
+      "mode": "kernel_ionice_idle",
+      "kernel_control": "ionice",
+      "kernel_control_detail": "ionice class 3",
+      "successful_rows": 3,
+      "writer_start_rows": 3,
+      "foreground_p99_ms": {
+        "median": 16.217910019999998,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "deadline_misses": {
+        "median": 6.0,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "background_throughput_mb_s": {
+        "median": 7.248431018854942,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "raw_rows": [
+        {
+          "acceptable": true,
+          "background_bytes_written": 3670016,
+          "background_throughput_mb_s": 7.0084336827733695,
+          "deadline_misses": 17,
+          "foreground_p95_ms": 13.969959399999995,
+          "foreground_p99_ms": 16.537148539999997,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline/rep_00/kernel_ionice_idle/mode_summary.json",
+          "repetition": 0
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 3538944,
+          "background_throughput_mb_s": 7.36872842829315,
+          "deadline_misses": 5,
+          "foreground_p95_ms": 10.742462249999999,
+          "foreground_p99_ms": 11.325034330000001,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline/rep_01/kernel_ionice_idle/mode_summary.json",
+          "repetition": 1
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 3604480,
+          "background_throughput_mb_s": 7.248431018854942,
+          "deadline_misses": 6,
+          "foreground_p95_ms": 10.937501899999999,
+          "foreground_p99_ms": 16.217910019999998,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline/rep_02/kernel_ionice_idle/mode_summary.json",
+          "repetition": 2
+        }
+      ]
+    },
+    {
+      "row_type": "kernel_baseline",
+      "source": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json",
+      "verdict": "measured",
+      "overall_pass": true,
+      "mode": "kernel_systemd_io_weight",
+      "kernel_control": "systemd_io_weight",
+      "kernel_control_detail": "systemd IOWeight=10",
+      "successful_rows": 3,
+      "writer_start_rows": 3,
+      "foreground_p99_ms": {
+        "median": 12.574790109999999,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "deadline_misses": {
+        "median": 7.0,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "background_throughput_mb_s": {
+        "median": 6.73069491922091,
+        "ci95_low": null,
+        "ci95_high": null,
+        "p05": null,
+        "p95": null,
+        "runs": 3
+      },
+      "raw_rows": [
+        {
+          "acceptable": true,
+          "background_bytes_written": 4063232,
+          "background_throughput_mb_s": 6.685623817701344,
+          "deadline_misses": 10,
+          "foreground_p95_ms": 11.693290399999999,
+          "foreground_p99_ms": 12.65173145,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/mode_summary.json",
+          "repetition": 0
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 4063232,
+          "background_throughput_mb_s": 6.73069491922091,
+          "deadline_misses": 5,
+          "foreground_p95_ms": 10.453361649999998,
+          "foreground_p99_ms": 11.40027003,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/mode_summary.json",
+          "repetition": 1
+        },
+        {
+          "acceptable": true,
+          "background_bytes_written": 4063232,
+          "background_throughput_mb_s": 6.79095433316294,
+          "deadline_misses": 7,
+          "foreground_p95_ms": 10.75933715,
+          "foreground_p99_ms": 12.574790109999999,
+          "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/mode_summary.json",
+          "repetition": 2
+        }
+      ]
+    }
+  ],
+  "aegis_policy_deltas": [
+    {
+      "against": "app_only",
+      "row_type": "hero_mode",
+      "aegis_minus_row_p99_ms": 0.8972773899999993,
+      "aegis_minus_row_background_mb_s": 3.0160640171203785
+    },
+    {
+      "against": "unthrottled_storage",
+      "row_type": "hero_mode",
+      "aegis_minus_row_p99_ms": -1.470345720000001,
+      "aegis_minus_row_background_mb_s": -3.96829651337991
+    },
+    {
+      "against": "simple_controller",
+      "row_type": "hero_mode",
+      "aegis_minus_row_p99_ms": 0.6062534299999989,
+      "aegis_minus_row_background_mb_s": 1.5190626443170832
+    },
+    {
+      "against": "aegis_policy",
+      "row_type": "hero_mode",
+      "aegis_minus_row_p99_ms": 0.0,
+      "aegis_minus_row_background_mb_s": 0.0
+    },
+    {
+      "against": "kernel_ionice_idle",
+      "row_type": "kernel_baseline",
+      "aegis_minus_row_p99_ms": -8.067379589999998,
+      "aegis_minus_row_background_mb_s": -4.232367001734563
+    },
+    {
+      "against": "kernel_systemd_io_weight",
+      "row_type": "kernel_baseline",
+      "aegis_minus_row_p99_ms": -4.424259679999999,
+      "aegis_minus_row_background_mb_s": -3.7146309021005313
+    }
+  ],
+  "paper_claim_scan": {
+    "paper_dir": "Paper",
+    "exists": true,
+    "mentions_ionice": true,
+    "mentions_systemd_io_weight": true,
+    "mentions_kernel_qos": true,
+    "mentions_repetition_mismatch": true,
+    "mentions_no_uniqueness_boundary": true,
+    "sqlite_p99_candidate_lines": [
+      {
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "line": 40,
+        "text": "The evaluated envelope is a local edge service whose foreground SQLite database shares mounted secure storage with elastic background writes.  This is sqlite-mounted-qos-recovery-2026-06-27, the same case study summarized by Figure~\\ref{fig:first_page_qos} and Table~\\ref{tab:qos_sqlite_recovery}, not a separate anecdotal demo.  The useful property is policy separation plus TPM replay-after-advance fail-closed behavior; it does not extend to kernel-encryption replacement, high-throughput general-purpose encryption, TensorRT p99 recovery, unmanaged power loss, or CUDA-independent deployment.  This is the intended paper shape: boundary-aware secure edge storage, not a claim that GPU/PQC makes every filesystem path faster."
+      },
+      {
+        "path": "Paper/1_Introduction.tex",
+        "line": 10,
+        "text": "\\Description{Bar chart of foreground SQLite p99 latency for app-only, unthrottled pressure, simple-controller, and AEGIS-Q policy modes.}"
+      },
+      {
+        "path": "Paper/1_Introduction.tex",
+        "line": 38,
+        "text": "Figure~\\ref{fig:first_page_qos} is the paper's edge-runtime result.  Unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling only elastic writes.  The point is visible storage-layer policy with accelerator-independent format correctness, not peak filesystem throughput.  The low frozen-contract throughput row is a known cost boundary, not a hidden general-purpose claim."
+      },
+      {
+        "path": "Paper/3_Design.tex",
+        "line": 91,
+        "text": "QoS telemetry & SQLite recovery only & Workload/CUPTI traces can drive mounted-FUSE throttling; no foreground AI p99 recovery claim.\\\\"
+      },
+      {
+        "path": "Paper/3_Design.tex",
+        "line": 99,
+        "text": "QoS follows Figure~\\ref{fig:first_page_qos}: unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling elastic writes, not by claiming foreground-inference recovery or completion bypass."
+      },
+      {
+        "path": "Paper/4_Evaluation.tex",
+        "line": 26,
+        "text": "\\Description{Three-panel bar chart summarizing filesystem throughput, SQLite foreground p99 latency under storage pressure and kernel controls, and key-plane refresh throughput for CPU, GPU batch, and policy fallback modes.}"
+      },
+      {
+        "path": "Paper/4_Evaluation.tex",
+        "line": 113,
+        "text": "The app-level result uses SQLite transaction latency.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls.  AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s.  Kernel controls preserve more background throughput but do not recover the foreground tail here: \\texttt{ionice} reports 16.22~ms p99 with six median misses, and \\texttt{IOWeight} reports 12.57~ms p99 with seven median misses.  This is bounded storage-visible control under matched durability semantics, not a uniqueness or AI-inference QoS claim."
+      },
+      {
+        "path": "Paper/4_Evaluation.tex",
+        "line": 117,
+        "text": "Together, the mechanism-ablation manifest and ablation rows attribute observed behavior to four runtime decisions: the authenticated FUSE format accounts for the warm-cache filesystem cost, elastic-write throttling accounts for SQLite p99 recovery, the GPU lane helps only the mounted open-file key refresh workflow with slack, and the TPM anchor converts the file-anchor replay negative control into fail-closed replay-after-advance behavior.  The sensitivity sweep then tests whether the QoS result depends on one constant rather than a stable controller regime."
+      },
+      {
+        "path": "Paper/6_Conclusion.tex",
+        "line": 4,
+        "text": "AEGIS-Q treats secure edge storage as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem.  Its authenticated format keeps AES-GCM data writes on the CPU, admits PQC/GPU maintenance only for slack-tolerant batches, and separates replayable file witnesses from externally anchored freshness checks.  On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.  The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+      },
+      {
+        "path": "Paper/generated_qos_recovery_table.tex",
+        "line": 3,
+        "text": "\\caption{SQLite p99 under mounted secure-storage pressure.  Hero rows are five-run medians; kernel rows are 3 retained runs each.}"
+      },
+      {
+        "path": "Paper/main.tex",
+        "line": 91,
+        "text": "On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms.  The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling.  This is a scoped runtime-boundary result, not deployed-filesystem or peak-throughput superiority."
+      }
+    ]
+  },
+  "claim_guard": {
+    "sqlite_p99_uniqueness_claim_allowed": true,
+    "required_before_claim": [
+      "Paper comparison table includes AEGIS-Q hero modes plus ionice and systemd_io_weight rows.",
+      "Paper text states the current repetition mismatch between five-run hero summaries and one-run kernel-control baselines.",
+      "Paper explains whether AEGIS-Q wins, loses, or offers different storage-visible control than kernel QoS."
+    ],
+    "forbidden_until_closed": [
+      "SQLite p99 recovery is unique to AEGIS-Q.",
+      "Kernel QoS cannot recover SQLite p99.",
+      "AEGIS-Q beats standard kernel throttling for SQLite p99 without qualification."
+    ]
+  },
+  "comparability_warnings": [
+    "Kernel-control rows are currently one repetition each.",
+    "The repeated hero summary and kernel baselines have different repetition counts and foreground sample counts.",
+    "This artifact supports a paper comparison table, not a broad deployment or superiority claim."
+  ],
+  "paper_outputs": {
+    "qos_recovery_table": "Paper/generated_qos_recovery_table.tex"
+  }
+}

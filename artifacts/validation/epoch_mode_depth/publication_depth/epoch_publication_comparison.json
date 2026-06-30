@@ -1,0 +1,1782 @@
+{
+  "cases": [
+    {
+      "client_write_fsync_latency_ns": {
+        "count": 5,
+        "max_ns": 14468277,
+        "mean_ns": 7765998.0,
+        "min_ns": 2605824,
+        "p50_ns": 4207343.0,
+        "p95_ns": 14453097.4,
+        "p999_ns": 14467973.408,
+        "p99_ns": 14465241.08
+      },
+      "error": null,
+      "label": "strict",
+      "lock_profile": {
+        "event_count": 283,
+        "exists": true,
+        "hot_locks": {},
+        "lock_hold_count": 256,
+        "lock_order_violations": 0,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_strict/lock_profile.jsonl",
+        "summary_count": 0
+      },
+      "measured_ops": [
+        {
+          "matches": true,
+          "op_index": 1,
+          "path": "/tmp/aegisq_strict_mnt_lruike6a/op_001.dat",
+          "payload_len": 16384,
+          "read_ns": 88769,
+          "write_fsync_ns": 2605824,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 2,
+          "path": "/tmp/aegisq_strict_mnt_lruike6a/op_002.dat",
+          "payload_len": 16384,
+          "read_ns": 101759,
+          "write_fsync_ns": 3156167,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 3,
+          "path": "/tmp/aegisq_strict_mnt_lruike6a/op_003.dat",
+          "payload_len": 16384,
+          "read_ns": 95064,
+          "write_fsync_ns": 4207343,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 4,
+          "path": "/tmp/aegisq_strict_mnt_lruike6a/op_004.dat",
+          "payload_len": 16384,
+          "read_ns": 91861,
+          "write_fsync_ns": 14392379,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 5,
+          "path": "/tmp/aegisq_strict_mnt_lruike6a/op_005.dat",
+          "payload_len": 16384,
+          "read_ns": 99343,
+          "write_fsync_ns": 14468277,
+          "written": 16384
+        }
+      ],
+      "measured_publication_events": [
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 748204,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 661463,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 722491,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 679278,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 726676,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        }
+      ],
+      "measured_publication_summary": {
+        "commit_latency_ns": {
+          "count": 5,
+          "max_ns": 748204,
+          "mean_ns": 707622.4,
+          "min_ns": 661463,
+          "p50_ns": 722491.0,
+          "p95_ns": 743898.3999999999,
+          "p999_ns": 748117.888,
+          "p99_ns": 747342.88
+        },
+        "data_fsync_count_total": 5,
+        "epoch_log_fsync_count_total": 0,
+        "journal_fsync_count_total": 5,
+        "publication_count": 5,
+        "sync_count_total": 10
+      },
+      "mode": "strict",
+      "pass": true,
+      "payload_bytes_measured": 81920,
+      "sync_count_per_measured_op": 2.0,
+      "sync_count_total": 10,
+      "throughput_mib_s": 2.011975794997629,
+      "total_write_fsync_ns": 38829990,
+      "trace": {
+        "commit_latency_ns": {
+          "count": 6,
+          "max_ns": 1045879,
+          "mean_ns": 763998.5,
+          "min_ns": 661463,
+          "p50_ns": 724583.5,
+          "p95_ns": 971460.25,
+          "p999_ns": 1044390.625,
+          "p99_ns": 1030995.25
+        },
+        "data_fsync_count_total": 6,
+        "epoch_append_events": [],
+        "epoch_append_group_size_max": 0,
+        "epoch_append_sync_primitives": [],
+        "epoch_log_fsync_count_total": 0,
+        "event_count": 6,
+        "exists": true,
+        "journal_fsync_count_total": 6,
+        "malformed_line_count": 0,
+        "modes": [
+          "strict"
+        ],
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_strict/publication_trace.jsonl",
+        "publication_count": 6,
+        "publication_events": [
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1045879,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 748204,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 661463,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 722491,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 679278,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 726676,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          }
+        ],
+        "rc_values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sync_count_total": 12
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_strict_mnt_lruike6a"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "warmup": [
+        {
+          "matches": true,
+          "op_index": 0,
+          "path": "/tmp/aegisq_strict_mnt_lruike6a/op_000.dat",
+          "payload_len": 16384,
+          "read_ns": 120482,
+          "write_fsync_ns": 7526824,
+          "written": 16384
+        }
+      ]
+    },
+    {
+      "client_write_fsync_latency_ns": {
+        "count": 5,
+        "max_ns": 14366695,
+        "mean_ns": 7482920.8,
+        "min_ns": 2566556,
+        "p50_ns": 3420575.0,
+        "p95_ns": 14359406.0,
+        "p999_ns": 14366549.22,
+        "p99_ns": 14365237.2
+      },
+      "error": null,
+      "label": "epoch_redo_log",
+      "lock_profile": {
+        "event_count": 286,
+        "exists": true,
+        "hot_locks": {},
+        "lock_hold_count": 261,
+        "lock_order_violations": 0,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_epoch_redo_log/lock_profile.jsonl",
+        "summary_count": 0
+      },
+      "measured_ops": [
+        {
+          "matches": true,
+          "op_index": 1,
+          "path": "/tmp/aegisq_epoch_redo_log_mnt_3q0w_wez/op_001.dat",
+          "payload_len": 16384,
+          "read_ns": 96509,
+          "write_fsync_ns": 2566556,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 2,
+          "path": "/tmp/aegisq_epoch_redo_log_mnt_3q0w_wez/op_002.dat",
+          "payload_len": 16384,
+          "read_ns": 95130,
+          "write_fsync_ns": 3420575,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 3,
+          "path": "/tmp/aegisq_epoch_redo_log_mnt_3q0w_wez/op_003.dat",
+          "payload_len": 16384,
+          "read_ns": 81111,
+          "write_fsync_ns": 2730528,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 4,
+          "path": "/tmp/aegisq_epoch_redo_log_mnt_3q0w_wez/op_004.dat",
+          "payload_len": 16384,
+          "read_ns": 90834,
+          "write_fsync_ns": 14330250,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 5,
+          "path": "/tmp/aegisq_epoch_redo_log_mnt_3q0w_wez/op_005.dat",
+          "payload_len": 16384,
+          "read_ns": 90176,
+          "write_fsync_ns": 14366695,
+          "written": 16384
+        }
+      ],
+      "measured_publication_events": [
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 2234305,
+          "epoch_log_fsync_count": 1,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 3094223,
+          "epoch_log_fsync_count": 1,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 2414028,
+          "epoch_log_fsync_count": 1,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 2347982,
+          "epoch_log_fsync_count": 1,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 2359917,
+          "epoch_log_fsync_count": 1,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        }
+      ],
+      "measured_publication_summary": {
+        "commit_latency_ns": {
+          "count": 5,
+          "max_ns": 3094223,
+          "mean_ns": 2490091.0,
+          "min_ns": 2234305,
+          "p50_ns": 2359917.0,
+          "p95_ns": 2958184.0,
+          "p999_ns": 3091502.22,
+          "p99_ns": 3067015.2
+        },
+        "data_fsync_count_total": 5,
+        "epoch_log_fsync_count_total": 5,
+        "journal_fsync_count_total": 0,
+        "publication_count": 5,
+        "sync_count_total": 10
+      },
+      "mode": "epoch-redo-log",
+      "pass": true,
+      "payload_bytes_measured": 81920,
+      "sync_count_per_measured_op": 2.0,
+      "sync_count_total": 10,
+      "throughput_mib_s": 2.08808838388347,
+      "total_write_fsync_ns": 37414604,
+      "trace": {
+        "commit_latency_ns": {
+          "count": 6,
+          "max_ns": 4662074,
+          "mean_ns": 2852088.1666666665,
+          "min_ns": 2234305,
+          "p50_ns": 2386972.5,
+          "p95_ns": 4270111.25,
+          "p999_ns": 4654234.745,
+          "p99_ns": 4583681.45
+        },
+        "data_fsync_count_total": 6,
+        "epoch_append_events": [
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 1,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 0,
+            "group_completion_wait_ns": 0,
+            "group_epoch": 0,
+            "group_open_wait_ns": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_sync_ns": 287528,
+            "group_wait_ns": 287593,
+            "log_path": "/tmp/aegisq_epoch_redo_log_storage_pqnczqc8/op_000.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 1,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 0,
+            "group_completion_wait_ns": 0,
+            "group_epoch": 0,
+            "group_open_wait_ns": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_sync_ns": 271417,
+            "group_wait_ns": 271482,
+            "log_path": "/tmp/aegisq_epoch_redo_log_storage_pqnczqc8/op_001.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 1,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 0,
+            "group_completion_wait_ns": 0,
+            "group_epoch": 0,
+            "group_open_wait_ns": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_sync_ns": 276695,
+            "group_wait_ns": 276769,
+            "log_path": "/tmp/aegisq_epoch_redo_log_storage_pqnczqc8/op_002.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 1,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 0,
+            "group_completion_wait_ns": 0,
+            "group_epoch": 0,
+            "group_open_wait_ns": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_sync_ns": 296037,
+            "group_wait_ns": 296112,
+            "log_path": "/tmp/aegisq_epoch_redo_log_storage_pqnczqc8/op_003.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 1,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 0,
+            "group_completion_wait_ns": 0,
+            "group_epoch": 0,
+            "group_open_wait_ns": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_sync_ns": 278778,
+            "group_wait_ns": 278843,
+            "log_path": "/tmp/aegisq_epoch_redo_log_storage_pqnczqc8/op_004.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 1,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 0,
+            "group_completion_wait_ns": 0,
+            "group_epoch": 0,
+            "group_open_wait_ns": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_sync_ns": 297278,
+            "group_wait_ns": 297352,
+            "log_path": "/tmp/aegisq_epoch_redo_log_storage_pqnczqc8/op_005.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          }
+        ],
+        "epoch_append_group_size_max": 1,
+        "epoch_append_sync_primitives": [
+          "fdatasync"
+        ],
+        "epoch_log_fsync_count_total": 6,
+        "event_count": 12,
+        "exists": true,
+        "journal_fsync_count_total": 0,
+        "malformed_line_count": 0,
+        "modes": [
+          "epoch-redo-log"
+        ],
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_epoch_redo_log/publication_trace.jsonl",
+        "publication_count": 6,
+        "publication_events": [
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 4662074,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 2234305,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 3094223,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 2414028,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 2347982,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 2359917,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          }
+        ],
+        "rc_values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sync_count_total": 12
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_epoch_redo_log_mnt_3q0w_wez"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "warmup": [
+        {
+          "matches": true,
+          "op_index": 0,
+          "path": "/tmp/aegisq_epoch_redo_log_mnt_3q0w_wez/op_000.dat",
+          "payload_len": 16384,
+          "read_ns": 120250,
+          "write_fsync_ns": 5171759,
+          "written": 16384
+        }
+      ]
+    },
+    {
+      "client_count": 8,
+      "client_write_fsync_latency_ns": {
+        "count": 8,
+        "max_ns": 61545758,
+        "mean_ns": 32144530.375,
+        "min_ns": 4366398,
+        "p50_ns": 31222161.0,
+        "p95_ns": 61013366.0,
+        "p999_ns": 61535110.160000004,
+        "p99_ns": 61439279.6
+      },
+      "epoch_append_group_size_max": 0,
+      "epoch_append_sync_primitives": [],
+      "epoch_group_max": 1,
+      "epoch_group_wait_ns": 0,
+      "error": null,
+      "label": "strict_grouped",
+      "lock_profile": {
+        "event_count": 373,
+        "exists": true,
+        "hot_locks": {},
+        "lock_hold_count": 338,
+        "lock_order_violations": 0,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_strict_grouped/lock_profile.jsonl",
+        "summary_count": 0
+      },
+      "measured_ops": [
+        {
+          "matches": true,
+          "op_index": 0,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_000.dat",
+          "payload_len": 16384,
+          "read_ns": 129130,
+          "write_fsync_ns": 61545758,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 1,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_001.dat",
+          "payload_len": 16384,
+          "read_ns": 284148,
+          "write_fsync_ns": 58229869,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 2,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_002.dat",
+          "payload_len": 16384,
+          "read_ns": 167796,
+          "write_fsync_ns": 56036100,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 3,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_003.dat",
+          "payload_len": 16384,
+          "read_ns": 87926,
+          "write_fsync_ns": 6408222,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 4,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_004.dat",
+          "payload_len": 16384,
+          "read_ns": 127241,
+          "write_fsync_ns": 5875703,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 5,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_005.dat",
+          "payload_len": 16384,
+          "read_ns": 121426,
+          "write_fsync_ns": 4669555,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 6,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_006.dat",
+          "payload_len": 16384,
+          "read_ns": 88759,
+          "write_fsync_ns": 4366398,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 7,
+          "path": "/tmp/aegisq_strict_grouped_mnt_jdsmv2la/group_op_007.dat",
+          "payload_len": 16384,
+          "read_ns": 154333,
+          "write_fsync_ns": 60024638,
+          "written": 16384
+        }
+      ],
+      "measured_publication_events": [
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 1117463,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 943046,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 832602,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 705861,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 1530482,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 1171528,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 725787,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 1,
+          "elapsed_ns": 1239028,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 1,
+          "mode": "strict",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 2
+        }
+      ],
+      "measured_publication_summary": {
+        "commit_latency_ns": {
+          "count": 8,
+          "max_ns": 1530482,
+          "mean_ns": 1033224.625,
+          "min_ns": 705861,
+          "p50_ns": 1030254.5,
+          "p95_ns": 1428473.0999999999,
+          "p999_ns": 1528441.822,
+          "p99_ns": 1510080.22
+        },
+        "data_fsync_count_total": 8,
+        "epoch_log_fsync_count_total": 0,
+        "journal_fsync_count_total": 8,
+        "publication_count": 8,
+        "sync_count_total": 16
+      },
+      "mode": "strict",
+      "pass": true,
+      "payload_bytes_measured": 131072,
+      "sync_count_per_measured_op": 2.0,
+      "sync_count_total": 16,
+      "throughput_mib_s": 1.5987223727024984,
+      "trace": {
+        "commit_latency_ns": {
+          "count": 8,
+          "max_ns": 1530482,
+          "mean_ns": 1033224.625,
+          "min_ns": 705861,
+          "p50_ns": 1030254.5,
+          "p95_ns": 1428473.0999999999,
+          "p999_ns": 1528441.822,
+          "p99_ns": 1510080.22
+        },
+        "data_fsync_count_total": 8,
+        "epoch_append_events": [],
+        "epoch_append_group_size_max": 0,
+        "epoch_append_sync_primitives": [],
+        "epoch_log_fsync_count_total": 0,
+        "event_count": 8,
+        "exists": true,
+        "journal_fsync_count_total": 8,
+        "malformed_line_count": 0,
+        "modes": [
+          "strict"
+        ],
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_strict_grouped/publication_trace.jsonl",
+        "publication_count": 8,
+        "publication_events": [
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1117463,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 943046,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 832602,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 705861,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1530482,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1171528,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 725787,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1239028,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 1,
+            "mode": "strict",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 2
+          }
+        ],
+        "rc_values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sync_count_total": 16
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_strict_grouped_mnt_jdsmv2la"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "wall_elapsed_ns": 78187434,
+      "workload_kind": "concurrent_unique_file_fdatasync"
+    },
+    {
+      "client_count": 8,
+      "client_write_fsync_latency_ns": {
+        "count": 8,
+        "max_ns": 67904733,
+        "mean_ns": 29177604.75,
+        "min_ns": 3900574,
+        "p50_ns": 8555037.0,
+        "p95_ns": 67711905.75,
+        "p999_ns": 67900876.455,
+        "p99_ns": 67866167.55
+      },
+      "epoch_append_group_size_max": 8,
+      "epoch_append_sync_primitives": [
+        "none",
+        "syncfs"
+      ],
+      "epoch_group_max": 8,
+      "epoch_group_wait_ns": 10000000,
+      "error": null,
+      "label": "epoch_redo_log_grouped",
+      "lock_profile": {
+        "event_count": 464,
+        "exists": true,
+        "hot_locks": {
+          "admission_state_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 256,
+            "order_violations": 0,
+            "samples": 2,
+            "wait_p99_le_ns": 256
+          },
+          "admission_trace_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 8192,
+            "order_violations": 0,
+            "samples": 3,
+            "wait_p99_le_ns": 256
+          },
+          "anchor_epoch_record_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 256,
+            "order_violations": 0,
+            "samples": 8,
+            "wait_p99_le_ns": 512
+          },
+          "anchor_lifecycle_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 32768,
+            "order_violations": 0,
+            "samples": 4,
+            "wait_p99_le_ns": 512
+          },
+          "anchor_pending_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 0,
+            "order_violations": 0,
+            "samples": 0,
+            "wait_p99_le_ns": 0
+          },
+          "anchor_worker_lock": {
+            "cond_wait_p99_le_ns": 268435456,
+            "cond_wait_samples": 13,
+            "hold_p99_le_ns": 32768,
+            "order_violations": 0,
+            "samples": 56,
+            "wait_p99_le_ns": 16384
+          },
+          "commit_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 524288,
+            "order_violations": 0,
+            "samples": 104,
+            "wait_p99_le_ns": 512
+          },
+          "committed_map_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 2048,
+            "order_violations": 0,
+            "samples": 32,
+            "wait_p99_le_ns": 512
+          },
+          "epoch_barrier_lock": {
+            "cond_wait_p99_le_ns": 8388608,
+            "cond_wait_samples": 19,
+            "hold_p99_le_ns": 524288,
+            "order_violations": 0,
+            "samples": 28,
+            "wait_p99_le_ns": 512
+          },
+          "fault_cutpoint_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 0,
+            "order_violations": 0,
+            "samples": 0,
+            "wait_p99_le_ns": 0
+          },
+          "fd_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 131072,
+            "order_violations": 0,
+            "samples": 88,
+            "wait_p99_le_ns": 65536
+          },
+          "file_anchor_commit_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 1024,
+            "order_violations": 0,
+            "samples": 16,
+            "wait_p99_le_ns": 512
+          },
+          "file_state_table_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 2048,
+            "order_violations": 0,
+            "samples": 16,
+            "wait_p99_le_ns": 512
+          },
+          "parallel_runtime_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 512,
+            "order_violations": 0,
+            "samples": 1,
+            "wait_p99_le_ns": 128
+          },
+          "parallel_shard_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 0,
+            "order_violations": 0,
+            "samples": 0,
+            "wait_p99_le_ns": 0
+          },
+          "qos_gpu_load_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 256,
+            "order_violations": 0,
+            "samples": 8,
+            "wait_p99_le_ns": 65536
+          },
+          "qos_throttle_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 0,
+            "order_violations": 0,
+            "samples": 0,
+            "wait_p99_le_ns": 0
+          },
+          "rekey_lifecycle_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 65536,
+            "order_violations": 0,
+            "samples": 3,
+            "wait_p99_le_ns": 256
+          },
+          "rekey_queue_lock": {
+            "cond_wait_p99_le_ns": 134217728,
+            "cond_wait_samples": 1,
+            "hold_p99_le_ns": 65536,
+            "order_violations": 0,
+            "samples": 6,
+            "wait_p99_le_ns": 256
+          },
+          "scheduler_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 512,
+            "order_violations": 0,
+            "samples": 28,
+            "wait_p99_le_ns": 32768
+          },
+          "trace_sink_lock": {
+            "cond_wait_p99_le_ns": 0,
+            "cond_wait_samples": 0,
+            "hold_p99_le_ns": 128,
+            "order_violations": 0,
+            "samples": 3,
+            "wait_p99_le_ns": 256
+          }
+        },
+        "lock_hold_count": 373,
+        "lock_order_violations": 0,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_epoch_redo_log_grouped/lock_profile.jsonl",
+        "summary_count": 21
+      },
+      "measured_ops": [
+        {
+          "matches": true,
+          "op_index": 0,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_000.dat",
+          "payload_len": 16384,
+          "read_ns": 82704,
+          "write_fsync_ns": 67904733,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 1,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_001.dat",
+          "payload_len": 16384,
+          "read_ns": 351769,
+          "write_fsync_ns": 65165103,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 2,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_002.dat",
+          "payload_len": 16384,
+          "read_ns": 265472,
+          "write_fsync_ns": 9104148,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 3,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_003.dat",
+          "payload_len": 16384,
+          "read_ns": 253213,
+          "write_fsync_ns": 8005926,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 4,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_004.dat",
+          "payload_len": 16384,
+          "read_ns": 123518,
+          "write_fsync_ns": 6618861,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 5,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_005.dat",
+          "payload_len": 16384,
+          "read_ns": 226232,
+          "write_fsync_ns": 5367695,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 6,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_006.dat",
+          "payload_len": 16384,
+          "read_ns": 192612,
+          "write_fsync_ns": 3900574,
+          "written": 16384
+        },
+        {
+          "matches": true,
+          "op_index": 7,
+          "path": "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry/group_op_007.dat",
+          "payload_len": 16384,
+          "read_ns": 119416,
+          "write_fsync_ns": 67353798,
+          "written": 16384
+        }
+      ],
+      "measured_publication_events": [
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 66525825,
+          "epoch_log_fsync_count": 1,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 1
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 64655584,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 0
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 7033287,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 0
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 8083445,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 0
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 4212898,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 0
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 5327519,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 0
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 13052112,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 0
+        },
+        {
+          "block_count": 4,
+          "data_fsync_count": 0,
+          "elapsed_ns": 3000796,
+          "epoch_log_fsync_count": 0,
+          "event": "publication_dispatch",
+          "journal_fsync_count": 0,
+          "mode": "epoch-redo-log",
+          "payload_bytes": 16384,
+          "rc": 0,
+          "sync_count": 0
+        }
+      ],
+      "measured_publication_summary": {
+        "commit_latency_ns": {
+          "count": 8,
+          "max_ns": 66525825,
+          "mean_ns": 21486433.25,
+          "min_ns": 3000796,
+          "p50_ns": 7558366.0,
+          "p95_ns": 65871240.65,
+          "p999_ns": 66512733.313,
+          "p99_ns": 66394908.129999995
+        },
+        "data_fsync_count_total": 0,
+        "epoch_log_fsync_count_total": 1,
+        "journal_fsync_count_total": 0,
+        "publication_count": 8,
+        "sync_count_total": 1
+      },
+      "mode": "epoch-redo-log",
+      "pass": true,
+      "payload_bytes_measured": 131072,
+      "sync_count_per_measured_op": 0.125,
+      "sync_count_total": 1,
+      "throughput_mib_s": 1.556238648873107,
+      "trace": {
+        "commit_latency_ns": {
+          "count": 8,
+          "max_ns": 66525825,
+          "mean_ns": 21486433.25,
+          "min_ns": 3000796,
+          "p50_ns": 7558366.0,
+          "p95_ns": 65871240.65,
+          "p999_ns": 66512733.313,
+          "p99_ns": 66394908.129999995
+        },
+        "data_fsync_count_total": 0,
+        "epoch_append_events": [
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 0,
+            "group_epoch": 1,
+            "group_open_wait_ns": 6952297,
+            "group_role": "leader",
+            "group_size": 8,
+            "group_sync_ns": 1172296,
+            "group_wait_ns": 8124593,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_007.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "syncfs"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 0,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 7832315,
+            "group_epoch": 1,
+            "group_open_wait_ns": 0,
+            "group_role": "follower",
+            "group_size": 8,
+            "group_sync_ns": 0,
+            "group_wait_ns": 7832315,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_000.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "none"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 0,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 5093611,
+            "group_epoch": 1,
+            "group_open_wait_ns": 0,
+            "group_role": "follower",
+            "group_size": 8,
+            "group_sync_ns": 0,
+            "group_wait_ns": 5093611,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_003.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "none"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 0,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 2664213,
+            "group_epoch": 1,
+            "group_open_wait_ns": 0,
+            "group_role": "follower",
+            "group_size": 8,
+            "group_sync_ns": 0,
+            "group_wait_ns": 2664213,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_005.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "none"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 0,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 5244084,
+            "group_epoch": 1,
+            "group_open_wait_ns": 0,
+            "group_role": "follower",
+            "group_size": 8,
+            "group_sync_ns": 0,
+            "group_wait_ns": 5244084,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_002.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "none"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 0,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 2741407,
+            "group_epoch": 1,
+            "group_open_wait_ns": 0,
+            "group_role": "follower",
+            "group_size": 8,
+            "group_sync_ns": 0,
+            "group_wait_ns": 2741407,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_004.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "none"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 0,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 8240528,
+            "group_epoch": 1,
+            "group_open_wait_ns": 0,
+            "group_role": "follower",
+            "group_size": 8,
+            "group_sync_ns": 0,
+            "group_wait_ns": 8240528,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_001.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "none"
+          },
+          {
+            "barrier_rc": 0,
+            "data_fsync_fallback_count": 0,
+            "epoch_log_sync_count": 0,
+            "event": "epoch_redo_log_append",
+            "force_syncfs": 1,
+            "group_completion_wait_ns": 2063824,
+            "group_epoch": 1,
+            "group_open_wait_ns": 0,
+            "group_role": "follower",
+            "group_size": 8,
+            "group_sync_ns": 0,
+            "group_wait_ns": 2063824,
+            "log_path": "/tmp/aegisq_epoch_redo_log_grouped_storage_8aqbyk30/group_op_006.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "none"
+          }
+        ],
+        "epoch_append_group_size_max": 8,
+        "epoch_append_sync_primitives": [
+          "none",
+          "syncfs"
+        ],
+        "epoch_log_fsync_count_total": 1,
+        "event_count": 16,
+        "exists": true,
+        "journal_fsync_count_total": 0,
+        "malformed_line_count": 0,
+        "modes": [
+          "epoch-redo-log"
+        ],
+        "path": "artifacts/validation/epoch_mode_depth/publication_depth/comparison_epoch_redo_log_grouped/publication_trace.jsonl",
+        "publication_count": 8,
+        "publication_events": [
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 66525825,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 1
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 64655584,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 0
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 7033287,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 0
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 8083445,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 0
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 4212898,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 0
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 5327519,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 0
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 13052112,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 0
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 0,
+            "elapsed_ns": 3000796,
+            "epoch_log_fsync_count": 0,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 16384,
+            "rc": 0,
+            "sync_count": 0
+          }
+        ],
+        "rc_values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sync_count_total": 1
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_epoch_redo_log_grouped_mnt_4s6_yvry"
+        ],
+        "fuse_returncode": 8,
+        "returncode": 0
+      },
+      "wall_elapsed_ns": 80321871,
+      "workload_kind": "concurrent_unique_file_fdatasync"
+    }
+  ],
+  "comparison_verdict": "Grouped epoch redo-log amortized the metadata barrier in the concurrent mounted workload: total traced sync count is lower than strict while journal fsync remains off the foreground epoch path. Throughput is lower_or_equal and client p99 is higher_or_equal versus strict in this run, so claims must be scoped to the metrics that actually improve.",
+  "generated_by": "experiments/run_epoch_publication_comparison.py",
+  "generated_utc": "2026-06-30T05:17:56Z",
+  "negative_claim_guard": "This artifact is a narrow mounted-path comparison. It does not support any claim that epoch mode reduces total sync count, improves throughput, improves p99 latency, or is SOSP-ready unless the reported metrics show that result under the stated workload. A zero journal-fsync count only supports the narrower claim that strict journal publication has moved out of the foreground epoch-mode write path.",
+  "overall_pass": true,
+  "schema_version": 1,
+  "scope": "Gate 0.9-S4 strict versus epoch publication measurement.",
+  "workload_contract": {
+    "cache_state": "not dropped; same mounted-path contract for both modes",
+    "group_clients": 8,
+    "group_wait_ns": 10000000,
+    "modes": [
+      "strict",
+      "epoch-redo-log"
+    ],
+    "mount_options": "-f foreground FUSE via helper",
+    "operation": "unique-file write + fdatasync + readback",
+    "payload_bytes": 16384,
+    "repetitions": 5,
+    "warmup": 1
+  }
+}

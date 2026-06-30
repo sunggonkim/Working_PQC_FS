@@ -1,0 +1,103 @@
+{
+  "decision": {
+    "next_if_osdi_demands_more": "Run O2 supported fscrypt first; only open a kernel-assist publication redesign if the paper explicitly claims kernel integration rather than a scoped edge FUSE runtime.",
+    "verdict": "hybrid-barrier-closeout",
+    "what_is_closed": "O3 is closed as a production-facing hybrid barrier response: strict per-write publication remains the conservative D/J/C cost boundary, while epoch/group publication is the implemented opt-in path for concurrent or batched writes that can share a barrier.",
+    "what_is_not_claimed": [
+      "not a single-client strict-path throughput win",
+      "not a general-purpose filesystem throughput claim",
+      "not kernel upstreaming or a kernel-assist implementation",
+      "not physical power-loss or drive-cache certification"
+    ]
+  },
+  "generated_utc": "2026-06-30T13:57:54.304044+00:00",
+  "inputs": {
+    "a1_throughput_decision": "artifacts/validation/a1_throughput_decision/a1_throughput_decision.json",
+    "a2_gap_attribution": "artifacts/validation/a2_gap_attribution/a2_gap_attribution.json",
+    "a3_batching_decision": "artifacts/validation/a3_batching_decision/a3_batching_decision.json",
+    "x6_strict_cost_reduction": "artifacts/validation/x6_strict_cost_reduction/x6_strict_cost_reduction_model.json"
+  },
+  "metrics": {
+    "hybrid_epoch_fault_matrix_loss_boundary": {
+      "epoch_p99_ms": 53.136288719999996,
+      "epoch_sync_count_total": 5,
+      "epoch_throughput_mib_s": 1.0764902470241977,
+      "interpretation": "The grouped barrier can reduce sync count while still losing latency or throughput when waiting dominates; it is an admission rule, not a general fast path.",
+      "strict_p99_ms": 2.6698860199999994,
+      "strict_sync_count_total": 8,
+      "strict_throughput_mib_s": 6.4461233014465105
+    },
+    "hybrid_epoch_grouped_current_100us": {
+      "epoch_p99_ms": 40.13899472999999,
+      "epoch_sync_count_total": 6.0,
+      "epoch_sync_primitives": [
+        "fdatasync",
+        "none",
+        "syncfs"
+      ],
+      "epoch_throughput_mib_s": 9.721212539283178,
+      "max_epoch_append_group_size": 3,
+      "p99_reduction_fraction": 0.156970379311013,
+      "strict_p99_ms": 47.612792889999994,
+      "strict_sync_count_total": 8.0,
+      "strict_throughput_mib_s": 9.051860598631222,
+      "sync_count_reduction_fraction": 0.25,
+      "throughput_increase_fraction": 0.07394633770135295
+    },
+    "strict_single_client_cost_boundary": {
+      "a2_aegisq_to_gocryptfs_ratio": 0.1024206263153264,
+      "frozen_aegisq_p99_us_median": 11206.656,
+      "frozen_aegisq_throughput_mib_s_median": 0.3600606918334961,
+      "marker_syncfs_removed_by_x6": 1070,
+      "remaining_barriers": [
+        "data-sidecar durability",
+        "journal-sidecar durability",
+        "marker/checkpoint publication"
+      ],
+      "strict_publication_cycles_from_a2": 1070,
+      "strict_sync_family_ops_after_x6": 3210,
+      "strict_sync_family_ops_per_cycle_after_x6": 3.0
+    }
+  },
+  "overall_pass": true,
+  "paper_checks": {
+    "djc_barrier_boundary_present": true,
+    "hybrid_barrier_answer_present": true,
+    "kernel_assist_future_scoped": true,
+    "physical_power_loss_negated": true,
+    "single_client_not_general_win": true,
+    "strict_path_cost_boundary_present": true
+  },
+  "proof_checks": {
+    "a1_passes": true,
+    "a2_present": true,
+    "a3_grouped_reduces_sync_count": true,
+    "a3_has_win_and_loss_boundary": true,
+    "a3_passes": true,
+    "a3_replay_fault_matrix_passes": true,
+    "a3_single_not_general_win": true,
+    "current_grouped_sync_reduction_positive": true,
+    "strict_per_cycle_still_has_three_boundaries": true,
+    "x6_passes": true,
+    "x6_removed_marker_syncfs": true
+  },
+  "schema": "aegisq.o3_strict_path_practicality.v1",
+  "source_checks": {
+    "epoch_can_skip_journal_fsync": true,
+    "epoch_group_admission_knobs_present": true,
+    "epoch_group_barrier_present": true,
+    "epoch_redo_log_mode_present": true,
+    "epoch_shared_syncfs_barrier_present": true,
+    "parallel_commit_runtime_present": true,
+    "strict_exposes_epoch_callbacks": true,
+    "strict_keeps_data_fdatasync": true,
+    "strict_keeps_journal_fdatasync": true
+  },
+  "source_files": {
+    "epoch_publish": "code/storage/pqc_epoch_publish.c",
+    "epoch_publish_header": "code/storage/pqc_epoch_publish.h",
+    "parallel_commit": "code/fs/pqc_parallel_commit.c",
+    "strict_publish": "code/storage/pqc_strict_publish.c",
+    "strict_publish_header": "code/storage/pqc_strict_publish.h"
+  }
+}

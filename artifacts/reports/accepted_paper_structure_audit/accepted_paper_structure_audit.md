@@ -28,5 +28,5 @@
 | first-page pressure/gap | `True` | `True` | `True` |
 | authenticated format and D/J/C publication | `True` | `True` | `True` |
 | CPU-first data lane and elastic key lane | `True` | `True` | `True` |
-| external freshness boundary | `True` | `True` | `True` |
+| external replay boundary | `True` | `True` | `True` |
 | telemetry-to-storage QoS | `True` | `True` | `True` |

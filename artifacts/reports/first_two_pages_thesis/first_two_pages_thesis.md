@@ -7,16 +7,16 @@
 
 | Anchor | Source | Present |
 | --- | --- | ---: |
-| `pressure_result` | `Paper/1_Introduction.tex:38` | `True` |
+| `pressure_result` | `Paper/1_Introduction.tex:39` | `True` |
 | `capability_table` | `Paper/1_Introduction.tex:16` | `True` |
-| `concrete_gap` | `Paper/1_Introduction.tex:36` | `True` |
-| `central_thesis` | `Paper/1_Introduction.tex:40` | `True` |
-| `design_insight` | `Paper/1_Introduction.tex:42` | `True` |
-| `contribution_intro` | `Paper/1_Introduction.tex:44` | `True` |
-| `contribution_c1` | `Paper/1_Introduction.tex:46` | `True` |
-| `contribution_c2` | `Paper/1_Introduction.tex:47` | `True` |
-| `contribution_c3` | `Paper/1_Introduction.tex:48` | `True` |
-| `contribution_c4` | `Paper/1_Introduction.tex:49` | `True` |
+| `concrete_gap` | `Paper/1_Introduction.tex:37` | `True` |
+| `central_thesis` | `Paper/1_Introduction.tex:4` | `True` |
+| `design_insight` | `Paper/1_Introduction.tex:43` | `True` |
+| `contribution_intro` | `Paper/1_Introduction.tex:45` | `True` |
+| `contribution_c1` | `Paper/1_Introduction.tex:47` | `True` |
+| `contribution_c2` | `Paper/1_Introduction.tex:48` | `True` |
+| `contribution_c3` | `Paper/1_Introduction.tex:49` | `True` |
+| `contribution_c4` | `Paper/1_Introduction.tex:50` | `True` |
 | `not_weaker_component_stack` | `Paper/2_Background.tex:13` | `True` |
 
 ## Compiled PDF Checks
@@ -29,6 +29,10 @@
 | `first_two_pages_thesis` | `True` |
 | `first_two_pages_contributions` | `True` |
 | `first_two_pages_component_stack_answer` | `True` |
+
+## Forbidden First-Page Terms
+
+- Hits: `[]`
 
 ## Support Gates
 
@@ -46,5 +50,6 @@
 | `paper_pages_12` | `True` |
 | `source_anchors_present` | `True` |
 | `compiled_first_two_pages_present` | `True` |
+| `no_overstrong_freshness_root_language` | `True` |
 | `positive_contributions_before_defensive_scope` | `True` |
 | `support_gates_pass` | `True` |

@@ -1,4 +1,4 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-AEGIS-Q is an evidence-first secure edge-storage prototype: secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms with one deadline miss; AEGIS-Q recovers 8.8~ms, zero misses, and 2.7~MB/s background progress.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.
+AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime under secure-storage pressure, not blanket GPU offload.  Its format keeps AES-GCM writes on CPU, admits ML-KEM/cuPQC maintenance only with slack, and reports 8.15~ms SQLite p99 with 3.02~MB/s background progress on Thor.  Accelerator throughput matters only after publication order, QoS, and replay boundaries are explicit.

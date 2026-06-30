@@ -1,91 +1,146 @@
-# Mount-Key Lifecycle Manifest
+# Key-Management Lifecycle Manifest
 
 - Overall pass: `true`
-- Scope: Mount-key lifecycle scope artifact.  It supports authenticated storage-format correctness, clean remount, tamper rejection, and mounted open-file envelope refresh.  It does not claim hardware-backed credential release, deployed credential rotation, transactional rewrap recovery, or credential-only rollback resistance.
+- Scope: Key-management lifecycle closeout for the mounted prototype. It covers the password-derived mount key, scrypt/PBKDF2 boundary, per-file envelope secret, AES-GCM data-block key, mount-lifetime ML-KEM keypair, freshness anchor material, TPM NV/PCR policy status, open-file rekey, recovery, rotation boundary, and failure modes. It does not claim hardware-backed credential release, deployed credential rotation, persistent PCR-bound key release, transactional rewrap recovery, or credential-only rollback resistance.
 
-## Checks
+## Close Conditions
 
-- `all_required_decisions_present`: `true`
-- `all_rows_have_evidence_and_scope`: `true`
-- `source_checks_pass`: `true`
-- `artifact_checks_pass`: `true`
-- `paper_covers_all_lifecycle_decisions`: `true`
+- `production_lifecycle_table_complete`: `true`
+- `source_boundary_matches_lifecycle_table`: `true`
+- `retained_d1_d2_c5_evidence_linked`: `true`
+- `paper_summarizes_key_lifecycle_and_non_claims`: `true`
 
-## Source Checks
+## lifecycle_table_checks
 
-- `mount_password_required`: `true`
-- `pbkdf2_sha256_master_key`: `true`
-- `random_dek_and_file_id_on_create`: `true`
-- `metadata_store_wraps_under_mount_key`: `true`
-- `metadata_store_hmac_authenticates_envelope`: `true`
-- `metadata_load_hmac_before_unwrap`: `true`
-- `metadata_load_rejects_bad_hmac`: `true`
-- `rekey_worker_refreshes_open_file_secret`: `true`
-- `rekey_worker_updates_runtime_epoch`: `true`
-- `rekey_rewrap_not_transactional`: `true`
-- `mounted_target_excludes_legacy_file_key_helper`: `true`
-- `legacy_epoch_helper_is_not_mounted_path`: `true`
+- `all_required_materials_present`: `true`
+- `all_names_match_materials`: `true`
+- `all_rows_have_owner_producer_storage_protector_recovery`: `true`
+- `data_key_is_only_data_plane_critical`: `true`
+- `tpm_pcr_policy_is_non_claim`: `true`
+- `no_material_is_hardware_released`: `true`
+- `self_test_validates_table`: `true`
+- `self_test_wired_to_binary`: `true`
+- `build_includes_lifecycle_source`: `true`
 
-## Artifact Checks
+## source_checks
 
+- `runtime_requires_mount_password`: `true`
+- `new_roots_use_scrypt_metadata`: `true`
+- `legacy_pbkdf2_is_compatibility_path`: `true`
+- `envelope_wrapped_under_mount_key_and_file_id`: `true`
+- `envelope_hmac_before_unwrap`: `true`
+- `tampered_envelope_rejects`: `true`
+- `data_plane_uses_aes_gcm_aad`: `true`
+- `rekey_refreshes_open_file_envelope_not_data_key_rotation`: `true`
+- `freshness_anchor_uses_file_or_tpm_nv_backend`: `true`
+- `persistent_pcr_key_release_not_in_anchor_source`: `true`
+
+## artifact_checks
+
+- `d1_kdf_verdict_passes`: `true`
+- `d2_crypto_plane_guard_passes`: `true`
+- `c5_freshness_ladder_guard_passes`: `true`
+- `tpm_policy_scopes_no_credential_release`: `true`
 - `clean_remount_passes`: `true`
 - `tampered_envelope_rejected`: `true`
 - `keyplane_workflow_passes`: `true`
-- `keyplane_methodology_passes`: `true`
 - `generation_matrix_passes`: `true`
 - `file_anchor_old_state_is_negative_control`: `true`
 - `tpm_old_state_fails_closed`: `true`
-- `tpm_policy_scopes_no_credential_release`: `true`
+
+## paper_gates
+
+- `scrypt_new_root`: `true`
+- `mount_key_not_hardware_released`: `true`
+- `no_hardware_credential_release`: `true`
+- `rekey_boundary`: `true`
+- `runtime_epoch_boundary`: `true`
+- `no_transactional_rewrap`: `true`
+- `envelope_not_rollback`: `true`
+- `bulk_data_boundary`: `true`
+- `persistent_pcr_nonclaim`: `true`
 
 ## Lifecycle Rows
 
-### password_derived_mount_key_boundary
+### mount-key
 
-- Current evidence: pqc_subsystem_init() requires PQC_MASTER_PASSWORD, derives g_master_key with PBKDF2-HMAC-SHA256, and pqc_create() generates a random 256-bit per-file DEK plus file identifier.
-- Policy or scope: The mount key is the prototype root credential.  This closes only the storage-format correctness boundary, not deployed credential protection.
-- Paper gate phrase: `mount key is password-derived and never hardware-released`
+- Material: `PQC_KEY_MATERIAL_MOUNT_KEY`
+- Plane/status: `PQC_KEY_LIFECYCLE_PLANE_KEY` / `PQC_KEY_LIFECYCLE_STATUS_IMPLEMENTED`
+- Owner: pqc_keyring.c
+- Producer: pqc_keyring_derive_master_key
+- Storage: process memory g_master_key; .pqc_kdf stores KDF metadata
+- Protector: OpenSSL scrypt for new roots; PBKDF2 legacy compatibility only
+- Rotation: cleared on runtime cleanup and rederived on mount
+- Recovery: password plus canonical .pqc_kdf metadata
+- Failure boundary: invalid KDF metadata rejects; no TPM/PCR key release
 
-### hardware_backed_credential_release_plan
+### per-file-envelope-secret
 
-- Current evidence: The TPM policy manifest explicitly records no hardware-backed credential release, and the mounted FUSE source has no TPM/PCR release path for g_master_key.
-- Policy or scope: Hardware-backed release remains out of scope; TPM evidence is limited to freshness-anchor behavior.
-- Paper gate phrase: `no hardware-backed credential release path for the mount key`
+- Material: `PQC_KEY_MATERIAL_FILE_ENVELOPE_SECRET`
+- Plane/status: `PQC_KEY_LIFECYCLE_PLANE_KEY` / `PQC_KEY_LIFECYCLE_STATUS_IMPLEMENTED`
+- Owner: pqc_keyring.c,pqc_fd_context.c,pqc_rekey.c
+- Producer: pqc_keyring_metadata_store/load and rekey worker
+- Storage: user.pqc_metadata xattr plus fd-lifecycle memory
+- Protector: HMAC-SHA256 metadata check and mount-key/file-id wrapping
+- Rotation: explicit rekey worker refresh when configured
+- Recovery: xattr unwrap under the current mount key and file id
+- Failure boundary: missing or tampered xattr rejects authenticated open
 
-### key_rotation
+### aes-gcm-data-block-key
 
-- Current evidence: The rekey worker batches open file descriptors, encapsulates fresh key material on the admitted executor, installs it in the open fd context, increments an in-memory key_epoch, and persists a new envelope.
-- Policy or scope: This is open-file DEK refresh.  It is not deployed mount credential rotation, administrator key rollover, or a persistent KEM hierarchy.
-- Paper gate phrase: `rekey is open-file DEK refresh rather than deployed credential rotation`
+- Material: `PQC_KEY_MATERIAL_DATA_BLOCK_KEY`
+- Plane/status: `PQC_KEY_LIFECYCLE_PLANE_DATA` / `PQC_KEY_LIFECYCLE_STATUS_IMPLEMENTED`
+- Owner: pqc_crypto.c,pqc_writeback.c,pqc_file_io.c
+- Producer: fd-context per-file secret loaded from keyring metadata
+- Storage: fd-lifecycle memory only
+- Protector: AES-256-GCM nonce/AAD bound to file id, block, generation, length
+- Rotation: inherits per-file envelope-secret refresh
+- Recovery: reload per-file envelope secret before decrypting blocks
+- Failure boundary: tag mismatch returns authentication failure
 
-### envelope_rewrap
+### mount-lifetime-kem-keypair
 
-- Current evidence: metadata_store() masks the per-file DEK under the mount key and file id and HMAC-authenticates the envelope; metadata_load() verifies the HMAC before unwrapping.  The retained key-plane workflow refreshes 1,024 open files per mode, and the tamper regression rejects a corrupted metadata xattr with EKEYREJECTED.
-- Policy or scope: Envelope rewrap evidence applies to mounted open files and authenticated open/remount behavior only.
-- Paper gate phrase: `HMAC envelope rewrap for open files`
+- Material: `PQC_KEY_MATERIAL_MOUNT_KEM_KEYPAIR`
+- Plane/status: `PQC_KEY_LIFECYCLE_PLANE_KEY` / `PQC_KEY_LIFECYCLE_STATUS_IMPLEMENTED`
+- Owner: pqc_runtime.c,pqc_rekey.c
+- Producer: OQS_KEM_keypair at runtime init
+- Storage: mount-lifetime process memory
+- Protector: process isolation and explicit cleanup zeroization
+- Rotation: new keypair on each mount
+- Recovery: not persisted; remount generates a new keypair
+- Failure boundary: keypair failure aborts runtime init
 
-### epoch_counter_interaction
+### committed-prefix-freshness-anchor
 
-- Current evidence: The mounted path has an in-memory key_epoch incremented by the rekey worker.  The older pqc_file_key epoch/grace helper is present in source but is not part of the pqc_fuse CMake target.
-- Policy or scope: Epochs are runtime bookkeeping for the evaluated path, not a persisted anti-rollback journal or stale-handle proof.
-- Paper gate phrase: `runtime key epoch is in-memory bookkeeping, not a persistent anti-rollback journal`
+- Material: `PQC_KEY_MATERIAL_FRESHNESS_ANCHOR`
+- Plane/status: `PQC_KEY_LIFECYCLE_PLANE_FRESHNESS` / `PQC_KEY_LIFECYCLE_STATUS_IMPLEMENTED`
+- Owner: pqc_anchor.c,pqc_checkpoint.c,pqc_anchor_worker.c
+- Producer: committed-prefix root over per-file generation state
+- Storage: file backend or administrator-provisioned TPM NV backend
+- Protector: prefix-anchor digest and fail-closed load checks
+- Rotation: advanced by checkpoint/freshness-anchor publication
+- Recovery: anchor load compares stored prefix against reconstructed state
+- Failure boundary: file backend is replayable; TPM path depends on provisioning
 
-### recovery_after_failed_rewrap
+### persistent-tpm-pcr-key-release-policy
 
-- Current evidence: No retained artifact exercises an interrupted envelope rewrap, and the rekey worker does not implement a transactional rewrap journal.  Existing retained evidence covers HMAC fail-closed behavior on later open and clean remount after normal writes.
-- Policy or scope: The prototype makes no transactional recovery claim for failed rewrap; future work must add a cut-point campaign before making that claim.
-- Paper gate phrase: `no transactional rewrap recovery claim`
-
-### rollback_behavior_for_old_envelopes
-
-- Current evidence: The generation fault matrix records file-anchor stale snapshot replay as an expected negative control and records the existing TPM stale snapshot artifact as fail closed.
-- Policy or scope: A password-derived envelope by itself is replayable with a whole backing snapshot.  Rollback resistance is claimed only when generation/checkpoint and external-anchor evidence reject stale state.
-- Paper gate phrase: `password-derived envelope alone is not rollback resistance`
+- Material: `PQC_KEY_MATERIAL_TPM_PCR_POLICY`
+- Plane/status: `PQC_KEY_LIFECYCLE_PLANE_FRESHNESS` / `PQC_KEY_LIFECYCLE_STATUS_NON_CLAIM`
+- Owner: pqc_anchor.c
+- Producer: not implemented in the mounted production path
+- Storage: none in this revision
+- Protector: none; persistent PCR-bound key release is a non-claim
+- Rotation: not implemented
+- Recovery: not implemented
+- Failure boundary: must not be used to claim sealed-key or PCR-bound recovery
 
 ## Non-Claims
 
 - no hardware-backed credential release path for the mount key
 - no deployed mount credential rotation
 - no persistent KEM hierarchy
+- no persistent PCR-bound key release
+- no TPM/PCR sealed-key recovery
 - no persistent epoch anti-rollback journal in the mounted path
 - no transactional rewrap recovery claim
 - no credential-only rollback resistance

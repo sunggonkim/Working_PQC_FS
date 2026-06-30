@@ -1,0 +1,760 @@
+{
+  "artifact": "sqlite_hero_validity_closeout",
+  "claim_boundary": {
+    "allowed": [
+      "SQLite WAL/FULL foreground transaction p99 under the retained mounted secure-storage pressure workflow",
+      "four-mode comparison: app-only, unthrottled storage, simple controller, and AEGIS-Q policy",
+      "AEGIS-Q storage-visible throttling records policy/telemetry/daemon-throttle decisions in every repeated run",
+      "kernel-QoS rows are compared with an explicit repetition mismatch warning"
+    ],
+    "forbidden": [
+      "broad workload generality",
+      "SQLite recovery uniqueness without qualification",
+      "external application scheduler recovery",
+      "general-purpose filesystem performance",
+      "deployed-filesystem or peak-throughput superiority"
+    ],
+    "scoped_instability": {
+      "aegis_recovers_p99": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 4
+      },
+      "aegis_removes_deadline_misses": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 3
+      },
+      "pressure_causes_deadline_miss": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 2
+      },
+      "pressure_raises_p99": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 3
+      }
+    }
+  },
+  "close_conditions": {
+    "four_single_modes_acceptable": true,
+    "four_single_modes_present": true,
+    "kernel_qos_comparison_available": true,
+    "methodology_component_coverage_complete": true,
+    "paper_scope_guard_passes": true,
+    "repeated_mode_summaries_complete": true,
+    "repeated_raw_logs_complete": true,
+    "repeated_warmup_and_five_runs": true,
+    "required_inputs_present": true,
+    "required_recovery_checks_pass": true,
+    "single_bundle_passes": true,
+    "single_raw_logs_complete": true,
+    "stat_thermal_audit_passes": true,
+    "thermal_log_retained": true,
+    "unstable_recovery_directions_are_scoped": true
+  },
+  "kernel_qos_integration": {
+    "claim_guard": {
+      "forbidden_until_closed": [
+        "SQLite p99 recovery is unique to AEGIS-Q.",
+        "Kernel QoS cannot recover SQLite p99.",
+        "AEGIS-Q beats standard kernel throttling for SQLite p99 without qualification."
+      ],
+      "required_before_claim": [
+        "Paper comparison table includes AEGIS-Q hero modes plus ionice and systemd_io_weight rows.",
+        "Paper text states the current repetition mismatch between five-run hero summaries and one-run kernel-control baselines.",
+        "Paper explains whether AEGIS-Q wins, loses, or offers different storage-visible control than kernel QoS."
+      ],
+      "sqlite_p99_uniqueness_claim_allowed": true
+    },
+    "comparability_warnings": [
+      "Kernel-control rows are currently one repetition each.",
+      "The repeated hero summary and kernel baselines have different repetition counts and foreground sample counts.",
+      "This artifact supports a paper comparison table, not a broad deployment or superiority claim."
+    ],
+    "overall_pass": true,
+    "paper_compares_both_kernel_baselines": true,
+    "two_kernel_baselines_measured": true
+  },
+  "overall_pass": true,
+  "paper_scope_guard": {
+    "broad_generality_hits": [],
+    "complete": true,
+    "paper_files": [
+      "Paper/1_Introduction.tex",
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/6_Conclusion.tex",
+      "Paper/main.tex"
+    ],
+    "required_phrases": {
+      "no_external_scheduler": true,
+      "no_uniqueness_claim": true,
+      "repeated_vs_kernel_boundary": true,
+      "scoped_runtime_boundary": true,
+      "sqlite_kernel_qos_table": true,
+      "workload_boundary": true
+    },
+    "unguarded_broad_generality_hits": []
+  },
+  "raw_log_evidence": {
+    "repeated": {
+      "bundle_root": "artifacts/validation/qos_sqlite_hero_methodology",
+      "complete": true,
+      "expected_empty_logs": [
+        {
+          "key": "background_jsonl",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/app_only/background_writer.jsonl",
+          "run": "rep_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/app_only/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_00"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/app_only/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_00"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_00"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/simple_controller/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "aegis_policy",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_00/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_00"
+        },
+        {
+          "key": "background_jsonl",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/app_only/background_writer.jsonl",
+          "run": "rep_01"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/app_only/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_01"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/app_only/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_01"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_01"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_01"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_01"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/simple_controller/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_01"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "aegis_policy",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_01/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_01"
+        },
+        {
+          "key": "background_jsonl",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/background_writer.jsonl",
+          "run": "rep_02"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_02"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/app_only/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_02"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_02"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_02"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_02"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/simple_controller/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_02"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "aegis_policy",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_02/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_02"
+        },
+        {
+          "key": "background_jsonl",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/background_writer.jsonl",
+          "run": "rep_03"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_03"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/app_only/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_03"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_03"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_03"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_03"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/simple_controller/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_03"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "aegis_policy",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_03/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_03"
+        },
+        {
+          "key": "background_jsonl",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/app_only/background_writer.jsonl",
+          "run": "rep_04"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/app_only/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_04"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/app_only/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_04"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_04"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_04"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_04"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/simple_controller/runtime_fuse_throttle_trace.jsonl",
+          "run": "rep_04"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "aegis_policy",
+          "path": "artifacts/validation/qos_sqlite_hero_methodology/rep_04/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+          "run": "rep_04"
+        }
+      ],
+      "foreground_rows_counted": 7680,
+      "log_paths_checked": 200,
+      "missing_or_empty_logs": [],
+      "run_count": 5
+    },
+    "single": {
+      "bundle_root": "artifacts/validation/qos_sqlite_hero_bundle",
+      "complete": true,
+      "expected_empty_logs": [
+        {
+          "key": "background_jsonl",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/app_only/background_writer.jsonl",
+          "run": "single_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/app_only/mount_logs/pqc_fuse.stdout.txt",
+          "run": "single_00"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "app_only",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/app_only/runtime_fuse_throttle_trace.jsonl",
+          "run": "single_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
+          "run": "single_00"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "unthrottled_storage",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
+          "run": "single_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/mount_logs/pqc_fuse.stdout.txt",
+          "run": "single_00"
+        },
+        {
+          "key": "runtime_fuse_throttle_trace",
+          "mode": "simple_controller",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/runtime_fuse_throttle_trace.jsonl",
+          "run": "single_00"
+        },
+        {
+          "key": "fuse_stdout",
+          "mode": "aegis_policy",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
+          "run": "single_00"
+        }
+      ],
+      "foreground_rows_counted": 1536,
+      "log_paths_checked": 40,
+      "missing_or_empty_logs": [],
+      "run_count": 1
+    }
+  },
+  "repeated_methodology_summary": {
+    "component_coverage_summary": {
+      "aegis_daemon_throttle_trace": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "background_secure_writer_logs": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "foreground_sqlite_logs": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "mounted_fuse_logs": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "policy_trace_logs": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "required_modes_present": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "simple_controller_trace": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "telemetry_sampler_logs": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      }
+    },
+    "mode_summaries": {
+      "aegis_policy": {
+        "all_acceptable": true,
+        "deadline_misses": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.0,
+          "median": 0.0,
+          "p05": 0.0,
+          "p95": 1.0,
+          "runs": 5
+        },
+        "p99_ms": {
+          "ci95_high": 10.001156430000002,
+          "ci95_low": 7.04147598,
+          "median": 8.15053043,
+          "p05": 7.04147598,
+          "p95": 10.001156430000002,
+          "runs": 5
+        },
+        "runs": 5,
+        "storage_mb_s": {
+          "ci95_high": 3.1676303493572924,
+          "ci95_low": 2.888516699385721,
+          "median": 3.0160640171203785,
+          "p05": 2.888516699385721,
+          "p95": 3.1676303493572924,
+          "runs": 5
+        }
+      },
+      "app_only": {
+        "all_acceptable": true,
+        "deadline_misses": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.0,
+          "median": 0.0,
+          "p05": 0.0,
+          "p95": 1.0,
+          "runs": 5
+        },
+        "p99_ms": {
+          "ci95_high": 11.361421180000008,
+          "ci95_low": 6.24338126,
+          "median": 7.253253040000001,
+          "p05": 6.24338126,
+          "p95": 11.361421180000008,
+          "runs": 5
+        },
+        "runs": 5,
+        "storage_mb_s": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "median": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        }
+      },
+      "simple_controller": {
+        "all_acceptable": true,
+        "deadline_misses": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "median": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "runs": 5
+        },
+        "p99_ms": {
+          "ci95_high": 8.25166015,
+          "ci95_low": 7.033460830000001,
+          "median": 7.544277000000001,
+          "p05": 7.033460830000001,
+          "p95": 8.25166015,
+          "runs": 5
+        },
+        "runs": 5,
+        "storage_mb_s": {
+          "ci95_high": 1.7248485626945593,
+          "ci95_low": 1.0964138231777922,
+          "median": 1.4970013728032954,
+          "p05": 1.0964138231777922,
+          "p95": 1.7248485626945593,
+          "runs": 5
+        }
+      },
+      "unthrottled_storage": {
+        "all_acceptable": true,
+        "deadline_misses": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.0,
+          "median": 0.0,
+          "p05": 0.0,
+          "p95": 1.0,
+          "runs": 5
+        },
+        "p99_ms": {
+          "ci95_high": 11.261585520000004,
+          "ci95_low": 8.27045628,
+          "median": 9.62087615,
+          "p05": 8.27045628,
+          "p95": 11.261585520000004,
+          "runs": 5
+        },
+        "runs": 5,
+        "storage_mb_s": {
+          "ci95_high": 7.069425245957353,
+          "ci95_low": 6.858390607540784,
+          "median": 6.984360530500289,
+          "p05": 6.858390607540784,
+          "p95": 7.069425245957353,
+          "runs": 5
+        }
+      }
+    },
+    "overall_pass": false,
+    "overall_pass_interpretation": "false is acceptable for E1 closeout when repeated evidence exists and unstable recovery directions are scoped rather than claimed",
+    "recovery_check_summary": {
+      "aegis_keeps_more_storage_than_simple": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "aegis_records_throttle_decisions": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "aegis_recovers_p99": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 4
+      },
+      "aegis_removes_deadline_misses": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 3
+      },
+      "pressure_causes_deadline_miss": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 2
+      },
+      "pressure_raises_p99": {
+        "all_true": false,
+        "runs": 5,
+        "true_runs": 3
+      },
+      "required_modes_available": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "simple_recovers_p99": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      },
+      "simple_removes_deadline_misses": {
+        "all_true": true,
+        "runs": 5,
+        "true_runs": 5
+      }
+    },
+    "repetitions_measured": 5,
+    "warmup_runs": 1
+  },
+  "required_inputs": {
+    "kernel_qos_comparison": {
+      "bytes": 31311,
+      "exists": true,
+      "path": "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json"
+    },
+    "methodology_bundle": {
+      "bytes": 267243,
+      "exists": true,
+      "path": "artifacts/validation/qos_sqlite_hero_methodology/qos_sqlite_hero_bundle.json"
+    },
+    "single_bundle": {
+      "bytes": 31819,
+      "exists": true,
+      "path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json"
+    },
+    "stat_thermal_audit": {
+      "bytes": 36764,
+      "exists": true,
+      "path": "artifacts/validation/stat_thermal_methodology/stat_thermal_methodology_audit.json"
+    },
+    "thermal_tegrastats_log": {
+      "bytes": 84263,
+      "exists": true,
+      "path": "artifacts/validation/qos_sqlite_hero_methodology/thermal_tegrastats.log"
+    }
+  },
+  "single_run_summary": {
+    "component_coverage": {
+      "aegis_daemon_throttle_trace": true,
+      "background_secure_writer_logs": true,
+      "foreground_sqlite_logs": true,
+      "mounted_fuse_logs": true,
+      "policy_trace_logs": true,
+      "required_modes_present": true,
+      "simple_controller_trace": true,
+      "telemetry_sampler_logs": true
+    },
+    "mode_summaries": {
+      "aegis_policy": {
+        "acceptable": true,
+        "background_bytes": 1703936,
+        "background_mb_s": 2.736089363877744,
+        "daemon_sleep_us_total": 480000,
+        "daemon_throttle_rows": 248,
+        "daemon_throttled_rows": 16,
+        "deadline_misses": 0,
+        "foreground_rows": 384,
+        "foreground_samples": 48,
+        "p99_ms": 8.75331646,
+        "policy_events": {
+          "enter": 1,
+          "hold": 28
+        },
+        "present": true,
+        "telemetry_rows": 29
+      },
+      "app_only": {
+        "acceptable": true,
+        "background_bytes": 0,
+        "background_mb_s": 0.0,
+        "daemon_sleep_us_total": 0,
+        "daemon_throttle_rows": 0,
+        "daemon_throttled_rows": 0,
+        "deadline_misses": 0,
+        "foreground_rows": 384,
+        "foreground_samples": 48,
+        "p99_ms": 6.43596154,
+        "policy_events": {
+          "none": 28
+        },
+        "present": true,
+        "telemetry_rows": 28
+      },
+      "simple_controller": {
+        "acceptable": true,
+        "background_bytes": 1441792,
+        "background_mb_s": 2.268259869303856,
+        "daemon_sleep_us_total": 0,
+        "daemon_throttle_rows": 0,
+        "daemon_throttled_rows": 0,
+        "deadline_misses": 0,
+        "foreground_rows": 384,
+        "foreground_samples": 48,
+        "p99_ms": 8.185088930000001,
+        "policy_events": {
+          "enter": 1,
+          "hold": 27
+        },
+        "present": true,
+        "telemetry_rows": 28
+      },
+      "unthrottled_storage": {
+        "acceptable": true,
+        "background_bytes": 4784128,
+        "background_mb_s": 6.793162736869544,
+        "daemon_sleep_us_total": 0,
+        "daemon_throttle_rows": 0,
+        "daemon_throttled_rows": 0,
+        "deadline_misses": 1,
+        "foreground_rows": 384,
+        "foreground_samples": 48,
+        "p99_ms": 13.822082770000009,
+        "policy_events": {
+          "none": 31
+        },
+        "present": true,
+        "telemetry_rows": 31
+      }
+    },
+    "overall_pass": true,
+    "recovery_checks": {
+      "aegis_keeps_more_storage_than_simple": true,
+      "aegis_records_throttle_decisions": true,
+      "aegis_recovers_p99": true,
+      "aegis_removes_deadline_misses": true,
+      "pressure_causes_deadline_miss": true,
+      "pressure_raises_p99": true,
+      "required_modes_available": true,
+      "simple_recovers_p99": true,
+      "simple_removes_deadline_misses": true
+    }
+  },
+  "source_artifacts": {
+    "kernel_qos_comparison": "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json",
+    "methodology_bundle": "artifacts/validation/qos_sqlite_hero_methodology/qos_sqlite_hero_bundle.json",
+    "single_bundle": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+    "stat_thermal_audit": "artifacts/validation/stat_thermal_methodology/stat_thermal_methodology_audit.json",
+    "thermal_tegrastats_log": "artifacts/validation/qos_sqlite_hero_methodology/thermal_tegrastats.log"
+  },
+  "thermal_and_methodology": {
+    "overall_pass": true,
+    "paper_scope_gate_pass": true,
+    "thermal_log": {
+      "bytes": 84263,
+      "exists": true,
+      "path": "artifacts/validation/qos_sqlite_hero_methodology/thermal_tegrastats.log"
+    }
+  },
+  "timestamp_utc": "2026-06-30T13:42:43.242916+00:00"
+}

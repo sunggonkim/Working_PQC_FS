@@ -7,7 +7,7 @@
 ## Direct Answer
 
 - Source: `Paper/2_Background.tex:13`
-- Text: The value of AEGIS-Q is not that user-space encryption is inherently preferable to kernel encryption. In fact, kernel-integrated systems have a clear maturity advantage. AEGIS-Q is also not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external freshness checks under one evidence contract. In that setting, the storage layer exposes policy decisions that conventional encryption layers usually hide. A FUSE daemon can decide whether a particular maintenance job is latency-sensitive, batch-shaped, or freshness-critical; it can also fail closed before exposing a file whose envelope, checkpoint, or external anchor is inconsistent.
+- Text: AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption. It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external replay-after-advance checks under one evidence contract. In that setting, the storage layer exposes policy decisions that conventional encryption layers usually hide. A FUSE daemon can decide whether a maintenance job is latency-sensitive, batch-shaped, or replay-critical; it can also fail closed before exposing a file whose envelope, checkpoint, or external anchor is inconsistent.
 
 ## Combined Capability
 
@@ -16,7 +16,7 @@
 | `authenticated-block publication` | `True` |
 | `storage-visible QoS/admission` | `True` |
 | `optional batched GPU key-plane work` | `True` |
-| `external freshness checks` | `True` |
+| `external replay-after-advance checks` | `True` |
 | `one evidence contract` | `True` |
 
 ## Deployed-Baseline Classes

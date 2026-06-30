@@ -1,0 +1,510 @@
+{
+  "checks": {
+    "all_required_rows_accounted": true,
+    "all_rows_have_valid_status": true,
+    "blocked_rows_have_proof": true,
+    "master_contract_complete": true,
+    "measured_rows_tied_to_same_contract": true,
+    "paper_status_matches_rows": true
+  },
+  "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+  "contract_sha256": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+  "expected_command_template": "fio --name=frozen_randrw_4k_fdatasync --ioengine=psync --rw=randrw --rwmixread=70 --bs=4k --direct=0 --fdatasync=1 --iodepth=1 --numjobs=1 --size=1G --fallocate=none --allow_file_create=0 --overwrite=1 --time_based --runtime=60 --ramp_time=10 --directory=${BENCH_DIR} --output-format=json",
+  "expected_repetitions": 5,
+  "gate": "B4",
+  "negative_claim_guard": {
+    "cold_cache_claim_allowed": false,
+    "historical_diagnostics_are_current_rows": false,
+    "unsupported_fscrypt_speed_claim_allowed": false
+  },
+  "overall_pass": true,
+  "paper": {
+    "bad_historical_lines": [],
+    "bad_measured_kernel_lines": [],
+    "checks": {
+      "environment_blocked_rows_present": true,
+      "frozen_contract_status_present": true,
+      "historical_diagnostics_not_current_rows": true,
+      "measured_rows_present": true,
+      "no_measured_fscrypt_throughput_claim": true
+    },
+    "environment_blocked_lines": [
+      {
+        "line": 17,
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "text": "The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, dm-crypt, AEGIS-Q, plus an fscrypt environment-blocked row; it is not yet a complete fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison.  Its role is to expose the cost of the current authenticated-publication boundary, not to rank deployed encryption systems.  Historical fscrypt and dm-crypt fio outputs are retained only for traceability, not current comparison evidence, because they do not sweep the same request sizes, cache states, queue depths, sync modes, and application workloads."
+      },
+      {
+        "line": 30,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "Figure~\\ref{fig:evaluation_summary} is the evaluation spine.  It deliberately puts the negative cost boundary next to the positive runtime effects: AEGIS-Q is slow under strict per-write authenticated publication, recovers bounded SQLite pressure relative to unthrottled storage while giving up background bandwidth, and uses the GPU only for a mounted maintenance workflow with explicit slack.  Table~\\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB file, fixed mounts/platform, and five repetitions.  A same-profile attribution probe on the current code-owned binary confirms that the strict path still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries on each write-publication cycle.  The matched dm-crypt row now runs on the same warm-cache contract, passing five repetitions with median throughput 9.03~MiB/s and median p99/p99.9 latency 264/823~\\(\\mu\\)s; fscrypt remains environment-blocked because \\texttt{CONFIG\\_FS\\_ENCRYPTION} is unset and \\texttt{fscrypt status} reports the root ext4 encrypt feature unavailable."
+      },
+      {
+        "line": 45,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "RQ2 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\\\"
+      }
+    ],
+    "frozen_contract_lines": [
+      {
+        "line": 17,
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "text": "The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, dm-crypt, AEGIS-Q, plus an fscrypt environment-blocked row; it is not yet a complete fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison.  Its role is to expose the cost of the current authenticated-publication boundary, not to rank deployed encryption systems.  Historical fscrypt and dm-crypt fio outputs are retained only for traceability, not current comparison evidence, because they do not sweep the same request sizes, cache states, queue depths, sync modes, and application workloads."
+      },
+      {
+        "line": 38,
+        "path": "Paper/1_Introduction.tex",
+        "text": "Figure~\\ref{fig:first_page_qos} is the paper's edge-runtime result.  Unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling only elastic writes.  The point is visible storage-layer policy with accelerator-independent format correctness, not peak filesystem throughput.  The low frozen-contract throughput row is a known cost boundary, not a hidden general-purpose claim."
+      },
+      {
+        "line": 10,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "  \\item \\textbf{RQ2: Mode-aligned baselines.} What cost and bottleneck boundary does the FUSE prototype impose when the same authenticated publication rule is compared with plaintext and gocryptfs rows under the frozen filesystem contract?"
+      },
+      {
+        "line": 25,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "  \\caption{Evaluation summary generated from retained validation JSON.  Panel~(a) shows the strict frozen-contract cost boundary for RQ2; Panel~(b) shows mounted SQLite QoS and kernel-control rows for RQ3; Panel~(c) shows the mounted open-file key-plane refresh workflow for RQ5.}"
+      },
+      {
+        "line": 30,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "Figure~\\ref{fig:evaluation_summary} is the evaluation spine.  It deliberately puts the negative cost boundary next to the positive runtime effects: AEGIS-Q is slow under strict per-write authenticated publication, recovers bounded SQLite pressure relative to unthrottled storage while giving up background bandwidth, and uses the GPU only for a mounted maintenance workflow with explicit slack.  Table~\\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB file, fixed mounts/platform, and five repetitions.  A same-profile attribution probe on the current code-owned binary confirms that the strict path still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries on each write-publication cycle.  The matched dm-crypt row now runs on the same warm-cache contract, passing five repetitions with median throughput 9.03~MiB/s and median p99/p99.9 latency 264/823~\\(\\mu\\)s; fscrypt remains environment-blocked because \\texttt{CONFIG\\_FS\\_ENCRYPTION} is unset and \\texttt{fscrypt status} reports the root ext4 encrypt feature unavailable."
+      },
+      {
+        "line": 45,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "RQ2 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\\\"
+      }
+    ],
+    "historical_lines": [
+      {
+        "line": 17,
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "text": "The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, dm-crypt, AEGIS-Q, plus an fscrypt environment-blocked row; it is not yet a complete fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison.  Its role is to expose the cost of the current authenticated-publication boundary, not to rank deployed encryption systems.  Historical fscrypt and dm-crypt fio outputs are retained only for traceability, not current comparison evidence, because they do not sweep the same request sizes, cache states, queue depths, sync modes, and application workloads."
+      }
+    ],
+    "measured_rows_lines": [
+      {
+        "line": 17,
+        "path": "Paper/10_Discussion_and_Limitations.tex",
+        "text": "The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, dm-crypt, AEGIS-Q, plus an fscrypt environment-blocked row; it is not yet a complete fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison.  Its role is to expose the cost of the current authenticated-publication boundary, not to rank deployed encryption systems.  Historical fscrypt and dm-crypt fio outputs are retained only for traceability, not current comparison evidence, because they do not sweep the same request sizes, cache states, queue depths, sync modes, and application workloads."
+      },
+      {
+        "line": 30,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "Figure~\\ref{fig:evaluation_summary} is the evaluation spine.  It deliberately puts the negative cost boundary next to the positive runtime effects: AEGIS-Q is slow under strict per-write authenticated publication, recovers bounded SQLite pressure relative to unthrottled storage while giving up background bandwidth, and uses the GPU only for a mounted maintenance workflow with explicit slack.  Table~\\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB file, fixed mounts/platform, and five repetitions.  A same-profile attribution probe on the current code-owned binary confirms that the strict path still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries on each write-publication cycle.  The matched dm-crypt row now runs on the same warm-cache contract, passing five repetitions with median throughput 9.03~MiB/s and median p99/p99.9 latency 264/823~\\(\\mu\\)s; fscrypt remains environment-blocked because \\texttt{CONFIG\\_FS\\_ENCRYPTION} is unset and \\texttt{fscrypt status} reports the root ext4 encrypt feature unavailable."
+      }
+    ],
+    "pass": true
+  },
+  "row_statuses": {
+    "aegis_q": "measured",
+    "dm_crypt_ext4": "measured",
+    "fscrypt": "environment-blocked",
+    "gocryptfs": "measured",
+    "plaintext_lowerfs": "measured"
+  },
+  "rows": {
+    "aegis_q": {
+      "artifact": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+      "cache_state": "warm",
+      "canonical_fio_command": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=${BENCH_DIR}",
+        "--output-format=json"
+      ],
+      "checks": {
+        "artifact_exists": true,
+        "command_artifacts_present": true,
+        "contract_id_matches": true,
+        "contract_sha256_matches": true,
+        "fio_command_matches": true,
+        "raw_fio_artifacts_present": true,
+        "status_measured": true,
+        "warm_cache_contract_compliant": true,
+        "warm_repetition_count_matches": true,
+        "workload_profile_matches": true
+      },
+      "cold_cache": {
+        "reason": "cold-cache contract requires privileged cache dropping after unmount/remount; this run had no noninteractive sudo/root access",
+        "status": "invalid_not_run",
+        "sudo_probe": {
+          "argv": [
+            "sudo",
+            "-n",
+            "true"
+          ],
+          "available": true,
+          "returncode": 1,
+          "stderr": "sudo: a password is required",
+          "stdout": ""
+        }
+      },
+      "command_artifacts": [
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_04.command.json"
+      ],
+      "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+      "contract_sha256_recorded": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+      "expected_repetitions": 5,
+      "invalid_run_reasons": [
+        "cold_cache:invalid_not_run",
+        "comparison_ready:false"
+      ],
+      "paper_table_status": "warm-cache measured row",
+      "pass": true,
+      "raw_fio_artifacts": [
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_00.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_01.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_02.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_03.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_04.command.json",
+        "artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_04.json"
+      ],
+      "row": "aegis_q",
+      "status": "measured",
+      "warm_valid_repetitions": 5,
+      "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+    },
+    "dm_crypt_ext4": {
+      "artifact": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json",
+      "cache_state": "warm",
+      "canonical_fio_command": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=${BENCH_DIR}",
+        "--output-format=json"
+      ],
+      "checks": {
+        "artifact_exists": true,
+        "command_artifacts_present": true,
+        "contract_id_matches": true,
+        "contract_sha256_matches": true,
+        "fio_command_matches": true,
+        "raw_fio_artifacts_present": true,
+        "status_measured": true,
+        "warm_cache_contract_compliant": true,
+        "warm_repetition_count_matches": true,
+        "workload_profile_matches": true
+      },
+      "cold_cache": {
+        "reason": "cold-cache contract requires privileged cache dropping after unmount/remount; this run had no noninteractive sudo/root access",
+        "status": "invalid_not_run",
+        "sudo_probe": {
+          "argv": [
+            "sudo",
+            "-n",
+            "true"
+          ],
+          "available": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      "command_artifacts": [
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_04.command.json"
+      ],
+      "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+      "contract_sha256_recorded": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+      "expected_repetitions": 5,
+      "invalid_run_reasons": [
+        "cold_cache:invalid_not_run",
+        "comparison_ready:false"
+      ],
+      "paper_table_status": "warm-cache measured row",
+      "pass": true,
+      "raw_fio_artifacts": [
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_01.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_02.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_04.command.json",
+        "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_04.json"
+      ],
+      "row": "dm_crypt_ext4",
+      "status": "measured",
+      "warm_valid_repetitions": 5,
+      "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+    },
+    "fscrypt": {
+      "artifact": "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json",
+      "blocking_reasons": [
+        "noninteractive_sudo_unavailable",
+        "kernel_config_fs_encryption_disabled",
+        "root_ext4_encrypt_feature_not_enabled",
+        "fscrypt_status_nonzero"
+      ],
+      "cache_state": "not run",
+      "canonical_fio_command": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=${BENCH_DIR}",
+        "--output-format=json"
+      ],
+      "checks": {
+        "artifact_exists": true,
+        "blocking_reasons_present": true,
+        "dangerous_claims_clear": true,
+        "environment_blocked": true,
+        "not_measured": true,
+        "paper_marks_unavailable_with_proof": true
+      },
+      "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+      "expected_repetitions": 5,
+      "invalid_run_reasons": [
+        "noninteractive_sudo_unavailable",
+        "kernel_config_fs_encryption_disabled",
+        "root_ext4_encrypt_feature_not_enabled",
+        "fscrypt_status_nonzero"
+      ],
+      "mount_options": {
+        "filesystem": "ext4 with encrypt feature",
+        "lower_device_policy": "same NVMe device class as plaintext and AEGIS-Q",
+        "mount_command": "mount ${FSCRYPT_BLOCK_DEVICE} ${FSCRYPT_ROOT}",
+        "policy": "fscrypt v2 policy with custom passphrase"
+      },
+      "paper_table_status": "environment-blocked with proof",
+      "pass": true,
+      "row": "fscrypt",
+      "status": "environment-blocked",
+      "warm_valid_repetitions": 0,
+      "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+    },
+    "gocryptfs": {
+      "artifact": "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+      "cache_state": "warm",
+      "canonical_fio_command": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=${BENCH_DIR}",
+        "--output-format=json"
+      ],
+      "checks": {
+        "artifact_exists": true,
+        "command_artifacts_present": true,
+        "contract_id_matches": true,
+        "contract_sha256_matches": true,
+        "fio_command_matches": true,
+        "raw_fio_artifacts_present": true,
+        "status_measured": true,
+        "warm_cache_contract_compliant": true,
+        "warm_repetition_count_matches": true,
+        "workload_profile_matches": true
+      },
+      "cold_cache": {
+        "reason": "cold-cache contract requires privileged cache dropping after unmount/remount; this run had no noninteractive sudo/root access",
+        "status": "invalid_not_run",
+        "sudo_probe": {
+          "argv": [
+            "sudo",
+            "-n",
+            "true"
+          ],
+          "available": true,
+          "returncode": 1,
+          "stderr": "sudo: a password is required",
+          "stdout": ""
+        }
+      },
+      "command_artifacts": [
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_04.command.json"
+      ],
+      "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+      "contract_sha256_recorded": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+      "expected_repetitions": 5,
+      "invalid_run_reasons": [
+        "cold_cache:invalid_not_run",
+        "comparison_ready:false"
+      ],
+      "paper_table_status": "warm-cache measured row",
+      "pass": true,
+      "raw_fio_artifacts": [
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_00.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_01.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_02.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_03.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_04.command.json",
+        "artifacts/validation/frozen_gocryptfs_contract/fio_raw/warm_rep_04.json"
+      ],
+      "row": "gocryptfs",
+      "status": "measured",
+      "warm_valid_repetitions": 5,
+      "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+    },
+    "plaintext_lowerfs": {
+      "artifact": "artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json",
+      "cache_state": "warm",
+      "canonical_fio_command": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=${BENCH_DIR}",
+        "--output-format=json"
+      ],
+      "checks": {
+        "artifact_exists": true,
+        "command_artifacts_present": true,
+        "contract_id_matches": true,
+        "contract_sha256_matches": true,
+        "fio_command_matches": true,
+        "raw_fio_artifacts_present": true,
+        "status_measured": true,
+        "warm_cache_contract_compliant": true,
+        "warm_repetition_count_matches": true,
+        "workload_profile_matches": true
+      },
+      "cold_cache": {
+        "reason": "cold-cache contract requires privileged cache dropping after unmount/remount; this run had no noninteractive sudo/root access",
+        "status": "invalid_not_run",
+        "sudo_probe": {
+          "argv": [
+            "sudo",
+            "-n",
+            "true"
+          ],
+          "available": true,
+          "returncode": 1,
+          "stderr": "sudo: a password is required",
+          "stdout": ""
+        }
+      },
+      "command_artifacts": [
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_04.command.json"
+      ],
+      "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+      "contract_sha256_recorded": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+      "expected_repetitions": 5,
+      "invalid_run_reasons": [
+        "cold_cache:invalid_not_run",
+        "comparison_ready:false"
+      ],
+      "paper_table_status": "warm-cache measured row",
+      "pass": true,
+      "raw_fio_artifacts": [
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_00.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_00.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_01.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_01.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_02.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_02.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_03.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_03.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_04.command.json",
+        "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_04.json"
+      ],
+      "row": "plaintext_lowerfs",
+      "status": "measured",
+      "warm_valid_repetitions": 5,
+      "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+    }
+  },
+  "schema_version": 1,
+  "source_contract": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json",
+  "submilestone": "B4-S0",
+  "timestamp_utc": "2026-06-30T05:52:44.890721+00:00",
+  "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+}

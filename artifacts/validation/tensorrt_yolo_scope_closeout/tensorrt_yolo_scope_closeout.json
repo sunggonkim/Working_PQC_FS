@@ -1,0 +1,362 @@
+{
+  "schema": "aegisq.tensorrt_yolo_scope_closeout.v1",
+  "overall_pass": true,
+  "verdict": "trace-scoped-non-claim",
+  "conditions": {
+    "ci_report_complete": true,
+    "primary_trace_complete": true,
+    "all_retained_traces_complete": true,
+    "cupti_bridge_complete": true,
+    "paper_scope_phrases_present": true,
+    "claim_scan_passes": true
+  },
+  "allowed_claims": [
+    "TensorRT/YOLO interference traces show foreground inference can suffer under GPU/storage pressure.",
+    "Adaptive/prototype traces may be described as policy-direction evidence.",
+    "CUPTI PM samples can drive the mounted FUSE throttle path in the retained bridge run."
+  ],
+  "forbidden_claims": [
+    "foreground AI QoS recovery",
+    "foreground AI or TensorRT p99 recovery",
+    "closed-loop inference QoS controller",
+    "full AI-QoS restoration",
+    "uniqueness or deployment claim based on TensorRT traces"
+  ],
+  "ci_report": {
+    "path": "artifacts/reports/tensorrt_ci_report/tensorrt_ci_report.json",
+    "exists": true,
+    "bytes": 7258,
+    "source": "artifacts/motivation/tensorrt_interference.json",
+    "row_count": 4,
+    "modes": [
+      "yolov8:adaptive",
+      "yolov8:cpu_only",
+      "yolov8:gpu_only",
+      "yolov8:inference_only"
+    ],
+    "complete": true,
+    "rows": [
+      {
+        "mode": "yolov8:adaptive",
+        "trials": 3,
+        "sample_count_total": 9361,
+        "median_of_trial_medians_ms": 0.834356527775526
+      },
+      {
+        "mode": "yolov8:cpu_only",
+        "trials": 3,
+        "sample_count_total": 11914,
+        "median_of_trial_medians_ms": 0.83199143409729
+      },
+      {
+        "mode": "yolov8:gpu_only",
+        "trials": 3,
+        "sample_count_total": 6402,
+        "median_of_trial_medians_ms": 0.9388523176312447
+      },
+      {
+        "mode": "yolov8:inference_only",
+        "trials": 3,
+        "sample_count_total": 11866,
+        "median_of_trial_medians_ms": 0.8372310549020767
+      }
+    ]
+  },
+  "traces": [
+    {
+      "path": "artifacts/results/motivation/tensorrt_interference.json",
+      "exists": true,
+      "bytes": 1026558,
+      "row_count": 12,
+      "modes": [
+        "yolov8:adaptive",
+        "yolov8:cpu_only",
+        "yolov8:gpu_only",
+        "yolov8:inference_only"
+      ],
+      "mode_summaries": {
+        "yolov8:adaptive": {
+          "trials": 3,
+          "sample_count_total": 9361,
+          "p99_median_ms": 2.8414591774344444
+        },
+        "yolov8:cpu_only": {
+          "trials": 3,
+          "sample_count_total": 11914,
+          "p99_median_ms": 0.9114225022494793
+        },
+        "yolov8:gpu_only": {
+          "trials": 3,
+          "sample_count_total": 6402,
+          "p99_median_ms": 4.9503616988658905
+        },
+        "yolov8:inference_only": {
+          "trials": 3,
+          "sample_count_total": 11866,
+          "p99_median_ms": 0.9160312823951244
+        }
+      },
+      "complete": true
+    },
+    {
+      "path": "artifacts/results/qos/m6_tradeoff_yolov8_adaptive_tight/tensorrt_interference.json",
+      "exists": true,
+      "bytes": 389106,
+      "row_count": 4,
+      "modes": [
+        "yolov8:adaptive",
+        "yolov8:cpu_only",
+        "yolov8:gpu_only",
+        "yolov8:inference_only"
+      ],
+      "mode_summaries": {
+        "yolov8:adaptive": {
+          "trials": 1,
+          "sample_count_total": 4006,
+          "p99_median_ms": 0.9072899352759123
+        },
+        "yolov8:cpu_only": {
+          "trials": 1,
+          "sample_count_total": 3998,
+          "p99_median_ms": 0.9024558030068874
+        },
+        "yolov8:gpu_only": {
+          "trials": 1,
+          "sample_count_total": 3049,
+          "p99_median_ms": 1.1102429032325745
+        },
+        "yolov8:inference_only": {
+          "trials": 1,
+          "sample_count_total": 3932,
+          "p99_median_ms": 1.0337962210178375
+        }
+      },
+      "complete": true
+    },
+    {
+      "path": "artifacts/results/qos/m6_tradeoff_yolov8_elasticcontend/tensorrt_interference.json",
+      "exists": true,
+      "bytes": 387067,
+      "row_count": 4,
+      "modes": [
+        "yolov8:adaptive",
+        "yolov8:cpu_only",
+        "yolov8:gpu_only",
+        "yolov8:inference_only"
+      ],
+      "mode_summaries": {
+        "yolov8:adaptive": {
+          "trials": 1,
+          "sample_count_total": 2702,
+          "p99_median_ms": 4.937501326203346
+        },
+        "yolov8:cpu_only": {
+          "trials": 1,
+          "sample_count_total": 4767,
+          "p99_median_ms": 0.9117248095571995
+        },
+        "yolov8:gpu_only": {
+          "trials": 1,
+          "sample_count_total": 2706,
+          "p99_median_ms": 4.928612848743796
+        },
+        "yolov8:inference_only": {
+          "trials": 1,
+          "sample_count_total": 4745,
+          "p99_median_ms": 1.0413509234786034
+        }
+      },
+      "complete": true
+    }
+  ],
+  "cupti_bridge": {
+    "path": "artifacts/validation/qos_cupti_pm_fuse_bridge/qos_cupti_pm_fuse_bridge.json",
+    "exists": true,
+    "bytes": 2790,
+    "note": "Same-run mounted-FUSE QoS bridge driven by live CUPTI PM sampling telemetry.",
+    "verified": true,
+    "cupti_returncode": 0,
+    "runtime_throttle_trace_rows": 19,
+    "runtime_admission_trace_rows": 0,
+    "runtime_throttle_counts": {
+      "open": 14,
+      "throttled": 5
+    },
+    "runtime_throttle_sleep_us_total": 250000,
+    "success_criteria": {
+      "cupti_samples_present": true,
+      "mounted_fuse_throttle_present": true,
+      "writer_harness_throttle_disabled": true,
+      "cupti_returncode_zero": true
+    },
+    "complete": true,
+    "scope": "same-run CUPTI PM to mounted-FUSE throttle wiring; not foreground inference p99 recovery"
+  },
+  "paper_phrase_checks": {
+    "TensorRT/AI p99 recovery": true,
+    "not a uniqueness or AI-inference QoS claim": true,
+    "foreground AI p99 recovery": true,
+    "does not justify foreground AI-QoS recovery": true,
+    "does not claim": true
+  },
+  "claim_scan": {
+    "candidate_count": 19,
+    "unguarded_count": 0,
+    "candidates": [
+      {
+        "file": "Paper/10_Discussion_and_Limitations.tex",
+        "line": 7,
+        "pattern": "foreground_ai_qos_recovery",
+        "match": "foreground AI-QoS recovery",
+        "guarded": true,
+        "line_text": "The useful result is asymmetry, not an aggregate ``GPU speedup.''  On Thor, CPU/OpenSSL fits the AES-GCM data path, while the GPU helps independent ML-KEM batches and measured envelope refresh.  AEGIS-Q therefore exposes an elastic GPU/PQC maintenance lane; current telemetry can throttle mounted FUSE writes but still does not justify foreground AI-QoS recovery.  The paper trades peak background throughput for explicit publication, placement, QoS, and recovery boundaries, which is the intended edge-runtime point."
+      },
+      {
+        "file": "Paper/10_Discussion_and_Limitations.tex",
+        "line": 24,
+        "pattern": "tensorrt_p99_recovery",
+        "match": "TensorRT p99 recovery",
+        "guarded": true,
+        "line_text": "The evaluated envelope is a local edge service whose foreground SQLite database shares mounted secure storage with elastic background writes.  The useful property is policy separation plus TPM replay-after-advance fail-closed behavior; it does not extend to kernel-encryption replacement, high-throughput general-purpose encryption, TensorRT p99 recovery, unmanaged power loss, or CUDA-independent deployment.  This is the intended paper shape: boundary-aware secure edge storage, not a claim that GPU/PQC makes every filesystem path faster."
+      },
+      {
+        "file": "Paper/3_Design.tex",
+        "line": 123,
+        "pattern": "foreground_ai_p99_recovery",
+        "match": "foreground AI p99 recovery",
+        "guarded": true,
+        "line_text": "QoS telemetry & SQLite recovery only & Workload/CUPTI traces can drive mounted-FUSE throttling; no foreground AI p99 recovery claim.\\\\"
+      },
+      {
+        "file": "Paper/4_Evaluation.tex",
+        "line": 55,
+        "pattern": "foreground_ai_qos_recovery",
+        "match": "foreground AI QoS recovery",
+        "guarded": true,
+        "line_text": "The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-protected envelopes.  CPU-only refresh takes 24.399~ms (41,969.6 files/s).  With explicit slack, admission selects the GPU and finishes in 21.070~ms (48,599.0 files/s), a 1.158$\\times$ speedup.  With zero slack and high memory-pressure telemetry, admission falls back to CPU in 24.411~ms with an AI-QoS-exhausted deferral.  This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or foreground AI QoS recovery."
+      },
+      {
+        "file": "Paper/4_Evaluation.tex",
+        "line": 41,
+        "pattern": "closed_loop_controller",
+        "match": "closed-loop QoS controller",
+        "guarded": true,
+        "line_text": "RQ3 TensorRT & Interference traces and samples & Not a closed-loop QoS controller\\\\"
+      },
+      {
+        "file": "Paper/6_Conclusion.tex",
+        "line": 4,
+        "pattern": "foreground_ai_p99_recovery",
+        "match": "foreground AI p99 recovery",
+        "guarded": true,
+        "line_text": "AEGIS-Q treats secure edge storage as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem.  Its authenticated format keeps AES-GCM data writes on the CPU, admits PQC/GPU maintenance only for slack-tolerant batches, and separates replayable file witnesses from externally anchored freshness checks.  On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.  The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+      },
+      {
+        "file": "README.md",
+        "line": 191,
+        "pattern": "foreground_ai_qos_recovery",
+        "match": "foreground AI QoS recovery",
+        "guarded": true,
+        "line_text": "foreground AI QoS recovery."
+      },
+      {
+        "file": "README.md",
+        "line": 48,
+        "pattern": "foreground_ai_p99_recovery",
+        "match": "foreground AI\n  p99 recovery",
+        "guarded": true,
+        "line_text": "prototype throttling, not an eBPF/io_uring completion bypass or foreground AI"
+      },
+      {
+        "file": "README.md",
+        "line": 142,
+        "pattern": "foreground_ai_p99_recovery",
+        "match": "foreground\n  AI p99 recovery",
+        "guarded": true,
+        "line_text": "evidence and TensorRT/YOLO interference traces; it does not claim foreground"
+      },
+      {
+        "file": "README.md",
+        "line": 314,
+        "pattern": "foreground_ai_p99_recovery",
+        "match": "foreground AI p99 recovery",
+        "guarded": true,
+        "line_text": "certification, foreground AI p99 recovery, or portability beyond the tested"
+      },
+      {
+        "file": "README.md",
+        "line": 406,
+        "pattern": "foreground_ai_p99_recovery",
+        "match": "foreground AI p99 recovery",
+        "guarded": true,
+        "line_text": "\ud604\uc7ac admission \uacbd\ub85c\ub294 `pqc_block_job_choose_target()`\uc640 `pqc_admission.c`\uc758 JSONL trace\ub97c \ud1b5\ud574 batch age, queue delay, service time, queue depth, GPU wait budget, deferral reason, and route reason\uc744 \uae30\ub85d\ud55c\ub2e4. `experiments/run_m5_admission_sweep.py`\ub294 `PQC_AI_QOS_MIN_BUDGET_NS`\ub97c \ubc14\uafd4\uac00\uba70 \uc774 trace\ub97c \uc218\uc9d1\ud558\uace0, \ub0ae\uc740 budget\uc5d0\uc11c\ub294 GPU-admitted job \uc218\uac00 \ub354 \ub9ce\uace0 \ub192\uc740 budget\uc5d0\uc11c\ub294 CPU fallback\uc774 \ub298\uc5b4\ub098\ub294 causality\ub97c \ubcf4\uc5ec\uc900\ub2e4. queue-depth sensitivity sweep\ub3c4 \uc774\uc81c \ubcc4\ub3c4 retained artifact (`artifacts/results/qos/m5_admission_sweep_qdepth.json` / `.csv`)\ub85c \ucd94\uac00\ub410\uc9c0\ub9cc, \uc774\uac83\uc740 \uc5ec\uc804\ud788 controller unit test\uc774\uc9c0 end-to-end QoS \uc99d\uba85\uc740 \uc544\ub2c8\ub2e4. `experiments/run_qos_measured_pressure_adapter.py`\ub294 retained Nsight Compute CSV\uc5d0\uc11c memory / SM throughput\uc744 \uc77d\uc5b4 `PQC_TELEMETRY_MEM_BANDWIDTH`\uc640 `PQC_TELEMETRY_TENSOR_CORE`\ub85c \uc8fc\uc785\ud558\uace0, `pqc_fuse --admission-telemetry-smoke`\ub97c \ud1b5\ud574 \uae30\uc874 `pqc_admission_update_telemetry()` / `pqc_admit()` path\uc5d0 \ub3c4\ub2ec\ud568\uc744 \ubcf4\uc5ec\uc900\ub2e4. `experiments/run_qos_fuse_live_bridge.py`\ub294 live `tegrastats` sample\uc744 mounted FUSE daemon\uc758 `PQC_TELEMETRY_FILE`\ub85c \uc8fc\uc785\ud558\uace0, `do_flush_wbuf_locked()` \uc548\uc5d0\uc11c real FUSE flush\ub97c throttle\ud55c\ub2e4. Retained trace\ub294 20\uac1c flush \uc911 8\uac1c\uac00 high-pressure \uc0c1\ud0dc\uc5d0\uc11c daemon \ub0b4\ubd80 50ms sleep\uc744 \uc801\uc6a9\ud588\uace0, writer-side harness throttle\uc740 0\ud68c\uc600\uc74c\uc744 \uae30\ub85d\ud55c\ub2e4. `experiments/run_qos_cupti_pm_fuse_bridge.py`\ub294 \uac19\uc740 mounted-FUSE telemetry-file path\ub97c NVIDIA CUPTI PM-sampling input\uc73c\ub85c \uad6c\ub3d9\ud55c\ub2e4. Retained run\uc740 1741\uac1c live PM samples, 19\uac1c mounted-FUSE flush events, 5\uac1c daemon-throttled flushes, 250 ms total daemon sleep, writer-side harness throttle 0\ud68c\ub97c \uae30\ub85d\ud55c\ub2e4. \ub530\ub77c\uc11c CUPTI/tegrastats-derived telemetry-to-daemon \uacbd\ub85c\ub294 wiring evidence\ub85c \ub0a8\uace0, \ubcc4\ub3c4\uc758 `qos_sqlite_hero_bundle`\uc740 SQLite foreground p99\ub97c 13.8 ms\uc5d0\uc11c 8.8 ms\ub85c \ub0ae\ucd94\uace0 deadline miss\ub97c \uc81c\uac70\ud55c app-level recovery evidence\ub85c \ub2eb\ud78c\ub2e4. foreground AI p99 recovery\ub294 \uc544\uc9c1 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4. UVM\uc740 \ud604\uc7ac software rolling proxy\uac00 admission \uc785\ub825\uc73c\ub85c \ub3d9\uc791\ud558\uace0 \uc788\uc73c\uba70, CUPTI/Nsight \uae30\ubc18 migration counter\ub294 hardware-backed extension\uc73c\ub85c \ub0a8\uc544 \uc788\uace0, MIG\ub3c4 \ud604\uc7ac \uc7a5\uce58\uc5d0\uc11c\ub294 \ube44\ud65c\uc131\ud654\ub418\uc5b4 portability path\ub85c\ub9cc \ub2e4\ub8ec\ub2e4."
+      },
+      {
+        "file": "README.md",
+        "line": 63,
+        "pattern": "foreground_ai_tensorrt_recovery",
+        "match": "foreground AI/TensorRT recovery",
+        "guarded": true,
+        "line_text": "decisions.  This is SQLite recovery, not foreground AI/TensorRT recovery."
+      },
+      {
+        "file": "README.md",
+        "line": 134,
+        "pattern": "foreground_ai_tensorrt_recovery",
+        "match": "foreground AI/TensorRT recovery",
+        "guarded": true,
+        "line_text": "foreground AI/TensorRT recovery."
+      },
+      {
+        "file": "README.md",
+        "line": 284,
+        "pattern": "tensorrt_p99_recovery",
+        "match": "TensorRT p99 recovery",
+        "guarded": true,
+        "line_text": "TensorRT p99 recovery, unmanaged power loss, and CUDA-independent deployment"
+      },
+      {
+        "file": "README.md",
+        "line": 622,
+        "pattern": "tensorrt_p99_recovery",
+        "match": "TensorRT p99 recovery",
+        "guarded": true,
+        "line_text": "Retained scripts can parse telemetry traces and feed measured/profiler-derived pressure into the admission smoke path. The current retained CUPTI bridge also collects live PM samples during the run and drives the mounted FUSE daemon throttle path in the same execution. The retained SQLite co-run now reports app-level recovery: AEGIS-Q lowers mounted foreground SQLite p99 from 13.8 ms to 8.8 ms and removes the observed deadline miss while preserving 2.7 MB/s of background progress. This remains SQLite recovery, not foreground AI/TensorRT p99 recovery."
+      },
+      {
+        "file": "README.md",
+        "line": 586,
+        "pattern": "closed_loop_controller",
+        "match": "closed-loop QoS controller",
+        "guarded": true,
+        "line_text": "Retained TensorRT/YOLO traces show that strong background GPU secure-I/O pressure can materially worsen inference tail latency.  A separate adaptive-mode trace reduces that interference in the retained setup, but the paper does not treat it as a completed closed-loop QoS controller because the foreground slack producer, controller calibration, and same-run PM/CUPTI admission path are not yet integrated into one end-to-end inference experiment.  The retained 5-trial, 8-second, 2-background-writer summary records median p99 values of inference-only 0.9113 ms (bootstrap median CI 0.9042--1.0181), GPU-only 5.0875 ms (3.4121--5.2159), and adaptive 0.9081 ms (0.9020--0.9173).  These numbers are trace evidence for interference and policy direction, not a paper-grade QoS restoration claim."
+      },
+      {
+        "file": "README.md",
+        "line": 599,
+        "pattern": "closed_loop_controller",
+        "match": "closed-loop QoS controller",
+        "guarded": true,
+        "line_text": "\ud604\uc7ac latency pass\ub294 NVIDIA TensorRT \uad8c\uc7a5 \ubc29\uc2dd\uc5d0 \ub9de\ucdb0 non-default CUDA stream, pinned host memory, async H2D/D2H, \uadf8\ub9ac\uace0 \ubcc4\ub3c4\uc758 GPU elastic contender worker\uae4c\uc9c0 \uc0ac\uc6a9\ud558\ub3c4\ub85d \uc7ac\uad6c\uc131\ub418\uc5c8\uc2b5\ub2c8\ub2e4. Retained traces\ub294 GPU contention\uc774 inference tail latency\ub97c \uc545\ud654\uc2dc\ud0ac \uc218 \uc788\uc74c\uc744 \ubcf4\uc5ec\uc8fc\uc9c0\ub9cc, \ud604\uc7ac \ub17c\ubb38\uc740 \uc774\ub97c \uc644\uc131\ub41c closed-loop QoS controller \uc99d\uba85\uc73c\ub85c \uc2b9\uaca9\ud558\uc9c0 \uc54a\ub294\ub2e4. \uad00\ub828 artifact\uc640 CI report\ub294 controller \ubc29\ud5a5\uc131\uc744 \ubcf4\uc870\ud558\ub294 evidence\ub85c\ub9cc \ucde8\uae09\ud55c\ub2e4."
+      },
+      {
+        "file": "README.md",
+        "line": 1303,
+        "pattern": "closed_loop_controller",
+        "match": "closed-loop QoS controller",
+        "guarded": true,
+        "line_text": "- `artifacts/validation/qos_live_telemetry_admission/`: live `tegrastats` samples collected during GPU pressure are mapped into the same admission telemetry smoke path; this proves telemetry-to-admission path wiring only, not a production closed-loop QoS controller"
+      },
+      {
+        "file": "README.md",
+        "line": 625,
+        "pattern": "fully_restores_qos",
+        "match": "fully restores QoS",
+        "guarded": true,
+        "line_text": "LLM/YOLO interference artifacts are retained as prototype and trace evidence. They should not be read as proof that AEGIS-Q fully restores QoS under all model phases."
+      }
+    ],
+    "unguarded": [],
+    "passes": true
+  }
+}

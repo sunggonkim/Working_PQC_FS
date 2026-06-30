@@ -65,16 +65,9 @@
       "source": "Paper/4_Evaluation.tex"
     },
     {
-      "label": "fig:baseline_comparison",
+      "label": "fig:evaluation_summary",
       "label_present": true,
-      "obligation": "placement evidence",
-      "referenced": true,
-      "source": "Paper/4_Evaluation.tex"
-    },
-    {
-      "label": "tab:recovery_scope",
-      "label_present": true,
-      "obligation": "freshness/recovery interpretation",
+      "obligation": "evaluation spine",
       "referenced": true,
       "source": "Paper/4_Evaluation.tex"
     },
@@ -134,9 +127,10 @@
       ],
       "design_present": true,
       "evaluation_needles": [
-        "daemon power-fault campaign",
-        "SQLite WAL/FULL selected-boundary",
-        "oracle verdict"
+        "daemon campaign kills",
+        "D/J/C",
+        "previous committed payload",
+        "latest committed payload"
       ],
       "evaluation_present": true,
       "mechanism": "D/J/C publication",
@@ -157,15 +151,15 @@
       "closure_id": "E3-hardware-freshness-verdict-matrix",
       "design_needles": [
         "TPM NV index",
-        "Freshness boundary"
+        "Replay boundary"
       ],
       "design_present": true,
       "evaluation_needles": [
-        "hardware-freshness recovery matrix",
-        "TPM replay-after-advance"
+        "hardware replay matrix",
+        "replay-after-advance"
       ],
       "evaluation_present": true,
-      "mechanism": "TPM freshness",
+      "mechanism": "TPM replay check",
       "rq": "RQ4"
     },
     {
@@ -189,7 +183,7 @@
       "evaluation_needles": [
         "SQLite transaction latency",
         "sensitivity bundle",
-        "hysteresis trace"
+        "hysteresis records"
       ],
       "evaluation_present": true,
       "mechanism": "QoS controller",
@@ -232,19 +226,24 @@
         {
           "path": "artifacts/validation/keyplane_rekey_methodology/keyplane_rekey_workflow.json",
           "present": true
+        },
+        {
+          "path": "artifacts/reports/x11_mlkem_break_even_model/x11_mlkem_break_even_model.json",
+          "present": true
         }
       ],
       "artifacts_present": true,
       "closure_id": "E6-mounted-open-file-rekey-workflow",
       "design_needles": [
-        "optional batched ML-KEM",
+        "ML-KEM envelope refresh",
         "key-plane workflow",
         "producer supplies nonzero relative slack"
       ],
       "design_present": true,
       "evaluation_needles": [
         "ML-KEM-768",
-        "1.158$\\times$ speedup",
+        "1.186$\\times$ median speedup",
+        "break-even model",
         "open-file envelope refresh"
       ],
       "evaluation_present": true,

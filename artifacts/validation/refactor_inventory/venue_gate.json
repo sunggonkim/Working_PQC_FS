@@ -1,0 +1,762 @@
+{
+  "artifact_verdict": {
+    "fallback_targets_are_claim_closures": false,
+    "missing_blocker_refs": [],
+    "missing_policy_boundaries": [],
+    "missing_venue_classes": [],
+    "overall_pass": true,
+    "ready_for_sosp_osdi_claim": false,
+    "review_map_loaded": true,
+    "venue_classes_present": [
+      "ATC",
+      "FAST",
+      "SOSP/OSDI"
+    ],
+    "worktree_freeze_loaded": true
+  },
+  "generated_by": "code/experiments/build_venue_gate.py",
+  "generated_utc": "2026-06-29T10:18:24Z",
+  "next_cursor": {
+    "reason": "Refresh source ownership and module-decomposition inventory for the current code tree.",
+    "row_id": "0.4-S0"
+  },
+  "paper_text_policy": {
+    "allowed_now": [
+      "scoped prototype",
+      "retained evidence for specific mounted-path workflows",
+      "blocked SOSP/OSDI target pending Gate 0 and dependent gates"
+    ],
+    "forbidden_until_closed": [
+      "SOSP-ready",
+      "OSDI-ready",
+      "general-purpose filesystem",
+      "ready for deployment",
+      "direct NVMe-to-UVM DMA",
+      "GPUDirect/RDMA",
+      "dma-buf zero-copy",
+      "eBPF/io_uring completion bypass",
+      "persistent PCR-bound freshness",
+      "TPM rollback resistance",
+      "foreground AI QoS recovery",
+      "full crash certification",
+      "side-channel protection",
+      "portability"
+    ]
+  },
+  "paper_text_status": "not_updated",
+  "parent_checklist_closed": false,
+  "review_map": {
+    "exists": true,
+    "generated_utc": "2026-06-29T10:18:24Z",
+    "objection_count": 14,
+    "overall_pass": true,
+    "schema_version": 2,
+    "source": "artifacts/validation/refactor_inventory/review_objection_map.json",
+    "status_counts": {
+      "artifact-required": 6,
+      "code-required": 4,
+      "dropped-claim": 0,
+      "negative-claim-only": 2,
+      "paper-required": 2
+    }
+  },
+  "schema_version": 2,
+  "scope": "Gate 0.3-S0 venue readiness against current review-objection map and frozen worktree.",
+  "target_policy": {
+    "fallback_targets": [
+      "ATC",
+      "FAST"
+    ],
+    "primary_target": "SOSP/OSDI",
+    "rule": "SOSP/OSDI remains the active target. ATC/FAST are fallback classifications only if the user explicitly rescopes; they do not close SOSP/OSDI blockers."
+  },
+  "venues": [
+    {
+      "fallback_classification_rule": "SOSP/OSDI is the active target. It cannot be claimed by scoped paper wording alone; every hard blocker must be closed by production-path code, retained artifact, paper text, and negative guard, or the corresponding venue-level claim must be removed.",
+      "paper_nonclaim_boundary": "Do not say SOSP-ready, OSDI-ready, deployment-ready, general-purpose filesystem, broad POSIX support, or full rollback/crash/GPU-isolation defense until the listed blockers close.",
+      "readiness_verdict": "blocked",
+      "required_bar": [
+        "one-sentence systems thesis centered on a storage-runtime bottleneck",
+        "implemented production-path mechanism with explicit invariant and failure boundary",
+        "clean code architecture or retained behavior-equivalence evidence for decomposition",
+        "mode-aligned filesystem baselines including kernel-native alternatives or blocking proof",
+        "kernel QoS baselines for any QoS uniqueness claim",
+        "macrobenchmark evidence beyond a single SQLite/FUSE vignette",
+        "correctness, POSIX, crash, freshness, and security boundaries backed by artifacts",
+        "claim firewall that prevents unimplemented GPU, TPM, eBPF, POSIX, and deployment wording"
+      ],
+      "required_blockers": [
+        {
+          "blocking_reason": "The current filesystem path still needs a defensible storage-runtime architecture, not a set of accumulated FUSE, CUDA, TPM, and checklist patches.",
+          "found": true,
+          "gate_links": [
+            "0.1",
+            "0.4",
+            "0.5",
+            "0.6",
+            "0.7",
+            "0.8",
+            "0.14"
+          ],
+          "id": "O01",
+          "missing_artifacts": [
+            "Gate 0.14 behavior-equivalence closeout after decomposition",
+            "paper negative guard for clean-module claims"
+          ],
+          "negative_guard": "No production-clean, modular-storage-runtime, or behavior-equivalent refactor claim before Gate 0.14 closes.",
+          "paper_claim_boundary": "Implementation text may describe current modules only as refactored components after behavior-equivalence evidence; until then, it must not claim a production-clean architecture.",
+          "primary_code_module": "code/pqc_fuse.c",
+          "status": "code-required",
+          "title": "codebase architecture still looks patch-accumulated"
+        },
+        {
+          "blocking_reason": "AEGIS-Q frozen-contract throughput is far below plaintext and gocryptfs, and the paper must explain whether the bottleneck is semantic, implementation, or redesign debt.",
+          "found": true,
+          "gate_links": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "0.9",
+            "0.15",
+            "0.16"
+          ],
+          "id": "O02",
+          "missing_artifacts": [
+            "filesystem_viability_breakdown end-to-end component attribution",
+            "strict-versus-epoch lock-hold and p99/p99.9 closeout",
+            "paper text classifying the dominant bottleneck"
+          ],
+          "negative_guard": "No high-throughput, competitive-with-gocryptfs, or general-purpose filesystem wording before viability breakdown and epoch evidence close.",
+          "paper_claim_boundary": "The paper may report conservative strict-mode results and epoch-mode diagnostics, but no high-throughput or general-purpose filesystem implication is allowed until A1/A3 close.",
+          "primary_code_module": "code/pqc_file_io.c",
+          "status": "artifact-required",
+          "title": "filesystem throughput viability remains the top blocker"
+        },
+        {
+          "blocking_reason": "fscrypt is missing from the matched frozen-contract baseline table.",
+          "found": true,
+          "gate_links": [
+            "B1",
+            "B4"
+          ],
+          "id": "O03",
+          "missing_artifacts": [
+            "matched fscrypt fio row or environment-blocked proof"
+          ],
+          "negative_guard": "No fscrypt speedup or apples-to-apples implication without a measured fscrypt row.",
+          "paper_claim_boundary": "fscrypt must appear only as measured, environment-blocked, or removed from the comparison.",
+          "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+          "status": "artifact-required",
+          "title": "fscrypt matched baseline is unresolved"
+        },
+        {
+          "blocking_reason": "dm-crypt appears runnable but lacks a matched frozen-contract row.",
+          "found": true,
+          "gate_links": [
+            "B2",
+            "B4"
+          ],
+          "id": "O04",
+          "missing_artifacts": [
+            "LUKS/dmsetup setup logs and matched fio JSON for dm-crypt/ext4"
+          ],
+          "negative_guard": "Historical dm-crypt diagnostics are not a paper comparison row.",
+          "paper_claim_boundary": "dm-crypt is either a measured row or an unavailable row with root/device proof.",
+          "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+          "status": "artifact-required",
+          "title": "dm-crypt matched baseline is unresolved"
+        },
+        {
+          "blocking_reason": "SQLite p99 recovery may be achievable with standard Linux QoS controls.",
+          "found": true,
+          "gate_links": [
+            "B3",
+            "E2"
+          ],
+          "id": "O05",
+          "missing_artifacts": [
+            "artifacts/reports/qos_repeated/*.json",
+            "at least two cgroup/blk-throttle/ionice/BFQ baseline runs"
+          ],
+          "negative_guard": "No SQLite p99 uniqueness claim before two kernel QoS baselines exist.",
+          "paper_claim_boundary": "SQLite p99 improvement must be compared against kernel QoS or scoped as internal controller evidence.",
+          "primary_code_module": "code/pqc_qos.c",
+          "status": "artifact-required",
+          "title": "SQLite QoS lacks kernel-control baselines"
+        },
+        {
+          "blocking_reason": "Shared mmap, rename, directory fsync, and concurrent writes are not closed enough for broad POSIX wording.",
+          "found": true,
+          "gate_links": [
+            "C1",
+            "C2",
+            "0.14"
+          ],
+          "id": "O06",
+          "missing_artifacts": [
+            "paper POSIX envelope table with support/formal rejection/paper limitation"
+          ],
+          "negative_guard": "No general-purpose POSIX wording before shared mmap and POSIX envelope evidence close.",
+          "paper_claim_boundary": "The paper must read as a scoped FUSE secure-storage prototype unless shared mmap and envelope semantics pass.",
+          "primary_code_module": "code/pqc_posix.c",
+          "status": "paper-required",
+          "title": "POSIX envelope is too broad unless closed by tests or formal rejection"
+        },
+        {
+          "blocking_reason": "SIGKILL-at-cutpoint evidence is not the same as power-loss certification.",
+          "found": true,
+          "gate_links": [
+            "C3",
+            "C4",
+            "0.8",
+            "0.9"
+          ],
+          "id": "O07",
+          "missing_artifacts": [
+            "physical power-loss or explicit unavailable-environment boundary artifact"
+          ],
+          "negative_guard": "No power-loss safe, full crash certification, or crash-certified wording without physical or explicitly bounded evidence.",
+          "paper_claim_boundary": "Crash claims must be bounded to the strongest retained model: process kill, daemon kill, remount, or physical power cut.",
+          "primary_code_module": "code/pqc_test_hooks.c",
+          "status": "artifact-required",
+          "title": "crash and power-loss model is not fully bounded"
+        },
+        {
+          "blocking_reason": "File anchors and TPM NV evidence do not prove persistent PCR-bound rollback resistance.",
+          "found": true,
+          "gate_links": [
+            "C5",
+            "C6",
+            "D3"
+          ],
+          "id": "O08",
+          "missing_artifacts": [
+            "production async Merkle or committed-prefix root plus TPM epoch evidence"
+          ],
+          "negative_guard": "No TPM rollback resistance, persistent PCR-bound freshness, sealed-key release, or full rollback-resistance wording before Gate C6.",
+          "paper_claim_boundary": "Freshness text must map to the retained ladder level and stop before PCR-bound rollback resistance unless C6 exists.",
+          "primary_code_module": "code/pqc_anchor.c",
+          "status": "code-required",
+          "title": "freshness and rollback resistance remain overclaim-prone"
+        },
+        {
+          "blocking_reason": "PBKDF2-HMAC-SHA256 and key lifecycle boundaries need a parameterized decision backed by artifacts.",
+          "found": true,
+          "gate_links": [
+            "D1",
+            "D2",
+            "D3"
+          ],
+          "id": "O09",
+          "missing_artifacts": [
+            "Argon2id/scrypt implementation or PBKDF2 parameter/salt/offline-attack benchmark artifact"
+          ],
+          "negative_guard": "No offline-attack resistance or strong password-hardening claim while PBKDF2 remains unexplained.",
+          "paper_claim_boundary": "Security text must state the KDF, salt, parameters, offline attacker model, and PQC/data-plane separation.",
+          "primary_code_module": "code/pqc_keyring.c",
+          "status": "code-required",
+          "title": "KDF and key lifecycle need a security-facing decision"
+        },
+        {
+          "blocking_reason": "Pinned memory, UVM, dma-buf, GPUDirect, stream priority, and Jetson power claims need local probes, production traces, and official-document boundaries.",
+          "found": true,
+          "gate_links": [
+            "0.10",
+            "0.11",
+            "0.12",
+            "0.18",
+            "A4",
+            "E5"
+          ],
+          "id": "O10",
+          "missing_artifacts": [
+            "production mounted-path benefit traces before any NVIDIA term becomes a paper mechanism"
+          ],
+          "negative_guard": "No NVMe-to-UVM, GPUDirect, dma-buf zero-copy, CUDA isolation, or stream-priority QoS claim without production evidence.",
+          "paper_claim_boundary": "NVIDIA terms may appear only at their retained evidence level: API available, probe passed, diagnostic, or non-claim.",
+          "primary_code_module": "code/cuda_aead.cu",
+          "status": "negative-claim-only",
+          "title": "GPU and Jetson optimization claims need a ladder"
+        },
+        {
+          "blocking_reason": "SQLite/FUSE QoS alone is not enough for SOSP/OSDI workload generality.",
+          "found": true,
+          "gate_links": [
+            "E1",
+            "E2",
+            "E3",
+            "E4",
+            "E5"
+          ],
+          "id": "O11",
+          "missing_artifacts": [
+            "artifacts/validation/hero_result_contract/*.json",
+            "artifacts/validation/second_macrobenchmark/*.json",
+            "RocksDB/WAL, checkpointing, or secure inference-log macrobenchmark runner and raw logs"
+          ],
+          "negative_guard": "No broad workload-general or SOSP/OSDI-ready claim before a second macrobenchmark exists.",
+          "paper_claim_boundary": "SQLite can remain the primary hero, but generality requires a second macrobenchmark or downgraded venue ambition.",
+          "primary_code_module": "code/experiments/run_qos_sqlite_hero_bundle.py",
+          "status": "code-required",
+          "title": "hero workload generality is too narrow"
+        },
+        {
+          "blocking_reason": "The paper can sound broader than the retained production evidence.",
+          "found": true,
+          "gate_links": [
+            "F1",
+            "F2",
+            "F3",
+            "F4",
+            "F5"
+          ],
+          "id": "O12",
+          "missing_artifacts": [
+            "artifacts/validation/first_two_pages_thesis_audit/*.json",
+            "artifacts/validation/recurring_review_elimination_audit/*.json",
+            "paper text pass with dangerous phrases absent, negated, or evidence-backed"
+          ],
+          "negative_guard": "Dangerous phrases must be absent, explicitly negated, or tied to a closed gate.",
+          "paper_claim_boundary": "Paper body must prioritize thesis, hard problem, mechanism, result, and loss case, not artifact-ledger narration.",
+          "primary_code_module": "code/experiments/build_paper_spine_gate.py",
+          "status": "paper-required",
+          "title": "paper narrative can overclaim the evidence"
+        },
+        {
+          "blocking_reason": "FUSE context switching and per-write fdatasync can dominate the path and must be amortized or honestly measured.",
+          "found": true,
+          "gate_links": [
+            "A5",
+            "0.9",
+            "0.15",
+            "0.16"
+          ],
+          "id": "O13",
+          "missing_artifacts": [
+            "vfs_ebpf_fdatasync_storm context-switch/syscall/fdatasync/tail-latency breakdown"
+          ],
+          "negative_guard": "No eBPF passthrough, io_uring completion bypass, or async epoch fdatasync claim without production evidence.",
+          "paper_claim_boundary": "The design may claim fdatasync amortization only for the measured epoch path; eBPF/io_uring bypass remains a non-claim.",
+          "primary_code_module": "code/pqc_epoch_publish.c",
+          "status": "artifact-required",
+          "title": "FUSE and fdatasync storm need amortization or measured rejection"
+        },
+        {
+          "blocking_reason": "GPU side channels, multi-tenant attackers, privileged local attackers, and deployment readiness are not implemented defenses.",
+          "found": true,
+          "gate_links": [
+            "D4",
+            "F4",
+            "F5"
+          ],
+          "id": "O14",
+          "missing_artifacts": [
+            "artifacts/validation/sidechannel_eval/*.json",
+            "artifacts/validation/tvla_leakage_eval/*.json",
+            "claim lint output proving out-of-scope language remains explicit"
+          ],
+          "negative_guard": "No side-channel protection, multi-tenant defense, compromised-kernel defense, deployment-ready, or ready-for-production wording.",
+          "paper_claim_boundary": "Security scope must exclude compromised kernel/driver/FUSE, privileged local attackers, multi-tenant isolation, and GPU side-channel defense.",
+          "primary_code_module": "code/experiments/run_sidechannel_eval.py",
+          "status": "negative-claim-only",
+          "title": "attacker model and deployment claims must stay scoped"
+        }
+      ],
+      "unresolved_status_counts": {
+        "artifact-required": 6,
+        "code-required": 4,
+        "negative-claim-only": 2,
+        "paper-required": 2
+      },
+      "venue_class": "SOSP/OSDI"
+    },
+    {
+      "fallback_classification_rule": "ATC may become a fallback only if the user explicitly rescopes from SOSP/OSDI; it still needs clean implementation evidence, practical baselines, reproducibility, and explicit limitations.",
+      "paper_nonclaim_boundary": "Do not use ATC fallback to keep SOSP/OSDI claims. If rescoped to ATC, remove or downgrade claims that depend on unclosed venue-level novelty, broad POSIX, rollback resistance, or second-workload generality.",
+      "readiness_verdict": "conditional-blocked",
+      "required_bar": [
+        "production-quality implementation with a clear engineering contribution",
+        "reproducible evaluation harness and retained raw artifacts",
+        "practical baselines against deployed alternatives",
+        "honest limitations for POSIX, crash, freshness, hardware, and threat model",
+        "paper narrative that emphasizes measured implementation behavior instead of broad systems novelty"
+      ],
+      "required_blockers": [
+        {
+          "blocking_reason": "The current filesystem path still needs a defensible storage-runtime architecture, not a set of accumulated FUSE, CUDA, TPM, and checklist patches.",
+          "found": true,
+          "gate_links": [
+            "0.1",
+            "0.4",
+            "0.5",
+            "0.6",
+            "0.7",
+            "0.8",
+            "0.14"
+          ],
+          "id": "O01",
+          "missing_artifacts": [
+            "Gate 0.14 behavior-equivalence closeout after decomposition",
+            "paper negative guard for clean-module claims"
+          ],
+          "negative_guard": "No production-clean, modular-storage-runtime, or behavior-equivalent refactor claim before Gate 0.14 closes.",
+          "paper_claim_boundary": "Implementation text may describe current modules only as refactored components after behavior-equivalence evidence; until then, it must not claim a production-clean architecture.",
+          "primary_code_module": "code/pqc_fuse.c",
+          "status": "code-required",
+          "title": "codebase architecture still looks patch-accumulated"
+        },
+        {
+          "blocking_reason": "AEGIS-Q frozen-contract throughput is far below plaintext and gocryptfs, and the paper must explain whether the bottleneck is semantic, implementation, or redesign debt.",
+          "found": true,
+          "gate_links": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "0.9",
+            "0.15",
+            "0.16"
+          ],
+          "id": "O02",
+          "missing_artifacts": [
+            "filesystem_viability_breakdown end-to-end component attribution",
+            "strict-versus-epoch lock-hold and p99/p99.9 closeout",
+            "paper text classifying the dominant bottleneck"
+          ],
+          "negative_guard": "No high-throughput, competitive-with-gocryptfs, or general-purpose filesystem wording before viability breakdown and epoch evidence close.",
+          "paper_claim_boundary": "The paper may report conservative strict-mode results and epoch-mode diagnostics, but no high-throughput or general-purpose filesystem implication is allowed until A1/A3 close.",
+          "primary_code_module": "code/pqc_file_io.c",
+          "status": "artifact-required",
+          "title": "filesystem throughput viability remains the top blocker"
+        },
+        {
+          "blocking_reason": "fscrypt is missing from the matched frozen-contract baseline table.",
+          "found": true,
+          "gate_links": [
+            "B1",
+            "B4"
+          ],
+          "id": "O03",
+          "missing_artifacts": [
+            "matched fscrypt fio row or environment-blocked proof"
+          ],
+          "negative_guard": "No fscrypt speedup or apples-to-apples implication without a measured fscrypt row.",
+          "paper_claim_boundary": "fscrypt must appear only as measured, environment-blocked, or removed from the comparison.",
+          "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+          "status": "artifact-required",
+          "title": "fscrypt matched baseline is unresolved"
+        },
+        {
+          "blocking_reason": "dm-crypt appears runnable but lacks a matched frozen-contract row.",
+          "found": true,
+          "gate_links": [
+            "B2",
+            "B4"
+          ],
+          "id": "O04",
+          "missing_artifacts": [
+            "LUKS/dmsetup setup logs and matched fio JSON for dm-crypt/ext4"
+          ],
+          "negative_guard": "Historical dm-crypt diagnostics are not a paper comparison row.",
+          "paper_claim_boundary": "dm-crypt is either a measured row or an unavailable row with root/device proof.",
+          "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+          "status": "artifact-required",
+          "title": "dm-crypt matched baseline is unresolved"
+        },
+        {
+          "blocking_reason": "SQLite p99 recovery may be achievable with standard Linux QoS controls.",
+          "found": true,
+          "gate_links": [
+            "B3",
+            "E2"
+          ],
+          "id": "O05",
+          "missing_artifacts": [
+            "artifacts/reports/qos_repeated/*.json",
+            "at least two cgroup/blk-throttle/ionice/BFQ baseline runs"
+          ],
+          "negative_guard": "No SQLite p99 uniqueness claim before two kernel QoS baselines exist.",
+          "paper_claim_boundary": "SQLite p99 improvement must be compared against kernel QoS or scoped as internal controller evidence.",
+          "primary_code_module": "code/pqc_qos.c",
+          "status": "artifact-required",
+          "title": "SQLite QoS lacks kernel-control baselines"
+        },
+        {
+          "blocking_reason": "SIGKILL-at-cutpoint evidence is not the same as power-loss certification.",
+          "found": true,
+          "gate_links": [
+            "C3",
+            "C4",
+            "0.8",
+            "0.9"
+          ],
+          "id": "O07",
+          "missing_artifacts": [
+            "physical power-loss or explicit unavailable-environment boundary artifact"
+          ],
+          "negative_guard": "No power-loss safe, full crash certification, or crash-certified wording without physical or explicitly bounded evidence.",
+          "paper_claim_boundary": "Crash claims must be bounded to the strongest retained model: process kill, daemon kill, remount, or physical power cut.",
+          "primary_code_module": "code/pqc_test_hooks.c",
+          "status": "artifact-required",
+          "title": "crash and power-loss model is not fully bounded"
+        },
+        {
+          "blocking_reason": "PBKDF2-HMAC-SHA256 and key lifecycle boundaries need a parameterized decision backed by artifacts.",
+          "found": true,
+          "gate_links": [
+            "D1",
+            "D2",
+            "D3"
+          ],
+          "id": "O09",
+          "missing_artifacts": [
+            "Argon2id/scrypt implementation or PBKDF2 parameter/salt/offline-attack benchmark artifact"
+          ],
+          "negative_guard": "No offline-attack resistance or strong password-hardening claim while PBKDF2 remains unexplained.",
+          "paper_claim_boundary": "Security text must state the KDF, salt, parameters, offline attacker model, and PQC/data-plane separation.",
+          "primary_code_module": "code/pqc_keyring.c",
+          "status": "code-required",
+          "title": "KDF and key lifecycle need a security-facing decision"
+        },
+        {
+          "blocking_reason": "The paper can sound broader than the retained production evidence.",
+          "found": true,
+          "gate_links": [
+            "F1",
+            "F2",
+            "F3",
+            "F4",
+            "F5"
+          ],
+          "id": "O12",
+          "missing_artifacts": [
+            "artifacts/validation/first_two_pages_thesis_audit/*.json",
+            "artifacts/validation/recurring_review_elimination_audit/*.json",
+            "paper text pass with dangerous phrases absent, negated, or evidence-backed"
+          ],
+          "negative_guard": "Dangerous phrases must be absent, explicitly negated, or tied to a closed gate.",
+          "paper_claim_boundary": "Paper body must prioritize thesis, hard problem, mechanism, result, and loss case, not artifact-ledger narration.",
+          "primary_code_module": "code/experiments/build_paper_spine_gate.py",
+          "status": "paper-required",
+          "title": "paper narrative can overclaim the evidence"
+        },
+        {
+          "blocking_reason": "GPU side channels, multi-tenant attackers, privileged local attackers, and deployment readiness are not implemented defenses.",
+          "found": true,
+          "gate_links": [
+            "D4",
+            "F4",
+            "F5"
+          ],
+          "id": "O14",
+          "missing_artifacts": [
+            "artifacts/validation/sidechannel_eval/*.json",
+            "artifacts/validation/tvla_leakage_eval/*.json",
+            "claim lint output proving out-of-scope language remains explicit"
+          ],
+          "negative_guard": "No side-channel protection, multi-tenant defense, compromised-kernel defense, deployment-ready, or ready-for-production wording.",
+          "paper_claim_boundary": "Security scope must exclude compromised kernel/driver/FUSE, privileged local attackers, multi-tenant isolation, and GPU side-channel defense.",
+          "primary_code_module": "code/experiments/run_sidechannel_eval.py",
+          "status": "negative-claim-only",
+          "title": "attacker model and deployment claims must stay scoped"
+        }
+      ],
+      "unresolved_status_counts": {
+        "artifact-required": 5,
+        "code-required": 2,
+        "negative-claim-only": 1,
+        "paper-required": 1
+      },
+      "venue_class": "ATC"
+    },
+    {
+      "fallback_classification_rule": "FAST may become a fallback only if the paper is reframed as a storage publication/runtime mechanism; filesystem viability, baselines, crash semantics, and sync/fdatasync accounting remain required.",
+      "paper_nonclaim_boundary": "Do not claim a FAST-style storage mechanism until epoch publication, fdatasync amortization, recovery, and mode-aligned storage baselines are measured in the production mounted path.",
+      "readiness_verdict": "conditional-blocked",
+      "required_bar": [
+        "storage-specific mechanism with durability, write amplification, sync, and recovery accounting",
+        "mode-aligned filesystem or block-layer baselines",
+        "crash and replay semantics tied to implementation artifacts",
+        "tail-latency and throughput attribution for the mounted path",
+        "related-work positioning against logging, journaling, fast-commit, and kernel encryption systems"
+      ],
+      "required_blockers": [
+        {
+          "blocking_reason": "AEGIS-Q frozen-contract throughput is far below plaintext and gocryptfs, and the paper must explain whether the bottleneck is semantic, implementation, or redesign debt.",
+          "found": true,
+          "gate_links": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "0.9",
+            "0.15",
+            "0.16"
+          ],
+          "id": "O02",
+          "missing_artifacts": [
+            "filesystem_viability_breakdown end-to-end component attribution",
+            "strict-versus-epoch lock-hold and p99/p99.9 closeout",
+            "paper text classifying the dominant bottleneck"
+          ],
+          "negative_guard": "No high-throughput, competitive-with-gocryptfs, or general-purpose filesystem wording before viability breakdown and epoch evidence close.",
+          "paper_claim_boundary": "The paper may report conservative strict-mode results and epoch-mode diagnostics, but no high-throughput or general-purpose filesystem implication is allowed until A1/A3 close.",
+          "primary_code_module": "code/pqc_file_io.c",
+          "status": "artifact-required",
+          "title": "filesystem throughput viability remains the top blocker"
+        },
+        {
+          "blocking_reason": "fscrypt is missing from the matched frozen-contract baseline table.",
+          "found": true,
+          "gate_links": [
+            "B1",
+            "B4"
+          ],
+          "id": "O03",
+          "missing_artifacts": [
+            "matched fscrypt fio row or environment-blocked proof"
+          ],
+          "negative_guard": "No fscrypt speedup or apples-to-apples implication without a measured fscrypt row.",
+          "paper_claim_boundary": "fscrypt must appear only as measured, environment-blocked, or removed from the comparison.",
+          "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+          "status": "artifact-required",
+          "title": "fscrypt matched baseline is unresolved"
+        },
+        {
+          "blocking_reason": "dm-crypt appears runnable but lacks a matched frozen-contract row.",
+          "found": true,
+          "gate_links": [
+            "B2",
+            "B4"
+          ],
+          "id": "O04",
+          "missing_artifacts": [
+            "LUKS/dmsetup setup logs and matched fio JSON for dm-crypt/ext4"
+          ],
+          "negative_guard": "Historical dm-crypt diagnostics are not a paper comparison row.",
+          "paper_claim_boundary": "dm-crypt is either a measured row or an unavailable row with root/device proof.",
+          "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+          "status": "artifact-required",
+          "title": "dm-crypt matched baseline is unresolved"
+        },
+        {
+          "blocking_reason": "Shared mmap, rename, directory fsync, and concurrent writes are not closed enough for broad POSIX wording.",
+          "found": true,
+          "gate_links": [
+            "C1",
+            "C2",
+            "0.14"
+          ],
+          "id": "O06",
+          "missing_artifacts": [
+            "paper POSIX envelope table with support/formal rejection/paper limitation"
+          ],
+          "negative_guard": "No general-purpose POSIX wording before shared mmap and POSIX envelope evidence close.",
+          "paper_claim_boundary": "The paper must read as a scoped FUSE secure-storage prototype unless shared mmap and envelope semantics pass.",
+          "primary_code_module": "code/pqc_posix.c",
+          "status": "paper-required",
+          "title": "POSIX envelope is too broad unless closed by tests or formal rejection"
+        },
+        {
+          "blocking_reason": "SIGKILL-at-cutpoint evidence is not the same as power-loss certification.",
+          "found": true,
+          "gate_links": [
+            "C3",
+            "C4",
+            "0.8",
+            "0.9"
+          ],
+          "id": "O07",
+          "missing_artifacts": [
+            "physical power-loss or explicit unavailable-environment boundary artifact"
+          ],
+          "negative_guard": "No power-loss safe, full crash certification, or crash-certified wording without physical or explicitly bounded evidence.",
+          "paper_claim_boundary": "Crash claims must be bounded to the strongest retained model: process kill, daemon kill, remount, or physical power cut.",
+          "primary_code_module": "code/pqc_test_hooks.c",
+          "status": "artifact-required",
+          "title": "crash and power-loss model is not fully bounded"
+        },
+        {
+          "blocking_reason": "File anchors and TPM NV evidence do not prove persistent PCR-bound rollback resistance.",
+          "found": true,
+          "gate_links": [
+            "C5",
+            "C6",
+            "D3"
+          ],
+          "id": "O08",
+          "missing_artifacts": [
+            "production async Merkle or committed-prefix root plus TPM epoch evidence"
+          ],
+          "negative_guard": "No TPM rollback resistance, persistent PCR-bound freshness, sealed-key release, or full rollback-resistance wording before Gate C6.",
+          "paper_claim_boundary": "Freshness text must map to the retained ladder level and stop before PCR-bound rollback resistance unless C6 exists.",
+          "primary_code_module": "code/pqc_anchor.c",
+          "status": "code-required",
+          "title": "freshness and rollback resistance remain overclaim-prone"
+        },
+        {
+          "blocking_reason": "FUSE context switching and per-write fdatasync can dominate the path and must be amortized or honestly measured.",
+          "found": true,
+          "gate_links": [
+            "A5",
+            "0.9",
+            "0.15",
+            "0.16"
+          ],
+          "id": "O13",
+          "missing_artifacts": [
+            "vfs_ebpf_fdatasync_storm context-switch/syscall/fdatasync/tail-latency breakdown"
+          ],
+          "negative_guard": "No eBPF passthrough, io_uring completion bypass, or async epoch fdatasync claim without production evidence.",
+          "paper_claim_boundary": "The design may claim fdatasync amortization only for the measured epoch path; eBPF/io_uring bypass remains a non-claim.",
+          "primary_code_module": "code/pqc_epoch_publish.c",
+          "status": "artifact-required",
+          "title": "FUSE and fdatasync storm need amortization or measured rejection"
+        },
+        {
+          "blocking_reason": "The paper can sound broader than the retained production evidence.",
+          "found": true,
+          "gate_links": [
+            "F1",
+            "F2",
+            "F3",
+            "F4",
+            "F5"
+          ],
+          "id": "O12",
+          "missing_artifacts": [
+            "artifacts/validation/first_two_pages_thesis_audit/*.json",
+            "artifacts/validation/recurring_review_elimination_audit/*.json",
+            "paper text pass with dangerous phrases absent, negated, or evidence-backed"
+          ],
+          "negative_guard": "Dangerous phrases must be absent, explicitly negated, or tied to a closed gate.",
+          "paper_claim_boundary": "Paper body must prioritize thesis, hard problem, mechanism, result, and loss case, not artifact-ledger narration.",
+          "primary_code_module": "code/experiments/build_paper_spine_gate.py",
+          "status": "paper-required",
+          "title": "paper narrative can overclaim the evidence"
+        }
+      ],
+      "unresolved_status_counts": {
+        "artifact-required": 5,
+        "code-required": 1,
+        "paper-required": 2
+      },
+      "venue_class": "FAST"
+    }
+  ],
+  "worktree_freeze": {
+    "branch": "main",
+    "code_refactor_strategy_absent": true,
+    "diff_name_only_count": 292,
+    "exists": true,
+    "generated_utc": "2026-06-29T10:18:24Z",
+    "paper_text_status": "not_updated",
+    "parent_checklist_closed": false,
+    "source": "artifacts/validation/refactor_inventory/worktree_freeze.json",
+    "untracked_files_count": 657
+  }
+}

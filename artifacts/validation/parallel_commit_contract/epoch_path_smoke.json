@@ -1,0 +1,82 @@
+{
+  "cases": [
+    {
+      "client": {
+        "matches": true,
+        "path": "/tmp/aegisq_strict_mnt_dwh4v749/smoke.dat",
+        "payload_len": 8221,
+        "read_len": 8221,
+        "written": 8221
+      },
+      "error": null,
+      "mode": "strict",
+      "pass": true,
+      "trace": {
+        "begin_count": 0,
+        "event_count": 0,
+        "events": [],
+        "exists": false,
+        "finish_count": 0,
+        "malformed_line_count": 0,
+        "max_group_size": 0,
+        "path": "artifacts/validation/parallel_commit_contract/strict_path_smoke/parallel_commit_trace.jsonl",
+        "roles": []
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_strict_mnt_dwh4v749"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      }
+    },
+    {
+      "client": {
+        "matches": true,
+        "path": "/tmp/aegisq_epoch_gated_strict_mnt_62l2ntnx/smoke.dat",
+        "payload_len": 8233,
+        "read_len": 8233,
+        "written": 8233
+      },
+      "error": null,
+      "mode": "epoch_gated_strict",
+      "pass": true,
+      "trace": {
+        "begin_count": 1,
+        "event_count": 4,
+        "events": [
+          "runtime_init",
+          "begin",
+          "finish",
+          "runtime_shutdown"
+        ],
+        "exists": true,
+        "finish_count": 1,
+        "malformed_line_count": 0,
+        "max_group_size": 1,
+        "path": "artifacts/validation/parallel_commit_contract/epoch_path_smoke/parallel_commit_trace.jsonl",
+        "roles": [
+          "invalid",
+          "leader"
+        ]
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_epoch_gated_strict_mnt_62l2ntnx"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      }
+    }
+  ],
+  "generated_by": "experiments/run_parallel_commit_epoch_path_smoke.py",
+  "generated_utc": "2026-06-28T05:55:15Z",
+  "negative_claim_guard": "This smoke proves that epoch-gated-strict writeback reaches the parallel-commit coordinator. It does not prove sync reduction, epoch redo-log durability, throughput improvement, or Gate 0.16 closure.",
+  "overall_pass": true,
+  "schema_version": 1,
+  "scope": "Gate 0.16-S2 mounted-path proof for explicit parallel commit mode."
+}

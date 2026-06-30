@@ -1,0 +1,33 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-30 14:13:07.747] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 14:13:07.747]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 14:13:07.747]   Storage dir : /tmp/aegis_qos_kernel_ionice_idle_uzs6hjra/store
+[PQC-FUSE 2026-06-30 14:13:07.747]   Mount point : /tmp/aegis_qos_kernel_ionice_idle_uzs6hjra/mnt
+[PQC-FUSE 2026-06-30 14:13:07.747] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/sqlite_kernel_qos_baseline/rep_02/kernel_ionice_idle/runtime_fuse_admission_trace.jsonl
+[PQC-FUSE 2026-06-30 14:13:07.747] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 14:13:07.747]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 14:13:07.747]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 14:13:07.747]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 14:13:07.747]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 14:13:07.750] Keypair generated in 1397.79 µs
+[PQC-FUSE 2026-06-30 14:13:07.811] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 14:13:07.811] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 14:13:07.811] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 14:13:07.811] Admission telemetry file monitor started: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/sqlite_kernel_qos_baseline/rep_02/kernel_ionice_idle/runtime_telemetry.txt
+[PQC-FUSE 2026-06-30 14:13:07.811] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 14:13:07.918] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 14:13:07.918] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-30 14:13:08.012] CREATE /background_0.bin: authenticated file-key envelope initialized (fid=16768262877748597190)
+[PQC-FUSE 2026-06-30 14:13:08.014] SETXATTR /background_0.bin qos_class=elastic
+[PQC-FUSE 2026-06-30 14:13:08.016] OPEN /background_0.bin: restored authenticated file-key envelope (fid=16768262877748597190)
+[PQC-FUSE 2026-06-30 14:13:08.057] CREATE /foreground.db: authenticated file-key envelope initialized (fid=8239924414234842779)
+[PQC-FUSE 2026-06-30 14:13:08.057] SETXATTR /foreground.db qos_class=latency
+[PQC-FUSE 2026-06-30 14:13:08.058] OPEN /foreground.db: restored authenticated file-key envelope (fid=8239924414234842779)
+[PQC-FUSE 2026-06-30 14:13:08.059] CREATE /foreground.db-journal: authenticated file-key envelope initialized (fid=5089258646165692356)

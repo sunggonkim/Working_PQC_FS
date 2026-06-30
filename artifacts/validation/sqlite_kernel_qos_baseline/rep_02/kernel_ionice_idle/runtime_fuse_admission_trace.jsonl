@@ -1,0 +1,5 @@
+# pqc_admission_init: gpu_min_batch=4096 bytes, ai_qos_min_budget=1730000 ns, deadline_margin=100000 ns, producer_slack_stale=250000000 ns, queue_threshold=0.80
+# AI_BUDGET_UPDATE: old=10000000 ns, new=1490971 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=1490971 ns, new=669010 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=669010 ns, new=603287 ns, queue_depth=0
+# AI_BUDGET_UPDATE: old=603287 ns, new=0 ns, queue_depth=1

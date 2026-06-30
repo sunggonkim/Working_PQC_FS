@@ -1,9 +1,9 @@
 \section{Implementation}
 \label{sec:design_impl}
 
-AEGIS-Q is implemented in C/CUDA on FUSE3.  The secure-storage path is in \texttt{pqc\_fuse.c}; the anchor format and Merkle helper are in \texttt{pqc\_anchor.c}; CUDA AES-GCM, ML-KEM, and integrity executors are separate translation units.  The build enables \texttt{-Wall -Wextra -Werror} for C/C++ and builds CUDA targets only when the required cuPQC libraries are present.  The reported build used liboqs~0.15.0, FUSE3~3.14.0, OpenSSL, CUDA~13.0.48, and cuPQC on the platform in Section~\ref{sec:evaluation}.
+AEGIS-Q is implemented in C/CUDA on FUSE3.  The source tree splits the FUSE adapter, fd-context lifecycle, writeback/publication, epoch log, recovery, anchor, keyring/KDF, QoS, POSIX policy, and CUDA executors across \texttt{code/}; \texttt{pqc\_fuse.c} is mount-facing.  The build enables \texttt{-Wall -Wextra -Werror} for C/C++ and builds CUDA targets only when cuPQC is present.
 
-The implementation makes several choices that are easy to obscure in a high-level diagram; Table~\ref{tab:impl_boundaries} summarizes the boundary for each one.  First, GPU AES-GCM is format-compatible with the CPU implementation, but failure in the CUDA executor falls back to CPU rather than changing a record format.  Second, the GPU ML-KEM batch executor allocates device buffers internally; it is not an in-place filesystem data path.  Third, the integrity executor has direct parity tests against OpenSSL for leaf hashes, non-power-of-two trees, and the empty-tree case.  These tests check functional equality for the helper used by the committed-prefix anchor root; they do not mean the filesystem persists a per-file content Merkle tree or provides side-channel protection.
+Table~\ref{tab:impl_boundaries} summarizes choices that are easy to misread.  Publication is a strict data/journal/checkpoint path plus opt-in epoch-redo-log grouping, not an accelerator path.  GPU AES-GCM is format-compatible and falls back to CPU, but evaluated data writes are CPU-first.  The GPU ML-KEM executor is not an in-place filesystem data path; integrity parity tests do not imply a persisted per-file Merkle tree or side-channel protection.
 
 \begin{table}[t]
 \centering
@@ -12,7 +12,7 @@ The implementation makes several choices that are easy to obscure in a high-leve
 \toprule
 \textbf{Mechanism} & \textbf{Current implementation} & \textbf{Boundary}\\
 \midrule
-CUDA storage path & Managed allocation with explicit prefetch and stream synchronization & Not a verified NVMe-to-UVM storage-DMA path\\
+CUDA storage path & Managed allocation with explicit prefetch and stream synchronization & Not an NVMe-to-UVM storage-DMA path\\
 CUDA failure policy & CUDA executor falls back to CPU on failure & Does not change the on-disk record format\\
 Anchor backend & File witness plus optional hardware NV index backend & Hardware path requires administrator pre-provisioning\\
 Scheduler fallback & No-slack jobs route to CPU & No optimistic GPU admission without producer-supplied slack\\
@@ -21,11 +21,11 @@ Scheduler fallback & No-slack jobs route to CPU & No optimistic GPU admission wi
 \label{tab:impl_boundaries}
 \end{table}
 
-The key-envelope repair is central to remount correctness.  An earlier metadata design generated and discarded a per-file ML-KEM secret key, making later decapsulation impossible.  The revised path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before ciphertext is read.  ML-KEM is only optional batched maintenance: the rekey worker can refresh open-file DEK material and persist new HMAC envelopes, but the format does not pretend that a KEM benchmark is a persistent per-file key hierarchy.
+The key-envelope path is central to remount correctness.  The current path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before ciphertext is read.  ML-KEM is optional batched maintenance: the rekey worker can refresh open-file DEK material and persist new HMAC envelopes, but the format does not pretend that a KEM benchmark is a persistent per-file key hierarchy.
 
-The older \texttt{pqc\_file\_key.*} epoch/grace helper remains source-only and is not linked into \texttt{pqc\_fuse}; evaluated epochs are open-file refresh bookkeeping, not stale-handle, rollback, or TPM/PCR-bound freshness proof.
+The older \texttt{pqc\_file\_key.*} epoch/grace helper remains source-only and is not linked into \texttt{pqc\_fuse}; evaluated epochs are open-file refresh bookkeeping, not stale-handle, rollback, or TPM/PCR-bound rollback proof.
 
-The implementation also fails closed in two places.  A scheduler job with no producer-supplied AI slack is routed to CPU.  A requested TPM backend with no pre-provisioned NV index causes initialization to fail rather than creating a persistent index with undocumented ownership.  These are conservative operational choices; neither substitutes for a complete inference-telemetry integration or TPM policy design.
+The implementation also fails closed in two places.  A scheduler job with no producer-supplied slack is routed to CPU.  A requested TPM backend with no pre-provisioned NV index causes initialization to fail rather than creating a persistent index with undocumented ownership.  These are conservative operational choices; neither substitutes for a complete external foreground-workload telemetry integration or TPM policy design.
 
 \subsection{Persistent-object layout}
 
@@ -35,10 +35,10 @@ The layout also creates concrete assumptions.  AEGIS-Q relies on the lower files
 
 \subsection{Concurrency and unsupported modes}
 
-The evaluated path uses ordinary FUSE read, write, flush, fsync, open, and release operations.  Per-file state is serialized through the daemon's state management before records are published.  The coalescing buffer is flushed before sync returns, and pending block jobs are drained before the checkpoint is considered visible.  This is sufficient for the retained remount and SQLite selected-boundary experiments.
+The evaluated path uses ordinary FUSE read, write, flush, fsync, open, and release operations.  Recent hot-path cleanup moves repeated policy parsing, same-daemon metadata reloads, sidecar EOF probes, read/write scratch allocation, and redundant read-side zeroing out of common mounted-path work.  Strict mode still drains coalesced writes before sync returns; epoch mode can group selected publication barriers while replaying only committed prefixes.  This supports the retained remount and SQLite selected-boundary experiments, not a general high-throughput filesystem claim.
 
 The implementation is not presented as a full POSIX conformance layer.  In particular, the paper does not claim validated shared \texttt{mmap} semantics, all possible concurrent-writer races, cross-process byte-range lock compatibility, or arbitrary rename/directory-fsync crash behavior.  Those modes are common sources of filesystem bugs, and the review correctly identified them as missing evidence.  Treating them as unsupported or unvalidated is preferable to silently inheriting a POSIX claim from FUSE.
 
 \subsection{Telemetry plumbing}
 
-The admission logic is implemented as ordinary C state rather than a separate daemon that invents scheduling results.  It records input queue depth, batch size, slack, telemetry freshness, and route decision.  The mounted-FUSE throttle path reads a telemetry file and applies hysteresis before sleeping inside the write-flush path.  The tegrastats and CUPTI harnesses differ only in how they populate that telemetry input.  This shared path is the reason the evaluation can claim same-run telemetry-to-FUSE wiring.  It is also why the paper still requires a separate foreground-inference experiment before making an AI QoS-restoration claim.
+The admission logic is implemented as ordinary C state rather than a separate daemon that invents scheduling results.  It records input queue depth, batch size, slack, telemetry age, and route decision.  The mounted-FUSE throttle path reads a telemetry file and applies hysteresis before sleeping inside the write-flush path.  The tegrastats and CUPTI harnesses differ only in how they populate that telemetry input.  This shared path is the reason the evaluation can claim same-run telemetry-to-FUSE wiring; it is still a storage-runtime result rather than an external application scheduler.

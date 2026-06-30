@@ -1,0 +1,57 @@
+{
+  "artifact": "lowerfs_durability_assumptions",
+  "assumption_matrix": [
+    {
+      "assumption": "data sidecar reaches lower storage before mapping publication",
+      "claim_boundary": "requires lower `fdatasync` to order file data before the later journal mapping",
+      "evidence": "daemon cutpoints `data_write`, `journal_append`, and `journal_fsync` all return acceptable committed-prefix verdicts",
+      "pass": true,
+      "status": "fault-tested"
+    },
+    {
+      "assumption": "checkpoint/logical-size xattr is exposed only after mapping publication",
+      "claim_boundary": "xattr atomicity is delegated to the lower filesystem; physical power-loss certification is not claimed",
+      "evidence": "`xattr_checkpoint_update` and `checkpoint_write` cutpoints are acceptable; POSIX audit records lower xattr availability and hidden internal xattrs",
+      "pass": true,
+      "status": "fault-tested-plus-scope-probed"
+    },
+    {
+      "assumption": "new-target/overwrite rename, directory-tree rename, directory fsync, hard-link, and symlink namespace support are bounded subsets",
+      "claim_boundary": "no open hard-link creation, open-subtree retargeting, full link-count lifecycle certification, or crash-atomic multi-file rename claim",
+      "evidence": "POSIX audit renames a closed regular file to a new target, supports closed-target overwrite rename, supports open-source rename to a new target, supports open-target overwrite rename with stale target fd isolation, supports empty-directory and non-empty directory-tree rename to a new target, fsyncs a lower directory, passes no-open regular-file hard-link read/write-through, and passes relative symlink readlink/read-through",
+      "pass": true,
+      "status": "supported-subset"
+    },
+    {
+      "assumption": "recovery ordering is limited to retained D/J/C cutpoints",
+      "claim_boundary": "kernel crash, drive-cache flush loss, and physical power loss remain outside scope",
+      "evidence": "daemon campaign covers all required daemon cutpoints and crash audit retains selected app-level evidence",
+      "pass": true,
+      "status": "selected-boundary-fault-tested"
+    }
+  ],
+  "claim_guard": "Paper text may use this artifact only as an assumption matrix for the implemented mounted prototype. It must not claim full POSIX crash consistency, crash-atomic rename, open hard-link creation, full link-count lifecycle certification, open-subtree retargeting, or power-loss certification.",
+  "lower_filesystem_probe": {
+    "filesystem_type": "ext2/ext3",
+    "marker_checkpoint_xattr_bytes": 80,
+    "marker_metadata_xattr_bytes": 120,
+    "scope": "The harness records lower-filesystem type and xattr availability; xattr atomicity and directory durability remain delegated, not certified.",
+    "storage_dir_fsync_ok": true
+  },
+  "overall_pass": true,
+  "paper_terms": {
+    "directory": true,
+    "fdatasync": true,
+    "lower_filesystem": true,
+    "not_certified": true,
+    "ordering": true,
+    "xattr": true
+  },
+  "source_artifacts": {
+    "crash_audit_report": "artifacts/reports/crash_audit_report/crash_audit_report.json",
+    "daemon_power_fault_campaign": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+    "posix_scope_audit": "artifacts/validation/posix_scope_audit/posix_scope_audit.json"
+  },
+  "timestamp_utc": "2026-06-30T10:01:12.653689+00:00",
+  "verdict": "The retained evidence supports a scoped D/J/C ordering argument: data and journal cutpoints recover to an acceptable committed prefix, checkpoint/xattr cutpoints are covered, and closed-file new-target rename, closed-target overwrite rename, open-source rename to a new target, empty-directory and non-empty directory-tree rename to a new target, directory fsync, no-open regular-file hard-link read/write-through, open-target stale-fd isolation, and relative symlink read-through have bounded supported subsets. It does not certify lower-filesystem xattr atomicity, directory durability, drive-cache behavior, kernel crash, or physical power-loss semantics."
+}

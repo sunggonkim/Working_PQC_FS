@@ -1,0 +1,276 @@
+{
+  "claim_contract": [
+    {
+      "evidence": [
+        "device_count=1",
+        "selected_device_name=NVIDIA Thor",
+        "compute_capability=11.0"
+      ],
+      "evidence_level": "local_probe",
+      "name": "cudaDeviceProp/cudaDeviceGetAttribute inventory",
+      "negative_guard": "No CUDA/Jetson hardware mechanism claim may be made if device_count is zero or the property is absent.",
+      "paper_mechanism_eligible": true
+    },
+    {
+      "evidence": [
+        "cudaHostAlloc=pass",
+        "mapped_kernel=pass"
+      ],
+      "evidence_level": "local_probe_pass",
+      "name": "pinned host allocation via cudaHostAlloc",
+      "negative_guard": "Do not claim pinned-memory benefit or zero-copy unless a production mounted-path benchmark uses this path.",
+      "paper_mechanism_eligible": true
+    },
+    {
+      "evidence": [
+        "hostRegisterSupported=1",
+        "cudaHostRegister=pass"
+      ],
+      "evidence_level": "local_probe_pass",
+      "name": "registered host memory via cudaHostRegister",
+      "negative_guard": "Do not claim registered host memory for production I/O unless the mounted path records this allocation mode.",
+      "paper_mechanism_eligible": true
+    },
+    {
+      "evidence": [
+        "managedMemory=1",
+        "concurrentManagedAccess=1",
+        "cudaMallocManaged=pass",
+        "cudaMemPrefetchAsyncManaged=pass"
+      ],
+      "evidence_level": "local_probe_pass",
+      "name": "managed memory / UVM allocation",
+      "negative_guard": "Do not claim direct storage-to-UVM DMA or production UVM benefit from allocation-only evidence.",
+      "paper_mechanism_eligible": true
+    },
+    {
+      "evidence": [
+        "pageableMemoryAccess=1",
+        "pageableMemoryAccessUsesHostPageTables=1",
+        "pageableMemoryPrefetch=pass"
+      ],
+      "evidence_level": "local_probe_pass",
+      "name": "pageable memory access",
+      "negative_guard": "Do not claim coherent pageable GPU access unless the probe passes and the mounted path uses pageable memory intentionally.",
+      "paper_mechanism_eligible": true
+    },
+    {
+      "evidence": [
+        "/dev/dma_heap_present=False",
+        "no CUDA dma-buf export/import production probe is implemented"
+      ],
+      "evidence_level": "non_claim",
+      "name": "dma-buf export/import",
+      "negative_guard": "dma-buf zero-copy remains a non-claim until CUDA allocation export/import and mounted-path use are proven.",
+      "paper_mechanism_eligible": false
+    },
+    {
+      "evidence": [
+        "cudaDevAttrGPUDirectRDMASupported=0",
+        "nvidia_peermem_or_nv_peer_mem=False",
+        "infiniband_devices=[]"
+      ],
+      "evidence_level": "non_claim",
+      "name": "GPUDirect/RDMA applicability",
+      "negative_guard": "GPUDirect/RDMA and direct NVMe-to-UVM DMA remain non-claims without driver, peer-memory, RDMA/NVMe, and production mounted-path evidence.",
+      "paper_mechanism_eligible": false
+    },
+    {
+      "evidence": [
+        "no NVMe peer-DMA proof",
+        "no UVM direct-DMA proof",
+        "no production mounted-path trace"
+      ],
+      "evidence_level": "non_claim",
+      "name": "NVMe-to-UVM direct DMA",
+      "negative_guard": "The paper must not claim direct NVMe-to-UVM DMA.",
+      "paper_mechanism_eligible": false
+    }
+  ],
+  "generated_by": "code/experiments/run_jetson_memory_contract.py",
+  "generated_utc": "2026-06-29T08:33:10Z",
+  "negative_claim_guard": "No paper or README text may claim direct NVMe-to-UVM DMA, GPUDirect/RDMA, dma-buf zero-copy, pageable-memory coherency, UVM production benefit, or pinned/registered host-memory benefit unless this contract reports paper_mechanism_eligible=true for that mechanism and a later production mounted-path artifact uses it.",
+  "official_basis": [
+    {
+      "name": "NVIDIA CUDA for Tegra memory/coherency guidance",
+      "url": "https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/index.html",
+      "used_for": [
+        "Tegra memory model scope",
+        "host registration and pageable memory caution",
+        "UVM and coherency claim boundary"
+      ]
+    },
+    {
+      "name": "NVIDIA GPUDirect RDMA caveats",
+      "url": "https://docs.nvidia.com/cuda/gpudirect-rdma/index.html",
+      "used_for": [
+        "GPUDirect/RDMA applicability boundary",
+        "non-claim guard for NVMe-to-UVM/direct DMA"
+      ]
+    }
+  ],
+  "overall_pass": true,
+  "paper_text_status": "not_updated",
+  "parent_checklist_closed": false,
+  "platform_manifest": {
+    "device_nodes": {
+      "/dev/cpu_dma_latency": true,
+      "/dev/dma_heap": [],
+      "/dev/nvidia*": [
+        "/dev/nvidia-caps",
+        "/dev/nvidia-modeset",
+        "/dev/nvidia-uvm",
+        "/dev/nvidia-uvm-tools",
+        "/dev/nvidia0",
+        "/dev/nvidia1",
+        "/dev/nvidiactl"
+      ],
+      "/dev/nvidia-caps": [
+        "/dev/nvidia-caps/nvidia-cap1",
+        "/dev/nvidia-caps/nvidia-cap2"
+      ]
+    },
+    "kernel_modules_relevant": [
+      "nvidia",
+      "nvidia_modeset",
+      "nvidia_uvm"
+    ],
+    "kernel_release": "6.8.12-tegra",
+    "l4t_version_files": {
+      "/etc/nv_boot_control.conf": "TNSPEC 3834-400-0008-H.1-1-1-jetson-agx-thor-devkit-\nCOMPATIBLE_SPEC 3834-000-0008--1--jetson-agx-thor-devkit-\nTEGRA_BOOT_STORAGE nvme0n1\nTEGRA_CHIPID 0x26\nTEGRA_OTA_BOOT_DEVICE /dev/mtdblock0\nTEGRA_OTA_GPT_DEVICE /dev/mtdblock0",
+      "/etc/nv_tegra_release": "# R38 (release), REVISION: 4.0, GCID: 43443517, BOARD: generic, EABI: aarch64, DATE: Wed Dec 31 00:15:19 UTC 2025\n# KERNEL_VARIANT: oot\nTARGET_USERSPACE_LIB_DIR=nvidia\nTARGET_USERSPACE_LIB_DIR_PATH=usr/lib/aarch64-linux-gnu/nvidia\nINSTALL_TYPE=openrm"
+    },
+    "machine": "aarch64",
+    "nv_tegra_release": "# R38 (release), REVISION: 4.0, GCID: 43443517, BOARD: generic, EABI: aarch64, DATE: Wed Dec 31 00:15:19 UTC 2025\n# KERNEL_VARIANT: oot\nTARGET_USERSPACE_LIB_DIR=nvidia\nTARGET_USERSPACE_LIB_DIR_PATH=usr/lib/aarch64-linux-gnu/nvidia\nINSTALL_TYPE=openrm",
+    "nvcc_version": {
+      "argv": [
+        "nvcc",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jul_16_07:31:19_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.48\nBuild cuda_13.0.r13.0/compiler.36260728_0\n",
+      "timed_out": false
+    },
+    "nvidia_smi": {
+      "argv": [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA Thor, 580.00\n",
+      "timed_out": false
+    },
+    "platform": "Linux-6.8.12-tegra-aarch64-with-glibc2.39",
+    "processor": "aarch64",
+    "sysfs": {
+      "/sys/class/dma_heap": [],
+      "/sys/class/infiniband": [],
+      "/sys/kernel/dmabuf": []
+    },
+    "uname": {
+      "machine": "aarch64",
+      "node": "thor",
+      "processor": "aarch64",
+      "release": "6.8.12-tegra",
+      "system": "Linux",
+      "version": "#1 SMP PREEMPT Tue Dec 30 15:40:41 PST 2025"
+    }
+  },
+  "probe_payload": {
+    "cuda_driver_version": 13000,
+    "cuda_driver_version_status": "pass",
+    "cuda_get_device_count": {
+      "cuda_error": "cudaSuccess",
+      "cuda_error_text": "",
+      "status": "pass"
+    },
+    "cuda_runtime_version": 13000,
+    "cuda_runtime_version_status": "pass",
+    "cuda_set_device_flags": {
+      "cuda_error": "cudaSuccess",
+      "cuda_error_text": "",
+      "status": "pass"
+    },
+    "device_count": 1,
+    "devices": [
+      {
+        "can_use_host_pointer_for_registered_mem": 1,
+        "compute_capability": "11.0",
+        "concurrent_managed_access": 1,
+        "device": 0,
+        "direct_managed_mem_access_from_host": 0,
+        "gpudirect_rdma_flush_writes_options": 1,
+        "gpudirect_rdma_supported": 0,
+        "gpudirect_rdma_writes_ordering": 100,
+        "host_register_supported": 1,
+        "integrated": 1,
+        "managed_memory": 1,
+        "name": "NVIDIA Thor",
+        "pageable_memory_access": 1,
+        "pageable_memory_access_uses_host_page_tables": 1,
+        "properties_status": "pass",
+        "unified_addressing": 1
+      }
+    ],
+    "probes": {
+      "cudaHostAlloc": {
+        "cuda_error": "cudaSuccess",
+        "cuda_error_text": "",
+        "status": "pass"
+      },
+      "cudaHostAllocMappedKernel": {
+        "cuda_error": "cudaSuccess",
+        "cuda_error_text": "",
+        "host_alloc_mapped_error": "cudaSuccess",
+        "host_get_device_pointer_error": "cudaSuccess",
+        "status": "pass",
+        "value_observed": true
+      },
+      "cudaHostRegister": {
+        "cuda_error": "cudaSuccess",
+        "cuda_error_text": "",
+        "host_get_device_pointer_error": "cudaSuccess",
+        "mapped_kernel_error": "cudaSuccess",
+        "posix_memalign_rc": 0,
+        "status": "pass",
+        "value_observed": true
+      },
+      "cudaMallocManaged": {
+        "cuda_error": "cudaSuccess",
+        "cuda_error_text": "",
+        "status": "pass"
+      },
+      "cudaMemPrefetchAsyncManaged": {
+        "cuda_error": "cudaSuccess",
+        "cuda_error_text": "",
+        "status": "pass"
+      },
+      "cudaStreamAttachMemAsyncManaged": {
+        "cuda_error": "cudaSuccess",
+        "cuda_error_text": "",
+        "status": "pass"
+      },
+      "pageableMemoryPrefetch": {
+        "cuda_error": "cudaSuccess",
+        "cuda_error_text": "",
+        "status": "pass"
+      }
+    },
+    "schema_version": 1,
+    "selected_device": 0
+  },
+  "probe_run": {
+    "available": true,
+    "json_parse_error": null,
+    "path": "build/jetson_memory_contract_probe",
+    "returncode": 0,
+    "stderr_path": "artifacts/validation/jetson_memory_contract/jetson_memory_probe.stderr.txt",
+    "stdout_path": "artifacts/validation/jetson_memory_contract/jetson_memory_probe.stdout.json",
+    "timed_out": false
+  },
+  "schema_version": 1,
+  "scope": "Gate 0.10-S0 CUDA/Jetson memory capability and claim contract."
+}

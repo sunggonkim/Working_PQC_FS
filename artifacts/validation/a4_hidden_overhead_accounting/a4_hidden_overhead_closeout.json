@@ -1,0 +1,153 @@
+{
+  "generated_utc": "2026-06-30T03:00:07Z",
+  "inputs": {
+    "a4_smoke": "artifacts/validation/a4_hidden_overhead_accounting/a4_overhead_trace_smoke.json",
+    "cuda_qos_contract": "artifacts/validation/cuda_qos_contract/cuda_qos_contract.json",
+    "jetson_memory_contract": "artifacts/validation/jetson_memory_contract/jetson_memory_contract.json",
+    "jetson_optimization_ladder": "artifacts/validation/jetson_optimization_ladder/jetson_optimization_ladder.json",
+    "paper_files": [
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/10_Discussion_and_Limitations.tex"
+    ]
+  },
+  "non_claims": [
+    "not a kernel context-switch count",
+    "not proof of eBPF/io_uring bypass",
+    "not a CUDA optimization paper mechanism",
+    "not a direct NVMe-to-UVM, GPUDirect/RDMA, or dma-buf zero-copy claim",
+    "not a TPM rollback-resistance claim"
+  ],
+  "overall_pass": true,
+  "overhead_classification": [
+    {
+      "classification": "measured",
+      "evidence": [
+        "create_avg_ns=1644658",
+        "write_avg_ns=38287",
+        "fsync_avg_ns=6801778",
+        "read_avg_ns=227037",
+        "daemon-side proxy only"
+      ],
+      "overhead": "FUSE daemon operation latency",
+      "paper_guard": "Do not call this a kernel context-switch count or eBPF/io_uring bypass proof."
+    },
+    {
+      "classification": "measured",
+      "evidence": [
+        "fdatasync=2",
+        "syncfs=1",
+        "data_sidecar=1",
+        "journal_sidecar=1",
+        "marker_metadata=1",
+        "publication_sync_count_total=10",
+        "publication_elapsed_ns_total=6072629"
+      ],
+      "overhead": "durability syscalls and publication barriers",
+      "paper_guard": "Report strict publication cost as a boundary, not a general filesystem ranking."
+    },
+    {
+      "classification": "measured",
+      "evidence": [
+        "journal_sidecar=1",
+        "marker_metadata=1",
+        "publication_count=5"
+      ],
+      "overhead": "journal/checkpoint update",
+      "paper_guard": "Keep journal/checkpoint wording tied to D/J/C publication evidence."
+    },
+    {
+      "classification": "measured",
+      "evidence": [
+        "freshness_anchor_events=1",
+        "freshness_anchor_successes=1",
+        "freshness_anchor_file_backend=1",
+        "freshness_anchor_hardware_backend=0"
+      ],
+      "overhead": "freshness anchor refresh",
+      "paper_guard": "Do not upgrade file-backed or replay-after-advance evidence to PCR-bound rollback resistance."
+    },
+    {
+      "classification": "measured",
+      "evidence": [
+        "encrypt_blocks=16",
+        "decrypt_blocks=16",
+        "cpu_blocks=32",
+        "gpu_blocks=0"
+      ],
+      "overhead": "AES-GCM data-plane routing",
+      "paper_guard": "Do not imply bulk file data is encrypted directly by PQC primitives."
+    },
+    {
+      "classification": "diagnostic-only",
+      "evidence": [
+        "production_kernel_launches=11",
+        "cuda_qos_paper_eligible=False",
+        "profiler_trace_retained=False"
+      ],
+      "overhead": "CUDA launch and stream synchronization",
+      "paper_guard": "CUDA launch evidence is not a paper mechanism until same-run mounted-path traces show benefit."
+    },
+    {
+      "classification": "diagnostic-only",
+      "evidence": [
+        "device_count=1",
+        "selected_device=0",
+        "A4 smoke does not time initialization on the mounted path"
+      ],
+      "overhead": "GPU initialization",
+      "paper_guard": "Do not report GPU initialization as hidden mounted-path overhead until a production trace times it."
+    },
+    {
+      "classification": "diagnostic-only",
+      "evidence": [
+        "managed_memory_class=local_probe_pass",
+        "ladder_paper_mechanism_eligible_count=0",
+        "no production mounted-path benefit retained"
+      ],
+      "overhead": "staging copy / UVM / pinned memory",
+      "paper_guard": "Keep UVM, pinned, and registered-memory wording diagnostic unless production mounted-path benefit exists."
+    },
+    {
+      "classification": "not-claimed",
+      "evidence": [
+        "non_claim_terms=['CUPTI', 'dma-buf zero-copy', 'GPUDirect/RDMA', 'direct NVMe-to-UVM DMA']",
+        "no mounted-path peer-DMA proof"
+      ],
+      "overhead": "dma-buf, GPUDirect/RDMA, direct NVMe-to-UVM DMA",
+      "paper_guard": "These terms remain non-claims."
+    }
+  ],
+  "paper_scan": {
+    "dangerous_positive_hits": [],
+    "files": [
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/10_Discussion_and_Limitations.tex"
+    ],
+    "reports_cuda_staging_scope": true,
+    "reports_fuse_cost_boundary": true,
+    "reports_no_storage_dma": true,
+    "scoped_phrase_hits": [
+      "not a claim that a FUSE write becomes 23.2",
+      "not storage-DMA registration",
+      "no foreground AI p99 recovery claim",
+      "not yet a complete measured kernel-encryption",
+      "not to rank deployed encryption systems",
+      "does not expose an \\texttt{O\\_DIRECT} storage path"
+    ]
+  },
+  "paper_text_status": "already_scoped_no_update",
+  "parent_checklist_closed": false,
+  "proof_checks": {
+    "a4_smoke_pass": true,
+    "cuda_qos_pass": true,
+    "jetson_memory_pass": true,
+    "measured_fuse_latency": true,
+    "measured_publication_barriers": true,
+    "no_unscoped_dangerous_positive_hits": true,
+    "optimization_ladder_pass": true,
+    "paper_has_scope_guards": true
+  },
+  "schema": "a4-hidden-overhead-closeout-v1"
+}

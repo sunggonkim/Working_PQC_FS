@@ -1,0 +1,952 @@
+{
+  "cases": [
+    {
+      "client_results": [
+        {
+          "client_id": 0,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 4751510,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_00_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 35017056,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_00_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3437945,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_00_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3746787,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_00_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_00.json"
+        },
+        {
+          "client_id": 1,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 5532805,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_01_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 34187334,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_01_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3265639,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_01_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3941500,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_01_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_01.json"
+        },
+        {
+          "client_id": 2,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 37167463,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_02_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3420417,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_02_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3872370,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_02_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3176871,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_02_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_02.json"
+        },
+        {
+          "client_id": 3,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 38696538,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_03_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3275620,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_03_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3946417,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_03_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3280268,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_03_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_03.json"
+        },
+        {
+          "client_id": 4,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 5734926,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_04_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 33275074,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_04_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3517750,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_04_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 4636843,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_04_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_04.json"
+        },
+        {
+          "client_id": 5,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 6144676,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_05_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 33497843,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_05_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3528213,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_05_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 2844046,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_05_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_05.json"
+        },
+        {
+          "client_id": 6,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 38331658,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3850546,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3401741,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3730343,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_06.json"
+        },
+        {
+          "client_id": 7,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 38437658,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_07_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3505731,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_07_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 4013407,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_07_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 2802861,
+              "matches": true,
+              "op_id": 3,
+              "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_07_op_03.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/client_results/client_07.json"
+        }
+      ],
+      "completed_ops": 32,
+      "config": {
+        "clients": 8,
+        "group_max": 4,
+        "join_timeout_s": 45,
+        "name": "starvation_same_shard",
+        "ops_per_client": 4,
+        "payload_size": 4096,
+        "purpose": "bounded starvation negative test under one shared commit shard",
+        "shards": 1,
+        "wait_ns": 10000000
+      },
+      "error": null,
+      "expected_ops": 32,
+      "fairness": {
+        "client_max_latency_ns_summary": {
+          "count": 8,
+          "max": 38696538,
+          "mean": 36076328.0,
+          "min": 33275074,
+          "p50": 36092259.5,
+          "p95": 38605930.0,
+          "p99": 38678416.4
+        },
+        "max_ops": 4,
+        "max_to_min_ops_equal": true,
+        "min_ops": 4,
+        "op_count_distribution": {
+          "4": 8
+        },
+        "per_client": [
+          {
+            "client_id": 0,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 35017056,
+              "mean": 11738324.5,
+              "min": 3437945,
+              "p50": 4249148.5,
+              "p95": 30477224.099999987,
+              "p99": 34109089.62
+            },
+            "op_count": 4,
+            "pass": true
+          },
+          {
+            "client_id": 1,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 34187334,
+              "mean": 11731819.5,
+              "min": 3265639,
+              "p50": 4737152.5,
+              "p95": 29889154.64999999,
+              "p99": 33327698.129999995
+            },
+            "op_count": 4,
+            "pass": true
+          },
+          {
+            "client_id": 2,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 37167463,
+              "mean": 11909280.25,
+              "min": 3176871,
+              "p50": 3646393.5,
+              "p95": 32173199.049999986,
+              "p99": 36168610.20999999
+            },
+            "op_count": 4,
+            "pass": true
+          },
+          {
+            "client_id": 3,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 38696538,
+              "mean": 12299710.75,
+              "min": 3275620,
+              "p50": 3613342.5,
+              "p95": 33484019.849999987,
+              "p99": 37654034.36999999
+            },
+            "op_count": 4,
+            "pass": true
+          },
+          {
+            "client_id": 4,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 33275074,
+              "mean": 11791148.25,
+              "min": 3517750,
+              "p50": 5185884.5,
+              "p95": 29144051.79999999,
+              "p99": 32448869.55999999
+            },
+            "op_count": 4,
+            "pass": true
+          },
+          {
+            "client_id": 5,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 33497843,
+              "mean": 11503694.5,
+              "min": 2844046,
+              "p50": 4836444.5,
+              "p95": 29394867.94999999,
+              "p99": 32677247.989999995
+            },
+            "op_count": 4,
+            "pass": true
+          },
+          {
+            "client_id": 6,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 38331658,
+              "mean": 12328572.0,
+              "min": 3401741,
+              "p50": 3790444.5,
+              "p95": 33159491.199999988,
+              "p99": 37297224.63999999
+            },
+            "op_count": 4,
+            "pass": true
+          },
+          {
+            "client_id": 7,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 4,
+              "max": 38437658,
+              "mean": 12189914.25,
+              "min": 2802861,
+              "p50": 3759569.0,
+              "p95": 33274020.349999987,
+              "p99": 37404930.46999999
+            },
+            "op_count": 4,
+            "pass": true
+          }
+        ]
+      },
+      "name": "starvation_same_shard",
+      "pass": true,
+      "purpose": "bounded starvation negative test under one shared commit shard",
+      "replay_order": {
+        "begin_count": 32,
+        "duplicate_finish_shards": [],
+        "event_count": 42,
+        "finish_count": 8,
+        "malformed_line_count": 0,
+        "missing_begin_epochs": [],
+        "non_monotonic_shards": [],
+        "observed_shards": [
+          0
+        ],
+        "pass": true,
+        "reconstruction_time_ns": 242667,
+        "replay_plan": [
+          {
+            "begin_count": 4,
+            "epoch": 1,
+            "finish_line": 3,
+            "shard": 0
+          },
+          {
+            "begin_count": 4,
+            "epoch": 2,
+            "finish_line": 8,
+            "shard": 0
+          },
+          {
+            "begin_count": 4,
+            "epoch": 3,
+            "finish_line": 13,
+            "shard": 0
+          },
+          {
+            "begin_count": 4,
+            "epoch": 4,
+            "finish_line": 18,
+            "shard": 0
+          },
+          {
+            "begin_count": 4,
+            "epoch": 5,
+            "finish_line": 23,
+            "shard": 0
+          },
+          {
+            "begin_count": 4,
+            "epoch": 6,
+            "finish_line": 28,
+            "shard": 0
+          },
+          {
+            "begin_count": 4,
+            "epoch": 7,
+            "finish_line": 33,
+            "shard": 0
+          },
+          {
+            "begin_count": 4,
+            "epoch": 8,
+            "finish_line": 38,
+            "shard": 0
+          }
+        ],
+        "replay_plan_length": 8,
+        "trace_exists": true,
+        "trace_path": "artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/parallel_commit_trace.jsonl"
+      },
+      "replay_order_pass": true,
+      "starvation_negative_pass": true,
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw"
+        ],
+        "fuse_returncode": 8,
+        "returncode": 0
+      },
+      "worker_exitcodes": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "client_results": [
+        {
+          "client_id": 0,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 4726657,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_00_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 4623074,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_00_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 4195121,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_00_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/replay_order_multi_shard/client_results/client_00.json"
+        },
+        {
+          "client_id": 1,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 7047000,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_01_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 3947584,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_01_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 6469306,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_01_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/replay_order_multi_shard/client_results/client_01.json"
+        },
+        {
+          "client_id": 2,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 4887546,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_02_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 2054287,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_02_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 2348185,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_02_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/replay_order_multi_shard/client_results/client_02.json"
+        },
+        {
+          "client_id": 3,
+          "error": null,
+          "ops": [
+            {
+              "latency_ns": 9342186,
+              "matches": true,
+              "op_id": 0,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_03_op_00.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 2775500,
+              "matches": true,
+              "op_id": 1,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_03_op_01.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            },
+            {
+              "latency_ns": 2376741,
+              "matches": true,
+              "op_id": 2,
+              "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_03_op_02.dat",
+              "payload_len": 4110,
+              "read_len": 4110,
+              "written": 4110
+            }
+          ],
+          "pass": true,
+          "result_path": "artifacts/validation/parallel_commit_contract/fairness_replay/replay_order_multi_shard/client_results/client_03.json"
+        }
+      ],
+      "completed_ops": 12,
+      "config": {
+        "clients": 4,
+        "group_max": 2,
+        "join_timeout_s": 45,
+        "name": "replay_order_multi_shard",
+        "ops_per_client": 3,
+        "payload_size": 4096,
+        "purpose": "per-shard epoch replay-order reconstruction",
+        "shards": 4,
+        "wait_ns": 5000000
+      },
+      "error": null,
+      "expected_ops": 12,
+      "fairness": {
+        "client_max_latency_ns_summary": {
+          "count": 4,
+          "max": 9342186,
+          "mean": 6500847.25,
+          "min": 4726657,
+          "p50": 5967273.0,
+          "p95": 8997908.1,
+          "p99": 9273330.42
+        },
+        "max_ops": 3,
+        "max_to_min_ops_equal": true,
+        "min_ops": 3,
+        "op_count_distribution": {
+          "3": 4
+        },
+        "per_client": [
+          {
+            "client_id": 0,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 3,
+              "max": 4726657,
+              "mean": 4514950.666666667,
+              "min": 4195121,
+              "p50": 4623074.0,
+              "p95": 4716298.7,
+              "p99": 4724585.340000001
+            },
+            "op_count": 3,
+            "pass": true
+          },
+          {
+            "client_id": 1,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 3,
+              "max": 7047000,
+              "mean": 5821296.666666667,
+              "min": 3947584,
+              "p50": 6469306.0,
+              "p95": 6989230.6,
+              "p99": 7035446.12
+            },
+            "op_count": 3,
+            "pass": true
+          },
+          {
+            "client_id": 2,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 3,
+              "max": 4887546,
+              "mean": 3096672.6666666665,
+              "min": 2054287,
+              "p50": 2348185.0,
+              "p95": 4633609.899999999,
+              "p99": 4836758.78
+            },
+            "op_count": 3,
+            "pass": true
+          },
+          {
+            "client_id": 3,
+            "error": null,
+            "latency_ns_summary": {
+              "count": 3,
+              "max": 9342186,
+              "mean": 4831475.666666667,
+              "min": 2376741,
+              "p50": 2775500.0,
+              "p95": 8685517.399999999,
+              "p99": 9210852.28
+            },
+            "op_count": 3,
+            "pass": true
+          }
+        ]
+      },
+      "name": "replay_order_multi_shard",
+      "pass": true,
+      "purpose": "per-shard epoch replay-order reconstruction",
+      "replay_order": {
+        "begin_count": 12,
+        "duplicate_finish_shards": [],
+        "event_count": 20,
+        "finish_count": 7,
+        "malformed_line_count": 0,
+        "missing_begin_epochs": [],
+        "non_monotonic_shards": [],
+        "observed_shards": [
+          0,
+          1,
+          2
+        ],
+        "pass": true,
+        "reconstruction_time_ns": 177121,
+        "replay_plan": [
+          {
+            "begin_count": 1,
+            "epoch": 1,
+            "finish_line": 10,
+            "shard": 0
+          },
+          {
+            "begin_count": 2,
+            "epoch": 2,
+            "finish_line": 14,
+            "shard": 0
+          },
+          {
+            "begin_count": 1,
+            "epoch": 3,
+            "finish_line": 20,
+            "shard": 0
+          },
+          {
+            "begin_count": 2,
+            "epoch": 1,
+            "finish_line": 6,
+            "shard": 1
+          },
+          {
+            "begin_count": 2,
+            "epoch": 2,
+            "finish_line": 17,
+            "shard": 1
+          },
+          {
+            "begin_count": 2,
+            "epoch": 1,
+            "finish_line": 3,
+            "shard": 2
+          },
+          {
+            "begin_count": 2,
+            "epoch": 2,
+            "finish_line": 11,
+            "shard": 2
+          }
+        ],
+        "replay_plan_length": 7,
+        "trace_exists": true,
+        "trace_path": "artifacts/validation/parallel_commit_contract/fairness_replay/replay_order_multi_shard/parallel_commit_trace.jsonl"
+      },
+      "replay_order_pass": true,
+      "starvation_negative_pass": true,
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "worker_exitcodes": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "coverage": {
+    "case_names": [
+      "starvation_same_shard",
+      "replay_order_multi_shard"
+    ],
+    "client_counts": [
+      4,
+      8
+    ],
+    "group_max_values": [
+      2,
+      4
+    ],
+    "shard_counts": [
+      1,
+      4
+    ],
+    "wait_ns_values": [
+      5000000,
+      10000000
+    ]
+  },
+  "generated_by": "experiments/run_parallel_commit_fairness_replay.py",
+  "generated_utc": "2026-06-28T06:01:18Z",
+  "negative_claim_guard": "This artifact proves bounded mounted-path starvation-negative behavior and trace-level per-shard epoch replay-order reconstruction for the current coordinator. It does not prove redo-log recovery, crash replay, fdatasync reduction, throughput improvement, or Gate 0.16 closure.",
+  "overall_pass": true,
+  "schema_version": 1,
+  "scope": "Gate 0.16-S4 fairness/starvation and trace replay-order evidence."
+}

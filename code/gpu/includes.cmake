@@ -1,0 +1,3 @@
+set(PQC_GPU_INCLUDE_DIRS
+    ${CODE_DIR}/gpu
+)

@@ -1,0 +1,667 @@
+{
+  "cases": [
+    {
+      "after_mutation": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_normal_storage_68x6o3lj/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "before_mutation": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_normal_storage_68x6o3lj/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "error": null,
+      "final_scan": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_normal_storage_68x6o3lj/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "first_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_normal_mnt_dobvvyus"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "label": "replay_normal",
+      "mutation": null,
+      "mutation_result": {
+        "mutation": null,
+        "ok": true
+      },
+      "pass": true,
+      "read_client": {
+        "matches": true,
+        "opened": true,
+        "path": "/tmp/aegisq_replay_normal_remount_0p_g9gec/replay.dat",
+        "read_len": 12315
+      },
+      "second_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_normal_remount_0p_g9gec"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "trace": {
+        "compact_events": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 5,
+            "duplicate_generation_records": 0,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 0,
+            "log_path": "/tmp/aegisq_replay_normal_storage_68x6o3lj/replay.dat.pqcepoch",
+            "logical_size_after": 12315,
+            "max_generation": 4,
+            "rc": 0,
+            "torn_tail_bytes": 0,
+            "uncommitted_records": 0
+          }
+        ],
+        "event_count": 3,
+        "events": [
+          {
+            "barrier_rc": 0,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "group_epoch": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_wait_ns": 259602,
+            "log_path": "/tmp/aegisq_replay_normal_storage_68x6o3lj/replay.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1104009,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 12315,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 5,
+            "duplicate_generation_records": 0,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 0,
+            "log_path": "/tmp/aegisq_replay_normal_storage_68x6o3lj/replay.dat.pqcepoch",
+            "logical_size_after": 12315,
+            "max_generation": 4,
+            "rc": 0,
+            "torn_tail_bytes": 0,
+            "uncommitted_records": 0
+          }
+        ],
+        "exists": true,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/publication_protocol_fault_matrix/replay_normal/publication_trace.jsonl"
+      },
+      "write_client": {
+        "matches": true,
+        "path": "/tmp/aegisq_replay_normal_mnt_dobvvyus/replay.dat",
+        "payload_len": 12315,
+        "read_len": 12315,
+        "written": 12315
+      }
+    },
+    {
+      "after_mutation": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 1,
+            "path": "/tmp/aegisq_replay_torn_tail_storage_dqi2x8v4/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 697,
+            "trailing_bytes": 17
+          }
+        ],
+        "malformed_records": 1,
+        "record_count": 5
+      },
+      "before_mutation": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_torn_tail_storage_dqi2x8v4/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "error": null,
+      "final_scan": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 1,
+            "path": "/tmp/aegisq_replay_torn_tail_storage_dqi2x8v4/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 697,
+            "trailing_bytes": 17
+          }
+        ],
+        "malformed_records": 1,
+        "record_count": 5
+      },
+      "first_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_torn_tail_mnt_4yt_nv6t"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "label": "replay_torn_tail",
+      "mutation": "torn_tail",
+      "mutation_result": {
+        "bytes_appended": 17,
+        "ok": true,
+        "path": "/tmp/aegisq_replay_torn_tail_storage_dqi2x8v4/replay.dat.pqcepoch"
+      },
+      "pass": true,
+      "read_client": {
+        "matches": true,
+        "opened": true,
+        "path": "/tmp/aegisq_replay_torn_tail_remount_otabg_bc/replay.dat",
+        "read_len": 12318
+      },
+      "second_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_torn_tail_remount_otabg_bc"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "trace": {
+        "compact_events": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 5,
+            "duplicate_generation_records": 0,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 0,
+            "log_path": "/tmp/aegisq_replay_torn_tail_storage_dqi2x8v4/replay.dat.pqcepoch",
+            "logical_size_after": 12318,
+            "max_generation": 4,
+            "rc": 0,
+            "torn_tail_bytes": 17,
+            "uncommitted_records": 0
+          }
+        ],
+        "event_count": 3,
+        "events": [
+          {
+            "barrier_rc": 0,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "group_epoch": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_wait_ns": 486583,
+            "log_path": "/tmp/aegisq_replay_torn_tail_storage_dqi2x8v4/replay.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1486454,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 12318,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 5,
+            "duplicate_generation_records": 0,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 0,
+            "log_path": "/tmp/aegisq_replay_torn_tail_storage_dqi2x8v4/replay.dat.pqcepoch",
+            "logical_size_after": 12318,
+            "max_generation": 4,
+            "rc": 0,
+            "torn_tail_bytes": 17,
+            "uncommitted_records": 0
+          }
+        ],
+        "exists": true,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/publication_protocol_fault_matrix/replay_torn_tail/publication_trace.jsonl"
+      },
+      "write_client": {
+        "matches": true,
+        "path": "/tmp/aegisq_replay_torn_tail_mnt_4yt_nv6t/replay.dat",
+        "payload_len": 12318,
+        "read_len": 12318,
+        "written": 12318
+      }
+    },
+    {
+      "after_mutation": {
+        "block_records": 5,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 5,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_duplicate_generation_storage_xq9zcrjh/replay.dat.pqcepoch",
+            "record_count": 6,
+            "size_bytes": 816,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 6
+      },
+      "before_mutation": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_duplicate_generation_storage_xq9zcrjh/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "error": null,
+      "final_scan": {
+        "block_records": 5,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 5,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_duplicate_generation_storage_xq9zcrjh/replay.dat.pqcepoch",
+            "record_count": 6,
+            "size_bytes": 816,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 6
+      },
+      "first_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_duplicate_generation_mnt_fbn633s5"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "label": "replay_duplicate_generation",
+      "mutation": "duplicate_generation",
+      "mutation_result": {
+        "bytes_appended": 136,
+        "ok": true,
+        "path": "/tmp/aegisq_replay_duplicate_generation_storage_xq9zcrjh/replay.dat.pqcepoch"
+      },
+      "pass": true,
+      "read_client": {
+        "errno": 5,
+        "error": "OSError(5, 'Input/output error')",
+        "matches": false,
+        "opened": false,
+        "path": "/tmp/aegisq_replay_duplicate_generation_remount_6vcx5msu/replay.dat"
+      },
+      "second_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_duplicate_generation_remount_6vcx5msu"
+        ],
+        "fuse_returncode": 8,
+        "returncode": 0
+      },
+      "trace": {
+        "compact_events": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 6,
+            "duplicate_generation_records": 1,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 0,
+            "log_path": "/tmp/aegisq_replay_duplicate_generation_storage_xq9zcrjh/replay.dat.pqcepoch",
+            "logical_size_after": 12329,
+            "max_generation": 4,
+            "rc": -17,
+            "torn_tail_bytes": 0,
+            "uncommitted_records": 1
+          }
+        ],
+        "event_count": 3,
+        "events": [
+          {
+            "barrier_rc": 0,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "group_epoch": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_wait_ns": 289982,
+            "log_path": "/tmp/aegisq_replay_duplicate_generation_storage_xq9zcrjh/replay.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1150963,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 12329,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 6,
+            "duplicate_generation_records": 1,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 0,
+            "log_path": "/tmp/aegisq_replay_duplicate_generation_storage_xq9zcrjh/replay.dat.pqcepoch",
+            "logical_size_after": 12329,
+            "max_generation": 4,
+            "rc": -17,
+            "torn_tail_bytes": 0,
+            "uncommitted_records": 1
+          }
+        ],
+        "exists": true,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/publication_protocol_fault_matrix/replay_duplicate_generation/publication_trace.jsonl"
+      },
+      "write_client": {
+        "matches": true,
+        "path": "/tmp/aegisq_replay_duplicate_generation_mnt_fbn633s5/replay.dat",
+        "payload_len": 12329,
+        "read_len": 12329,
+        "written": 12329
+      }
+    },
+    {
+      "after_mutation": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_journal_loss_storage_m_2ze_80/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "before_mutation": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_journal_loss_storage_m_2ze_80/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "error": null,
+      "final_scan": {
+        "block_records": 4,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_replay_journal_loss_storage_m_2ze_80/replay.dat.pqcepoch",
+            "record_count": 5,
+            "size_bytes": 680,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 5
+      },
+      "first_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_journal_loss_mnt_c4_t_ay4"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "label": "replay_journal_loss",
+      "mutation": "journal_loss",
+      "mutation_result": {
+        "bytes_after": 0,
+        "bytes_before": 384,
+        "ok": true,
+        "path": "/tmp/aegisq_replay_journal_loss_storage_m_2ze_80/replay.dat.pqcmeta"
+      },
+      "pass": true,
+      "read_client": {
+        "matches": true,
+        "opened": true,
+        "path": "/tmp/aegisq_replay_journal_loss_remount_3evf6uto/replay.dat",
+        "read_len": 12321
+      },
+      "second_unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_replay_journal_loss_remount_3evf6uto"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      },
+      "trace": {
+        "compact_events": [
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 5,
+            "duplicate_generation_records": 0,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 4,
+            "log_path": "/tmp/aegisq_replay_journal_loss_storage_m_2ze_80/replay.dat.pqcepoch",
+            "logical_size_after": 12321,
+            "max_generation": 4,
+            "rc": 0,
+            "torn_tail_bytes": 0,
+            "uncommitted_records": 0
+          }
+        ],
+        "event_count": 3,
+        "events": [
+          {
+            "barrier_rc": 0,
+            "epoch_log_sync_count": 1,
+            "event": "epoch_redo_log_append",
+            "group_epoch": 0,
+            "group_role": "single",
+            "group_size": 1,
+            "group_wait_ns": 284000,
+            "log_path": "/tmp/aegisq_replay_journal_loss_storage_m_2ze_80/replay.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 5,
+            "sync_primitive": "fdatasync"
+          },
+          {
+            "block_count": 4,
+            "data_fsync_count": 1,
+            "elapsed_ns": 1121399,
+            "epoch_log_fsync_count": 1,
+            "event": "publication_dispatch",
+            "journal_fsync_count": 0,
+            "mode": "epoch-redo-log",
+            "payload_bytes": 12321,
+            "rc": 0,
+            "sync_count": 2
+          },
+          {
+            "block_records": 4,
+            "commit_records": 1,
+            "committed_epoch": 4,
+            "committed_records": 5,
+            "decoded_records": 5,
+            "duplicate_generation_records": 0,
+            "event": "epoch_replay_compact",
+            "journal_repair_records": 4,
+            "log_path": "/tmp/aegisq_replay_journal_loss_storage_m_2ze_80/replay.dat.pqcepoch",
+            "logical_size_after": 12321,
+            "max_generation": 4,
+            "rc": 0,
+            "torn_tail_bytes": 0,
+            "uncommitted_records": 0
+          }
+        ],
+        "exists": true,
+        "malformed_line_count": 0,
+        "path": "artifacts/validation/publication_protocol_fault_matrix/replay_journal_loss/publication_trace.jsonl"
+      },
+      "write_client": {
+        "matches": true,
+        "path": "/tmp/aegisq_replay_journal_loss_mnt_c4_t_ay4/replay.dat",
+        "payload_len": 12321,
+        "read_len": 12321,
+        "written": 12321
+      }
+    }
+  ],
+  "generated_by": "experiments/run_epoch_replay_fault_matrix.py",
+  "generated_utc": "2026-06-28T06:59:44Z",
+  "negative_claim_guard": "This matrix proves mounted remount compaction for journal-backed committed epoch prefixes, torn-tail ignore, and duplicate generation rejection. It also proves recovery-time journal repair from a committed epoch prefix after deliberate journal-sidecar loss. It does not prove physical power-loss certification, throughput improvement, group-commit amortization, or rollback resistance.",
+  "overall_pass": true,
+  "schema_version": 1,
+  "scope": "Gate 0.9-S3/S5 committed-prefix replay, checkpoint compaction, and recovery-time journal repair proof."
+}

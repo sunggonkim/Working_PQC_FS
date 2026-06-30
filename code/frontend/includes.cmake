@@ -1,0 +1,3 @@
+set(PQC_FRONTEND_INCLUDE_DIRS
+    ${CODE_DIR}/frontend
+)

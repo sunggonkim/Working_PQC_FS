@@ -1,0 +1,1159 @@
+{
+  "blocking_items": [],
+  "forbidden_claim_hits": [],
+  "generated_utc": "2026-06-30T02:56:54Z",
+  "hot_locks": [
+    {
+      "allowed_call_sites": [
+        "admission_init_policy",
+        "pqc_admission_shutdown"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not perform file I/O while held",
+      "inventory_lock": "g_admission.state_lock",
+      "lock": "admission_state_lock",
+      "max_hold_p99_ns": 324.0,
+      "max_wait_p99_ns": 222.0,
+      "measured_sites": [
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 324,
+            "p50": 324.0,
+            "p95": 324.0,
+            "p99": 324.0
+          },
+          "site": "admission_init_policy",
+          "wait_ns": {
+            "max": 92,
+            "p50": 92.0,
+            "p95": 92.0,
+            "p99": 92.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 111,
+            "p50": 111.0,
+            "p95": 111.0,
+            "p99": 111.0
+          },
+          "site": "pqc_admission_shutdown",
+          "wait_ns": {
+            "max": 222,
+            "p50": 222.0,
+            "p95": 222.0,
+            "p99": 222.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "admission",
+      "protected_state": "admission policy, telemetry, and counters",
+      "sample_count": 2
+    },
+    {
+      "allowed_call_sites": [
+        "admission_init_trace_fd",
+        "admission_shutdown_trace",
+        "admission_trace_append"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not nest under state_lock when blocking I/O is possible after Gate 0.15",
+      "inventory_lock": "g_admission.trace_lock",
+      "lock": "admission_trace_lock",
+      "max_hold_p99_ns": 7213.0,
+      "max_wait_p99_ns": 222.0,
+      "measured_sites": [
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 121,
+            "p50": 121.0,
+            "p95": 121.0,
+            "p99": 121.0
+          },
+          "site": "admission_init_trace_fd",
+          "wait_ns": {
+            "max": 111,
+            "p50": 111.0,
+            "p95": 111.0,
+            "p99": 111.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 7213,
+            "p50": 7213.0,
+            "p95": 7213.0,
+            "p99": 7213.0
+          },
+          "site": "admission_shutdown_trace",
+          "wait_ns": {
+            "max": 222,
+            "p50": 222.0,
+            "p95": 222.0,
+            "p99": 222.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 4028,
+            "p50": 4028.0,
+            "p95": 4028.0,
+            "p99": 4028.0
+          },
+          "site": "admission_trace_append",
+          "wait_ns": {
+            "max": 64,
+            "p50": 64.0,
+            "p95": 64.0,
+            "p99": 64.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "metrics",
+      "protected_state": "admission JSONL trace file",
+      "sample_count": 3
+    },
+    {
+      "allowed_call_sites": [
+        "anchor_epoch_record_update"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not nest under fd_lock or commit_lock while performing TPM, file-anchor, or xattr I/O",
+      "inventory_lock": "g_epoch_record_lock",
+      "lock": "anchor_epoch_record_lock",
+      "max_hold_p99_ns": 121.0,
+      "max_wait_p99_ns": 287.0,
+      "measured_sites": [
+        {
+          "count": 157,
+          "hold_ns": {
+            "max": 130,
+            "p50": 102.0,
+            "p95": 120.0,
+            "p99": 121.0
+          },
+          "site": "anchor_epoch_record_update",
+          "wait_ns": {
+            "max": 324,
+            "p50": 111.0,
+            "p95": 260.0,
+            "p99": 287.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "anchor",
+      "protected_state": "async freshness epoch record status, generation range, and durable commit markers",
+      "sample_count": 157
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_anchor_worker_start_if_configured",
+        "pqc_anchor_worker_stop"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "lifecycle lock must not be held while waiting on g_anchor_lock or durable anchor I/O",
+      "inventory_lock": "g_anchor_lifecycle_lock",
+      "lock": "anchor_lifecycle_lock",
+      "max_hold_p99_ns": 31259.0,
+      "max_wait_p99_ns": 241.0,
+      "measured_sites": [
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 31259,
+            "p50": 31259.0,
+            "p95": 31259.0,
+            "p99": 31259.0
+          },
+          "site": "pqc_anchor_worker_start_if_configured",
+          "wait_ns": {
+            "max": 148,
+            "p50": 148.0,
+            "p95": 148.0,
+            "p99": 148.0
+          }
+        },
+        {
+          "count": 3,
+          "hold_ns": {
+            "max": 16157,
+            "p50": 83.0,
+            "p95": 16157.0,
+            "p99": 16157.0
+          },
+          "site": "pqc_anchor_worker_stop",
+          "wait_ns": {
+            "max": 241,
+            "p50": 139.0,
+            "p95": 241.0,
+            "p99": 241.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "anchor",
+      "protected_state": "anchor worker lifecycle state: started/joining/stop flags and worker thread handle",
+      "sample_count": 4
+    },
+    {
+      "allowed_call_sites": [
+        "anchor_worker_main",
+        "anchor_worker_mark_committed",
+        "anchor_worker_take_dirty",
+        "pqc_anchor_worker_stage",
+        "pqc_anchor_worker_start_if_configured",
+        "pqc_anchor_worker_stop"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "fd_lock -> commit_lock -> g_anchor_lock is currently possible and must be redesigned",
+      "inventory_lock": "g_anchor_lock",
+      "lock": "anchor_worker_lock",
+      "max_hold_p99_ns": 42981.0,
+      "max_wait_p99_ns": 10019.0,
+      "measured_sites": [
+        {
+          "count": 156,
+          "hold_ns": {
+            "max": 241592,
+            "p50": 3787.0,
+            "p95": 16389.0,
+            "p99": 42981.0
+          },
+          "site": "anchor_worker_main",
+          "wait_ns": {
+            "max": 0,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0
+          }
+        },
+        {
+          "count": 157,
+          "hold_ns": {
+            "max": 185,
+            "p50": 93.0,
+            "p95": 111.0,
+            "p99": 139.0
+          },
+          "site": "anchor_worker_mark_committed",
+          "wait_ns": {
+            "max": 16047,
+            "p50": 250.0,
+            "p95": 343.0,
+            "p99": 352.0
+          }
+        },
+        {
+          "count": 172,
+          "hold_ns": {
+            "max": 3296,
+            "p50": 1380.0,
+            "p95": 1713.0,
+            "p99": 3074.0
+          },
+          "site": "anchor_worker_take_dirty",
+          "wait_ns": {
+            "max": 18917,
+            "p50": 259.0,
+            "p95": 352.0,
+            "p99": 10019.0
+          }
+        },
+        {
+          "count": 168,
+          "hold_ns": {
+            "max": 6537,
+            "p50": 1703.0,
+            "p95": 2325.0,
+            "p99": 4518.0
+          },
+          "site": "pqc_anchor_worker_stage",
+          "wait_ns": {
+            "max": 408,
+            "p50": 250.0,
+            "p95": 351.0,
+            "p99": 361.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 334,
+            "p50": 334.0,
+            "p95": 334.0,
+            "p99": 334.0
+          },
+          "site": "pqc_anchor_worker_start_if_configured",
+          "wait_ns": {
+            "max": 74,
+            "p50": 74.0,
+            "p95": 74.0,
+            "p99": 74.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 1694,
+            "p50": 1694.0,
+            "p95": 1694.0,
+            "p99": 1694.0
+          },
+          "site": "pqc_anchor_worker_stop",
+          "wait_ns": {
+            "max": 84,
+            "p50": 84.0,
+            "p95": 84.0,
+            "p99": 84.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "anchor",
+      "protected_state": "anchor worker state, dirty flag, last commit timestamp",
+      "sample_count": 655
+    },
+    {
+      "allowed_call_sites": [
+        "fd_context_state_generation_snapshot",
+        "pqc_fd_context_set",
+        "pqc_file_state_mapping_cache_lookup",
+        "pqc_read",
+        "pqc_writeback_flush_locked",
+        "writeback_flush_authenticated_snapshot"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not be held across crypto, CUDA, fdatasync, or anchor I/O after Gate 0.15",
+      "inventory_lock": "commit_lock",
+      "lock": "commit_lock",
+      "max_hold_p99_ns": 931426.0,
+      "max_wait_p99_ns": 426.0,
+      "measured_sites": [
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 84,
+            "p50": 74.0,
+            "p95": 84.0,
+            "p99": 84.0
+          },
+          "site": "fd_context_state_generation_snapshot",
+          "wait_ns": {
+            "max": 379,
+            "p50": 139.0,
+            "p95": 333.0,
+            "p99": 370.0
+          }
+        },
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 936750,
+            "p50": 75.0,
+            "p95": 507371.0,
+            "p99": 931426.0
+          },
+          "site": "pqc_fd_context_set",
+          "wait_ns": {
+            "max": 426,
+            "p50": 139.0,
+            "p95": 287.0,
+            "p99": 389.0
+          }
+        },
+        {
+          "count": 112,
+          "hold_ns": {
+            "max": 796,
+            "p50": 139.0,
+            "p95": 352.0,
+            "p99": 389.0
+          },
+          "site": "pqc_file_state_mapping_cache_lookup",
+          "wait_ns": {
+            "max": 287,
+            "p50": 83.0,
+            "p95": 84.0,
+            "p99": 101.0
+          }
+        },
+        {
+          "count": 224,
+          "hold_ns": {
+            "max": 120,
+            "p50": 83.0,
+            "p95": 102.0,
+            "p99": 102.0
+          },
+          "site": "pqc_read",
+          "wait_ns": {
+            "max": 407,
+            "p50": 83.0,
+            "p95": 268.0,
+            "p99": 380.0
+          }
+        },
+        {
+          "count": 168,
+          "hold_ns": {
+            "max": 102,
+            "p50": 74.0,
+            "p95": 84.0,
+            "p99": 84.0
+          },
+          "site": "pqc_writeback_flush_locked",
+          "wait_ns": {
+            "max": 268,
+            "p50": 74.0,
+            "p95": 84.0,
+            "p99": 213.0
+          }
+        },
+        {
+          "count": 504,
+          "hold_ns": {
+            "max": 2194,
+            "p50": 83.0,
+            "p95": 667.0,
+            "p99": 824.0
+          },
+          "site": "writeback_flush_authenticated_snapshot",
+          "wait_ns": {
+            "max": 2232,
+            "p50": 83.0,
+            "p95": 361.0,
+            "p99": 426.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "publish",
+      "protected_state": "per-file generation high-water, publish tickets, logical size, mappings, checkpoint publication",
+      "sample_count": 1260
+    },
+    {
+      "allowed_call_sites": [
+        "build_prefix_anchor",
+        "pqc_anchor_load",
+        "pqc_anchor_record_file"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "profiled as committed_map_lock; must not nest with fd_lock or commit_lock after Gate C6",
+      "inventory_lock": "g_committed_lock",
+      "lock": "committed_map_lock",
+      "max_hold_p99_ns": 232.0,
+      "max_wait_p99_ns": 416.0,
+      "measured_sites": [
+        {
+          "count": 157,
+          "hold_ns": {
+            "max": 250,
+            "p50": 84.0,
+            "p95": 176.0,
+            "p99": 213.0
+          },
+          "site": "build_prefix_anchor",
+          "wait_ns": {
+            "max": 84,
+            "p50": 74.0,
+            "p95": 84.0,
+            "p99": 84.0
+          }
+        },
+        {
+          "count": 90,
+          "hold_ns": {
+            "max": 84,
+            "p50": 74.0,
+            "p95": 84.0,
+            "p99": 84.0
+          },
+          "site": "pqc_anchor_load",
+          "wait_ns": {
+            "max": 277,
+            "p50": 83.0,
+            "p95": 222.0,
+            "p99": 268.0
+          }
+        },
+        {
+          "count": 673,
+          "hold_ns": {
+            "max": 1018,
+            "p50": 84.0,
+            "p95": 176.0,
+            "p99": 232.0
+          },
+          "site": "pqc_anchor_record_file",
+          "wait_ns": {
+            "max": 472,
+            "p50": 84.0,
+            "p95": 379.0,
+            "p99": 416.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "anchor",
+      "protected_state": "committed-prefix map and sequence",
+      "sample_count": 920
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_fd_context_clear",
+        "pqc_fd_context_set",
+        "pqc_flush",
+        "pqc_fsync",
+        "pqc_read",
+        "pqc_release",
+        "pqc_write",
+        "restore_qos_class_for_fd"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must protect context only and must not cover blocking publication after Gate 0.15",
+      "inventory_lock": "fd_lock",
+      "lock": "fd_lock",
+      "max_hold_p99_ns": 40574.0,
+      "max_wait_p99_ns": 10398.0,
+      "measured_sites": [
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 1130,
+            "p50": 556.0,
+            "p95": 1028.0,
+            "p99": 1084.0
+          },
+          "site": "pqc_fd_context_clear",
+          "wait_ns": {
+            "max": 185,
+            "p50": 83.0,
+            "p95": 93.0,
+            "p99": 185.0
+          }
+        },
+        {
+          "count": 252,
+          "hold_ns": {
+            "max": 22157,
+            "p50": 510.0,
+            "p95": 9898.0,
+            "p99": 16676.0
+          },
+          "site": "pqc_fd_context_set",
+          "wait_ns": {
+            "max": 11231,
+            "p50": 93.0,
+            "p95": 426.0,
+            "p99": 10398.0
+          }
+        },
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 315,
+            "p50": 83.0,
+            "p95": 120.0,
+            "p99": 222.0
+          },
+          "site": "pqc_flush",
+          "wait_ns": {
+            "max": 527,
+            "p50": 222.0,
+            "p95": 407.0,
+            "p99": 472.0
+          }
+        },
+        {
+          "count": 504,
+          "hold_ns": {
+            "max": 98148,
+            "p50": 1268.0,
+            "p95": 4194.0,
+            "p99": 12278.0
+          },
+          "site": "pqc_fsync",
+          "wait_ns": {
+            "max": 537,
+            "p50": 84.0,
+            "p95": 371.0,
+            "p99": 472.0
+          }
+        },
+        {
+          "count": 224,
+          "hold_ns": {
+            "max": 201889,
+            "p50": 5213.0,
+            "p95": 22453.0,
+            "p99": 40574.0
+          },
+          "site": "pqc_read",
+          "wait_ns": {
+            "max": 546,
+            "p50": 84.0,
+            "p95": 352.0,
+            "p99": 444.0
+          }
+        },
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 167,
+            "p50": 83.0,
+            "p95": 111.0,
+            "p99": 139.0
+          },
+          "site": "pqc_release",
+          "wait_ns": {
+            "max": 426,
+            "p50": 213.0,
+            "p95": 398.0,
+            "p99": 417.0
+          }
+        },
+        {
+          "count": 168,
+          "hold_ns": {
+            "max": 16953,
+            "p50": 398.0,
+            "p95": 833.0,
+            "p99": 1398.0
+          },
+          "site": "pqc_write",
+          "wait_ns": {
+            "max": 528,
+            "p50": 241.0,
+            "p95": 426.0,
+            "p99": 509.0
+          }
+        },
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 157,
+            "p50": 74.0,
+            "p95": 84.0,
+            "p99": 102.0
+          },
+          "site": "restore_qos_class_for_fd",
+          "wait_ns": {
+            "max": 186,
+            "p50": 83.0,
+            "p95": 148.0,
+            "p99": 185.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "FUSE adapter",
+      "protected_state": "per-open fd context, write buffer, pending jobs, sidecar descriptors",
+      "sample_count": 1652
+    },
+    {
+      "allowed_call_sites": [
+        "file_anchor_already_committed",
+        "file_anchor_note_committed"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not nest under fd_lock or commit_lock; anchor publication must be outside hot file locks",
+      "inventory_lock": "g_file_anchor_commit_lock",
+      "lock": "file_anchor_commit_lock",
+      "max_hold_p99_ns": 778.0,
+      "max_wait_p99_ns": 425.0,
+      "measured_sites": [
+        {
+          "count": 157,
+          "hold_ns": {
+            "max": 954,
+            "p50": 186.0,
+            "p95": 334.0,
+            "p99": 555.0
+          },
+          "site": "file_anchor_already_committed",
+          "wait_ns": {
+            "max": 454,
+            "p50": 232.0,
+            "p95": 370.0,
+            "p99": 425.0
+          }
+        },
+        {
+          "count": 156,
+          "hold_ns": {
+            "max": 1046,
+            "p50": 472.0,
+            "p95": 639.0,
+            "p99": 778.0
+          },
+          "site": "file_anchor_note_committed",
+          "wait_ns": {
+            "max": 648,
+            "p50": 83.0,
+            "p95": 296.0,
+            "p99": 407.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "anchor",
+      "protected_state": "file-anchor commit serialization and last committed anchor snapshot",
+      "sample_count": 313
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_file_state_acquire",
+        "pqc_file_state_release"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must precede per-file commit_lock only during lookup/refcount operations",
+      "inventory_lock": "g_file_state_table_lock",
+      "lock": "file_state_table_lock",
+      "max_hold_p99_ns": 4473.0,
+      "max_wait_p99_ns": 445.0,
+      "measured_sites": [
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 2686,
+            "p50": 83.0,
+            "p95": 870.0,
+            "p99": 2490.0
+          },
+          "site": "pqc_file_state_acquire",
+          "wait_ns": {
+            "max": 7815,
+            "p50": 222.0,
+            "p95": 361.0,
+            "p99": 445.0
+          }
+        },
+        {
+          "count": 126,
+          "hold_ns": {
+            "max": 335074,
+            "p50": 74.0,
+            "p95": 2704.0,
+            "p99": 4473.0
+          },
+          "site": "pqc_file_state_release",
+          "wait_ns": {
+            "max": 417,
+            "p50": 185.0,
+            "p95": 287.0,
+            "p99": 333.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "publish",
+      "protected_state": "global file_state_t list and references",
+      "sample_count": 252
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_parallel_commit_runtime_shutdown"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not nest with shard locks while writing traces or initializing runtime state",
+      "inventory_lock": "g_runtime_lock",
+      "lock": "parallel_runtime_lock",
+      "max_hold_p99_ns": 158.0,
+      "max_wait_p99_ns": 185.0,
+      "measured_sites": [
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 158,
+            "p50": 158.0,
+            "p95": 158.0,
+            "p99": 158.0
+          },
+          "site": "pqc_parallel_commit_runtime_shutdown",
+          "wait_ns": {
+            "max": 185,
+            "p50": 185.0,
+            "p95": 185.0,
+            "p99": 185.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "publish",
+      "protected_state": "process-wide parallel-commit coordinator pointer, config, trace file, and enabled flag",
+      "sample_count": 1
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_qos_gpu_load_ewma_read"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "leaf lock only",
+      "inventory_lock": "g_gpu_load_lock",
+      "lock": "qos_gpu_load_lock",
+      "max_hold_p99_ns": 148.0,
+      "max_wait_p99_ns": 379.0,
+      "measured_sites": [
+        {
+          "count": 168,
+          "hold_ns": {
+            "max": 250,
+            "p50": 111.0,
+            "p95": 130.0,
+            "p99": 148.0
+          },
+          "site": "pqc_qos_gpu_load_ewma_read",
+          "wait_ns": {
+            "max": 7000,
+            "p50": 84.0,
+            "p95": 306.0,
+            "p99": 379.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "admission",
+      "protected_state": "GPU load EWMA",
+      "sample_count": 168
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_rekey_worker_start",
+        "pqc_rekey_worker_stop"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not be held while waiting on g_rekey_queue.lock or while running GPU/KEM work",
+      "inventory_lock": "g_rekey_lifecycle_lock",
+      "lock": "rekey_lifecycle_lock",
+      "max_hold_p99_ns": 73583.0,
+      "max_wait_p99_ns": 27352.0,
+      "measured_sites": [
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 73583,
+            "p50": 73583.0,
+            "p95": 73583.0,
+            "p99": 73583.0
+          },
+          "site": "pqc_rekey_worker_start",
+          "wait_ns": {
+            "max": 27352,
+            "p50": 27352.0,
+            "p95": 27352.0,
+            "p99": 27352.0
+          }
+        },
+        {
+          "count": 2,
+          "hold_ns": {
+            "max": 102,
+            "p50": 84.0,
+            "p95": 102.0,
+            "p99": 102.0
+          },
+          "site": "pqc_rekey_worker_stop",
+          "wait_ns": {
+            "max": 7546,
+            "p50": 83.0,
+            "p95": 7546.0,
+            "p99": 7546.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "admission",
+      "protected_state": "background rekey worker lifecycle state and worker thread handle",
+      "sample_count": 3
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_rekey_queue_stats_snapshot",
+        "pqc_rekey_worker_start",
+        "pqc_rekey_worker_stop",
+        "rekey_worker_main"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not nest with fd_lock during GPU work",
+      "inventory_lock": "g_rekey_queue.lock",
+      "lock": "rekey_queue_lock",
+      "max_hold_p99_ns": 17630.0,
+      "max_wait_p99_ns": 296.0,
+      "measured_sites": [
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 84,
+            "p50": 84.0,
+            "p95": 84.0,
+            "p99": 84.0
+          },
+          "site": "pqc_rekey_queue_stats_snapshot",
+          "wait_ns": {
+            "max": 176,
+            "p50": 176.0,
+            "p95": 176.0,
+            "p99": 176.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 1000,
+            "p50": 1000.0,
+            "p95": 1000.0,
+            "p99": 1000.0
+          },
+          "site": "pqc_rekey_worker_start",
+          "wait_ns": {
+            "max": 195,
+            "p50": 195.0,
+            "p95": 195.0,
+            "p99": 195.0
+          }
+        },
+        {
+          "count": 2,
+          "hold_ns": {
+            "max": 7815,
+            "p50": 1963.0,
+            "p95": 7815.0,
+            "p99": 7815.0
+          },
+          "site": "pqc_rekey_worker_stop",
+          "wait_ns": {
+            "max": 296,
+            "p50": 83.0,
+            "p95": 296.0,
+            "p99": 296.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 17630,
+            "p50": 17630.0,
+            "p95": 17630.0,
+            "p99": 17630.0
+          },
+          "site": "rekey_worker_main",
+          "wait_ns": {
+            "max": 0,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "admission",
+      "protected_state": "background rekey queue",
+      "sample_count": 5
+    },
+    {
+      "allowed_call_sites": [
+        "scheduler_data_job_snapshot",
+        "scheduler_data_job_stats",
+        "scheduler_policy_snapshot",
+        "scheduler_record_data_bytes",
+        "scheduler_reload_publish",
+        "scheduler_reload_snapshot",
+        "scheduler_stats_snapshot"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "must not nest inside fd_lock or commit_lock",
+      "inventory_lock": "g_sched_lock",
+      "lock": "scheduler_lock",
+      "max_hold_p99_ns": 232.0,
+      "max_wait_p99_ns": 361.0,
+      "measured_sites": [
+        {
+          "count": 168,
+          "hold_ns": {
+            "max": 232,
+            "p50": 111.0,
+            "p95": 167.0,
+            "p99": 213.0
+          },
+          "site": "scheduler_data_job_snapshot",
+          "wait_ns": {
+            "max": 426,
+            "p50": 138.0,
+            "p95": 314.0,
+            "p99": 361.0
+          }
+        },
+        {
+          "count": 168,
+          "hold_ns": {
+            "max": 121,
+            "p50": 102.0,
+            "p95": 111.0,
+            "p99": 112.0
+          },
+          "site": "scheduler_data_job_stats",
+          "wait_ns": {
+            "max": 84,
+            "p50": 74.0,
+            "p95": 84.0,
+            "p99": 84.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 232,
+            "p50": 232.0,
+            "p95": 232.0,
+            "p99": 232.0
+          },
+          "site": "scheduler_policy_snapshot",
+          "wait_ns": {
+            "max": 74,
+            "p50": 74.0,
+            "p95": 74.0,
+            "p99": 74.0
+          }
+        },
+        {
+          "count": 168,
+          "hold_ns": {
+            "max": 370,
+            "p50": 112.0,
+            "p95": 176.0,
+            "p99": 213.0
+          },
+          "site": "scheduler_record_data_bytes",
+          "wait_ns": {
+            "max": 1167,
+            "p50": 83.0,
+            "p95": 305.0,
+            "p99": 352.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 112,
+            "p50": 112.0,
+            "p95": 112.0,
+            "p99": 112.0
+          },
+          "site": "scheduler_reload_publish",
+          "wait_ns": {
+            "max": 74,
+            "p50": 74.0,
+            "p95": 74.0,
+            "p99": 74.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 102,
+            "p50": 102.0,
+            "p95": 102.0,
+            "p99": 102.0
+          },
+          "site": "scheduler_reload_snapshot",
+          "wait_ns": {
+            "max": 74,
+            "p50": 74.0,
+            "p95": 74.0,
+            "p99": 74.0
+          }
+        },
+        {
+          "count": 1,
+          "hold_ns": {
+            "max": 129,
+            "p50": 129.0,
+            "p95": 129.0,
+            "p99": 129.0
+          },
+          "site": "scheduler_stats_snapshot",
+          "wait_ns": {
+            "max": 241,
+            "p50": 241.0,
+            "p95": 241.0,
+            "p99": 241.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "admission",
+      "protected_state": "scheduler runtime policy, statistics, and GPU in-flight counters",
+      "sample_count": 508
+    },
+    {
+      "allowed_call_sites": [
+        "trace_sink_close"
+      ],
+      "complete": true,
+      "forbidden_blocking_boundary": "leaf metrics lock; must not call back into mounted-path locks while held",
+      "inventory_lock": "sink.lock",
+      "lock": "trace_sink_lock",
+      "max_hold_p99_ns": 139.0,
+      "max_wait_p99_ns": 9491.0,
+      "measured_sites": [
+        {
+          "count": 3,
+          "hold_ns": {
+            "max": 139,
+            "p50": 138.0,
+            "p95": 139.0,
+            "p99": 139.0
+          },
+          "site": "trace_sink_close",
+          "wait_ns": {
+            "max": 9491,
+            "p50": 203.0,
+            "p95": 9491.0,
+            "p99": 9491.0
+          }
+        }
+      ],
+      "missing": [],
+      "owner_module": "metrics",
+      "protected_state": "trace sink file descriptor and path buffer",
+      "sample_count": 3
+    }
+  ],
+  "negative_claim_guard": "This contract supports measured mounted-path lock hold/wait boundaries and bounded deadlock/livelock smoke. It does not justify broad multicore scalability, deployment readiness, or general concurrent-client claims.",
+  "observed_hot_lock_count": 16,
+  "overall_pass": true,
+  "parent_0_15_closed": true,
+  "schema_version": 1,
+  "source_artifacts": {
+    "blocking_syscall_profile": "artifacts/validation/concurrency_contract/blocking_syscall_profile/blocking_syscall_profile.json",
+    "lock_inventory": "artifacts/validation/refactor_inventory/lock_inventory.json",
+    "lock_order_table": "artifacts/validation/concurrency_contract/lock_order_table.json",
+    "lock_profile_summary": "artifacts/validation/concurrency_contract/lock_profile_summary.json",
+    "reader_visibility_probe": "artifacts/validation/concurrency_contract/reader_visibility_probe/reader_visibility_probe.json"
+  },
+  "stress_evidence": {
+    "blocking_syscall_profile_pass": true,
+    "deadlock_livelock_negative_pass": true,
+    "disjoint_file_phases": 3,
+    "disjoint_file_process_phases": 3,
+    "lock_profile_summary_pass": true,
+    "max_process_client_count": 4,
+    "max_thread_count": 4,
+    "reader_visibility_pass": true,
+    "same_file_phases": 3,
+    "same_file_process_phases": 3,
+    "thread_counts": [
+      1,
+      2,
+      4
+    ]
+  }
+}

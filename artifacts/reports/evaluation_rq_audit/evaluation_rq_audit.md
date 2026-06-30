@@ -8,20 +8,20 @@
 
 | RQ | Required category | Found title | Terms present | Evidence present | Pass |
 | --- | --- | --- | ---: | ---: | ---: |
-| RQ1 | correctness | Correctness | `True` | `True` | `True` |
-| RQ2 | mode-aligned baselines | Mode-aligned baselines | `True` | `True` | `True` |
-| RQ3 | QoS/hero result | QoS/hero result | `True` | `True` | `True` |
-| RQ4 | freshness and recovery | Freshness and recovery | `True` | `True` | `True` |
-| RQ5 | ablation and sensitivity | Ablation and sensitivity | `True` | `True` | `True` |
+| RQ1 | correctness | Correctness of authenticated publication | `True` | `True` | `True` |
+| RQ2 | CPU/GPU/PQC placement | CPU/GPU/PQC placement | `True` | `True` | `True` |
+| RQ3 | mounted app QoS | Mounted application behavior | `True` | `True` | `True` |
+| RQ4 | replay and recovery | Replay and recovery oracle | `True` | `True` | `True` |
+| RQ5 | cost boundaries and sensitivity | Cost boundaries and sensitivity | `True` | `True` | `True` |
 
 ## Discussion boundary retention
 
 | Boundary needle | Present |
 | --- | ---: |
 | `\label{sec:disc_roadmap}` | `True` |
-| `Historical fscrypt and dm-crypt fio outputs` | `True` |
+| `fscrypt is environment-blocked` | `True` |
 | `physical power-loss` | `True` |
 | `kernel-crash` | `True` |
 | `drive-cache` | `True` |
-| `non-NVIDIA UMA platform` | `True` |
-| `side-channel testing` | `True` |
+| `non-NVIDIA UMA` | `True` |
+| `side-channel evidence` | `True` |

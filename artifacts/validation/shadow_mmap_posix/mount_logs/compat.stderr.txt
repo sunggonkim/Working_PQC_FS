@@ -1,0 +1,35 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-30 12:08:02.810] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 12:08:02.810]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 12:08:02.810]   Storage dir : /tmp/shadow_mmap_sqlite_mmap_env_encrypted_file_store_dfms22d3
+[PQC-FUSE 2026-06-30 12:08:02.810]   Mount point : /tmp/shadow_mmap_sqlite_mmap_env_encrypted_file_mnt_z5l7mk7x
+[PQC-FUSE 2026-06-30 12:08:02.810] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=disabled
+[PQC-FUSE 2026-06-30 12:08:02.810] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 12:08:02.810]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 12:08:02.810]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 12:08:02.810]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 12:08:02.810]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 12:08:02.813] Keypair generated in 1529.12 µs
+[PQC-FUSE 2026-06-30 12:08:02.872] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 12:08:02.872] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 12:08:02.872] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 12:08:02.872] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 12:08:02.981] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 12:08:02.981] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-30 12:08:03.024] CREATE /encrypted.bin: authenticated file-key envelope initialized (fid=10638040679533039975)
+[PQC-FUSE 2026-06-30 12:08:03.032] OPEN /encrypted.bin: restored authenticated file-key envelope (fid=10638040679533039975)
+[PQC-FUSE 2026-06-30 12:08:03.033] OPEN /encrypted.bin: restored authenticated file-key envelope (fid=10638040679533039975)
+[PQC-FUSE 2026-06-30 12:08:03.034] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-30 12:08:03.036] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-30 12:08:03.037] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-06-30 12:08:03.037] Scheduler stats: submitted=1 cpu=1 gpu=0 bytes_cpu=0 bytes_gpu=8192 migration_ns=524288
+[PQC-FUSE 2026-06-30 12:08:03.037] Durability sync stats: fdatasync=3 failures=0 total_ns=1878111 fsync=1 failures=0 total_ns=239972 syncfs=1 failures=0 total_ns=1604149 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=2 parent_dir=0 other=0
+[PQC-FUSE 2026-06-30 12:08:03.037] Durability mounted-operation sync stats: fdatasync=2 failures=0 total_ns=986880 fsync=0 failures=0 total_ns=0 syncfs=1 failures=0 total_ns=1604149 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

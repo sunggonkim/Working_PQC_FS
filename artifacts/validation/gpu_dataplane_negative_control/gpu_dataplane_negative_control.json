@@ -1,0 +1,636 @@
+{
+  "benchmark": "/home/thor/skim/pqc_encrpyted_fs/build/code/bench_gpu_dataplane_negative_control",
+  "command": {
+    "argv": [
+      "/home/thor/skim/pqc_encrpyted_fs/build/code/bench_gpu_dataplane_negative_control",
+      "--warmups",
+      "2",
+      "--reps",
+      "7"
+    ],
+    "returncode": 0,
+    "stderr": "artifacts/validation/gpu_dataplane_negative_control/bench_gpu_dataplane_negative_control.stderr.txt",
+    "stdout_csv": "artifacts/validation/gpu_dataplane_negative_control/bench_gpu_dataplane_negative_control.stdout.csv"
+  },
+  "generated_utc": "2026-06-30T05:09:26Z",
+  "rows": [
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 1335.013671,
+      "mode": "cpu",
+      "ns": 2926,
+      "rep": 0,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 1401.596699,
+      "mode": "cpu",
+      "ns": 2787,
+      "rep": 1,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 1430.336873,
+      "mode": "cpu",
+      "ns": 2731,
+      "rep": 2,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 1439.82676,
+      "mode": "cpu",
+      "ns": 2713,
+      "rep": 3,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 1406.137509,
+      "mode": "cpu",
+      "ns": 2778,
+      "rep": 4,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 1465.210053,
+      "mode": "cpu",
+      "ns": 2666,
+      "rep": 5,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 1420.454545,
+      "mode": "cpu",
+      "ns": 2750,
+      "rep": 6,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.688725,
+      "mode": "gpu",
+      "ns": 5671713,
+      "rep": 0,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.689361,
+      "mode": "gpu",
+      "ns": 5666481,
+      "rep": 1,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.689271,
+      "mode": "gpu",
+      "ns": 5667222,
+      "rep": 2,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.688412,
+      "mode": "gpu",
+      "ns": 5674287,
+      "rep": 3,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.689862,
+      "mode": "gpu",
+      "ns": 5662361,
+      "rep": 4,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.689747,
+      "mode": "gpu",
+      "ns": 5663305,
+      "rep": 5,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.688034,
+      "mode": "gpu",
+      "ns": 5677407,
+      "rep": 6,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 1501.393293,
+      "mode": "cpu",
+      "ns": 10407,
+      "rep": 0,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 1502.692826,
+      "mode": "cpu",
+      "ns": 10398,
+      "rep": 1,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 1505.443684,
+      "mode": "cpu",
+      "ns": 10379,
+      "rep": 2,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 1498.657203,
+      "mode": "cpu",
+      "ns": 10426,
+      "rep": 3,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 1498.657203,
+      "mode": "cpu",
+      "ns": 10426,
+      "rep": 4,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 1488.095238,
+      "mode": "cpu",
+      "ns": 10500,
+      "rep": 5,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 1502.548322,
+      "mode": "cpu",
+      "ns": 10399,
+      "rep": 6,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 2.470367,
+      "mode": "gpu",
+      "ns": 6324972,
+      "rep": 0,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 2.475411,
+      "mode": "gpu",
+      "ns": 6312083,
+      "rep": 1,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 2.469499,
+      "mode": "gpu",
+      "ns": 6327195,
+      "rep": 2,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 2.476058,
+      "mode": "gpu",
+      "ns": 6310435,
+      "rep": 3,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 2.47605,
+      "mode": "gpu",
+      "ns": 6310453,
+      "rep": 4,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 2.466871,
+      "mode": "gpu",
+      "ns": 6333935,
+      "rep": 5,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 4,
+      "gpu_available": true,
+      "mib_s": 2.47777,
+      "mode": "gpu",
+      "ns": 6306074,
+      "rep": 6,
+      "total_bytes": 16384,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 1528.192088,
+      "mode": "cpu",
+      "ns": 40898,
+      "rep": 0,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 1518.575212,
+      "mode": "cpu",
+      "ns": 41157,
+      "rep": 1,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 1525.432002,
+      "mode": "cpu",
+      "ns": 40972,
+      "rep": 2,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 1511.085322,
+      "mode": "cpu",
+      "ns": 41361,
+      "rep": 3,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 1524.055695,
+      "mode": "cpu",
+      "ns": 41009,
+      "rep": 4,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 1525.394772,
+      "mode": "cpu",
+      "ns": 40973,
+      "rep": 5,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 1522.681869,
+      "mode": "cpu",
+      "ns": 41046,
+      "rep": 6,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 8.239263,
+      "mode": "gpu",
+      "ns": 7585630,
+      "rep": 0,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 8.286011,
+      "mode": "gpu",
+      "ns": 7542833,
+      "rep": 1,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 8.254852,
+      "mode": "gpu",
+      "ns": 7571305,
+      "rep": 2,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 8.839001,
+      "mode": "gpu",
+      "ns": 7070935,
+      "rep": 3,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 7.787974,
+      "mode": "gpu",
+      "ns": 8025194,
+      "rep": 4,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 8.822561,
+      "mode": "gpu",
+      "ns": 7084111,
+      "rep": 5,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 16,
+      "gpu_available": true,
+      "mib_s": 8.272333,
+      "mode": "gpu",
+      "ns": 7555305,
+      "rep": 6,
+      "total_bytes": 65536,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 1529.051988,
+      "mode": "cpu",
+      "ns": 163500,
+      "rep": 0,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 1514.472297,
+      "mode": "cpu",
+      "ns": 165074,
+      "rep": 1,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 1478.074247,
+      "mode": "cpu",
+      "ns": 169139,
+      "rep": 2,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 1461.911361,
+      "mode": "cpu",
+      "ns": 171009,
+      "rep": 3,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 1467.945933,
+      "mode": "cpu",
+      "ns": 170306,
+      "rep": 4,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 1497.508146,
+      "mode": "cpu",
+      "ns": 166944,
+      "rep": 5,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 1532.266467,
+      "mode": "cpu",
+      "ns": 163157,
+      "rep": 6,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 30.83522,
+      "mode": "gpu",
+      "ns": 8107612,
+      "rep": 0,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 30.835787,
+      "mode": "gpu",
+      "ns": 8107463,
+      "rep": 1,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 27.690546,
+      "mode": "gpu",
+      "ns": 9028352,
+      "rep": 2,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 29.16132,
+      "mode": "gpu",
+      "ns": 8573000,
+      "rep": 3,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 29.206522,
+      "mode": "gpu",
+      "ns": 8559732,
+      "rep": 4,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 29.166485,
+      "mode": "gpu",
+      "ns": 8571482,
+      "rep": 5,
+      "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 64,
+      "gpu_available": true,
+      "mib_s": 30.835258,
+      "mode": "gpu",
+      "ns": 8107602,
+      "rep": 6,
+      "total_bytes": 262144,
+      "verified": true
+    }
+  ],
+  "schema_version": 1,
+  "summary": {
+    "all_verified": true,
+    "cases": [
+      {
+        "count": 1,
+        "cpu_median_mib_s": 1420.454545,
+        "cpu_median_ns": 2750,
+        "gpu_available": true,
+        "gpu_median_mib_s": 0.689271,
+        "gpu_median_ns": 5667222,
+        "gpu_slower_ratio": 2060.808,
+        "negative_control_supports_cpu_first": true,
+        "total_bytes": 4096,
+        "verified": true
+      },
+      {
+        "count": 4,
+        "cpu_median_mib_s": 1501.393293,
+        "cpu_median_ns": 10407,
+        "gpu_available": true,
+        "gpu_median_mib_s": 2.475411,
+        "gpu_median_ns": 6312083,
+        "gpu_slower_ratio": 606.5228211780533,
+        "negative_control_supports_cpu_first": true,
+        "total_bytes": 16384,
+        "verified": true
+      },
+      {
+        "count": 16,
+        "cpu_median_mib_s": 1524.055695,
+        "cpu_median_ns": 41009,
+        "gpu_available": true,
+        "gpu_median_mib_s": 8.272333,
+        "gpu_median_ns": 7555305,
+        "gpu_slower_ratio": 184.23528981443098,
+        "negative_control_supports_cpu_first": true,
+        "total_bytes": 65536,
+        "verified": true
+      },
+      {
+        "count": 64,
+        "cpu_median_mib_s": 1497.508146,
+        "cpu_median_ns": 166944,
+        "gpu_available": true,
+        "gpu_median_mib_s": 29.206522,
+        "gpu_median_ns": 8559732,
+        "gpu_slower_ratio": 51.273073605520416,
+        "negative_control_supports_cpu_first": true,
+        "total_bytes": 262144,
+        "verified": true
+      }
+    ],
+    "claim_boundary": "This is a data-plane negative control for CPU-first AES-GCM placement. It does not claim GPU data-plane offload is always slower, only that the retained small/mid block evidence includes loss cases under the current UMA/CUDA executor.",
+    "gpu_available": true,
+    "overall_pass": true,
+    "small_or_mid_gpu_loss_observed": true
+  }
+}

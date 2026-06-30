@@ -1,0 +1,8 @@
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":1117463,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":943046,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":832602,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":705861,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":1530482,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":1171528,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":725787,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}
+{"event":"publication_dispatch","mode":"strict","rc":0,"elapsed_ns":1239028,"block_count":4,"payload_bytes":16384,"sync_count":2,"data_fsync_count":1,"journal_fsync_count":1,"epoch_log_fsync_count":0}

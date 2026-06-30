@@ -1,0 +1,267 @@
+{
+  "c6_s2_requirements": {
+    "anti_hammering_wear_boundary": {
+      "max_anchor_self_tests": 1,
+      "observed_hardware_flush_attempts": 1,
+      "reason": "probe is intentionally single-shot and does not provision or loop TPM NV writes",
+      "status": "recorded"
+    },
+    "mount_refusal_logs": {
+      "reason": "hardware TPM epoch did not commit on this run; replay test would not measure a provisioned epoch",
+      "status": "not_run_environment_blocked"
+    },
+    "pcr_drift": {
+      "reason": "PCR read failed or anchor path has no persistent PCR policy; PCR-bound freshness remains a non-claim",
+      "status": "not_run_environment_blocked"
+    },
+    "reboot_recovery": {
+      "reason": "hardware TPM epoch did not commit on this run; replay test would not measure a provisioned epoch",
+      "status": "not_run_environment_blocked"
+    },
+    "stale_snapshot_replay": {
+      "reason": "hardware TPM epoch did not commit on this run; replay test would not measure a provisioned epoch",
+      "status": "not_run_environment_blocked"
+    },
+    "tpm_latency": {
+      "commands": [
+        {
+          "elapsed_ms": 5.988463,
+          "name": "sudo_noninteractive",
+          "returncode": 1
+        },
+        {
+          "elapsed_ms": 5.199213,
+          "name": "tpm2_nvreadpublic",
+          "returncode": 1
+        },
+        {
+          "elapsed_ms": 5.002277,
+          "name": "tpm2_pcrread",
+          "returncode": 1
+        },
+        {
+          "elapsed_ms": 174.427315,
+          "name": "hardware_anchor_self_test",
+          "returncode": 1
+        }
+      ],
+      "status": "recorded"
+    }
+  },
+  "checks": {
+    "anti_hammering_boundary_recorded": true,
+    "committed_or_environment_blocked": true,
+    "hardware_flush_attempted": true,
+    "hardware_pending_observed": true,
+    "rollback_claim_not_allowed": true,
+    "source_checks_pass": true,
+    "tpm_latency_recorded": true,
+    "trace_jsonl_well_formed": true
+  },
+  "config": {
+    "devices": [
+      {
+        "exists": true,
+        "gid": 110,
+        "group": "tss",
+        "is_char_device": true,
+        "mode_octal": "0o660",
+        "path": "/dev/tpmrm0",
+        "uid": 106,
+        "user": "tss"
+      },
+      {
+        "exists": true,
+        "gid": 0,
+        "group": "root",
+        "is_char_device": true,
+        "mode_octal": "0o660",
+        "path": "/dev/tpm0",
+        "uid": 106,
+        "user": "tss"
+      }
+    ],
+    "nv_index": "0x01500010",
+    "tcti": "device:/dev/tpmrm0",
+    "tools": {
+      "tpm2_nvread": true,
+      "tpm2_nvreadpublic": true,
+      "tpm2_nvwrite": true,
+      "tpm2_pcrread": true
+    },
+    "user": {
+      "PQC_SUDO_PASSWORD_present": false,
+      "gid": 1000,
+      "groups": [
+        "adm",
+        "audio",
+        "cdrom",
+        "dip",
+        "docker",
+        "gdm",
+        "gpio",
+        "i2c",
+        "lpadmin",
+        "ollama",
+        "plugdev",
+        "render",
+        "sudo",
+        "thor",
+        "users",
+        "video",
+        "weston-launch"
+      ],
+      "uid": 1000
+    }
+  },
+  "environment_blocked": true,
+  "events": [
+    {
+      "backend": "hardware",
+      "blocks_since_commit": 1,
+      "cause": "stage_pending",
+      "committed": false,
+      "duration_ns": 2694,
+      "epoch_interval": 100,
+      "event": "anchor_epoch_freshness_record",
+      "file_count": 1,
+      "flush_policy": "hardware_stage",
+      "global_sequence": 11,
+      "pending": true,
+      "prefix_root": "fa575622124f2830816bfb58654d29b31452939b447f63724f642bf32103da17",
+      "rc": 0,
+      "status": "pending"
+    },
+    {
+      "backend": "hardware",
+      "blocks_since_commit": 1,
+      "duration_ns": 72537,
+      "event": "anchor_stage_pending",
+      "file_count": 1,
+      "freshness_window_cached": 100,
+      "global_sequence": 11,
+      "prefix_root": "fa575622124f2830816bfb58654d29b31452939b447f63724f642bf32103da17",
+      "rc": 0
+    },
+    {
+      "backend": "hardware",
+      "blocks_since_commit": 1,
+      "cause": "flush",
+      "committed": false,
+      "duration_ns": 8801648,
+      "epoch_interval": 100,
+      "event": "anchor_epoch_freshness_record",
+      "file_count": 1,
+      "flush_policy": "hardware_force",
+      "global_sequence": 11,
+      "pending": false,
+      "prefix_root": "fa575622124f2830816bfb58654d29b31452939b447f63724f642bf32103da17",
+      "rc": -19,
+      "status": "failed"
+    },
+    {
+      "backend": "hardware",
+      "blocks_since_commit": 1,
+      "duration_ns": 8818259,
+      "event": "anchor_flush",
+      "file_count": 1,
+      "freshness_window_cached": 100,
+      "global_sequence": 11,
+      "prefix_root": "fa575622124f2830816bfb58654d29b31452939b447f63724f642bf32103da17",
+      "rc": -19
+    },
+    {
+      "backend": "hardware",
+      "blocks_since_commit": 1,
+      "duration_ns": 118572528,
+      "event": "anchor_commit_current_prefix",
+      "file_count": 1,
+      "freshness_window_cached": 100,
+      "global_sequence": 11,
+      "prefix_root": "fa575622124f2830816bfb58654d29b31452939b447f63724f642bf32103da17",
+      "rc": -19
+    }
+  ],
+  "generated_by": "code/experiments/run_tpm_epoch_freshness_probe.py",
+  "generated_utc": "2026-06-30T02:54:54Z",
+  "hardware_epoch_committed": false,
+  "malformed_trace_lines": 0,
+  "next_code_edit": "If TPM access is enabled, run a provisioned stale-snapshot replay and reboot/remount refusal proof; otherwise keep rollback resistance as a non-claim.",
+  "overall_pass": true,
+  "production_path_attempt": {
+    "command": [
+      "/home/thor/skim/pqc_encrpyted_fs/build/pqc_fuse",
+      "--anchor-self-test"
+    ],
+    "elapsed_ms": 174.427315,
+    "name": "hardware_anchor_self_test",
+    "returncode": 1,
+    "stderr": "artifacts/validation/async_merkle_tpm_epoch/hardware_anchor_self_test.stderr.txt",
+    "stderr_tail": "PQC-FUSE anchor self-test: FAIL\n",
+    "stdout": "artifacts/validation/async_merkle_tpm_epoch/hardware_anchor_self_test.stdout.txt",
+    "trace_path": "artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.trace.jsonl"
+  },
+  "schema_version": 1,
+  "scope": "Bounded hardware TPM epoch-freshness probe.  It records whether the production hardware anchor path commits an epoch or is blocked by local TPM/provisioning/permission state.  It is not a rollback resistance claim.",
+  "source_checks": {
+    "epoch_trace_event_present": true,
+    "hardware_backend_switch_present": true,
+    "hardware_force_policy_present": true,
+    "pcr_policy_not_implemented_in_anchor": true,
+    "tpm_nv_read_path_present": true,
+    "tpm_nv_write_path_present": true
+  },
+  "tool_probes": [
+    {
+      "command": [
+        "sudo",
+        "-n",
+        "true"
+      ],
+      "elapsed_ms": 5.988463,
+      "name": "sudo_noninteractive",
+      "returncode": 1,
+      "stderr": "artifacts/validation/async_merkle_tpm_epoch/sudo_noninteractive.stderr.txt",
+      "stderr_tail": "sudo: a password is required\n",
+      "stdout": "artifacts/validation/async_merkle_tpm_epoch/sudo_noninteractive.stdout.txt"
+    },
+    {
+      "command": [
+        "tpm2_nvreadpublic",
+        "0x01500010"
+      ],
+      "elapsed_ms": 5.199213,
+      "name": "tpm2_nvreadpublic",
+      "returncode": 1,
+      "stderr": "artifacts/validation/async_merkle_tpm_epoch/tpm2_nvreadpublic.stderr.txt",
+      "stderr_tail": "ERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpmrm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tcti-swtpm.c:613:Tss2_Tcti_Swtpm_Init() Cannot connect to swtpm TPM socket \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-swtpm.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-mssim.so.0 \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:269:tctildr_get_default() No standard TCTI could be loaded \nERROR:tcti:src/tss2-tcti/tctildr.c:430:Tss2_TctiLdr_Initialize_Ex() Failed to instantiate TCTI \nERROR: Could not load tcti, got: \"(null)\"\n",
+      "stdout": "artifacts/validation/async_merkle_tpm_epoch/tpm2_nvreadpublic.stdout.txt"
+    },
+    {
+      "command": [
+        "tpm2_pcrread",
+        "sha256:0,1,2,3"
+      ],
+      "elapsed_ms": 5.002277,
+      "name": "tpm2_pcrread",
+      "returncode": 1,
+      "stderr": "artifacts/validation/async_merkle_tpm_epoch/tpm2_pcrread.stderr.txt",
+      "stderr_tail": "ERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpmrm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nERROR:tcti:src/tss2-tcti/tcti-device.c:451:Tss2_Tcti_Device_Init() Failed to open specified TCTI device file /dev/tpm0: Permission denied \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-device.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tcti-swtpm.c:613:Tss2_Tcti_Swtpm_Init() Cannot connect to swtpm TPM socket \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-swtpm.so.0 \nWARNING:tcti:src/util/io.c:262:socket_connect() Failed to connect to host 127.0.0.1, port 2321: errno 111: Connection refused \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:169:tcti_from_file() Could not initialize TCTI file: libtss2-tcti-mssim.so.0 \nERROR:tcti:src/tss2-tcti/tctildr-dl.c:269:tctildr_get_default() No standard TCTI could be loaded \nERROR:tcti:src/tss2-tcti/tctildr.c:430:Tss2_TctiLdr_Initialize_Ex() Failed to instantiate TCTI \nERROR: Could not load tcti, got: \"(null)\"\n",
+      "stdout": "artifacts/validation/async_merkle_tpm_epoch/tpm2_pcrread.stdout.txt"
+    }
+  ],
+  "trace_summary": {
+    "epoch_record_count": 2,
+    "event_count": 5,
+    "hardware_committed_count": 0,
+    "hardware_committed_observed": false,
+    "hardware_epoch_record_count": 2,
+    "hardware_failed_flush_count": 1,
+    "hardware_flush_attempted": true,
+    "hardware_pending_count": 1,
+    "hardware_pending_observed": true,
+    "last_hardware_rc": -19,
+    "last_hardware_status": "failed"
+  },
+  "verdict": "environment-blocked"
+}

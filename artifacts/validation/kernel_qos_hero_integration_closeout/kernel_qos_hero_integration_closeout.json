@@ -1,0 +1,162 @@
+{
+  "artifact": "kernel_qos_hero_integration_closeout",
+  "claim_boundary": {
+    "allowed": [
+      "bounded SQLite foreground p99 comparison under the retained mounted secure-storage pressure workflow",
+      "AEGIS-Q versus app-only, unthrottled storage, simple controller, ionice, and systemd IOWeight rows",
+      "statement that kernel controls preserve more background throughput in the retained one-run controls",
+      "statement that AEGIS-Q offers storage-visible policy/observability in this workload envelope"
+    ],
+    "forbidden": [
+      "SQLite p99 recovery uniqueness without qualification",
+      "claim that kernel QoS cannot recover SQLite p99 in general",
+      "claim that AEGIS-Q beats standard kernel throttling without noting repetition mismatch",
+      "claim that the result generalizes to all workloads or all kernel QoS controls"
+    ]
+  },
+  "close_conditions": {
+    "b3_comparison_passes": true,
+    "b3_parent_gate_closed": true,
+    "e1_closeout_passes": true,
+    "generated_table_complete": true,
+    "hero_modes_available": true,
+    "hero_rows_are_five_run": true,
+    "kernel_rows_are_measured": true,
+    "kernel_source_artifacts_exist": true,
+    "paper_claim_guard_passes": true,
+    "paper_compares_both_kernel_baselines": true,
+    "required_inputs_present": true,
+    "sqlite_uniqueness_claim_guard_allows_only_bounded_claim": true,
+    "two_kernel_baselines_measured": true
+  },
+  "inputs": {
+    "evaluation_tex": {
+      "bytes": 14807,
+      "exists": true,
+      "path": "Paper/4_Evaluation.tex"
+    },
+    "generated_qos_recovery_table": {
+      "bytes": 871,
+      "exists": true,
+      "path": "Paper/generated_qos_recovery_table.tex"
+    },
+    "kernel_qos_comparison": {
+      "bytes": 31311,
+      "exists": true,
+      "path": "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json"
+    },
+    "main_tex": {
+      "bytes": 4945,
+      "exists": true,
+      "path": "Paper/main.tex"
+    },
+    "sqlite_hero_validity_closeout": {
+      "bytes": 25804,
+      "exists": true,
+      "path": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json"
+    }
+  },
+  "overall_pass": true,
+  "paper_guard": {
+    "complete": true,
+    "forbidden_hits": [],
+    "paper_files": [
+      "Paper/4_Evaluation.tex",
+      "Paper/main.tex"
+    ],
+    "required_phrases": {
+      "bounded_not_unique": true,
+      "five_run_hero_one_run_kernel": true,
+      "ionice_result": true,
+      "ioweight_result": true,
+      "separate_repeated_and_kernel": true
+    },
+    "unguarded_forbidden_hits": []
+  },
+  "row_summary": {
+    "hero_modes": {
+      "aegis_policy": {
+        "all_acceptable": true,
+        "background_mb_s": 3.0160640171203785,
+        "deadline_misses": 0.0,
+        "p99_ms": 8.15053043,
+        "runs": 5
+      },
+      "app_only": {
+        "all_acceptable": true,
+        "background_mb_s": 0.0,
+        "deadline_misses": 0.0,
+        "p99_ms": 7.253253040000001,
+        "runs": 5
+      },
+      "simple_controller": {
+        "all_acceptable": true,
+        "background_mb_s": 1.4970013728032954,
+        "deadline_misses": 0.0,
+        "p99_ms": 7.544277000000001,
+        "runs": 5
+      },
+      "unthrottled_storage": {
+        "all_acceptable": true,
+        "background_mb_s": 6.984360530500289,
+        "deadline_misses": 0.0,
+        "p99_ms": 9.62087615,
+        "runs": 5
+      }
+    },
+    "hero_modes_five_run": true,
+    "kernel_controls": {
+      "ionice": {
+        "background_mb_s": 7.248431018854942,
+        "deadline_misses": 6.0,
+        "overall_pass": true,
+        "p99_ms": 16.217910019999998,
+        "source": "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json",
+        "successful_rows": 3,
+        "verdict": "measured",
+        "writer_start_rows": 3
+      },
+      "systemd_io_weight": {
+        "background_mb_s": 6.73069491922091,
+        "deadline_misses": 7.0,
+        "overall_pass": true,
+        "p99_ms": 12.574790109999999,
+        "source": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json",
+        "successful_rows": 3,
+        "verdict": "measured",
+        "writer_start_rows": 3
+      }
+    },
+    "kernel_controls_measured": true,
+    "required_hero_modes_present": true,
+    "required_kernel_controls_present": true
+  },
+  "source_artifacts": {
+    "generated_table": "Paper/generated_qos_recovery_table.tex",
+    "kernel_qos_comparison": "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json",
+    "sqlite_hero_validity_closeout": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json"
+  },
+  "table_guard": {
+    "complete": true,
+    "required_controls": {
+      "five_run_caption": true,
+      "ionice_class_3": true,
+      "ioweight_10": true,
+      "three_run_caption": true
+    },
+    "required_labels": {
+      "AEGIS-Q": true,
+      "App only": true,
+      "Kernel IOWeight": true,
+      "Kernel ionice": true,
+      "Simple ctrl.": true,
+      "Unthrottled": true
+    },
+    "table": {
+      "bytes": 871,
+      "exists": true,
+      "path": "Paper/generated_qos_recovery_table.tex"
+    }
+  },
+  "timestamp_utc": "2026-06-30T13:42:43.270199+00:00"
+}

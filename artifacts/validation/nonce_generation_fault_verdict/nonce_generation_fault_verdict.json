@@ -1,0 +1,97 @@
+{
+  "checks": [
+    {
+      "evidence": "strict matrix reports overall_pass, no generated nonce reuse, no silent corruption, and no unexpected liveness failures",
+      "name": "strict_matrix_overall",
+      "ok": true,
+      "residual": "process/final-binary fault model only"
+    },
+    {
+      "evidence": "partial update/remount returns latest committed state with no generated duplicate journal pairs",
+      "name": "strict_partial_update_remount",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "torn strict journal tail is ignored and remount exposes the latest committed payload",
+      "name": "strict_torn_record_tail",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "daemon kill after generation reservation/data fsync skips the unpublished generation on remount",
+      "name": "strict_interrupted_generation_advance",
+      "ok": true,
+      "residual": "not physical power loss"
+    },
+    {
+      "evidence": "adversarial append of an older mapping creates a replay duplicate but does not supersede the newer mapping",
+      "name": "strict_replayed_metadata",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "file-backed stale snapshot remains replayable, while retained TPM replay-after-advance artifact fails closed",
+      "name": "strict_stale_checkpoint_ladder",
+      "ok": true,
+      "residual": "not PCR-bound rollback resistance"
+    },
+    {
+      "evidence": "6 retained strict journal files exist",
+      "name": "strict_retained_raw_logs",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "epoch replay matrix reports all cases pass",
+      "name": "epoch_matrix_overall",
+      "ok": true,
+      "residual": "committed-prefix replay only"
+    },
+    {
+      "evidence": "epoch committed-prefix replay ignores a torn log tail and recovers matching data",
+      "name": "epoch_torn_log_tail",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "epoch replay rejects duplicate generation records instead of exposing data",
+      "name": "epoch_duplicate_append_fail_closed",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "epoch replay repairs a deliberately lost strict journal from the committed epoch prefix",
+      "name": "epoch_stale_journal_repair",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "normal epoch remount compacts the committed prefix without duplicate generations",
+      "name": "epoch_normal_committed_prefix",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "nonce/AAD bind file_id, block, generation; strict replay chooses highest committed generation; epoch replay rejects duplicate keys",
+      "name": "source_invariant_guard",
+      "ok": true,
+      "residual": ""
+    },
+    {
+      "evidence": "paper states duplicate-generation invariant and residual power-loss/PCR/crash-proof limits",
+      "name": "paper_negative_claim_guard",
+      "ok": true,
+      "residual": ""
+    }
+  ],
+  "claim_boundary": "C3 proves nonce/generation safety only for the retained final-binary strict and epoch fault models. Strict evidence is per-file sidecar (block,generation) evidence; epoch replay additionally checks (file_id,block,generation) duplicate records. This does not prove physical power-loss, kernel-crash, drive-cache, PCR-bound rollback resistance, or complete POSIX crash certification.",
+  "generated_by": "code/experiments/build_nonce_generation_fault_verdict.py",
+  "generated_utc": "2026-06-29T08:31:41Z",
+  "inputs": {
+    "epoch_matrix": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json",
+    "strict_matrix": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json"
+  },
+  "overall_pass": true,
+  "schema_version": 1
+}

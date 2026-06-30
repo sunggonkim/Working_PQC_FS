@@ -1,17 +1,11 @@
 {
-  "storage_dir": "/tmp/daemon_fault_checkpoint_write_store_fedxvtn5",
+  "storage_dir": "/tmp/daemon_fault_checkpoint_write_store_izu06199",
   "entries": [
     {
       "path": ".anchor",
       "mode": 33152,
       "size": 88,
-      "sha256": "82662858b5cccbe5a007dc1cc134f188e2ba971d3e6d3cf030770928317e04c1"
-    },
-    {
-      "path": ".anchor.tmp.cvbQ5J",
-      "mode": 33152,
-      "size": 88,
-      "sha256": "82662858b5cccbe5a007dc1cc134f188e2ba971d3e6d3cf030770928317e04c1"
+      "sha256": "561481c98bdb1077fc5914641213bea43d21df5306094c15ff89dd34f8c814db"
     },
     {
       "path": "probe.bin",
@@ -21,7 +15,7 @@
       "xattrs": {
         "user.pqc_checkpoint": {
           "bytes": 80,
-          "sha256": "61a90aa2240a1b1318d3d735632999ebf09cd5813c1f9ef883a1719404205484"
+          "sha256": "f5f001e9bbcb3a77787088c8ec07de879d978d228732dd2654c88a64018ac60c"
         },
         "user.pqc_logical_size": {
           "bytes": 8,
@@ -29,7 +23,7 @@
         },
         "user.pqc_metadata": {
           "bytes": 120,
-          "sha256": "7b83651f7dc8d8651ec2f6c14c917c6fbf30a59234c8350cd2cc77d0c2b4453d"
+          "sha256": "a32cf330cdd926a874bab06523b195a9a64c83bcf0db6c006c91c6fb300da3e0"
         }
       }
     },
@@ -37,13 +31,13 @@
       "path": "probe.bin.pqcdata",
       "mode": 33152,
       "size": 8192,
-      "sha256": "45c0a07893dc5b90bedd810e2e1fecbbe4526bc1a36910918e81f4c26a061643"
+      "sha256": "3c309f35f3084b9a6b7fb1661aef2bd16de3f03c7dcdc95cf64802ace4b25a9a"
     },
     {
       "path": "probe.bin.pqcmeta",
       "mode": 33152,
       "size": 192,
-      "sha256": "3865b99684e21357c633fcc6213a664703d6cadc4eb141548023afa7f6050b33"
+      "sha256": "1d023d56b20ae92eb54058d3fb857c7005519a45904de748d0536c5609046c1a"
     }
   ]
 }

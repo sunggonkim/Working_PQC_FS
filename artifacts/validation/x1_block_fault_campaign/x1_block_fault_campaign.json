@@ -1,0 +1,865 @@
+{
+  "artifact": "x1_block_fault_campaign",
+  "cleanup": [
+    {
+      "command": [
+        "sudo",
+        "-S",
+        "-p",
+        "",
+        "umount",
+        "-l",
+        "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+      ],
+      "returncode": 0,
+      "stderr": "artifacts/validation/x1_block_fault_campaign/cleanup_umount_lower.stderr.txt",
+      "stdout": "artifacts/validation/x1_block_fault_campaign/cleanup_umount_lower.stdout.txt",
+      "timeout": false
+    },
+    {
+      "command": [
+        "sudo",
+        "-S",
+        "-p",
+        "",
+        "dmsetup",
+        "remove",
+        "-f",
+        "aegisq_x1_6481"
+      ],
+      "returncode": 0,
+      "stderr": "artifacts/validation/x1_block_fault_campaign/cleanup_dm_remove.stderr.txt",
+      "stdout": "artifacts/validation/x1_block_fault_campaign/cleanup_dm_remove.stdout.txt",
+      "timeout": false
+    },
+    {
+      "command": [
+        "sudo",
+        "-S",
+        "-p",
+        "",
+        "losetup",
+        "-d",
+        "/dev/loop9"
+      ],
+      "returncode": 0,
+      "stderr": "artifacts/validation/x1_block_fault_campaign/cleanup_losetup_detach.stderr.txt",
+      "stdout": "artifacts/validation/x1_block_fault_campaign/cleanup_losetup_detach.stdout.txt",
+      "timeout": false
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "claim_status": "closed by this campaign if observed",
+      "meaning": "latest write was not accepted across the lower-block interruption; previous committed state remains readable",
+      "verdict": "previous_committed"
+    },
+    {
+      "claim_status": "acceptable but not a physical power-loss proof",
+      "meaning": "latest write reached an accepted durable state before the interruption was observed",
+      "verdict": "latest_committed"
+    },
+    {
+      "claim_status": "acceptable fail-closed outcome",
+      "meaning": "remount or read rejects the state instead of exposing unauthenticated data",
+      "verdict": "fail_closed"
+    },
+    {
+      "claim_status": "unacceptable",
+      "meaning": "recovered bytes match no oracle state",
+      "verdict": "silent_corruption"
+    }
+  ],
+  "generated_utc": "2026-06-30T09:26:46.522278+00:00",
+  "overall_pass": true,
+  "paper_claim_boundary": "This campaign supports lower-block interruption recovery on a loopback ext4/device-mapper stack. It includes a post-fsync accepted-state row, but still does not certify physical power loss, kernel crash, drive write-cache loss, arbitrary workloads, or full POSIX crash semantics.",
+  "readiness": {
+    "all_present": true,
+    "fuse_binary": "build/pqc_fuse",
+    "fuse_binary_exists": true,
+    "missing": [],
+    "tools": {
+      "dmsetup": "/usr/sbin/dmsetup",
+      "e2fsck": "/usr/sbin/e2fsck",
+      "losetup": "/usr/sbin/losetup",
+      "mkfs.ext4": "/usr/sbin/mkfs.ext4",
+      "mount": "/usr/bin/mount",
+      "sudo": "/usr/bin/sudo",
+      "umount": "/usr/bin/umount"
+    }
+  },
+  "rows": [
+    {
+      "acceptable": true,
+      "baseline_stop": {
+        "daemon_returncode": -2,
+        "label": "baseline",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/aegisq_x1_block_fault_j7n5feb7/fuse_mount"
+            ],
+            "returncode": 0,
+            "stderr": "artifacts/validation/x1_block_fault_campaign/baseline_unmount_0.stderr.txt",
+            "stdout": "artifacts/validation/x1_block_fault_campaign/baseline_unmount_0.stdout.txt",
+            "timeout": false
+          }
+        ]
+      },
+      "baseline_write": {
+        "command": [
+          "python3",
+          "-c",
+          "\nimport hashlib\nimport json\nimport os\nimport pathlib\nimport time\nimport sys\n\npath = pathlib.Path(os.environ[\"TARGET_PATH\"])\npayload = bytes.fromhex(os.environ[\"PAYLOAD_HEX\"])\nmode = os.environ.get(\"OPEN_MODE\", \"r+b\")\npause_file = os.environ.get(\"PAUSE_BEFORE_FSYNC_FILE\")\nrelease_file = os.environ.get(\"RELEASE_FSYNC_FILE\")\ntry:\n    with path.open(mode) as f:\n        f.seek(0)\n        f.write(payload)\n        f.flush()\n        if pause_file and release_file:\n            pathlib.Path(pause_file).write_text(\"ready\\n\", encoding=\"utf-8\")\n            deadline = time.monotonic() + float(os.environ.get(\"PAUSE_TIMEOUT_S\", \"20\"))\n            while time.monotonic() < deadline:\n                if pathlib.Path(release_file).exists():\n                    break\n                time.sleep(0.02)\n            else:\n                raise TimeoutError(\"timed out waiting for fsync release file\")\n        os.fsync(f.fileno())\n    print(json.dumps({\n        \"operation\": \"write_fsync\",\n        \"bytes\": len(payload),\n        \"sha256\": hashlib.sha256(payload).hexdigest(),\n    }))\nexcept OSError as exc:\n    print(json.dumps({\n        \"operation\": \"write_fsync\",\n        \"error\": \"OSError\",\n        \"errno\": exc.errno,\n        \"message\": str(exc),\n    }), file=sys.stderr)\n    raise\n"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/baseline_write.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/baseline_write.stdout.txt",
+        "stdout_json": {
+          "bytes": 4096,
+          "operation": "write_fsync",
+          "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+        },
+        "stdout_tail": "{\"operation\": \"write_fsync\", \"bytes\": 4096, \"sha256\": \"128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f\"}",
+        "timeout": false
+      },
+      "baseline_write_returncode": 0,
+      "case": "lower_block_error_during_latest_write",
+      "fault_model": "device-mapper error target while final pqc_fuse writes and fsyncs a mounted file",
+      "fault_stop": {
+        "daemon_returncode": -2,
+        "label": "fault",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/aegisq_x1_block_fault_j7n5feb7/fuse_mount"
+            ],
+            "returncode": 0,
+            "stderr": "artifacts/validation/x1_block_fault_campaign/fault_unmount_0.stderr.txt",
+            "stdout": "artifacts/validation/x1_block_fault_campaign/fault_unmount_0.stdout.txt",
+            "timeout": false
+          }
+        ]
+      },
+      "fault_write": {
+        "command": [
+          "python3",
+          "-c",
+          "\nimport hashlib\nimport json\nimport os\nimport pathlib\nimport time\nimport sys\n\npath = pathlib.Path(os.environ[\"TARGET_PATH\"])\npayload = bytes.fromhex(os.environ[\"PAYLOAD_HEX\"])\nmode = os.environ.get(\"OPEN_MODE\", \"r+b\")\npause_file = os.environ.get(\"PAUSE_BEFORE_FSYNC_FILE\")\nrelease_file = os.environ.get(\"RELEASE_FSYNC_FILE\")\ntry:\n    with path.open(mode) as f:\n        f.seek(0)\n        f.write(payload)\n        f.flush()\n        if pause_file and release_file:\n            pathlib.Path(pause_file).write_text(\"ready\\n\", encoding=\"utf-8\")\n            deadline = time.monotonic() + float(os.environ.get(\"PAUSE_TIMEOUT_S\", \"20\"))\n            while time.monotonic() < deadline:\n                if pathlib.Path(release_file).exists():\n                    break\n                time.sleep(0.02)\n            else:\n                raise TimeoutError(\"timed out waiting for fsync release file\")\n        os.fsync(f.fileno())\n    print(json.dumps({\n        \"operation\": \"write_fsync\",\n        \"bytes\": len(payload),\n        \"sha256\": hashlib.sha256(payload).hexdigest(),\n    }))\nexcept OSError as exc:\n    print(json.dumps({\n        \"operation\": \"write_fsync\",\n        \"error\": \"OSError\",\n        \"errno\": exc.errno,\n        \"message\": str(exc),\n    }), file=sys.stderr)\n    raise\n"
+        ],
+        "returncode": 1,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 5, \"message\": \"[Errno 5] Input/output error\"}\nTraceback (most recent call last):\n  File \"<string>\", line 28, in <module>\nOSError: [Errno 5] Input/output error",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/fault_write.stdout.txt",
+        "timeout": false
+      },
+      "fault_write_failed": true,
+      "fault_write_returncode": 1,
+      "recovery": {
+        "acceptable": true,
+        "detail": "recovered previous committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "\nimport hashlib\nimport json\nimport os\nimport pathlib\nimport sys\n\npath = pathlib.Path(os.environ[\"TARGET_PATH\"])\ntry:\n    data = path.read_bytes()\n    print(json.dumps({\n        \"operation\": \"read_all\",\n        \"bytes\": len(data),\n        \"sha256\": hashlib.sha256(data).hexdigest(),\n    }))\nexcept OSError as exc:\n    print(json.dumps({\n        \"operation\": \"read_all\",\n        \"error\": \"OSError\",\n        \"errno\": exc.errno,\n        \"message\": str(exc),\n    }), file=sys.stderr)\n    raise\n"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/recovery_read.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/recovery_read.stdout.txt",
+          "stdout_json": {
+            "bytes": 4096,
+            "operation": "read_all",
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          },
+          "stdout_tail": "{\"operation\": \"read_all\", \"bytes\": 4096, \"sha256\": \"128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f\"}",
+          "timeout": false
+        },
+        "verdict": "previous_committed"
+      },
+      "restore_steps": [
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "umount",
+            "-l",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_umount_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_umount_lower.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "remove",
+            "-f",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_dm_remove.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_dm_remove.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "create",
+            "aegisq_x1_6481",
+            "--table",
+            "0 262144 linear /dev/loop9 0"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_dm_create_linear.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_dm_create_linear.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "e2fsck",
+            "-fy",
+            "/dev/mapper/aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_e2fsck.stderr.txt",
+          "stderr_tail": "e2fsck 1.47.0 (5-Feb-2023)",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_e2fsck.stdout.txt",
+          "stdout_tail": "Pass 1: Checking inodes, blocks, and sizes\nPass 2: Checking directory structure\nPass 3: Checking directory connectivity\nPass 4: Checking reference counts\nPass 5: Checking group summary information\n/dev/mapper/aegisq_x1_6481: 18/32768 files (5.6% non-contiguous), 6176/32768 blocks",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "mount",
+            "-o",
+            "sync",
+            "/dev/mapper/aegisq_x1_6481",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_mount_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_mount_lower.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "chown",
+            "1000:1000",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_chown_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_chown_lower.stdout.txt",
+          "timeout": false
+        }
+      ],
+      "switch_to_error": [
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "suspend",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/fault_error_suspend.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/fault_error_suspend.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "load",
+            "aegisq_x1_6481",
+            "--table",
+            "0 262144 error"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/fault_error_load.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/fault_error_load.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "resume",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/fault_error_resume.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/fault_error_resume.stdout.txt",
+          "timeout": false
+        }
+      ],
+      "verdict": "previous_committed"
+    },
+    {
+      "acceptable": true,
+      "case": "lower_block_error_after_write_before_fsync",
+      "fault_model": "client writes and flushes a mounted file, campaign switches device-mapper to error before fsync returns",
+      "fault_stop": {
+        "daemon_returncode": 8,
+        "label": "fault_prefsync",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/aegisq_x1_block_fault_j7n5feb7/fuse_mount"
+            ],
+            "returncode": 0,
+            "stderr": "artifacts/validation/x1_block_fault_campaign/fault_prefsync_unmount_0.stderr.txt",
+            "stdout": "artifacts/validation/x1_block_fault_campaign/fault_prefsync_unmount_0.stdout.txt",
+            "timeout": false
+          }
+        ]
+      },
+      "fault_write": {
+        "command": [
+          "python3",
+          "-c",
+          "WRITE_CLIENT"
+        ],
+        "returncode": 1,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_write.stderr.txt",
+        "stderr_tail": "{\"operation\": \"write_fsync\", \"error\": \"OSError\", \"errno\": 5, \"message\": \"[Errno 5] Input/output error\"}\nTraceback (most recent call last):\n  File \"<string>\", line 28, in <module>\nOSError: [Errno 5] Input/output error",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_write.stdout.txt",
+        "timeout": false
+      },
+      "fault_write_failed": true,
+      "fault_write_returncode": 1,
+      "prefsync_ready": true,
+      "recovery": {
+        "acceptable": true,
+        "detail": "recovered previous committed payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "\nimport hashlib\nimport json\nimport os\nimport pathlib\nimport sys\n\npath = pathlib.Path(os.environ[\"TARGET_PATH\"])\ntry:\n    data = path.read_bytes()\n    print(json.dumps({\n        \"operation\": \"read_all\",\n        \"bytes\": len(data),\n        \"sha256\": hashlib.sha256(data).hexdigest(),\n    }))\nexcept OSError as exc:\n    print(json.dumps({\n        \"operation\": \"read_all\",\n        \"error\": \"OSError\",\n        \"errno\": exc.errno,\n        \"message\": str(exc),\n    }), file=sys.stderr)\n    raise\n"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/recovery_read.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/recovery_read.stdout.txt",
+          "stdout_json": {
+            "bytes": 4096,
+            "operation": "read_all",
+            "sha256": "128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f"
+          },
+          "stdout_tail": "{\"operation\": \"read_all\", \"bytes\": 4096, \"sha256\": \"128dafa70ed67011dcbaf63d1a22593e6345cfb00c4d05b1272d80a43b2c909f\"}",
+          "timeout": false
+        },
+        "verdict": "previous_committed"
+      },
+      "restore_steps": [
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "umount",
+            "-l",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_umount_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_umount_lower.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "remove",
+            "-f",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_dm_remove.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_dm_remove.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "create",
+            "aegisq_x1_6481",
+            "--table",
+            "0 262144 linear /dev/loop9 0"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_dm_create_linear.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_dm_create_linear.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "e2fsck",
+            "-fy",
+            "/dev/mapper/aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_e2fsck.stderr.txt",
+          "stderr_tail": "e2fsck 1.47.0 (5-Feb-2023)",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_e2fsck.stdout.txt",
+          "stdout_tail": "Pass 1: Checking inodes, blocks, and sizes\nPass 2: Checking directory structure\nPass 3: Checking directory connectivity\nPass 4: Checking reference counts\nPass 5: Checking group summary information\n/dev/mapper/aegisq_x1_6481: 18/32768 files (11.1% non-contiguous), 6177/32768 blocks",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "mount",
+            "-o",
+            "sync",
+            "/dev/mapper/aegisq_x1_6481",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_mount_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_mount_lower.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "chown",
+            "1000:1000",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_chown_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_chown_lower.stdout.txt",
+          "timeout": false
+        }
+      ],
+      "switch_to_error": [
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "suspend",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_error_suspend.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_error_suspend.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "load",
+            "aegisq_x1_6481",
+            "--table",
+            "0 262144 error"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_error_load.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_error_load.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "resume",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_error_resume.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/prefsync_fault_error_resume.stdout.txt",
+          "timeout": false
+        }
+      ],
+      "verdict": "previous_committed"
+    },
+    {
+      "acceptable": true,
+      "case": "lower_block_error_after_successful_fsync",
+      "fault_model": "mounted write and fsync return success, then device-mapper switches to error before recovery",
+      "fault_stop": {
+        "daemon_returncode": -2,
+        "label": "fault_postfsync",
+        "unmount_attempts": [
+          {
+            "command": [
+              "fusermount3",
+              "-uz",
+              "/tmp/aegisq_x1_block_fault_j7n5feb7/fuse_mount"
+            ],
+            "returncode": 0,
+            "stderr": "artifacts/validation/x1_block_fault_campaign/fault_postfsync_unmount_0.stderr.txt",
+            "stdout": "artifacts/validation/x1_block_fault_campaign/fault_postfsync_unmount_0.stdout.txt",
+            "timeout": false
+          }
+        ]
+      },
+      "fault_write_failed": false,
+      "fault_write_returncode": 0,
+      "recovery": {
+        "acceptable": true,
+        "detail": "recovered latest payload",
+        "read": {
+          "command": [
+            "python3",
+            "-c",
+            "\nimport hashlib\nimport json\nimport os\nimport pathlib\nimport sys\n\npath = pathlib.Path(os.environ[\"TARGET_PATH\"])\ntry:\n    data = path.read_bytes()\n    print(json.dumps({\n        \"operation\": \"read_all\",\n        \"bytes\": len(data),\n        \"sha256\": hashlib.sha256(data).hexdigest(),\n    }))\nexcept OSError as exc:\n    print(json.dumps({\n        \"operation\": \"read_all\",\n        \"error\": \"OSError\",\n        \"errno\": exc.errno,\n        \"message\": str(exc),\n    }), file=sys.stderr)\n    raise\n"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/recovery_read.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/recovery_read.stdout.txt",
+          "stdout_json": {
+            "bytes": 4096,
+            "operation": "read_all",
+            "sha256": "6d25bb0bce7a53e2e0a559d641fee4e322999bf3df35832f6f256ecd26ccb42d"
+          },
+          "stdout_tail": "{\"operation\": \"read_all\", \"bytes\": 4096, \"sha256\": \"6d25bb0bce7a53e2e0a559d641fee4e322999bf3df35832f6f256ecd26ccb42d\"}",
+          "timeout": false
+        },
+        "verdict": "latest_committed"
+      },
+      "restore_steps": [
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "umount",
+            "-l",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_umount_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_umount_lower.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "remove",
+            "-f",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_dm_remove.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_dm_remove.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "create",
+            "aegisq_x1_6481",
+            "--table",
+            "0 262144 linear /dev/loop9 0"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_dm_create_linear.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_dm_create_linear.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "e2fsck",
+            "-fy",
+            "/dev/mapper/aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_e2fsck.stderr.txt",
+          "stderr_tail": "e2fsck 1.47.0 (5-Feb-2023)",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_e2fsck.stdout.txt",
+          "stdout_tail": "Pass 1: Checking inodes, blocks, and sizes\nPass 2: Checking directory structure\nPass 3: Checking directory connectivity\nPass 4: Checking reference counts\nPass 5: Checking group summary information\n/dev/mapper/aegisq_x1_6481: 18/32768 files (16.7% non-contiguous), 6179/32768 blocks",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "mount",
+            "-o",
+            "sync",
+            "/dev/mapper/aegisq_x1_6481",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_mount_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_mount_lower.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "chown",
+            "1000:1000",
+            "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/restore_chown_lower.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/restore_chown_lower.stdout.txt",
+          "timeout": false
+        }
+      ],
+      "switch_to_error": [
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "suspend",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/postfsync_fault_error_suspend.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/postfsync_fault_error_suspend.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "load",
+            "aegisq_x1_6481",
+            "--table",
+            "0 262144 error"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/postfsync_fault_error_load.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/postfsync_fault_error_load.stdout.txt",
+          "timeout": false
+        },
+        {
+          "command": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "dmsetup",
+            "resume",
+            "aegisq_x1_6481"
+          ],
+          "returncode": 0,
+          "stderr": "artifacts/validation/x1_block_fault_campaign/postfsync_fault_error_resume.stderr.txt",
+          "stdout": "artifacts/validation/x1_block_fault_campaign/postfsync_fault_error_resume.stdout.txt",
+          "timeout": false
+        }
+      ],
+      "verdict": "latest_committed",
+      "write": {
+        "command": [
+          "python3",
+          "-c",
+          "\nimport hashlib\nimport json\nimport os\nimport pathlib\nimport time\nimport sys\n\npath = pathlib.Path(os.environ[\"TARGET_PATH\"])\npayload = bytes.fromhex(os.environ[\"PAYLOAD_HEX\"])\nmode = os.environ.get(\"OPEN_MODE\", \"r+b\")\npause_file = os.environ.get(\"PAUSE_BEFORE_FSYNC_FILE\")\nrelease_file = os.environ.get(\"RELEASE_FSYNC_FILE\")\ntry:\n    with path.open(mode) as f:\n        f.seek(0)\n        f.write(payload)\n        f.flush()\n        if pause_file and release_file:\n            pathlib.Path(pause_file).write_text(\"ready\\n\", encoding=\"utf-8\")\n            deadline = time.monotonic() + float(os.environ.get(\"PAUSE_TIMEOUT_S\", \"20\"))\n            while time.monotonic() < deadline:\n                if pathlib.Path(release_file).exists():\n                    break\n                time.sleep(0.02)\n            else:\n                raise TimeoutError(\"timed out waiting for fsync release file\")\n        os.fsync(f.fileno())\n    print(json.dumps({\n        \"operation\": \"write_fsync\",\n        \"bytes\": len(payload),\n        \"sha256\": hashlib.sha256(payload).hexdigest(),\n    }))\nexcept OSError as exc:\n    print(json.dumps({\n        \"operation\": \"write_fsync\",\n        \"error\": \"OSError\",\n        \"errno\": exc.errno,\n        \"message\": str(exc),\n    }), file=sys.stderr)\n    raise\n"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/postfsync_write.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/postfsync_write.stdout.txt",
+        "stdout_json": {
+          "bytes": 4096,
+          "operation": "write_fsync",
+          "sha256": "6d25bb0bce7a53e2e0a559d641fee4e322999bf3df35832f6f256ecd26ccb42d"
+        },
+        "stdout_tail": "{\"operation\": \"write_fsync\", \"bytes\": 4096, \"sha256\": \"6d25bb0bce7a53e2e0a559d641fee4e322999bf3df35832f6f256ecd26ccb42d\"}",
+        "timeout": false
+      }
+    }
+  ],
+  "scope": [
+    "Loopback ext4 lower filesystem on a device-mapper target.",
+    "Fault injection switches the lower block device from linear to error and back.",
+    "This is block-device interruption evidence, not physical power-loss, kernel-crash, or drive-cache certification."
+  ],
+  "setup": {
+    "dm_name": "aegisq_x1_6481",
+    "image": "/tmp/aegisq_x1_block_fault_j7n5feb7/lower.img",
+    "loop_dev": "/dev/loop9",
+    "lower_mount": "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount",
+    "mapper": "/dev/mapper/aegisq_x1_6481",
+    "sectors": 262144,
+    "steps": {
+      "chown": {
+        "command": [
+          "sudo",
+          "-S",
+          "-p",
+          "",
+          "chown",
+          "1000:1000",
+          "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/chown_lower.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/chown_lower.stdout.txt",
+        "timeout": false
+      },
+      "dmsetup_create": {
+        "command": [
+          "sudo",
+          "-S",
+          "-p",
+          "",
+          "dmsetup",
+          "create",
+          "aegisq_x1_6481",
+          "--table",
+          "0 262144 linear /dev/loop9 0"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/dmsetup_create.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/dmsetup_create.stdout.txt",
+        "timeout": false
+      },
+      "losetup": {
+        "command": [
+          "sudo",
+          "-S",
+          "-p",
+          "",
+          "losetup",
+          "--find",
+          "--show",
+          "/tmp/aegisq_x1_block_fault_j7n5feb7/lower.img"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/losetup.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/losetup.stdout.txt",
+        "stdout_tail": "/dev/loop9",
+        "timeout": false
+      },
+      "mkfs_ext4": {
+        "command": [
+          "sudo",
+          "-S",
+          "-p",
+          "",
+          "mkfs.ext4",
+          "-F",
+          "-q",
+          "/dev/mapper/aegisq_x1_6481"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/mkfs_ext4.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/mkfs_ext4.stdout.txt",
+        "timeout": false
+      },
+      "mount": {
+        "command": [
+          "sudo",
+          "-S",
+          "-p",
+          "",
+          "mount",
+          "-o",
+          "sync",
+          "/dev/mapper/aegisq_x1_6481",
+          "/tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/mount_lower.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/mount_lower.stdout.txt",
+        "timeout": false
+      },
+      "truncate": {
+        "command": [
+          "truncate",
+          "-s",
+          "128M",
+          "/tmp/aegisq_x1_block_fault_j7n5feb7/lower.img"
+        ],
+        "returncode": 0,
+        "stderr": "artifacts/validation/x1_block_fault_campaign/truncate_image.stderr.txt",
+        "stdout": "artifacts/validation/x1_block_fault_campaign/truncate_image.stdout.txt",
+        "timeout": false
+      }
+    }
+  },
+  "sudo_password_env": "SUDO_PASSWORD"
+}

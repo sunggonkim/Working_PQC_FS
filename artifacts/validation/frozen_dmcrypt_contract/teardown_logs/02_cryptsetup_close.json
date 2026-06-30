@@ -1,0 +1,19 @@
+{
+  "name": "cryptsetup_close",
+  "result": {
+    "argv": [
+      "sudo",
+      "-S",
+      "-p",
+      "",
+      "cryptsetup",
+      "close",
+      "aegisq_dmcrypt_4157957"
+    ],
+    "available": true,
+    "password_supplied": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  }
+}

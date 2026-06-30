@@ -1,0 +1,7 @@
+if(CMAKE_CUDA_COMPILER AND HAS_OQS)
+    if(EXISTS "${EXPERIMENT_CODE_DIR}/workload_map_bench.cpp")
+        add_executable(workload_map_bench ${EXPERIMENT_CODE_DIR}/workload_map_bench.cpp)
+        target_include_directories(workload_map_bench PRIVATE ${PQC_EXPERIMENT_INCLUDE_DIRS})
+        target_link_libraries(workload_map_bench PRIVATE OQS::oqs OpenSSL::Crypto skim_cuda_aead pthread)
+    endif()
+endif()

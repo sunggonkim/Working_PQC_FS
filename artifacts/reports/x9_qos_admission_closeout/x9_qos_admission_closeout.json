@@ -1,0 +1,286 @@
+{
+  "admission_interface": {
+    "cases": [
+      "deadline_elapsed_cpu",
+      "no_slack_cpu",
+      "slack_available_gpu",
+      "stale_slack_cpu"
+    ],
+    "checks": {
+      "audit_overall_pass": true,
+      "deadline_elapsed_cpu": true,
+      "no_slack_cpu": true,
+      "slack_available_gpu": true
+    },
+    "complete": true,
+    "source": "artifacts/validation/admission_interface_audit/admission_interface_audit.json"
+  },
+  "artifact": "x9_qos_admission_closeout",
+  "checklist_guard": {
+    "closeout_artifact_named": true,
+    "complete": true,
+    "source": "SUBMISSION_CHECKLIST.md",
+    "x10_done_or_next": true,
+    "x9_done": true
+  },
+  "checks": {
+    "admission_complete": true,
+    "checklist_complete": true,
+    "comparison_complete": true,
+    "paper_complete": true,
+    "sensitivity_complete": true,
+    "source_constants_complete": true
+  },
+  "comparison": {
+    "checks": {
+      "aegis_improves_p99_vs_unthrottled": true,
+      "aegis_spends_background_vs_unthrottled": true,
+      "kernel_controls_measured": true,
+      "required_hero_modes_present": true,
+      "required_kernel_controls_present": true,
+      "simple_is_lower_latency_lower_background": true
+    },
+    "complete": true,
+    "hero_modes": {
+      "aegis_policy": {
+        "background_mb_s": 3.0160640171203785,
+        "daemon_throttle_rows": 15.0,
+        "deadline_misses": 0.0,
+        "p99_ms": 8.15053043,
+        "policy_throttle_rows": 27.0,
+        "runs": 5
+      },
+      "app_only": {
+        "background_mb_s": 0.0,
+        "daemon_throttle_rows": 0.0,
+        "deadline_misses": 0.0,
+        "p99_ms": 7.253253040000001,
+        "policy_throttle_rows": 0.0,
+        "runs": 5
+      },
+      "simple_controller": {
+        "background_mb_s": 1.4970013728032954,
+        "daemon_throttle_rows": 0.0,
+        "deadline_misses": 0.0,
+        "p99_ms": 7.544277000000001,
+        "policy_throttle_rows": 27.0,
+        "runs": 5
+      },
+      "unthrottled_storage": {
+        "background_mb_s": 6.984360530500289,
+        "daemon_throttle_rows": 0.0,
+        "deadline_misses": 0.0,
+        "p99_ms": 9.62087615,
+        "policy_throttle_rows": 0.0,
+        "runs": 5
+      }
+    },
+    "kernel_controls": {
+      "ionice": {
+        "background_mb_s": 7.248431018854942,
+        "daemon_throttle_rows": null,
+        "deadline_misses": 6.0,
+        "detail": "ionice class 3",
+        "mode": "kernel_ionice_idle",
+        "p99_ms": 16.217910019999998,
+        "policy_throttle_rows": null,
+        "runs": 3
+      },
+      "systemd_io_weight": {
+        "background_mb_s": 6.73069491922091,
+        "daemon_throttle_rows": null,
+        "deadline_misses": 7.0,
+        "detail": "systemd IOWeight=10",
+        "mode": "kernel_systemd_io_weight",
+        "p99_ms": 12.574790109999999,
+        "policy_throttle_rows": null,
+        "runs": 3
+      }
+    },
+    "overall_pass": true,
+    "source": "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json",
+    "tradeoff": {
+      "aegis_vs_simple_background_mb_s": 1.5190626443170832,
+      "aegis_vs_simple_p99_ms": 0.6062534299999989,
+      "aegis_vs_unthrottled_background_mb_s": -3.96829651337991,
+      "aegis_vs_unthrottled_p99_ms": -1.470345720000001
+    }
+  },
+  "overall_pass": true,
+  "paper_guard": {
+    "complete": true,
+    "forbidden_hits": [
+      {
+        "guarded": true,
+        "line": 94,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls.  AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s.  This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress.  Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 with six misses, and \\texttt{IOWeight} reports 12.57~ms p99 with seven misses.  This is bounded storage-visible control, not a uniqueness or non-storage QoS claim."
+      },
+      {
+        "guarded": true,
+        "line": 96,
+        "path": "Paper/4_Evaluation.tex",
+        "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity.  The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms slack freshness, and 0.80 queue threshold.  Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss).  No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips.  This keeps the claim on mounted storage-visible control, not an external application scheduler."
+      }
+    ],
+    "paper_files": [
+      "Paper/10_Discussion_and_Limitations.tex",
+      "Paper/1_Introduction.tex",
+      "Paper/4_Evaluation.tex"
+    ],
+    "required_phrases": {
+      "Pareto point rather than a free throughput improvement": true,
+      "The default storage-pressure controller uses 20~ms telemetry sampling": true,
+      "This keeps the claim on mounted storage-visible control, not an external application scheduler": true,
+      "high threshold disables throttling": true,
+      "two writers is fragile": true
+    },
+    "unguarded_forbidden_hits": []
+  },
+  "scope": "Retained evidence closeout for SQLite storage-visible QoS/admission design space; does not claim external application scheduling or broad workload coverage.",
+  "sensitivity": {
+    "artifact_overall_pass": true,
+    "cases": {
+      "background_128k": {
+        "daemon_throttle_rows": 11,
+        "deadline_misses": 0,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": false,
+        "oscillation_count": 0,
+        "p99_ms": 7.21800878,
+        "policy_throttle_rows": 24,
+        "setting": "128KiB writer chunks",
+        "storage_mb_s": 4.996659874445963,
+        "transition_count": 1
+      },
+      "baseline": {
+        "daemon_throttle_rows": 13,
+        "deadline_misses": 0,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": false,
+        "oscillation_count": 0,
+        "p99_ms": 6.43213547,
+        "policy_throttle_rows": 24,
+        "setting": "10ms budget, 20ms sampling, 0.70/0.60 threshold, qd=1, 64KiB chunks",
+        "storage_mb_s": 3.831630441065111,
+        "transition_count": 1
+      },
+      "high_threshold": {
+        "daemon_throttle_rows": 0,
+        "deadline_misses": 0,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": false,
+        "oscillation_count": 0,
+        "p99_ms": 8.83240947,
+        "policy_throttle_rows": 0,
+        "setting": "0.90/0.80 enter/exit",
+        "storage_mb_s": 7.235668392484242,
+        "transition_count": 0
+      },
+      "hysteresis_wave": {
+        "daemon_throttle_rows": 13,
+        "deadline_misses": 0,
+        "hysteresis_enter_exit": true,
+        "no_throttle_fallback": false,
+        "oscillation_count": 8,
+        "p99_ms": 6.95159837,
+        "policy_throttle_rows": 16,
+        "setting": "0.85:3,0.45:3 pressure wave, hold=2",
+        "storage_mb_s": 3.7539320322184886,
+        "transition_count": 9
+      },
+      "low_pressure_no_throttle": {
+        "daemon_throttle_rows": 0,
+        "deadline_misses": 0,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": true,
+        "oscillation_count": 0,
+        "p99_ms": 7.3720452299999994,
+        "policy_throttle_rows": 0,
+        "setting": "0.30 pressure, 20ms budget",
+        "storage_mb_s": 7.600067360262252,
+        "transition_count": 0
+      },
+      "no_slack_mounted": {
+        "daemon_throttle_rows": 13,
+        "deadline_misses": 40,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": false,
+        "oscillation_count": 0,
+        "p99_ms": 7.59929888,
+        "policy_throttle_rows": 24,
+        "setting": "1ms foreground deadline",
+        "storage_mb_s": 3.6955201448097763,
+        "transition_count": 1
+      },
+      "queue_depth_2": {
+        "daemon_throttle_rows": 27,
+        "deadline_misses": 1,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": false,
+        "oscillation_count": 0,
+        "p99_ms": 12.311358709999997,
+        "policy_throttle_rows": 25,
+        "setting": "2 background writers",
+        "storage_mb_s": 6.4629547229659465,
+        "transition_count": 1
+      },
+      "slow_sampling": {
+        "daemon_throttle_rows": 12,
+        "deadline_misses": 0,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": false,
+        "oscillation_count": 0,
+        "p99_ms": 6.97132998,
+        "policy_throttle_rows": 6,
+        "setting": "80ms telemetry interval",
+        "storage_mb_s": 4.239553106061609,
+        "transition_count": 1
+      },
+      "tight_budget": {
+        "daemon_throttle_rows": 13,
+        "deadline_misses": 1,
+        "hysteresis_enter_exit": false,
+        "no_throttle_fallback": false,
+        "oscillation_count": 0,
+        "p99_ms": 7.78841086,
+        "policy_throttle_rows": 24,
+        "setting": "8ms foreground deadline",
+        "storage_mb_s": 3.7517459397759594,
+        "transition_count": 1
+      }
+    },
+    "checks": {
+      "background_128k_zero_miss": true,
+      "baseline_zero_miss": true,
+      "high_threshold_less_invasive_but_higher_p99": true,
+      "hysteresis_records_transitions": true,
+      "low_pressure_no_throttle_fallback": true,
+      "queue_depth_2_fragile": true,
+      "required_cases_present": true,
+      "slow_sampling_zero_miss": true
+    },
+    "complete": true,
+    "json_source": "artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_analysis.json",
+    "source": "artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_summary.csv"
+  },
+  "source_constants": {
+    "complete": true,
+    "defaults": {
+      "ai_qos_min_budget_ns": 1730000,
+      "deadline_margin_ns": 100000,
+      "gpu_min_batch_bytes": 4096,
+      "producer_slack_stale_ns": 250000000,
+      "qos_enter_util": 0.7,
+      "qos_exit_util": 0.6,
+      "qos_hold_samples": 2,
+      "queue_pressure_threshold": 0.8
+    },
+    "sources": [
+      "code/runtime/pqc_admission.c",
+      "code/runtime/pqc_qos.c"
+    ]
+  },
+  "timestamp_utc": "2026-06-30T13:42:20.955835+00:00",
+  "verdict": "X9 is closed: the paper has enough retained evidence to answer the repeated QoS tradeoff review as a scoped Pareto/admission result, provided it keeps external application scheduling and free-throughput language out of claim scope."
+}

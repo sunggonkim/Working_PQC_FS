@@ -1,0 +1,1135 @@
+{
+  "boundary": "Freshness claims are ordered by evidence: file anchor replay is a negative control; TPM NV evidence supports only retained replay-after-advance fail-closed rows; PCR evidence is transient; the C6 hardware epoch probe is environment-blocked on this machine; persistent PCR-bound policy, sealed-key release, async Merkle TPM epoch freshness, TPM rollback resistance, full replay protection, and full rollback resistance remain non-claims.",
+  "c6_epoch_checks": {
+    "probe_artifact_exists": true,
+    "probe_attempts_hardware_flush": true,
+    "probe_environment_blocked": true,
+    "probe_hardware_epoch_not_committed": true,
+    "probe_overall_pass": true,
+    "probe_reaches_hardware_stage": true,
+    "strong_c6_claims_guarded": true
+  },
+  "c6_epoch_findings": [
+    {
+      "context": "\\begin{table}[t] \\caption{Applicability boundary for the evaluated prototype.} \\label{tab:applicability_boundary} \\begin{tabularx}{\\columnwidth}{P{0.30\\columnwidth}|Y} \\toprule Boundary & Current paper position\\\\ \\midrule Protection domain & Authenticated FUSE backing format for local edge storage; not kernel-encryption replacement\\\\ Trust assumptions & Kernel, driver, FUSE daemon, OpenSSL/liboqs, and mount credential are trusted\\\\ Platform dependencies & Jetson/CUDA/cuPQC evidence plus optional administrator-provisioned TPM NV anchor\\\\ Known loss cases & High-throughput gocryptfs/kernel-native paths and general-purpose encryption remain outside the win case\\\\ Unsupported guarantees & General POSIX, persistent PCR-bound freshness, side-channel protection, portability, and power-loss certification are not claimed\\\\ \\bottomrule \\end{tabularx}",
+      "guarded": true,
+      "line": 34,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "Paper/10_Discussion_and_Limitations.tex",
+      "text": "Unsupported guarantees & General POSIX, persistent PCR-bound freshness, side-channel protection, portability, and power-loss certification are not claimed\\\\"
+    },
+    {
+      "context": "AEGIS-Q explores this gap as a UMA-aware secure-storage runtime.  Its thesis is that secure edge storage should expose one durable authenticated format while separating a CPU-first AES-GCM data plane, an elastic GPU/PQC maintenance lane, and an external-anchor path that can fail closed on replayed state.  The claim ties placement to format invariants, QoS policy, and recovery behavior rather than to a GPU microbenchmark or a general-purpose encrypted-filesystem replacement.  The key design insight is that accelerator placement must be subordinate to storage correctness.  AEGIS-Q never lets the GPU define the persistent record format.  Data records are AES-GCM blocks bound to file identifier, logical block, generation, and plaintext length.  Metadata publication follows a data/journal/checkpoint order.  Optional GPU work either produces format-compatible results or falls back to the CPU path.  Jobs without producer-supplied slack are routed conservatively.  This makes the accelerator an execution choice, not a new security boundary.  This paper makes four contributions. \\begin{enumerate} \\item \\textbf{C1: Placement-safe storage format.}  AEGIS-Q implements authenticated envelopes, generation-bound AEAD, durable mapping publication, and CPU/GPU rules that do not alter the persistent record format. \\item \\textbf{C2: CPU data lane, GPU/PQC maintenance lane.}  Measurements explain why AES-GCM writes stay on the CPU, while independent ML-KEM envelope-refresh batches can enter the GPU lane only with slack and telemetry permission. \\item \\textbf{C3: Recovery and freshness boundary.}  AEGIS-Q separates replayable file witnesses from externally anchored replay-after-advance checks and labels clean-remount, tamper, stale-replay, selected app-crash, and unsupported power-loss outcomes. \\item \\textbf{C4: Storage-visible QoS control.}  AEGIS-Q includes deterministic admission, platform telemetry to mounted-FUSE throttling, and the bounded mounted SQLite result in Figure~\\ref{fig:first_page_qos}. \\end{enumerate}  The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack.  The rest of the paper follows the structure of a systems design argument.  Section~\\ref{sec:background} states the storage and UMA assumptions, Section~\\ref{sec:design} presents the format and placement design, Section~\\ref{sec:design_impl} records implementation choices that determine the boundary, Section~\\ref{sec:security} states the security and recovery model, Section~\\ref{sec:evaluation} evaluates the scoped claims, and Sections~\\ref{sec:discussion}--\\ref{sec:conclusion} discuss implications, related work, and limits.",
+      "guarded": true,
+      "line": 52,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "Paper/1_Introduction.tex",
+      "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack."
+    },
+    {
+      "context": "\\centering \\caption{Formal storage-protocol invariants, implementation loci, exercised paths, and claim boundaries.} \\scriptsize \\setlength{\\tabcolsep}{3pt} \\begin{tabularx}{\\textwidth}{P{0.20\\textwidth}|P{0.27\\textwidth}|P{0.25\\textwidth}|Y} \\toprule \\textbf{Invariant} & \\textbf{Implementation locus} & \\textbf{Exercised path} & \\textbf{Claim boundary}\\\\ \\midrule Envelope authentication before DEK use & \\texttt{metadata\\_load()} verifies the HMAC-protected envelope before \\texttt{pqc\\_open()} installs file state & Clean-remount regression and \\texttt{user.pqc\\_metadata} tamper rejection returning \\texttt{EKEYREJECTED} & Remountable authenticated envelope; no hardware-bound credential release\\\\ AEAD nonce uniqueness & \\texttt{derive\\_block\\_nonce()}, \\texttt{build\\_block\\_aad()}, and \\texttt{do\\_flush\\_wbuf\\_locked()} bind file identifier, block, generation, and length & Generation fault matrix, self-test replay regression, clean-remount validation, and daemon cutpoint matrix & Generation-bound record format; physical power loss and broad workload certification remain open\\\\ Data-before-mapping publication & \\texttt{do\\_flush\\_wbuf\\_locked()} writes \\texttt{.pqcdata}, calls \\texttt{fdatasync}, appends \\texttt{.pqcmeta}, then syncs the journal & Journal self-test, daemon cutpoint matrix, and SQLite selected-boundary campaign & D/J ordering evidence; no physical power-loss or drive-cache certification\\\\ Checkpoint exposure rule & \\texttt{logical\\_size\\_store()}, \\texttt{checkpoint\\_store()}, \\texttt{checkpoint\\_load()}, and remount \\texttt{ctx\\_set()} expose size/checkpoint state only after journal publication & Checkpoint self-test, clean remount, and stale-replay fail-closed artifacts & Authenticated checkpoint exposure; lower-filesystem xattr/directory ordering is delegated\\\\ External-anchor freshness condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retained as a negative control & Replay-after-advance freshness only; no persistent PCR-bound lifecycle claim\\\\ Unsupported-mode boundary & \\texttt{pqc\\_open()} defaults to FUSE \\texttt{direct\\_io}; rename and directory \\texttt{fsync} return \\texttt{ENOTSUP}; internal xattrs are hidden & POSIX scope audit plus current remount/SQLite selected-boundary tests & Ordinary read/write/\\texttt{fsync} and narrow disjoint writers only; shared \\texttt{mmap} and directory-entry durability are not claimed\\\\ Controller safety fallback & \\texttt{pqc\\_block\\_job\\_choose\\_target()} and \\texttt{pqc\\_admit()} default to CPU on missing slack, stale telemetry, size, deadline, or queue-pressure constraints & Scheduler self-test, admission sweeps, and same-run CUPTI/tegrastats-to-mounted-FUSE throttle traces & Implemented conservative fallback; no foreground inference p99 recovery claim\\\\",
+      "guarded": true,
+      "line": 24,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:policy|lifecycle)"
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "External-anchor freshness condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retained as a negative control & Replay-after-advance freshness only; no persistent PCR-bound lifecycle claim\\\\"
+    },
+    {
+      "context": "\\section{Conclusion} \\label{sec:conclusion}  AEGIS-Q treats secure edge storage as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem.  Its authenticated format keeps AES-GCM data writes on the CPU, admits PQC/GPU maintenance only for slack-tolerant batches, and separates replayable file witnesses from externally anchored freshness checks.  On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.  The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful.",
+      "guarded": true,
+      "line": 4,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "Paper/6_Conclusion.tex",
+      "text": "AEGIS-Q treats secure edge storage as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem.  Its authenticated format keeps AES-GCM data writes on the CPU, admits PQC/GPU maintenance only for slack-tolerant batches, and separates replayable file witnesses from externally anchored freshness checks.  On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.  The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+    },
+    {
+      "context": "\\begin{table}[t] \\centering \\caption{Threat classes and mechanism boundaries.} \\scriptsize \\setlength{\\tabcolsep}{3pt} \\begin{tabularx}{\\columnwidth}{P{0.24\\columnwidth}|P{0.30\\columnwidth}|Y} \\toprule \\textbf{Threat} & \\textbf{Mechanism} & \\textbf{Boundary}\\\\ \\midrule Backing-store read & AES-GCM ciphertext with per-file DEK & Assumes mount credential remains secret\\\\ Backing-store tamper & AEAD tags, HMAC envelope, HMAC checkpoint & Denial of service remains possible\\\\ Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\\\ Crash during update & Ordered publication plus selected daemon/app cutpoint tests & Physical power-loss and drive-cache certification remain open\\\\ GPU side channel & No protection mechanism claimed & Integrity parity is not constant-time evidence\\\\",
+      "guarded": true,
+      "line": 22,
+      "matched": [
+        "full\\s+rollback\\s+resistance"
+      ],
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\\\"
+    },
+    {
+      "context": "CI [0.059648, 0.062208].  It records the cold-cache row as invalid because   noninteractive sudo is unavailable for `drop_caches`; fscrypt and dm-crypt   frozen-contract rows remain open. - Mechanism-ablation manifest:   `experiments/build_mechanism_ablation_manifest.py` aggregates already   retained rows under `artifacts/validation/mechanism_ablation_manifest/` and   gates the corresponding paper text.  It attributes the lowerfs-to-AEGIS-Q   frozen-contract gap to the mounted encrypted format as a whole, compares   unthrottled/simple-controller/AEGIS-policy SQLite QoS rows, records the   key-plane CPU-only/GPU-batched/zero-slack fallback modes, and separates   file-backed anchor replay as a negative control from TPM replay-after-advance   fail-closed evidence.  It does not create fscrypt/dm-crypt rows, cold-cache   results, a plaintext-FUSE decomposition, persistent PCR-bound freshness, or   foreground AI/TensorRT recovery. - Workload-diversity matrix:",
+      "guarded": true,
+      "line": 133,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "README.md",
+      "text": "results, a plaintext-FUSE decomposition, persistent PCR-bound freshness, or"
+    },
+    {
+      "context": "`bench_gpu_integrity --only-tests` output under   `artifacts/validation/integrity_scope_audit/`; this supports only   committed-prefix anchor/parity evidence and confirms the paper does not claim   persisted per-file content Merkle protection. - TPM and durability: retained unprovisioned-TPM fail-closed checks, hardware   NV round-trip/provisioning probes, transient PCR-policy probe,   replay-after-advance fail-closed result, SQLite selected-boundary campaign,   SQLite/dbm.dumb stale-snapshot campaigns, and SQLite syscall-exact app-crash   timing.  The policy manifest under   `artifacts/validation/tpm_freshness_policy/` records the intended NV   authorization model, PCR-binding role, index lifecycle, reprovisioning/update,   backup/migration, lost-credential, and fail-closed behavior.  These do not   prove persistent PCR-bound filesystem freshness or full power-loss crash   certification. - PCR anchor decision: `artifacts/validation/pcr_anchor_decision/` records the",
+      "guarded": true,
+      "line": 211,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "README.md",
+      "text": "prove persistent PCR-bound filesystem freshness or full power-loss crash"
+    },
+    {
+      "context": "under `artifacts/reports/first_two_pages_thesis/` has `overall_pass=true`,   `pages=12`, zero violations, 11 source anchors present, 6 compiled-PDF checks   present, positive contributions before defensive scope text, and supporting   paper-spine, hero-result, novelty-isolation, and accepted-structure gates   passing. - Cross-section alignment audit:   `experiments/build_cross_section_alignment_audit.py` checks that the abstract,   introduction, design, evaluation, and conclusion all carry the same rounded   SQLite hero claim and mode boundary.  The retained report under   `artifacts/reports/cross_section_alignment/` has `overall_pass=true`,   `pages=12`, all five section/source anchors present, the hero-result contract   passing, and no unnegated restored claims for direct NVMe-to-UVM DMA,   eBPF/io_uring completion bypass, persistent PCR-bound freshness, power-loss   certification, foreground AI p99 recovery, or portability beyond the tested   stack.",
+      "guarded": true,
+      "line": 313,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "README.md",
+      "text": "eBPF/io_uring completion bypass, persistent PCR-bound freshness, power-loss"
+    },
+    {
+      "context": "\ubb38\uc81c \uc815\uc758:  \uc5e3\uc9c0 \uc7a5\uce58\uc5d0\uc11c\ub294 \uc800\uc7a5 \uc554\ud638\ud654\uac00 AI \ucd94\ub860, \ud30c\uc77c I/O, \uba54\ud0c0\ub370\uc774\ud130 \uac31\uc2e0, \ud06c\ub798\uc2dc \ubcf5\uad6c, \ub864\ubc31 \ubc29\uc9c0\uc640 \ub3d9\uc2dc\uc5d0 \uc2e4\ud589\ub41c\ub2e4. \uadf8\ub7ec\ub098 \uae30\uc874 PQC \ud30c\uc77c\uc2dc\uc2a4\ud15c\uc740 \uc774 \uc804\uccb4 \uacbd\ub85c\ub97c \ub2e8\uc77c\ud55c \uc120\ud615 \ud30c\uc774\ud504\ub77c\uc778\uc73c\ub85c \ubaa8\ub378\ub9c1\ud558\uc5ec, \uc791\uc740 \uc694\uccad\uc5d0\uc11c\ub294 FUSE \uc624\ubc84\ud5e4\ub4dc\uac00 \uc9c0\ubc30\uc801\uc774\uace0, \ud070 \uc694\uccad\uc5d0\uc11c\ub294 GPU \ub3d9\uae30\ud654\uc640 \uba54\ubaa8\ub9ac \uc774\ub3d9\uc774 \uc9c0\ubc30\uc801\uc774\ub2e4. freshness anchor\ub97c \ud30c\uc77c \uae30\ubc18\uc73c\ub85c\ub9cc \ub450\ub294 \uad6c\uc870\ub294 \uc624\ud504\ub77c\uc778 \ub864\ubc31\uc5d0 \ucde8\uc57d\ud558\uace0, TPM\uc744 hot path\uc5d0\uc11c \uc9c1\uc811 \ud638\ucd9c\ud558\ub294 \uad6c\uc870\ub294 \uc131\ub2a5\uc744 \ubd95\uad34\uc2dc\ud0a8\ub2e4.  \ud574\uacb0 \ubc29\ud5a5:  \uccab\uc9f8, CPU\uc640 GPU\ub97c \uace0\uc815 \uc5ed\ud560\ub85c \ub450\uc9c0 \uc54a\uace0 \uc694\uccad \ud06c\uae30\uc640 \uc2dc\uc2a4\ud15c \uc555\ub825\uc5d0 \ub530\ub77c \ub3d9\uc801\uc73c\ub85c \ub77c\uc6b0\ud305\ud558\ub294 \uc815\ucc45 \ud45c\uba74\uc744 \ub454\ub2e4. \ub458\uc9f8, Unified Memory\ub294 \ud3b8\uc758 \uae30\ub2a5\uc774\uc9c0\ub9cc, \ud604\uc7ac \uc81c\ucd9c \uc8fc\uc7a5\uc740 raw pinned-buffer same-buffer proof\uc640 managed storage-buffer diagnostic\uae4c\uc9c0\ub9cc \ud3ec\ud568\ud55c\ub2e4. \uc14b\uc9f8, freshness anchor\ub294 file/hardware backend\uc640 round-trip/provisioning evidence\ub97c \ubcf4\uc874\ud558\uc9c0\ub9cc persistent filesystem anchor\uc758 PCR sealing\uc740 \uc544\uc9c1 claim\ud558\uc9c0 \uc54a\ub294\ub2e4. \ub137\uc9f8, app recovery\ub294 daemon SIGKILL cutpoint matrix, SQLite selected-boundary, SQLite/dbm.dumb stale-snapshot, SQLite syscall-exact app-crash timing\uae4c\uc9c0 \ubcf4\uc874\ud558\uc9c0\ub9cc physical power-loss/kernel-crash certification\uc740 \uc544\ub2c8\ub2e4.  \uae30\uc5ec\uc810:  - \uc5e3\uc9c0 PQC \uc800\uc7a5\uc18c\uc5d0\uc11c CPU/GPU \ub3d9\uc801 \ub77c\uc6b0\ud305\uc774 \ud544\uc694\ud55c \uc774\uc720\ub97c \uc2e4\ud5d8\uc801\uc73c\ub85c \ud3c9\uac00 - Unified Memory \uae30\ubc18 \ubc30\uce58 \uc2a4\ud14c\uc774\uc9d5\uacfc pressure-aware scheduling\uc758 prototype path\ub97c \ud3c9\uac00\ud558\ub418, migration-suppression\uc774\ub098 final storage-DMA\ub294 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\uc74c - freshness anchor\uc758 file/hardware backend\uc640 provisioning state\ub97c \ud3c9\uac00\ud558\ub418, PCR-bound rollback resistance\ub294 \uc544\uc9c1 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\uc74c - \uc2e4\uc81c \uc6cc\ud06c\ub85c\ub4dc \uae30\uc900\uc73c\ub85c plaintext, CPU-only, GPU-only, \ud604\uc7ac AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage\uc744 \ube44\uad50\ud574 \uc124\uacc4 \ud0c0\ub2f9\uc131\uc744 \ud3c9\uac00",
+      "guarded": true,
+      "line": 718,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "README.md",
+      "text": "- freshness anchor\uc758 file/hardware backend\uc640 provisioning state\ub97c \ud3c9\uac00\ud558\ub418, PCR-bound rollback resistance\ub294 \uc544\uc9c1 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\uc74c"
+    },
+    {
+      "context": "| crash recovery | \uae30\uc874 FS semantics \uc758\uc874 \uac00\ub2a5 | dedicated journal | | placement | \uc5c6\uc74c | CPU/GPU common block job + scheduler | | edge AI awareness | \uc5c6\uc74c | inference contention / coherence proxy \uace0\ub824 | | policy control | coarse knobs | xattr + runtime policy |  ### \ucc28\ubcc4\uc810\uc758 \ud575\uc2ec  AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage\uc740 \u201cPQC-backed secure storage runtime\u201d\uc774 \uc544\ub2c8\ub77c, \u201c\uc5e3\uc9c0 CPU/GPU contention \uc544\ub798\uc5d0\uc11c\ub3c4 \uc800\uc7a5 \ubb34\uacb0\uc131, \ubcf5\uad6c\uc131, \uadf8\ub9ac\uace0 placement \uc815\ucc45\uc744 \ud568\uaed8 \uc720\uc9c0\ud558\ub294 secure storage runtime\u201d\uc774\ub2e4.  \uc774 \ucc28\ubcc4\uc810\uc740 \uc131\ub2a5 \uc22b\uc790\ub9cc\uc73c\ub85c \ub9cc\ub4e4 \uc218 \uc5c6\uace0, \uba3c\uc800 storage format, journal, block job, scheduler\uc758 \uacf5\ud1b5 \uacc4\uc57d\uc744 \ub9de\ucdb0\uc57c\ub9cc \uc758\ubbf8\uac00 \uc0dd\uae34\ub2e4.  \ud604\uc7ac \uad6c\ud604\uc758 rollback \uad00\ub828 \uc99d\uac70\ub294 local checkpoint witness \uae30\ubc18 tamper evidence, file-backed replay negative control, TPM unprovisioned fail-closed, TPM NV round-trip/provisioning artifacts, replay-after-advance fail-closed \uacb0\uacfc, \uadf8\ub9ac\uace0 selected daemon SIGKILL cutpoint matrix\uae4c\uc9c0\ub2e4. anchor\ub294 mount \uc2dc \ubc31\uadf8\ub77c\uc6b4\ub4dc worker\ub85c lazy commit\ub418\uba70, fsync/destroy \uc2dc \uac15\uc81c\ub85c \ube44\uc6cc\uc9c4\ub2e4. hardware backend\ub294 TPM NV index\ub97c \uc0ac\uc6a9\ud558\uba70, \ub77c\uc774\ube0c\ub7ec\ub9ac\ub098 TPM device\uac00 \uc5c6\uc73c\uba74 \uba85\uc2dc\uc801\uc73c\ub85c `-ENOTSUP` \ub610\ub294 I/O \uc624\ub958\ub85c \ub5a8\uc5b4\uc9c4\ub2e4. \uc774 \uc800\uc7a5\uc18c\ub294 \ud604\uc7ac provisioned TPM NV index\uc5d0\uc11c stale snapshot replay\uac00 fail-closed \ub418\ub294 \uac83\uc744 \ubcf4\uc874\ud558\uc9c0\ub9cc, offline rollback resistance\ub97c \uc644\uc804 \ubcf4\uc7a5\ud55c\ub2e4\uace0 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4. \ub354 \uac15\ud55c \uc8fc\uc7a5\uc740 persistent PCR policy, physical power-loss/kernel-crash evidence, drive-cache behavior, and/or another protected freshness backend\uae4c\uc9c0 \ubcc4\ub3c4\ub85c \uac80\uc99d\ud574\uc57c \ud55c\ub2e4.  `scheduler_smoke`\ub3c4 \uc774\uc81c pressure path\ub97c \ud3ec\ud568\ud55c\ub2e4. \uc989, \uc791\uc740 \uc694\uccad\uc740 CPU\ub85c, \ud070 \uc694\uccad\uc740 GPU\ub85c, \uadf8\ub9ac\uace0 GPU wait budget\uc744 \ucd08\uacfc\ud558\ub294 \ud070 \uc694\uccad\uc740 \ub2e4\uc2dc CPU\ub85c \ub5a8\uc5b4\uc9c0\ub294 \ub3d9\uc791\uc744 \uc9c1\uc811 \ub85c\uadf8\ub85c \ud655\uc778\ud560 \uc218 \uc788\ub2e4.",
+      "guarded": true,
+      "line": 1135,
+      "matched": [
+        "offline\\s+rollback\\s+resistance"
+      ],
+      "path": "README.md",
+      "text": "\ud604\uc7ac \uad6c\ud604\uc758 rollback \uad00\ub828 \uc99d\uac70\ub294 local checkpoint witness \uae30\ubc18 tamper evidence, file-backed replay negative control, TPM unprovisioned fail-closed, TPM NV round-trip/provisioning artifacts, replay-after-advance fail-closed \uacb0\uacfc, \uadf8\ub9ac\uace0 selected daemon SIGKILL cutpoint matrix\uae4c\uc9c0\ub2e4. anchor\ub294 mount \uc2dc \ubc31\uadf8\ub77c\uc6b4\ub4dc worker\ub85c lazy commit\ub418\uba70, fsync/destroy \uc2dc \uac15\uc81c\ub85c \ube44\uc6cc\uc9c4\ub2e4. hardware backend\ub294 TPM NV index\ub97c \uc0ac\uc6a9\ud558\uba70, \ub77c\uc774\ube0c\ub7ec\ub9ac\ub098 TPM device\uac00 \uc5c6\uc73c\uba74 \uba85\uc2dc\uc801\uc73c\ub85c `-ENOTSUP` \ub610\ub294 I/O \uc624\ub958\ub85c \ub5a8\uc5b4\uc9c4\ub2e4. \uc774 \uc800\uc7a5\uc18c\ub294 \ud604\uc7ac provisioned TPM NV index\uc5d0\uc11c stale snapshot replay\uac00 fail-closed \ub418\ub294 \uac83\uc744 \ubcf4\uc874\ud558\uc9c0\ub9cc, offline rollback resistance\ub97c \uc644\uc804 \ubcf4\uc7a5\ud55c\ub2e4\uace0 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4. \ub354 \uac15\ud55c \uc8fc\uc7a5\uc740 persistent PCR policy, physical power-loss/kernel-crash evidence, drive-cache behavior, and/or another protected freshness backend\uae4c\uc9c0 \ubcc4\ub3c4\ub85c \uac80\uc99d\ud574\uc57c \ud55c\ub2e4."
+    },
+    {
+      "context": "- `artifacts/validation/qos_sqlite_hero_bundle/`: synchronized four-mode SQLite/FUSE QoS recovery bundle; it retains foreground SQLite latency logs, background secure-writer logs, workload-pressure telemetry samples, policy traces, mounted-FUSE logs, the AEGIS in-daemon throttle trace, `qos_recovery_table.csv`, `qos_recovery_table.tex`, and the generated paper table.  The retained result reports AEGIS-Q at 8.8 ms foreground SQLite p99, zero deadline misses, and 2.7 MB/s background throughput versus the unthrottled 13.8 ms p99 / one-miss case and the simple-controller 8.2 ms p99 / 2.3 MB/s tradeoff; it is not AI/TensorRT recovery. - `artifacts/validation/qos_sqlite_hero_methodology/`: methodology-strengthened SQLite/FUSE QoS bundle with one full-workload warmup, five measured repetitions, bootstrap CI fields, platform/clock/process metadata, and a 250-line thermal log.  It records component coverage in every repetition but unstable recovery gates, so it is not a statistical QoS headline. - `artifacts/validation/qos_sensitivity_analysis/`: mounted SQLite AEGIS-Q policy sensitivity bundle; it retains per-case foreground/background/telemetry/policy/FUSE/throttle logs, `qos_sensitivity_summary.csv`, and `qos_sensitivity_analysis.json` with `overall_pass=true` for budget, sampling interval, controller threshold, queue-depth, and background-intensity variables.  The retained stability checks include low-pressure no-throttle fallback, mounted zero-budget rows, final-binary no-slack CPU fallback, and a hysteresis pressure wave with 9 transitions / 8 flips. - `artifacts/results/motivation/uvm_proxy_report/`: managed-memory smoke and semantic-gap proxy report - `artifacts/reports/crash_audit_report/`: conservative map of the retained crash/recovery evidence and remaining physical power-loss/kernel-crash gap - `artifacts/reports/platform_inventory_report/`: conservative map of the retained Thor platform evidence and the missing second hardware / driver matrix - `artifacts/validation/tpm_only_bundle/` and `artifacts/validation/combined_durability_bundle/`: TPM-only and combined durability bundles; the combined bundle now includes same-backing-store SQLite+TPM and dbm.dumb+TPM replay-after-advance campaigns where baseline row count 1 advances to row count 3 and stale snapshot replay fails closed for both workloads - `artifacts/validation/tpm_freshness_policy/`: policy-definition manifest for   TPM freshness.  It gates the paper text for owner-authorized NV use,   transient rather than persistent PCR binding, external index lifecycle,   reprovisioning/software-update handling, backup/migration bootstrap,   unrecoverable lost mount credentials, and fail-closed error behavior.  It is   not a persistent PCR-bound freshness proof or a deployed credential service. - `artifacts/validation/pcr_anchor_decision/`: decision manifest stating that   the persistent filesystem anchor is not PCR-bound in this revision; it gates",
+      "guarded": true,
+      "line": 1318,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "README.md",
+      "text": "not a persistent PCR-bound freshness proof or a deployed credential service."
+    },
+    {
+      "context": "- `artifacts/validation/qos_sensitivity_analysis/`: mounted SQLite AEGIS-Q policy sensitivity bundle; it retains per-case foreground/background/telemetry/policy/FUSE/throttle logs, `qos_sensitivity_summary.csv`, and `qos_sensitivity_analysis.json` with `overall_pass=true` for budget, sampling interval, controller threshold, queue-depth, and background-intensity variables.  The retained stability checks include low-pressure no-throttle fallback, mounted zero-budget rows, final-binary no-slack CPU fallback, and a hysteresis pressure wave with 9 transitions / 8 flips. - `artifacts/results/motivation/uvm_proxy_report/`: managed-memory smoke and semantic-gap proxy report - `artifacts/reports/crash_audit_report/`: conservative map of the retained crash/recovery evidence and remaining physical power-loss/kernel-crash gap - `artifacts/reports/platform_inventory_report/`: conservative map of the retained Thor platform evidence and the missing second hardware / driver matrix - `artifacts/validation/tpm_only_bundle/` and `artifacts/validation/combined_durability_bundle/`: TPM-only and combined durability bundles; the combined bundle now includes same-backing-store SQLite+TPM and dbm.dumb+TPM replay-after-advance campaigns where baseline row count 1 advances to row count 3 and stale snapshot replay fails closed for both workloads - `artifacts/validation/tpm_freshness_policy/`: policy-definition manifest for   TPM freshness.  It gates the paper text for owner-authorized NV use,   transient rather than persistent PCR binding, external index lifecycle,   reprovisioning/software-update handling, backup/migration bootstrap,   unrecoverable lost mount credentials, and fail-closed error behavior.  It is   not a persistent PCR-bound freshness proof or a deployed credential service. - `artifacts/validation/pcr_anchor_decision/`: decision manifest stating that   the persistent filesystem anchor is not PCR-bound in this revision; it gates   `pqc_anchor.c`, the transient PCR-policy probe, the TPM policy manifest, and   main-paper PCR wording so persistent PCR-bound freshness remains a non-claim",
+      "guarded": true,
+      "line": 1320,
+      "matched": [
+        "persistent\\s+filesystem\\s+anchor.{0,80}PCR[- ]bound"
+      ],
+      "path": "README.md",
+      "text": "the persistent filesystem anchor is not PCR-bound in this revision; it gates"
+    },
+    {
+      "context": "- `artifacts/reports/crash_audit_report/`: conservative map of the retained crash/recovery evidence and remaining physical power-loss/kernel-crash gap - `artifacts/reports/platform_inventory_report/`: conservative map of the retained Thor platform evidence and the missing second hardware / driver matrix - `artifacts/validation/tpm_only_bundle/` and `artifacts/validation/combined_durability_bundle/`: TPM-only and combined durability bundles; the combined bundle now includes same-backing-store SQLite+TPM and dbm.dumb+TPM replay-after-advance campaigns where baseline row count 1 advances to row count 3 and stale snapshot replay fails closed for both workloads - `artifacts/validation/tpm_freshness_policy/`: policy-definition manifest for   TPM freshness.  It gates the paper text for owner-authorized NV use,   transient rather than persistent PCR binding, external index lifecycle,   reprovisioning/software-update handling, backup/migration bootstrap,   unrecoverable lost mount credentials, and fail-closed error behavior.  It is   not a persistent PCR-bound freshness proof or a deployed credential service. - `artifacts/validation/pcr_anchor_decision/`: decision manifest stating that   the persistent filesystem anchor is not PCR-bound in this revision; it gates   `pqc_anchor.c`, the transient PCR-policy probe, the TPM policy manifest, and   main-paper PCR wording so persistent PCR-bound freshness remains a non-claim - `artifacts/validation/hardware_freshness_recovery_matrix/`: seven-case   hardware-freshness recovery matrix with raw artifacts and oracle verdicts for",
+      "guarded": true,
+      "line": 1322,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "README.md",
+      "text": "main-paper PCR wording so persistent PCR-bound freshness remains a non-claim"
+    },
+    {
+      "context": "- Reader-visible generation state advances only after publication dispatch returns successfully.  ## Known Losses  - Sequential epoch-redo-log mode does not improve total sync count because each write still has one data fdatasync and one epoch-log barrier. - Grouped epoch-redo-log reduces traced sync count in the retained concurrent workload, but the retained run does not show a throughput win. - The grouped barrier uses syncfs, which can be broader and more expensive than per-file fdatasync.  ## Non-Claims  - No direct NVMe-to-UVM, GPUDirect/RDMA, dma-buf zero-copy, eBPF/io_uring bypass, or kernel-bypass publication path is claimed. - No physical power-loss certification or full crash certification is claimed. - No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate. - No general-purpose POSIX filesystem support or ready-for-deployment wording is supported by this closeout.",
+      "guarded": true,
+      "line": 77,
+      "matched": [
+        "TPM\\s+rollback\\s+resistance",
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "docs/architecture/publication_protocol.md",
+      "text": "- No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate."
+    },
+    {
+      "context": ".status = PQC_TRUST_STATUS_EXTERNAL_TCB,         .name = \"backing-storage\",         .trusted_component = \"local lower filesystem and configured anchor backend\",         .implemented_boundary =             \"ciphertext/tag verification and committed-prefix anchor checks for \"             \"the stated daemon/crash model\",         .excluded_attacker =             \"administrator that can roll back the complete lower storage root and \"             \"all file-backed anchors without a hardware freshness source\",         .failure_boundary =             \"file-backed anchors are replayable; TPM-backed freshness depends on provisioning\",         .non_claim_guard =             \"must not claim full rollback resistance from file-backed anchors\",         .claims_defense = 1,         .deployment_ready = 0,",
+      "guarded": true,
+      "line": 58,
+      "matched": [
+        "full\\s+rollback\\s+resistance"
+      ],
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim full rollback resistance from file-backed anchors\","
+    },
+    {
+      "context": "],             \"paper_guard\": \"Keep journal/checkpoint wording tied to D/J/C publication evidence.\",         },         {             \"overhead\": \"freshness anchor refresh\",             \"classification\": \"measured\",             \"evidence\": [                 f\"freshness_anchor_events={plane.get('freshness_anchor_events', 0)}\",                 f\"freshness_anchor_successes={plane.get('freshness_anchor_successes', 0)}\",                 f\"freshness_anchor_file_backend={plane.get('freshness_anchor_file_backend', 0)}\",                 f\"freshness_anchor_hardware_backend={plane.get('freshness_anchor_hardware_backend', 0)}\",             ],             \"paper_guard\": \"Do not upgrade file-backed or replay-after-advance evidence to PCR-bound rollback resistance.\",         },         {",
+      "guarded": true,
+      "line": 176,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_a4_hidden_overhead_closeout.py",
+      "text": "\"paper_guard\": \"Do not upgrade file-backed or replay-after-advance evidence to PCR-bound rollback resistance.\","
+    },
+    {
+      "context": "\"security-recovery-claim\",             (                 \"TPM\", \"PCR\", \"NV\", \"0x01500010\", \"replay-after-advance\",                 \"rollback visible\", \"four of four\", \"File-anchor replay visible\",                 \"File-backed witness is a negative control\", \"External freshness state\",             ),             (                 \"artifacts/validation/freshness_ladder_claim_guard/freshness_ladder_claim_guard.json\",                 \"artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json\",                 \"artifacts/validation/pcr_anchor_decision/pcr_anchor_decision.json\",                 \"artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.json\",             ),             \"Replay-after-advance and file-anchor negative control; no persistent PCR-bound rollback resistance.\",         ),         EvidenceRule(",
+      "guarded": true,
+      "line": 189,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_final_claim_evidence_manifest.py",
+      "text": "\"Replay-after-advance and file-anchor negative control; no persistent PCR-bound rollback resistance.\","
+    },
+    {
+      "context": "\"batching_boundary_closed\":             artifact_pass(a3)             and a3.get(\"derived\", {}).get(\"grouped_sync_reduced_current\") is True             and a3.get(\"derived\", {}).get(\"grouped_has_win_and_loss\") is True,         \"hidden_overhead_closed\": artifact_pass(a4),         \"fdatasync_storm_closed\": artifact_pass(a5),         \"async_merkle_tpm_nonclaim_guarded\":             artifact_pass(tpm)             and tpm.get(\"hardware_epoch_committed\") is False             and tpm.get(\"environment_blocked\") is True             and artifact_pass(dangerous)             and artifact_pass(firewall)             and \"persistent pcr-bound freshness\" in lower_paper             and \"does not claim\" in lower_paper,         \"final_manifest_still_passes\": artifact_pass(manifest),",
+      "guarded": true,
+      "line": 117,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_final_s2_closeout.py",
+      "text": "and \"persistent pcr-bound freshness\" in lower_paper"
+    },
+    {
+      "context": "},         \"closed_checklist_candidates\": [             \"Gate 0.4 Source Ownership and Module Decomposition\",             \"Gate 0.14 Mechanical Decomposition Gate\",             \"Gate 0.15 Fine-Grained Concurrency and Lock Contract\",             \"Gate A1 AEGIS-Q Frozen-Contract Throughput\",             \"Gate A3 Batching or Redesign Evidence\",             \"Gate A4 Hidden Overhead Accounting\",             \"Gate A5 VFS/eBPF Passthrough and fdatasync Storm\",             \"Final: Gate 0 is closed before any SOSP/OSDI readiness claim\",             \"Final: AEGIS-Q throughput bottleneck breakdown exists and is reflected in the paper\",             \"Final: Fine-grained lock contract exists with measured lock hold-time and deadlock/livelock stress evidence\",             \"Final: Async Merkle + TPM epoch freshness exists before rollback-resistance claims\",         ] if final_s2_closed else [],         \"non_claim_boundary\": (",
+      "guarded": true,
+      "line": 165,
+      "matched": [
+        "TPM\\s+epoch\\s+freshness"
+      ],
+      "path": "code/experiments/build_final_s2_closeout.py",
+      "text": "\"Final: Async Merkle + TPM epoch freshness exists before rollback-resistance claims\","
+    },
+    {
+      "context": "\"Gate 0.14 Mechanical Decomposition Gate\",             \"Gate 0.15 Fine-Grained Concurrency and Lock Contract\",             \"Gate A1 AEGIS-Q Frozen-Contract Throughput\",             \"Gate A3 Batching or Redesign Evidence\",             \"Gate A4 Hidden Overhead Accounting\",             \"Gate A5 VFS/eBPF Passthrough and fdatasync Storm\",             \"Final: Gate 0 is closed before any SOSP/OSDI readiness claim\",             \"Final: AEGIS-Q throughput bottleneck breakdown exists and is reflected in the paper\",             \"Final: Fine-grained lock contract exists with measured lock hold-time and deadlock/livelock stress evidence\",             \"Final: Async Merkle + TPM epoch freshness exists before rollback-resistance claims\",         ] if final_s2_closed else [],         \"non_claim_boundary\": (             \"C6 production async Merkle + persistent PCR-bound TPM epoch freshness \"             \"is not implemented in this environment; the final condition is closed \"             \"only as a guarded non-claim because the paper forbids rollback-resistance \"",
+      "guarded": true,
+      "line": 168,
+      "matched": [
+        "TPM\\s+epoch\\s+freshness"
+      ],
+      "path": "code/experiments/build_final_s2_closeout.py",
+      "text": "\"C6 production async Merkle + persistent PCR-bound TPM epoch freshness \""
+    },
+    {
+      "context": "\"Gate A3 Batching or Redesign Evidence\",             \"Gate A4 Hidden Overhead Accounting\",             \"Gate A5 VFS/eBPF Passthrough and fdatasync Storm\",             \"Final: Gate 0 is closed before any SOSP/OSDI readiness claim\",             \"Final: AEGIS-Q throughput bottleneck breakdown exists and is reflected in the paper\",             \"Final: Fine-grained lock contract exists with measured lock hold-time and deadlock/livelock stress evidence\",             \"Final: Async Merkle + TPM epoch freshness exists before rollback-resistance claims\",         ] if final_s2_closed else [],         \"non_claim_boundary\": (             \"C6 production async Merkle + persistent PCR-bound TPM epoch freshness \"             \"is not implemented in this environment; the final condition is closed \"             \"only as a guarded non-claim because the paper forbids rollback-resistance \"             \"and persistent PCR-bound freshness wording.\"         ),     }",
+      "guarded": true,
+      "line": 171,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_final_s2_closeout.py",
+      "text": "\"and persistent PCR-bound freshness wording.\""
+    },
+    {
+      "context": "all(row.get(\"pass\") is True for row in hw_rows) and         all(artifact_paths_exist(row.get(\"raw_artifacts\", [])) for row in hw_rows)     )     pcr_transient_ok = (         pcr_results.get(\"good_unseal_rc\") == 0 and         pcr_results.get(\"good_unseal_matches_secret\") is True and         pcr_results.get(\"drift_rejected\") is True and         \"Transient PCR policy probe only\" in pcr.get(\"note\", \"\")     )     persistent_pcr_nonclaim_ok = (         pcr_decision.get(\"overall_pass\") is True and         pcr_decision.get(\"decision\") == \"no_persistent_pcr_bound_filesystem_anchor_in_this_revision\" and         \"no persistent PCR-bound filesystem freshness\" in pcr_decision.get(\"non_claims\", [])     )     sealed_key_nonclaim_ok = (",
+      "guarded": true,
+      "line": 349,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"no persistent PCR-bound filesystem freshness\" in pcr_decision.get(\"non_claims\", [])"
+    },
+    {
+      "context": "((tpm_epoch_probe.get(\"trace_summary\") or {}).get(             \"hardware_pending_observed\"         ) is True) and         ((tpm_epoch_probe.get(\"trace_summary\") or {}).get(             \"hardware_flush_attempted\"         ) is True)     )     async_merkle_nonclaim_ok = (         (async_merkle is None or async_merkle.get(\"overall_pass\") is True) and         tpm_epoch_probe_ok     )     full_rollback_nonclaim_ok = (         \"full rollback resistance is not claimed\" in paper_text() and         \"offline rollback resistance\ub97c \uc644\uc804 \ubcf4\uc7a5\ud55c\ub2e4\uace0 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4\" in paper_text()     )",
+      "guarded": true,
+      "line": 373,
+      "matched": [
+        "full\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"full rollback resistance is not claimed\" in paper_text() and"
+    },
+    {
+      "context": "\"hardware_pending_observed\"         ) is True) and         ((tpm_epoch_probe.get(\"trace_summary\") or {}).get(             \"hardware_flush_attempted\"         ) is True)     )     async_merkle_nonclaim_ok = (         (async_merkle is None or async_merkle.get(\"overall_pass\") is True) and         tpm_epoch_probe_ok     )     full_rollback_nonclaim_ok = (         \"full rollback resistance is not claimed\" in paper_text() and         \"offline rollback resistance\ub97c \uc644\uc804 \ubcf4\uc7a5\ud55c\ub2e4\uace0 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4\" in paper_text()     )     app_replay_ok = (",
+      "guarded": true,
+      "line": 374,
+      "matched": [
+        "offline\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"offline rollback resistance\ub97c \uc644\uc804 \ubcf4\uc7a5\ud55c\ub2e4\uace0 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4\" in paper_text()"
+    },
+    {
+      "context": "ladder = [         {             \"level\": \"L0_file_anchor_negative_control\",             \"supported\": file_anchor_ok,             \"allowed_claim\": \"file-backed witness is replayable; stale directory snapshot remains visible\",             \"forbidden_upgrade\": \"rollback resistance\",             \"evidence\": [relpath(FILE_REPLAY)],         },         {             \"level\": \"L1_tpm_nv_replay_after_advance\",             \"supported\": tpm_nv_ok and app_replay_ok,             \"allowed_claim\": \"pre-provisioned TPM NV replay-after-advance can fail closed under retained rows\",             \"forbidden_upgrade\": \"persistent PCR-bound freshness or full rollback resistance\",             \"evidence\": [relpath(TPM_PROVISION), relpath(TPM_REPLAY),                          relpath(HW_MATRIX), relpath(COMBINED)],",
+      "guarded": true,
+      "line": 395,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness",
+        "full\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"forbidden_upgrade\": \"persistent PCR-bound freshness or full rollback resistance\","
+    },
+    {
+      "context": "},         {             \"level\": \"L2_transient_pcr_policy_probe\",             \"supported\": pcr_transient_ok,             \"allowed_claim\": \"transient PCR-policy seal/unseal probe rejects drift\",             \"forbidden_upgrade\": \"persistent filesystem PCR policy\",             \"evidence\": [relpath(TPM_PCR)],         },         {             \"level\": \"L3_persistent_pcr_bound_policy\",             \"supported\": False,             \"allowed_claim\": \"non-claim only in this revision\",             \"forbidden_upgrade\": \"persistent PCR-bound freshness\",             \"nonclaim_guarded\": persistent_pcr_nonclaim_ok,             \"evidence\": [relpath(PCR_DECISION), relpath(TPM_POLICY)],",
+      "guarded": true,
+      "line": 410,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"forbidden_upgrade\": \"persistent PCR-bound freshness\","
+    },
+    {
+      "context": "\"allowed_claim\": \"non-claim only in this revision\",             \"forbidden_upgrade\": \"hardware-backed credential release or sealed-key release\",             \"nonclaim_guarded\": sealed_key_nonclaim_ok,             \"evidence\": [relpath(TPM_POLICY)],         },         {             \"level\": \"L5_async_merkle_tpm_epoch_freshness\",             \"supported\": False,             \"allowed_claim\": (                 \"non-claim only while the bounded hardware epoch probe is \"                 \"environment-blocked and no TPM epoch is committed\"             ),             \"forbidden_upgrade\": \"async Merkle + TPM epoch freshness\",             \"nonclaim_guarded\": async_merkle_nonclaim_ok,             \"evidence\": [relpath(TPM_EPOCH_PROBE)] +",
+      "guarded": true,
+      "line": 429,
+      "matched": [
+        "TPM\\s+epoch\\s+freshness"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"forbidden_upgrade\": \"async Merkle + TPM epoch freshness\","
+    },
+    {
+      "context": "\"non-claim only while the bounded hardware epoch probe is \"                 \"environment-blocked and no TPM epoch is committed\"             ),             \"forbidden_upgrade\": \"async Merkle + TPM epoch freshness\",             \"nonclaim_guarded\": async_merkle_nonclaim_ok,             \"evidence\": [relpath(TPM_EPOCH_PROBE)] +             ([relpath(ASYNC_MERKLE)] if async_merkle else []),         },         {             \"level\": \"L6_full_rollback_resistance\",             \"supported\": False,             \"allowed_claim\": \"non-claim only in this revision\",             \"forbidden_upgrade\": \"full/offline rollback resistance\",             \"nonclaim_guarded\": full_rollback_nonclaim_ok,             \"evidence\": [relpath(HW_MATRIX), relpath(PCR_DECISION)],",
+      "guarded": true,
+      "line": 438,
+      "matched": [
+        "offline\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"forbidden_upgrade\": \"full/offline rollback resistance\","
+    },
+    {
+      "context": "\"sealed-key\",             )         ),     }   def build_paper_checks() -> dict[str, bool]:     text = paper_text()     required = {         \"file_anchor_negative_control\": \"file-backed anchor produces the deliberately negative result\" in text,         \"tpm_replay_after_advance_scope\": \"This is replay-after-advance evidence\" in text,         \"pcr_transient_scope\": \"PCR binding is a transient probe rather than a persistent filesystem policy\" in text,         \"persistent_pcr_nonclaim\": \"persistent PCR-bound freshness\" in text and \"does not claim\" in text,         \"full_rollback_nonclaim\": \"full rollback resistance is not claimed\" in text,         \"credential_release_nonclaim\": \"no hardware-backed credential release\" in text,",
+      "guarded": true,
+      "line": 506,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"persistent_pcr_nonclaim\": \"persistent PCR-bound freshness\" in text and \"does not claim\" in text,"
+    },
+    {
+      "context": ")         ),     }   def build_paper_checks() -> dict[str, bool]:     text = paper_text()     required = {         \"file_anchor_negative_control\": \"file-backed anchor produces the deliberately negative result\" in text,         \"tpm_replay_after_advance_scope\": \"This is replay-after-advance evidence\" in text,         \"pcr_transient_scope\": \"PCR binding is a transient probe rather than a persistent filesystem policy\" in text,         \"persistent_pcr_nonclaim\": \"persistent PCR-bound freshness\" in text and \"does not claim\" in text,         \"full_rollback_nonclaim\": \"full rollback resistance is not claimed\" in text,         \"credential_release_nonclaim\": \"no hardware-backed credential release\" in text,         \"async_merkle_not_claimed\": \"async Merkle\" not in \"\\n\".join(",
+      "guarded": true,
+      "line": 507,
+      "matched": [
+        "full\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"full_rollback_nonclaim\": \"full rollback resistance is not claimed\" in text,"
+    },
+    {
+      "context": "all(supported_required.values()) and             all(c6_epoch_checks.values()) and             all(source_checks.values()) and             all(paper_checks.values()) and             not unguarded and             not c6_unguarded         ),         \"boundary\": (             \"Freshness claims are ordered by evidence: file anchor replay is a \"             \"negative control; TPM NV evidence supports only retained \"             \"replay-after-advance fail-closed rows; PCR evidence is transient; \"             \"the C6 hardware epoch probe is environment-blocked on this machine; \"             \"persistent PCR-bound policy, sealed-key release, async Merkle TPM \"             \"epoch freshness, TPM rollback resistance, full replay protection, \"             \"and full rollback resistance remain non-claims.\"",
+      "guarded": true,
+      "line": 650,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:policy|lifecycle)"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"persistent PCR-bound policy, sealed-key release, async Merkle TPM \""
+    },
+    {
+      "context": "all(c6_epoch_checks.values()) and             all(source_checks.values()) and             all(paper_checks.values()) and             not unguarded and             not c6_unguarded         ),         \"boundary\": (             \"Freshness claims are ordered by evidence: file anchor replay is a \"             \"negative control; TPM NV evidence supports only retained \"             \"replay-after-advance fail-closed rows; PCR evidence is transient; \"             \"the C6 hardware epoch probe is environment-blocked on this machine; \"             \"persistent PCR-bound policy, sealed-key release, async Merkle TPM \"             \"epoch freshness, TPM rollback resistance, full replay protection, \"             \"and full rollback resistance remain non-claims.\"         ),",
+      "guarded": true,
+      "line": 651,
+      "matched": [
+        "TPM\\s+rollback\\s+resistance",
+        "full\\s+replay\\s+protection"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"epoch freshness, TPM rollback resistance, full replay protection, \""
+    },
+    {
+      "context": "all(source_checks.values()) and             all(paper_checks.values()) and             not unguarded and             not c6_unguarded         ),         \"boundary\": (             \"Freshness claims are ordered by evidence: file anchor replay is a \"             \"negative control; TPM NV evidence supports only retained \"             \"replay-after-advance fail-closed rows; PCR evidence is transient; \"             \"the C6 hardware epoch probe is environment-blocked on this machine; \"             \"persistent PCR-bound policy, sealed-key release, async Merkle TPM \"             \"epoch freshness, TPM rollback resistance, full replay protection, \"             \"and full rollback resistance remain non-claims.\"         ),     }",
+      "guarded": true,
+      "line": 652,
+      "matched": [
+        "full\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_freshness_ladder_claim_guard.py",
+      "text": "\"and full rollback resistance remain non-claims.\""
+    },
+    {
+      "context": "\"file_anchor_acceptable\": bool(file_anchor[\"acceptable\"]),             \"tpm_anchor_oracle_verdict\": tpm_anchor[\"oracle_verdict\"],             \"tpm_anchor_acceptable\": bool(tpm_anchor[\"acceptable\"]),             \"tpm_replay_fail_closed\": bool(tpm_result.get(\"fail_closed\")),             \"tpm_replay_visible\": bool(tpm_result.get(\"replay_visible\")),         },         \"interpretation\": (             \"The file-backed anchor is replayable with the backing directory \"             \"and is therefore a negative control.  The retained TPM \"             \"replay-after-advance artifact fails closed against stale disk \"             \"state.\"         ),         \"scope_boundary\": \"No persistent PCR-bound filesystem freshness, NV authorization lifecycle, or power-loss certification.\",     }",
+      "guarded": true,
+      "line": 236,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_mechanism_ablation_manifest.py",
+      "text": "\"scope_boundary\": \"No persistent PCR-bound filesystem freshness, NV authorization lifecycle, or power-loss certification.\","
+    },
+    {
+      "context": "\"scope\": (             \"Mechanism attribution over existing retained evidence.  This is \"             \"not a new broad filesystem comparison and does not close \"             \"fscrypt/dm-crypt, cold-cache, PCR-bound freshness, or AI QoS gaps.\"         ),         \"checks\": checks,         \"paper_snippets\": paper_snippets,         \"entries\": entries,         \"non_claims\": [             \"no fscrypt/dm-crypt frozen-contract rows\",             \"no cold-cache filesystem result\",             \"no plaintext-FUSE decomposition row\",             \"no persistent PCR-bound freshness lifecycle\",             \"no foreground TensorRT/AI p99 recovery\",             \"no data-plane GPU acceleration claim\",",
+      "guarded": true,
+      "line": 289,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_mechanism_ablation_manifest.py",
+      "text": "\"no persistent PCR-bound freshness lifecycle\","
+    },
+    {
+      "context": "not older.get(\"generated_duplicate_nonce_pairs\"),         \"adversarial append of an older mapping creates a replay duplicate but does not supersede the newer mapping\",     ))     checks.append(Check(         \"strict_stale_checkpoint_ladder\",         stale_file.get(\"acceptable\") is True and         stale_file.get(\"oracle_verdict\") == \"previous_committed\" and         stale_file.get(\"negative_control\") is True and         stale_tpm.get(\"acceptable\") is True and         stale_tpm.get(\"oracle_verdict\") == \"fail_closed\" and         stale_tpm.get(\"negative_control\") is False,         \"file-backed stale snapshot remains replayable, while retained TPM replay-after-advance artifact fails closed\",         \"not PCR-bound rollback resistance\",     ))",
+      "guarded": true,
+      "line": 205,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_nonce_generation_fault_verdict.py",
+      "text": "\"not PCR-bound rollback resistance\","
+    },
+    {
+      "context": "\"nonce/AAD bind file_id, block, generation; strict replay chooses highest committed generation; epoch replay rejects duplicate keys\",     ))      text = paper_text()     duplicate_guard = (         \"no duplicate generated\" in text or         \"no generated \\\\((\\\\mathit{block},\\\\mathit{generation})\\\\) duplicates\" in text     )     paper_checks = (         duplicate_guard and         \"not physical power-loss\" in text and         \"not a formal proof of crash consistency\" in text and         \"persistent PCR-bound freshness\" in text     )     checks.append(Check(",
+      "guarded": true,
+      "line": 299,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_nonce_generation_fault_verdict.py",
+      "text": "\"persistent PCR-bound freshness\" in text"
+    },
+    {
+      "context": "#!/usr/bin/env python3 \"\"\"Build the persistent-anchor PCR-binding decision manifest.  This manifest closes the checklist decision item by recording the current choice: the persistent filesystem anchor is not PCR-bound in this revision. The retained PCR artifact remains a transient seal/unseal probe, while the persistent AEGIS-Q anchor path uses an administrator-provisioned TPM NV index.",
+      "guarded": true,
+      "line": 5,
+      "matched": [
+        "persistent\\s+filesystem\\s+anchor.{0,80}PCR[- ]bound"
+      ],
+      "path": "code/experiments/build_pcr_anchor_decision_manifest.py",
+      "text": "choice: the persistent filesystem anchor is not PCR-bound in this revision."
+    },
+    {
+      "context": "\"tpm2_createpolicy\",     \"tpm2_policypcr\",     \"tpm2_startauthsession\",     \"tpm2_unseal\",     \"--policy-pcr\",     \"--policy-session\",     \"TPM2_PolicyPCR\", )  REQUIRED_PAPER_GATES = {     \"security_transient_policy\": \"PCR binding is a transient probe rather than a persistent filesystem policy\",     \"evaluation_not_pcr_sealed\": \"not a claim that the persistent filesystem anchor itself is PCR-sealed\",     \"design_no_persistent_lifecycle\": \"no persistent PCR-bound lifecycle claim\",     \"abstract_nonclaim\": \"PCR-bound persistent freshness\",     \"conclusion_nonclaim\": \"persistent PCR-bound freshness\",",
+      "guarded": true,
+      "line": 47,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:policy|lifecycle)"
+      ],
+      "path": "code/experiments/build_pcr_anchor_decision_manifest.py",
+      "text": "\"design_no_persistent_lifecycle\": \"no persistent PCR-bound lifecycle claim\","
+    },
+    {
+      "context": "\"tpm2_startauthsession\",     \"tpm2_unseal\",     \"--policy-pcr\",     \"--policy-session\",     \"TPM2_PolicyPCR\", )  REQUIRED_PAPER_GATES = {     \"security_transient_policy\": \"PCR binding is a transient probe rather than a persistent filesystem policy\",     \"evaluation_not_pcr_sealed\": \"not a claim that the persistent filesystem anchor itself is PCR-sealed\",     \"design_no_persistent_lifecycle\": \"no persistent PCR-bound lifecycle claim\",     \"abstract_nonclaim\": \"PCR-bound persistent freshness\",     \"conclusion_nonclaim\": \"persistent PCR-bound freshness\", }",
+      "guarded": true,
+      "line": 49,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_pcr_anchor_decision_manifest.py",
+      "text": "\"conclusion_nonclaim\": \"persistent PCR-bound freshness\","
+    },
+    {
+      "context": "},     ]      source_checks = {         \"anchor_uses_preprovisioned_nv_index\": \"tpm2_nvreadpublic\" in anchor_src         and \"Creating a persistent\" in anchor_src         and \"implicitly would make ownership\" in anchor_src,         \"anchor_uses_owner_hierarchy_nv_ops\": \"tpm2_nvwrite -C o\" in anchor_src         and \"tpm2_nvread -C o\" in anchor_src,         \"anchor_source_has_no_persistent_pcr_commands\": not any(cmd in anchor_src for cmd in FORBIDDEN_PERSISTENT_PCR_COMMANDS),         \"pcr_probe_script_declares_transient_scope\": \"This is PCR-policy evidence for a transient object\" in pcr_script         and \"does not provision the persistent AEGIS-Q NV index\" in pcr_script,         \"tpm_policy_manifest_declares_nonclaim\": \"no persistent PCR-bound filesystem freshness\" in set(policy.get(\"non_claims\", [])),         \"tpm_policy_script_preserves_nonclaim\": \"does not claim persistent\" in tpm_policy_script,     }",
+      "guarded": true,
+      "line": 183,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_pcr_anchor_decision_manifest.py",
+      "text": "\"tpm_policy_manifest_declares_nonclaim\": \"no persistent PCR-bound filesystem freshness\" in set(policy.get(\"non_claims\", [])),"
+    },
+    {
+      "context": "\"decision_rows_present\": len(decision_rows) == 3,         \"source_checks_pass\": all(source_checks.values()),         \"artifact_checks_pass\": all(artifact_checks.values()),         \"paper_checks_pass\": all(paper_checks.values()),     }      return {         \"schema_version\": 1,         \"timestamp_utc\": datetime.now(timezone.utc).isoformat(),         \"overall_pass\": all(checks.values()),         \"decision\": \"no_persistent_pcr_bound_filesystem_anchor_in_this_revision\",         \"scope\": (             \"The persistent filesystem anchor is not PCR-bound in this revision. \"             \"PCR evidence is retained only as a transient policy probe; persistent \"             \"freshness evidence is limited to pre-provisioned TPM NV \"",
+      "guarded": true,
+      "line": 216,
+      "matched": [
+        "persistent\\s+filesystem\\s+anchor.{0,80}PCR[- ]bound"
+      ],
+      "path": "code/experiments/build_pcr_anchor_decision_manifest.py",
+      "text": "\"The persistent filesystem anchor is not PCR-bound in this revision. \""
+    },
+    {
+      "context": "relpath(TPM_POLICY),             relpath(TPM_PROVISION),             relpath(TPM_REPLAY),         ],         \"decision_rows\": decision_rows,         \"source_checks\": source_checks,         \"artifact_checks\": artifact_checks,         \"paper_gates\": paper_gates,         \"paper_checks\": paper_checks,         \"checks\": checks,         \"high_risk_pcr_mentions\": risk_mentions,         \"non_claims\": [             \"no persistent PCR-bound filesystem freshness\",             \"no persistent PCR-sealed filesystem anchor\",             \"no PCR-bound key release\",",
+      "guarded": true,
+      "line": 238,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_pcr_anchor_decision_manifest.py",
+      "text": "\"no persistent PCR-bound filesystem freshness\","
+    },
+    {
+      "context": "\"replay_boundary\": (             \"recovery accepts only committed epoch prefixes\" in lowered or             \"replay accepts only committed epoch prefixes\" in lowered         ),         \"no_full_crash_claim\": (             \"does not claim physical power-loss\" in text or             \"not physical power-loss\" in text         ),         \"no_kernel_bypass_claim\": (             \"does not claim verified \\\\texttt{O\\\\_DIRECT} NVMe-to-UVM DMA\" in text and             \"\\\\texttt{io\\\\_uring}/eBPF completion bypass\" in text         ),         \"no_rollback_upgrade\": \"no persistent PCR-bound lifecycle claim\" in text,         \"unsupported_posix_boundary\": \"unsupported POSIX modes remain open\" in text,     }",
+      "guarded": true,
+      "line": 171,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:policy|lifecycle)"
+      ],
+      "path": "code/experiments/build_publication_protocol_closeout.py",
+      "text": "\"no_rollback_upgrade\": \"no persistent PCR-bound lifecycle claim\" in text,"
+    },
+    {
+      "context": "\"Grouped epoch mode uses one filesystem-level syncfs barrier for joined foreground operations when PQC_EPOCH_GROUP_MAX is greater than one.\",             \"Replay accepts only committed epoch prefixes, ignores torn tails, and rejects duplicate generation records.\",             \"Reader-visible generation state advances only after publication dispatch returns successfully.\",         ],         \"known_losses\": [             \"Sequential epoch-redo-log mode does not improve total sync count because each write still has one data fdatasync and one epoch-log barrier.\",             \"Grouped epoch-redo-log reduces traced sync count in the retained concurrent workload, but the retained run does not show a throughput win.\",             \"The grouped barrier uses syncfs, which can be broader and more expensive than per-file fdatasync.\",         ],         \"non_claims\": [             \"No direct NVMe-to-UVM, GPUDirect/RDMA, dma-buf zero-copy, eBPF/io_uring bypass, or kernel-bypass publication path is claimed.\",             \"No physical power-loss certification or full crash certification is claimed.\",             \"No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate.\",             \"No general-purpose POSIX filesystem support or ready-for-deployment wording is supported by this closeout.\",         ],",
+      "guarded": true,
+      "line": 296,
+      "matched": [
+        "TPM\\s+rollback\\s+resistance",
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_publication_protocol_closeout.py",
+      "text": "\"No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate.\","
+    },
+    {
+      "context": "return out   def sidecar_object_status(obj: dict[str, Any]) -> tuple[str, str]:     if obj[\"name\"] == \"epoch redo log\":         return (             \"epoch-log-inventory-only\",             \"epoch redo-log object exists, but full Gate 0.9 publication/replay closure is separate\",         )     if obj[\"name\"] == \"external freshness anchor\":         return (             \"freshness-anchor-inventory-only\",             \"file/TPM freshness target is inventoried but does not claim PCR-bound rollback resistance\",         )     return (",
+      "guarded": true,
+      "line": 1191,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_refactor_inventory.py",
+      "text": "\"file/TPM freshness target is inventoried but does not claim PCR-bound rollback resistance\","
+    },
+    {
+      "context": "\"endian_rule\": \"pqc_prefix_anchor_t currently uses host struct layout; portable endian compatibility is not claimed\",             \"digest_or_hmac_rule\": \"prefix-anchor digest field is inventoried through pqc_prefix_anchor_t\",             \"upgrade_downgrade_behavior\": \"PQC_PREFIX_ANCHOR_VERSION is checked; rollback resistance is not claimed\",         },         {             \"name\": \"TPM NV freshness anchor\",             \"index_env\": \"PQC_TPM_NV_INDEX\",             \"current_owner\": \"pqc_anchor.c\",             \"durability_role\": \"optional TPM NV backend for prefix anchor bytes\",             \"format_status\": \"PQC_TPM_NV_DEFAULT_INDEX lives in pqc_format.h; provisioning is explicit admin state\",             \"endian_rule\": \"TPM payload stores pqc_prefix_anchor_t bytes; portable endian compatibility is not claimed\",             \"digest_or_hmac_rule\": \"prefix-anchor digest is retained; PCR-bound policy is not implemented\",             \"upgrade_downgrade_behavior\": \"unprovisioned TPM fails closed; PCR-bound rollback resistance remains unclaimed\",         },     ]",
+      "guarded": true,
+      "line": 3106,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_refactor_inventory.py",
+      "text": "\"upgrade_downgrade_behavior\": \"unprovisioned TPM fails closed; PCR-bound rollback resistance remains unclaimed\","
+    },
+    {
+      "context": "WIN_LOSE_APPLY = {     \"wins_or_value\": (\"storage-visible\", \"SQLite\", \"replay-after-advance\"),     \"loses\": (\"gocryptfs\", \"high-throughput\", \"kernel-encryption replacement\"),     \"does_not_apply\": (\"does not extend\", \"not a universal replacement\", \"unsupported\"), }  DANGEROUS_CLAIMS = {     \"ready_for_deployment\": re.compile(r\"\\bready for deployment\\b|\\bproduction ready\\b\", re.IGNORECASE),     \"general_purpose_filesystem\": re.compile(r\"\\bgeneral-purpose filesystem\\b\", re.IGNORECASE),     \"direct_nvme_to_uvm\": re.compile(r\"direct NVMe-to-UVM|NVMe-to-UVM DMA\", re.IGNORECASE),     \"gpudirect_rdma_claim\": re.compile(r\"GPUDirect/RDMA\", re.IGNORECASE),     \"ebpf_iouring_bypass\": re.compile(r\"eBPF/io_uring completion bypass|io_uring/eBPF completion bypass\", re.IGNORECASE),     \"persistent_pcr_freshness\": re.compile(r\"persistent PCR-bound freshness|persistent PCR binding\", re.IGNORECASE),     \"foreground_ai_qos\": re.compile(r\"foreground AI QoS recovery|AI-inference QoS\", re.IGNORECASE),     \"full_crash_certification\": re.compile(r\"full crash certification|power-loss certification\", re.IGNORECASE),",
+      "guarded": true,
+      "line": 71,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_related_work_applicability_audit.py",
+      "text": "\"persistent_pcr_freshness\": re.compile(r\"persistent PCR-bound freshness|persistent PCR binding\", re.IGNORECASE),"
+    },
+    {
+      "context": "ArtifactSpec(\"generation fault matrix\", \"artifacts/validation/generation_fault_matrix/generation_fault_matrix.json\"),                 ArtifactSpec(\"daemon power fault campaign\", \"artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json\"),                 ArtifactSpec(\"epoch replay fault matrix\", \"artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json\"),             ),             required_missing_artifacts=(\"physical power-loss or explicit unavailable-environment boundary artifact\",),             paper_claim_boundary=\"Crash claims must be bounded to the strongest retained model: process kill, daemon kill, remount, or physical power cut.\",             negative_guard=\"No power-loss safe, full crash certification, or crash-certified wording without physical or explicitly bounded evidence.\",         ),         ObjectionSpec(             ident=\"O08\",             title=\"freshness and rollback resistance remain overclaim-prone\",             status=\"code-required\",             reviewer_objection=\"File anchors and TPM NV evidence do not prove persistent PCR-bound rollback resistance.\",             gate_links=(\"C5\", \"C6\", \"D3\"),             primary_code_module=\"code/storage/pqc_anchor.c\",",
+      "guarded": true,
+      "line": 290,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_review_objection_map.py",
+      "text": "reviewer_objection=\"File anchors and TPM NV evidence do not prove persistent PCR-bound rollback resistance.\","
+    },
+    {
+      "context": "code_modules=(                 \"code/storage/pqc_anchor.c\",                 \"code/storage/pqc_anchor_worker.c\",                 \"code/storage/pqc_checkpoint.c\",                 \"code/experiments/run_tpm_monotonic_replay.py\",                 \"code/experiments/run_tpm_pcr_policy_probe.py\",                 \"code/experiments/build_tpm_freshness_policy_manifest.py\",             ),             artifact_specs=(                 ArtifactSpec(\"TPM freshness bundle\", \"artifacts/validation/tpm_freshness_bundle/*.json\"),                 ArtifactSpec(\"TPM monotonic replay\", \"artifacts/validation/tpm_monotonic_replay/*.json\"),                 ArtifactSpec(\"TPM PCR policy probe\", \"artifacts/validation/tpm_pcr_policy_probe/*.json\"),                 ArtifactSpec(\"async Merkle TPM epoch\", \"artifacts/validation/async_merkle_tpm_epoch/*.json\"),             ),             required_missing_artifacts=(\"production async Merkle or committed-prefix root plus TPM epoch evidence\",),",
+      "guarded": true,
+      "line": 305,
+      "matched": [
+        "async\\s+Merkle(?:\\+TPM)?\\s+(?:TPM\\s+)?epoch"
+      ],
+      "path": "code/experiments/build_review_objection_map.py",
+      "text": "ArtifactSpec(\"async Merkle TPM epoch\", \"artifacts/validation/async_merkle_tpm_epoch/*.json\"),"
+    },
+    {
+      "context": "\"code/storage/pqc_checkpoint.c\",                 \"code/experiments/run_tpm_monotonic_replay.py\",                 \"code/experiments/run_tpm_pcr_policy_probe.py\",                 \"code/experiments/build_tpm_freshness_policy_manifest.py\",             ),             artifact_specs=(                 ArtifactSpec(\"TPM freshness bundle\", \"artifacts/validation/tpm_freshness_bundle/*.json\"),                 ArtifactSpec(\"TPM monotonic replay\", \"artifacts/validation/tpm_monotonic_replay/*.json\"),                 ArtifactSpec(\"TPM PCR policy probe\", \"artifacts/validation/tpm_pcr_policy_probe/*.json\"),                 ArtifactSpec(\"async Merkle TPM epoch\", \"artifacts/validation/async_merkle_tpm_epoch/*.json\"),             ),             required_missing_artifacts=(\"production async Merkle or committed-prefix root plus TPM epoch evidence\",),             paper_claim_boundary=\"Freshness text must map to the retained ladder level and stop before PCR-bound rollback resistance unless C6 exists.\",             negative_guard=\"No TPM rollback resistance, persistent PCR-bound freshness, sealed-key release, or full rollback-resistance wording before Gate C6.\",         ),",
+      "guarded": true,
+      "line": 308,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_review_objection_map.py",
+      "text": "paper_claim_boundary=\"Freshness text must map to the retained ladder level and stop before PCR-bound rollback resistance unless C6 exists.\","
+    },
+    {
+      "context": "\"code/experiments/run_tpm_monotonic_replay.py\",                 \"code/experiments/run_tpm_pcr_policy_probe.py\",                 \"code/experiments/build_tpm_freshness_policy_manifest.py\",             ),             artifact_specs=(                 ArtifactSpec(\"TPM freshness bundle\", \"artifacts/validation/tpm_freshness_bundle/*.json\"),                 ArtifactSpec(\"TPM monotonic replay\", \"artifacts/validation/tpm_monotonic_replay/*.json\"),                 ArtifactSpec(\"TPM PCR policy probe\", \"artifacts/validation/tpm_pcr_policy_probe/*.json\"),                 ArtifactSpec(\"async Merkle TPM epoch\", \"artifacts/validation/async_merkle_tpm_epoch/*.json\"),             ),             required_missing_artifacts=(\"production async Merkle or committed-prefix root plus TPM epoch evidence\",),             paper_claim_boundary=\"Freshness text must map to the retained ladder level and stop before PCR-bound rollback resistance unless C6 exists.\",             negative_guard=\"No TPM rollback resistance, persistent PCR-bound freshness, sealed-key release, or full rollback-resistance wording before Gate C6.\",         ),         ObjectionSpec(",
+      "guarded": true,
+      "line": 309,
+      "matched": [
+        "TPM\\s+rollback\\s+resistance",
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_review_objection_map.py",
+      "text": "negative_guard=\"No TPM rollback resistance, persistent PCR-bound freshness, sealed-key release, or full rollback-resistance wording before Gate C6.\","
+    },
+    {
+      "context": "\"artifacts/validation/frozen_dmcrypt_contract/*.json\",             ),             paper_patterns=(r\"fscrypt\", r\"dm-crypt\", r\"environment-blocked|unavailable\"),             contribution_boundary=(                 \"AEGIS-Q is positioned against kernel-native alternatives through measured or blocked rows, not by replacing their \"                 \"maturity or kernel trust boundary.\"             ),             nonclaim_boundary=\"No apples-to-apples fscrypt/dm-crypt speedup without matched measured rows.\",         ),         Technique(             prior_mechanism=\"TPM/TEE freshness and rollback boundaries\",             prior_source=\"TPM/TEE systems\",             aegisq_analogue=\"TPM NV replay-after-advance checks plus freshness ladder, without sealed-key release or PCR-bound rollback resistance.\",             transfer_status=\"implemented-negative-boundary\",             code_modules=(",
+      "guarded": true,
+      "line": 224,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_systems_literature_gate.py",
+      "text": "aegisq_analogue=\"TPM NV replay-after-advance checks plus freshness ladder, without sealed-key release or PCR-bound rollback resistance.\","
+    },
+    {
+      "context": "\"code/storage/pqc_anchor.c\",                 \"code/storage/pqc_anchor_worker.c\",                 \"code/experiments/run_hardware_freshness_recovery_matrix.py\",             ),             artifact_paths=(                 \"artifacts/validation/freshness_ladder_claim_guard/*.json\",                 \"artifacts/validation/hardware_freshness_recovery_matrix/*.json\",                 \"artifacts/validation/tpm_freshness_bundle/*.json\",             ),             paper_patterns=(r\"TPM replay-after-advance\", r\"persistent PCR-bound\", r\"sealed-key|rollback\"),             contribution_boundary=(                 \"AEGIS-Q may claim replay-after-advance fail-closed behavior under the retained model; it may not claim full rollback \"                 \"resistance, sealed-key release, or persistent PCR-bound freshness.\"             ),             nonclaim_boundary=\"No TPM rollback-resistance or PCR-bound freshness claim before Gate C6 closes.\",",
+      "guarded": true,
+      "line": 239,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_systems_literature_gate.py",
+      "text": "\"resistance, sealed-key release, or persistent PCR-bound freshness.\""
+    },
+    {
+      "context": "\"a fresh anchor bootstrap.\"             ),             \"paper_gate_phrase\": \"explicit reprovisioning/resealing\",         },         {             \"topic\": \"software_update\",             \"current_evidence\": (                 \"PCR drift is rejected only in the transient PCR-policy probe; no \"                 \"persistent PCR-sealed filesystem anchor is installed.\"             ),             \"intended_policy\": (                 \"Software updates or PCR changes require explicit policy renewal \"                 \"before the paper can claim persistent PCR-bound freshness.\"             ),             \"paper_gate_phrase\": \"software update or PCR change therefore requires explicit reprovisioning/resealing\",",
+      "guarded": true,
+      "line": 152,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_tpm_freshness_policy_manifest.py",
+      "text": "\"before the paper can claim persistent PCR-bound freshness.\""
+    },
+    {
+      "context": "relpath(TPM_PROVISION),             relpath(TPM_PCR),             relpath(TPM_REPLAY),             relpath(COMBINED),             relpath(TPM_UNPROVISIONED),             relpath(ANCHOR_C),         ],         \"policy_rows\": policy_rows,         \"source_checks\": source_checks,         \"paper_gates\": paper_gates,         \"checks\": policy_checks,         \"non_claims\": [             \"no persistent PCR-bound filesystem freshness\",             \"no hardware-backed credential release\",             \"no automatic backup or migration recovery\",",
+      "guarded": true,
+      "line": 242,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_tpm_freshness_policy_manifest.py",
+      "text": "\"no persistent PCR-bound filesystem freshness\","
+    },
+    {
+      "context": "\"retained evidence for specific mounted-path workflows\",                 \"blocked SOSP/OSDI target pending Gate 0 and dependent gates\",             ),             \"forbidden_until_closed\": (                 \"SOSP-ready\",                 \"OSDI-ready\",                 \"general-purpose filesystem\",                 \"ready for deployment\",                 \"direct NVMe-to-UVM DMA\",                 \"GPUDirect/RDMA\",                 \"dma-buf zero-copy\",                 \"eBPF/io_uring completion bypass\",                 \"persistent PCR-bound freshness\",                 \"TPM rollback resistance\",                 \"foreground AI QoS recovery\",",
+      "guarded": true,
+      "line": 375,
+      "matched": [
+        "persistent\\s+PCR[- ]bound\\s+(?:filesystem\\s+)?freshness"
+      ],
+      "path": "code/experiments/build_venue_gate.py",
+      "text": "\"persistent PCR-bound freshness\","
+    },
+    {
+      "context": "\"blocked SOSP/OSDI target pending Gate 0 and dependent gates\",             ),             \"forbidden_until_closed\": (                 \"SOSP-ready\",                 \"OSDI-ready\",                 \"general-purpose filesystem\",                 \"ready for deployment\",                 \"direct NVMe-to-UVM DMA\",                 \"GPUDirect/RDMA\",                 \"dma-buf zero-copy\",                 \"eBPF/io_uring completion bypass\",                 \"persistent PCR-bound freshness\",                 \"TPM rollback resistance\",                 \"foreground AI QoS recovery\",                 \"full crash certification\",",
+      "guarded": true,
+      "line": 376,
+      "matched": [
+        "TPM\\s+rollback\\s+resistance"
+      ],
+      "path": "code/experiments/build_venue_gate.py",
+      "text": "\"TPM rollback resistance\","
+    },
+    {
+      "context": "#!/usr/bin/env python3 \"\"\"Smoke-test production anchor root-transition tracing for C6.  This does not claim async Merkle+TPM epoch freshness.  It verifies the first production-path code edit needed for that gate: committed-prefix root transitions can now be observed from the anchor store path with `PQC_ANCHOR_TRACE_PATH`.",
+      "guarded": true,
+      "line": 4,
+      "matched": [
+        "async\\s+Merkle(?:\\+TPM)?\\s+(?:TPM\\s+)?epoch",
+        "TPM\\s+epoch\\s+freshness"
+      ],
+      "path": "code/experiments/run_anchor_trace_smoke.py",
+      "text": "This does not claim async Merkle+TPM epoch freshness.  It verifies the first"
+    },
+    {
+      "context": "\"source_checks_pass\": all(source_checks().values()),             \"mounted_smoke_pass\": mounted_smoke[\"overall_pass\"],         }         return {             \"schema_version\": 1,             \"generated_by\": \"code/experiments/run_anchor_trace_smoke.py\",             \"generated_utc\": now_utc(),             \"scope\": (                 \"C6 epoch-record smoke: production anchor store emits \"                 \"committed-prefix root transitions plus an explicit epoch \"                 \"freshness record carrying epoch interval, flush policy, \"                 \"pending/committed status, and prefix root.  This is still \"                 \"not async Merkle+TPM epoch freshness or PCR-bound rollback \"                 \"resistance.\"             ),",
+      "guarded": true,
+      "line": 315,
+      "matched": [
+        "async\\s+Merkle(?:\\+TPM)?\\s+(?:TPM\\s+)?epoch",
+        "TPM\\s+epoch\\s+freshness"
+      ],
+      "path": "code/experiments/run_anchor_trace_smoke.py",
+      "text": "\"not async Merkle+TPM epoch freshness or PCR-bound rollback \""
+    },
+    {
+      "context": "continue         stderr = result.get(\"stderr_tail\", \"\")         if any(needle in stderr for needle in needles):             return True     return False   def write_markdown(payload: dict[str, Any], path: Path) -> None:     verdict = payload[\"verdict\"]     checks = payload[\"checks\"]     req = payload[\"c6_s2_requirements\"]     lines = [         \"# TPM Epoch Freshness Probe\",         \"\",         \"This is a bounded C6-S2 probe of the production hardware anchor path.\",",
+      "guarded": true,
+      "line": 199,
+      "matched": [
+        "TPM\\s+epoch\\s+freshness"
+      ],
+      "path": "code/experiments/run_tpm_epoch_freshness_probe.py",
+      "text": "\"# TPM Epoch Freshness Probe\","
+    },
+    {
+      "context": "return True     return False   def write_markdown(payload: dict[str, Any], path: Path) -> None:     verdict = payload[\"verdict\"]     checks = payload[\"checks\"]     req = payload[\"c6_s2_requirements\"]     lines = [         \"# TPM Epoch Freshness Probe\",         \"\",         \"This is a bounded C6-S2 probe of the production hardware anchor path.\",         \"It does not claim async Merkle maintenance, PCR-bound rollback resistance, or full replay protection.\",         \"\",         \"## Verdict\",",
+      "guarded": true,
+      "line": 202,
+      "matched": [
+        "PCR[- ]bound\\s+rollback\\s+resistance",
+        "full\\s+replay\\s+protection"
+      ],
+      "path": "code/experiments/run_tpm_epoch_freshness_probe.py",
+      "text": "\"It does not claim async Merkle maintenance, PCR-bound rollback resistance, or full replay protection.\","
+    }
+  ],
+  "c6_epoch_probe": {
+    "environment_blocked": true,
+    "hardware_epoch_committed": false,
+    "path": "artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.json",
+    "trace_summary": {
+      "epoch_record_count": 2,
+      "event_count": 5,
+      "hardware_committed_count": 0,
+      "hardware_committed_observed": false,
+      "hardware_epoch_record_count": 2,
+      "hardware_failed_flush_count": 1,
+      "hardware_flush_attempted": true,
+      "hardware_pending_count": 1,
+      "hardware_pending_observed": true,
+      "last_hardware_rc": -19,
+      "last_hardware_status": "failed"
+    },
+    "verdict": "environment-blocked"
+  },
+  "c6_epoch_unguarded_count": 0,
+  "c6_epoch_unguarded_findings": [],
+  "dangerous_findings": [
+    {
+      "context": "\\section{Discussion and Limitations} \\label{sec:discussion}  \\subsection{Interpretation of the placement result} \\label{sec:disc_tradeoff}  The useful result is asymmetry, not an aggregate ``GPU speedup.''  On Thor, CPU/OpenSSL fits the AES-GCM data path, while the GPU helps independent ML-KEM batches and measured envelope refresh.  AEGIS-Q therefore exposes an elastic GPU/PQC maintenance lane; current telemetry can throttle mounted FUSE writes but still does not justify foreground AI-QoS recovery.  The paper trades peak background throughput for explicit publication, placement, QoS, and recovery boundaries, which is the intended edge-runtime point.  \\subsection{Security limits} \\label{sec:disc_energy}  The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation.  File anchors are replayable.  TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release under provisioned TPM policy.  \\subsection{Evaluation limits and roadmap}",
+      "guarded": true,
+      "line": 12,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "hardware[- ]backed\\s+credential\\s+release"
+      ],
+      "path": "Paper/10_Discussion_and_Limitations.tex",
+      "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation.  File anchors are replayable.  TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release under provisioned TPM policy."
+    },
+    {
+      "context": "\\begin{table}[t] \\caption{Applicability boundary for the evaluated prototype.} \\label{tab:applicability_boundary} \\begin{tabularx}{\\columnwidth}{P{0.30\\columnwidth}|Y} \\toprule Boundary & Current paper position\\\\ \\midrule Protection domain & Authenticated FUSE backing format for local edge storage; not kernel-encryption replacement\\\\ Trust assumptions & Kernel, driver, FUSE daemon, OpenSSL/liboqs, and mount credential are trusted\\\\ Platform dependencies & Jetson/CUDA/cuPQC evidence plus optional administrator-provisioned TPM NV anchor\\\\ Known loss cases & High-throughput gocryptfs/kernel-native paths and general-purpose encryption remain outside the win case\\\\ Unsupported guarantees & General POSIX, persistent PCR-bound freshness, side-channel protection, portability, and power-loss certification are not claimed\\\\ \\bottomrule \\end{tabularx}",
+      "guarded": true,
+      "line": 34,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "Paper/10_Discussion_and_Limitations.tex",
+      "text": "Unsupported guarantees & General POSIX, persistent PCR-bound freshness, side-channel protection, portability, and power-loss certification are not claimed\\\\"
+    },
+    {
+      "context": "AEGIS-Q explores this gap as a UMA-aware secure-storage runtime.  Its thesis is that secure edge storage should expose one durable authenticated format while separating a CPU-first AES-GCM data plane, an elastic GPU/PQC maintenance lane, and an external-anchor path that can fail closed on replayed state.  The claim ties placement to format invariants, QoS policy, and recovery behavior rather than to a GPU microbenchmark or a general-purpose encrypted-filesystem replacement.  The key design insight is that accelerator placement must be subordinate to storage correctness.  AEGIS-Q never lets the GPU define the persistent record format.  Data records are AES-GCM blocks bound to file identifier, logical block, generation, and plaintext length.  Metadata publication follows a data/journal/checkpoint order.  Optional GPU work either produces format-compatible results or falls back to the CPU path.  Jobs without producer-supplied slack are routed conservatively.  This makes the accelerator an execution choice, not a new security boundary.  This paper makes four contributions. \\begin{enumerate} \\item \\textbf{C1: Placement-safe storage format.}  AEGIS-Q implements authenticated envelopes, generation-bound AEAD, durable mapping publication, and CPU/GPU rules that do not alter the persistent record format. \\item \\textbf{C2: CPU data lane, GPU/PQC maintenance lane.}  Measurements explain why AES-GCM writes stay on the CPU, while independent ML-KEM envelope-refresh batches can enter the GPU lane only with slack and telemetry permission. \\item \\textbf{C3: Recovery and freshness boundary.}  AEGIS-Q separates replayable file witnesses from externally anchored replay-after-advance checks and labels clean-remount, tamper, stale-replay, selected app-crash, and unsupported power-loss outcomes. \\item \\textbf{C4: Storage-visible QoS control.}  AEGIS-Q includes deterministic admission, platform telemetry to mounted-FUSE throttling, and the bounded mounted SQLite result in Figure~\\ref{fig:first_page_qos}. \\end{enumerate}  The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack.  The rest of the paper follows the structure of a systems design argument.  Section~\\ref{sec:background} states the storage and UMA assumptions, Section~\\ref{sec:design} presents the format and placement design, Section~\\ref{sec:design_impl} records implementation choices that determine the boundary, Section~\\ref{sec:security} states the security and recovery model, Section~\\ref{sec:evaluation} evaluates the scoped claims, and Sections~\\ref{sec:discussion}--\\ref{sec:conclusion} discuss implications, related work, and limits.",
+      "guarded": true,
+      "line": 52,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "Paper/1_Introduction.tex",
+      "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack."
+    },
+    {
+      "context": "\\centering \\caption{Formal storage-protocol invariants, implementation loci, exercised paths, and claim boundaries.} \\scriptsize \\setlength{\\tabcolsep}{3pt} \\begin{tabularx}{\\textwidth}{P{0.20\\textwidth}|P{0.27\\textwidth}|P{0.25\\textwidth}|Y} \\toprule \\textbf{Invariant} & \\textbf{Implementation locus} & \\textbf{Exercised path} & \\textbf{Claim boundary}\\\\ \\midrule Envelope authentication before DEK use & \\texttt{metadata\\_load()} verifies the HMAC-protected envelope before \\texttt{pqc\\_open()} installs file state & Clean-remount regression and \\texttt{user.pqc\\_metadata} tamper rejection returning \\texttt{EKEYREJECTED} & Remountable authenticated envelope; no hardware-bound credential release\\\\ AEAD nonce uniqueness & \\texttt{derive\\_block\\_nonce()}, \\texttt{build\\_block\\_aad()}, and \\texttt{do\\_flush\\_wbuf\\_locked()} bind file identifier, block, generation, and length & Generation fault matrix, self-test replay regression, clean-remount validation, and daemon cutpoint matrix & Generation-bound record format; physical power loss and broad workload certification remain open\\\\ Data-before-mapping publication & \\texttt{do\\_flush\\_wbuf\\_locked()} writes \\texttt{.pqcdata}, calls \\texttt{fdatasync}, appends \\texttt{.pqcmeta}, then syncs the journal & Journal self-test, daemon cutpoint matrix, and SQLite selected-boundary campaign & D/J ordering evidence; no physical power-loss or drive-cache certification\\\\ Checkpoint exposure rule & \\texttt{logical\\_size\\_store()}, \\texttt{checkpoint\\_store()}, \\texttt{checkpoint\\_load()}, and remount \\texttt{ctx\\_set()} expose size/checkpoint state only after journal publication & Checkpoint self-test, clean remount, and stale-replay fail-closed artifacts & Authenticated checkpoint exposure; lower-filesystem xattr/directory ordering is delegated\\\\ External-anchor freshness condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retained as a negative control & Replay-after-advance freshness only; no persistent PCR-bound lifecycle claim\\\\ Unsupported-mode boundary & \\texttt{pqc\\_open()} defaults to FUSE \\texttt{direct\\_io}; rename and directory \\texttt{fsync} return \\texttt{ENOTSUP}; internal xattrs are hidden & POSIX scope audit plus current remount/SQLite selected-boundary tests & Ordinary read/write/\\texttt{fsync} and narrow disjoint writers only; shared \\texttt{mmap} and directory-entry durability are not claimed\\\\ Controller safety fallback & \\texttt{pqc\\_block\\_job\\_choose\\_target()} and \\texttt{pqc\\_admit()} default to CPU on missing slack, stale telemetry, size, deadline, or queue-pressure constraints & Scheduler self-test, admission sweeps, and same-run CUPTI/tegrastats-to-mounted-FUSE throttle traces & Implemented conservative fallback; no foreground inference p99 recovery claim\\\\",
+      "guarded": true,
+      "line": 24,
+      "matched": [
+        "persistent\\s+PCR[- ]bound"
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "External-anchor freshness condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retained as a negative control & Replay-after-advance freshness only; no persistent PCR-bound lifecycle claim\\\\"
+    },
+    {
+      "context": "\\end{table*}  \\begin{figure*}[t]   \\centering   \\includegraphics[width=0.98\\textwidth]{Figures/fig_architecture.pdf}   \\caption{Implemented AEGIS-Q control and persistence path. Solid arrows are the FUSE format used by the tests; orange dashed arrows denote optional accelerator or externally provisioned hardware paths. This revision does not claim \\texttt{O\\_DIRECT} UMA pinning, a completed eBPF completion path, or a closed-loop hardware-QoS controller.}   \\Description{Architecture diagram of the AEGIS-Q FUSE data path, key envelope, checkpoint, optional CUDA executor, and optional externally provisioned TPM path.}   \\label{fig:overall_procedure} \\end{figure*}  New roots use OpenSSL scrypt in versioned \\texttt{.pqc\\_kdf} metadata (random 32-byte per-filesystem salt; \\(N=32768\\), \\(r=8\\), \\(p=1\\), 64~MiB max memory); roots lacking it use the legacy PBKDF2-HMAC-SHA256 compatibility path.  PBKDF2 is not the new-root default.  New files receive random 256-bit DEKs and file identifiers; each DEK is masked under mount-key/file-ID material and HMAC-authenticated before open accepts it.  The file identifier, generation, logical block number, and plaintext length are AES-GCM associated data, preventing valid records from moving to different logical positions.  The password-derived mount key is never hardware-released; scrypt does not remove weak-password or offline-guessing risk.  There is no hardware-backed credential release path for the mount key.  The rekey is open-file DEK refresh rather than deployed credential rotation: HMAC envelope rewrap for open files; runtime key epoch is in-memory bookkeeping, not a persistent anti-rollback journal.  There is no transactional rewrap recovery claim, and password-derived envelope alone is not rollback resistance; stale old envelopes fail only when generation/checkpoint/external-anchor evidence rejects them.  \\subsection{Durable encrypted-block publication}",
+      "guarded": true,
+      "line": 42,
+      "matched": [
+        "hardware[- ]backed\\s+credential\\s+release",
+        "rollback\\s+resistance",
+        "anti[- ]rollback"
+      ],
+      "path": "Paper/3_Design.tex",
+      "text": "The password-derived mount key is never hardware-released; scrypt does not remove weak-password or offline-guessing risk.  There is no hardware-backed credential release path for the mount key.  The rekey is open-file DEK refresh rather than deployed credential rotation: HMAC envelope rewrap for open files; runtime key epoch is in-memory bookkeeping, not a persistent anti-rollback journal.  There is no transactional rewrap recovery claim, and password-derived envelope alone is not rollback resistance; stale old envelopes fail only when generation/checkpoint/external-anchor evidence rejects them."
+    },
+    {
+      "context": "\\bottomrule \\end{tabularx} \\label{tab:benchmark_workloads} \\end{table}  \\subsection{CPU for bulk data, GPU for batched ML-KEM} \\label{sec:eval_performance}  Figure~\\ref{fig:baseline_comparison} reports the diagnostic placement result.  For a 16~MiB AES-256-GCM input, CPU/OpenSSL reaches 1.61~GB/s (observed 1.59--1.63~GB/s), whereas the managed-buffer GPU path reaches 0.172~GB/s (0.172--0.172~GB/s).  The GPU result includes managed-buffer staging and stream synchronization.  Smaller requests amplify the same effect.  This is why AEGIS-Q's data plane is CPU-first; a GPU label alone is not a performance result.  For a batch of 4,096 ML-KEM-768 key generations, liboqs on CPU reaches 64.8~K operations/s (64.3--64.9~K), while cuPQC reaches 1.50~M operations/s (1.49--1.51~M), a 23.2$\\times$ ratio of medians.  The comparison is a primitive microbenchmark on one platform, not a claim that a FUSE write becomes 23.2$\\times$ faster.  It supports the narrower policy of reserving GPU work for sufficiently large, independent key-plane batches.  The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-protected envelopes.  CPU-only refresh takes 24.399~ms (41,969.6 files/s).  With explicit slack, admission selects the GPU and finishes in 21.070~ms (48,599.0 files/s), a 1.158$\\times$ speedup.  With zero slack and high memory-pressure telemetry, admission falls back to CPU in 24.411~ms with an AI-QoS-exhausted deferral.  This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or foreground AI QoS recovery.  These measurements produce the main placement rule used by the design: AES-GCM data writes are latency-sensitive and remain CPU-first, while ML-KEM batches are elastic and may use the GPU only when producer slack and telemetry permit it.  The result would be weaker if the paper reported only the faster GPU primitive; the important systems observation is the boundary between the data plane and the slack-tolerant maintenance plane.",
+      "guarded": true,
+      "line": 55,
+      "matched": [
+        "hardware[- ]backed\\s+credential\\s+release"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-protected envelopes.  CPU-only refresh takes 24.399~ms (41,969.6 files/s).  With explicit slack, admission selects the GPU and finishes in 21.070~ms (48,599.0 files/s), a 1.158$\\times$ speedup.  With zero slack and high memory-pressure telemetry, admission falls back to CPU in 24.411~ms with an AI-QoS-exhausted deferral.  This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or foreground AI QoS recovery."
+    },
+    {
+      "context": "\\label{fig:baseline_comparison} \\end{figure*}  \\subsection{Correctness and negative controls} \\label{sec:eval_workloads}  The GPU integrity test passes leaf, Merkle, and empty-tree parity cases against OpenSSL.  The FUSE self-test covers journal/checkpoint/anchor units and a generation-replay regression.  The retained generation fault matrix covers partial update, clean remount, torn tails, stale snapshots, journal loss, older-generation append, and duplicate-generation replay across strict and epoch modes; every row has an oracle verdict without silent-corruption or unexpected-liveness outcomes.  Clean remount byte-compares plaintext after \\texttt{fsync}, and envelope tamper returns \\texttt{EKEYREJECTED}.  The POSIX-scope audit records the narrow interface: default encrypted-file \\texttt{mmap}/\\texttt{msync}, path-only truncate, rename, directory \\texttt{fsync}, hard links, and symlinks are rejected; open-fd truncate/fallocate, user xattrs, and disjoint write/\\texttt{fsync} cases pass; internal xattrs are hidden; writeback-cache/direct-IO mmap capabilities are not requested; and lower-filesystem xattr atomicity, directory durability, and full crash-time POSIX visibility remain delegated.  Auxiliary storage/GPU diagnostics are deliberately scoped.  The host-pinning and managed-storage probes show same-buffer CPU/GPU checksum agreement plus CUDA pointer diagnostics, but they do not prove UVM migration suppression or final FUSE data-path DMA.  The file-backed anchor produces the deliberately negative result: restoring an entire backing-directory snapshot is classified as \\texttt{rollback\\_visible}, i.e., the previous committed baseline remains readable.  The result remains a negative control rather than rollback resistance.  The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe.  The hardware-freshness recovery matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance.  This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed.",
+      "guarded": true,
+      "line": 76,
+      "matched": [
+        "rollback\\s+resistance"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The file-backed anchor produces the deliberately negative result: restoring an entire backing-directory snapshot is classified as \\texttt{rollback\\_visible}, i.e., the previous committed baseline remains readable.  The result remains a negative control rather than rollback resistance."
+    },
+    {
+      "context": "\\subsection{Correctness and negative controls} \\label{sec:eval_workloads}  The GPU integrity test passes leaf, Merkle, and empty-tree parity cases against OpenSSL.  The FUSE self-test covers journal/checkpoint/anchor units and a generation-replay regression.  The retained generation fault matrix covers partial update, clean remount, torn tails, stale snapshots, journal loss, older-generation append, and duplicate-generation replay across strict and epoch modes; every row has an oracle verdict without silent-corruption or unexpected-liveness outcomes.  Clean remount byte-compares plaintext after \\texttt{fsync}, and envelope tamper returns \\texttt{EKEYREJECTED}.  The POSIX-scope audit records the narrow interface: default encrypted-file \\texttt{mmap}/\\texttt{msync}, path-only truncate, rename, directory \\texttt{fsync}, hard links, and symlinks are rejected; open-fd truncate/fallocate, user xattrs, and disjoint write/\\texttt{fsync} cases pass; internal xattrs are hidden; writeback-cache/direct-IO mmap capabilities are not requested; and lower-filesystem xattr atomicity, directory durability, and full crash-time POSIX visibility remain delegated.  Auxiliary storage/GPU diagnostics are deliberately scoped.  The host-pinning and managed-storage probes show same-buffer CPU/GPU checksum agreement plus CUDA pointer diagnostics, but they do not prove UVM migration suppression or final FUSE data-path DMA.  The file-backed anchor produces the deliberately negative result: restoring an entire backing-directory snapshot is classified as \\texttt{rollback\\_visible}, i.e., the previous committed baseline remains readable.  The result remains a negative control rather than rollback resistance.  The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe.  The hardware-freshness recovery matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance.  This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed.  The broader crash/replay matrices are selected-boundary evidence, not complete app-level crash coverage.  The daemon power-fault campaign kills the final binary at data write, journal append/fsync, checkpoint xattr, anchor update, \\texttt{fsync}, remount-validation, and authenticated-read cut points; application rows cover SQLite WAL/FULL selected-boundary, SQLite DELETE/EXTRA \\texttt{fdatasync}, and a \\texttt{dbm.dumb} TPM replay row.  Each row receives an oracle verdict, but this is not physical power-loss, kernel-crash, drive-cache, arbitrary-workload, or multi-block raw-write atomicity certification.",
+      "guarded": true,
+      "line": 78,
+      "matched": [
+        "PCR[- ]sealed"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe.  The hardware-freshness recovery matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance.  This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
+    },
+    {
+      "context": "\\begin{table}[t] \\centering \\caption{Recovery/freshness outcomes and their interpretation.} \\scriptsize \\setlength{\\tabcolsep}{3pt} \\begin{tabularx}{\\columnwidth}{P{0.28\\columnwidth}|P{0.30\\columnwidth}|Y} \\toprule \\textbf{Retained result} & \\textbf{Interpretation} & \\textbf{Still missing}\\\\ \\midrule Clean FUSE remount & Envelope/key hierarchy can recover the written file after clean unmount/remount & Crash timing across all D/J/C boundaries\\\\ Metadata HMAC tamper & Unauthenticated envelope metadata fails closed & Full ciphertext/journal tamper campaign\\\\ File-anchor replay visible & File-backed witness is a negative control & External freshness state\\\\ TPM replay-after-advance fail closed & Current provisioned NV index can reject stale disk state after anchor advance & Persistent PCR policy and lifecycle\\\\ Daemon/app fault matrix & Retained daemon and SQLite/\\texttt{dbm.dumb} cut points recover to acceptable oracle states & Physical power loss, drive caches, and broader workloads\\\\ SQLite/\\texttt{dbm.dumb} stale snapshots & Two workloads fail closed on TPM-backed stale replay & Broader workload matrix\\\\",
+      "guarded": true,
+      "line": 98,
+      "matched": [
+        "persistent\\s+PCR\\s+(?:binding|policy)"
+      ],
+      "path": "Paper/4_Evaluation.tex",
+      "text": "TPM replay-after-advance fail closed & Current provisioned NV index can reject stale disk state after anchor advance & Persistent PCR policy and lifecycle\\\\"
+    },
+    {
+      "context": "\\section{Conclusion} \\label{sec:conclusion}  AEGIS-Q treats secure edge storage as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem.  Its authenticated format keeps AES-GCM data writes on the CPU, admits PQC/GPU maintenance only for slack-tolerant batches, and separates replayable file witnesses from externally anchored freshness checks.  On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.  The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful.",
+      "guarded": true,
+      "line": 4,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "Paper/6_Conclusion.tex",
+      "text": "AEGIS-Q treats secure edge storage as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem.  Its authenticated format keeps AES-GCM data writes on the CPU, admits PQC/GPU maintenance only for slack-tolerant batches, and separates replayable file witnesses from externally anchored freshness checks.  On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.  The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+    },
+    {
+      "context": "\\midrule CUDA storage path & Managed allocation with explicit prefetch and stream synchronization & Not an NVMe-to-UVM storage-DMA path\\\\ CUDA failure policy & CUDA executor falls back to CPU on failure & Does not change the on-disk record format\\\\ Anchor backend & File witness plus optional hardware NV index backend & Hardware path requires administrator pre-provisioning\\\\ Scheduler fallback & No-slack jobs route to CPU & No optimistic GPU admission without producer-supplied slack\\\\ \\bottomrule \\end{tabularx} \\label{tab:impl_boundaries} \\end{table}  The key-envelope path is central to remount correctness.  The current path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before ciphertext is read.  ML-KEM is optional batched maintenance: the rekey worker can refresh open-file DEK material and persist new HMAC envelopes, but the format does not pretend that a KEM benchmark is a persistent per-file key hierarchy.  The older \\texttt{pqc\\_file\\_key.*} epoch/grace helper remains source-only and is not linked into \\texttt{pqc\\_fuse}; evaluated epochs are open-file refresh bookkeeping, not stale-handle, rollback, or TPM/PCR-bound freshness proof.  The implementation also fails closed in two places.  A scheduler job with no producer-supplied AI slack is routed to CPU.  A requested TPM backend with no pre-provisioned NV index causes initialization to fail rather than creating a persistent index with undocumented ownership.  These are conservative operational choices; neither substitutes for a complete inference-telemetry integration or TPM policy design.",
+      "guarded": true,
+      "line": 26,
+      "matched": [
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "Paper/7_Implementation_Details.tex",
+      "text": "The older \\texttt{pqc\\_file\\_key.*} epoch/grace helper remains source-only and is not linked into \\texttt{pqc\\_fuse}; evaluated epochs are open-file refresh bookkeeping, not stale-handle, rollback, or TPM/PCR-bound freshness proof."
+    },
+    {
+      "context": "\\begin{table}[t] \\centering \\caption{Threat classes and mechanism boundaries.} \\scriptsize \\setlength{\\tabcolsep}{3pt} \\begin{tabularx}{\\columnwidth}{P{0.24\\columnwidth}|P{0.30\\columnwidth}|Y} \\toprule \\textbf{Threat} & \\textbf{Mechanism} & \\textbf{Boundary}\\\\ \\midrule Backing-store read & AES-GCM ciphertext with per-file DEK & Assumes mount credential remains secret\\\\ Backing-store tamper & AEAD tags, HMAC envelope, HMAC checkpoint & Denial of service remains possible\\\\ Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\\\ Crash during update & Ordered publication plus selected daemon/app cutpoint tests & Physical power-loss and drive-cache certification remain open\\\\ GPU side channel & No protection mechanism claimed & Integrity parity is not constant-time evidence\\\\",
+      "guarded": true,
+      "line": 22,
+      "matched": [
+        "full\\s+rollback\\s+resistance",
+        "rollback\\s+resistance",
+        "full\\s+rollback"
+      ],
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\\\"
+    },
+    {
+      "context": "GPU side channel & No protection mechanism claimed & Integrity parity is not constant-time evidence\\\\ Privileged local attacker & Out of scope & Kernel/driver/FUSE process are trusted\\\\ \\bottomrule \\end{tabularx} \\label{tab:threat_boundary} \\end{table}  \\subsection{Freshness is conditional on an external anchor} \\label{sec:case_problem}  The source tree contains two anchor modes.  The file mode is only an integrity witness; copying the directory copies the witness.  The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \\emph{rollback visible}, not as successful protection.  This negative result is important: an HMAC alone does not create freshness when its entire state is replayable.  The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record.  PCR binding is a transient probe rather than a persistent filesystem policy; a software update or PCR change therefore requires explicit reprovisioning/resealing.  Backup or migration cannot copy only the backing directory; it needs a fresh authorized anchor bootstrap.  Lost mount credentials are unrecoverable.  Missing index, authorization failure, TPM I/O failure, digest mismatch, or a TPM sequence ahead of local state fail closed; a TPM anchor behind local state is treated as a lagging witness and must be refreshed rather than as disk rollback.  The evaluated claim is only replay-after-advance fail-closed behavior, including the SQLite same-store campaign in Section~\\ref{sec:eval_workloads}; it does not assert that an NV index is a signer, report invented TPM latency, or claim persistent PCR binding.  \\subsection{Side channels and application semantics}",
+      "guarded": true,
+      "line": 36,
+      "matched": [
+        "persistent\\s+PCR\\s+(?:binding|policy)"
+      ],
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record.  PCR binding is a transient probe rather than a persistent filesystem policy; a software update or PCR change therefore requires explicit reprovisioning/resealing.  Backup or migration cannot copy only the backing directory; it needs a fresh authorized anchor bootstrap.  Lost mount credentials are unrecoverable.  Missing index, authorization failure, TPM I/O failure, digest mismatch, or a TPM sequence ahead of local state fail closed; a TPM anchor behind local state is treated as a lagging witness and must be refreshed rather than as disk rollback.  The evaluated claim is only replay-after-advance fail-closed behavior, including the SQLite same-store campaign in Section~\\ref{sec:eval_workloads}; it does not assert that an NV index is a signer, report invented TPM latency, or claim persistent PCR binding."
+    },
+    {
+      "context": "> The active disposition of every review point is > [`SUBMISSION_CHECKLIST.md`](/home/thor/skim/pqc_encrpyted_fs/SUBMISSION_CHECKLIST.md).  > **Important:** Most material below is retained historical working material. > It includes superseded Orin, eBPF/io_uring, TPM, and AI-QoS narratives and > legacy generated plots.  It is not submission evidence, must not be cited as > a current result, and does not override the evidence-first paper or checklist.  > **Current scope:** The final binary uses AES-256-GCM encrypted records, a > persisted HMAC-authenticated per-file DEK envelope, POSIX sidecar I/O, and a > CPU-first data path.  GPU ML-KEM is a batch primitive benchmark and a mounted > open-file envelope-refresh workflow.  Direct > NVMe-to-UVM DMA, eBPF/io_uring notification, PCR-bound freshness, and > end-to-end AI QoS are not claimed.  The paper also does not claim a > persisted per-file content Merkle tree; retained SHA-256/Merkle tests support",
+      "guarded": true,
+      "line": 18,
+      "matched": [
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "README.md",
+      "text": "> NVMe-to-UVM DMA, eBPF/io_uring notification, PCR-bound freshness, and"
+    },
+    {
+      "context": "CI [0.059648, 0.062208].  It records the cold-cache row as invalid because   noninteractive sudo is unavailable for `drop_caches`; fscrypt and dm-crypt   frozen-contract rows remain open. - Mechanism-ablation manifest:   `experiments/build_mechanism_ablation_manifest.py` aggregates already   retained rows under `artifacts/validation/mechanism_ablation_manifest/` and   gates the corresponding paper text.  It attributes the lowerfs-to-AEGIS-Q   frozen-contract gap to the mounted encrypted format as a whole, compares   unthrottled/simple-controller/AEGIS-policy SQLite QoS rows, records the   key-plane CPU-only/GPU-batched/zero-slack fallback modes, and separates   file-backed anchor replay as a negative control from TPM replay-after-advance   fail-closed evidence.  It does not create fscrypt/dm-crypt rows, cold-cache   results, a plaintext-FUSE decomposition, persistent PCR-bound freshness, or   foreground AI/TensorRT recovery. - Workload-diversity matrix:",
+      "guarded": true,
+      "line": 133,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "README.md",
+      "text": "results, a plaintext-FUSE decomposition, persistent PCR-bound freshness, or"
+    },
+    {
+      "context": "unstable (`pressure_causes_deadline_miss` 2/5,   `pressure_raises_p99` 3/5, `aegis_recovers_p99` 4/5, and   `aegis_removes_deadline_misses` 3/5).  The paper therefore keeps the SQLite   QoS result scoped to the original single retained workflow bundle.  The audit   now passes with `methodology_complete=true`: historical fscrypt/dm-crypt   sequential fio outputs are retained only for repository traceability and are   not current paper comparison evidence.  Plaintext and gocryptfs warm-cache   frozen-contract rows are retained; fscrypt/dm-crypt execution remains open in   `SUBMISSION_CHECKLIST.md` as privileged benchmark work. - Key-plane workflow: `artifacts/validation/keyplane_rekey_workflow/` retains a   mounted 1,024-open-file envelope-refresh run with CPU-only, GPU-batched, and   zero-slack policy-fallback modes.  It supports only maintenance-visible open   envelope refresh, not hardware credential release, persistent PCR binding, or   foreground AI QoS recovery. - Mount-key lifecycle: `artifacts/validation/mount_key_lifecycle/` records the",
+      "guarded": true,
+      "line": 190,
+      "matched": [
+        "persistent\\s+PCR\\s+(?:binding|policy)"
+      ],
+      "path": "README.md",
+      "text": "envelope refresh, not hardware credential release, persistent PCR binding, or"
+    },
+    {
+      "context": "frozen-contract rows are retained; fscrypt/dm-crypt execution remains open in   `SUBMISSION_CHECKLIST.md` as privileged benchmark work. - Key-plane workflow: `artifacts/validation/keyplane_rekey_workflow/` retains a   mounted 1,024-open-file envelope-refresh run with CPU-only, GPU-batched, and   zero-slack policy-fallback modes.  It supports only maintenance-visible open   envelope refresh, not hardware credential release, persistent PCR binding, or   foreground AI QoS recovery. - Mount-key lifecycle: `artifacts/validation/mount_key_lifecycle/` records the   prototype credential boundary and gates the paper text for password-derived   root key scope, no hardware-backed mount-key release, open-file DEK refresh   rather than deployed credential rotation, HMAC envelope rewrap, in-memory   runtime epoch bookkeeping, no transactional rewrap recovery claim, and no   credential-only rollback resistance. - Integrity scope audit: retained claim-scope scan and raw   `bench_gpu_integrity --only-tests` output under",
+      "guarded": true,
+      "line": 197,
+      "matched": [
+        "rollback\\s+resistance"
+      ],
+      "path": "README.md",
+      "text": "credential-only rollback resistance."
+    },
+    {
+      "context": "`bench_gpu_integrity --only-tests` output under   `artifacts/validation/integrity_scope_audit/`; this supports only   committed-prefix anchor/parity evidence and confirms the paper does not claim   persisted per-file content Merkle protection. - TPM and durability: retained unprovisioned-TPM fail-closed checks, hardware   NV round-trip/provisioning probes, transient PCR-policy probe,   replay-after-advance fail-closed result, SQLite selected-boundary campaign,   SQLite/dbm.dumb stale-snapshot campaigns, and SQLite syscall-exact app-crash   timing.  The policy manifest under   `artifacts/validation/tpm_freshness_policy/` records the intended NV   authorization model, PCR-binding role, index lifecycle, reprovisioning/update,   backup/migration, lost-credential, and fail-closed behavior.  These do not   prove persistent PCR-bound filesystem freshness or full power-loss crash   certification. - PCR anchor decision: `artifacts/validation/pcr_anchor_decision/` records the",
+      "guarded": true,
+      "line": 211,
+      "matched": [
+        "persistent\\s+PCR[- ]bound"
+      ],
+      "path": "README.md",
+      "text": "prove persistent PCR-bound filesystem freshness or full power-loss crash"
+    },
+    {
+      "context": "under `artifacts/reports/first_two_pages_thesis/` has `overall_pass=true`,   `pages=12`, zero violations, 11 source anchors present, 6 compiled-PDF checks   present, positive contributions before defensive scope text, and supporting   paper-spine, hero-result, novelty-isolation, and accepted-structure gates   passing. - Cross-section alignment audit:   `experiments/build_cross_section_alignment_audit.py` checks that the abstract,   introduction, design, evaluation, and conclusion all carry the same rounded   SQLite hero claim and mode boundary.  The retained report under   `artifacts/reports/cross_section_alignment/` has `overall_pass=true`,   `pages=12`, all five section/source anchors present, the hero-result contract   passing, and no unnegated restored claims for direct NVMe-to-UVM DMA,   eBPF/io_uring completion bypass, persistent PCR-bound freshness, power-loss   certification, foreground AI p99 recovery, or portability beyond the tested   stack.",
+      "guarded": true,
+      "line": 313,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "README.md",
+      "text": "eBPF/io_uring completion bypass, persistent PCR-bound freshness, power-loss"
+    },
+    {
+      "context": "- Claim rule: a performance result must name operation, platform, repetition   count, executor, wall-clock boundary, and raw artifact; a security result must   name adversary, trusted components, key state, failure behavior, and evidence   type. - Format invariants: validate the authenticated envelope before DEK use; bind   AEAD context to file identifier, block, generation, and logical length; make   ciphertext durable before publishing a journal mapping; validate checkpoint   state before exposing logical length; route jobs without supplied slack to the   CPU path. - Recovery oracle: each interruption trial must classify recovery as previous   committed state, latest committed state, fail closed, silent corruption, or   unexpected liveness failure.  A successful mount alone is not enough. - Freshness oracle: a directory snapshot cannot prove rollback resistance unless   an external state source such as TPM NV is preserved independently from the   restored disk image.",
+      "guarded": true,
+      "line": 370,
+      "matched": [
+        "rollback\\s+resistance"
+      ],
+      "path": "README.md",
+      "text": "- Freshness oracle: a directory snapshot cannot prove rollback resistance unless"
+    },
+    {
+      "context": "- overwrite-safe generation/nonce \uae30\ubc18 AEAD \uc800\uc7a5 \ud615\uc2dd - append-only journal\uacfc torn-tail \ubcf5\uad6c - same-file multi-open\uc744 \uc704\ud55c per-inode context - CPU fast lane\uacfc GPU batch lane\uc744 \uacf5\uc720\ud558\ub294 block-job ABI - GPU inflight cap\uc744 \ubc18\uc601\ud558\ub294 dynamic spill-over fallback - GPU wait budget\uc744 \ubc18\uc601\ud558\ub294 spill-over fallback - GPU load EWMA monitor (`PQC_GPU_LOAD_PATH`)\ub97c \ubc18\uc601\ud558\ub294 contention-aware routing - batch-aware CUDA \uc554\ud638\ud654\uc640 CPU fallback - managed-memory batch staging (`cudaMallocManaged`)\uc744 \uc0ac\uc6a9\ud55c locality-aware flush path - per-fd write coalescing buffer\ub294 UMA \ud658\uacbd\uc744 \uace0\ub824\ud574 \uc815\ub9ac\ub410\uc9c0\ub9cc, final data path\ub294 verified NVMe-to-UVM DMA\ub97c \uc8fc\uc7a5\ud558\uc9c0 \uc54a\uc74c  \ub2e4\ub9cc \uc678\ubd80 freshness anchor\uc758 hardware \uacbd\ub85c\ub294 TPM NV\uc5d0 \ub300\ud55c \uc2e4\uc81c device/simulator \uc811\uadfc\uc774 \uac00\ub2a5\ud55c \ud658\uacbd\uc5d0\uc11c\ub9cc \uc644\uc804 \ub3d9\uc791\ud55c\ub2e4. \ud604\uc7ac \ucf54\ub4dc\ub294 `pqc_anchor.c`\ub85c \ubd84\ub9ac\ub41c \uc678\ubd80 anchor \ubc31\uc5d4\ub4dc \uc778\ud130\ud398\uc774\uc2a4\ub97c \uc9c0\uc6d0\ud558\uace0, \uae30\ubcf8 \uc0c1\ud0dc\uc5d0\uc11c\ub294 \ub85c\uceec checkpoint witness\uc640 append-only journal\ub85c crash consistency\uc640 tamper evidence\ub97c \uc81c\uacf5\ud55c\ub2e4. `PQC_FRESHNESS_ANCHOR_BACKEND=file`\uc740 \uac1c\ubc1c\uc6a9 \uacbd\ub85c\uc774\uace0, `PQC_FRESHNESS_ANCHOR_BACKEND=hardware`\ub294 TPM NV index\ub97c \uc0ac\uc6a9\ud558\ub294 \uacbd\ub85c\ub2e4. `PQC_TPM_TCTI` \ub610\ub294 `TSS2_TCTI`\ub97c \uc8fc\uba74 device/swtpm/mssim TCTI\ub97c \uba85\uc2dc\uc801\uc73c\ub85c \uc120\ud0dd\ud560 \uc218 \uc788\ub2e4. \uc774 \uc800\uc7a5\uc18c\ub294 file-backed replay negative control\uacfc unprovisioned TPM fail-closed \uacb0\uacfc\ub97c \ubcf4\uc874\ud558\uace0 \uc788\uc73c\uba70, `artifacts/results/freshness/anchor_refresh/`\uc5d0\ub294 file/hardware anchor round-trip \uce21\uc815 \uc544\ud2f0\ud329\ud2b8\uac00 \ub0a8\uc544 \uc788\ub2e4. `artifacts/validation/tpm_provisioning_probe_sudo/`\ub294 \ud604\uc7ac live NV index `0x01500010`\uc774 `ownerwrite|ownerread` \uc18d\uc131\uacfc 88-byte size\ub97c \uac16\ub3c4\ub85d reprovisioned\ub41c \uc0c1\ud0dc\ub97c \uae30\ub85d\ud558\uace0, `artifacts/validation/tpm_monotonic_replay/`\ub294 replay-after-advance stale snapshot\uc774 payload read \ub2e8\uacc4\uc5d0\uc11c fail-closed \ub418\ub294 \ud604\uc7ac hardware-backed freshness result\ub97c \ubcf4\uc874\ud55c\ub2e4. \uc774\ubc88 \uc218\uc815\uc5d0\uc11c\ub294 `checkpoint_store()`\uac00 hardware anchor update failure\ub97c \ub354 \uc774\uc0c1 \ubb34\uc2dc\ud558\uc9c0 \uc54a\uace0, `ctx_set()`\uac00 checkpoint/anchor load failure\ub97c \ub354 \uc774\uc0c1 \ubb34\uc2dc\ud558\uc9c0 \uc54a\ub3c4\ub85d \ubc14\uafe8\ub2e4. \ub2e4\ub9cc retained PCR evidence\ub294 \uc5ec\uc804\ud788 transient PCR-policy probe \uc218\uc900\uc774\ubbc0\ub85c, persistent filesystem anchor \uc790\uccb4\uac00 PCR-sealed\ub418\uc5c8\ub2e4\uace0 \uacfc\uc7a5\ud574\uc11c\ub294 \uc548 \ub41c\ub2e4. SQLite \ucabd\ub3c4 WAL-first concurrent reader/writer \uacbd\ub85c\uc5d0\uc11c `journal_mode=WAL`, `synchronous=FULL`, `PRAGMA integrity_check=ok`\ub97c \uc720\uc9c0\ud55c \ucc44 \uc7ac\uce21\uc815\ub418\uc5c8\ub2e4. UM/AI interference \uacc4\uce21\uc740 `um_counters.json`\uc73c\ub85c, crash/replay cut-point \uac80\uc99d\uc740 `crash_replay_matrix.json`\uacfc `crash_replay_summary.json`\uc73c\ub85c \ub530\ub85c \ub0a8\uae34\ub2e4. \uc774 README\ub294 \uad6c\ud604\ub41c \uc0ac\uc2e4\uacfc \uc55e\uc73c\ub85c \uac80\uc99d\ud574\uc57c \ud560 \uc8fc\uc7a5\uc744 \ubd84\ub9ac\ud574\uc11c \uc815\ub9ac\ud55c\ub2e4.  ---",
+      "guarded": true,
+      "line": 669,
+      "matched": [
+        "PCR[- ]sealed"
+      ],
+      "path": "README.md",
+      "text": "\ub2e4\ub9cc \uc678\ubd80 freshness anchor\uc758 hardware \uacbd\ub85c\ub294 TPM NV\uc5d0 \ub300\ud55c \uc2e4\uc81c device/simulator \uc811\uadfc\uc774 \uac00\ub2a5\ud55c \ud658\uacbd\uc5d0\uc11c\ub9cc \uc644\uc804 \ub3d9\uc791\ud55c\ub2e4. \ud604\uc7ac \ucf54\ub4dc\ub294 `pqc_anchor.c`\ub85c \ubd84\ub9ac\ub41c \uc678\ubd80 anchor \ubc31\uc5d4\ub4dc \uc778\ud130\ud398\uc774\uc2a4\ub97c \uc9c0\uc6d0\ud558\uace0, \uae30\ubcf8 \uc0c1\ud0dc\uc5d0\uc11c\ub294 \ub85c\uceec checkpoint witness\uc640 append-only journal\ub85c crash consistency\uc640 tamper evidence\ub97c \uc81c\uacf5\ud55c\ub2e4. `PQC_FRESHNESS_ANCHOR_BACKEND=file`\uc740 \uac1c\ubc1c\uc6a9 \uacbd\ub85c\uc774\uace0, `PQC_FRESHNESS_ANCHOR_BACKEND=hardware`\ub294 TPM NV index\ub97c \uc0ac\uc6a9\ud558\ub294 \uacbd\ub85c\ub2e4. `PQC_TPM_TCTI` \ub610\ub294 `TSS2_TCTI`\ub97c \uc8fc\uba74 device/swtpm/mssim TCTI\ub97c \uba85\uc2dc\uc801\uc73c\ub85c \uc120\ud0dd\ud560 \uc218 \uc788\ub2e4. \uc774 \uc800\uc7a5\uc18c\ub294 file-backed replay negative control\uacfc unprovisioned TPM fail-closed \uacb0\uacfc\ub97c \ubcf4\uc874\ud558\uace0 \uc788\uc73c\uba70, `artifacts/results/freshness/anchor_refresh/`\uc5d0\ub294 file/hardware anchor round-trip \uce21\uc815 \uc544\ud2f0\ud329\ud2b8\uac00 \ub0a8\uc544 \uc788\ub2e4. `artifacts/validation/tpm_provisioning_probe_sudo/`\ub294 \ud604\uc7ac live NV index `0x01500010`\uc774 `ownerwrite|ownerread` \uc18d\uc131\uacfc 88-byte size\ub97c \uac16\ub3c4\ub85d reprovisioned\ub41c \uc0c1\ud0dc\ub97c \uae30\ub85d\ud558\uace0, `artifacts/validation/tpm_monotonic_replay/`\ub294 replay-after-advance stale snapshot\uc774 payload read \ub2e8\uacc4\uc5d0\uc11c fail-closed \ub418\ub294 \ud604\uc7ac hardware-backed freshness result\ub97c \ubcf4\uc874\ud55c\ub2e4. \uc774\ubc88 \uc218\uc815\uc5d0\uc11c\ub294 `checkpoint_store()`\uac00 hardware anchor update failure\ub97c \ub354 \uc774\uc0c1 \ubb34\uc2dc\ud558\uc9c0 \uc54a\uace0, `ctx_set()`\uac00 checkpoint/anchor load failure\ub97c \ub354 \uc774\uc0c1 \ubb34\uc2dc\ud558\uc9c0 \uc54a\ub3c4\ub85d \ubc14\uafe8\ub2e4. \ub2e4\ub9cc retained PCR evidence\ub294 \uc5ec\uc804\ud788 transient PCR-policy probe \uc218\uc900\uc774\ubbc0\ub85c, persistent filesystem anchor \uc790\uccb4\uac00 PCR-sealed\ub418\uc5c8\ub2e4\uace0 \uacfc\uc7a5\ud574\uc11c\ub294 \uc548 \ub41c\ub2e4. SQLite \ucabd\ub3c4 WAL-first concurrent reader/writer \uacbd\ub85c\uc5d0\uc11c `journal_mode=WAL`, `synchronous=FULL`, `PRAGMA integrity_check=ok`\ub97c \uc720\uc9c0\ud55c \ucc44 \uc7ac\uce21\uc815\ub418\uc5c8\ub2e4. UM/AI interference \uacc4\uce21\uc740 `um_counters.json`\uc73c\ub85c, crash/replay cut-point \uac80\uc99d\uc740 `crash_replay_matrix.json`\uacfc `crash_replay_summary.json`\uc73c\ub85c \ub530\ub85c \ub0a8\uae34\ub2e4. \uc774 README\ub294 \uad6c\ud604\ub41c \uc0ac\uc2e4\uacfc \uc55e\uc73c\ub85c \uac80\uc99d\ud574\uc57c \ud560 \uc8fc\uc7a5\uc744 \ubd84\ub9ac\ud574\uc11c \uc815\ub9ac\ud55c\ub2e4."
+    },
+    {
+      "context": "2. [\ub3d9\uae30\uc801 \ud3c9\uac00](#\ub3d9\uae30\uc801-\ud3c9\uac00) 3. [\uc2dc\uc2a4\ud15c \uac1c\uc694](#\uc2dc\uc2a4\ud15c-\uac1c\uc694) 4. [\uc124\uacc4](#\uc124\uacc4) 5. [\uad6c\ud604 \ub9e4\ud551](#\uad6c\ud604-\ub9e4\ud551) 6. [\ud3c9\uac00 \uacc4\ud68d](#\ud3c9\uac00-\uacc4\ud68d) 7. [\uad00\ub828 \uc5f0\uad6c \ubc0f \ucc28\ubcc4\uc810](#\uad00\ub828-\uc5f0\uad6c-\ubc0f-\ucc28\ubcc4\uc810) 8. [\ud604\uc7ac \uac80\uc99d \uc0c1\ud0dc](#\ud604\uc7ac-\uac80\uc99d-\uc0c1\ud0dc)  ---  ## \ubb38\uc81c \uc815\uc758  \uc5e3\uc9c0 \uc7a5\uce58\uc5d0\uc11c \uc800\uc7a5 \ub370\uc774\ud130\ub294 \ub2e8\uc21c\ud788 \uc554\ud638\ud654\ub9cc \ud558\uba74 \ub05d\ub098\uc9c0 \uc54a\ub294\ub2e4. \uc2e4\uc81c \uacbd\ub85c\ub294 AI \ucd94\ub860, \ub370\uc774\ud130 \uc218\uc9d1, \ud30c\uc77c I/O, \uba54\ud0c0\ub370\uc774\ud130 \uac31\uc2e0, \ud06c\ub798\uc2dc \ubcf5\uad6c, \ub864\ubc31 \ubc29\uc9c0\uae4c\uc9c0 \ub3d9\uc2dc\uc5d0 \ud3ec\ud568\ud55c\ub2e4. \uadf8\ub7f0\ub370 \uae30\uc874 PQC \ud30c\uc77c\uc2dc\uc2a4\ud15c \ud504\ub85c\ud1a0\ud0c0\uc785\uc740 \uc774 \uc804\uccb4 \uacbd\ub85c\ub97c \ud558\ub098\uc758 \uc120\ud615 \ud30c\uc774\ud504\ub77c\uc778\ucc98\ub7fc \ucde8\uae09\ud55c\ub2e4. \uadf8 \uacb0\uacfc \uc791\uc740 I/O\uc5d0\uc11c\ub294 FUSE \uc624\ubc84\ud5e4\ub4dc\uac00 \ucee4\uc9c0\uace0, \ud070 I/O\uc5d0\uc11c\ub294 GPU\uac00 \uc720\ub9ac\ud558\ub354\ub77c\ub3c4 \ub3d9\uae30\ud654\uc640 \uba54\ubaa8\ub9ac \uc774\ub3d9\uc774 \ubcd1\ubaa9\uc774 \ub41c\ub2e4. \ub610\ud55c freshness anchor\ub97c \ud30c\uc77c \uae30\ubc18\uc73c\ub85c\ub9cc \ub450\uba74 \uc624\ud504\ub77c\uc778 \ub864\ubc31 \uacf5\uaca9\uc744 \ucda9\ubd84\ud788 \ub9c9\uae30 \uc5b4\ub835\uace0, TPM\uc744 \ub9e4\ubc88 \ud638\ucd9c\ud558\uba74 \uc131\ub2a5\uc774 \ubb34\ub108\uc9c4\ub2e4.  \uc989, \ud575\uc2ec \ubb38\uc81c\ub294 \u201cPQC \uc5f0\uc0b0\uc774 \ubb34\uac81\ub2e4\u201d\uac00 \uc544\ub2c8\ub77c, \uc5e3\uc9c0 \ud658\uacbd\uc5d0\uc11c \ubcf4\uc548 I/O\ub97c \uc5b4\ub5a4 \uc2e4\ud589 \uacbd\ub85c\ub85c \ubc30\uce58\ud560 \uac83\uc778\uac00\uc774\ub2e4.",
+      "guarded": true,
+      "line": 688,
+      "matched": [
+        "\ub864\ubc31\\s*\ubc29\uc9c0"
+      ],
+      "path": "README.md",
+      "text": "\uc5e3\uc9c0 \uc7a5\uce58\uc5d0\uc11c \uc800\uc7a5 \ub370\uc774\ud130\ub294 \ub2e8\uc21c\ud788 \uc554\ud638\ud654\ub9cc \ud558\uba74 \ub05d\ub098\uc9c0 \uc54a\ub294\ub2e4. \uc2e4\uc81c \uacbd\ub85c\ub294 AI \ucd94\ub860, \ub370\uc774\ud130 \uc218\uc9d1, \ud30c\uc77c I/O, \uba54\ud0c0\ub370\uc774\ud130 \uac31\uc2e0, \ud06c\ub798\uc2dc \ubcf5\uad6c, \ub864\ubc31 \ubc29\uc9c0\uae4c\uc9c0 \ub3d9\uc2dc\uc5d0 \ud3ec\ud568\ud55c\ub2e4. \uadf8\ub7f0\ub370 \uae30\uc874 PQC \ud30c\uc77c\uc2dc\uc2a4\ud15c \ud504\ub85c\ud1a0\ud0c0\uc785\uc740 \uc774 \uc804\uccb4 \uacbd\ub85c\ub97c \ud558\ub098\uc758 \uc120\ud615 \ud30c\uc774\ud504\ub77c\uc778\ucc98\ub7fc \ucde8\uae09\ud55c\ub2e4. \uadf8 \uacb0\uacfc \uc791\uc740 I/O\uc5d0\uc11c\ub294 FUSE \uc624\ubc84\ud5e4\ub4dc\uac00 \ucee4\uc9c0\uace0, \ud070 I/O\uc5d0\uc11c\ub294 GPU\uac00 \uc720\ub9ac\ud558\ub354\ub77c\ub3c4 \ub3d9\uae30\ud654\uc640 \uba54\ubaa8\ub9ac \uc774\ub3d9\uc774 \ubcd1\ubaa9\uc774 \ub41c\ub2e4. \ub610\ud55c freshness anchor\ub97c \ud30c\uc77c \uae30\ubc18\uc73c\ub85c\ub9cc \ub450\uba74 \uc624\ud504\ub77c\uc778 \ub864\ubc31 \uacf5\uaca9\uc744 \ucda9\ubd84\ud788 \ub9c9\uae30 \uc5b4\ub835\uace0, TPM\uc744 \ub9e4\ubc88 \ud638\ucd9c\ud558\uba74 \uc131\ub2a5\uc774 \ubb34\ub108\uc9c4\ub2e4."
+    },
+    {
+      "context": "- crash/recovery correctness - same-file multi-open consistency - CPU/GPU placement control  AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage\uc758 \ud575\uc2ec \uba85\uc81c\ub294 \u201cGPU crypto\uac00 \ube60\ub974\ub2e4\u201d\uac00 \uc544\ub2c8\ub2e4. \ub354 \uc815\ud655\ud788\ub294 \ub2e4\uc74c\uc774\ub2e4.  > secure storage operation\uc758 \uc2e4\ud589 \uc704\uce58\ub294 deadline slack, queueing, memory-coherence cost, co-running AI workload interference, \uadf8\ub9ac\uace0 durability transaction \ube44\uc6a9\uc5d0 \uc758\ud574 \uacb0\uc815\ub418\uba70, \uc774\ub97c \uad00\uce21\ud558\uace0 \uc81c\uc5b4\ud558\ub294 runtime\uc774 \ud544\uc694\ud558\ub2e4.  ### \ub17c\ubb38\uc6a9 \uc694\uc57d  \ubb38\uc81c \uc815\uc758:  \uc5e3\uc9c0 \uc7a5\uce58\uc5d0\uc11c\ub294 \uc800\uc7a5 \uc554\ud638\ud654\uac00 AI \ucd94\ub860, \ud30c\uc77c I/O, \uba54\ud0c0\ub370\uc774\ud130 \uac31\uc2e0, \ud06c\ub798\uc2dc \ubcf5\uad6c, \ub864\ubc31 \ubc29\uc9c0\uc640 \ub3d9\uc2dc\uc5d0 \uc2e4\ud589\ub41c\ub2e4. \uadf8\ub7ec\ub098 \uae30\uc874 PQC \ud30c\uc77c\uc2dc\uc2a4\ud15c\uc740 \uc774 \uc804\uccb4 \uacbd\ub85c\ub97c \ub2e8\uc77c\ud55c \uc120\ud615 \ud30c\uc774\ud504\ub77c\uc778\uc73c\ub85c \ubaa8\ub378\ub9c1\ud558\uc5ec, \uc791\uc740 \uc694\uccad\uc5d0\uc11c\ub294 FUSE \uc624\ubc84\ud5e4\ub4dc\uac00 \uc9c0\ubc30\uc801\uc774\uace0, \ud070 \uc694\uccad\uc5d0\uc11c\ub294 GPU \ub3d9\uae30\ud654\uc640 \uba54\ubaa8\ub9ac \uc774\ub3d9\uc774 \uc9c0\ubc30\uc801\uc774\ub2e4. freshness anchor\ub97c \ud30c\uc77c \uae30\ubc18\uc73c\ub85c\ub9cc \ub450\ub294 \uad6c\uc870\ub294 \uc624\ud504\ub77c\uc778 \ub864\ubc31\uc5d0 \ucde8\uc57d\ud558\uace0, TPM\uc744 hot path\uc5d0\uc11c \uc9c1\uc811 \ud638\ucd9c\ud558\ub294 \uad6c\uc870\ub294 \uc131\ub2a5\uc744 \ubd95\uad34\uc2dc\ud0a8\ub2e4.  \ud574\uacb0 \ubc29\ud5a5:",
+      "guarded": true,
+      "line": 708,
+      "matched": [
+        "\ub864\ubc31\\s*\ubc29\uc9c0"
+      ],
+      "path": "README.md",
+      "text": "\uc5e3\uc9c0 \uc7a5\uce58\uc5d0\uc11c\ub294 \uc800\uc7a5 \uc554\ud638\ud654\uac00 AI \ucd94\ub860, \ud30c\uc77c I/O, \uba54\ud0c0\ub370\uc774\ud130 \uac31\uc2e0, \ud06c\ub798\uc2dc \ubcf5\uad6c, \ub864\ubc31 \ubc29\uc9c0\uc640 \ub3d9\uc2dc\uc5d0 \uc2e4\ud589\ub41c\ub2e4. \uadf8\ub7ec\ub098 \uae30\uc874 PQC \ud30c\uc77c\uc2dc\uc2a4\ud15c\uc740 \uc774 \uc804\uccb4 \uacbd\ub85c\ub97c \ub2e8\uc77c\ud55c \uc120\ud615 \ud30c\uc774\ud504\ub77c\uc778\uc73c\ub85c \ubaa8\ub378\ub9c1\ud558\uc5ec, \uc791\uc740 \uc694\uccad\uc5d0\uc11c\ub294 FUSE \uc624\ubc84\ud5e4\ub4dc\uac00 \uc9c0\ubc30\uc801\uc774\uace0, \ud070 \uc694\uccad\uc5d0\uc11c\ub294 GPU \ub3d9\uae30\ud654\uc640 \uba54\ubaa8\ub9ac \uc774\ub3d9\uc774 \uc9c0\ubc30\uc801\uc774\ub2e4. freshness anchor\ub97c \ud30c\uc77c \uae30\ubc18\uc73c\ub85c\ub9cc \ub450\ub294 \uad6c\uc870\ub294 \uc624\ud504\ub77c\uc778 \ub864\ubc31\uc5d0 \ucde8\uc57d\ud558\uace0, TPM\uc744 hot path\uc5d0\uc11c \uc9c1\uc811 \ud638\ucd9c\ud558\ub294 \uad6c\uc870\ub294 \uc131\ub2a5\uc744 \ubd95\uad34\uc2dc\ud0a8\ub2e4."
+    },
+    {
+      "context": "\ubb38\uc81c \uc815\uc758:  \uc5e3\uc9c0 \uc7a5\uce58\uc5d0\uc11c\ub294 \uc800\uc7a5 \uc554\ud638\ud654\uac00 AI \ucd94\ub860, \ud30c\uc77c I/O, \uba54\ud0c0\ub370\uc774\ud130 \uac31\uc2e0, \ud06c\ub798\uc2dc \ubcf5\uad6c, \ub864\ubc31 \ubc29\uc9c0\uc640 \ub3d9\uc2dc\uc5d0 \uc2e4\ud589\ub41c\ub2e4. \uadf8\ub7ec\ub098 \uae30\uc874 PQC \ud30c\uc77c\uc2dc\uc2a4\ud15c\uc740 \uc774 \uc804\uccb4 \uacbd\ub85c\ub97c \ub2e8\uc77c\ud55c \uc120\ud615 \ud30c\uc774\ud504\ub77c\uc778\uc73c\ub85c \ubaa8\ub378\ub9c1\ud558\uc5ec, \uc791\uc740 \uc694\uccad\uc5d0\uc11c\ub294 FUSE \uc624\ubc84\ud5e4\ub4dc\uac00 \uc9c0\ubc30\uc801\uc774\uace0, \ud070 \uc694\uccad\uc5d0\uc11c\ub294 GPU \ub3d9\uae30\ud654\uc640 \uba54\ubaa8\ub9ac \uc774\ub3d9\uc774 \uc9c0\ubc30\uc801\uc774\ub2e4. freshness anchor\ub97c \ud30c\uc77c \uae30\ubc18\uc73c\ub85c\ub9cc \ub450\ub294 \uad6c\uc870\ub294 \uc624\ud504\ub77c\uc778 \ub864\ubc31\uc5d0 \ucde8\uc57d\ud558\uace0, TPM\uc744 hot path\uc5d0\uc11c \uc9c1\uc811 \ud638\ucd9c\ud558\ub294 \uad6c\uc870\ub294 \uc131\ub2a5\uc744 \ubd95\uad34\uc2dc\ud0a8\ub2e4.  \ud574\uacb0 \ubc29\ud5a5:  \uccab\uc9f8, CPU\uc640 GPU\ub97c \uace0\uc815 \uc5ed\ud560\ub85c \ub450\uc9c0 \uc54a\uace0 \uc694\uccad \ud06c\uae30\uc640 \uc2dc\uc2a4\ud15c \uc555\ub825\uc5d0 \ub530\ub77c \ub3d9\uc801\uc73c\ub85c \ub77c\uc6b0\ud305\ud558\ub294 \uc815\ucc45 \ud45c\uba74\uc744 \ub454\ub2e4. \ub458\uc9f8, Unified Memory\ub294 \ud3b8\uc758 \uae30\ub2a5\uc774\uc9c0\ub9cc, \ud604\uc7ac \uc81c\ucd9c \uc8fc\uc7a5\uc740 raw pinned-buffer same-buffer proof\uc640 managed storage-buffer diagnostic\uae4c\uc9c0\ub9cc \ud3ec\ud568\ud55c\ub2e4. \uc14b\uc9f8, freshness anchor\ub294 file/hardware backend\uc640 round-trip/provisioning evidence\ub97c \ubcf4\uc874\ud558\uc9c0\ub9cc persistent filesystem anchor\uc758 PCR sealing\uc740 \uc544\uc9c1 claim\ud558\uc9c0 \uc54a\ub294\ub2e4. \ub137\uc9f8, app recovery\ub294 daemon SIGKILL cutpoint matrix, SQLite selected-boundary, SQLite/dbm.dumb stale-snapshot, SQLite syscall-exact app-crash timing\uae4c\uc9c0 \ubcf4\uc874\ud558\uc9c0\ub9cc physical power-loss/kernel-crash certification\uc740 \uc544\ub2c8\ub2e4.  \uae30\uc5ec\uc810:  - \uc5e3\uc9c0 PQC \uc800\uc7a5\uc18c\uc5d0\uc11c CPU/GPU \ub3d9\uc801 \ub77c\uc6b0\ud305\uc774 \ud544\uc694\ud55c \uc774\uc720\ub97c \uc2e4\ud5d8\uc801\uc73c\ub85c \ud3c9\uac00 - Unified Memory \uae30\ubc18 \ubc30\uce58 \uc2a4\ud14c\uc774\uc9d5\uacfc pressure-aware scheduling\uc758 prototype path\ub97c \ud3c9\uac00\ud558\ub418, migration-suppression\uc774\ub098 final storage-DMA\ub294 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\uc74c - freshness anchor\uc758 file/hardware backend\uc640 provisioning state\ub97c \ud3c9\uac00\ud558\ub418, PCR-bound rollback resistance\ub294 \uc544\uc9c1 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\uc74c - \uc2e4\uc81c \uc6cc\ud06c\ub85c\ub4dc \uae30\uc900\uc73c\ub85c plaintext, CPU-only, GPU-only, \ud604\uc7ac AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage\uc744 \ube44\uad50\ud574 \uc124\uacc4 \ud0c0\ub2f9\uc131\uc744 \ud3c9\uac00",
+      "guarded": true,
+      "line": 718,
+      "matched": [
+        "PCR[- ]bound\\s+rollback",
+        "rollback\\s+resistance"
+      ],
+      "path": "README.md",
+      "text": "- freshness anchor\uc758 file/hardware backend\uc640 provisioning state\ub97c \ud3c9\uac00\ud558\ub418, PCR-bound rollback resistance\ub294 \uc544\uc9c1 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\uc74c"
+    },
+    {
+      "context": "| crash recovery | \uae30\uc874 FS semantics \uc758\uc874 \uac00\ub2a5 | dedicated journal | | placement | \uc5c6\uc74c | CPU/GPU common block job + scheduler | | edge AI awareness | \uc5c6\uc74c | inference contention / coherence proxy \uace0\ub824 | | policy control | coarse knobs | xattr + runtime policy |  ### \ucc28\ubcc4\uc810\uc758 \ud575\uc2ec  AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage\uc740 \u201cPQC-backed secure storage runtime\u201d\uc774 \uc544\ub2c8\ub77c, \u201c\uc5e3\uc9c0 CPU/GPU contention \uc544\ub798\uc5d0\uc11c\ub3c4 \uc800\uc7a5 \ubb34\uacb0\uc131, \ubcf5\uad6c\uc131, \uadf8\ub9ac\uace0 placement \uc815\ucc45\uc744 \ud568\uaed8 \uc720\uc9c0\ud558\ub294 secure storage runtime\u201d\uc774\ub2e4.  \uc774 \ucc28\ubcc4\uc810\uc740 \uc131\ub2a5 \uc22b\uc790\ub9cc\uc73c\ub85c \ub9cc\ub4e4 \uc218 \uc5c6\uace0, \uba3c\uc800 storage format, journal, block job, scheduler\uc758 \uacf5\ud1b5 \uacc4\uc57d\uc744 \ub9de\ucdb0\uc57c\ub9cc \uc758\ubbf8\uac00 \uc0dd\uae34\ub2e4.  \ud604\uc7ac \uad6c\ud604\uc758 rollback \uad00\ub828 \uc99d\uac70\ub294 local checkpoint witness \uae30\ubc18 tamper evidence, file-backed replay negative control, TPM unprovisioned fail-closed, TPM NV round-trip/provisioning artifacts, replay-after-advance fail-closed \uacb0\uacfc, \uadf8\ub9ac\uace0 selected daemon SIGKILL cutpoint matrix\uae4c\uc9c0\ub2e4. anchor\ub294 mount \uc2dc \ubc31\uadf8\ub77c\uc6b4\ub4dc worker\ub85c lazy commit\ub418\uba70, fsync/destroy \uc2dc \uac15\uc81c\ub85c \ube44\uc6cc\uc9c4\ub2e4. hardware backend\ub294 TPM NV index\ub97c \uc0ac\uc6a9\ud558\uba70, \ub77c\uc774\ube0c\ub7ec\ub9ac\ub098 TPM device\uac00 \uc5c6\uc73c\uba74 \uba85\uc2dc\uc801\uc73c\ub85c `-ENOTSUP` \ub610\ub294 I/O \uc624\ub958\ub85c \ub5a8\uc5b4\uc9c4\ub2e4. \uc774 \uc800\uc7a5\uc18c\ub294 \ud604\uc7ac provisioned TPM NV index\uc5d0\uc11c stale snapshot replay\uac00 fail-closed \ub418\ub294 \uac83\uc744 \ubcf4\uc874\ud558\uc9c0\ub9cc, offline rollback resistance\ub97c \uc644\uc804 \ubcf4\uc7a5\ud55c\ub2e4\uace0 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4. \ub354 \uac15\ud55c \uc8fc\uc7a5\uc740 persistent PCR policy, physical power-loss/kernel-crash evidence, drive-cache behavior, and/or another protected freshness backend\uae4c\uc9c0 \ubcc4\ub3c4\ub85c \uac80\uc99d\ud574\uc57c \ud55c\ub2e4.  `scheduler_smoke`\ub3c4 \uc774\uc81c pressure path\ub97c \ud3ec\ud568\ud55c\ub2e4. \uc989, \uc791\uc740 \uc694\uccad\uc740 CPU\ub85c, \ud070 \uc694\uccad\uc740 GPU\ub85c, \uadf8\ub9ac\uace0 GPU wait budget\uc744 \ucd08\uacfc\ud558\ub294 \ud070 \uc694\uccad\uc740 \ub2e4\uc2dc CPU\ub85c \ub5a8\uc5b4\uc9c0\ub294 \ub3d9\uc791\uc744 \uc9c1\uc811 \ub85c\uadf8\ub85c \ud655\uc778\ud560 \uc218 \uc788\ub2e4.",
+      "guarded": true,
+      "line": 1135,
+      "matched": [
+        "persistent\\s+PCR\\s+(?:binding|policy)",
+        "offline\\s+rollback\\s+resistance",
+        "rollback\\s+resistance"
+      ],
+      "path": "README.md",
+      "text": "\ud604\uc7ac \uad6c\ud604\uc758 rollback \uad00\ub828 \uc99d\uac70\ub294 local checkpoint witness \uae30\ubc18 tamper evidence, file-backed replay negative control, TPM unprovisioned fail-closed, TPM NV round-trip/provisioning artifacts, replay-after-advance fail-closed \uacb0\uacfc, \uadf8\ub9ac\uace0 selected daemon SIGKILL cutpoint matrix\uae4c\uc9c0\ub2e4. anchor\ub294 mount \uc2dc \ubc31\uadf8\ub77c\uc6b4\ub4dc worker\ub85c lazy commit\ub418\uba70, fsync/destroy \uc2dc \uac15\uc81c\ub85c \ube44\uc6cc\uc9c4\ub2e4. hardware backend\ub294 TPM NV index\ub97c \uc0ac\uc6a9\ud558\uba70, \ub77c\uc774\ube0c\ub7ec\ub9ac\ub098 TPM device\uac00 \uc5c6\uc73c\uba74 \uba85\uc2dc\uc801\uc73c\ub85c `-ENOTSUP` \ub610\ub294 I/O \uc624\ub958\ub85c \ub5a8\uc5b4\uc9c4\ub2e4. \uc774 \uc800\uc7a5\uc18c\ub294 \ud604\uc7ac provisioned TPM NV index\uc5d0\uc11c stale snapshot replay\uac00 fail-closed \ub418\ub294 \uac83\uc744 \ubcf4\uc874\ud558\uc9c0\ub9cc, offline rollback resistance\ub97c \uc644\uc804 \ubcf4\uc7a5\ud55c\ub2e4\uace0 \uc8fc\uc7a5\ud558\uc9c0 \uc54a\ub294\ub2e4. \ub354 \uac15\ud55c \uc8fc\uc7a5\uc740 persistent PCR policy, physical power-loss/kernel-crash evidence, drive-cache behavior, and/or another protected freshness backend\uae4c\uc9c0 \ubcc4\ub3c4\ub85c \uac80\uc99d\ud574\uc57c \ud55c\ub2e4."
+    },
+    {
+      "context": "3. `sqlite_contention_latency`\ucc98\ub7fc \uae68\uc9c0\ub294 \uacbd\ub85c\ub294 \uc131\ub2a5 \uadf8\ub798\ud504\uac00 \uc544\ub2c8\ub77c \uc548\uc815\uc131 \uc2e4\ud328\ub85c \ucde8\uae09\ud558\uace0, recovery/journal \uaddc\uce59\uc744 \uba3c\uc800 \uace0\uce5c\ub2e4. 4. offline rollback\uc740 `pqc_anchor.c`\ub85c \ubd84\ub9ac\ub41c backend\ub97c \uc720\uc9c0\ud558\ub418, \uc2e4\uc81c \ub17c\ubb38 \uc8fc\uc7a5\uc740 \ud604\uc7ac provisioned TPM NV index\uc758 replay-after-advance fail-closed \uacb0\uacfc\uae4c\uc9c0\ub9cc \uc0ac\uc6a9\ud574\uc57c \ud55c\ub2e4. 5. README\uc758 motivation\uc740 baseline(plaintext / CPU-only / GPU-only / current AEGIS-Q: Adaptive Edge Guard for PQC-Backed Secure Storage)\uacfc SOTA/\ub300\uc548\uc758 \ucc28\uc774\ub97c \uc120\uba85\ud558\uac8c \ubcf4\uc5ec\uc8fc\ub294 \uad6c\uc870\ub85c \uc720\uc9c0\ud55c\ub2e4. \ub610\ud55c PQC instantiation(ML-KEM/ML-DSA), fsync semantics, nonce/rollback safety, and Unified Memory counters\ub97c \uba85\uc2dc\ud55c\ub2e4.  ### \ub0a8\uc740 \uc5f0\uad6c \uacfc\uc81c  \ud604\uc7ac \uad6c\ud604\uc744 \ub17c\ubb38 \uc218\uc900\uc758 \uc644\uacb0\ub41c \uc2dc\uc2a4\ud15c \uc8fc\uc7a5\uc73c\ub85c \ub04c\uc5b4\uc62c\ub9ac\uae30 \uc704\ud574 \ub0a8\uc740 \uacfc\uc81c\ub294 \ub2e4\uc74c\uacfc \uac19\ub2e4.  | \uacfc\uc81c | \uc5f0\uacb0\ub418\ub294 RQ | \ubaa9\ud45c | |---|---|---| | physical power-loss/kernel-crash injection | RQ4 | selected daemon SIGKILL\uc744 \ub118\uc5b4 \uc2e4\uc81c \uc804\uc6d0 \uc190\uc2e4, \ucee4\ub110 \ud06c\ub798\uc2dc, drive-cache \ub3d9\uc791\uc5d0\uc11c\ub3c4 \ubcf5\uad6c \uac00\ub2a5\ud55c\uc9c0 \uac80\uc99d | | replay/rollback adversary tests | RQ3 | file-backed negative control\uacfc TPM replay-after-advance fail-closed evidence\ub97c \ubd84\ub9ac \uc720\uc9c0 | | TPM NV round-trip on usable TCTI session | RQ3 | hardware backend\uc758 \uc2e4\uc6b4\uc6a9 \uac00\ub2a5\uc131 \ud655\uc778; persistent PCR policy\ub294 \ubcc4\ub3c4 \uac80\uc99d \ud544\uc694 | | true UMA/coherence hardware counter integration | RQ2, RQ5 | migration/coherence \ube44\uc6a9\uc744 \uc9c1\uc811 \uacc4\uce21 | | static CPU / static GPU / heuristic / oracle comparison | RQ1, RQ2, RQ5 | placement policy\uc758 \uc0c1\ub300\uc801 \uc6b0\uc704 \uac80\uc99d |",
+      "guarded": true,
+      "line": 1157,
+      "matched": [
+        "persistent\\s+PCR\\s+(?:binding|policy)"
+      ],
+      "path": "README.md",
+      "text": "| TPM NV round-trip on usable TCTI session | RQ3 | hardware backend\uc758 \uc2e4\uc6b4\uc6a9 \uac00\ub2a5\uc131 \ud655\uc778; persistent PCR policy\ub294 \ubcc4\ub3c4 \uac80\uc99d \ud544\uc694 |"
+    },
+    {
+      "context": "- `artifacts/validation/uma_storage_dma_profile_combined/` and `artifacts/validation/uma_storage_dma_profile_combined_report/`: profiler-backed raw-read, managed-memory smoke, and managed-storage-buffer bundle; the raw probe includes the same-buffer CPU/GPU checksum match plus host-pinning diagnostics, while the managed-storage probe shows a storage-filled `cudaMallocManaged` buffer with `cudaPointerGetAttributes(type=managed)`, device\u2192host last-prefetch-location transitions on that same buffer, and a matching CPU/GPU checksum; this is still not migration-suppression evidence or a final FUSE data-path DMA proof - `artifacts/validation/uma_counter_availability/`: counter-availability audit showing that the retained Nsight Systems reports expose no UM transfer/page-fault event rows for the raw probe, managed smoke, or managed-storage probe, and that `ncu --query-metrics` exposes no matching UVM/migration/coherence metric names; this documents non-exposure, not migration suppression - `artifacts/validation/uma_dma_scope_audit/`: paper-scope audit that records the accept-critical decision to exclude direct NVMe-to-UVM DMA from the contribution while retaining only pinned-host same-buffer, managed-buffer, and counter-non-exposure diagnostics - `artifacts/probes/evidence/repro_malloc_register.out`, `artifacts/probes/evidence/io_uring_uvm.out`, and `artifacts/probes/evidence/io_uring_uvm_nvme_sudo.out`: host-pinning, direct-read, and same-buffer GPU checksum smoke logs - `artifacts/probes/evidence/trace_nvme_lat.out`: raw `nvme_complete_rq` histogram from the eBPF tracepoint run - `artifacts/validation/ebpf_iouring_scope_audit/`: paper/source/artifact audit proving the current revision treats eBPF/io_uring as scoped-out standalone diagnostics only; it does not claim a mounted FUSE notification path or completion bypass - `artifacts/validation/fuse_roundtrip.json`: clean remount regression with raw plaintext search result - `artifacts/validation/fuse_tamper_rejection.json`: authenticated envelope tamper rejection regression - `artifacts/validation/integrity_scope_audit/`: claim-scope scan plus raw `bench_gpu_integrity --only-tests` output; it verifies that Merkle-related paper text is explicitly scoped to committed-prefix anchor/parity evidence and does not claim persisted per-file content Merkle protection - `artifacts/validation/generation_replay/`: `pqc_fuse --self-test` output including the generation-replay regression; the test verifies that a replayed older journal generation does not supersede the latest mapping and that decrypting with the wrong generation fails - `artifacts/validation/keyplane_rekey_workflow/`: mounted open-file envelope-refresh workflow; the retained run refreshes 1,024 files per mode, observes CPU-only 24.399 ms, GPU-batched 21.070 ms, and zero-slack CPU fallback 24.411 ms, and records the admission trace that sends the fallback through the AI-QoS-exhausted path - `artifacts/validation/keyplane_rekey_methodology/`: methodology-strengthened mounted key-plane workflow bundle; it retains one full-workload warmup, five measured 1,024-file repetitions, bootstrap CI fields, platform/clock/process metadata, a 987-line thermal log, and accepted CPU-only/GPU-batched/zero-slack fallback route coverage in every repetition - `artifacts/validation/mount_key_lifecycle/`: source/artifact/paper gate manifest for the mount-key lifecycle boundary; it supports authenticated storage-format correctness and mounted open-file envelope refresh, while scoping out hardware-backed credential release, deployed credential rotation, persistent epoch anti-rollback journaling, transactional rewrap recovery, and credential-only rollback resistance - `artifacts/results/motivation/baseline_write_latency.png`, `artifacts/results/motivation/contention_latency.*`, `artifacts/results/motivation/inference_latency.*`, and `artifacts/results/motivation/spillover_latency.*`: motivation figure bundles for baseline, contention, inference interference, and spill-over - `artifacts/results/motivation/anchor_latency.*`: file-anchor round-trip latency bundle",
+      "guarded": true,
+      "line": 1202,
+      "matched": [
+        "hardware[- ]backed\\s+credential\\s+release",
+        "rollback\\s+resistance",
+        "anti[- ]rollback"
+      ],
+      "path": "README.md",
+      "text": "- `artifacts/validation/mount_key_lifecycle/`: source/artifact/paper gate manifest for the mount-key lifecycle boundary; it supports authenticated storage-format correctness and mounted open-file envelope refresh, while scoping out hardware-backed credential release, deployed credential rotation, persistent epoch anti-rollback journaling, transactional rewrap recovery, and credential-only rollback resistance"
+    },
+    {
+      "context": "fscrypt/dm-crypt rows remain open instead of being replaced by historical   sequential fio numbers. - `artifacts/validation/integrity_comparison_manifest/`: non-numeric   integrity-oriented comparison for fs-verity, dm-integrity, and AEGIS-Q.  It   records protection boundary, update model, current kernel support, and the   reason a throughput number would be misleading for each row, and gates the   matching related-work scope text. - `artifacts/validation/mechanism_ablation_manifest/`: retained mechanism   attribution manifest plus CSV/Markdown summaries.  It verifies the scoped   lowerfs-vs-AEGIS-Q frozen-contract gap, SQLite QoS controller variants,   key-plane CPU/GPU/fallback variants, and file-vs-TPM anchor behavior, and   gates the matching `Paper/4_Evaluation.tex` text.  It is not a new broad   filesystem comparison or a PCR-bound freshness proof. - `artifacts/validation/workload_diversity_matrix/`: retained workload-diversity   manifest plus CSV/Markdown summaries.  It verifies one fio-style filesystem",
+      "guarded": true,
+      "line": 1284,
+      "matched": [
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "README.md",
+      "text": "filesystem comparison or a PCR-bound freshness proof."
+    },
+    {
+      "context": "- `artifacts/validation/qos_live_telemetry_admission/`: live `tegrastats` samples collected during GPU pressure are mapped into the same admission telemetry smoke path; this proves telemetry-to-admission path wiring only, not a production closed-loop QoS controller - `artifacts/validation/qos_fuse_live_bridge/`: mounted-FUSE workload bundle where live `tegrastats` samples are fed into the mounted daemon through `PQC_TELEMETRY_FILE`; retained `runtime_fuse_throttle_trace.jsonl` shows 12 open flushes followed by 8 in-daemon throttled flushes and 400 ms total daemon sleep, with no writer-side harness pause - `artifacts/validation/qos_cupti_pm_fuse_bridge/`: mounted-FUSE workload bundle where sudo CUPTI PM sampling writes live PM-derived telemetry into `PQC_TELEMETRY_FILE`; retained `cupti_pm_samples.jsonl` has 1741 PM samples and `runtime_fuse_throttle_trace.jsonl` shows 14 open flushes plus 5 in-daemon throttled flushes, 250 ms total daemon sleep, and no writer-side harness pause - `artifacts/validation/qos_sqlite_hero_bundle/`: synchronized four-mode SQLite/FUSE QoS recovery bundle; it retains foreground SQLite latency logs, background secure-writer logs, workload-pressure telemetry samples, policy traces, mounted-FUSE logs, the AEGIS in-daemon throttle trace, `qos_recovery_table.csv`, `qos_recovery_table.tex`, and the generated paper table.  The retained result reports AEGIS-Q at 8.8 ms foreground SQLite p99, zero deadline misses, and 2.7 MB/s background throughput versus the unthrottled 13.8 ms p99 / one-miss case and the simple-controller 8.2 ms p99 / 2.3 MB/s tradeoff; it is not AI/TensorRT recovery. - `artifacts/validation/qos_sqlite_hero_methodology/`: methodology-strengthened SQLite/FUSE QoS bundle with one full-workload warmup, five measured repetitions, bootstrap CI fields, platform/clock/process metadata, and a 250-line thermal log.  It records component coverage in every repetition but unstable recovery gates, so it is not a statistical QoS headline. - `artifacts/validation/qos_sensitivity_analysis/`: mounted SQLite AEGIS-Q policy sensitivity bundle; it retains per-case foreground/background/telemetry/policy/FUSE/throttle logs, `qos_sensitivity_summary.csv`, and `qos_sensitivity_analysis.json` with `overall_pass=true` for budget, sampling interval, controller threshold, queue-depth, and background-intensity variables.  The retained stability checks include low-pressure no-throttle fallback, mounted zero-budget rows, final-binary no-slack CPU fallback, and a hysteresis pressure wave with 9 transitions / 8 flips. - `artifacts/results/motivation/uvm_proxy_report/`: managed-memory smoke and semantic-gap proxy report - `artifacts/reports/crash_audit_report/`: conservative map of the retained crash/recovery evidence and remaining physical power-loss/kernel-crash gap - `artifacts/reports/platform_inventory_report/`: conservative map of the retained Thor platform evidence and the missing second hardware / driver matrix - `artifacts/validation/tpm_only_bundle/` and `artifacts/validation/combined_durability_bundle/`: TPM-only and combined durability bundles; the combined bundle now includes same-backing-store SQLite+TPM and dbm.dumb+TPM replay-after-advance campaigns where baseline row count 1 advances to row count 3 and stale snapshot replay fails closed for both workloads - `artifacts/validation/tpm_freshness_policy/`: policy-definition manifest for   TPM freshness.  It gates the paper text for owner-authorized NV use,   transient rather than persistent PCR binding, external index lifecycle,   reprovisioning/software-update handling, backup/migration bootstrap,   unrecoverable lost mount credentials, and fail-closed error behavior.  It is",
+      "guarded": true,
+      "line": 1315,
+      "matched": [
+        "persistent\\s+PCR\\s+(?:binding|policy)"
+      ],
+      "path": "README.md",
+      "text": "transient rather than persistent PCR binding, external index lifecycle,"
+    },
+    {
+      "context": "- `artifacts/validation/qos_sqlite_hero_bundle/`: synchronized four-mode SQLite/FUSE QoS recovery bundle; it retains foreground SQLite latency logs, background secure-writer logs, workload-pressure telemetry samples, policy traces, mounted-FUSE logs, the AEGIS in-daemon throttle trace, `qos_recovery_table.csv`, `qos_recovery_table.tex`, and the generated paper table.  The retained result reports AEGIS-Q at 8.8 ms foreground SQLite p99, zero deadline misses, and 2.7 MB/s background throughput versus the unthrottled 13.8 ms p99 / one-miss case and the simple-controller 8.2 ms p99 / 2.3 MB/s tradeoff; it is not AI/TensorRT recovery. - `artifacts/validation/qos_sqlite_hero_methodology/`: methodology-strengthened SQLite/FUSE QoS bundle with one full-workload warmup, five measured repetitions, bootstrap CI fields, platform/clock/process metadata, and a 250-line thermal log.  It records component coverage in every repetition but unstable recovery gates, so it is not a statistical QoS headline. - `artifacts/validation/qos_sensitivity_analysis/`: mounted SQLite AEGIS-Q policy sensitivity bundle; it retains per-case foreground/background/telemetry/policy/FUSE/throttle logs, `qos_sensitivity_summary.csv`, and `qos_sensitivity_analysis.json` with `overall_pass=true` for budget, sampling interval, controller threshold, queue-depth, and background-intensity variables.  The retained stability checks include low-pressure no-throttle fallback, mounted zero-budget rows, final-binary no-slack CPU fallback, and a hysteresis pressure wave with 9 transitions / 8 flips. - `artifacts/results/motivation/uvm_proxy_report/`: managed-memory smoke and semantic-gap proxy report - `artifacts/reports/crash_audit_report/`: conservative map of the retained crash/recovery evidence and remaining physical power-loss/kernel-crash gap - `artifacts/reports/platform_inventory_report/`: conservative map of the retained Thor platform evidence and the missing second hardware / driver matrix - `artifacts/validation/tpm_only_bundle/` and `artifacts/validation/combined_durability_bundle/`: TPM-only and combined durability bundles; the combined bundle now includes same-backing-store SQLite+TPM and dbm.dumb+TPM replay-after-advance campaigns where baseline row count 1 advances to row count 3 and stale snapshot replay fails closed for both workloads - `artifacts/validation/tpm_freshness_policy/`: policy-definition manifest for   TPM freshness.  It gates the paper text for owner-authorized NV use,   transient rather than persistent PCR binding, external index lifecycle,   reprovisioning/software-update handling, backup/migration bootstrap,   unrecoverable lost mount credentials, and fail-closed error behavior.  It is   not a persistent PCR-bound freshness proof or a deployed credential service. - `artifacts/validation/pcr_anchor_decision/`: decision manifest stating that   the persistent filesystem anchor is not PCR-bound in this revision; it gates",
+      "guarded": true,
+      "line": 1318,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "README.md",
+      "text": "not a persistent PCR-bound freshness proof or a deployed credential service."
+    },
+    {
+      "context": "- `artifacts/reports/crash_audit_report/`: conservative map of the retained crash/recovery evidence and remaining physical power-loss/kernel-crash gap - `artifacts/reports/platform_inventory_report/`: conservative map of the retained Thor platform evidence and the missing second hardware / driver matrix - `artifacts/validation/tpm_only_bundle/` and `artifacts/validation/combined_durability_bundle/`: TPM-only and combined durability bundles; the combined bundle now includes same-backing-store SQLite+TPM and dbm.dumb+TPM replay-after-advance campaigns where baseline row count 1 advances to row count 3 and stale snapshot replay fails closed for both workloads - `artifacts/validation/tpm_freshness_policy/`: policy-definition manifest for   TPM freshness.  It gates the paper text for owner-authorized NV use,   transient rather than persistent PCR binding, external index lifecycle,   reprovisioning/software-update handling, backup/migration bootstrap,   unrecoverable lost mount credentials, and fail-closed error behavior.  It is   not a persistent PCR-bound freshness proof or a deployed credential service. - `artifacts/validation/pcr_anchor_decision/`: decision manifest stating that   the persistent filesystem anchor is not PCR-bound in this revision; it gates   `pqc_anchor.c`, the transient PCR-policy probe, the TPM policy manifest, and   main-paper PCR wording so persistent PCR-bound freshness remains a non-claim - `artifacts/validation/hardware_freshness_recovery_matrix/`: seven-case   hardware-freshness recovery matrix with raw artifacts and oracle verdicts for",
+      "guarded": true,
+      "line": 1322,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness"
+      ],
+      "path": "README.md",
+      "text": "main-paper PCR wording so persistent PCR-bound freshness remains a non-claim"
+    },
+    {
+      "context": "- Reader-visible generation state advances only after publication dispatch returns successfully.  ## Known Losses  - Sequential epoch-redo-log mode does not improve total sync count because each write still has one data fdatasync and one epoch-log barrier. - Grouped epoch-redo-log reduces traced sync count in the retained concurrent workload, but the retained run does not show a throughput win. - The grouped barrier uses syncfs, which can be broader and more expensive than per-file fdatasync.  ## Non-Claims  - No direct NVMe-to-UVM, GPUDirect/RDMA, dma-buf zero-copy, eBPF/io_uring bypass, or kernel-bypass publication path is claimed. - No physical power-loss certification or full crash certification is claimed. - No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate. - No general-purpose POSIX filesystem support or ready-for-deployment wording is supported by this closeout.",
+      "guarded": true,
+      "line": 77,
+      "matched": [
+        "persistent\\s+PCR[- ]bound",
+        "PCR[- ]bound\\s+freshness",
+        "TPM\\s+rollback\\s+resistance",
+        "rollback\\s+resistance"
+      ],
+      "path": "docs/architecture/publication_protocol.md",
+      "text": "- No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate."
+    },
+    {
+      "context": "- Grouped epoch-redo-log reduces traced sync count in the retained concurrent workload, but the retained run does not show a throughput win. - The grouped barrier uses syncfs, which can be broader and more expensive than per-file fdatasync.  ## Non-Claims  - No direct NVMe-to-UVM, GPUDirect/RDMA, dma-buf zero-copy, eBPF/io_uring bypass, or kernel-bypass publication path is claimed. - No physical power-loss certification or full crash certification is claimed. - No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate. - No general-purpose POSIX filesystem support or ready-for-deployment wording is supported by this closeout.  ## Negative Claim Guard  Paper or README text may describe strict and epoch publication only within the retained artifact scope. It must not claim throughput improvement, full crash certification, kernel bypass, direct storage DMA, rollback resistance, side-channel defense, or general-purpose POSIX support from Gate 0.9 evidence.",
+      "guarded": true,
+      "line": 82,
+      "matched": [
+        "rollback\\s+resistance"
+      ],
+      "path": "docs/architecture/publication_protocol.md",
+      "text": "Paper or README text may describe strict and epoch publication only within the retained artifact scope. It must not claim throughput improvement, full crash certification, kernel bypass, direct storage DMA, rollback resistance, side-channel defense, or general-purpose POSIX support from Gate 0.9 evidence."
+    }
+  ],
+  "generated_by": "code/experiments/build_freshness_ladder_claim_guard.py",
+  "generated_utc": "2026-06-30T03:54:31Z",
+  "ladder": [
+    {
+      "allowed_claim": "file-backed witness is replayable; stale directory snapshot remains visible",
+      "evidence": [
+        "artifacts/validation/replay_file_final_matrix.json"
+      ],
+      "forbidden_upgrade": "rollback resistance",
+      "level": "L0_file_anchor_negative_control",
+      "supported": true
+    },
+    {
+      "allowed_claim": "pre-provisioned TPM NV replay-after-advance can fail closed under retained rows",
+      "evidence": [
+        "artifacts/validation/tpm_provisioning_probe_sudo/tpm_provisioning_probe.json",
+        "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json",
+        "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+        "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json"
+      ],
+      "forbidden_upgrade": "persistent PCR-bound freshness or full rollback resistance",
+      "level": "L1_tpm_nv_replay_after_advance",
+      "supported": true
+    },
+    {
+      "allowed_claim": "transient PCR-policy seal/unseal probe rejects drift",
+      "evidence": [
+        "artifacts/validation/tpm_pcr_policy_probe/tpm_pcr_policy_probe.json"
+      ],
+      "forbidden_upgrade": "persistent filesystem PCR policy",
+      "level": "L2_transient_pcr_policy_probe",
+      "supported": true
+    },
+    {
+      "allowed_claim": "non-claim only in this revision",
+      "evidence": [
+        "artifacts/validation/pcr_anchor_decision/pcr_anchor_decision.json",
+        "artifacts/validation/tpm_freshness_policy/tpm_freshness_policy.json"
+      ],
+      "forbidden_upgrade": "persistent PCR-bound freshness",
+      "level": "L3_persistent_pcr_bound_policy",
+      "nonclaim_guarded": true,
+      "supported": false
+    },
+    {
+      "allowed_claim": "non-claim only in this revision",
+      "evidence": [
+        "artifacts/validation/tpm_freshness_policy/tpm_freshness_policy.json"
+      ],
+      "forbidden_upgrade": "hardware-backed credential release or sealed-key release",
+      "level": "L4_sealed_key_release",
+      "nonclaim_guarded": true,
+      "supported": false
+    },
+    {
+      "allowed_claim": "non-claim only while the bounded hardware epoch probe is environment-blocked and no TPM epoch is committed",
+      "evidence": [
+        "artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.json"
+      ],
+      "forbidden_upgrade": "async Merkle + TPM epoch freshness",
+      "level": "L5_async_merkle_tpm_epoch_freshness",
+      "nonclaim_guarded": true,
+      "supported": false
+    },
+    {
+      "allowed_claim": "non-claim only in this revision",
+      "evidence": [
+        "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+        "artifacts/validation/pcr_anchor_decision/pcr_anchor_decision.json"
+      ],
+      "forbidden_upgrade": "full/offline rollback resistance",
+      "level": "L6_full_rollback_resistance",
+      "nonclaim_guarded": true,
+      "supported": false
+    }
+  ],
+  "ladder_details": {
+    "application_replay_after_advance_ok": true,
+    "async_merkle_artifact_present": false,
+    "async_merkle_nonclaim_ok": true,
+    "file_anchor_ok": true,
+    "full_rollback_nonclaim_ok": true,
+    "pcr_transient_ok": true,
+    "persistent_pcr_nonclaim_ok": true,
+    "sealed_key_nonclaim_ok": true,
+    "tpm_epoch_probe_environment_blocked": true,
+    "tpm_epoch_probe_guard_basis_ok": true,
+    "tpm_epoch_probe_hardware_epoch_committed": false,
+    "tpm_epoch_probe_present": true,
+    "tpm_nv_ok": true
+  },
+  "overall_pass": true,
+  "paper_checks": {
+    "async_merkle_not_claimed": true,
+    "credential_release_nonclaim": true,
+    "file_anchor_negative_control": true,
+    "full_rollback_nonclaim": true,
+    "pcr_transient_scope": true,
+    "persistent_pcr_nonclaim": true,
+    "tpm_replay_after_advance_scope": true
+  },
+  "schema_version": 1,
+  "source_checks": {
+    "anchor_has_file_and_hardware_backends": true,
+    "anchor_load_fails_closed_on_ahead_tpm_sequence": true,
+    "anchor_stages_hardware_and_flushes": true,
+    "anchor_worker_separates_background_stage_from_force_flush": true,
+    "source_has_no_persistent_pcr_or_sealed_key_path": true
+  },
+  "supported_required": {
+    "async_merkle_not_accidentally_claimed": true,
+    "file_anchor_negative_control_supported": true,
+    "full_rollback_nonclaim_guarded": true,
+    "pcr_transient_probe_supported": true,
+    "persistent_pcr_nonclaim_guarded": true,
+    "sealed_key_nonclaim_guarded": true,
+    "tpm_replay_after_advance_supported": true
+  },
+  "unguarded_count": 0,
+  "unguarded_findings": []
+}

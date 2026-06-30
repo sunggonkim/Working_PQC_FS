@@ -1,0 +1,19 @@
+{
+  "name": "losetup_detach",
+  "result": {
+    "argv": [
+      "sudo",
+      "-S",
+      "-p",
+      "",
+      "losetup",
+      "-d",
+      "/dev/loop9"
+    ],
+    "available": true,
+    "password_supplied": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  }
+}

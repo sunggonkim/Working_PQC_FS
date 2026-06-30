@@ -4,30 +4,31 @@
   │  CPU data plane; optional batch GPU helpers         │
   └─────────────────────────────────────────────────────┘
 
-[PQC-FUSE 2026-06-27 11:43:39.223] ════════════════════════════════════════════════════════════
-[PQC-FUSE 2026-06-27 11:43:39.223]   PQC-FUSE Session Started
-[PQC-FUSE 2026-06-27 11:43:39.223]   Storage dir : /tmp/aegisq_frozen_storage_412_tt06
-[PQC-FUSE 2026-06-27 11:43:39.223]   Mount point : /tmp/aegisq_frozen_mnt_kx1owikt
-[PQC-FUSE 2026-06-27 11:43:39.223] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 08:44:34.874] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 08:44:34.874]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-28 08:44:34.874]   Storage dir : /tmp/aegisq_frozen_storage_ha0hyw4h
+[PQC-FUSE 2026-06-28 08:44:34.874]   Mount point : /tmp/aegisq_frozen_mnt_735aaca5
+[PQC-FUSE 2026-06-28 08:44:34.874] ════════════════════════════════════════════════════════════
 [PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
-[PQC-FUSE 2026-06-27 11:43:39.223] KEM algorithm : ML-KEM-768
-[PQC-FUSE 2026-06-27 11:43:39.223]   public key  : 1184 bytes
-[PQC-FUSE 2026-06-27 11:43:39.223]   secret key  : 2400 bytes
-[PQC-FUSE 2026-06-27 11:43:39.223]   ciphertext  : 1088 bytes
-[PQC-FUSE 2026-06-27 11:43:39.223]   shared secret: 32 bytes
-[PQC-FUSE 2026-06-27 11:43:39.226] Keypair generated in 1411.57 µs
-[PQC-FUSE 2026-06-27 11:43:39.396] Master Key derived successfully (PBKDF2-SHA256)
-[PQC-FUSE 2026-06-27 11:43:39.396] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
-[PQC-FUSE 2026-06-27 11:43:39.396] GPU load monitor started: /sys/devices/gpu.0/load
-[PQC-FUSE 2026-06-27 11:43:39.396] Freshness anchor worker started
-[PQC-FUSE 2026-06-27 11:43:39.506] PQC background rekey worker started
-[PQC-FUSE 2026-06-27 11:43:39.506] Starting FUSE main loop...
+[PQC-FUSE 2026-06-28 08:44:34.874] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-28 08:44:34.874]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-28 08:44:34.874]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-28 08:44:34.874]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-28 08:44:34.874]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-28 08:44:34.876] Keypair generated in 1379.45 µs
+[PQC-FUSE 2026-06-28 08:44:35.046] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-28 08:44:35.046] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-28 08:44:35.046] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-28 08:44:35.046] Freshness anchor worker started
+[PQC-FUSE 2026-06-28 08:44:35.156] PQC background rekey worker started
+[PQC-FUSE 2026-06-28 08:44:35.156] Starting FUSE main loop...
 Ignoring invalid max threads value 4294967295 > max (100000).
-[PQC-FUSE 2026-06-27 11:43:39.536] CREATE /contract/frozen_randrw_4k_fdatasync.0.0: authenticated file-key envelope initialized (fid=9693649556358673792)
-[PQC-FUSE 2026-06-27 11:43:39.800] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=9693649556358673792)
-[PQC-FUSE 2026-06-27 11:44:50.090] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=9693649556358673792)
-[PQC-FUSE 2026-06-27 11:46:00.377] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=9693649556358673792)
-[PQC-FUSE 2026-06-27 11:47:10.671] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=9693649556358673792)
-[PQC-FUSE 2026-06-27 11:48:20.956] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=9693649556358673792)
-[PQC-FUSE 2026-06-27 11:49:31.241] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=9693649556358673792)
-[PQC-FUSE 2026-06-27 11:50:41.261] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-28 08:44:35.184] CREATE /contract/frozen_randrw_4k_fdatasync.0.0: authenticated file-key envelope initialized (fid=15037237032760325694)
+[PQC-FUSE 2026-06-28 08:44:35.441] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=15037237032760325694)
+[PQC-FUSE 2026-06-28 08:45:45.732] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=15037237032760325694)
+[PQC-FUSE 2026-06-28 08:46:56.024] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=15037237032760325694)
+[PQC-FUSE 2026-06-28 08:48:06.314] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=15037237032760325694)
+[PQC-FUSE 2026-06-28 08:49:16.612] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=15037237032760325694)
+[PQC-FUSE 2026-06-28 08:50:26.896] OPEN /contract/frozen_randrw_4k_fdatasync.0.0: restored authenticated file-key envelope (fid=15037237032760325694)
+[PQC-FUSE 2026-06-28 08:51:36.921] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-28 08:51:36.921] PQC background rekey worker stopped

@@ -1,0 +1,667 @@
+{
+  "args": {
+    "background_chunk_bytes": 65536,
+    "background_fsync_every": 1,
+    "background_pressure_pattern": "",
+    "background_pressure_util": 0.85,
+    "background_warmup_ms": 100,
+    "background_writers": 1,
+    "cgroup_io_weight": 10,
+    "control": "systemd_io_weight",
+    "controller_warmup_transactions": 2,
+    "daemon_throttle_sleep_us": 30000,
+    "deadline_ms": 10.0,
+    "enter_util": 0.7,
+    "exit_util": 0.6,
+    "harness_throttle_sleep_us": 5000,
+    "hold_samples": 1,
+    "inter_transaction_sleep_ms": 1.0,
+    "ionice_class": "3",
+    "ionice_level": null,
+    "overwrite": true,
+    "post_foreground_drain_ms": 150,
+    "repetitions": 3,
+    "rows_per_txn": 8,
+    "sqlite_payload_bytes": 256,
+    "telemetry_interval_ms": 20,
+    "telemetry_poll_ms": 10,
+    "telemetry_window": 12,
+    "thermal_interval_ms": 100,
+    "transactions": 24
+  },
+  "artifact": "sqlite_kernel_qos_baseline",
+  "artifacts": {
+    "json": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json",
+    "markdown": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.md",
+    "raw_dir": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup",
+    "thermal_log": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/thermal_tegrastats.log"
+  },
+  "kernel_control": {
+    "applied_rows": 3,
+    "control": "systemd_io_weight",
+    "details": [
+      {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": 0,
+        "systemd_run_stderr": "Running as unit: run-r9a4008fd523e4ba28d5a44f10fe985d4.scope; invocation ID: 0a263765a8744d398307e042cca0497f",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+            "-p",
+            "IOWeight",
+            "-p",
+            "ControlGroup",
+            "-p",
+            "Slice",
+            "-p",
+            "Delegate"
+          ],
+          "available": true,
+          "properties": {
+            "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+            "Delegate": "no",
+            "IOWeight": "10",
+            "Slice": "app.slice"
+          },
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "Slice=app.slice\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope\nDelegate=no\nIOWeight=10",
+          "unit": "run-r9a4008fd523e4ba28d5a44f10fe985d4.scope"
+        },
+        "writer_kernel_qos_rows": [
+          {
+            "apply_result": {
+              "enabled": true,
+              "method": "systemd-run --user --scope -p IOWeight",
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope"
+              }
+            },
+            "control": "systemd_io_weight",
+            "io_weight": 10
+          }
+        ],
+        "writer_start_rows": 1
+      },
+      {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": 0,
+        "systemd_run_stderr": "Running as unit: run-r25ba64342dac4a07bec39e912b989f22.scope; invocation ID: 163919a00edd4ee8ac0dd41fca67b2df",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "-p",
+            "IOWeight",
+            "-p",
+            "ControlGroup",
+            "-p",
+            "Slice",
+            "-p",
+            "Delegate"
+          ],
+          "available": true,
+          "properties": {
+            "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "Delegate": "no",
+            "IOWeight": "10",
+            "Slice": "app.slice"
+          },
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "Slice=app.slice\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope\nDelegate=no\nIOWeight=10",
+          "unit": "run-r25ba64342dac4a07bec39e912b989f22.scope"
+        },
+        "writer_kernel_qos_rows": [
+          {
+            "apply_result": {
+              "enabled": true,
+              "method": "systemd-run --user --scope -p IOWeight",
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope"
+              }
+            },
+            "control": "systemd_io_weight",
+            "io_weight": 10
+          }
+        ],
+        "writer_start_rows": 1
+      },
+      {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": 0,
+        "systemd_run_stderr": "Running as unit: run-r43d675329b0e4b9d9a52b65590e16695.scope; invocation ID: a8da9393db674f39b5d2885d772887eb",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "run-r43d675329b0e4b9d9a52b65590e16695.scope",
+            "-p",
+            "IOWeight",
+            "-p",
+            "ControlGroup",
+            "-p",
+            "Slice",
+            "-p",
+            "Delegate"
+          ],
+          "available": true,
+          "properties": {
+            "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+            "Delegate": "no",
+            "IOWeight": "10",
+            "Slice": "app.slice"
+          },
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "Slice=app.slice\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope\nDelegate=no\nIOWeight=10",
+          "unit": "run-r43d675329b0e4b9d9a52b65590e16695.scope"
+        },
+        "writer_kernel_qos_rows": [
+          {
+            "apply_result": {
+              "enabled": true,
+              "method": "systemd-run --user --scope -p IOWeight",
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope"
+              }
+            },
+            "control": "systemd_io_weight",
+            "io_weight": 10
+          }
+        ],
+        "writer_start_rows": 1
+      }
+    ],
+    "failed_rows": 0,
+    "io_weight": 10,
+    "missing_rows": 0,
+    "successful_rows": 3,
+    "writer_start_rows": 3
+  },
+  "modes": [
+    {
+      "acceptable": true,
+      "background": {
+        "bytes_written": 4063232,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 6.685623817701344,
+        "write_events": 62,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 4063232,
+            "chunks_written": 62,
+            "elapsed_ns": 579601860,
+            "event": "writer_stop",
+            "kernel_qos": {
+              "control": "systemd_io_weight",
+              "io_weight": 10,
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope"
+              }
+            },
+            "throughput_mb_s": 6.685623817701344,
+            "timestamp_ns": 1782796393803995674,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "systemd_io_weight",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 10,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "max_ms": 12.895574,
+        "mean_ms": 9.905074916666667,
+        "p50_ms": 9.648144,
+        "p95_ms": 11.693290399999999,
+        "p99_ms": 12.65173145,
+        "row_count": 192,
+        "rows_written": 192,
+        "samples": 24
+      },
+      "kernel_control": {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": 0,
+        "systemd_run_stderr": "Running as unit: run-r9a4008fd523e4ba28d5a44f10fe985d4.scope; invocation ID: 0a263765a8744d398307e042cca0497f",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+            "-p",
+            "IOWeight",
+            "-p",
+            "ControlGroup",
+            "-p",
+            "Slice",
+            "-p",
+            "Delegate"
+          ],
+          "available": true,
+          "properties": {
+            "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+            "Delegate": "no",
+            "IOWeight": "10",
+            "Slice": "app.slice"
+          },
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "Slice=app.slice\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope\nDelegate=no\nIOWeight=10",
+          "unit": "run-r9a4008fd523e4ba28d5a44f10fe985d4.scope"
+        },
+        "writer_kernel_qos_rows": [
+          {
+            "apply_result": {
+              "enabled": true,
+              "method": "systemd-run --user --scope -p IOWeight",
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a4008fd523e4ba28d5a44f10fe985d4.scope"
+              }
+            },
+            "control": "systemd_io_weight",
+            "io_weight": 10
+          }
+        ],
+        "writer_start_rows": 1
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/background_writer.jsonl",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/runtime_telemetry.txt",
+        "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/systemd_run.stderr.txt",
+        "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/systemd_run.stdout.txt"
+      },
+      "mode": "kernel_systemd_io_weight"
+    },
+    {
+      "acceptable": true,
+      "background": {
+        "bytes_written": 4063232,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 6.73069491922091,
+        "write_events": 62,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 4063232,
+            "chunks_written": 62,
+            "elapsed_ns": 575720642,
+            "event": "writer_stop",
+            "kernel_qos": {
+              "control": "systemd_io_weight",
+              "io_weight": 10,
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope"
+              }
+            },
+            "throughput_mb_s": 6.73069491922091,
+            "timestamp_ns": 1782796394785075275,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "systemd_io_weight",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 5,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "max_ms": 11.672852,
+        "mean_ms": 9.330579666666667,
+        "p50_ms": 9.132963499999999,
+        "p95_ms": 10.453361649999998,
+        "p99_ms": 11.40027003,
+        "row_count": 192,
+        "rows_written": 192,
+        "samples": 24
+      },
+      "kernel_control": {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": 0,
+        "systemd_run_stderr": "Running as unit: run-r25ba64342dac4a07bec39e912b989f22.scope; invocation ID: 163919a00edd4ee8ac0dd41fca67b2df",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "-p",
+            "IOWeight",
+            "-p",
+            "ControlGroup",
+            "-p",
+            "Slice",
+            "-p",
+            "Delegate"
+          ],
+          "available": true,
+          "properties": {
+            "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "Delegate": "no",
+            "IOWeight": "10",
+            "Slice": "app.slice"
+          },
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "Slice=app.slice\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope\nDelegate=no\nIOWeight=10",
+          "unit": "run-r25ba64342dac4a07bec39e912b989f22.scope"
+        },
+        "writer_kernel_qos_rows": [
+          {
+            "apply_result": {
+              "enabled": true,
+              "method": "systemd-run --user --scope -p IOWeight",
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope"
+              }
+            },
+            "control": "systemd_io_weight",
+            "io_weight": 10
+          }
+        ],
+        "writer_start_rows": 1
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/background_writer.jsonl",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/runtime_telemetry.txt",
+        "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/systemd_run.stderr.txt",
+        "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/systemd_run.stdout.txt"
+      },
+      "mode": "kernel_systemd_io_weight"
+    },
+    {
+      "acceptable": true,
+      "background": {
+        "bytes_written": 4063232,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 6.79095433316294,
+        "write_events": 62,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 4063232,
+            "chunks_written": 62,
+            "elapsed_ns": 570611995,
+            "event": "writer_stop",
+            "kernel_qos": {
+              "control": "systemd_io_weight",
+              "io_weight": 10,
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope"
+              }
+            },
+            "throughput_mb_s": 6.79095433316294,
+            "timestamp_ns": 1782796395766430051,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "systemd_io_weight",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 7,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "max_ms": 13.116519,
+        "mean_ms": 9.369656,
+        "p50_ms": 9.120903,
+        "p95_ms": 10.75933715,
+        "p99_ms": 12.574790109999999,
+        "row_count": 192,
+        "rows_written": 192,
+        "samples": 24
+      },
+      "kernel_control": {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": 0,
+        "systemd_run_stderr": "Running as unit: run-r43d675329b0e4b9d9a52b65590e16695.scope; invocation ID: a8da9393db674f39b5d2885d772887eb",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "run-r43d675329b0e4b9d9a52b65590e16695.scope",
+            "-p",
+            "IOWeight",
+            "-p",
+            "ControlGroup",
+            "-p",
+            "Slice",
+            "-p",
+            "Delegate"
+          ],
+          "available": true,
+          "properties": {
+            "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+            "Delegate": "no",
+            "IOWeight": "10",
+            "Slice": "app.slice"
+          },
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "Slice=app.slice\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope\nDelegate=no\nIOWeight=10",
+          "unit": "run-r43d675329b0e4b9d9a52b65590e16695.scope"
+        },
+        "writer_kernel_qos_rows": [
+          {
+            "apply_result": {
+              "enabled": true,
+              "method": "systemd-run --user --scope -p IOWeight",
+              "runtime_cgroup": {
+                "available": true,
+                "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+                "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope",
+                "io_weight": null,
+                "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r43d675329b0e4b9d9a52b65590e16695.scope"
+              }
+            },
+            "control": "systemd_io_weight",
+            "io_weight": 10
+          }
+        ],
+        "writer_start_rows": 1
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/background_writer.jsonl",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/runtime_telemetry.txt",
+        "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/systemd_run.stderr.txt",
+        "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/systemd_run.stdout.txt"
+      },
+      "mode": "kernel_systemd_io_weight"
+    }
+  ],
+  "non_claims": [
+    "not evidence that AEGIS-Q beats kernel QoS",
+    "not a complete kernel QoS comparison by itself",
+    "not foreground AI/TensorRT QoS recovery evidence"
+  ],
+  "overall_pass": true,
+  "platform": {
+    "cpu_count": 14,
+    "device_model": "NVIDIA Jetson AGX Thor Developer Kit",
+    "fuse_binary": {
+      "exists": true,
+      "path": "build/pqc_fuse",
+      "sha256": "1eb8a0452fc498eb6bae2471fb3861ccfb213a985a3443e2f08dccc01ee9fcf4"
+    },
+    "git_dirty_short": "M CMakeLists.txt\n M Paper/10_Discussion_and_Limitations.tex\n M Paper/1_Introduction.tex\n M Paper/2_Background.tex\n M Paper/3_Design.tex\n M Paper/4_Evaluation.tex\n M Paper/5_Related_Works.tex\n M Paper/6_Conclusion.tex\n M Paper/7_Implementation_Details.tex\n M Paper/8_Security_Analysis.tex\n M Paper/Figures/fig_architecture.pdf\n D Paper/Figures/fig_architecture.tex\n M Paper/Figures/fig_first_page_qos.pdf\n M Paper/generated_qos_recovery_table.tex\n M Paper/main.pdf\n M Paper/main.tex\n M README.md\n M SUBMISSION_CHECKLIST.md\n M artifacts/reports/case_study_takeaway/case_study_takeaway.json\n M artifacts/reports/case_study_takeaway/case_study_takeaway.md\n M artifacts/reports/cross_section_alignment/cross_section_alignment.json\n M artifacts/reports/cross_section_alignment/cross_section_alignment.md\n M artifacts/reports/evaluation_rq_audit/evaluation_rq_audit.json\n M artifacts/reports/evaluation_rq_audit/evaluation_rq_audit.md\n M artifacts/reports/evidence_dashboard/evidence_dashboard.json\n M artifacts/reports/figure_table_obligations/figure_table_obligations.json\n M artifacts/reports/figure_table_obligations/figure_table_obligations.md\n M artifacts/reports/first_two_pages_thesis/first_two_pages_thesis.json\n M artifacts/reports/hero_result_contract/hero_result_contract.json\n M artifacts/reports/hero_result_contract/hero_result_contract.md\n M artifacts/reports/paper_spine_gate/paper_spine_gate.json\n M artifacts/reports/paper_spine_gate/paper_spine_gate.md\n M artifacts/reports/recurring_review_elimination/recurring_review_elimination.json\n M artifacts/reports/recurring_review_elimination/recurring_review_elimination.md\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/anchor_update/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/application_read/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/application_read/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/mount_logs/precommit_latest.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/application_read/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/checkpoint_write/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json\n M artifacts/validation/daemon_power_fault_campaign/data_write/baseline.admission_trace.jsonl\n M artifacts/validation/daemon_power_fault_campaign/data_write/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/data_write/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/data_write/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/data_write/recovery.admission_trace.jsonl\n M artifacts/validation/daemon_power_fault_campaign/fsync/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/fsync/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/fsync/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/fsync/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/journal_append/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/journal_append/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_append/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/journal_fsync/recovery.admission_trace.jsonl\n M artifacts/validation/daemon_power_fault_campaign/remount/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/remount/fault_read.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/remount/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/mount_logs/precommit_latest.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/remount/mount_logs/recovery.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/cleanup_baseline_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/cleanup_baseline_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/cleanup_baseline_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/cleanup_fault_unmount_0.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/cleanup_fault_unmount_1.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/cleanup_fault_unmount_2.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/fault_marker.jsonl\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/faulted_storage_scan.json\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/mount_logs/baseline.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/mount_logs/fault.stderr.txt\n M artifacts/validation/daemon_power_fault_campaign/xattr_checkpoint_update/mount_logs/recovery.stderr.txt\n M artifacts/validation/ebpf_iouring_scope_audit/ebpf_iouring_scope_audit.json\n M artifacts/validation/ebpf_iouring_scope_audit/ebpf_iouring_scope_audit.md\n M artifacts/validation/frozen_aegisq_contract/file_preparation.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_00.command.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_00.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_01.command.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_01.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_02.command.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_02.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_03.command.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_03.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_04.command.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warm_rep_04.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warmup_00.command.json\n M artifacts/validation/frozen_aegisq_contract/fio_raw/warmup_00.json\n M artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json\n M artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.md\n M artifacts/validation/frozen_aegisq_contract/frozen_aegisq_repetitions.csv\n M artifacts/validation/frozen_aegisq_contract/mount_logs/pqc_fuse.stderr.txt\n M artifacts/validation/frozen_aegisq_contract/platform_manifest.json\n M artifacts/validation/frozen_aegisq_contract/storage_snapshot.json\n M artifacts/validation/frozen_workload_contract/frozen_workload_contract.json\n M artifacts/validation/generation_fault_matrix/generation_fault_matrix.json\n M artifacts/validation/generation_fault_matrix/generation_fault_matrix.md\n M artifacts/validation/generation_fault_matrix/journals/older_generation_after_attack.pqcmeta\n M artifacts/validation/generation_fault_matrix/journals/older_generation_before_attack.pqcmeta\n M artifacts/validation/generation_fault_matrix/journals/partial_update_after_write.pqcmeta\n M artifacts/validation/generation_fault_matrix/journals/torn_journal_after_tail.pqcmeta\n M artifacts/validation/generation_fault_matrix/mount_logs/partial_mount1.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/partial_remount.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/replay_mount1.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/replay_remount.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/snapshot_mount1.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/snapshot_mount2.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/snapshot_replay_mount.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/torn_mount1.stderr.txt\n M artifacts/validation/generation_fault_matrix/mount_logs/torn_remount.stderr.txt\n M artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json\n M artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.md\n M artifacts/validation/mount_key_lifecycle/mount_key_lifecycle.json\n M artifacts/validation/mount_key_lifecycle/mount_key_lifecycle.md\n M artifacts/validation/posix_scope_audit/mount_logs/pqc_fuse.stderr.txt\n M artifacts/validation/posix_scope_audit/posix_scope_audit.json\n M artifacts/validation/posix_scope_audit/posix_scope_audit.md\n D cuda_aead.cu\n D cuda_aead.h\n D cuda_integrity.cu\n D cuda_integrity.h\n D cuda_pqc.cu\n D cuda_pqc.h\n D experiments/bench_gpu_integrity.cu\n D experiments/bench_gpu_pqc.cu\n D experiments/bench_io_uring_ebpf.cu\n D experiments/bench_iouring_poll.c\n D experiments/benchmark_anchor_latency.py\n D experiments/benchmark_llm_interference.py\n D experiments/benchmark_m4_freshness_tradeoff.py\n D experiments/benchmark_tensorrt_interference.py\n D experiments/build_accepted_structure_audit.py\n D experiments/build_all_reports.py\n D experiments/build_app_recovery_report.py\n D experiments/build_case_study_takeaway_audit.py\n D experiments/build_crash_audit_report.py\n D experiments/build_cross_section_alignment_audit.py\n D experiments/build_design_eval_isomorphism_audit.py\n D experiments/build_evaluation_completeness_matrix.py\n D experiments/build_evaluation_rq_audit.py\n D experiments/build_evidence_dashboard.py\n D experiments/build_figure_table_obligation_audit.py\n D experiments/build_first_two_pages_thesis_audit.py\n D experiments/build_frozen_workload_contract.py\n D experiments/build_hero_result_contract.py\n D experiments/build_index_report.py\n D experiments/build_integrity_comparison_manifest.py\n D experiments/build_kernel_baseline_feasibility.py\n D experiments/build_m3_qos_ci_report.py\n D experiments/build_mechanism_ablation_manifest.py\n D experiments/build_mount_key_lifecycle_manifest.py\n D experiments/build_novelty_isolation_audit.py\n D experiments/build_paper_spine_gate.py\n D experiments/build_pcr_anchor_decision_manifest.py\n D experiments/build_platform_inventory_report.py\n D experiments/build_qos_repeated_report.py\n D experiments/build_recovery_oracle_audit.py\n D experiments/build_recurring_review_elimination_audit.py\n D experiments/build_remaining_gap_map.py\n D experiments/build_repro_bundle.py\n D experiments/build_sqlite_ci_report.py\n D experiments/build_sqlite_recovery_oracle.py\n D experiments/build_stat_thermal_methodology_audit.py\n D experiments/build_status_register.py\n D experiments/build_telemetry_trace_report.py\n D experiments/build_tensorrt_ci_report.py\n D experiments/build_tpm_freshness_policy_manifest.py\n D experiments/build_tpm_freshness_report.py\n D experiments/build_tpm_recovery_verdict.py\n D experiments/build_uma_storage_dma_profile_report.py\n D experiments/build_uma_storage_dma_report.py\n D experiments/build_uvm_proxy_report.py\n D experiments/build_workload_diversity_matrix.py\n D experiments/check_tpm_provisioning.py\n D experiments/generate_m4_pareto_data.py\n D experiments/gpu_burner.cu\n D experiments/io_uring_uvm.cu\n D experiments/plot_m3_qos.py\n D experiments/plot_m4_tradeoff.py\n D experiments/plot_tail_summary.py\n D experiments/plot_telemetry_ablation.py\n D experiments/plot_telemetry_sensitivity.py\n D experiments/plot_verified_microbench.py\n D experiments/plot_zero_context.py\n D experiments/probe_uma_counter_availability.py\n D experiments/profile_e3_nsys.py\n D experiments/profile_uma_storage_dma.py\n D experiments/repro_malloc_register.cu\n D experiments/repro_managed_register.cu\n D experiments/repro_pinned_memory.cu\n D experiments/run_admission_interface_audit.py\n D experiments/run_app_recovery_bundle.py\n D experiments/run_baselines.sh\n D experiments/run_combined_durability_bundle.py\n D experiments/run_cpu_baseline.py\n D experiments/run_crash_replay_e8.py\n D experiments/run_daemon_power_fault_matrix.py\n D experiments/run_e1_cost_curve.py\n D experiments/run_e3_interference_hero.py\n D experiments/run_e6_breakdown.py\n D experiments/run_ebpf_iouring_scope_audit.py\n D experiments/run_frozen_aegisq_contract.py\n D experiments/run_frozen_gocryptfs_contract.py\n D experiments/run_frozen_plaintext_contract.py\n D experiments/run_fuse_tamper_rejection.py\n D experiments/run_generation_fault_matrix.py\n D experiments/run_hardware_freshness_recovery_matrix.py\n D experiments/run_integrity_scope_audit.py\n D experiments/run_keyplane_rekey_workflow.py\n D experiments/run_m5_admission_sweep.py\n D experiments/run_m5_fastlane_stress.py\n D experiments/run_motivation_bench.py\n D experiments/run_motivation_profiling.py\n D experiments/run_posix_scope_audit.py\n D experiments/run_power_fail_test.py\n D experiments/run_qos_cupti_pm_fuse_bridge.py\n D experiments/run_qos_fuse_live_bridge.py\n D experiments/run_qos_gpu.py\n D experiments/run_qos_live_telemetry_admission.py\n D experiments/run_qos_measured_pressure_adapter.py\n D experiments/run_qos_repeated.py\n D experiments/run_qos_sensitivity_analysis.py\n D experiments/run_qos_sqlite_hero_bundle.py\n D experiments/run_scheduler_smoke.sh\n D experiments/run_sidechannel_eval.py\n D experiments/run_sqlite_fault_campaign.py\n D experiments/run_sqlite_syscall_crash_tpm.py\n D experiments/run_tpm_freshness_bundle.py\n D experiments/run_tpm_monotonic_replay.py\n D experiments/run_tpm_only_bundle.py\n D experiments/run_tpm_pcr_policy_probe.py\n D experiments/run_tvla_leakage_eval.py\n D experiments/run_uma_dma_scope_audit.py\n D experiments/run_uma_storage_dma_probe.py\n D experiments/run_uma_storage_dma_repeated.py\n D experiments/run_verified_microbench.py\n D experiments/scheduler_trace.jsonl\n D experiments/tegra_qos_daemon.py\n D experiments/trace_gup.sh\n D experiments/trace_gup_real.bt\n D experiments/trace_nvme_lat.bt\n D experiments/verify_gup_pinning.py\n D experiments/workload_map_bench.cpp\n D pqc_admission.c\n D pqc_admission.h\n D pqc_anchor.c\n D pqc_anchor.h\n D pqc_block_job.h\n D pqc_file_key.c\n D pqc_file_key.h\n D pqc_fuse.c\n?? Paper/Figures/fig_architecture.png\n?? Paper/Figures/fig_evaluation_summary.pdf\n?? Paper/Figures/fig_evaluation_summary.png\n?? Paper/Figures/fig_first_page_qos.png\n?? Paper/Figures/fig_problem_boundary.pdf\n?? Paper/Figures/fig_problem_boundary.png\n?? Paper/Figures/fig_publication_protocol.pdf\n?? Paper/Figures/fig_publication_protocol.png\n?? artifacts/reports/architecture_claim_firewall/\n?? artifacts/reports/artifact_ledger_separation/\n?? artifacts/reports/dangerous_claim_lint/\n?? artifacts/reports/final_claim_evidence_manifest/\n?? artifacts/reports/final_s2_closeout/\n?? artifacts/reports/related_work_applicability/\n?? artifacts/reports/review_response_strategy/\n?? artifacts/validation/a1_throughput_decision/\n?? artifacts/validation/a2_gap_attribution/\n?? artifacts/validation/a3_batching_decision/\n?? artifacts/validation/a4_hidden_overhead_accounting/\n?? artifacts/validation/async_merkle_tpm_epoch/\n?? artifacts/validation/attacker_model_claim_guard/\n?? artifacts/validation/baseline_contract_immutability/\n?? artifacts/validation/concurrency_contract/\n?? artifacts/validation/crash_power_loss_claim_guard/\n?? artifacts/validation/crypto_plane_separation/\n?? artifacts/validation/cuda_qos_contract/\n?? artifacts/validation/energy_thermal_metadata_closeout/\n?? artifacts/validation/filesystem_viability_breakdown/\n?? artifacts/validation/filesystem_viability_breakdown_wait1ms/\n?? artifacts/validation/freshness_ladder_claim_guard/\n?? artifacts/validation/frozen_dmcrypt_contract/\n?? artifacts/validation/generation_fault_matrix/journals/reserved_generation_after_fault.pqcmeta\n?? artifacts/validation/generation_fault_matrix/journals/reserved_generation_after_remount_write.pqcmeta\n?? artifacts/validation/generation_fault_matrix/mount_logs/reserved_fault_mount.stderr.txt\n?? artifacts/validation/generation_fault_matrix/mount_logs/reserved_fault_mount.stdout.txt\n?? artifacts/validation/generation_fault_matrix/mount_logs/reserved_mount1.stderr.txt\n?? artifacts/validation/generation_fault_matrix/mount_logs/reserved_mount1.stdout.txt\n?? artifacts/validation/generation_fault_matrix/mount_logs/reserved_remount.stderr.txt\n?? artifacts/validation/generation_fault_matrix/mount_logs/reserved_remount.stdout.txt\n?? artifacts/validation/generation_fault_matrix/reserved_generation_fault_marker.jsonl\n?? artifacts/validation/gpu_dataplane_negative_control/\n?? artifacts/validation/jetson_memory_contract/\n?? artifacts/validation/jetson_optimization_ladder/\n?? artifacts/validation/jetson_power_thermal_contract/\n?? artifacts/validation/kdf_crypto_plane/\n?? artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json\n?? artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.md\n?? artifacts/validation/kernel_qos_hero_integration_closeout/\n?? artifacts/validation/nonce_generation_fault_verdict/\n?? artifacts/validation/parallel_commit_contract/\n?? artifacts/validation/publication_protocol_fault_matrix/\n?? artifacts/validation/refactor_inventory/\n?? artifacts/validation/scheduler_trace.jsonl\n?? artifacts/validation/second_macrobenchmark_closeout/\n?? artifacts/validation/shadow_mmap_posix/\n?? artifacts/validation/sqlite_hero_validity_closeout/\n?? artifacts/validation/sqlite_kernel_qos_baseline/\n?? artifacts/validation/sqlite_kernel_qos_baseline_cgroup/\n?? artifacts/validation/sqlite_kernel_qos_comparison/\n?? artifacts/validation/tensorrt_yolo_scope_closeout/\n?? artifacts/validation/vfs_ebpf_fdatasync_storm/\n?? code/\n?? docs/",
+    "git_head": "de8269b1dc8dba36fdf36b78c8fbbd34503b3dcd",
+    "kernel": "Linux thor 6.8.12-tegra #1 SMP PREEMPT Tue Dec 30 15:40:41 PST 2025 aarch64 aarch64 aarch64 GNU/Linux",
+    "machine": "aarch64",
+    "nvcc": {
+      "argv": [
+        "nvcc",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jul_16_07:31:19_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.48\nBuild cuda_13.0.r13.0/compiler.36260728_0"
+    },
+    "python": "3.12.3",
+    "system": "Linux-6.8.12-tegra-aarch64-with-glibc2.39",
+    "timestamp_utc": "2026-06-30T05:13:15.854893+00:00"
+  },
+  "repetitions": 3,
+  "rows": [
+    {
+      "acceptable": true,
+      "background_bytes_written": 4063232,
+      "background_throughput_mb_s": 6.685623817701344,
+      "deadline_misses": 10,
+      "foreground_p95_ms": 11.693290399999999,
+      "foreground_p99_ms": 12.65173145,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_00/kernel_systemd_io_weight/mode_summary.json",
+      "repetition": 0
+    },
+    {
+      "acceptable": true,
+      "background_bytes_written": 4063232,
+      "background_throughput_mb_s": 6.73069491922091,
+      "deadline_misses": 5,
+      "foreground_p95_ms": 10.453361649999998,
+      "foreground_p99_ms": 11.40027003,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/mode_summary.json",
+      "repetition": 1
+    },
+    {
+      "acceptable": true,
+      "background_bytes_written": 4063232,
+      "background_throughput_mb_s": 6.79095433316294,
+      "deadline_misses": 7,
+      "foreground_p95_ms": 10.75933715,
+      "foreground_p99_ms": 12.574790109999999,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_02/kernel_systemd_io_weight/mode_summary.json",
+      "repetition": 2
+    }
+  ],
+  "scope": [
+    "First kernel-control baseline for SQLite foreground p99 under mounted secure-storage pressure.",
+    "Applies the selected Linux kernel control only to the background secure-storage writer.",
+    "Does not close Gate B3 by itself because the parent gate requires at least two kernel-level baselines plus paper text."
+  ],
+  "summary": {
+    "background_throughput_mb_s": {
+      "max": 6.79095433316294,
+      "median": 6.73069491922091,
+      "min": 6.685623817701344,
+      "samples": 3
+    },
+    "deadline_misses": {
+      "max": 10.0,
+      "median": 7.0,
+      "min": 5.0,
+      "samples": 3
+    },
+    "foreground_p99_ms": {
+      "max": 12.65173145,
+      "median": 12.574790109999999,
+      "min": 11.40027003,
+      "samples": 3
+    }
+  },
+  "thermal_logging": {
+    "available": true,
+    "command": [
+      "tegrastats",
+      "--interval",
+      "100"
+    ],
+    "line_count": 31,
+    "nonempty": true,
+    "path": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/thermal_tegrastats.log",
+    "returncode": -15,
+    "started": true
+  },
+  "timestamp_utc": "2026-06-30T05:13:15.854817+00:00",
+  "verdict": "measured"
+}

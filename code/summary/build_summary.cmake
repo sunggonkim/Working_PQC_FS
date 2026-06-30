@@ -1,0 +1,6 @@
+message(STATUS " Code Dir    : ${CODE_DIR}")
+if(CMAKE_CUDA_COMPILER)
+    message(STATUS " CUDA       : ${CMAKE_CUDA_COMPILER_VERSION}  arch=${CMAKE_CUDA_ARCHITECTURES}")
+else()
+    message(STATUS " CUDA       : NOT FOUND")
+endif()

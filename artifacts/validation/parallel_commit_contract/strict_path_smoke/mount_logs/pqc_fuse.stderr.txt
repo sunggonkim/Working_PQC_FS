@@ -1,0 +1,28 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-28 14:55:14.252] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 14:55:14.252]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-28 14:55:14.252]   Storage dir : /tmp/aegisq_strict_storage_pt6yp173
+[PQC-FUSE 2026-06-28 14:55:14.252]   Mount point : /tmp/aegisq_strict_mnt_dwh4v749
+[PQC-FUSE 2026-06-28 14:55:14.252] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=artifacts/validation/parallel_commit_contract/strict_path_smoke/admission_trace.jsonl
+[PQC-FUSE 2026-06-28 14:55:14.252] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-28 14:55:14.252]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-28 14:55:14.252]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-28 14:55:14.252]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-28 14:55:14.252]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-28 14:55:14.255] Keypair generated in 1478.72 µs
+[PQC-FUSE 2026-06-28 14:55:14.424] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-28 14:55:14.424] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-28 14:55:14.424] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-28 14:55:14.424] Freshness anchor worker started
+[PQC-FUSE 2026-06-28 14:55:14.533] PQC background rekey worker started
+[PQC-FUSE 2026-06-28 14:55:14.533] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-28 14:55:14.563] CREATE /smoke.dat: authenticated file-key envelope initialized (fid=3176118094079495349)
+[PQC-FUSE 2026-06-28 14:55:14.567] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-28 14:55:14.568] PQC background rekey worker stopped

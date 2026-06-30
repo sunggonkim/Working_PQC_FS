@@ -1,0 +1,574 @@
+{
+  "candidate_count": 62,
+  "claim_candidates": [
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 12,
+      "path": "Paper/10_Discussion_and_Limitations.tex",
+      "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation.  File anchors are replayable.  TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release under provisioned TPM policy."
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 21,
+      "path": "Paper/10_Discussion_and_Limitations.tex",
+      "text": "The crash story has the same boundary.  The repository retains conservative crash-audit, daemon \\texttt{SIGKILL}, SQLite selected-boundary, SQLite/\\texttt{dbm.dumb} TPM replay-after-advance, and SQLite syscall-exact app-crash evidence, but still lacks physical power-loss, kernel-crash, drive-cache, broader-workload, non-NVIDIA UMA platform, and side-channel testing evidence."
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 34,
+      "path": "Paper/10_Discussion_and_Limitations.tex",
+      "text": "Unsupported guarantees & General POSIX, persistent PCR-bound freshness, side-channel protection, portability, and power-loss certification are not claimed\\\\"
+    },
+    {
+      "guarded": true,
+      "kind": "gpu_constant_time",
+      "line": 52,
+      "path": "Paper/1_Introduction.tex",
+      "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack."
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 34,
+      "path": "Paper/4_Evaluation.tex",
+      "text": "RQ1 hash & CUDA and OpenSSL digests agree & Side-channel resistance\\\\"
+    },
+    {
+      "guarded": true,
+      "kind": "gpu_constant_time",
+      "line": 4,
+      "path": "Paper/6_Conclusion.tex",
+      "text": "AEGIS-Q treats secure edge storage as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem.  Its authenticated format keeps AES-GCM data writes on the CPU, admits PQC/GPU maintenance only for slack-tolerant batches, and separates replayable file witnesses from externally anchored freshness checks.  On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure.  It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability.  The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 6,
+      "path": "Paper/7_Implementation_Details.tex",
+      "text": "Table~\\ref{tab:impl_boundaries} summarizes choices that are easy to misread.  Publication is a strict data/journal/checkpoint path plus opt-in epoch-redo-log grouping, not an accelerator path.  GPU AES-GCM is format-compatible and falls back to CPU, but evaluated data writes are CPU-first.  The GPU ML-KEM executor is not an in-place filesystem data path; integrity parity tests do not imply a persisted per-file Merkle tree or side-channel protection."
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 7,
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES-GCM protects the confidentiality and authenticity of published block records, while the HMAC-protected key envelope and checkpoint detect unauthenticated metadata changes.  The adversary can still deny service, delete records, replay a complete file-backed snapshot, or exploit vulnerabilities outside the FUSE process.  We make no claim against a privileged local attacker that can read process memory, substitute the CUDA driver, alter the mount executable, or use GPU microarchitectural side channels."
+    },
+    {
+      "guarded": true,
+      "kind": "privileged_attacker",
+      "line": 7,
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES-GCM protects the confidentiality and authenticity of published block records, while the HMAC-protected key envelope and checkpoint detect unauthenticated metadata changes.  The adversary can still deny service, delete records, replay a complete file-backed snapshot, or exploit vulnerabilities outside the FUSE process.  We make no claim against a privileged local attacker that can read process memory, substitute the CUDA driver, alter the mount executable, or use GPU microarchitectural side channels."
+    },
+    {
+      "guarded": true,
+      "kind": "compromised_kernel",
+      "line": 7,
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES-GCM protects the confidentiality and authenticity of published block records, while the HMAC-protected key envelope and checkpoint detect unauthenticated metadata changes.  The adversary can still deny service, delete records, replay a complete file-backed snapshot, or exploit vulnerabilities outside the FUSE process.  We make no claim against a privileged local attacker that can read process memory, substitute the CUDA driver, alter the mount executable, or use GPU microarchitectural side channels."
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 24,
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "GPU side channel & No protection mechanism claimed & Integrity parity is not constant-time evidence\\\\"
+    },
+    {
+      "guarded": true,
+      "kind": "privileged_attacker",
+      "line": 25,
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "Privileged local attacker & Out of scope & Kernel/driver/FUSE process are trusted\\\\"
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 38,
+      "path": "Paper/8_Security_Analysis.tex",
+      "text": "\\subsection{Side channels and application semantics}"
+    },
+    {
+      "guarded": true,
+      "kind": "compromised_kernel",
+      "line": 32,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"no production code defends against a compromised kernel, driver, \""
+    },
+    {
+      "guarded": true,
+      "kind": "compromised_kernel",
+      "line": 35,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"compromised kernel, malicious FUSE driver, malicious filesystem \""
+    },
+    {
+      "guarded": true,
+      "kind": "fuse_stack_defense",
+      "line": 35,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"compromised kernel, malicious FUSE driver, malicious filesystem \""
+    },
+    {
+      "guarded": true,
+      "kind": "compromised_kernel",
+      "line": 40,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim compromised-kernel, driver, or FUSE-stack defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "fuse_stack_defense",
+      "line": 40,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim compromised-kernel, driver, or FUSE-stack defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "privileged_attacker",
+      "line": 69,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"or direct lower-storage access by a privileged local attacker\","
+    },
+    {
+      "guarded": true,
+      "kind": "privileged_attacker",
+      "line": 75,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim privileged local attacker defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 82,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": ".name = \"multi-tenant-gpu\","
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 90,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"multi-tenant GPU deployment requires platform isolation outside AEGIS-Q\","
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 92,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim multi-tenant GPU isolation or cross-tenant defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 99,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": ".name = \"gpu-side-channel\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 103,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"thermal, or occupancy side-channel defenses\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 108,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"GPU side-channel resistance is out of scope for this implementation\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 110,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim side-channel protection\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 124,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"privileged-attacker defense, side-channel defense, or certified crash safety\","
+    },
+    {
+      "guarded": true,
+      "kind": "deployment_ready",
+      "line": 126,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"the code is not a general-purpose deployment-ready secure filesystem\","
+    },
+    {
+      "guarded": true,
+      "kind": "deployment_ready",
+      "line": 128,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim ready for deployment or general-purpose filesystem status\","
+    },
+    {
+      "guarded": true,
+      "kind": "general_purpose_fs",
+      "line": 128,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"must not claim ready for deployment or general-purpose filesystem status\","
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 177,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "return \"multi-tenant-gpu\";"
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 179,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "return \"gpu-side-channel\";"
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 261,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"multi-tenant\") != 0)"
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 264,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"side-channel\") != 0)"
+    },
+    {
+      "guarded": true,
+      "kind": "deployment_ready",
+      "line": 267,
+      "path": "code/crypto/pqc_trust_boundary.c",
+      "text": "\"ready for deployment\") != 0)"
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 35,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"PQC_TRUST_SUBJECT_MULTI_TENANT_GPU\": \"multi-tenant-gpu\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 36,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"PQC_TRUST_SUBJECT_GPU_SIDE_CHANNEL\": \"gpu-side-channel\","
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 43,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"PQC_TRUST_SUBJECT_MULTI_TENANT_GPU\": [\"multi-tenant\"],"
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 44,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"PQC_TRUST_SUBJECT_GPU_SIDE_CHANNEL\": [\"side-channel\"],"
+    },
+    {
+      "guarded": true,
+      "kind": "deployment_ready",
+      "line": 46,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"ready for deployment\","
+    },
+    {
+      "guarded": true,
+      "kind": "general_purpose_fs",
+      "line": 47,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"general-purpose filesystem\","
+    },
+    {
+      "guarded": true,
+      "kind": "compromised_kernel",
+      "line": 53,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries\","
+    },
+    {
+      "guarded": true,
+      "kind": "privileged_attacker",
+      "line": 55,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"We make no claim against a privileged local attacker\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 57,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"GPU side channel & No protection mechanism claimed\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 59,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"privileged-attacker defense, or side-channel evaluation\","
+    },
+    {
+      "guarded": true,
+      "kind": "gpu_constant_time",
+      "line": 63,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"GPU constant-time behavior\","
+    },
+    {
+      "guarded": true,
+      "kind": "fuse_stack_defense",
+      "line": 79,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "(\"fuse_stack_defense\", re.compile(r\"FUSE[- ]stack defense|FUSE stack defense|compromised .*FUSE\", re.I)),"
+    },
+    {
+      "guarded": true,
+      "kind": "deployment_ready",
+      "line": 80,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "(\"deployment_ready\", re.compile(r\"deployment[- ]ready|ready for deployment|ready for production\", re.I)),"
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 304,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"kernel/driver/FUSE defense, privileged local attackers, multi-tenant \""
+    },
+    {
+      "guarded": true,
+      "kind": "privileged_attacker",
+      "line": 304,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"kernel/driver/FUSE defense, privileged local attackers, multi-tenant \""
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 305,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"GPU isolation, GPU side-channel protection, deployment readiness, \""
+    },
+    {
+      "guarded": true,
+      "kind": "general_purpose_fs",
+      "line": 306,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"and general-purpose filesystem status.\""
+    },
+    {
+      "guarded": true,
+      "kind": "compromised_kernel",
+      "line": 325,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"no compromised kernel/driver/FUSE-stack defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "fuse_stack_defense",
+      "line": 325,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"no compromised kernel/driver/FUSE-stack defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "privileged_attacker",
+      "line": 326,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"no privileged local attacker defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "multi_tenant",
+      "line": 327,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"no multi-tenant GPU isolation or cross-tenant defense\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 328,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"no GPU side-channel protection\","
+    },
+    {
+      "guarded": true,
+      "kind": "deployment_ready",
+      "line": 329,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"no deployment-ready or ready-for-production claim\","
+    },
+    {
+      "guarded": true,
+      "kind": "general_purpose_fs",
+      "line": 330,
+      "path": "code/experiments/build_attacker_model_claim_guard.py",
+      "text": "\"no general-purpose filesystem status\","
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 77,
+      "path": "docs/architecture/publication_protocol.md",
+      "text": "- No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate."
+    },
+    {
+      "guarded": true,
+      "kind": "side_channel",
+      "line": 82,
+      "path": "docs/architecture/publication_protocol.md",
+      "text": "Paper or README text may describe strict and epoch publication only within the retained artifact scope. It must not claim throughput improvement, full crash certification, kernel bypass, direct storage DMA, rollback resistance, side-channel defense, or general-purpose POSIX support from Gate 0.9 evidence."
+    }
+  ],
+  "claim_checks": {
+    "dangerous_claim_candidates_scanned": true,
+    "unguarded_d4_claim_count_zero": true
+  },
+  "close_conditions": {
+    "dangerous_claim_lint_passes": true,
+    "paper_states_attacker_model_and_non_claims": true,
+    "production_trust_boundary_table_complete": true
+  },
+  "non_claims": [
+    "no compromised kernel/driver/FUSE-stack defense",
+    "no privileged local attacker defense",
+    "no multi-tenant GPU isolation or cross-tenant defense",
+    "no GPU side-channel protection",
+    "no deployment-ready or ready-for-production claim",
+    "no general-purpose filesystem status"
+  ],
+  "overall_pass": true,
+  "paper_checks": {
+    "conclusion_nonclaims": true,
+    "deployment_nonclaim": true,
+    "gpu_side_channel_nonclaim": true,
+    "limitations_privileged_sidechannel": true,
+    "privileged_attacker_nonclaim": true,
+    "trusts_kernel_fuse_driver_stack": true
+  },
+  "schema_version": 1,
+  "scope": "D4 attacker-model and non-claim guard. It verifies the production trust-boundary table and rejects unguarded claims about compromised kernel/driver/FUSE defense, privileged local attackers, multi-tenant GPU isolation, GPU side-channel protection, deployment readiness, and general-purpose filesystem status.",
+  "source_artifacts": [
+    "code/crypto/pqc_trust_boundary.c",
+    "code/crypto/pqc_trust_boundary.h",
+    "code/support/pqc_selftest.c",
+    "code/frontend/pqc_main.c",
+    "code/crypto/sources.cmake"
+  ],
+  "source_checks": {
+    "all_names_match_subjects": true,
+    "all_required_subjects_present": true,
+    "all_rows_have_scope_fields": true,
+    "build_includes_trust_boundary_source": true,
+    "header_exposes_single_trust_boundary_api": true,
+    "required_non_claim_guards_present": true,
+    "required_subjects_are_non_claims": true,
+    "self_test_wired_to_binary": true,
+    "trust_self_test_checks_required_non_claims": true
+  },
+  "timestamp_utc": "2026-06-30T03:07:05.291801+00:00",
+  "trust_boundary_rows": [
+    {
+      "claims_defense": 1,
+      "deployment_ready": 0,
+      "excluded_attacker": "attacker that can read or modify daemon memory, ptrace the process,  or replace linked crypto libraries",
+      "failure_boundary": "daemon memory compromise can disclose mount and per-file secrets",
+      "implemented_boundary": "authenticated encryption, generation checks, explicit key cleanup,  and fail-closed metadata parsing inside the mounted daemon path",
+      "name": "daemon-process",
+      "non_claim_guard": "do not claim process compromise resistance or deployment hardening",
+      "status": "PQC_TRUST_STATUS_IMPLEMENTED_BOUNDARY",
+      "subject": "PQC_TRUST_SUBJECT_DAEMON_PROCESS",
+      "trusted_component": "pqc_fuse userspace daemon and OpenSSL/OQS libraries"
+    },
+    {
+      "claims_defense": 0,
+      "deployment_ready": 0,
+      "excluded_attacker": "compromised kernel, malicious FUSE driver, malicious filesystem  driver, or malicious block driver",
+      "failure_boundary": "kernel or driver compromise can observe, reorder, suppress, or forge I/O",
+      "implemented_boundary": "no production code defends against a compromised kernel, driver,  or FUSE stack",
+      "name": "kernel-driver-fuse-stack",
+      "non_claim_guard": "must not claim compromised-kernel, driver, or FUSE-stack defense",
+      "status": "PQC_TRUST_STATUS_NON_CLAIM",
+      "subject": "PQC_TRUST_SUBJECT_KERNEL_DRIVER_FUSE",
+      "trusted_component": "Linux kernel, VFS, FUSE driver, filesystem driver, and block stack"
+    },
+    {
+      "claims_defense": 1,
+      "deployment_ready": 0,
+      "excluded_attacker": "administrator that can roll back the complete lower storage root and  all file-backed anchors without a hardware freshness source",
+      "failure_boundary": "file-backed anchors are replayable; TPM-backed freshness depends on provisioning",
+      "implemented_boundary": "ciphertext/tag verification and committed-prefix anchor checks for  the stated daemon/crash model",
+      "name": "backing-storage",
+      "non_claim_guard": "must not claim full rollback resistance from file-backed anchors",
+      "status": "PQC_TRUST_STATUS_EXTERNAL_TCB",
+      "subject": "PQC_TRUST_SUBJECT_BACKING_STORAGE",
+      "trusted_component": "local lower filesystem and configured anchor backend"
+    },
+    {
+      "claims_defense": 0,
+      "deployment_ready": 0,
+      "excluded_attacker": "root user, host administrator, or process with equivalent local privilege",
+      "failure_boundary": "privileged local access can read daemon memory, alter mounts, and modify storage",
+      "implemented_boundary": "no production path defends against root, CAP_SYS_ADMIN, ptrace,  or direct lower-storage access by a privileged local attacker",
+      "name": "privileged-local-attacker",
+      "non_claim_guard": "must not claim privileged local attacker defense",
+      "status": "PQC_TRUST_STATUS_NON_CLAIM",
+      "subject": "PQC_TRUST_SUBJECT_PRIVILEGED_LOCAL_ATTACKER",
+      "trusted_component": "host OS privilege separation"
+    },
+    {
+      "claims_defense": 0,
+      "deployment_ready": 0,
+      "excluded_attacker": "co-resident GPU tenant, hostile CUDA process, or shared-device observer",
+      "failure_boundary": "multi-tenant GPU deployment requires platform isolation outside AEGIS-Q",
+      "implemented_boundary": "no production code implements GPU tenant isolation, MIG partitioning,  or scheduler-enforced cross-tenant secrecy",
+      "name": "multi-tenant-gpu",
+      "non_claim_guard": "must not claim multi-tenant GPU isolation or cross-tenant defense",
+      "status": "PQC_TRUST_STATUS_NON_CLAIM",
+      "subject": "PQC_TRUST_SUBJECT_MULTI_TENANT_GPU",
+      "trusted_component": "exclusive or administratively isolated GPU execution environment"
+    },
+    {
+      "claims_defense": 0,
+      "deployment_ready": 0,
+      "excluded_attacker": "local observer measuring GPU timing, cache effects, memory traffic,  power, temperature, or scheduler occupancy",
+      "failure_boundary": "GPU side-channel resistance is out of scope for this implementation",
+      "implemented_boundary": "no production code implements timing, cache, memory-bus, power,  thermal, or occupancy side-channel defenses",
+      "name": "gpu-side-channel",
+      "non_claim_guard": "must not claim side-channel protection",
+      "status": "PQC_TRUST_STATUS_NON_CLAIM",
+      "subject": "PQC_TRUST_SUBJECT_GPU_SIDE_CHANNEL",
+      "trusted_component": "single-tenant GPU timing and resource domain assumption"
+    },
+    {
+      "claims_defense": 0,
+      "deployment_ready": 0,
+      "excluded_attacker": "production adversary model requiring complete POSIX coverage,  privileged-attacker defense, side-channel defense, or certified crash safety",
+      "failure_boundary": "the code is not a general-purpose deployment-ready secure filesystem",
+      "implemented_boundary": "production code includes explicit checks and fail-closed paths, but  does not provide deployment certification or a hardening profile",
+      "name": "deployment-readiness",
+      "non_claim_guard": "must not claim ready for deployment or general-purpose filesystem status",
+      "status": "PQC_TRUST_STATUS_NON_CLAIM",
+      "subject": "PQC_TRUST_SUBJECT_DEPLOYMENT_READINESS",
+      "trusted_component": "research prototype configuration and operator discipline"
+    }
+  ],
+  "unguarded_claims": [],
+  "unguarded_count": 0
+}

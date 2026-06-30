@@ -1,0 +1,226 @@
+{
+  "artifact": "second_macrobenchmark_closeout",
+  "claim_boundary": {
+    "allowed": [
+      "secure inference logging exists as a second mounted macrobenchmark smoke",
+      "strict and epoch-redo-log modes append, sync, read back, remount, and verify ordered records",
+      "latency, throughput, process resource usage, and linked Jetson thermal metadata are retained"
+    ],
+    "forbidden": [
+      "broad workload diversity",
+      "SOSP/OSDI readiness from the second macrobenchmark alone",
+      "foreground AI QoS recovery",
+      "general application compatibility or database certification"
+    ]
+  },
+  "close_conditions": {
+    "all_macro_runs_pass": true,
+    "durability_recovery_retained": true,
+    "fuse_binary_exists": true,
+    "paper_scope_guard_passes": true,
+    "process_resource_usage_retained": true,
+    "raw_latency_throughput_retained": true,
+    "runner_exists": true,
+    "strict_and_epoch_runs_present": true,
+    "thermal_metadata_linked": true
+  },
+  "overall_pass": true,
+  "paper_guard": {
+    "complete": true,
+    "forbidden_hits": [],
+    "paper_files": [
+      "Paper/10_Discussion_and_Limitations.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/8_Security_Analysis.tex",
+      "Paper/main.tex"
+    ],
+    "required_phrases": {
+      "broader_workloads_still_missing": true,
+      "model_cache_third_scoped_workload": true,
+      "not_broad_workload_suite": true,
+      "secure_inference_log_second_macro": true,
+      "strict_epoch_modes": true
+    },
+    "unguarded_forbidden_hits": []
+  },
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "/home/thor/skim/pqc_encrpyted_fs/code/experiments/run_secure_inference_log_macro_smoke.py",
+        "--publication-mode",
+        "strict",
+        "--records",
+        "4",
+        "--payload-bytes",
+        "16384"
+      ],
+      "durability_recovery": {
+        "mounted_hash_mismatches": 0,
+        "mounted_malformed": 0,
+        "mounted_pass": true,
+        "mounted_record_count": 4,
+        "remount_hash_mismatches": 0,
+        "remount_malformed": 0,
+        "remount_pass": true,
+        "remount_record_count": 4,
+        "unmount_pass": true,
+        "visible_sidecars_mounted": [],
+        "visible_sidecars_remount": []
+      },
+      "latency_throughput_summary": {
+        "durable_append_latency": {
+          "avg_us": 3305.0925,
+          "count": 4,
+          "max_us": 6587.416,
+          "p50_us": 2243.111,
+          "p95_us": 6587.416,
+          "p99_us": 6587.416
+        },
+        "payload_mib_s": 3.8171176779514306,
+        "record_mib_s": 5.154646522502161,
+        "records_s": 244.29553138889156,
+        "sync_latency": {
+          "avg_us": 3271.06225,
+          "count": 4,
+          "max_us": 6527.972,
+          "p50_us": 2218.305,
+          "p95_us": 6527.972,
+          "p99_us": 6527.972
+        },
+        "total_payload_bytes": 65536,
+        "total_record_bytes": 88500,
+        "write_latency": {
+          "avg_us": 34.03025,
+          "count": 4,
+          "max_us": 59.444,
+          "p50_us": 28.417,
+          "p95_us": 59.444,
+          "p99_us": 59.444
+        }
+      },
+      "name": "strict",
+      "overall_pass": true,
+      "parse_error": null,
+      "payload_bytes": 16384,
+      "process_resource_usage": {
+        "cpu_utilization_percent_one_core": 85.37275023204896,
+        "involuntary_context_switches_delta": 31,
+        "major_faults_delta": 0,
+        "max_rss_kb_delta": 115564,
+        "minor_faults_delta": 30708,
+        "system_cpu_s": 0.311662,
+        "total_cpu_s": 0.536176,
+        "user_cpu_s": 0.224514,
+        "voluntary_context_switches_delta": 317,
+        "wall_s": 0.6280411472544074
+      },
+      "publication_mode": "strict",
+      "records_requested": 4,
+      "retained_repository_outputs": false,
+      "returncode": 0,
+      "stderr": "artifacts/validation/second_macrobenchmark_closeout/strict.stderr.txt",
+      "stdout_json": "artifacts/validation/second_macrobenchmark_closeout/strict_raw.json",
+      "workload": "secure_inference_logging"
+    },
+    {
+      "command": [
+        "python3",
+        "/home/thor/skim/pqc_encrpyted_fs/code/experiments/run_secure_inference_log_macro_smoke.py",
+        "--publication-mode",
+        "epoch-redo-log",
+        "--records",
+        "2",
+        "--payload-bytes",
+        "16384"
+      ],
+      "durability_recovery": {
+        "mounted_hash_mismatches": 0,
+        "mounted_malformed": 0,
+        "mounted_pass": true,
+        "mounted_record_count": 2,
+        "remount_hash_mismatches": 0,
+        "remount_malformed": 0,
+        "remount_pass": true,
+        "remount_record_count": 2,
+        "unmount_pass": true,
+        "visible_sidecars_mounted": [],
+        "visible_sidecars_remount": []
+      },
+      "latency_throughput_summary": {
+        "durable_append_latency": {
+          "avg_us": 3406.727,
+          "count": 2,
+          "max_us": 4403.1759999999995,
+          "p50_us": 2410.2780000000002,
+          "p95_us": 4403.1759999999995,
+          "p99_us": 4403.1759999999995
+        },
+        "payload_mib_s": 3.3858550784684103,
+        "record_mib_s": 4.5722682868111315,
+        "records_s": 216.69472502197826,
+        "sync_latency": {
+          "avg_us": 3368.1155,
+          "count": 2,
+          "max_us": 4346.324,
+          "p50_us": 2389.907,
+          "p95_us": 4346.324,
+          "p99_us": 4346.324
+        },
+        "total_payload_bytes": 32768,
+        "total_record_bytes": 44250,
+        "write_latency": {
+          "avg_us": 38.6115,
+          "count": 2,
+          "max_us": 56.852,
+          "p50_us": 20.371,
+          "p95_us": 56.852,
+          "p99_us": 56.852
+        }
+      },
+      "name": "epoch_redo_log",
+      "overall_pass": true,
+      "parse_error": null,
+      "payload_bytes": 16384,
+      "process_resource_usage": {
+        "cpu_utilization_percent_one_core": 85.68552735384274,
+        "involuntary_context_switches_delta": 28,
+        "major_faults_delta": 0,
+        "max_rss_kb_delta": 132,
+        "minor_faults_delta": 30137,
+        "system_cpu_s": 0.33865399999999996,
+        "total_cpu_s": 0.529849,
+        "user_cpu_s": 0.191195,
+        "voluntary_context_switches_delta": 279,
+        "wall_s": 0.6183646367862821
+      },
+      "publication_mode": "epoch-redo-log",
+      "records_requested": 2,
+      "retained_repository_outputs": false,
+      "returncode": 0,
+      "stderr": "artifacts/validation/second_macrobenchmark_closeout/epoch_redo_log.stderr.txt",
+      "stdout_json": "artifacts/validation/second_macrobenchmark_closeout/epoch_redo_log_raw.json",
+      "workload": "secure_inference_logging"
+    }
+  ],
+  "source": {
+    "fuse_binary": "build/pqc_fuse",
+    "runner": "code/experiments/run_secure_inference_log_macro_smoke.py",
+    "thermal_contract": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json"
+  },
+  "thermal_metadata": {
+    "available": true,
+    "complete": true,
+    "contract": {
+      "bytes": 48039,
+      "exists": true,
+      "path": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json"
+    },
+    "nvpmodel_available": true,
+    "platform_manifest_present": true,
+    "scope": "linked platform-state metadata; macro runner also records per-run process resource usage",
+    "tegrastats_available": true,
+    "tegrastats_samples": 0
+  },
+  "timestamp_utc": "2026-06-30T08:20:44.984845+00:00"
+}

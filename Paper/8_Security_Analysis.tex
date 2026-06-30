@@ -10,7 +10,7 @@ The accepted encrypted state consists of a validated DEK envelope, a complete jo
 
 \begin{table}[t]
 \centering
-\caption{Threat classes and retained mechanism boundaries.}
+\caption{Threat classes and mechanism boundaries.}
 \scriptsize
 \setlength{\tabcolsep}{3pt}
 \begin{tabularx}{\columnwidth}{P{0.24\columnwidth}|P{0.30\columnwidth}|Y}
@@ -28,28 +28,18 @@ Privileged local attacker & Out of scope & Kernel/driver/FUSE process are truste
 \label{tab:threat_boundary}
 \end{table}
 
-\subsection{Freshness is conditional on an external anchor}
+\subsection{Replay protection is conditional on an external anchor}
 \label{sec:case_problem}
 
-The source tree contains two anchor modes.  The file mode is only an integrity witness; copying the directory copies the witness.  The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \emph{rollback visible}, not as successful protection.  This negative result is important: an HMAC alone does not create freshness when its entire state is replayable.
+The source tree contains two anchor modes.  The file mode is only an integrity witness; copying the directory copies the witness.  The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \emph{rollback visible}, not as successful protection.  This negative result is important: an HMAC alone does not prevent rollback when its entire state is replayable.
 
 The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record.  PCR binding is a transient probe rather than a persistent filesystem policy; a software update or PCR change therefore requires explicit reprovisioning/resealing.  Backup or migration cannot copy only the backing directory; it needs a fresh authorized anchor bootstrap.  Lost mount credentials are unrecoverable.  Missing index, authorization failure, TPM I/O failure, digest mismatch, or a TPM sequence ahead of local state fail closed; a TPM anchor behind local state is treated as a lagging witness and must be refreshed rather than as disk rollback.  The evaluated claim is only replay-after-advance fail-closed behavior, including the SQLite same-store campaign in Section~\ref{sec:eval_workloads}; it does not assert that an NV index is a signer, report invented TPM latency, or claim persistent PCR binding.
 
 \subsection{Side channels and application semantics}
 \label{sec:case_impl}
 
-GPU SIMT execution, cache behavior, memory coalescing, occupancy, and contention can all leak information.  The repository contained generators that produced simulated timing and TVLA traces.  Those files are excluded from this paper.  The retained GPU integrity test checks output parity with OpenSSL; it says nothing about constant-time execution, physical power/EM leakage, or cross-tenant GPU channels.
+GPU SIMT execution, cache behavior, memory coalescing, occupancy, and contention can all leak information.  Simulated timing and TVLA traces are excluded from this paper.  The GPU integrity test checks output parity with OpenSSL; it says nothing about constant-time execution, physical power/EM leakage, or cross-tenant GPU channels.
 
-Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary.  It does not certify SQLite WAL, \texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract.  We retain the following labels to make the scope explicit: the prior SQLite case study (Section~\ref{sec:case_results}) and edge/cloud comparison (Section~\ref{sec:case_edge_cloud}) are not claimed by this revision.
+Likewise, the clean-remount test validates one encrypted 128~KiB round trip through the final binary.  It does not certify SQLite WAL, \texttt{mmap}, locking, crash recovery across every cut point, or the complete POSIX contract.  The current security evidence is local to the edge runtime: FUSE self-tests, clean remount, managed-memory smoke, and GPU integrity parity show the implemented boundary, not statistical security, cloud/privacy economics, or remote key-management behavior.
 
-Application semantics are separated from storage-record integrity.  AEGIS-Q can reject a corrupted block tag, but it cannot infer whether an application-level transaction was acknowledged unless the experiment supplies an external oracle.  The daemon power-fault matrix adds final-binary \texttt{SIGKILL} at selected one-block storage boundaries, while the SQLite WAL/FULL and DELETE/EXTRA rows supply application commit oracles.  A complete database certification would need broader workloads, multiple cache modes, physical power loss, kernel crash, and drive-cache timing.
-
-\subsection{What the current tests establish}
-\label{sec:case_results}
-
-The final validation runs a FUSE self-test, clean encrypted remount, a managed-memory smoke test, and GPU integrity parity checks.  The round-trip test confirms that after a clean unmount/remount, the original 128~KiB plaintext is recovered and the corresponding \texttt{.pqcdata} sidecar does not contain the whole plaintext byte sequence.  This is evidence of the repaired key-envelope path, not a statistical security proof.
-
-\subsection{Deployment boundary}
-\label{sec:case_edge_cloud}
-
-AEGIS-Q is a prototype for local edge storage.  It makes no edge-versus-cloud cost, latency, or privacy quantification.  The appropriate comparison is deployment-specific and requires a separately measured network/service configuration.  This restriction avoids turning a local microbenchmark into a claim about cloud databases or remote key-management systems.
+Application semantics are separated from storage-record integrity.  AEGIS-Q can reject a corrupted block tag, but it cannot infer whether an application-level transaction was acknowledged unless the experiment supplies an external oracle.  The daemon power-fault matrix adds final-binary \texttt{SIGKILL} at selected one-block storage boundaries, while the SQLite rows supply application commit oracles.  A complete database certification would need broader workloads, multiple cache modes, physical power loss, kernel crash, and drive-cache timing.

@@ -1,0 +1,141 @@
+{
+  "append": {
+    "expected": [
+      {
+        "payload_bytes": 16384,
+        "payload_sha256": "206beb4658f71c53801ca0bdd44ef22e91bb6dae32294a20bcb3a81faade26d3",
+        "seq": 0
+      },
+      {
+        "payload_bytes": 16384,
+        "payload_sha256": "3030602b0e49edccd97f8fde13f151f0af2ccb53749d17d67c1d46691f65c49b",
+        "seq": 1
+      }
+    ],
+    "latencies": [
+      {
+        "durable_append_us": 4403.1759999999995,
+        "record_bytes": 22125,
+        "seq": 0,
+        "sync_us": 4346.324,
+        "write_us": 56.852
+      },
+      {
+        "durable_append_us": 2410.2780000000002,
+        "record_bytes": 22125,
+        "seq": 1,
+        "sync_us": 2389.907,
+        "write_us": 20.371
+      }
+    ],
+    "summary": {
+      "append_wall_us": 9229.574,
+      "durable_append_latency": {
+        "avg_us": 3406.727,
+        "count": 2,
+        "max_us": 4403.1759999999995,
+        "p50_us": 2410.2780000000002,
+        "p95_us": 4403.1759999999995,
+        "p99_us": 4403.1759999999995
+      },
+      "payload_bytes_per_record": 16384,
+      "payload_mib_s": 3.3858550784684103,
+      "record_mib_s": 4.5722682868111315,
+      "records": 2,
+      "records_s": 216.69472502197826,
+      "sync_latency": {
+        "avg_us": 3368.1155,
+        "count": 2,
+        "max_us": 4346.324,
+        "p50_us": 2389.907,
+        "p95_us": 4346.324,
+        "p99_us": 4346.324
+      },
+      "total_payload_bytes": 32768,
+      "total_record_bytes": 44250,
+      "write_latency": {
+        "avg_us": 38.6115,
+        "count": 2,
+        "max_us": 56.852,
+        "p50_us": 20.371,
+        "p95_us": 56.852,
+        "p99_us": 56.852
+      }
+    }
+  },
+  "generated_by": "code/experiments/run_secure_inference_log_macro_smoke.py",
+  "generated_utc": "2026-06-30T08:20:44Z",
+  "mounted_readback": {
+    "bytes": 44250,
+    "parse": {
+      "hash_mismatches": 0,
+      "malformed": 0,
+      "ordered": true,
+      "record_count": 2,
+      "records": [
+        {
+          "payload_bytes": 16384,
+          "payload_sha256": "206beb4658f71c53801ca0bdd44ef22e91bb6dae32294a20bcb3a81faade26d3",
+          "record_sha256": "117f8489100577fe4746e52c53bc929514916a22793756f0e85f2c0224c6187c",
+          "seq": 0
+        },
+        {
+          "payload_bytes": 16384,
+          "payload_sha256": "3030602b0e49edccd97f8fde13f151f0af2ccb53749d17d67c1d46691f65c49b",
+          "record_sha256": "2d282351035943ddf636996f3d5e6a5906753a99e78cf20a36de6bd051e072e5",
+          "seq": 1
+        }
+      ]
+    },
+    "pass": true,
+    "sha256": "4e02a07ecd34080787b5579f2545b40d102275f6cc008cd95c6b2161f82027b6",
+    "visible_sidecars": []
+  },
+  "overall_pass": true,
+  "payload_bytes": 16384,
+  "publication_mode": "epoch-redo-log",
+  "records_requested": 2,
+  "remount_readback": {
+    "bytes": 44250,
+    "parse": {
+      "hash_mismatches": 0,
+      "malformed": 0,
+      "ordered": true,
+      "record_count": 2,
+      "records": [
+        {
+          "payload_bytes": 16384,
+          "payload_sha256": "206beb4658f71c53801ca0bdd44ef22e91bb6dae32294a20bcb3a81faade26d3",
+          "record_sha256": "117f8489100577fe4746e52c53bc929514916a22793756f0e85f2c0224c6187c",
+          "seq": 0
+        },
+        {
+          "payload_bytes": 16384,
+          "payload_sha256": "3030602b0e49edccd97f8fde13f151f0af2ccb53749d17d67c1d46691f65c49b",
+          "record_sha256": "2d282351035943ddf636996f3d5e6a5906753a99e78cf20a36de6bd051e072e5",
+          "seq": 1
+        }
+      ]
+    },
+    "pass": true,
+    "sha256": "4e02a07ecd34080787b5579f2545b40d102275f6cc008cd95c6b2161f82027b6",
+    "visible_sidecars": []
+  },
+  "retained_repository_outputs": false,
+  "schema_version": 1,
+  "stdout_only": true,
+  "unmount": {
+    "first": {
+      "fuse_rc": -2,
+      "unmount_rc": 0,
+      "unmount_stderr": ""
+    },
+    "pass": true,
+    "second": {
+      "fuse_rc": -2,
+      "unmount_rc": 0,
+      "unmount_stderr": ""
+    }
+  },
+  "workload": "secure_inference_logging"
+}

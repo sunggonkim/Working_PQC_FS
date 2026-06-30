@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "fio",
+    "--name=frozen_randrw_4k_fdatasync",
+    "--ioengine=psync",
+    "--rw=randrw",
+    "--rwmixread=70",
+    "--bs=4k",
+    "--direct=0",
+    "--fdatasync=1",
+    "--iodepth=1",
+    "--numjobs=1",
+    "--size=1G",
+    "--fallocate=none",
+    "--allow_file_create=0",
+    "--overwrite=1",
+    "--time_based",
+    "--runtime=60",
+    "--ramp_time=10",
+    "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+    "--output-format=json"
+  ],
+  "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+  "end_realtime_ns": 1782798231210833676,
+  "label": "warm_rep_00",
+  "returncode": 0,
+  "start_realtime_ns": 1782798160937226182,
+  "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.stderr.txt",
+  "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.json",
+  "timed_out": false,
+  "timeout_s": null,
+  "wall_seconds": 70.273607494
+}

@@ -1,0 +1,3 @@
+set(PQC_FILESYSTEM_INCLUDE_DIRS
+    ${CODE_DIR}/fs
+)

@@ -1,0 +1,12 @@
+set(PQC_FUSE_RUNTIME_SOURCES
+    ${CODE_DIR}/runtime/pqc_admission.c
+    ${CODE_DIR}/runtime/pqc_config.c
+    ${CODE_DIR}/runtime/pqc_fuse_trace.c
+    ${CODE_DIR}/runtime/pqc_lifecycle.c
+    ${CODE_DIR}/runtime/pqc_metrics.c
+    ${CODE_DIR}/runtime/pqc_plane_trace.c
+    ${CODE_DIR}/runtime/pqc_qos.c
+    ${CODE_DIR}/runtime/pqc_rekey.c
+    ${CODE_DIR}/runtime/pqc_runtime.c
+    ${CODE_DIR}/runtime/pqc_scheduler.c
+)

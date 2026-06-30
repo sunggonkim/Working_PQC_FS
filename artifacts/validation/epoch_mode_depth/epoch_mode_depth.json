@@ -1,0 +1,87 @@
+{
+  "artifact": "epoch_mode_depth",
+  "claim_guard": "Paper text may claim only that higher-depth epoch grouping amortizes sync count and has replay-order evidence. It must also state the observed p99/p99.9 or throughput loss and must not claim that epoch mode universally improves latency, throughput, or general filesystem scalability.",
+  "depth_comparison": {
+    "client_count": 8,
+    "epoch_grouped": {
+      "max_group_size": 8,
+      "p999_ms": 67.900876455,
+      "p99_ms": 67.86616755,
+      "sync_count": 1,
+      "sync_primitives": [
+        "none",
+        "syncfs"
+      ],
+      "throughput_mib_s": 1.556238648873107
+    },
+    "latency_loss": true,
+    "strict_grouped": {
+      "p999_ms": 61.53511016,
+      "p99_ms": 61.4392796,
+      "sync_count": 16,
+      "throughput_mib_s": 1.5987223727024984
+    },
+    "sync_win": true,
+    "throughput_loss": true
+  },
+  "overall_pass": true,
+  "replay_evidence": {
+    "coverage": {
+      "case_names": [
+        "starvation_same_shard",
+        "replay_order_multi_shard"
+      ],
+      "client_counts": [
+        4,
+        8
+      ],
+      "group_max_values": [
+        2,
+        4
+      ],
+      "shard_counts": [
+        1,
+        4
+      ],
+      "wait_ns_values": [
+        5000000,
+        10000000
+      ]
+    },
+    "max_clients": 8,
+    "max_replay_time_ns": 242667,
+    "overall_pass": true,
+    "rows": [
+      {
+        "clients": 8,
+        "completed_ops": 32,
+        "name": "starvation_same_shard",
+        "observed_shards": [
+          0
+        ],
+        "pass": true,
+        "reconstruction_time_ns": 242667,
+        "replay_plan_length": 8
+      },
+      {
+        "clients": 4,
+        "completed_ops": 12,
+        "name": "replay_order_multi_shard",
+        "observed_shards": [
+          0,
+          1,
+          2
+        ],
+        "pass": true,
+        "reconstruction_time_ns": 177121,
+        "replay_plan_length": 7
+      }
+    ]
+  },
+  "source_artifacts": {
+    "fairness_replay": "artifacts/validation/parallel_commit_contract/parallel_commit_fairness_replay.json",
+    "publication_depth": "artifacts/validation/epoch_mode_depth/publication_depth/epoch_publication_comparison.json"
+  },
+  "timestamp_utc": "2026-06-30T05:19:18.923665+00:00",
+  "verdict": "At eight concurrent writers, epoch-redo-log grouping reduces traced publication syncs from 16 to 1 and forms an 8-writer group, but the client tail does not improve: p99.9 is 67.90 ms for epoch versus 61.54 ms for strict. The replay-order artifact reconstructs committed epochs in 242667 ns at up to 8 clients. This supports an amortization mechanism with explicit tail-latency loss cases, not a universal fast path."
+}

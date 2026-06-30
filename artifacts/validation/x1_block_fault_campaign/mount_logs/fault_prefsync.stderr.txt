@@ -1,0 +1,35 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-30 18:26:48.252] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 18:26:48.253]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 18:26:48.254]   Storage dir : /tmp/aegisq_x1_block_fault_j7n5feb7/lower_mount/store
+[PQC-FUSE 2026-06-30 18:26:48.255]   Mount point : /tmp/aegisq_x1_block_fault_j7n5feb7/fuse_mount
+[PQC-FUSE 2026-06-30 18:26:48.255] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/x1_block_fault_campaign/fault_prefsync.admission_trace.jsonl
+[PQC-FUSE 2026-06-30 18:26:48.256] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 18:26:48.257]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 18:26:48.258]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 18:26:48.258]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 18:26:48.259]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 18:26:48.263] Keypair generated in 1387.08 µs
+[PQC-FUSE 2026-06-30 18:26:48.322] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 18:26:48.323] Freshness anchor reconstructed 1 committed checkpoint rows
+[PQC-FUSE 2026-06-30 18:26:48.324] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 18:26:48.324] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 18:26:48.325] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 18:26:48.433] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 18:26:48.434] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-30 18:26:48.482] OPEN /probe.bin: restored authenticated file-key envelope (fid=8375390927651610984)
+[PQC-FUSE 2026-06-30 18:26:48.689] authenticated flush failed: Input/output error
+[PQC-FUSE 2026-06-30 18:26:48.831] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-30 18:26:48.832] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-30 18:26:48.833] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-06-30 18:26:48.833] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-06-30 18:26:48.833] Durability sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-06-30 18:26:48.833] Durability mounted-operation sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

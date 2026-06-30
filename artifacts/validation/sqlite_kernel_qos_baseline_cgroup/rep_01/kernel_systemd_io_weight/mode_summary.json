@@ -1,0 +1,118 @@
+{
+  "acceptable": true,
+  "background": {
+    "bytes_written": 4063232,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 6.73069491922091,
+    "write_events": 62,
+    "writer_started": true,
+    "writer_stop_rows": [
+      {
+        "bytes_written": 4063232,
+        "chunks_written": 62,
+        "elapsed_ns": 575720642,
+        "event": "writer_stop",
+        "kernel_qos": {
+          "control": "systemd_io_weight",
+          "io_weight": 10,
+          "runtime_cgroup": {
+            "available": true,
+            "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "io_weight": null,
+            "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope"
+          }
+        },
+        "throughput_mb_s": 6.73069491922091,
+        "timestamp_ns": 1782796394785075275,
+        "writer_id": 0
+      }
+    ]
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "systemd_io_weight",
+    "daemon_throttle": false,
+    "harness_throttle": false
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 5,
+    "deadline_ms": 10.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+    "max_ms": 11.672852,
+    "mean_ms": 9.330579666666667,
+    "p50_ms": 9.132963499999999,
+    "p95_ms": 10.453361649999998,
+    "p99_ms": 11.40027003,
+    "row_count": 192,
+    "rows_written": 192,
+    "samples": 24
+  },
+  "kernel_control": {
+    "control": "systemd_io_weight",
+    "io_weight": 10,
+    "systemd_run_returncode": 0,
+    "systemd_run_stderr": "Running as unit: run-r25ba64342dac4a07bec39e912b989f22.scope; invocation ID: 163919a00edd4ee8ac0dd41fca67b2df",
+    "systemd_run_stdout": "",
+    "systemd_unit_probe": {
+      "argv": [
+        "systemctl",
+        "--user",
+        "show",
+        "run-r25ba64342dac4a07bec39e912b989f22.scope",
+        "-p",
+        "IOWeight",
+        "-p",
+        "ControlGroup",
+        "-p",
+        "Slice",
+        "-p",
+        "Delegate"
+      ],
+      "available": true,
+      "properties": {
+        "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+        "Delegate": "no",
+        "IOWeight": "10",
+        "Slice": "app.slice"
+      },
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Slice=app.slice\nControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope\nDelegate=no\nIOWeight=10",
+      "unit": "run-r25ba64342dac4a07bec39e912b989f22.scope"
+    },
+    "writer_kernel_qos_rows": [
+      {
+        "apply_result": {
+          "enabled": true,
+          "method": "systemd-run --user --scope -p IOWeight",
+          "runtime_cgroup": {
+            "available": true,
+            "cgroup_fs_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "cgroup_v2_path": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope",
+            "io_weight": null,
+            "proc_self_cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r25ba64342dac4a07bec39e912b989f22.scope"
+          }
+        },
+        "control": "systemd_io_weight",
+        "io_weight": 10
+      }
+    ],
+    "writer_start_rows": 1
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/background_writer.jsonl",
+    "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+    "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/runtime_telemetry.txt",
+    "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/systemd_run.stderr.txt",
+    "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/rep_01/kernel_systemd_io_weight/systemd_run.stdout.txt"
+  },
+  "mode": "kernel_systemd_io_weight"
+}

@@ -1,0 +1,83 @@
+{
+  "blocking_items": [],
+  "complete_count": 9,
+  "gate_0_13_close_condition": "The spine is a secure edge-storage runtime bottleneck claim, and each borrowed OS/storage mechanism is classified as implemented analogue, measured comparison, baseline boundary, rejected non-claim, or scoped placement.",
+  "generated_utc": "2026-06-30T02:43:57Z",
+  "overall_pass": true,
+  "required_mechanisms": [
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q uses an append/replay pattern for its FUSE sidecar format; it does not claim an F2FS segment cleaner, NAT/SIT design, or kernel-integrated flash filesystem.",
+      "nonclaim_boundary": "Do not call the epoch log an F2FS implementation or a flash-translation/filesystem replacement.",
+      "prior_mechanism": "Append-only logging and roll-forward recovery",
+      "prior_source": "F2FS FAST'15",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q borrows the idea of operation-shaped metadata records, but keeps a FUSE sidecar runtime with scoped parallel commit; it does not claim ScaleFS decentralization, kernel shared-memory metadata, or POSIX scalability.",
+      "nonclaim_boundary": "No ScaleFS-equivalent scalability or decentralized metadata claim is allowed.",
+      "prior_mechanism": "Operation logs and decentralized filesystem metadata",
+      "prior_source": "ScaleFS SOSP'17",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q has compact sidecar records and selective/windowed freshness tradeoffs, not an ext4 FastCommit path or a complete journaling filesystem redesign.",
+      "nonclaim_boundary": "Do not imply ext4 FastCommit semantics, broad selective flushing safety, or physical power-loss certification.",
+      "prior_mechanism": "Compact metadata logging and selective flushing",
+      "prior_source": "FastCommit ATC'24",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q can claim a scoped epoch-group mechanism only for the measured mounted path; it cannot claim broad multicore filesystem scalability without the concurrency-contract closeout.",
+      "nonclaim_boundary": "No broad scalability, multicore, or concurrent-client claim before Gate 0.15/A3 close.",
+      "prior_mechanism": "Group commit and parallel journaling",
+      "prior_source": "FAST/SOSP/OSDI storage systems",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q may claim storage-visible classification and observability tradeoffs; it may not claim kernel QoS is generally impossible or always worse.",
+      "nonclaim_boundary": "No SQLite uniqueness or general kernel-QoS impossibility claim.",
+      "prior_mechanism": "Kernel QoS and I/O scheduling controls",
+      "prior_source": "Linux ionice/cgroup/BFQ-style controls",
+      "transfer_status": "measured-comparison"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q is positioned against kernel-native alternatives through measured or blocked rows, not by replacing their maturity or kernel trust boundary.",
+      "nonclaim_boundary": "No apples-to-apples fscrypt/dm-crypt speedup without matched measured rows.",
+      "prior_mechanism": "Kernel-native encryption baselines",
+      "prior_source": "fscrypt and dm-crypt",
+      "transfer_status": "baseline-boundary"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q may claim replay-after-advance fail-closed behavior under the retained model; it may not claim full rollback resistance, sealed-key release, or persistent PCR-bound freshness.",
+      "nonclaim_boundary": "No TPM rollback-resistance or PCR-bound freshness claim before Gate C6 closes.",
+      "prior_mechanism": "TPM/TEE freshness and rollback boundaries",
+      "prior_source": "TPM/TEE systems",
+      "transfer_status": "implemented-negative-boundary"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q keeps ordinary FUSE semantics in the verified path; eBPF/io_uring completion bypass is not a contribution.",
+      "nonclaim_boundary": "No eBPF/io_uring bypass claim unless production mounted-path evidence exists.",
+      "prior_mechanism": "FUSE passthrough, eBPF, io_uring, and kernel-bypass completion",
+      "prior_source": "Modern kernel bypass and tracing paths",
+      "transfer_status": "rejected-nonclaim"
+    },
+    {
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q may claim measured placement asymmetry and optional GPU maintenance work; it may not claim direct storage DMA, GPUDirect, dma-buf zero-copy, or foreground AI QoS recovery.",
+      "nonclaim_boundary": "No NVIDIA mechanism is a paper mechanism without production mounted-path benefit evidence.",
+      "prior_mechanism": "GPU/UMA scheduling and storage staging",
+      "prior_source": "GPUfs, GPUDirect, FlashNeuron/Fastensor-style staging",
+      "transfer_status": "implemented-scoped-placement"
+    }
+  ],
+  "schema_version": 1,
+  "technique_count": 9
+}

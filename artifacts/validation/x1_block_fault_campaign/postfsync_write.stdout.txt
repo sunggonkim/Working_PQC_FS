@@ -1,0 +1,1 @@
+{"operation": "write_fsync", "bytes": 4096, "sha256": "6d25bb0bce7a53e2e0a559d641fee4e322999bf3df35832f6f256ecd26ccb42d"}

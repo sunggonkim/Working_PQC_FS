@@ -10,15 +10,15 @@
       "path": "contract/frozen_randrw_4k_fdatasync.0.0"
     },
     {
-      "bytes": 71852032,
+      "bytes": 72699904,
       "path": "contract/frozen_randrw_4k_fdatasync.0.0.pqcdata"
     },
     {
-      "bytes": 1684032,
+      "bytes": 1703904,
       "path": "contract/frozen_randrw_4k_fdatasync.0.0.pqcmeta"
     }
   ],
-  "storage_dir": "/tmp/aegisq_frozen_storage_412_tt06",
-  "total_file_bytes": 1147277976,
+  "storage_dir": "/tmp/aegisq_frozen_storage_ha0hyw4h",
+  "total_file_bytes": 1148145720,
   "truncated_to_files": 200
 }

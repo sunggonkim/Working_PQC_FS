@@ -1,0 +1,34 @@
+{
+  "client_id": 0,
+  "error": null,
+  "ops": [
+    {
+      "latency_ns": 4726657,
+      "matches": true,
+      "op_id": 0,
+      "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_00_op_00.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    },
+    {
+      "latency_ns": 4623074,
+      "matches": true,
+      "op_id": 1,
+      "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_00_op_01.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    },
+    {
+      "latency_ns": 4195121,
+      "matches": true,
+      "op_id": 2,
+      "path": "/tmp/aegisq_replay_order_multi_shard_mnt_nrla7t2e/client_00_op_02.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,25 @@
+{
+  "client_id": 0,
+  "error": null,
+  "ops": [
+    {
+      "latency_ns": 7277518,
+      "matches": true,
+      "op_id": 0,
+      "path": "/tmp/aegisq_quad_client_s4_g2_wait_mnt_rfe2w198/client_00_op_00.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    },
+    {
+      "latency_ns": 6095157,
+      "matches": true,
+      "op_id": 1,
+      "path": "/tmp/aegisq_quad_client_s4_g2_wait_mnt_rfe2w198/client_00_op_01.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    }
+  ],
+  "pass": true
+}

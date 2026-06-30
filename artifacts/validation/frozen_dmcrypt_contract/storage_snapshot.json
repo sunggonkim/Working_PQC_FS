@@ -1,0 +1,20 @@
+{
+  "file_count": 3,
+  "files": [
+    {
+      "bytes": 1610612736,
+      "path": "dmcrypt.img"
+    },
+    {
+      "bytes": 64,
+      "path": "luks.key"
+    },
+    {
+      "bytes": 1073741824,
+      "path": "mnt/contract/frozen_randrw_4k_fdatasync.0.0"
+    }
+  ],
+  "storage_dir": "/tmp/dmcrypt_frozen_root_khmoav28",
+  "total_file_bytes": 2684354624,
+  "truncated_to_files": 200
+}

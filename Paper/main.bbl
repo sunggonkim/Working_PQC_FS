@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{13}
+\begin{thebibliography}{18}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -50,6 +50,32 @@
 \newblock
 
 
+\bibitem[Bernstein et~al\mbox{.}(2024)]%
+        {pppqefs}
+\bibfield{author}{\bibinfo{person}{Daniel~J. Bernstein}, \bibinfo{person}{Tung
+  Chou}, \bibinfo{person}{Tanja Lange}, {and} \bibinfo{person}{Christine van
+  Vredendaal}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Predicting Performance for Post-Quantum
+  Encrypted-File Systems}.
+\newblock
+\urldef\tempurl%
+\url{https://cr.yp.to/papers/pppqefs-20240327.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Eduardo et~al\mbox{.}(2019)]%
+        {spec_gpu_cfs}
+\bibfield{author}{\bibinfo{person}{Vandeir Eduardo}, \bibinfo{person}{Luis C.
+  Erpen~de Bona}, {and} \bibinfo{person}{Wagner M.~Nunan Zola}.}
+  \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Speculative Encryption on {GPU} Applied to
+  Cryptographic File Systems}. In \bibinfo{booktitle}{\emph{17th USENIX
+  Conference on File and Storage Technologies (FAST 19)}}.
+  \bibinfo{pages}{93--105}.
+\newblock
+
+
 \bibitem[Fruhwirth(2005)]%
         {dmcrypt}
 \bibfield{author}{\bibinfo{person}{Clemens Fruhwirth}.}
@@ -72,13 +98,15 @@
 \newblock
 
 
-\bibitem[Li et~al\mbox{.}(2025)]%
-        {infscaler}
-\bibfield{author}{\bibinfo{person}{Borui Li}, \bibinfo{person}{Tiange Xia},
-  {and} \bibinfo{person}{Shuai Wang}.} \bibinfo{year}{2025}\natexlab{}.
-\newblock \showarticletitle{InfScaler: Enabling Efficient ML Inference Serving
-  on Multi-Accelerator Edge Devices}. In \bibinfo{booktitle}{\emph{ACM/IEEE
-  Design Automation Conference (DAC)}}.
+\bibitem[Maucher et~al\mbox{.}(2024)]%
+        {gpu4fs}
+\bibfield{author}{\bibinfo{person}{Julian Maucher}, \bibinfo{person}{Steven
+  Diethardt}, \bibinfo{person}{Lukas Steffen}, \bibinfo{person}{Alexander
+  Girol}, \bibinfo{person}{Harald Obermaier}, {and} \bibinfo{person}{Andreas
+  Koch}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{GPU4FS}: Full-Scale File System Acceleration on
+  {GPU}}. In \bibinfo{booktitle}{\emph{Architecture of Computing Systems (ARCS
+  24)}}.
 \newblock
 
 
@@ -101,15 +129,28 @@
 \newblock
 
 
-\bibitem[{NVIDIA Corporation}(2024)]%
-        {jetson}
+\bibitem[{NVIDIA Corporation}(2026a)]%
+        {gpudirect_storage}
 \bibfield{author}{\bibinfo{person}{{NVIDIA Corporation}}.}
-  \bibinfo{year}{2024}\natexlab{}.
-\newblock \bibinfo{booktitle}{\emph{NVIDIA Jetson Orin Nano Developer Kit
-  Platform Specifications}}.
+  \bibinfo{year}{2026}\natexlab{a}.
+\newblock \bibinfo{booktitle}{\emph{{NVIDIA GPUDirect Storage}: cuFile API
+  Reference Guide}}.
 \newblock
 \urldef\tempurl%
-\url{https://developer.nvidia.com/embedded/jetson-orin-nano-developer-kit}
+\url{https://docs.nvidia.com/gpudirect-storage/api-reference-guide/}
+\showURL{%
+\tempurl}
+
+
+\bibitem[{NVIDIA Corporation}(2026b)]%
+        {jetson}
+\bibfield{author}{\bibinfo{person}{{NVIDIA Corporation}}.}
+  \bibinfo{year}{2026}\natexlab{b}.
+\newblock \bibinfo{booktitle}{\emph{NVIDIA Jetson Linux Developer Guide:
+  Platform Power and Performance}}.
+\newblock
+\urldef\tempurl%
+\url{https://docs.nvidia.com/jetson/archives/r38.2/DeveloperGuide/SD/PlatformPowerAndPerformance.html}
 \showURL{%
 \tempurl}
 
@@ -134,12 +175,47 @@
 \newblock
 
 
+\bibitem[Qiu et~al\mbox{.}(2025)]%
+        {geminifs}
+\bibfield{author}{\bibinfo{person}{Shi Qiu}, \bibinfo{person}{Weinan Liu},
+  \bibinfo{person}{Yifan Hu}, \bibinfo{person}{Jianqin Yan},
+  \bibinfo{person}{Zhirong Shen}, \bibinfo{person}{Xin Yao},
+  \bibinfo{person}{Renhai Chen}, \bibinfo{person}{Gong Zhang}, {and}
+  \bibinfo{person}{Yiming Zhang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{GeminiFS}: A Companion File System for {GPUs}}. In
+  \bibinfo{booktitle}{\emph{23rd USENIX Conference on File and Storage
+  Technologies (FAST 25)}}. \bibinfo{pages}{221--236}.
+\newblock
+
+
+\bibitem[Silberstein et~al\mbox{.}(2013)]%
+        {gpufs}
+\bibfield{author}{\bibinfo{person}{Mark Silberstein}, \bibinfo{person}{Bryan
+  Ford}, \bibinfo{person}{Idit Keidar}, {and} \bibinfo{person}{Emmett
+  Witchel}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{{GPUfs}: Integrating File Systems with {GPUs}}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the Eighteenth International
+  Conference on Architectural Support for Programming Languages and Operating
+  Systems (ASPLOS 13)}}. \bibinfo{pages}{485--498}.
+\newblock
+
+
 \bibitem[Spenneberg et~al\mbox{.}(2017)]%
         {gocryptfs}
 \bibfield{author}{\bibinfo{person}{Jakob Spenneberg} {et~al\mbox{.}}}
   \bibinfo{year}{2017}\natexlab{}.
 \newblock \showarticletitle{gocryptfs: A Modern FUSE-based Encrypted
   Filesystem}. In \bibinfo{booktitle}{\emph{USENIX Security Association}}.
+\newblock
+
+
+\bibitem[Sun et~al\mbox{.}(2012)]%
+        {gpustore}
+\bibfield{author}{\bibinfo{person}{Weibin Sun}, \bibinfo{person}{Robert Ricci},
+  {and} \bibinfo{person}{Matthew~L. Curry}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{{GPUstore}: Harnessing {GPU} Computing for Storage
+  Systems in the {OS} Kernel}. In \bibinfo{booktitle}{\emph{Proceedings of the
+  5th Annual International Systems and Storage Conference (SYSTOR 12)}}.
 \newblock
 
 
@@ -152,20 +228,6 @@
   GPU for Deep Learning Training}.
 \newblock \bibinfo{journal}{\emph{ACM Trans. Archit. Code Optim.}}
   \bibinfo{volume}{20}, \bibinfo{number}{4} (\bibinfo{year}{2023}).
-\newblock
-
-
-\bibitem[Zhang et~al\mbox{.}(2025)]%
-        {breaking_edge}
-\bibfield{author}{\bibinfo{person}{Feng Zhang}, \bibinfo{person}{Chenyang
-  Zhang}, \bibinfo{person}{Jiawei Guan}, \bibinfo{person}{Qiangjun Zhou},
-  \bibinfo{person}{Kuangyu Chen}, \bibinfo{person}{Xiao Zhang},
-  \bibinfo{person}{Bingsheng He}, \bibinfo{person}{Jidong Zhai}, {and}
-  \bibinfo{person}{Xiaoyong Du}.} \bibinfo{year}{2025}\natexlab{}.
-\newblock \showarticletitle{Breaking the Edge: Enabling Efficient Neural
-  Network Inference on Integrated Edge Devices}.
-\newblock \bibinfo{journal}{\emph{IEEE Transactions on Cloud Computing}}
-  (\bibinfo{year}{2025}).
 \newblock
 
 

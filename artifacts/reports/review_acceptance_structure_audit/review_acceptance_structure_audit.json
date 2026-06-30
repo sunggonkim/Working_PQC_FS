@@ -1,0 +1,303 @@
+{
+  "artifact": "review_acceptance_structure_audit",
+  "current_structure": {
+    "complete": true,
+    "required": {
+      "capability_matrix": true,
+      "claim_boundaries": true,
+      "competitor_boundary": true,
+      "contributions_before_scope": true,
+      "energy_thermal_observations": true,
+      "first_page_qos_figure": true,
+      "foreground_inference_claim_removed": true,
+      "generation_x10": true,
+      "kernel_assist_roadmap": true,
+      "naive_failures": true,
+      "pressure_opening": true,
+      "qos_pareto": true,
+      "rq_mapping": true,
+      "thesis_sentence": true
+    },
+    "score": 14,
+    "total": 14
+  },
+  "previous_paper_patterns": [
+    {
+      "accepted_or_camera_ready": true,
+      "first_page_existing_systems": true,
+      "first_page_key_insight": true,
+      "first_page_problem_pressure": true,
+      "first_page_quant_figure_or_table": false,
+      "headline_result": true,
+      "paper": "Paper/Previous paper/_Accepted___FGCS_2024__AS2.pdf",
+      "rejected": false
+    },
+    {
+      "accepted_or_camera_ready": true,
+      "first_page_existing_systems": true,
+      "first_page_key_insight": true,
+      "first_page_problem_pressure": true,
+      "first_page_quant_figure_or_table": false,
+      "headline_result": true,
+      "paper": "Paper/Previous paper/_Accepted___SIGMETRICS_26__ScaleQsim__Highly_Scalable_Quantum_Circuit_Simulation_Framework_for_Exascale_HPC_Systems__KCJ_.pdf",
+      "rejected": false
+    },
+    {
+      "accepted_or_camera_ready": true,
+      "first_page_existing_systems": true,
+      "first_page_key_insight": true,
+      "first_page_problem_pressure": true,
+      "first_page_quant_figure_or_table": false,
+      "headline_result": true,
+      "paper": "Paper/Previous paper/_Camera_Ready___ICDCS_26__AURORA_Q__Q_Simulation_Offloading__KCJ_.pdf",
+      "rejected": false
+    },
+    {
+      "accepted_or_camera_ready": true,
+      "first_page_existing_systems": true,
+      "first_page_key_insight": true,
+      "first_page_problem_pressure": true,
+      "first_page_quant_figure_or_table": false,
+      "headline_result": true,
+      "paper": "Paper/Previous paper/_Camera_Ready___ICDCS_26__CITADEL.pdf",
+      "rejected": false
+    },
+    {
+      "accepted_or_camera_ready": false,
+      "first_page_existing_systems": true,
+      "first_page_key_insight": true,
+      "first_page_problem_pressure": true,
+      "first_page_quant_figure_or_table": false,
+      "headline_result": true,
+      "paper": "Paper/Previous paper/_Rejected___IPDPS_2025__TSALA.pdf",
+      "rejected": true
+    },
+    {
+      "accepted_or_camera_ready": false,
+      "first_page_existing_systems": true,
+      "first_page_key_insight": true,
+      "first_page_problem_pressure": true,
+      "first_page_quant_figure_or_table": false,
+      "headline_result": true,
+      "paper": "Paper/Previous paper/previous paper.pdf",
+      "rejected": false
+    }
+  ],
+  "review_item_map": [
+    {
+      "current_status": "bounded_nonclaim",
+      "id": "limited_posix_fuse",
+      "repeat_risk": "bounded_but_repeatable_if_reviewer_demands_deployment",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "bounded_nonclaim",
+      "id": "mount_credential",
+      "repeat_risk": "bounded_but_repeatable_if_reviewer_demands_deployment",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "bounded_nonclaim",
+      "id": "side_channel",
+      "repeat_risk": "bounded_but_repeatable_if_reviewer_demands_deployment",
+      "review_phrase_present": true
+    },
+    {
+      "current_status": "closed",
+      "id": "generation_robustness",
+      "repeat_risk": "low_repeat_risk_after_closeout",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "residual",
+      "id": "single_platform_workloads_fscrypt",
+      "repeat_risk": "medium_repeat_risk_but_not_p0_for_edge_scope",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "claim_removed",
+      "id": "closed_loop_foreground_nonstorage",
+      "repeat_risk": "low_repeat_risk_after_claim_removal",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "closed",
+      "id": "qos_tradeoff",
+      "repeat_risk": "low_repeat_risk_after_closeout",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "next",
+      "id": "mlkem_modest",
+      "repeat_risk": "low_repeat_risk_after_closeout",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "bounded_nonclaim",
+      "id": "power_failure",
+      "repeat_risk": "bounded_but_repeatable_if_reviewer_demands_deployment",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "partly_closed",
+      "id": "scoping_heavy",
+      "repeat_risk": "low_repeat_risk_after_crisper_spine",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "partly_closed",
+      "id": "figures_tables_alignment",
+      "repeat_risk": "low_repeat_risk_after_figure_table_alignment",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "next",
+      "id": "related_work_qos_logging",
+      "repeat_risk": "low_repeat_risk_after_qos_related_work",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "osdi_p0",
+      "id": "strict_fuse_impact",
+      "repeat_risk": "low_repeat_risk_after_closeout",
+      "review_phrase_present": true
+    },
+    {
+      "current_status": "claim_removed",
+      "id": "closed_loop_foreground_nonstorage_core_motivation",
+      "repeat_risk": "low_repeat_risk_after_claim_removal",
+      "review_phrase_present": false
+    },
+    {
+      "current_status": "osdi_p0",
+      "id": "fscrypt_baseline_supported",
+      "repeat_risk": "low_repeat_risk_after_closeout",
+      "review_phrase_present": true
+    },
+    {
+      "current_status": "osdi_p0",
+      "id": "energy_thermal_missing",
+      "repeat_risk": "low_repeat_risk_after_closeout",
+      "review_phrase_present": true
+    },
+    {
+      "current_status": "osdi_p0",
+      "id": "kernel_integration_path",
+      "repeat_risk": "low_repeat_risk_after_kernel_assist_roadmap",
+      "review_phrase_present": true
+    },
+    {
+      "current_status": "partly_closed",
+      "id": "competitor_boundary",
+      "repeat_risk": "low_repeat_risk_after_competitor_boundary",
+      "review_phrase_present": true
+    }
+  ],
+  "review_source": "/home/thor/.codex/attachments/4eb849c2-e0e7-4b67-bc49-a4519b5bf587/pasted-text-1.txt",
+  "support_reports": {
+    "architecture_firewall": {
+      "overall_pass": true,
+      "path": "artifacts/reports/architecture_claim_firewall/architecture_claim_firewall.json",
+      "present": true,
+      "violations": []
+    },
+    "cross_section_alignment": {
+      "overall_pass": true,
+      "path": "artifacts/reports/cross_section_alignment/cross_section_alignment.json",
+      "present": true,
+      "violations": []
+    },
+    "dangerous_claim_lint": {
+      "overall_pass": true,
+      "path": "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json",
+      "present": true,
+      "violations": []
+    },
+    "energy_thermal_metadata": {
+      "overall_pass": null,
+      "path": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json",
+      "present": true,
+      "violations": []
+    },
+    "evaluation_completeness": {
+      "overall_pass": true,
+      "path": "artifacts/reports/evaluation_completeness_matrix/evaluation_completeness_matrix.json",
+      "present": true,
+      "violations": []
+    },
+    "figure_table_obligations": {
+      "overall_pass": true,
+      "path": "artifacts/reports/figure_table_obligations/figure_table_obligations.json",
+      "present": true,
+      "violations": []
+    },
+    "first_two_pages": {
+      "overall_pass": true,
+      "path": "artifacts/reports/first_two_pages_thesis/first_two_pages_thesis.json",
+      "present": true,
+      "violations": []
+    },
+    "fscrypt_paper_verdict": {
+      "overall_pass": true,
+      "path": "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json",
+      "present": true,
+      "violations": []
+    },
+    "o3_strict_path_practicality": {
+      "overall_pass": true,
+      "path": "artifacts/validation/strict_path_practicality/strict_path_practicality.json",
+      "present": true,
+      "violations": []
+    },
+    "o4_energy_thermal_result": {
+      "overall_pass": true,
+      "path": "artifacts/reports/o4_energy_thermal_result/o4_energy_thermal_result.json",
+      "present": true,
+      "violations": []
+    },
+    "paper_spine": {
+      "overall_pass": true,
+      "path": "artifacts/reports/paper_spine_gate/paper_spine_gate.json",
+      "present": true,
+      "violations": []
+    },
+    "recurring_review_elimination": {
+      "overall_pass": true,
+      "path": "artifacts/reports/recurring_review_elimination/recurring_review_elimination.json",
+      "present": true,
+      "violations": []
+    },
+    "related_work_applicability": {
+      "overall_pass": true,
+      "path": "artifacts/reports/related_work_applicability/related_work_applicability.json",
+      "present": true,
+      "violations": []
+    },
+    "x10_generation": {
+      "overall_pass": true,
+      "path": "artifacts/reports/x10_generation_robustness_closeout/x10_generation_robustness_closeout.json",
+      "present": true,
+      "violations": []
+    },
+    "x11_mlkem_break_even": {
+      "overall_pass": true,
+      "path": "artifacts/reports/x11_mlkem_break_even_model/x11_mlkem_break_even_model.json",
+      "present": true,
+      "violations": []
+    },
+    "x9_qos_tradeoff": {
+      "overall_pass": true,
+      "path": "artifacts/reports/x9_qos_admission_closeout/x9_qos_admission_closeout.json",
+      "present": true,
+      "violations": []
+    }
+  },
+  "timestamp_utc": "2026-06-30T16:24:00.594157+00:00",
+  "verdict": {
+    "accept_readiness": "defensible under scoped edge-runtime claims; SOSP/OSDI acceptance is still not guaranteed because breadth, measured fscrypt preference, power-loss, and deployment expectations are venue-dependent, but they are no longer contradictions in the current paper claim",
+    "gates_ok": true,
+    "highest_remaining_review_risks": [],
+    "logic_structure_vs_previous_papers": "clear and aligned",
+    "same_review_exact_repeat": "unlikely for generation robustness, closed-loop foreground non-storage QoS mismatch, ML-KEM break-even, energy/thermal, strict-path hybrid-barrier criticism, unsupported fscrypt-speedup claims, and baseline-deletion criticism; a reviewer may still prefer a measured fscrypt row for OSDI, but it no longer contradicts the scoped paper claim"
+  }
+}

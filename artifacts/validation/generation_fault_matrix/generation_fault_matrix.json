@@ -40,7 +40,7 @@
       "previous_sha256": "4348e3b98e8a327b34ced39c1da9e67cdb4cd5e48e4d7960607a3ae403d35f0c",
       "latest_sha256": "6659339dda128a9ed5999edf84ffce3833740f2aa6f9fe056a4dff3ffdd10d84",
       "journal": {
-        "path": "/tmp/gen_matrix_partial_store_qowspjhg/partial.bin.pqcmeta",
+        "path": "/tmp/gen_matrix_partial_store_17nr_mzj/partial.bin.pqcmeta",
         "bytes": 576,
         "record_size": 96,
         "full_records": 6,
@@ -55,7 +55,7 @@
             "ciphertext_offset": 0,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "38fa658629a1c20bcce68003a6dab049b76083e2b3e71f112df811dab07ac12f"
+            "raw_sha256": "b5e8bd1e5fd96f786ab70c6c51d754f016b94f9e8b71b0a13105d73e1d6009ea"
           },
           {
             "index": 1,
@@ -65,7 +65,7 @@
             "ciphertext_offset": 4096,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "e54851307b9248bca528ac55916590daf834ada21d6efdf926dbf74790f2e577"
+            "raw_sha256": "d09d2ddf5904a8980fc0f961959363bc9263b6c7d6a5c056d25d8a42caca456a"
           },
           {
             "index": 2,
@@ -75,7 +75,7 @@
             "ciphertext_offset": 8192,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "7e95e89d3034036d5cd6e6809f2b74411b86f5ad94827ca699ca9842039e6404"
+            "raw_sha256": "3b38bf3cb02ee478b8e61e7af90d2239e1ffbc680f148d21b4a23c44c3506366"
           },
           {
             "index": 3,
@@ -85,7 +85,7 @@
             "ciphertext_offset": 12288,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "06c41b1efb3d1131334447eb58eaa34d775bf45d5b96f0934c8fba7fdb5731c6"
+            "raw_sha256": "f7be63eb6d4efbbda93d224e2c2d1976072d09ad753937709075611fecd9a67e"
           },
           {
             "index": 4,
@@ -95,7 +95,7 @@
             "ciphertext_offset": 16384,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "35f0e237b2ea0ab2eb82386695b264f342fd23134a736026449cd84f47333baa"
+            "raw_sha256": "a7e37c0c600c3c61a5d40c98e18a8b9415231f115e3c43aa59b38ef6899a4411"
           },
           {
             "index": 5,
@@ -105,14 +105,14 @@
             "ciphertext_offset": 20480,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "1b80061b1732b924985f5ea3a8c5d2d7131a8bc4487aaf7b772868696818baac"
+            "raw_sha256": "7c35fee805297fa9b0798966c965707a81b46232cf300f5127f5940a9b6165b7"
           }
         ],
         "duplicate_valid_pairs": [],
         "retained_file": {
           "path": "artifacts/validation/generation_fault_matrix/journals/partial_update_after_write.pqcmeta",
           "bytes": 576,
-          "sha256": "140e5aa5a6bd1f00c4e6883843ad266d7228beb4e48860dd43fc9e1924c1f5f2"
+          "sha256": "307ec2506b0eeb5fde123fcfcdb2c9f302da17e8ddf3f7811246b93899d0bd86"
         }
       },
       "generated_duplicate_nonce_pairs": []
@@ -127,7 +127,7 @@
       "acceptable": true,
       "latest_sha256": "d187ef19f395b6e46071a1e4cb33c42823b249d0c3cea3bea943865c05ca8c67",
       "journal": {
-        "path": "/tmp/gen_matrix_torn_store_f7bo7hvg/torn.bin.pqcmeta",
+        "path": "/tmp/gen_matrix_torn_store_m1e5_3wn/torn.bin.pqcmeta",
         "bytes": 196,
         "record_size": 96,
         "full_records": 2,
@@ -142,7 +142,7 @@
             "ciphertext_offset": 0,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "34bc68f43948ee0b185e0db86c643feaee9dcbb2b6856bde268a2e91f5107630"
+            "raw_sha256": "d1276b26e43f686cda8e7acef18c32dad80503e89fdf6b9b49fc5126d8b9254a"
           },
           {
             "index": 1,
@@ -152,32 +152,86 @@
             "ciphertext_offset": 4096,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "91a178d0c6708764e64eebdd9bbb26e83170e142f145fab72244e2912eb7e124"
+            "raw_sha256": "c5e840b05aa728f13b85e3cafd33f5dbc61ef99d29ae882db6fdd6f071ab0659"
           }
         ],
         "duplicate_valid_pairs": [],
         "retained_file": {
           "path": "artifacts/validation/generation_fault_matrix/journals/torn_journal_after_tail.pqcmeta",
           "bytes": 196,
-          "sha256": "faa18ccf7da1407a980082ed374ff374097fe7a73a86ae99809be5813c4ae2e9"
+          "sha256": "f8915a4bad37041f1b3402e06b402eb5305a3ee93c836f8d0f2d4cb7c945b394"
         }
       },
       "generated_duplicate_nonce_pairs": []
     },
     {
-      "case": "older_generation_append_after_newer_mapping",
+      "case": "reserved_generation_skip_after_data_fsync_fault",
       "required_cases": [
-        "older-generation append after newer mapping"
+        "reserved-but-unpublished generation",
+        "data fsync fault",
+        "remount",
+        "duplicate generation prevention"
       ],
       "oracle_verdict": "latest_committed",
       "detail": null,
       "acceptable": true,
-      "previous_sha256": "6896d9ea3f73a4434f5832bc65714e7d066f177373f36f34dc8a6f735daa41b1",
-      "latest_sha256": "725bcd6c66d02acf6ebeab9c92410e010ea22e336876256aaf05a211f4ce1902",
-      "older_generation": 1,
-      "newer_generation": 2,
-      "journal_before_attack": {
-        "path": "/tmp/gen_matrix_replay_store_11h9qu50/replay.bin.pqcmeta",
+      "fault_cutpoint": "data_fsync_after",
+      "fault_returncode": -9,
+      "fault_write_error": {
+        "errno": 107,
+        "detail": "OSError(107, 'Transport endpoint is not connected')"
+      },
+      "fault_marker": "artifacts/validation/generation_fault_matrix/reserved_generation_fault_marker.jsonl",
+      "checkpoint_after_fault": {
+        "path": "/tmp/gen_matrix_reserved_store_wib0nd0k/reserved.bin",
+        "present": true,
+        "bytes": 80,
+        "sha256": "f4e3d821a268342b39bf809dafb765718d92fd19b5863879925fb59f9c96f757",
+        "magic": 5783555695942063153,
+        "version": 1,
+        "reserved": 0,
+        "file_id": 11534194006012293744,
+        "sequence": 2,
+        "logical_size": 4096,
+        "max_generation": 2
+      },
+      "journal_max_after_fault": 1,
+      "final_generations_for_block0": [
+        1,
+        3
+      ],
+      "skipped_reserved_generation": true,
+      "initial_sha256": "764407ab1e783417ace1bd68942ee9a496d39a6089d416646be2f3275fa9bee1",
+      "fault_payload_sha256": "9ce2519c0561bb0b06617143d723160ce3a095ce9fa2bada3403d84d32045e47",
+      "final_sha256": "49f6cae3f0c85df26bb36f43311a05914726cc7cc1f057922652dbd2cae0cbbd",
+      "journal_after_fault": {
+        "path": "/tmp/gen_matrix_reserved_store_wib0nd0k/reserved.bin.pqcmeta",
+        "bytes": 96,
+        "record_size": 96,
+        "full_records": 1,
+        "torn_tail_bytes": 0,
+        "valid_records": 1,
+        "records": [
+          {
+            "index": 0,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 1,
+            "ciphertext_offset": 0,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "a37f784958cdc53f286d4d7a41fddb8f760ae42caac2deb4e78ef8b3518c50fb"
+          }
+        ],
+        "duplicate_valid_pairs": [],
+        "retained_file": {
+          "path": "artifacts/validation/generation_fault_matrix/journals/reserved_generation_after_fault.pqcmeta",
+          "bytes": 96,
+          "sha256": "a37f784958cdc53f286d4d7a41fddb8f760ae42caac2deb4e78ef8b3518c50fb"
+        }
+      },
+      "journal_after_remount_write": {
+        "path": "/tmp/gen_matrix_reserved_store_wib0nd0k/reserved.bin.pqcmeta",
         "bytes": 192,
         "record_size": 96,
         "full_records": 2,
@@ -192,7 +246,58 @@
             "ciphertext_offset": 0,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "d07ccb7e6590dd1a19d885689a81735ebcf3fe3f8a8e4f0f118e96329aae7b44"
+            "raw_sha256": "a37f784958cdc53f286d4d7a41fddb8f760ae42caac2deb4e78ef8b3518c50fb"
+          },
+          {
+            "index": 1,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 3,
+            "ciphertext_offset": 8192,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "a381825ac83017e03c5a008a05a1cf9adc6bcf94729060f4ee51e8b1f29853af"
+          }
+        ],
+        "duplicate_valid_pairs": [],
+        "retained_file": {
+          "path": "artifacts/validation/generation_fault_matrix/journals/reserved_generation_after_remount_write.pqcmeta",
+          "bytes": 192,
+          "sha256": "9860c8a6e95b28ffc87ad05f7c6286a3bad4709dfc637dd0e4e90fd8a3eff4b4"
+        }
+      },
+      "generated_duplicate_nonce_pairs": [],
+      "scope": "Daemon SIGKILL after reserved generation data fdatasync; proves remount skips the reserved high-water under this fault model, not physical power loss."
+    },
+    {
+      "case": "older_generation_append_after_newer_mapping",
+      "required_cases": [
+        "older-generation append after newer mapping"
+      ],
+      "oracle_verdict": "latest_committed",
+      "detail": null,
+      "acceptable": true,
+      "previous_sha256": "6896d9ea3f73a4434f5832bc65714e7d066f177373f36f34dc8a6f735daa41b1",
+      "latest_sha256": "725bcd6c66d02acf6ebeab9c92410e010ea22e336876256aaf05a211f4ce1902",
+      "older_generation": 1,
+      "newer_generation": 2,
+      "journal_before_attack": {
+        "path": "/tmp/gen_matrix_replay_store_rgyxj9j_/replay.bin.pqcmeta",
+        "bytes": 192,
+        "record_size": 96,
+        "full_records": 2,
+        "torn_tail_bytes": 0,
+        "valid_records": 2,
+        "records": [
+          {
+            "index": 0,
+            "valid": true,
+            "logical_block": 0,
+            "generation": 1,
+            "ciphertext_offset": 0,
+            "plaintext_length": 4096,
+            "algorithm_id": 0,
+            "raw_sha256": "6df6471507d40c8c1704c482bb8b7846e2bc5a83c78184d7f5825b22ff2ca025"
           },
           {
             "index": 1,
@@ -202,18 +307,18 @@
             "ciphertext_offset": 4096,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "d27aa8d1006037c450c174644e472728f9df468819f9e5f5ad02856a3efcc4d6"
+            "raw_sha256": "be3f8eeed54a0f43f4c2e990de54aa781ba411c6b0beedd1e13ce1933ba8f680"
           }
         ],
         "duplicate_valid_pairs": [],
         "retained_file": {
           "path": "artifacts/validation/generation_fault_matrix/journals/older_generation_before_attack.pqcmeta",
           "bytes": 192,
-          "sha256": "03768ac9cdda84a9895439458ec1d0ccd61acdb49d7ee1ab8f5b5c2ffee382c1"
+          "sha256": "5ed9fd1313edb87b70800863328c0d62f26cfae2019b61d86f7bf29d6c667f59"
         }
       },
       "journal_after_attack": {
-        "path": "/tmp/gen_matrix_replay_store_11h9qu50/replay.bin.pqcmeta",
+        "path": "/tmp/gen_matrix_replay_store_rgyxj9j_/replay.bin.pqcmeta",
         "bytes": 288,
         "record_size": 96,
         "full_records": 3,
@@ -228,7 +333,7 @@
             "ciphertext_offset": 0,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "d07ccb7e6590dd1a19d885689a81735ebcf3fe3f8a8e4f0f118e96329aae7b44"
+            "raw_sha256": "6df6471507d40c8c1704c482bb8b7846e2bc5a83c78184d7f5825b22ff2ca025"
           },
           {
             "index": 1,
@@ -238,7 +343,7 @@
             "ciphertext_offset": 4096,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "d27aa8d1006037c450c174644e472728f9df468819f9e5f5ad02856a3efcc4d6"
+            "raw_sha256": "be3f8eeed54a0f43f4c2e990de54aa781ba411c6b0beedd1e13ce1933ba8f680"
           },
           {
             "index": 2,
@@ -248,7 +353,7 @@
             "ciphertext_offset": 0,
             "plaintext_length": 4096,
             "algorithm_id": 0,
-            "raw_sha256": "d07ccb7e6590dd1a19d885689a81735ebcf3fe3f8a8e4f0f118e96329aae7b44"
+            "raw_sha256": "6df6471507d40c8c1704c482bb8b7846e2bc5a83c78184d7f5825b22ff2ca025"
           }
         ],
         "duplicate_valid_pairs": [
@@ -261,7 +366,7 @@
         "retained_file": {
           "path": "artifacts/validation/generation_fault_matrix/journals/older_generation_after_attack.pqcmeta",
           "bytes": 288,
-          "sha256": "6e4547fc4725bcab8b416b5e0be824531ff926dfdeeea2eb630b21429840c415"
+          "sha256": "529f2ef6c4da4248f13ba28a02f59e5ede190ff23d79dae0616eb35330369c34"
         }
       },
       "generated_duplicate_nonce_pairs": [],

@@ -1,0 +1,198 @@
+{
+  "artifacts_used": [
+    "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json",
+    "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json",
+    "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json"
+  ],
+  "closeout_complete": true,
+  "epoch_redo_log": {
+    "client_count": 1,
+    "client_p999_ns": 1555177.152,
+    "client_p99_ns": 1552775.52,
+    "commit_p99_ns": 857367.52,
+    "data_fsync_count_total": 5,
+    "epoch_append_group_size_max": null,
+    "epoch_append_sync_primitives": null,
+    "epoch_log_fsync_count_total": 5,
+    "journal_fsync_count_total": 0,
+    "mode": "epoch-redo-log",
+    "pass": true,
+    "sync_count_total": 10,
+    "throughput_mib_s": 10.880134274435354,
+    "workload_kind": "sequential_unique_file_fdatasync"
+  },
+  "epoch_redo_log_grouped": {
+    "client_count": 4,
+    "client_p999_ns": 53149280.472,
+    "client_p99_ns": 53136288.72,
+    "commit_p99_ns": 51631281.49,
+    "data_fsync_count_total": 4,
+    "epoch_append_group_size_max": 4,
+    "epoch_append_sync_primitives": [
+      "none",
+      "syncfs"
+    ],
+    "epoch_log_fsync_count_total": 1,
+    "journal_fsync_count_total": 0,
+    "mode": "epoch-redo-log",
+    "pass": true,
+    "sync_count_total": 5,
+    "throughput_mib_s": 1.0764902470241977,
+    "workload_kind": "concurrent_unique_file_fdatasync"
+  },
+  "generated_by": "code/experiments/build_publication_protocol_closeout.py",
+  "generated_utc": "2026-06-30T02:56:39Z",
+  "invariants": [
+    "Strict mode keeps data-sidecar fdatasync before journal fdatasync.",
+    "Epoch mode writes ciphertext and data-sidecar fdatasync before appending committed epoch records.",
+    "Epoch mode removes strict journal fdatasync from the foreground epoch path and repairs journal mappings from committed epoch prefixes at remount.",
+    "Grouped epoch mode uses one filesystem-level syncfs barrier for joined foreground operations when PQC_EPOCH_GROUP_MAX is greater than one.",
+    "Replay accepts only committed epoch prefixes, ignores torn tails, and rejects duplicate generation records.",
+    "Reader-visible generation state advances only after publication dispatch returns successfully."
+  ],
+  "known_losses": [
+    "Sequential epoch-redo-log mode does not improve total sync count because each write still has one data fdatasync and one epoch-log barrier.",
+    "Grouped epoch-redo-log reduces traced sync count in the retained concurrent workload, but the retained run does not show a throughput win.",
+    "The grouped barrier uses syncfs, which can be broader and more expensive than per-file fdatasync."
+  ],
+  "measured_result": {
+    "grouped_epoch_throughput_win": false,
+    "grouped_sync_amortized": true,
+    "grouped_sync_reduction_percent": 37.5,
+    "sequential_epoch_journal_fsync_removed": true,
+    "sequential_epoch_throughput_win": false
+  },
+  "negative_claim_guard": "Paper or README text may describe strict and epoch publication only within the retained artifact scope. It must not claim throughput improvement, full crash certification, kernel bypass, direct storage DMA, rollback resistance, side-channel defense, or general-purpose POSIX support from Gate 0.9 evidence.",
+  "non_claims": [
+    "No direct NVMe-to-UVM, GPUDirect/RDMA, dma-buf zero-copy, eBPF/io_uring bypass, or kernel-bypass publication path is claimed.",
+    "No physical power-loss certification or full crash certification is claimed.",
+    "No persistent PCR-bound freshness, TPM rollback resistance, or side-channel protection is claimed by this gate.",
+    "No general-purpose POSIX filesystem support or ready-for-deployment wording is supported by this closeout."
+  ],
+  "paper_text": {
+    "complete": true,
+    "paper_location": "Paper/3_Design.tex",
+    "requirements": {
+      "bounded_group_topology": true,
+      "epoch_mode_named": true,
+      "no_full_crash_claim": true,
+      "no_kernel_bypass_claim": true,
+      "no_rollback_upgrade": true,
+      "replay_boundary": true,
+      "shared_barrier": true,
+      "single_client_loss_case": true,
+      "strict_publication_path": true,
+      "sync_count_amortization": true,
+      "unsupported_posix_boundary": true
+    }
+  },
+  "paper_text_status": "updated",
+  "parallel_commit_audit": {
+    "closure_verdict": "closed",
+    "code_script_complete": true,
+    "implementation_blockers": [],
+    "negative_claim_guard_complete": true,
+    "paper_text_complete": true
+  },
+  "parent_checklist_closed": true,
+  "replay_fault_matrix": {
+    "cases": {
+      "replay_duplicate_generation": {
+        "compact_rc_values": [
+          -17
+        ],
+        "duplicate_generation_records_max": 1,
+        "journal_repair_records_max": 0,
+        "mutation": "duplicate_generation",
+        "pass": true,
+        "remount_read_matches": false,
+        "torn_tail_bytes_max": 0
+      },
+      "replay_journal_loss": {
+        "compact_rc_values": [
+          0
+        ],
+        "duplicate_generation_records_max": 0,
+        "journal_repair_records_max": 4,
+        "mutation": "journal_loss",
+        "pass": true,
+        "remount_read_matches": true,
+        "torn_tail_bytes_max": 0
+      },
+      "replay_normal": {
+        "compact_rc_values": [
+          0
+        ],
+        "duplicate_generation_records_max": 0,
+        "journal_repair_records_max": 0,
+        "mutation": null,
+        "pass": true,
+        "remount_read_matches": true,
+        "torn_tail_bytes_max": 0
+      },
+      "replay_torn_tail": {
+        "compact_rc_values": [
+          0
+        ],
+        "duplicate_generation_records_max": 0,
+        "journal_repair_records_max": 0,
+        "mutation": "torn_tail",
+        "pass": true,
+        "remount_read_matches": true,
+        "torn_tail_bytes_max": 17
+      }
+    },
+    "overall_pass": true
+  },
+  "schema_version": 1,
+  "scope": "Gate 0.9-S7 publication protocol architecture/evidence closeout.",
+  "source_complete": true,
+  "source_evidence": {
+    "epoch_checkpoint_compaction": true,
+    "epoch_duplicate_generation_reject": true,
+    "epoch_group_barrier": true,
+    "epoch_group_config": true,
+    "epoch_group_syncfs": true,
+    "epoch_journal_repair": true,
+    "epoch_log_replay_parser": true,
+    "epoch_mode_dispatch": true,
+    "epoch_skips_strict_journal_fsync": true,
+    "epoch_trace_group_size": true,
+    "fd_context_runs_epoch_compaction": true,
+    "strict_checkpoint_stage": true,
+    "strict_data_fsync": true,
+    "strict_journal_fsync": true
+  },
+  "strict": {
+    "client_count": 1,
+    "client_p999_ns": 1363045.332,
+    "client_p99_ns": 1359286.32,
+    "commit_p99_ns": 787508.88,
+    "data_fsync_count_total": 5,
+    "epoch_append_group_size_max": null,
+    "epoch_append_sync_primitives": null,
+    "epoch_log_fsync_count_total": 0,
+    "journal_fsync_count_total": 5,
+    "mode": "strict",
+    "pass": true,
+    "sync_count_total": 10,
+    "throughput_mib_s": 12.959676619366542,
+    "workload_kind": "sequential_unique_file_fdatasync"
+  },
+  "strict_grouped": {
+    "client_count": 4,
+    "client_p999_ns": 2687130.002,
+    "client_p99_ns": 2669886.0199999996,
+    "commit_p99_ns": 1401824.6,
+    "data_fsync_count_total": 4,
+    "epoch_append_group_size_max": 0,
+    "epoch_append_sync_primitives": [],
+    "epoch_log_fsync_count_total": 0,
+    "journal_fsync_count_total": 4,
+    "mode": "strict",
+    "pass": true,
+    "sync_count_total": 8,
+    "throughput_mib_s": 6.4461233014465105,
+    "workload_kind": "concurrent_unique_file_fdatasync"
+  }
+}

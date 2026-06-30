@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/usr/bin/gocryptfs",
+    "-quiet",
+    "-init",
+    "-passfile",
+    "${PASSFILE}",
+    "/tmp/a2_gocryptfs_cipher_qu48xdpz"
+  ],
+  "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+  "end_realtime_ns": 1782772101405005999,
+  "returncode": 0,
+  "start_realtime_ns": 1782772101256581071,
+  "stderr": "artifacts/validation/a2_gap_attribution/gocryptfs/mount_logs/gocryptfs_init.stderr.txt",
+  "stdout": "artifacts/validation/a2_gap_attribution/gocryptfs/mount_logs/gocryptfs_init.stdout.txt",
+  "wall_seconds": 0.148424928
+}

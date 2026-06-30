@@ -9,30 +9,30 @@
 
 | Row | Required | Status | Primary labels | Evidence | Paper anchors | Scoped gaps |
 | --- | ---: | --- | --- | ---: | ---: | --- |
-| `baseline_sota_comparison` | `True` | `scoped_partial` | `tab:capability_matrix` | `True` | `True` | fscrypt/dm-crypt/fs-verity/dm-integrity rows are not current matched measurements; cold-cache rows remain invalid without privileged cache-drop control |
-| `scalability_pressure_behavior` | `True` | `implemented_scoped` | `fig:first_page_qos`, `tab:qos_sqlite_recovery` | `True` | `True` | pressure result is mounted SQLite storage pressure, not TensorRT/AI p99 recovery |
+| `baseline_sota_comparison` | `True` | `scoped_partial` | `tab:capability_matrix` | `True` | `True` | fscrypt/fs-verity/dm-integrity rows are not current matched throughput measurements; cold-cache rows remain invalid without privileged cache-drop control |
+| `scalability_pressure_behavior` | `True` | `implemented_scoped` | `fig:first_page_qos`, `tab:qos_sqlite_recovery` | `True` | `True` | pressure result is mounted SQLite storage pressure, not non-storage application p99 recovery |
 | `workload_diversity` | `True` | `implemented_scoped` | `tab:benchmark_workloads` | `True` | `True` | workloads do not establish broad workload generalization or full crash certification |
-| `time_overhead_breakdown` | `True` | `implemented_scoped` | `fig:baseline_comparison` | `True` | `True` | primitive placement is not reported as an end-to-end FUSE write speedup |
+| `time_overhead_breakdown` | `True` | `implemented_scoped` | `fig:evaluation_summary` | `True` | `True` | primitive placement is not reported as an end-to-end FUSE write speedup |
 | `sensitivity_analysis` | `True` | `implemented_scoped` | - | `True` | `True` | sensitivity is controller-parameter coverage, not a statistical confidence study |
 | `stability_variance` | `True` | `scoped_partial` | - | `True` | `True` | SQLite QoS headline remains a single retained workflow artifact; future headline comparisons require the methodology gate before generalization |
 | `case_study` | `True` | `implemented_scoped` | - | `True` | `True` | deployment takeaway is the SQLite/FUSE hero contract, not a separate anecdote |
-| `protocol_correctness_and_security_obligations` | `False` | `implemented_scoped` | `tab:design_goals`, `fig:overall_procedure`, `fig:djc_state_machine`, `tab:memory_compat`, `tab:impl_boundaries`, `tab:threat_boundary`, `tab:recovery_scope` | `True` | `True` | protocol rows close design/security obligations rather than adding evaluation completeness rows |
+| `protocol_correctness_and_security_obligations` | `False` | `implemented_scoped` | `fig:problem_boundary`, `tab:design_goals`, `fig:overall_procedure`, `fig:djc_state_machine`, `tab:memory_compat`, `tab:impl_boundaries`, `tab:threat_boundary` | `True` | `True` | protocol rows close design/security obligations rather than adding evaluation completeness rows |
 
 ## Label ownership
 
 | Figure/table label | Matrix row |
 | --- | --- |
-| `fig:baseline_comparison` | `time_overhead_breakdown` |
 | `fig:djc_state_machine` | `protocol_correctness_and_security_obligations` |
+| `fig:evaluation_summary` | `time_overhead_breakdown` |
 | `fig:first_page_qos` | `scalability_pressure_behavior` |
 | `fig:overall_procedure` | `protocol_correctness_and_security_obligations` |
+| `fig:problem_boundary` | `protocol_correctness_and_security_obligations` |
 | `tab:benchmark_workloads` | `workload_diversity` |
 | `tab:capability_matrix` | `baseline_sota_comparison` |
 | `tab:design_goals` | `protocol_correctness_and_security_obligations` |
 | `tab:impl_boundaries` | `protocol_correctness_and_security_obligations` |
 | `tab:memory_compat` | `protocol_correctness_and_security_obligations` |
 | `tab:qos_sqlite_recovery` | `scalability_pressure_behavior` |
-| `tab:recovery_scope` | `protocol_correctness_and_security_obligations` |
 | `tab:threat_boundary` | `protocol_correctness_and_security_obligations` |
 
 ## Evidence contracts
@@ -41,14 +41,17 @@
 | --- | --- | ---: | ---: | ---: | --- |
 | `baseline_sota_comparison` | `artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json` | `True` | `True` | `True` | retained evidence |
 | `baseline_sota_comparison` | `artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json` | `True` | `True` | `True` | retained evidence |
+| `baseline_sota_comparison` | `artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json` | `True` | `True` | `True` | retained evidence |
 | `baseline_sota_comparison` | `artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json` | `True` | `True` | `True` | retained evidence |
 | `baseline_sota_comparison` | `artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json` | `True` | `True` | `True` | retained evidence |
+| `baseline_sota_comparison` | `artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json` | `True` | `True` | `True` | retained evidence |
 | `baseline_sota_comparison` | `artifacts/reports/novelty_isolation/novelty_isolation.json` | `True` | `True` | `True` | retained evidence |
 | `scalability_pressure_behavior` | `artifacts/reports/hero_result_contract/hero_result_contract.json` | `True` | `True` | `True` | retained evidence |
 | `scalability_pressure_behavior` | `artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json` | `True` | `True` | `True` | retained evidence |
 | `workload_diversity` | `artifacts/validation/workload_diversity_matrix/workload_diversity_matrix.json` | `True` | `True` | `True` | retained evidence |
 | `time_overhead_breakdown` | `artifacts/validation/mechanism_ablation_manifest/mechanism_ablation_manifest.json` | `True` | `True` | `True` | retained evidence |
 | `time_overhead_breakdown` | `artifacts/validation/keyplane_rekey_workflow/keyplane_rekey_workflow.json` | `True` | `True` | `True` | retained evidence |
+| `time_overhead_breakdown` | `artifacts/reports/x11_mlkem_break_even_model/x11_mlkem_break_even_model.json` | `True` | `True` | `True` | retained evidence |
 | `sensitivity_analysis` | `artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_analysis.json` | `True` | `True` | `True` | retained evidence |
 | `stability_variance` | `artifacts/validation/stat_thermal_methodology/stat_thermal_methodology_audit.json` | `True` | `True` | `True` | retained evidence |
 | `stability_variance` | `artifacts/validation/qos_sqlite_hero_methodology/qos_sqlite_hero_bundle.json` | `False` | `False` | `True` | negative repeated-run stability artifact |

@@ -1,0 +1,52 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-30 17:26:45.166] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 17:26:45.166]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 17:26:45.166]   Storage dir : /tmp/aegisq-model-cache-dp_8nrx3/storage
+[PQC-FUSE 2026-06-30 17:26:45.166]   Mount point : /tmp/aegisq-model-cache-dp_8nrx3/mnt
+[PQC-FUSE 2026-06-30 17:26:45.166] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=disabled
+[PQC-FUSE 2026-06-30 17:26:45.166] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 17:26:45.166]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 17:26:45.166]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 17:26:45.166]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 17:26:45.166]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 17:26:45.169] Keypair generated in 1432.47 µs
+[PQC-FUSE 2026-06-30 17:26:45.227] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 17:26:45.227] Freshness anchor reconstructed 25 committed checkpoint rows
+[PQC-FUSE 2026-06-30 17:26:45.227] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 17:26:45.227] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 17:26:45.227] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 17:26:45.383] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 17:26:45.383] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-30 17:26:45.428] OPEN /manifest.v1: restored authenticated file-key envelope (fid=12576111240075890633)
+[PQC-FUSE 2026-06-30 17:26:45.429] OPEN /objects/obj-0000.bin: restored authenticated file-key envelope (fid=1465469203794939811)
+[PQC-FUSE 2026-06-30 17:26:45.429] OPEN /objects/obj-0001.bin: restored authenticated file-key envelope (fid=2152438511259945920)
+[PQC-FUSE 2026-06-30 17:26:45.429] OPEN /objects/obj-0002.bin: restored authenticated file-key envelope (fid=3900396116154888234)
+[PQC-FUSE 2026-06-30 17:26:45.430] OPEN /objects/obj-0003.bin: restored authenticated file-key envelope (fid=12214664432222673828)
+[PQC-FUSE 2026-06-30 17:26:45.430] OPEN /objects/obj-0004.bin: restored authenticated file-key envelope (fid=6395637021039225991)
+[PQC-FUSE 2026-06-30 17:26:45.430] OPEN /objects/obj-0005.bin: restored authenticated file-key envelope (fid=4236578700314299278)
+[PQC-FUSE 2026-06-30 17:26:45.431] OPEN /objects/obj-0006.bin: restored authenticated file-key envelope (fid=14635700124748751717)
+[PQC-FUSE 2026-06-30 17:26:45.431] OPEN /objects/obj-0007.bin: restored authenticated file-key envelope (fid=12522228438529344843)
+[PQC-FUSE 2026-06-30 17:26:45.431] OPEN /objects/obj-0008.bin: restored authenticated file-key envelope (fid=12456216581059143521)
+[PQC-FUSE 2026-06-30 17:26:45.432] OPEN /objects/obj-0009.bin: restored authenticated file-key envelope (fid=9218035316487955426)
+[PQC-FUSE 2026-06-30 17:26:45.432] OPEN /objects/obj-0010.bin: restored authenticated file-key envelope (fid=8370236421575765281)
+[PQC-FUSE 2026-06-30 17:26:45.432] OPEN /objects/obj-0011.bin: restored authenticated file-key envelope (fid=4032734819996731167)
+[PQC-FUSE 2026-06-30 17:26:45.432] OPEN /objects/obj-0012.bin: restored authenticated file-key envelope (fid=6288213043611225703)
+[PQC-FUSE 2026-06-30 17:26:45.433] OPEN /objects/obj-0013.bin: restored authenticated file-key envelope (fid=161958277453020958)
+[PQC-FUSE 2026-06-30 17:26:45.433] OPEN /objects/obj-0014.bin: restored authenticated file-key envelope (fid=4970622224603933998)
+[PQC-FUSE 2026-06-30 17:26:45.433] OPEN /objects/obj-0015.bin: restored authenticated file-key envelope (fid=9891467664748362312)
+[PQC-FUSE 2026-06-30 17:26:45.433] OPEN /objects/obj-0016.bin: restored authenticated file-key envelope (fid=12636527127057130490)
+[PQC-FUSE 2026-06-30 17:26:45.434] OPEN /objects/obj-0017.bin: restored authenticated file-key envelope (fid=1762386237027621106)
+[PQC-FUSE 2026-06-30 17:26:45.434] OPEN /objects/obj-0018.bin: restored authenticated file-key envelope (fid=12106188653274501626)
+[PQC-FUSE 2026-06-30 17:26:45.434] OPEN /objects/obj-0019.bin: restored authenticated file-key envelope (fid=10110154114442175153)
+[PQC-FUSE 2026-06-30 17:26:45.434] OPEN /objects/obj-0020.bin: restored authenticated file-key envelope (fid=342730362117589024)
+[PQC-FUSE 2026-06-30 17:26:45.435] OPEN /objects/obj-0021.bin: restored authenticated file-key envelope (fid=10192135894082145565)
+[PQC-FUSE 2026-06-30 17:26:45.435] OPEN /objects/obj-0022.bin: restored authenticated file-key envelope (fid=5350484862563970836)
+[PQC-FUSE 2026-06-30 17:26:45.435] OPEN /objects/obj-0023.bin: restored authenticated file-key envelope (fid=15826966477227627568)
+[PQC-FUSE 2026-06-30 17:26:45.438] Shutting down PQC-FUSE filesystem...

@@ -170,7 +170,7 @@
       "available": true,
       "returncode": 0,
       "stderr": "",
-      "stdout": "Filesystem     Type 1024-blocks      Used Available Capacity Mounted on\n/dev/nvme0n1p1 ext4   981422704 346334372 585201616      38% /"
+      "stdout": "Filesystem     Type 1024-blocks      Used Available Capacity Mounted on\n/dev/nvme0n1p1 ext4   981422704 346118396 585417592      38% /"
     },
     "findmnt": {
       "parsed": {

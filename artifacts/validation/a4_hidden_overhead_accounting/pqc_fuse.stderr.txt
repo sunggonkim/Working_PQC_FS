@@ -1,0 +1,33 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-30 07:54:45.305] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 07:54:45.306]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 07:54:45.306]   Storage dir : /tmp/aegisq_a4_overhead_8jufxij4/storage
+[PQC-FUSE 2026-06-30 07:54:45.306]   Mount point : /tmp/aegisq_a4_overhead_8jufxij4/mnt
+[PQC-FUSE 2026-06-30 07:54:45.306] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=disabled
+[PQC-FUSE 2026-06-30 07:54:45.306] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 07:54:45.306]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 07:54:45.306]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 07:54:45.306]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 07:54:45.306]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 07:54:45.308] Keypair generated in 1417.14 µs
+[PQC-FUSE 2026-06-30 07:54:45.366] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 07:54:45.366] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 07:54:45.366] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 07:54:45.366] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 07:54:45.475] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 07:54:45.475] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-30 07:54:45.514] CREATE /overhead.dat: authenticated file-key envelope initialized (fid=121346701988445261)
+[PQC-FUSE 2026-06-30 07:54:45.525] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-30 07:54:45.526] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-30 07:54:45.527] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-06-30 07:54:45.527] Scheduler stats: submitted=1 cpu=1 gpu=0 bytes_cpu=0 bytes_gpu=65536 migration_ns=4194304
+[PQC-FUSE 2026-06-30 07:54:45.527] Durability sync stats: fdatasync=3 failures=0 total_ns=1723231 fsync=1 failures=0 total_ns=247648 syncfs=1 failures=0 total_ns=2722472 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=2 parent_dir=0 other=0
+[PQC-FUSE 2026-06-30 07:54:45.527] Durability mounted-operation sync stats: fdatasync=2 failures=0 total_ns=1013935 fsync=0 failures=0 total_ns=0 syncfs=1 failures=0 total_ns=2722472 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

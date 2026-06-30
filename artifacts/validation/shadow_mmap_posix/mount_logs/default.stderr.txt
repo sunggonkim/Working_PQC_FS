@@ -1,0 +1,29 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-30 12:08:02.410] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 12:08:02.410]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 12:08:02.410]   Storage dir : /tmp/shadow_mmap_default_env_encrypted_file_store_xnrt8de6
+[PQC-FUSE 2026-06-30 12:08:02.410]   Mount point : /tmp/shadow_mmap_default_env_encrypted_file_mnt_n7bijy_k
+[PQC-FUSE 2026-06-30 12:08:02.410] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=disabled
+[PQC-FUSE 2026-06-30 12:08:02.411] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 12:08:02.411]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 12:08:02.411]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 12:08:02.411]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 12:08:02.411]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 12:08:02.413] Keypair generated in 1417.06 µs
+[PQC-FUSE 2026-06-30 12:08:02.472] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 12:08:02.472] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 12:08:02.472] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 12:08:02.472] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 12:08:02.635] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 12:08:02.635] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-30 12:08:02.678] CREATE /encrypted.bin: authenticated file-key envelope initialized (fid=6325091380205227913)
+[PQC-FUSE 2026-06-30 12:08:02.689] OPEN /encrypted.bin: restored authenticated file-key envelope (fid=6325091380205227913)
+[PQC-FUSE 2026-06-30 12:08:02.691] OPEN /encrypted.bin: restored authenticated file-key envelope (fid=6325091380205227913)
+[PQC-FUSE 2026-06-30 12:08:02.694] Shutting down PQC-FUSE filesystem...

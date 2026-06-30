@@ -1,0 +1,29 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-28 15:59:43.869] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 15:59:43.869]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-28 15:59:43.869]   Storage dir : /tmp/aegisq_replay_journal_loss_storage_m_2ze_80
+[PQC-FUSE 2026-06-28 15:59:43.869]   Mount point : /tmp/aegisq_replay_journal_loss_mnt_c4_t_ay4
+[PQC-FUSE 2026-06-28 15:59:43.869] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/publication_protocol_fault_matrix/replay_journal_loss/write_mount/admission_trace.jsonl
+[PQC-FUSE 2026-06-28 15:59:43.869] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-28 15:59:43.869]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-28 15:59:43.869]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-28 15:59:43.869]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-28 15:59:43.869]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-28 15:59:43.871] Keypair generated in 1360.57 µs
+[PQC-FUSE 2026-06-28 15:59:44.041] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-28 15:59:44.041] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-28 15:59:44.041] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-28 15:59:44.041] Freshness anchor worker started
+[PQC-FUSE 2026-06-28 15:59:44.146] PQC background rekey worker started
+[PQC-FUSE 2026-06-28 15:59:44.146] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-28 15:59:44.180] CREATE /replay.dat: authenticated file-key envelope initialized (fid=17824871126485803862)
+[PQC-FUSE 2026-06-28 15:59:44.184] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-28 15:59:44.184] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-28 15:59:44.185] Scheduler stats: submitted=1 cpu=1 gpu=0 bytes_cpu=0 bytes_gpu=12321 migration_ns=788544

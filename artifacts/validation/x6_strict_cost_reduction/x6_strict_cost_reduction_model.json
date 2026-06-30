@@ -1,0 +1,59 @@
+{
+  "attribution_model": {
+    "modeled_after_blocking_syncs": 3210,
+    "modeled_before_blocking_syncs": 3210,
+    "modeled_filesystem_wide_syncfs_after": 0,
+    "modeled_filesystem_wide_syncfs_before": 1070,
+    "modeled_syncfs_removed": 1070,
+    "modeled_syncfs_removed_fraction": 1.0,
+    "retained_counts": {
+      "data_sidecar_calls": 1070,
+      "fdatasync_calls": 2140,
+      "journal_sidecar_calls": 1070,
+      "marker_metadata_calls": 1070,
+      "syncfs_calls": 1070
+    },
+    "scope": "Counts are from retained A2 attribution. The model changes the type of the marker/checkpoint durability primitive from syncfs to fsync; it does not remove data or journal fdatasync and does not predict end-to-end throughput.",
+    "source_artifact": "artifacts/validation/a2_gap_attribution/a2_gap_attribution.json",
+    "targeted_barrier": "strict fsync-return marker/checkpoint syncfs",
+    "targeted_syncfs_calls": 1070
+  },
+  "checks": {
+    "anchor_external_sync_uses_marker_fsync": true,
+    "epoch_syncfs_scope": true,
+    "epoch_syncfs_still_present": true,
+    "marker_metadata_no_syncfs_helper": true,
+    "marker_metadata_uses_fsync": true,
+    "paper_scope_complete": true,
+    "retained_attribution_present": true,
+    "targeted_syncfs_positive": true
+  },
+  "generated_utc": "2026-06-30T08:28:48.631175+00:00",
+  "overall_pass": true,
+  "paper_checks": {
+    "complete": true,
+    "required_phrases": {
+      "does_not_claim_kernel_upstreaming": true,
+      "does_not_claim_power_loss": true,
+      "keeps_strict_cost_boundary": true,
+      "mentions_marker_fsync_narrowing": true
+    }
+  },
+  "schema": "aegisq.x6_strict_cost_reduction_model.v1",
+  "scope": [
+    "Production strict-path marker/checkpoint syncfs narrowing.",
+    "Retained attribution-count model only; not a new throughput benchmark.",
+    "No kernel upstreaming, broad POSIX, physical power-loss, or drive-cache certification claim."
+  ],
+  "source_checks": {
+    "anchor_external_sync_uses_marker_fsync": true,
+    "epoch_syncfs_scope": true,
+    "epoch_syncfs_still_present": true,
+    "marker_metadata_no_syncfs_helper": true,
+    "marker_metadata_uses_fsync": true
+  },
+  "source_files": [
+    "code/fs/pqc_file_io.c",
+    "code/fs/pqc_fd_context.c"
+  ]
+}

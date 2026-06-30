@@ -1,0 +1,43 @@
+{
+  "client_id": 6,
+  "error": null,
+  "ops": [
+    {
+      "latency_ns": 38331658,
+      "matches": true,
+      "op_id": 0,
+      "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_00.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    },
+    {
+      "latency_ns": 3850546,
+      "matches": true,
+      "op_id": 1,
+      "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_01.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    },
+    {
+      "latency_ns": 3401741,
+      "matches": true,
+      "op_id": 2,
+      "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_02.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    },
+    {
+      "latency_ns": 3730343,
+      "matches": true,
+      "op_id": 3,
+      "path": "/tmp/aegisq_starvation_same_shard_mnt_n7p557mw/client_06_op_03.dat",
+      "payload_len": 4110,
+      "read_len": 4110,
+      "written": 4110
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "complete": true,
+    "missing_evidence": [],
+    "present_evidence": [
+      "artifacts/validation/parallel_commit_contract/epoch_path_smoke.json",
+      "artifacts/validation/parallel_commit_contract/parallel_commit_telemetry_sweep.json",
+      "artifacts/validation/parallel_commit_contract/parallel_commit_fairness_replay.json",
+      "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json",
+      "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json"
+    ]
+  },
+  "blocking_items": [],
+  "closure_verdict": "closed",
+  "code_script": {
+    "complete": true,
+    "missing_evidence": [],
+    "present_evidence": [
+      "parallel commit coordinator source exists",
+      "mounted writeback path calls runtime parallel commit coordinator",
+      "epoch mode replaces strict journal fdatasync with a recovery-proven epoch-log barrier",
+      "grouped epoch comparison reduces total sync count under the concurrent mounted workload"
+    ]
+  },
+  "generated_by": "experiments/build_parallel_commit_contract.py",
+  "generated_utc": "2026-06-30T02:56:32Z",
+  "negative_claim_guard": {
+    "claim_scan_match_count": 0,
+    "complete": true,
+    "guard_text": "No paper or README text may claim sharded queues, parallel commit, epoch fdatasync, group commit, or scalability from commit batching until this contract reports overall_pass=true with production mounted-path evidence."
+  },
+  "next_unblock_step": "Add the Gate 0.16 paper text and negative-claim guard only after the user explicitly moves from code-first implementation to paper-claim closure.",
+  "overall_pass": true,
+  "paper_text": {
+    "claim_scan": {
+      "match_count": 0,
+      "matches": [],
+      "phrases": [
+        "sharded queues",
+        "parallel commit",
+        "epoch fdatasync",
+        "group commit",
+        "scalability from commit batching"
+      ],
+      "targets": [
+        "Paper",
+        "README.md"
+      ]
+    },
+    "complete": true,
+    "paper_location": "Paper/3_Design.tex",
+    "reason": "Gate 0.16 paper text is present.",
+    "requirements": {
+      "mentions_bounded_leader_follower_epoch_group": true,
+      "mentions_epoch_redo_log_mode": true,
+      "mentions_shared_durability_barrier": true,
+      "mentions_single_client_loss_case": true,
+      "mentions_sync_count_amortization": true
+    }
+  },
+  "schema_version": 1,
+  "scope": "Gate 0.16-S5 closure audit."
+}

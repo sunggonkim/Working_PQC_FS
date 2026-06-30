@@ -1,0 +1,66 @@
+{
+  "decision": {
+    "next_valid_optimization_target": "Use epoch/group commit only for batched or concurrent work where a shared barrier can amortize publication, or design a new strict-compatible compact publication format with fresh crash evidence.",
+    "verdict": "cost-boundary-closeout",
+    "why_not_local_syscall_swap": "The remaining strict path has data-sidecar durability before journal mapping durability, followed by marker/checkpoint publication. Replacing those barriers with one later sync would change crash-ordering obligations and requires a publication redesign/fault matrix, not a local optimization."
+  },
+  "inputs": {
+    "a2_attribution": "artifacts/validation/a2_gap_attribution/a2_gap_attribution.json",
+    "discussion_text": "Paper/10_Discussion_and_Limitations.tex",
+    "evaluation_text": "Paper/4_Evaluation.tex",
+    "frozen_aegisq": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+    "fs_io_source": "code/fs/pqc_file_io.c",
+    "strict_publish_source": "code/storage/pqc_strict_publish.c"
+  },
+  "metrics": {
+    "a2_aegisq_throughput_mib_s": 1.858445167541504,
+    "a2_aegisq_to_gocryptfs_ratio": 0.1024206263153264,
+    "a2_durability_calls": {
+      "anchor_file": 0,
+      "data_sidecar": 1070,
+      "epoch_log": 0,
+      "fdatasync": 2140,
+      "fsync": 0,
+      "journal_sidecar": 1070,
+      "marker_metadata": 1070,
+      "parent_dir": 0,
+      "syncfs": 1070
+    },
+    "a2_gocryptfs_throughput_mib_s": 18.14522361755371,
+    "frozen_aegisq_p99_us_median": 11206.656,
+    "frozen_aegisq_throughput_mib_s_median": 0.3600606918334961
+  },
+  "non_claims": [
+    "not a high-throughput filesystem claim",
+    "not a general-purpose encrypted-filesystem replacement claim",
+    "not proof that local syscall coalescing can preserve crash semantics"
+  ],
+  "overall_pass": true,
+  "paper_checks": {
+    "a2_attribution_wording": true,
+    "cost_boundary_wording": true,
+    "dangerous_high_throughput_claim": false,
+    "discussion_file": "Paper/10_Discussion_and_Limitations.tex",
+    "evaluation_file": "Paper/4_Evaluation.tex",
+    "no_headline_win_wording": true,
+    "no_high_throughput_replacement_wording": true
+  },
+  "proof_checks": {
+    "a2_overall_pass": true,
+    "frozen_aegisq_overall_pass": true,
+    "no_broad_high_throughput_claim": true,
+    "paper_cost_boundary_present": true,
+    "strict_publication_boundaries_present": true
+  },
+  "schema": "a1-throughput-decision-v1",
+  "source_checks": {
+    "anchor_external_sync": true,
+    "data_before_metadata_comment": true,
+    "fs_io_file": "code/fs/pqc_file_io.c",
+    "marker_syncfs_tail": true,
+    "strict_data_fdatasync": true,
+    "strict_journal_fdatasync": true,
+    "strict_publish_file": "code/storage/pqc_strict_publish.c",
+    "windowed_anchor_opt_in_only": true
+  }
+}

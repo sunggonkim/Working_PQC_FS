@@ -1,0 +1,64 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-28 15:01:17.178] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 15:01:17.178]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-28 15:01:17.178]   Storage dir : /tmp/aegisq_starvation_same_shard_storage_m6sd2jen
+[PQC-FUSE 2026-06-28 15:01:17.178]   Mount point : /tmp/aegisq_starvation_same_shard_mnt_n7p557mw
+[PQC-FUSE 2026-06-28 15:01:17.178] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=artifacts/validation/parallel_commit_contract/fairness_replay/starvation_same_shard/admission_trace.jsonl
+[PQC-FUSE 2026-06-28 15:01:17.178] Parallel commit mode enabled
+[PQC-FUSE 2026-06-28 15:01:17.178] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-28 15:01:17.178]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-28 15:01:17.178]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-28 15:01:17.178]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-28 15:01:17.178]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-28 15:01:17.181] Keypair generated in 1402.94 µs
+[PQC-FUSE 2026-06-28 15:01:17.352] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-28 15:01:17.352] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-28 15:01:17.352] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-28 15:01:17.352] Freshness anchor worker started
+[PQC-FUSE 2026-06-28 15:01:17.466] PQC background rekey worker started
+[PQC-FUSE 2026-06-28 15:01:17.466] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-28 15:01:17.739] CREATE /client_00_op_00.dat: authenticated file-key envelope initialized (fid=1952314436814720662)
+[PQC-FUSE 2026-06-28 15:01:17.740] CREATE /client_04_op_00.dat: authenticated file-key envelope initialized (fid=8330458064321694458)
+[PQC-FUSE 2026-06-28 15:01:17.740] CREATE /client_05_op_00.dat: authenticated file-key envelope initialized (fid=2494845431841186194)
+[PQC-FUSE 2026-06-28 15:01:17.741] CREATE /client_01_op_00.dat: authenticated file-key envelope initialized (fid=13271985881232473047)
+[PQC-FUSE 2026-06-28 15:01:17.772] CREATE /client_02_op_00.dat: authenticated file-key envelope initialized (fid=14908150466961675525)
+[PQC-FUSE 2026-06-28 15:01:17.773] CREATE /client_06_op_00.dat: authenticated file-key envelope initialized (fid=307235605808264656)
+[PQC-FUSE 2026-06-28 15:01:17.773] CREATE /client_07_op_00.dat: authenticated file-key envelope initialized (fid=505001733633828797)
+[PQC-FUSE 2026-06-28 15:01:17.773] CREATE /client_03_op_00.dat: authenticated file-key envelope initialized (fid=14223824056228050580)
+[PQC-FUSE 2026-06-28 15:01:17.774] CREATE /client_00_op_01.dat: authenticated file-key envelope initialized (fid=4805276221042565232)
+[PQC-FUSE 2026-06-28 15:01:17.774] CREATE /client_04_op_01.dat: authenticated file-key envelope initialized (fid=13624299847942601001)
+[PQC-FUSE 2026-06-28 15:01:17.774] CREATE /client_01_op_01.dat: authenticated file-key envelope initialized (fid=3467901315225335400)
+[PQC-FUSE 2026-06-28 15:01:17.774] CREATE /client_05_op_01.dat: authenticated file-key envelope initialized (fid=5029833415406021957)
+[PQC-FUSE 2026-06-28 15:01:17.776] CREATE /client_02_op_01.dat: authenticated file-key envelope initialized (fid=10840982111902269384)
+[PQC-FUSE 2026-06-28 15:01:17.777] CREATE /client_06_op_01.dat: authenticated file-key envelope initialized (fid=3313130086884436072)
+[PQC-FUSE 2026-06-28 15:01:17.777] CREATE /client_03_op_01.dat: authenticated file-key envelope initialized (fid=11417891876982256809)
+[PQC-FUSE 2026-06-28 15:01:17.778] CREATE /client_04_op_02.dat: authenticated file-key envelope initialized (fid=9485756691600477590)
+[PQC-FUSE 2026-06-28 15:01:17.778] CREATE /client_07_op_01.dat: authenticated file-key envelope initialized (fid=12135045006991704289)
+[PQC-FUSE 2026-06-28 15:01:17.778] CREATE /client_05_op_02.dat: authenticated file-key envelope initialized (fid=891118218755167820)
+[PQC-FUSE 2026-06-28 15:01:17.778] CREATE /client_00_op_02.dat: authenticated file-key envelope initialized (fid=11654433074250903539)
+[PQC-FUSE 2026-06-28 15:01:17.779] CREATE /client_01_op_02.dat: authenticated file-key envelope initialized (fid=4861716374101197655)
+[PQC-FUSE 2026-06-28 15:01:17.780] CREATE /client_02_op_02.dat: authenticated file-key envelope initialized (fid=13254809665995373789)
+[PQC-FUSE 2026-06-28 15:01:17.781] CREATE /client_03_op_02.dat: authenticated file-key envelope initialized (fid=1974122089451935633)
+[PQC-FUSE 2026-06-28 15:01:17.781] CREATE /client_07_op_02.dat: authenticated file-key envelope initialized (fid=8734518014882736604)
+[PQC-FUSE 2026-06-28 15:01:17.782] CREATE /client_06_op_02.dat: authenticated file-key envelope initialized (fid=17652695859768127911)
+[PQC-FUSE 2026-06-28 15:01:17.782] CREATE /client_04_op_03.dat: authenticated file-key envelope initialized (fid=17073803456580650327)
+[PQC-FUSE 2026-06-28 15:01:17.782] CREATE /client_05_op_03.dat: authenticated file-key envelope initialized (fid=13319592103436211510)
+[PQC-FUSE 2026-06-28 15:01:17.783] CREATE /client_00_op_03.dat: authenticated file-key envelope initialized (fid=16586905471581162312)
+[PQC-FUSE 2026-06-28 15:01:17.783] CREATE /client_01_op_03.dat: authenticated file-key envelope initialized (fid=17870845318980963870)
+[PQC-FUSE 2026-06-28 15:01:17.784] CREATE /client_02_op_03.dat: authenticated file-key envelope initialized (fid=16626958826846821271)
+[PQC-FUSE 2026-06-28 15:01:17.785] CREATE /client_06_op_03.dat: authenticated file-key envelope initialized (fid=973022796268612711)
+[PQC-FUSE 2026-06-28 15:01:17.785] CREATE /client_03_op_03.dat: authenticated file-key envelope initialized (fid=10749713847853646432)
+[PQC-FUSE 2026-06-28 15:01:17.785] CREATE /client_07_op_03.dat: authenticated file-key envelope initialized (fid=14889855010947965272)
+[PQC-FUSE 2026-06-28 15:01:17.792] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-28 15:01:17.792] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-28 15:01:17.793] Scheduler stats: submitted=32 cpu=32 gpu=0 bytes_cpu=0 bytes_gpu=131520 migration_ns=8417280
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0
+[PQC-FUSE 2026-06-28 15:01:17.793] Scheduler stats: submitted=32 cpu=32 gpu=0 bytes_cpu=0 bytes_gpu=131520 migration_ns=8417280
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

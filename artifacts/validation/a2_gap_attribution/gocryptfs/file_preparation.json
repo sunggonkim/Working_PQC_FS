@@ -1,0 +1,12 @@
+{
+  "end_realtime_ns": 1782772101562503796,
+  "error": null,
+  "method": "posix_fallocate",
+  "observed_size_bytes": 16777216,
+  "path": "/tmp/a2_gocryptfs_mnt_ub7gak2c/contract/frozen_randrw_4k_fdatasync.0.0",
+  "requested_size_bytes": 16777216,
+  "returncode": 0,
+  "start_realtime_ns": 1782772101562241740,
+  "valid": true,
+  "wall_seconds": 0.000262056
+}

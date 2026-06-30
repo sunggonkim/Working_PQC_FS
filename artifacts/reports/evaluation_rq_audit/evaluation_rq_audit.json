@@ -7,13 +7,13 @@
   ],
   "defensive_hits": [],
   "discussion_boundaries": {
-    "Historical fscrypt and dm-crypt fio outputs": true,
     "\\label{sec:disc_roadmap}": true,
     "drive-cache": true,
+    "fscrypt is environment-blocked": true,
     "kernel-crash": true,
-    "non-NVIDIA UMA platform": true,
+    "non-NVIDIA UMA": true,
     "physical power-loss": true,
-    "side-channel testing": true
+    "side-channel evidence": true
   },
   "overall_pass": true,
   "pages": 12,
@@ -26,8 +26,8 @@
       ],
       "evidence_present": true,
       "found_id": "RQ1",
-      "found_question": "Does the implemented authenticated format preserve nonce/generation, publication, and metadata-authentication invariants under retained remount, fault, and tamper campaigns?",
-      "found_title": "Correctness",
+      "found_question": "Does the implemented format preserve nonce/generation, publication, and metadata-auth invariants under remount, fault, and tamper campaigns?",
+      "found_title": "Correctness of authenticated publication",
       "passes": true,
       "required_category": "correctness",
       "required_id": "RQ1",
@@ -42,23 +42,23 @@
     },
     {
       "evidence_needles": [
-        "frozen filesystem contract",
-        "plaintext warm-cache row",
-        "gocryptfs reports"
+        "\\label{sec:eval_performance}",
+        "CPU for bulk data",
+        "mounted ML-KEM-768 key-plane workflow"
       ],
       "evidence_present": true,
       "found_id": "RQ2",
-      "found_question": "What cost does AEGIS-Q impose relative to retained plaintext and gocryptfs rows under the frozen filesystem contract?",
-      "found_title": "Mode-aligned baselines",
+      "found_question": "When should a UMA edge runtime keep AES-GCM file encryption on the CPU, and when can ML-KEM/cuPQC key-plane maintenance use the GPU?",
+      "found_title": "CPU/GPU/PQC placement",
       "passes": true,
-      "required_category": "mode-aligned baselines",
+      "required_category": "CPU/GPU/PQC placement",
       "required_id": "RQ2",
       "terms": [
-        "mode-aligned",
-        "baselines",
-        "plaintext",
-        "gocryptfs",
-        "frozen"
+        "cpu",
+        "gpu",
+        "pqc",
+        "placement",
+        "ml-kem"
       ],
       "terms_present": true
     },
@@ -66,39 +66,39 @@
       "evidence_needles": [
         "\\label{sec:eval_qos}",
         "SQLite transaction latency",
-        "simple controller"
+        "Kernel controls preserve"
       ],
       "evidence_present": true,
       "found_id": "RQ3",
-      "found_question": "Does AEGIS-Q recover foreground SQLite latency under mounted secure-storage pressure relative to unthrottled pressure and a simple controller?",
-      "found_title": "QoS/hero result",
+      "found_question": "Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?",
+      "found_title": "Mounted application behavior",
       "passes": true,
-      "required_category": "QoS/hero result",
+      "required_category": "mounted app QoS",
       "required_id": "RQ3",
       "terms": [
-        "qos",
-        "hero",
+        "storage-visible",
         "sqlite",
-        "foreground",
-        "pressure"
+        "latency",
+        "secure-storage",
+        "remount"
       ],
       "terms_present": true
     },
     {
       "evidence_needles": [
-        "hardware-freshness recovery matrix",
-        "daemon power-fault campaign",
+        "hardware replay matrix",
+        "daemon campaign",
         "oracle verdict"
       ],
       "evidence_present": true,
       "found_id": "RQ4",
-      "found_question": "What oracle-classified recovery and TPM-freshness outcomes are supported by the retained fault campaigns?",
-      "found_title": "Freshness and recovery",
+      "found_question": "Which daemon/app crash and TPM replay-after-advance outcomes are supported, and which rollback or power-loss claims remain outside scope?",
+      "found_title": "Replay and recovery oracle",
       "passes": true,
-      "required_category": "freshness and recovery",
+      "required_category": "replay and recovery",
       "required_id": "RQ4",
       "terms": [
-        "freshness",
+        "replay",
         "recovery",
         "oracle",
         "tpm"
@@ -107,22 +107,23 @@
     },
     {
       "evidence_needles": [
-        "mechanism-ablation manifest",
+        "frozen filesystem contract",
         "sensitivity bundle",
-        "hysteresis"
+        "ablation manifest"
       ],
       "evidence_present": true,
       "found_id": "RQ5",
-      "found_question": "Which mechanisms account for the measured placement, controller, key-plane, and anchor behavior, and how sensitive is the SQLite controller?",
-      "found_title": "Ablation and sensitivity",
+      "found_question": "What strict-publication cost appears against mode-aligned baselines, and which controller/key-plane/anchor mechanisms account for the result?",
+      "found_title": "Cost boundaries and sensitivity",
       "passes": true,
-      "required_category": "ablation and sensitivity",
+      "required_category": "cost boundaries and sensitivity",
       "required_id": "RQ5",
       "terms": [
-        "ablation",
-        "sensitivity",
-        "mechanisms",
-        "controller"
+        "strict-publication",
+        "mode-aligned",
+        "baselines",
+        "controller",
+        "key-plane"
       ],
       "terms_present": true
     }

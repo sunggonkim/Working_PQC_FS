@@ -1,0 +1,902 @@
+{
+  "artifact_verdict": {
+    "overall_pass": true,
+    "paper_claim_guard": "No NVIDIA/Jetson optimization term may be described as an AEGIS-Q paper mechanism unless this ladder marks it paper-mechanism after retained production mounted-path traces and benchmark evidence.",
+    "paper_text_status": "not_updated",
+    "parent_checklist_closed": false
+  },
+  "classifications": [
+    "available-api",
+    "probe-passes",
+    "microbenchmark-benefit",
+    "production-mounted-path-benefit",
+    "paper-mechanism",
+    "diagnostic-only",
+    "unavailable",
+    "non-claim"
+  ],
+  "generated_by": "code/experiments/build_jetson_optimization_ladder.py",
+  "generated_utc": "2026-06-29T08:33:12Z",
+  "input_artifacts": [
+    "artifacts/validation/jetson_memory_contract/jetson_memory_contract.json",
+    "artifacts/validation/cuda_qos_contract/cuda_qos_contract.json",
+    "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json"
+  ],
+  "ladder": [
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": true,
+      "evidence": [
+        "cudaHostAlloc=pass",
+        "cudaHostAllocMappedKernel=pass",
+        "production_source_present=False",
+        "source_contract=artifacts/validation/jetson_memory_contract/jetson_memory_contract.json"
+      ],
+      "highest_evidence_level": "probe-passes",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "production mounted-path allocation uses cudaHostAlloc",
+        "matched benchmark shows benefit versus pageable/managed staging",
+        "thermal-qualified headline run carries this allocation mode"
+      ],
+      "name": "pinned memory via cudaHostAlloc",
+      "negative_claim_guard": "Do not claim pinned-memory benefit or zero-copy unless a production mounted-path benchmark uses this path.",
+      "paper_classification": "diagnostic-only",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": true,
+      "evidence": [
+        "cudaHostRegister=pass",
+        "production_source_present=False",
+        "source_contract=artifacts/validation/jetson_memory_contract/jetson_memory_contract.json"
+      ],
+      "highest_evidence_level": "probe-passes",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "production mounted-path buffer registration path",
+        "registration lifetime and unregister cleanup proof",
+        "matched benchmark shows benefit and no unsafe lifetime exposure"
+      ],
+      "name": "registered host memory via cudaHostRegister",
+      "negative_claim_guard": "Do not claim registered host memory for production I/O unless the mounted path records this allocation mode.",
+      "paper_classification": "diagnostic-only",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": true,
+      "evidence": [
+        "managedMemory=None",
+        "concurrentManagedAccess=None",
+        "cudaMallocManaged=pass",
+        "production_source_present=True",
+        "source_contract=artifacts/validation/jetson_memory_contract/jetson_memory_contract.json"
+      ],
+      "highest_evidence_level": "probe-passes",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "production mounted-path benefit for managed buffers",
+        "Nsight/CUPTI migration or stall trace for the same mounted workload",
+        "no direct-storage-DMA implication in paper text"
+      ],
+      "name": "UVM / cudaMallocManaged",
+      "negative_claim_guard": "Do not claim direct storage-to-UVM DMA or production UVM benefit from allocation-only evidence.",
+      "paper_classification": "diagnostic-only",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": true
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": true,
+      "evidence": [
+        "stream_priority_range=pass",
+        "distinct_priority_range=True",
+        "production_uses_stream_priority=False",
+        "source_contract=artifacts/validation/cuda_qos_contract/cuda_qos_contract.json"
+      ],
+      "highest_evidence_level": "probe-passes",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "mounted-path executor creates priority streams",
+        "same-run trace shows storage work submitted on priority stream",
+        "foreground latency evidence under competing GPU pressure"
+      ],
+      "name": "CUDA stream priority",
+      "negative_claim_guard": "Do not claim stream-priority QoS until mounted-path priority streams and same-run trace evidence exist.",
+      "paper_classification": "diagnostic-only",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": true,
+      "evidence": [
+        "memory_contract_prefetch=pass",
+        "qos_prefetch_device=pass",
+        "qos_prefetch_host=pass",
+        "production_uses_prefetch=True",
+        "source_contract=artifacts/validation/cuda_qos_contract/cuda_qos_contract.json"
+      ],
+      "highest_evidence_level": "probe-passes",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "per-run mounted-path trace proving the prefetch calls execute",
+        "microbenchmark or macrobenchmark benefit attributed to prefetch",
+        "thermal-qualified same-run metadata for the benchmark"
+      ],
+      "name": "CUDA prefetch",
+      "negative_claim_guard": "Prefetch is implementation/diagnostic evidence only until a retained mounted-path benefit exists.",
+      "paper_classification": "diagnostic-only",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": true
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": true,
+      "evidence": [
+        "memory_contract_attach=pass",
+        "qos_attach_managed=pass",
+        "production_uses_attach=False",
+        "source_contract=artifacts/validation/cuda_qos_contract/cuda_qos_contract.json"
+      ],
+      "highest_evidence_level": "probe-passes",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "production mounted-path code uses cudaStreamAttachMemAsync",
+        "retained trace shows stream attach on mounted workload buffers",
+        "benchmark isolates attach effect from prefetch and synchronization"
+      ],
+      "name": "CUDA stream attach",
+      "negative_claim_guard": "Do not claim stream-attach scheduling or coherency benefit without production mounted-path evidence.",
+      "paper_classification": "diagnostic-only",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": true,
+      "evidence": [
+        "nsys_available=True",
+        "ncu_available=True",
+        "retained_profiler_trace=False",
+        "thermal_contract_pass=True",
+        "source_contract=artifacts/validation/cuda_qos_contract/cuda_qos_contract.json"
+      ],
+      "highest_evidence_level": "probe-passes",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "retained Nsight report for the mounted workload",
+        "exported trace summary tied to exact run command",
+        "same-run thermal and power metadata"
+      ],
+      "name": "Nsight Systems / Nsight Compute",
+      "negative_claim_guard": "Profiler availability is not trace evidence; do not claim Nsight-backed QoS without retained reports.",
+      "paper_classification": "diagnostic-only",
+      "paper_mechanism_eligible": false,
+      "probe_pass": true,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": false,
+      "evidence": [
+        "cupti_headers=0",
+        "cupti_libs=0",
+        "retained_profiler_trace=False",
+        "production_source_mentions_cupti=True",
+        "source_contract=artifacts/validation/cuda_qos_contract/cuda_qos_contract.json"
+      ],
+      "highest_evidence_level": "non-claim",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "CUPTI headers and libraries available in build environment",
+        "live CUPTI sampler linked or invoked for mounted-path run",
+        "retained PM/occupancy trace tied to storage pressure"
+      ],
+      "name": "CUPTI",
+      "negative_claim_guard": "CUPTI-backed hardware-counter claims are prohibited until retained CUPTI traces exist.",
+      "paper_classification": "non-claim",
+      "paper_mechanism_eligible": false,
+      "probe_pass": false,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": true
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": false,
+      "evidence": [
+        "/sys/class/dma_heap=[]",
+        "/dev/dma_heap=[]",
+        "no CUDA dma-buf export/import probe is retained",
+        "production_source_mentions_dmabuf=False",
+        "source_contract=artifacts/validation/jetson_memory_contract/jetson_memory_contract.json"
+      ],
+      "highest_evidence_level": "non-claim",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "CUDA allocation export/import proof",
+        "mounted-path use of dma-buf buffers",
+        "copy-path comparison showing zero-copy effect"
+      ],
+      "name": "dma-buf zero-copy",
+      "negative_claim_guard": "dma-buf zero-copy remains a non-claim until CUDA allocation export/import and mounted-path use are proven.",
+      "paper_classification": "non-claim",
+      "paper_mechanism_eligible": false,
+      "probe_pass": false,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": false,
+      "evidence": [
+        "cudaDevAttrGPUDirectRDMASupported=None",
+        "kernel_modules_relevant=['nvidia', 'nvidia_modeset', 'nvidia_uvm']",
+        "infiniband=[]",
+        "production_source_mentions_gd=False",
+        "source_contract=artifacts/validation/jetson_memory_contract/jetson_memory_contract.json"
+      ],
+      "highest_evidence_level": "non-claim",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "GPUDirect/RDMA-supported device attribute and peer-memory driver",
+        "RDMA/NVMe peer device evidence",
+        "production mounted-path trace and benchmark"
+      ],
+      "name": "GPUDirect/RDMA",
+      "negative_claim_guard": "GPUDirect/RDMA and direct NVMe-to-UVM DMA remain non-claims without driver, peer-memory, RDMA/NVMe, and production mounted-path evidence.",
+      "paper_classification": "non-claim",
+      "paper_mechanism_eligible": false,
+      "probe_pass": false,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    },
+    {
+      "allowed_classifications": [
+        "available-api",
+        "probe-passes",
+        "microbenchmark-benefit",
+        "production-mounted-path-benefit",
+        "paper-mechanism",
+        "diagnostic-only",
+        "unavailable",
+        "non-claim"
+      ],
+      "available_api": false,
+      "evidence": [
+        "no NVMe peer-DMA proof",
+        "no UVM direct-DMA proof",
+        "no mounted-path direct-DMA trace",
+        "source_contract=artifacts/validation/jetson_memory_contract/jetson_memory_contract.json"
+      ],
+      "highest_evidence_level": "non-claim",
+      "microbenchmark_benefit_retained": false,
+      "missing_for_paper_mechanism": [
+        "kernel/driver proof of direct NVMe peer DMA into UVM",
+        "mounted-path implementation and trace",
+        "correctness and fallback evidence"
+      ],
+      "name": "direct NVMe-to-UVM DMA",
+      "negative_claim_guard": "The paper must not claim direct NVMe-to-UVM DMA.",
+      "paper_classification": "non-claim",
+      "paper_mechanism_eligible": false,
+      "probe_pass": false,
+      "production_mounted_path_benefit_retained": false,
+      "production_source_present": false
+    }
+  ],
+  "missing_inputs": [],
+  "official_basis": [
+    {
+      "name": "NVIDIA CUDA for Tegra memory/coherency guidance",
+      "url": "https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/index.html"
+    },
+    {
+      "name": "NVIDIA CUDA Runtime API stream management",
+      "url": "https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__STREAM.html"
+    },
+    {
+      "name": "NVIDIA CUDA Runtime API memory management",
+      "url": "https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__MEMORY.html"
+    },
+    {
+      "name": "NVIDIA GPUDirect RDMA caveats",
+      "url": "https://docs.nvidia.com/cuda/gpudirect-rdma/index.html"
+    },
+    {
+      "name": "NVIDIA CUPTI documentation",
+      "url": "https://docs.nvidia.com/cupti/"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Gate 0.18-S0 NVIDIA/Jetson optimization evidence ladder.",
+  "source_scan": {
+    "files_scanned": [
+      "code/cuda_aead.cu",
+      "code/cuda_aead.h",
+      "code/cuda_integrity.cu",
+      "code/cuda_integrity.h",
+      "code/cuda_pqc.cu",
+      "code/cuda_pqc.h",
+      "code/pqc_admission.c",
+      "code/pqc_admission.h",
+      "code/pqc_anchor.c",
+      "code/pqc_anchor.h",
+      "code/pqc_anchor_worker.c",
+      "code/pqc_anchor_worker.h",
+      "code/pqc_block_job.h",
+      "code/pqc_checkpoint.c",
+      "code/pqc_checkpoint.h",
+      "code/pqc_config.c",
+      "code/pqc_config.h",
+      "code/pqc_crypto.c",
+      "code/pqc_crypto.h",
+      "code/pqc_durability.c",
+      "code/pqc_durability.h",
+      "code/pqc_epoch_log.c",
+      "code/pqc_epoch_log.h",
+      "code/pqc_epoch_publish.c",
+      "code/pqc_epoch_publish.h",
+      "code/pqc_fd_context.c",
+      "code/pqc_fd_context.h",
+      "code/pqc_file_io.c",
+      "code/pqc_file_io.h",
+      "code/pqc_file_lock.c",
+      "code/pqc_file_lock.h",
+      "code/pqc_flush_batch.c",
+      "code/pqc_flush_batch.h",
+      "code/pqc_flush_crypto.c",
+      "code/pqc_flush_crypto.h",
+      "code/pqc_format.h",
+      "code/pqc_fuse.c",
+      "code/pqc_fuse.h",
+      "code/pqc_journal.c",
+      "code/pqc_journal.h",
+      "code/pqc_key_lifecycle.c",
+      "code/pqc_key_lifecycle.h",
+      "code/pqc_keyring.c",
+      "code/pqc_keyring.h",
+      "code/pqc_lifecycle.c",
+      "code/pqc_lifecycle.h",
+      "code/pqc_lock_profile.c",
+      "code/pqc_lock_profile.h",
+      "code/pqc_main.c",
+      "code/pqc_metrics.c",
+      "code/pqc_metrics.h",
+      "code/pqc_namespace.c",
+      "code/pqc_namespace.h",
+      "code/pqc_parallel_commit.c",
+      "code/pqc_parallel_commit.h",
+      "code/pqc_plane_trace.c",
+      "code/pqc_plane_trace.h",
+      "code/pqc_posix.c",
+      "code/pqc_posix.h",
+      "code/pqc_publish.c",
+      "code/pqc_publish.h",
+      "code/pqc_qos.c",
+      "code/pqc_qos.h",
+      "code/pqc_recovery.c",
+      "code/pqc_recovery.h",
+      "code/pqc_rekey.c",
+      "code/pqc_rekey.h",
+      "code/pqc_runtime.c",
+      "code/pqc_runtime.h",
+      "code/pqc_scheduler.c",
+      "code/pqc_scheduler.h",
+      "code/pqc_selftest.c",
+      "code/pqc_selftest.h",
+      "code/pqc_state.c",
+      "code/pqc_state.h",
+      "code/pqc_storage_path.c",
+      "code/pqc_storage_path.h",
+      "code/pqc_strict_publish.c",
+      "code/pqc_strict_publish.h",
+      "code/pqc_test_hooks.c",
+      "code/pqc_test_hooks.h",
+      "code/pqc_trace_sink.c",
+      "code/pqc_trace_sink.h",
+      "code/pqc_trust_boundary.c",
+      "code/pqc_trust_boundary.h",
+      "code/pqc_writeback.c",
+      "code/pqc_writeback.h",
+      "code/pqc_xattr.c",
+      "code/pqc_xattr.h"
+    ],
+    "kernel_launches": [
+      {
+        "configuration_text": "blocks, threads",
+        "file": "code/cuda_aead.cu",
+        "kernel": "um_smoke_touch_kernel",
+        "line": 354
+      },
+      {
+        "configuration_text": "1, 1, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_expand_key_kernel",
+        "line": 480
+      },
+      {
+        "configuration_text": "grid, 256, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_ctr_batch_kernel",
+        "line": 484
+      },
+      {
+        "configuration_text": "1, 1, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_expand_key_kernel",
+        "line": 531
+      },
+      {
+        "configuration_text": "grid, 256, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_ctr_batch_kernel",
+        "line": 535
+      },
+      {
+        "configuration_text": "(unsigned int)((count + tag_threads - 1) / tag_threads), tag_threads, 0, g_executor.stream",
+        "file": "code/cuda_aead.cu",
+        "kernel": "aes256_gcm_tag_batch_kernel",
+        "line": 540
+      },
+      {
+        "configuration_text": "blocks, threads",
+        "file": "code/cuda_integrity.cu",
+        "kernel": "sha256_batch_kernel",
+        "line": 216
+      },
+      {
+        "configuration_text": "blocks, threads",
+        "file": "code/cuda_integrity.cu",
+        "kernel": "merkle_reduce_kernel",
+        "line": 275
+      },
+      {
+        "configuration_text": "(unsigned)count, MLKEM768Key::BlockDim",
+        "file": "code/cuda_pqc.cu",
+        "kernel": "keygen_kernel",
+        "line": 139
+      },
+      {
+        "configuration_text": "(unsigned)count, MLKEM768Encaps::BlockDim",
+        "file": "code/cuda_pqc.cu",
+        "kernel": "encaps_kernel",
+        "line": 189
+      },
+      {
+        "configuration_text": "(unsigned)count, MLKEM768Decaps::BlockDim",
+        "file": "code/cuda_pqc.cu",
+        "kernel": "decaps_kernel",
+        "line": 233
+      }
+    ],
+    "term_hits": {
+      "CUPTI": [
+        {
+          "file": "code/cuda_integrity.h",
+          "line": 108,
+          "text": "* Does NOT use CUPTI; call without profiler for latency-accurate measurements."
+        },
+        {
+          "file": "code/cuda_pqc.cu",
+          "line": 11,
+          "text": "*   how to measure SM occupancy alongside inference (CUPTI), and how to"
+        },
+        {
+          "file": "code/cuda_pqc.cu",
+          "line": 373,
+          "text": "/* SM monitor stubs \u2014 full CUPTI implementation is in a separate analysis build */"
+        },
+        {
+          "file": "code/cuda_pqc.cu",
+          "line": 374,
+          "text": "extern \"C\" int skim_cuda_pqc_sm_monitor_start(void) { return -1; /* CUPTI not linked */ }"
+        },
+        {
+          "file": "code/cuda_pqc.h",
+          "line": 14,
+          "text": "*   and how to measure GPU SM occupancy with CUPTI during batch execution."
+        },
+        {
+          "file": "code/cuda_pqc.h",
+          "line": 134,
+          "text": "* Does NOT use CUPTI; call from a non-profiled process for latency numbers."
+        },
+        {
+          "file": "code/cuda_pqc.h",
+          "line": 150,
+          "text": "* When CUPTI is available, these functions record SM occupancy samples during"
+        },
+        {
+          "file": "code/cuda_pqc.h",
+          "line": 170,
+          "text": "/* Returns -1 if CUPTI is not available (compile without -DAEGISQ_CUPTI). */"
+        },
+        {
+          "file": "code/pqc_admission.c",
+          "line": 12,
+          "text": "*   2. GPU occupancy telemetry: CUPTI or similar (M6, but need mock for M5)."
+        },
+        {
+          "file": "code/pqc_admission.c",
+          "line": 831,
+          "text": "*  Telemetry Integration (software rolling proxy + CUPTI hooks)"
+        },
+        {
+          "file": "code/pqc_admission.h",
+          "line": 83,
+          "text": "*     when CUPTI counters are unavailable"
+        },
+        {
+          "file": "code/pqc_admission.h",
+          "line": 103,
+          "text": "*   3. Coherence cost (software proxy or CUPTI-backed counter):"
+        },
+        {
+          "file": "code/pqc_admission.h",
+          "line": 213,
+          "text": "*  Telemetry Integration (software rolling proxy + CUPTI-ready hooks)"
+        },
+        {
+          "file": "code/pqc_block_job.h",
+          "line": 190,
+          "text": "PQC_ROUTE_REASON_COHERENCE_RISK         = 0x20,   /* UVM migration stall risk (M6 CUPTI future) */"
+        }
+      ],
+      "GPUDirect": [],
+      "Nsight": [],
+      "cudaDeviceSynchronize": [
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 355,
+          "text": "rc = cudaDeviceSynchronize() == cudaSuccess ? 0 : -1;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 360,
+          "text": "rc = cudaDeviceSynchronize() == cudaSuccess ? 0 : -1;"
+        },
+        {
+          "file": "code/cuda_integrity.cu",
+          "line": 224,
+          "text": "rc = cudaDeviceSynchronize();"
+        },
+        {
+          "file": "code/cuda_integrity.cu",
+          "line": 226,
+          "text": "fprintf(stderr, \"cudaDeviceSynchronize failed: %s (%d)\\n\", cudaGetErrorString(rc), (int)rc);"
+        },
+        {
+          "file": "code/cuda_integrity.cu",
+          "line": 279,
+          "text": "rc = cudaDeviceSynchronize();"
+        },
+        {
+          "file": "code/cuda_pqc.cu",
+          "line": 143,
+          "text": "rc = cudaDeviceSynchronize();"
+        },
+        {
+          "file": "code/cuda_pqc.cu",
+          "line": 192,
+          "text": "rc = cudaDeviceSynchronize(); if (rc != cudaSuccess) goto fail;"
+        },
+        {
+          "file": "code/cuda_pqc.cu",
+          "line": 236,
+          "text": "rc = cudaDeviceSynchronize(); if (rc != cudaSuccess) goto fail;"
+        }
+      ],
+      "cudaHostAlloc": [],
+      "cudaHostRegister": [],
+      "cudaMallocManaged": [
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 72,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.key, 32) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 73,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.round_keys, 240) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 74,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.nonces, job_capacity * 12) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 75,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.aads, job_capacity * 28) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 76,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.tags, job_capacity * 16) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 77,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.offsets, job_capacity * sizeof(size_t)) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 78,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.lengths, job_capacity * sizeof(size_t)) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 79,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.in, byte_capacity) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 80,
+          "text": "rc = rc == cudaSuccess ? cudaMallocManaged(&g_executor.out, byte_capacity) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 378,
+          "text": "if (cudaMallocManaged(&ptr, size) != cudaSuccess)"
+        },
+        {
+          "file": "code/cuda_pqc.h",
+          "line": 74,
+          "text": "*   On UMA platforms (Jetson) they may be cudaMallocManaged regions;"
+        }
+      ],
+      "cudaMemPrefetchAsync": [
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 410,
+          "text": "if (cudaMemPrefetchAsync(ptr, size, loc, 0) != cudaSuccess)"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 422,
+          "text": "if (cudaMemPrefetchAsync(ptr, size, loc, 0) != cudaSuccess)"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 472,
+          "text": "cudaError_t rc = cudaMemPrefetchAsync(g_executor.key, 32, gpu_location, 0, g_executor.stream);"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 473,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.round_keys, 240, gpu_location, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 474,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.nonces, count * 12, gpu_location, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 475,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.offsets, count * sizeof(size_t), gpu_location, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 476,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.lengths, count * sizeof(size_t), gpu_location, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 477,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.in, total_bytes, gpu_location, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 487,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.out, total_bytes, cpu_location, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 523,
+          "text": "cudaError_t rc = cudaMemPrefetchAsync(g_executor.key, 32, gpu, 0, g_executor.stream);"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 524,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.round_keys, 240, gpu, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 525,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.nonces, count * 12, gpu, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 526,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.aads, count * 28, gpu, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 527,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.offsets, count * sizeof(size_t), gpu, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 528,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.lengths, count * sizeof(size_t), gpu, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 529,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.in, total_bytes, gpu, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 544,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.out, total_bytes, host, 0, g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 545,
+          "text": "rc = rc == cudaSuccess ? cudaMemPrefetchAsync(g_executor.tags, count * 16, host, 0, g_executor.stream) : rc;"
+        }
+      ],
+      "cudaStreamAttachMemAsync": [],
+      "cudaStreamCreateWithFlags": [
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 71,
+          "text": "cudaError_t rc = cudaStreamCreateWithFlags(&g_executor.stream, cudaStreamNonBlocking);"
+        }
+      ],
+      "cudaStreamCreateWithPriority": [],
+      "cudaStreamSynchronize": [
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 40,
+          "text": "if (g_executor.stream) cudaStreamSynchronize(g_executor.stream);"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 488,
+          "text": "rc = rc == cudaSuccess ? cudaStreamSynchronize(g_executor.stream) : rc;"
+        },
+        {
+          "file": "code/cuda_aead.cu",
+          "line": 546,
+          "text": "rc = rc == cudaSuccess ? cudaStreamSynchronize(g_executor.stream) : rc;"
+        }
+      ],
+      "dma_buf": [],
+      "dmabuf": [],
+      "nsys": [],
+      "nv_peer_mem": [],
+      "nvidia_peermem": []
+    }
+  },
+  "summary": {
+    "diagnostic_only_terms": [
+      "pinned memory via cudaHostAlloc",
+      "registered host memory via cudaHostRegister",
+      "UVM / cudaMallocManaged",
+      "CUDA stream priority",
+      "CUDA prefetch",
+      "CUDA stream attach",
+      "Nsight Systems / Nsight Compute"
+    ],
+    "non_claim_terms": [
+      "CUPTI",
+      "dma-buf zero-copy",
+      "GPUDirect/RDMA",
+      "direct NVMe-to-UVM DMA"
+    ],
+    "paper_mechanism_eligible_count": 0,
+    "paper_mechanism_eligible_terms": [],
+    "terms_total": 11,
+    "unavailable_terms": []
+  }
+}

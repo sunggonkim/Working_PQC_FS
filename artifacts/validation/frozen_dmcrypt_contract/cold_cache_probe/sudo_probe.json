@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "sudo",
+    "-n",
+    "true"
+  ],
+  "available": true,
+  "returncode": 0,
+  "stderr": "",
+  "stdout": ""
+}

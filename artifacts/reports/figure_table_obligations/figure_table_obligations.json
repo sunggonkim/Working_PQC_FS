@@ -8,17 +8,17 @@
   },
   "duplicate_labels": [],
   "expected_labels": [
-    "fig:baseline_comparison",
     "fig:djc_state_machine",
+    "fig:evaluation_summary",
     "fig:first_page_qos",
     "fig:overall_procedure",
+    "fig:problem_boundary",
     "tab:benchmark_workloads",
     "tab:capability_matrix",
     "tab:design_goals",
     "tab:impl_boundaries",
     "tab:memory_compat",
     "tab:qos_sqlite_recovery",
-    "tab:recovery_scope",
     "tab:threat_boundary"
   ],
   "figure_tables": [
@@ -41,14 +41,16 @@
       "reference_count": 4
     },
     {
-      "caption": "Capability comparison that defines AEGIS-Q's design gap. ``Policy'' means storage-visible accelerator/QoS/freshness policy, not implementation maturity.",
+      "caption": "Capability comparison that defines AEGIS-Q's design gap. ``Policy'' means storage-visible accelerator/QoS/replay policy, not implementation maturity.",
       "caption_terms": [
         "Capability",
         "design gap"
       ],
       "caption_terms_present": true,
       "environment": "table",
-      "extra_labels": [],
+      "extra_labels": [
+        "tab:applicability_boundary"
+      ],
       "kind": "design",
       "label": "tab:capability_matrix",
       "line": 14,
@@ -58,7 +60,41 @@
       "reference_count": 1
     },
     {
-      "caption": "Formal storage-protocol invariants, implementation loci, retained evidence, and claim boundaries.",
+      "caption": "Motivating boundary for AEGIS-Q. The open systems problem is not encryption alone; it is the combination of authenticated publication, accelerator placement, foreground QoS, and replay-aware recovery in one mounted path.",
+      "caption_terms": [
+        "Motivating boundary",
+        "authenticated publication"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure*",
+      "extra_labels": [],
+      "kind": "motivation",
+      "label": "fig:problem_boundary",
+      "line": 17,
+      "obligation": "problem boundary for the edge-runtime thesis",
+      "passes": true,
+      "path": "Paper/2_Background.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "AEGIS-Q runtime architecture after separating the paper's three boundaries. Solid arrows are implemented mounted paths for foreground reads/writes, publication, recovery, and remount validation; dashed orange arrows are elastic maintenance paths that must pass admission and can fall back to CPU execution. The bottom strip is the claim firewall enforced throughout the paper.",
+      "caption_terms": [
+        "runtime architecture",
+        "claim firewall"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure*",
+      "extra_labels": [],
+      "kind": "design",
+      "label": "fig:overall_procedure",
+      "line": 9,
+      "obligation": "architecture and plane-separation figure",
+      "passes": true,
+      "path": "Paper/3_Design.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Formal storage-protocol invariants, implementation loci, exercised paths, and claim boundaries.",
       "caption_terms": [
         "invariants",
         "boundaries"
@@ -68,34 +104,17 @@
       "extra_labels": [],
       "kind": "design",
       "label": "tab:design_goals",
-      "line": 11,
+      "line": 19,
       "obligation": "formal storage-protocol invariant table",
       "passes": true,
       "path": "Paper/3_Design.tex",
       "reference_count": 1
     },
     {
-      "caption": "Implemented AEGIS-Q control and persistence path. Solid arrows are the FUSE format used by the tests; orange dashed arrows denote optional accelerator or externally provisioned hardware paths. The final revision does not claim verified \\texttt{O\\_DIRECT} UMA pinning, a completed eBPF completion path, or a closed-loop hardware-QoS controller.",
+      "caption": "D/J/C/xattr publication protocol. D is the durable ciphertext sidecar state, J is the journal mapping state, and C is the authenticated checkpoint/logical-size exposure state. The bottom row is the claim boundary: tails without J are unreachable, stale generations cannot supersede newer mappings, TPM replay-after-advance fails closed, and physical power-loss certification remains outside scope.",
       "caption_terms": [
-        "control",
-        "persistence"
-      ],
-      "caption_terms_present": true,
-      "environment": "figure*",
-      "extra_labels": [],
-      "kind": "design",
-      "label": "fig:overall_procedure",
-      "line": 32,
-      "obligation": "architecture and plane-separation figure",
-      "passes": true,
-      "path": "Paper/3_Design.tex",
-      "reference_count": 1
-    },
-    {
-      "caption": "D/J/C/xattr publication state machine and transition audit. D is the durable ciphertext sidecar state, J is the journal mapping state, and C is the authenticated checkpoint/logical-size exposure state.",
-      "caption_terms": [
-        "publication",
-        "state machine"
+        "publication protocol",
+        "claim boundary"
       ],
       "caption_terms_present": true,
       "environment": "figure*",
@@ -109,7 +128,7 @@
       "reference_count": 1
     },
     {
-      "caption": "Memory-path claims and their hardware-verified status.",
+      "caption": "Memory-path hardware claims and their exercised status.",
       "caption_terms": [
         "Memory-path",
         "hardware"
@@ -119,7 +138,7 @@
       "extra_labels": [],
       "kind": "design/RQ2/RQ5",
       "label": "tab:memory_compat",
-      "line": 110,
+      "line": 78,
       "obligation": "memory-path claim boundary",
       "passes": true,
       "path": "Paper/3_Design.tex",
@@ -143,7 +162,7 @@
       "reference_count": 1
     },
     {
-      "caption": "Threat classes and retained mechanism boundaries.",
+      "caption": "Threat classes and mechanism boundaries.",
       "caption_terms": [
         "Threat",
         "boundaries"
@@ -160,6 +179,25 @@
       "reference_count": 1
     },
     {
+      "caption": "Evaluation summary generated from retained validation JSON. Panel~(a) shows the strict frozen-contract cost boundary for RQ5; Panel~(b) shows mounted SQLite QoS and kernel-control rows for RQ3; Panel~(c) shows the mounted open-file key-plane refresh workflow for RQ2.",
+      "caption_terms": [
+        "Evaluation summary",
+        "RQ2",
+        "RQ3",
+        "RQ5"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure*",
+      "extra_labels": [],
+      "kind": "RQ2/RQ3/RQ5",
+      "label": "fig:evaluation_summary",
+      "line": 22,
+      "obligation": "evaluation spine across cost, QoS, and key-plane placement",
+      "passes": true,
+      "path": "Paper/4_Evaluation.tex",
+      "reference_count": 2
+    },
+    {
       "caption": "Evaluation scope by research question.",
       "caption_terms": [
         "Evaluation",
@@ -170,53 +208,18 @@
       "extra_labels": [],
       "kind": "RQ1-RQ5",
       "label": "tab:benchmark_workloads",
-      "line": 24,
+      "line": 34,
       "obligation": "evaluation scope by research question",
       "passes": true,
       "path": "Paper/4_Evaluation.tex",
       "reference_count": 1
     },
     {
-      "caption": "Placement result for RQ2/RQ5. CPU AES-GCM exceeds managed-buffer GPU for the data plane; cuPQC improves batched ML-KEM-768. Bars are medians with observed 5th--95th-percentile whiskers.",
-      "caption_terms": [
-        "RQ2",
-        "RQ5",
-        "Placement"
-      ],
-      "caption_terms_present": true,
-      "environment": "figure*",
-      "extra_labels": [],
-      "kind": "RQ2/RQ5",
-      "label": "fig:baseline_comparison",
-      "line": 58,
-      "obligation": "CPU/GPU placement and batch-lane evidence",
-      "passes": true,
-      "path": "Paper/4_Evaluation.tex",
-      "reference_count": 2
-    },
-    {
-      "caption": "Recovery/freshness outcomes and their interpretation.",
-      "caption_terms": [
-        "Recovery",
-        "freshness"
-      ],
-      "caption_terms_present": true,
-      "environment": "table",
-      "extra_labels": [],
-      "kind": "RQ4",
-      "label": "tab:recovery_scope",
-      "line": 83,
-      "obligation": "recovery/freshness interpretation",
-      "passes": true,
-      "path": "Paper/4_Evaluation.tex",
-      "reference_count": 1
-    },
-    {
-      "caption": "SQLite foreground recovery under mounted secure-storage pressure; latencies are p50/p95/p99 in ms and CPU/GPU are utilization percent.",
+      "caption": "SQLite p99 under mounted secure-storage pressure. Hero rows are five-run medians; kernel rows are 3 retained runs each.",
       "caption_terms": [
         "SQLite",
-        "foreground",
-        "p99"
+        "p99",
+        "medians"
       ],
       "caption_terms_present": true,
       "environment": "table",
@@ -231,17 +234,17 @@
     }
   ],
   "found_labels": [
-    "fig:baseline_comparison",
     "fig:djc_state_machine",
+    "fig:evaluation_summary",
     "fig:first_page_qos",
     "fig:overall_procedure",
+    "fig:problem_boundary",
     "tab:benchmark_workloads",
     "tab:capability_matrix",
     "tab:design_goals",
     "tab:impl_boundaries",
     "tab:memory_compat",
     "tab:qos_sqlite_recovery",
-    "tab:recovery_scope",
     "tab:threat_boundary"
   ],
   "overall_pass": true,

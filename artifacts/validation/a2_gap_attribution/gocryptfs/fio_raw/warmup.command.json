@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "fio",
+    "--name=frozen_randrw_4k_fdatasync",
+    "--ioengine=psync",
+    "--rw=randrw",
+    "--rwmixread=70",
+    "--bs=4k",
+    "--direct=0",
+    "--fdatasync=1",
+    "--iodepth=1",
+    "--numjobs=1",
+    "--size=16M",
+    "--fallocate=none",
+    "--allow_file_create=0",
+    "--overwrite=1",
+    "--time_based",
+    "--runtime=2",
+    "--ramp_time=0",
+    "--directory=/tmp/a2_gocryptfs_mnt_ub7gak2c/contract",
+    "--output-format=json"
+  ],
+  "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+  "end_realtime_ns": 1782772103835505911,
+  "label": "warmup",
+  "returncode": 0,
+  "start_realtime_ns": 1782772101562917111,
+  "stderr": "artifacts/validation/a2_gap_attribution/gocryptfs/fio_raw/warmup.stderr.txt",
+  "stdout_json": "artifacts/validation/a2_gap_attribution/gocryptfs/fio_raw/warmup.json",
+  "timed_out": false,
+  "timeout_s": null,
+  "wall_seconds": 2.2725888
+}

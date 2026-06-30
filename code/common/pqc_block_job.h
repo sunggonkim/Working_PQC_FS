@@ -1,0 +1,289 @@
+#ifndef PQC_BLOCK_JOB_H
+#define PQC_BLOCK_JOB_H
+
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+
+/*
+ * AEGIS-Q Placement Model
+ * =======================
+ *
+ * The scheduler partitions secure-storage work into four planes.
+ * Each plane has a distinct latency sensitivity and batch-parallelism profile,
+ * which determines its natural execution target:
+ *
+ *   DATA_PLANE      – Real-time authenticated I/O (AES-GCM per block).
+ *                     Latency-critical; CPU AES-NI/ARM-Crypto dominates.
+ *                     Always routed to the CPU fast lane.
+ *
+ *   KEY_PLANE       – PQC key lifecycle (ML-KEM keygen/encaps/decaps).
+ *                     Throughput-oriented; NTT polynomial arithmetic is
+ *                     structurally suited for GPU warp parallelism.
+ *                     Routed to the GPU elastic lane when QoS budget allows.
+ *
+ *   INTEGRITY_PLANE – Merkle / hash-tree maintenance (SHA-256 / BLAKE3).
+ *                     Data-parallel leaf hashing scales with batch size.
+ *                     Routed to the GPU elastic lane when QoS budget allows.
+ *
+ *   FRESHNESS_PLANE – Journal commit and TPM anchor updates.
+ *                     Must be serialized; always CPU, always background.
+ *
+ * The separation is the implementation of the research question:
+ * "When should each plane use CPU, GPU, or MIG to jointly preserve
+ *  application QoS and storage freshness?"
+ */
+
+typedef enum {
+    PQC_PLANE_DATA       = 0,  /* AES-GCM block I/O  → CPU fast lane      */
+    PQC_PLANE_KEY        = 1,  /* ML-KEM lifecycle   → GPU elastic lane    */
+    PQC_PLANE_INTEGRITY  = 2,  /* Hash / Merkle tree → GPU elastic lane    */
+    PQC_PLANE_FRESHNESS  = 3,  /* Journal / anchor   → CPU background      */
+} pqc_plane_t;
+
+#define PQC_JOB_FLAG_ENCRYPT      0x01u
+#define PQC_JOB_FLAG_READMOD      0x02u
+#define PQC_JOB_FLAG_GPU_ELIGIBLE 0x04u
+/* Set when the AI inference engine holds the GPU; admission must check budget. */
+#define PQC_JOB_FLAG_AI_ACTIVE    0x08u
+/* Set when the job deadline has elapsed; must spill to CPU immediately. */
+#define PQC_JOB_FLAG_DEADLINE     0x10u
+
+typedef enum {
+    PQC_JOB_CPU = 0,
+    PQC_JOB_GPU = 1,
+} pqc_job_target_t;
+
+typedef struct {
+    /* Identity */
+    uint64_t file_id;
+    uint64_t logical_block;
+    uint64_t generation;
+    uint64_t logical_offset;
+    uint32_t plaintext_length;
+    uint32_t flags;
+
+    /* Plane classification — determines GPU eligibility. */
+    pqc_plane_t plane;
+
+    /* Scheduler signals */
+    uint64_t submit_ns;
+    uint64_t cpu_queue_depth;
+    uint64_t gpu_queue_depth;
+    uint64_t gpu_wait_ns;
+    uint64_t coherence_cost_ns;
+
+    /*
+     * AI QoS budget remaining (nanoseconds).
+     * Filled by the admission controller from GPU occupancy telemetry.
+     * Zero means the inference engine currently owns the GPU fully.
+     * The elastic lane is only available when this value exceeds the
+     * estimated GPU kernel duration for the job.
+     */
+    uint64_t ai_qos_budget_ns;
+
+    pqc_job_target_t target;
+} pqc_block_job_t;
+
+typedef struct {
+    uint64_t submitted;
+    uint64_t cpu_executed;
+    uint64_t gpu_executed;
+    uint64_t bytes_cpu;
+    uint64_t bytes_gpu;
+    uint64_t gpu_migration_ns;
+
+    /* Per-plane counters */
+    uint64_t data_plane_cpu;
+    uint64_t key_plane_cpu;
+    uint64_t key_plane_gpu;
+    uint64_t integrity_plane_cpu;
+    uint64_t integrity_plane_gpu;
+    uint64_t freshness_plane_cpu;
+
+    /* QoS protection counters */
+    uint64_t spilled_ai_budget;   /* jobs spilled because ai_qos_budget_ns == 0  */
+    uint64_t spilled_deadline;    /* jobs spilled because deadline elapsed        */
+    uint64_t spilled_queue;       /* jobs spilled because GPU queue too deep      */
+} pqc_scheduler_stats_t;
+
+typedef struct {
+    size_t   gpu_min_bytes;
+    uint64_t gpu_queue_penalty_ns;
+    uint64_t coherence_penalty_ns;
+    uint64_t gpu_max_inflight_jobs;
+    uint64_t gpu_max_inflight_bytes;
+    uint64_t gpu_max_wait_ns;
+    double   cpu_load_bias;
+    double   gpu_queue_bias;
+    uint64_t gpu_contention_penalty_ns;
+    /*
+     * Traceable contention score threshold.  The scheduler computes a
+     * deterministic score from queue depth, wait time, coherence cost, and
+     * AI budget slack instead of relying on a learning policy.  That makes
+     * admission decisions reproducible enough for paper evidence.
+     */
+    uint64_t contention_score_ns;
+    /*
+     * Minimum AI QoS budget (ns) that must remain before a GPU elastic-lane
+     * job is admitted.  Set from measured TensorRT YOLOv8 p99 baseline
+     * (1.729 ms → 1_730_000 ns) plus a safety margin.
+     */
+    uint64_t ai_qos_min_budget_ns;
+} pqc_scheduler_policy_t;
+
+static inline void pqc_block_job_init(pqc_block_job_t *job,
+                                      uint64_t file_id,
+                                      uint64_t logical_block,
+                                      uint64_t generation,
+                                      uint64_t logical_offset,
+                                      uint32_t length,
+                                      uint32_t flags,
+                                      pqc_plane_t plane)
+{
+    if (!job) return;
+    job->file_id         = file_id;
+    job->logical_block   = logical_block;
+    job->generation      = generation;
+    job->logical_offset  = logical_offset;
+    job->plaintext_length = length;
+    job->flags           = flags;
+    job->plane           = plane;
+    job->submit_ns       = 0;
+    job->cpu_queue_depth = 0;
+    job->gpu_queue_depth = 0;
+    job->gpu_wait_ns     = 0;
+    job->coherence_cost_ns = 0;
+    job->ai_qos_budget_ns  = 0;
+    job->target          = PQC_JOB_CPU;
+}
+
+/*
+ * Returns non-zero if the job's plane is structurally eligible for the
+ * GPU elastic lane.
+ *
+ * DATA_PLANE and FRESHNESS_PLANE are never GPU-eligible:
+ *   - DATA_PLANE: CPU AES-NI/ARM-Crypto is ≥10× faster; GPU staging overhead
+ *                 dominates at every measured request size (workload_map.csv).
+ *   - FRESHNESS_PLANE: journal commit must be serialized on the CPU.
+ *
+ * KEY_PLANE and INTEGRITY_PLANE are eligible when flags confirm it and the
+ * GPU flag was not overridden by the caller for correctness reasons.
+ */
+static inline int pqc_block_job_gpu_eligible(const pqc_block_job_t *job)
+{
+    if (!job) return 0;
+    if (job->plane == PQC_PLANE_DATA || job->plane == PQC_PLANE_FRESHNESS)
+        return 0;
+    return (job->flags & PQC_JOB_FLAG_GPU_ELIGIBLE) != 0;
+}
+
+/*
+ * QoS-Aware Admission Control Types & API (Milestone 3)
+ */
+typedef enum {
+    PQC_ROUTE_REASON_GPU_ELIGIBLE           = 0x01,   /* Plane eligible + budget available */
+    PQC_ROUTE_REASON_AI_QOS_EXHAUSTED       = 0x02,   /* AI inference owns GPU; CPU fallback */
+    PQC_ROUTE_REASON_QUEUE_PRESSURE         = 0x04,   /* CPU queue << GPU queue; dispatch to GPU */
+    PQC_ROUTE_REASON_DEADLINE_ELAPSED       = 0x08,   /* Deadline exceeded; must spill to CPU */
+    PQC_ROUTE_REASON_SIZE_TOO_SMALL         = 0x10,   /* Request too small; staging cost dominates */
+    PQC_ROUTE_REASON_COHERENCE_RISK         = 0x20,   /* UVM migration stall risk (M6 CUPTI future) */
+    PQC_ROUTE_REASON_STAGING_COST_HIGH      = 0x40,   /* Expected staging time > execution time */
+    PQC_ROUTE_REASON_STALE_TELEMETRY        = 0x80,   /* Producer slack sample is stale */
+} pqc_admission_reason_t;
+
+typedef struct {
+    /* Batch characteristics */
+    size_t batch_count;
+    size_t bytes_total;
+    uint64_t batch_age_ns;              /* Monotonic relative time since job submission */
+    
+    /* Estimated costs */
+    uint64_t gpu_kernel_est_ns;         /* Estimated GPU kernel duration */
+    uint64_t gpu_h2d_staging_ns;        /* Host→Device transfer time */
+    uint64_t gpu_d2h_staging_ns;        /* Device→Host transfer time */
+    uint64_t queue_delay_ns;            /* Estimated queue delay before service */
+    uint64_t service_time_ns;           /* Estimated end-to-end service time */
+    
+    /* Queue & load state */
+    uint64_t cpu_queue_depth;
+    uint64_t gpu_queue_depth;
+    double cpu_load_avg;
+    double gpu_load_avg;
+    
+    /* QoS budget state */
+    uint64_t ai_qos_budget_remaining_ns;
+    uint64_t ai_inference_deadline_ns;  /* Producer-supplied relative deadline/slack budget */
+    uint64_t producer_slack_age_ns;     /* Monotonic age of the last producer slack sample */
+    uint64_t producer_slack_stale_after_ns;
+    uint32_t producer_slack_stale;
+    
+    /* Coherence & UMA state */
+    uint64_t uma_migration_bytes_est;
+    uint64_t uma_migration_cost_ns;
+    
+    /* Route decision output */
+    pqc_job_target_t chosen_target;
+    pqc_admission_reason_t decision_reason;
+    pqc_admission_reason_t deferral_reason;
+} pqc_admission_context_t;
+
+extern int pqc_admit(pqc_admission_context_t *ctx);
+extern void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx);
+
+/*
+ * Core placement decision for the Elastic Lane scheduler.
+ *
+ * The function implements the research question: "when should a KEY_PLANE or
+ * INTEGRITY_PLANE job use the GPU elastic lane?"
+ *
+ * Conditions that force CPU (in priority order):
+ *   1. Plane is DATA or FRESHNESS — structural, never GPU.
+ *   2. GPU not flagged eligible by the job builder.
+ *   3. Request too small for GPU launch overhead to be amortized.
+ *   4. Coherence cost exceeds the configured bound.
+ *   5. The job deadline or GPU queue bound has elapsed.
+ *   6. No explicit AI slack budget is available, or the supplied slack is
+ *      below the configured reserve.
+ *   7. GPU queue pressure is not lower than CPU pressure.
+ *
+ * The function is deliberately pure: callers must supply the current budget
+ * and queue state.  A missing telemetry feed is represented by a zero budget
+ * and therefore fails closed to the CPU.  This avoids treating a CUDA stream
+ * priority or a UVM hint as evidence of end-to-end AI QoS isolation.
+ */
+static inline pqc_job_target_t pqc_block_job_choose_target(
+    const pqc_block_job_t *job,
+    const pqc_scheduler_policy_t *policy,
+    double cpu_load,
+    double gpu_load)
+{
+    if (!job || !policy) return PQC_JOB_CPU;
+
+    /* Structural and safety gates. */
+    if (!pqc_block_job_gpu_eligible(job)) return PQC_JOB_CPU;
+    if (job->plaintext_length < policy->gpu_min_bytes) return PQC_JOB_CPU;
+    if (job->coherence_cost_ns > policy->coherence_penalty_ns) return PQC_JOB_CPU;
+    if ((job->flags & PQC_JOB_FLAG_DEADLINE) != 0 ||
+        job->gpu_wait_ns > policy->gpu_max_wait_ns) return PQC_JOB_CPU;
+
+    /* A zero budget means that the producer has no trustworthy slack sample. */
+    if (job->ai_qos_budget_ns == 0 ||
+        job->ai_qos_budget_ns < policy->ai_qos_min_budget_ns) return PQC_JOB_CPU;
+    if (job->gpu_queue_depth >= policy->gpu_max_inflight_jobs) return PQC_JOB_CPU;
+
+    const double cpu_pressure =
+        (double)job->cpu_queue_depth + cpu_load * policy->cpu_load_bias;
+    const double gpu_pressure =
+        (double)job->gpu_queue_depth + gpu_load * policy->gpu_queue_bias;
+    return gpu_pressure < cpu_pressure ? PQC_JOB_GPU : PQC_JOB_CPU;
+}
+
+/*
+ * Key-lifecycle ownership intentionally lives in pqc_key_lifecycle.[ch],
+ * pqc_keyring.[ch], and pqc_rekey.[ch]. This scheduler header must not expose
+ * unused per-file key APIs that imply a mounted-path TPM/PCR or per-file KEM
+ * lifecycle stronger than the production implementation.
+ */
+
+#endif

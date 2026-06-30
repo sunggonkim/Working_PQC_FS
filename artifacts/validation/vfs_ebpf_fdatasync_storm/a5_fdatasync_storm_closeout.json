@@ -1,0 +1,135 @@
+{
+  "generated_utc": "2026-06-30T03:00:07Z",
+  "inputs": {
+    "a2_gap_attribution": "artifacts/validation/a2_gap_attribution/a2_gap_attribution.json",
+    "a3_batching_decision": "artifacts/validation/a3_batching_decision/a3_batching_decision.json",
+    "a4_hidden_overhead_closeout": "artifacts/validation/a4_hidden_overhead_accounting/a4_hidden_overhead_closeout.json",
+    "a4_overhead_trace_smoke": "artifacts/validation/a4_hidden_overhead_accounting/a4_overhead_trace_smoke.json",
+    "ebpf_iouring_scope_audit": "artifacts/validation/ebpf_iouring_scope_audit/ebpf_iouring_scope_audit.json",
+    "publication_comparison": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json",
+    "publication_protocol_closeout": "artifacts/validation/publication_protocol_fault_matrix/publication_protocol_closeout.json",
+    "replay_fault_matrix": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json"
+  },
+  "non_claims": [
+    "no mounted eBPF/io_uring completion bypass",
+    "no kernel context-switch count",
+    "no claim that epoch mode removes all fdatasync/syncfs barriers",
+    "no general fast-filesystem throughput claim",
+    "no physical power-loss certification"
+  ],
+  "overall_pass": true,
+  "paper_scan": {
+    "files": [
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex"
+    ],
+    "states_cost_boundary": true,
+    "states_mounted_ebpf_not_established": true,
+    "states_strict_single_client_case": true,
+    "states_sync_amortization": true,
+    "unscoped_dangerous_hits": []
+  },
+  "paper_text_status": "already_scoped_no_update",
+  "parent_checklist_closed": false,
+  "path_classification": [
+    {
+      "classification": "accepted-measured",
+      "evidence": [
+        "fuse_create_avg_ns=1644658",
+        "fuse_write_avg_ns=38287",
+        "fuse_fsync_avg_ns=6801778",
+        "daemon-side proxy, not kernel context-switch count"
+      ],
+      "guard": "Do not claim FUSE bypass or kernel scheduler context-switch evidence.",
+      "path": "ordinary mounted FUSE path"
+    },
+    {
+      "classification": "not-claimed",
+      "evidence": [
+        "ebpf_audit_overall_pass=True",
+        "decision=scoped_out_no_mounted_ebpf_iouring_completion_bypass",
+        "mounted FUSE source has no io_uring/eBPF completion path"
+      ],
+      "guard": "eBPF/io_uring remains diagnostic or future work, not a mounted-path mechanism.",
+      "path": "eBPF/io_uring completion bypass"
+    },
+    {
+      "classification": "accepted-cost-boundary",
+      "evidence": [
+        "a2_fdatasync=2140",
+        "a2_data_sidecar=1070",
+        "a2_journal_sidecar=1070",
+        "strict_sync_count_per_op=2.0",
+        "strict_journal_fsync_total=5"
+      ],
+      "guard": "Strict mode is a correctness boundary; do not present it as optimized throughput.",
+      "path": "strict per-write data/journal fdatasync storm"
+    },
+    {
+      "classification": "eliminated-from-foreground-epoch-path",
+      "evidence": [
+        "sequential_epoch_journal_fsync_removed=True",
+        "epoch_journal_fsync_total=0",
+        "epoch_log_fsync_total=5"
+      ],
+      "guard": "This removes strict journal fdatasync from foreground epoch publication, not all durability barriers.",
+      "path": "epoch foreground journal fdatasync"
+    },
+    {
+      "classification": "amortized-for-grouped-work",
+      "evidence": [
+        "grouped_sync_amortized=True",
+        "grouped_sync_reduction_percent=37.5",
+        "a3_current_grouped_sync_count_reduced=True",
+        "strict_grouped_sync_total=8",
+        "epoch_grouped_sync_total=5"
+      ],
+      "guard": "Scope to grouped/concurrent mounted work; single-client frozen rows remain cost-boundary evidence.",
+      "path": "grouped epoch syncfs barrier"
+    },
+    {
+      "classification": "unavailable-not-claimed",
+      "evidence": [
+        "A4 records daemon-side FUSE operation latency only",
+        "A2 records fio-client syscall counts, not daemon scheduler switches"
+      ],
+      "guard": "Do not convert daemon-side latency or fio-client syscall counts into context-switch counts.",
+      "path": "kernel context-switch count"
+    },
+    {
+      "classification": "measured",
+      "evidence": [
+        "replay_fault_matrix_pass=True",
+        "a3_replay_fault_matrix_passes=True",
+        "a4_measured_classes=5"
+      ],
+      "guard": "Replay/fault evidence bounds epoch publication; it is not physical power-loss certification.",
+      "path": "correctness/fault boundary for amortization"
+    }
+  ],
+  "proof_checks": {
+    "a2_pass": true,
+    "a3_pass": true,
+    "a4_pass": true,
+    "ebpf_iouring_audit_pass": true,
+    "no_unscoped_dangerous_paper_hits": true,
+    "paper_scope_guards_present": true,
+    "publication_closeout_complete": true,
+    "publication_comparison_pass": true,
+    "replay_fault_matrix_pass": true,
+    "source_guards_present": true
+  },
+  "schema": "a5-fdatasync-storm-closeout-v1",
+  "source_scan": {
+    "epoch_has_group_syncfs_barrier": true,
+    "epoch_skips_foreground_journal_fsync": true,
+    "files": [
+      "code/storage/pqc_strict_publish.c",
+      "code/storage/pqc_epoch_publish.c",
+      "code/frontend/pqc_fuse.c"
+    ],
+    "fuse_has_no_ebpf_iouring_path": true,
+    "strict_has_data_fdatasync": true,
+    "strict_has_journal_fdatasync": true
+  }
+}

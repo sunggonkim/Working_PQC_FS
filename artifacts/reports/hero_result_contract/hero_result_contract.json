@@ -1,5 +1,5 @@
 {
-  "artifact_path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+  "artifact_path": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json",
   "baseline": {
     "aegis_policy": "AEGIS-Q in-daemon latency/elastic policy",
     "app_only": "foreground SQLite with no background secure-storage writer",
@@ -8,9 +8,9 @@
   },
   "checks": {
     "aegis_recovers_p99": true,
-    "aegis_removes_deadline_misses": true,
     "aegis_retains_more_background_than_simple": true,
     "bundle_overall_pass": true,
+    "closeout_overall_pass": true,
     "component_coverage_pass": true,
     "figure_data_matches_bundle": true,
     "figure_pdf_exists": true,
@@ -29,64 +29,36 @@
       "simple_controller": true,
       "unthrottled_storage": true
     },
-    "script": "experiments/build_paper_spine_gate.py"
+    "script": "code/experiments/build_paper_spine_gate.py"
   },
-  "headline_claim_displayed": "Mounted secure-storage pressure raises foreground SQLite p99 from 6.4 ms to 13.8 ms with one deadline miss; AEGIS-Q recovers to 8.8 ms, zero misses, and 2.7 MB/s background progress.",
-  "headline_claim_exact": "For foreground SQLite transactions on mounted AEGIS-Q FUSE, unthrottled secure-storage pressure raises p99 from 6.436 ms to 13.822 ms and causes 1 deadline miss; AEGIS-Q policy recovers p99 to 8.753 ms with 0 misses while retaining 2.736 MB/s of background progress.",
+  "headline_claim_displayed": "Unthrottled secure-storage pressure reports 9.62 ms SQLite p99 and 6.98 MB/s background writes; AEGIS-Q reports 8.15 ms p99, zero median misses, and 3.02 MB/s background writes.",
+  "headline_claim_exact": "For foreground SQLite transactions on mounted AEGIS-Q FUSE repeated-run medians, app-only reports 7.253 ms p99, unthrottled secure-storage pressure reports 9.621 ms p99 and 6.984 MB/s background writes, and AEGIS-Q policy reports 8.151 ms p99 with 0 median misses while retaining 3.016 MB/s of background progress.",
   "hero_id": "sqlite-mounted-qos-recovery-2026-06-27",
   "metrics": {
     "modes": {
       "aegis_policy": {
-        "background_log": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/background_writer.jsonl",
-        "background_mb_s": 2.736089363877744,
+        "background_mb_s": 3.0160640171203785,
         "deadline_misses": 0,
         "deadline_ms": 10.0,
-        "foreground_log": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/foreground_sqlite_latency.jsonl",
-        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/mount_logs/pqc_fuse.stderr.txt",
-        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/mount_logs/pqc_fuse.stdout.txt",
-        "p99_ms": 8.75331646,
-        "policy_log": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/policy_trace.jsonl",
-        "runtime_throttle_trace": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/runtime_fuse_throttle_trace.jsonl",
-        "telemetry_log": "artifacts/validation/qos_sqlite_hero_bundle/aegis_policy/telemetry_trace.jsonl"
+        "p99_ms": 8.15053043
       },
       "app_only": {
-        "background_log": "artifacts/validation/qos_sqlite_hero_bundle/app_only/background_writer.jsonl",
         "background_mb_s": 0.0,
         "deadline_misses": 0,
         "deadline_ms": 10.0,
-        "foreground_log": "artifacts/validation/qos_sqlite_hero_bundle/app_only/foreground_sqlite_latency.jsonl",
-        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_bundle/app_only/mount_logs/pqc_fuse.stderr.txt",
-        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_bundle/app_only/mount_logs/pqc_fuse.stdout.txt",
-        "p99_ms": 6.43596154,
-        "policy_log": "artifacts/validation/qos_sqlite_hero_bundle/app_only/policy_trace.jsonl",
-        "runtime_throttle_trace": "artifacts/validation/qos_sqlite_hero_bundle/app_only/runtime_fuse_throttle_trace.jsonl",
-        "telemetry_log": "artifacts/validation/qos_sqlite_hero_bundle/app_only/telemetry_trace.jsonl"
+        "p99_ms": 7.253253040000001
       },
       "simple_controller": {
-        "background_log": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/background_writer.jsonl",
-        "background_mb_s": 2.268259869303856,
+        "background_mb_s": 1.4970013728032954,
         "deadline_misses": 0,
         "deadline_ms": 10.0,
-        "foreground_log": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/foreground_sqlite_latency.jsonl",
-        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/mount_logs/pqc_fuse.stderr.txt",
-        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/mount_logs/pqc_fuse.stdout.txt",
-        "p99_ms": 8.185088930000001,
-        "policy_log": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/policy_trace.jsonl",
-        "runtime_throttle_trace": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/runtime_fuse_throttle_trace.jsonl",
-        "telemetry_log": "artifacts/validation/qos_sqlite_hero_bundle/simple_controller/telemetry_trace.jsonl"
+        "p99_ms": 7.544277000000001
       },
       "unthrottled_storage": {
-        "background_log": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/background_writer.jsonl",
-        "background_mb_s": 6.793162736869544,
-        "deadline_misses": 1,
+        "background_mb_s": 6.984360530500289,
+        "deadline_misses": 0,
         "deadline_ms": 10.0,
-        "foreground_log": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/foreground_sqlite_latency.jsonl",
-        "fuse_stderr": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/mount_logs/pqc_fuse.stderr.txt",
-        "fuse_stdout": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/mount_logs/pqc_fuse.stdout.txt",
-        "p99_ms": 13.822082770000009,
-        "policy_log": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/policy_trace.jsonl",
-        "runtime_throttle_trace": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/runtime_fuse_throttle_trace.jsonl",
-        "telemetry_log": "artifacts/validation/qos_sqlite_hero_bundle/unthrottled_storage/telemetry_trace.jsonl"
+        "p99_ms": 9.62087615
       }
     },
     "primary": "foreground SQLite p99 latency under pressure",
@@ -100,28 +72,28 @@
   "pages": 12,
   "paper_locations": {
     "abstract": {
-      "line": 89,
+      "line": 91,
       "path": "Paper/main.tex",
       "present": true,
-      "text": "On a Jetson AGX Thor Developer Kit, retained mounted artifacts show the intended spine: under secure-storage pressure, foreground SQLite p99 rises from 6.4~ms to 13.8~ms and incurs a deadline miss; AEGIS-Q's policy recovers p99 to 8.8~ms with zero misses while retaining 2.7~MB/s of background progress. The same evidence set exercises remount/tamper checks, generation/fault matrices, rekey fallback, TPM replay-after-advance, app-crash timing, and telemetry-to-FUSE throttling. The result is an evidence-first secure edge-storage prototype with explicit scope boundaries, not a claim of deployed-filesystem superiority."
+      "text": "The core result is asymmetric placement under edge pressure. AES-GCM file records remain CPU-first; ML-KEM/cuPQC work uses the GPU only when it is independent, batched, and slack-tolerant; storage-visible QoS throttles elastic writes rather than weakening publication order. On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms. The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling. This is a scoped edge file-encryption runtime result, not deployed-filesystem or peak-throughput superiority."
     },
     "evaluation": {
-      "line": 108,
+      "line": 92,
       "path": "Paper/4_Evaluation.tex",
       "present": true,
-      "text": "The app-level result uses SQLite transaction latency as the foreground workload. Table~\\ref{tab:qos_sqlite_recovery} is generated from the retained four-mode bundle. Mounted storage pressure raises SQLite p99 from 6.4~ms to 13.8~ms and causes one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with no misses at 2.7~MB/s. The simple controller reaches 8.2~ms p99 at 2.3~MB/s. This is SQLite recovery, not general AI-inference QoS."
+      "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together. Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls. AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s. This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress. Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 with six misses, and \\texttt{IOWeight} reports 12.57~ms p99 with seven misses. This is bounded storage-visible control, not a uniqueness or non-storage QoS claim."
     },
     "introduction": {
-      "line": 38,
+      "line": 39,
       "path": "Paper/1_Introduction.tex",
       "present": true,
-      "text": "Figure~\\ref{fig:first_page_qos} shows the retained first-page pressure result. Mounted secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms and introduces one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with zero misses while retaining 2.7~MB/s of background progress. This result motivates the paper's spine: policy must be visible at the secure-storage layer, but persistent format correctness must remain independent of the accelerator."
+      "text": "Figure~\\ref{fig:first_page_qos} is the paper's edge-runtime result. Unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling only elastic writes. The point is visible storage-layer policy with accelerator-independent format correctness, not peak filesystem throughput. The low frozen-contract throughput row is a known cost boundary, not a hidden general-purpose claim."
     },
     "scope_boundary": {
-      "line": 108,
+      "line": 92,
       "path": "Paper/4_Evaluation.tex",
       "present": true,
-      "text": "The app-level result uses SQLite transaction latency as the foreground workload. Table~\\ref{tab:qos_sqlite_recovery} is generated from the retained four-mode bundle. Mounted storage pressure raises SQLite p99 from 6.4~ms to 13.8~ms and causes one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with no misses at 2.7~MB/s. The simple controller reaches 8.2~ms p99 at 2.3~MB/s. This is SQLite recovery, not general AI-inference QoS."
+      "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together. Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls. AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s. This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress. Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 with six misses, and \\texttt{IOWeight} reports 12.57~ms p99 with seven misses. This is bounded storage-visible control, not a uniqueness or non-storage QoS claim."
     }
   },
   "raw_log_paths": {
@@ -166,9 +138,10 @@
   "scope_boundary": [
     "SQLite foreground recovery only",
     "single retained four-mode mounted bundle, not a statistical QoS headline",
-    "not foreground TensorRT/AI p99 recovery",
+    "not external application p99 recovery",
     "not a general deployed-filesystem superiority claim"
   ],
+  "single_run_artifact_path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
   "violations": [],
   "workload": {
     "background": "secure-storage writer to an elastic file on the same mounted daemon",

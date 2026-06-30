@@ -1,0 +1,19 @@
+{
+  "name": "mkfs_ext4",
+  "result": {
+    "argv": [
+      "sudo",
+      "-S",
+      "-p",
+      "",
+      "mkfs.ext4",
+      "-q",
+      "/dev/mapper/aegisq_dmcrypt_4157957"
+    ],
+    "available": true,
+    "password_supplied": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  }
+}

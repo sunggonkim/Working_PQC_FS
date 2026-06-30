@@ -1,0 +1,4 @@
+{"operation": "write_fsync", "error": "OSError", "errno": 5, "message": "[Errno 5] Input/output error"}
+Traceback (most recent call last):
+  File "<string>", line 28, in <module>
+OSError: [Errno 5] Input/output error

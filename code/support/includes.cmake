@@ -1,0 +1,3 @@
+set(PQC_SUPPORT_INCLUDE_DIRS
+    ${CODE_DIR}/support
+)

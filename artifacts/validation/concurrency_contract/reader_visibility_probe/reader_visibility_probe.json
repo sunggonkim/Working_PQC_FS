@@ -1,0 +1,24 @@
+{
+  "after_publish_observed_new": true,
+  "after_publish_sha256": "725bcd6c66d02acf6ebeab9c92410e010ea22e336876256aaf05a211f4ce1902",
+  "block_size": 4096,
+  "during_pause_observed_new": false,
+  "during_pause_observed_old": true,
+  "during_pause_sha256": "6896d9ea3f73a4434f5832bc65714e7d066f177373f36f34dc8a6f735daa41b1",
+  "marker_observed": true,
+  "overall_pass": true,
+  "pause_cutpoint": "journal_append_after",
+  "pause_marker": "artifacts/validation/concurrency_contract/reader_visibility_probe/pause_marker.jsonl",
+  "paused_unmount": {
+    "argv": [
+      "fusermount3",
+      "-u",
+      "/tmp/aegisq_vis_mnt_i4yukovb"
+    ],
+    "fuse_returncode": -2,
+    "returncode": 0
+  },
+  "scope": "Mounted-path probe: pause an update after journal append but before journal fdatasync, then verify a concurrent reader sees only the previous committed generation.",
+  "writer_errors": [],
+  "writer_thread_alive_after_timeout": false
+}

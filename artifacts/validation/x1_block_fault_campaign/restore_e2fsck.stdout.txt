@@ -1,0 +1,6 @@
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/dev/mapper/aegisq_x1_6481: 18/32768 files (16.7% non-contiguous), 6179/32768 blocks

@@ -2,16 +2,16 @@
 
 - Overall pass: `True`
 - Page count: `12`
-- Figure source: `artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json`
+- Figure source: `artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json`
 
 ## First-page figure data
 
 | Mode | p99 ms | Deadline misses | Background MB/s |
 | --- | ---: | ---: | ---: |
-| App | 6.436 | 0 | 0.000 |
-| Pressure | 13.822 | 1 | 6.793 |
-| Simple | 8.185 | 0 | 2.268 |
-| AEGIS-Q | 8.753 | 0 | 2.736 |
+| App | 7.253 | 0 | 0.000 |
+| Pressure | 9.621 | 0 | 6.984 |
+| Simple | 7.544 | 0 | 1.497 |
+| AEGIS-Q | 8.151 | 0 | 3.016 |
 
 ## Gate checks
 
@@ -25,7 +25,7 @@
 
 | Contribution | Intro map | Design | Evaluation | Mapped |
 | --- | ---: | ---: | ---: | ---: |
-| C1 Secure-storage format and placement boundary | `True` | `True` | `True` | `True` |
-| C2 Scoped placement and workflow evidence | `True` | `True` | `True` | `True` |
-| C3 Recovery/freshness evidence | `True` | `True` | `True` | `True` |
-| C4 Telemetry-to-storage QoS evidence | `True` | `True` | `True` | `True` |
+| C1 Placement-safe storage format | `True` | `True` | `True` | `True` |
+| C2 CPU data lane, GPU/PQC maintenance lane | `True` | `True` | `True` | `True` |
+| C3 Recovery and replay boundary | `True` | `True` | `True` | `True` |
+| C4 Storage-visible QoS control | `True` | `True` | `True` | `True` |

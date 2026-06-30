@@ -1,0 +1,158 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-29 20:05:17.273] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-29 20:05:17.273]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-29 20:05:17.273]   Storage dir : /tmp/aegisq_concurrency_storage_95jeuvsk
+[PQC-FUSE 2026-06-29 20:05:17.273]   Mount point : /tmp/aegisq_concurrency_mnt__jhiu1rn
+[PQC-FUSE 2026-06-29 20:05:17.273] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/concurrency_contract/admission_trace.jsonl
+[PQC-FUSE 2026-06-29 20:05:17.273] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-29 20:05:17.273]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-29 20:05:17.273]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-29 20:05:17.273]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-29 20:05:17.273]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-29 20:05:17.276] Keypair generated in 1398.85 µs
+[PQC-FUSE 2026-06-29 20:05:17.334] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-29 20:05:17.334] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-29 20:05:17.334] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-29 20:05:17.334] Freshness anchor worker started
+[PQC-FUSE 2026-06-29 20:05:17.443] PQC background rekey worker started
+[PQC-FUSE 2026-06-29 20:05:17.443] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-29 20:05:17.483] CREATE /same-file-1.dat: authenticated file-key envelope initialized (fid=18013898504848794035)
+[PQC-FUSE 2026-06-29 20:05:17.497] CREATE /disjoint-1-0.dat: authenticated file-key envelope initialized (fid=11147376127767005220)
+[PQC-FUSE 2026-06-29 20:05:17.508] CREATE /same-lifecycle-1.dat: authenticated file-key envelope initialized (fid=11636806574269804784)
+[PQC-FUSE 2026-06-29 20:05:17.512] OPEN /same-lifecycle-1.dat: restored authenticated file-key envelope (fid=11636806574269804784)
+[PQC-FUSE 2026-06-29 20:05:17.516] OPEN /same-lifecycle-1.dat: restored authenticated file-key envelope (fid=11636806574269804784)
+[PQC-FUSE 2026-06-29 20:05:17.520] OPEN /same-lifecycle-1.dat: restored authenticated file-key envelope (fid=11636806574269804784)
+[PQC-FUSE 2026-06-29 20:05:17.523] CREATE /disjoint-lifecycle-1-0.dat: authenticated file-key envelope initialized (fid=6972105472842522922)
+[PQC-FUSE 2026-06-29 20:05:17.526] OPEN /disjoint-lifecycle-1-0.dat: restored authenticated file-key envelope (fid=6972105472842522922)
+[PQC-FUSE 2026-06-29 20:05:17.530] OPEN /disjoint-lifecycle-1-0.dat: restored authenticated file-key envelope (fid=6972105472842522922)
+[PQC-FUSE 2026-06-29 20:05:17.533] OPEN /disjoint-lifecycle-1-0.dat: restored authenticated file-key envelope (fid=6972105472842522922)
+[PQC-FUSE 2026-06-29 20:05:17.536] CREATE /same-file-2.dat: authenticated file-key envelope initialized (fid=14794214800896344472)
+[PQC-FUSE 2026-06-29 20:05:17.537] OPEN /same-file-2.dat: restored authenticated file-key envelope (fid=14794214800896344472)
+[PQC-FUSE 2026-06-29 20:05:17.559] CREATE /disjoint-2-0.dat: authenticated file-key envelope initialized (fid=16101041891244240896)
+[PQC-FUSE 2026-06-29 20:05:17.560] CREATE /disjoint-2-1.dat: authenticated file-key envelope initialized (fid=9570328373673521633)
+[PQC-FUSE 2026-06-29 20:05:17.571] CREATE /same-lifecycle-2.dat: authenticated file-key envelope initialized (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.572] OPEN /same-lifecycle-2.dat: restored authenticated file-key envelope (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.578] OPEN /same-lifecycle-2.dat: restored authenticated file-key envelope (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.578] OPEN /same-lifecycle-2.dat: restored authenticated file-key envelope (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.584] OPEN /same-lifecycle-2.dat: restored authenticated file-key envelope (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.584] OPEN /same-lifecycle-2.dat: restored authenticated file-key envelope (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.590] OPEN /same-lifecycle-2.dat: restored authenticated file-key envelope (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.591] OPEN /same-lifecycle-2.dat: restored authenticated file-key envelope (fid=1029036841868082121)
+[PQC-FUSE 2026-06-29 20:05:17.596] CREATE /disjoint-lifecycle-2-0.dat: authenticated file-key envelope initialized (fid=4510302292567753249)
+[PQC-FUSE 2026-06-29 20:05:17.597] CREATE /disjoint-lifecycle-2-1.dat: authenticated file-key envelope initialized (fid=12180467214404799773)
+[PQC-FUSE 2026-06-29 20:05:17.600] OPEN /disjoint-lifecycle-2-0.dat: restored authenticated file-key envelope (fid=4510302292567753249)
+[PQC-FUSE 2026-06-29 20:05:17.601] OPEN /disjoint-lifecycle-2-1.dat: restored authenticated file-key envelope (fid=12180467214404799773)
+[PQC-FUSE 2026-06-29 20:05:17.604] OPEN /disjoint-lifecycle-2-0.dat: restored authenticated file-key envelope (fid=4510302292567753249)
+[PQC-FUSE 2026-06-29 20:05:17.604] OPEN /disjoint-lifecycle-2-1.dat: restored authenticated file-key envelope (fid=12180467214404799773)
+[PQC-FUSE 2026-06-29 20:05:17.607] OPEN /disjoint-lifecycle-2-1.dat: restored authenticated file-key envelope (fid=12180467214404799773)
+[PQC-FUSE 2026-06-29 20:05:17.607] OPEN /disjoint-lifecycle-2-0.dat: restored authenticated file-key envelope (fid=4510302292567753249)
+[PQC-FUSE 2026-06-29 20:05:17.610] CREATE /same-file-4.dat: authenticated file-key envelope initialized (fid=17659465841015550273)
+[PQC-FUSE 2026-06-29 20:05:17.612] OPEN /same-file-4.dat: restored authenticated file-key envelope (fid=17659465841015550273)
+[PQC-FUSE 2026-06-29 20:05:17.612] OPEN /same-file-4.dat: restored authenticated file-key envelope (fid=17659465841015550273)
+[PQC-FUSE 2026-06-29 20:05:17.612] OPEN /same-file-4.dat: restored authenticated file-key envelope (fid=17659465841015550273)
+[PQC-FUSE 2026-06-29 20:05:17.651] CREATE /disjoint-4-0.dat: authenticated file-key envelope initialized (fid=5343570795527573879)
+[PQC-FUSE 2026-06-29 20:05:17.652] CREATE /disjoint-4-1.dat: authenticated file-key envelope initialized (fid=11144567303083838739)
+[PQC-FUSE 2026-06-29 20:05:17.653] CREATE /disjoint-4-2.dat: authenticated file-key envelope initialized (fid=13881315116525049415)
+[PQC-FUSE 2026-06-29 20:05:17.656] CREATE /disjoint-4-3.dat: authenticated file-key envelope initialized (fid=2423110210112279638)
+[PQC-FUSE 2026-06-29 20:05:17.715] CREATE /same-lifecycle-4.dat: authenticated file-key envelope initialized (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.717] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.717] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.717] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.727] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.728] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.728] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.728] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.740] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.740] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.740] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.740] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.753] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.753] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.753] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.753] OPEN /same-lifecycle-4.dat: restored authenticated file-key envelope (fid=8239367825535639153)
+[PQC-FUSE 2026-06-29 20:05:17.764] CREATE /disjoint-lifecycle-4-0.dat: authenticated file-key envelope initialized (fid=16901610574211358457)
+[PQC-FUSE 2026-06-29 20:05:17.765] CREATE /disjoint-lifecycle-4-1.dat: authenticated file-key envelope initialized (fid=18266393982774306613)
+[PQC-FUSE 2026-06-29 20:05:17.766] CREATE /disjoint-lifecycle-4-2.dat: authenticated file-key envelope initialized (fid=1057096984226976335)
+[PQC-FUSE 2026-06-29 20:05:17.768] CREATE /disjoint-lifecycle-4-3.dat: authenticated file-key envelope initialized (fid=5343499009835181761)
+[PQC-FUSE 2026-06-29 20:05:17.770] OPEN /disjoint-lifecycle-4-0.dat: restored authenticated file-key envelope (fid=16901610574211358457)
+[PQC-FUSE 2026-06-29 20:05:17.770] OPEN /disjoint-lifecycle-4-1.dat: restored authenticated file-key envelope (fid=18266393982774306613)
+[PQC-FUSE 2026-06-29 20:05:17.770] OPEN /disjoint-lifecycle-4-2.dat: restored authenticated file-key envelope (fid=1057096984226976335)
+[PQC-FUSE 2026-06-29 20:05:17.774] OPEN /disjoint-lifecycle-4-3.dat: restored authenticated file-key envelope (fid=5343499009835181761)
+[PQC-FUSE 2026-06-29 20:05:17.774] OPEN /disjoint-lifecycle-4-0.dat: restored authenticated file-key envelope (fid=16901610574211358457)
+[PQC-FUSE 2026-06-29 20:05:17.776] OPEN /disjoint-lifecycle-4-1.dat: restored authenticated file-key envelope (fid=18266393982774306613)
+[PQC-FUSE 2026-06-29 20:05:17.776] OPEN /disjoint-lifecycle-4-2.dat: restored authenticated file-key envelope (fid=1057096984226976335)
+[PQC-FUSE 2026-06-29 20:05:17.779] OPEN /disjoint-lifecycle-4-3.dat: restored authenticated file-key envelope (fid=5343499009835181761)
+[PQC-FUSE 2026-06-29 20:05:17.779] OPEN /disjoint-lifecycle-4-0.dat: restored authenticated file-key envelope (fid=16901610574211358457)
+[PQC-FUSE 2026-06-29 20:05:17.780] OPEN /disjoint-lifecycle-4-1.dat: restored authenticated file-key envelope (fid=18266393982774306613)
+[PQC-FUSE 2026-06-29 20:05:17.780] OPEN /disjoint-lifecycle-4-2.dat: restored authenticated file-key envelope (fid=1057096984226976335)
+[PQC-FUSE 2026-06-29 20:05:17.785] OPEN /disjoint-lifecycle-4-3.dat: restored authenticated file-key envelope (fid=5343499009835181761)
+[PQC-FUSE 2026-06-29 20:05:17.793] CREATE /process-same-lifecycle-1.dat: authenticated file-key envelope initialized (fid=4662300141206949225)
+[PQC-FUSE 2026-06-29 20:05:17.796] OPEN /process-same-lifecycle-1.dat: restored authenticated file-key envelope (fid=4662300141206949225)
+[PQC-FUSE 2026-06-29 20:05:17.799] OPEN /process-same-lifecycle-1.dat: restored authenticated file-key envelope (fid=4662300141206949225)
+[PQC-FUSE 2026-06-29 20:05:17.802] OPEN /process-same-lifecycle-1.dat: restored authenticated file-key envelope (fid=4662300141206949225)
+[PQC-FUSE 2026-06-29 20:05:17.810] CREATE /process-disjoint-lifecycle-1-0.dat: authenticated file-key envelope initialized (fid=14610211615788067206)
+[PQC-FUSE 2026-06-29 20:05:17.815] OPEN /process-disjoint-lifecycle-1-0.dat: restored authenticated file-key envelope (fid=14610211615788067206)
+[PQC-FUSE 2026-06-29 20:05:17.818] OPEN /process-disjoint-lifecycle-1-0.dat: restored authenticated file-key envelope (fid=14610211615788067206)
+[PQC-FUSE 2026-06-29 20:05:17.822] OPEN /process-disjoint-lifecycle-1-0.dat: restored authenticated file-key envelope (fid=14610211615788067206)
+[PQC-FUSE 2026-06-29 20:05:17.828] CREATE /process-same-lifecycle-2.dat: authenticated file-key envelope initialized (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.829] OPEN /process-same-lifecycle-2.dat: restored authenticated file-key envelope (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.835] OPEN /process-same-lifecycle-2.dat: restored authenticated file-key envelope (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.835] OPEN /process-same-lifecycle-2.dat: restored authenticated file-key envelope (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.841] OPEN /process-same-lifecycle-2.dat: restored authenticated file-key envelope (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.841] OPEN /process-same-lifecycle-2.dat: restored authenticated file-key envelope (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.847] OPEN /process-same-lifecycle-2.dat: restored authenticated file-key envelope (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.847] OPEN /process-same-lifecycle-2.dat: restored authenticated file-key envelope (fid=9466453264032338493)
+[PQC-FUSE 2026-06-29 20:05:17.856] CREATE /process-disjoint-lifecycle-2-0.dat: authenticated file-key envelope initialized (fid=12938975332050197267)
+[PQC-FUSE 2026-06-29 20:05:17.857] CREATE /process-disjoint-lifecycle-2-1.dat: authenticated file-key envelope initialized (fid=17273326301716581601)
+[PQC-FUSE 2026-06-29 20:05:17.861] OPEN /process-disjoint-lifecycle-2-0.dat: restored authenticated file-key envelope (fid=12938975332050197267)
+[PQC-FUSE 2026-06-29 20:05:17.861] OPEN /process-disjoint-lifecycle-2-1.dat: restored authenticated file-key envelope (fid=17273326301716581601)
+[PQC-FUSE 2026-06-29 20:05:17.866] OPEN /process-disjoint-lifecycle-2-1.dat: restored authenticated file-key envelope (fid=17273326301716581601)
+[PQC-FUSE 2026-06-29 20:05:17.866] OPEN /process-disjoint-lifecycle-2-0.dat: restored authenticated file-key envelope (fid=12938975332050197267)
+[PQC-FUSE 2026-06-29 20:05:17.868] OPEN /process-disjoint-lifecycle-2-1.dat: restored authenticated file-key envelope (fid=17273326301716581601)
+[PQC-FUSE 2026-06-29 20:05:17.869] OPEN /process-disjoint-lifecycle-2-0.dat: restored authenticated file-key envelope (fid=12938975332050197267)
+[PQC-FUSE 2026-06-29 20:05:17.876] CREATE /process-same-lifecycle-4.dat: authenticated file-key envelope initialized (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.877] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.877] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.878] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.887] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.889] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.889] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.892] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.896] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.899] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.899] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.901] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.904] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.907] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.907] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.918] OPEN /process-same-lifecycle-4.dat: restored authenticated file-key envelope (fid=17530086835248422086)
+[PQC-FUSE 2026-06-29 20:05:17.928] CREATE /process-disjoint-lifecycle-4-0.dat: authenticated file-key envelope initialized (fid=7915628874079517182)
+[PQC-FUSE 2026-06-29 20:05:17.928] CREATE /process-disjoint-lifecycle-4-1.dat: authenticated file-key envelope initialized (fid=10248011551644079452)
+[PQC-FUSE 2026-06-29 20:05:17.930] CREATE /process-disjoint-lifecycle-4-2.dat: authenticated file-key envelope initialized (fid=10895528705445602689)
+[PQC-FUSE 2026-06-29 20:05:17.931] CREATE /process-disjoint-lifecycle-4-3.dat: authenticated file-key envelope initialized (fid=4796725008786082783)
+[PQC-FUSE 2026-06-29 20:05:17.934] OPEN /process-disjoint-lifecycle-4-0.dat: restored authenticated file-key envelope (fid=7915628874079517182)
+[PQC-FUSE 2026-06-29 20:05:17.934] OPEN /process-disjoint-lifecycle-4-1.dat: restored authenticated file-key envelope (fid=10248011551644079452)
+[PQC-FUSE 2026-06-29 20:05:17.934] OPEN /process-disjoint-lifecycle-4-2.dat: restored authenticated file-key envelope (fid=10895528705445602689)
+[PQC-FUSE 2026-06-29 20:05:17.937] OPEN /process-disjoint-lifecycle-4-3.dat: restored authenticated file-key envelope (fid=4796725008786082783)
+[PQC-FUSE 2026-06-29 20:05:17.938] OPEN /process-disjoint-lifecycle-4-0.dat: restored authenticated file-key envelope (fid=7915628874079517182)
+[PQC-FUSE 2026-06-29 20:05:17.939] OPEN /process-disjoint-lifecycle-4-1.dat: restored authenticated file-key envelope (fid=10248011551644079452)
+[PQC-FUSE 2026-06-29 20:05:17.943] OPEN /process-disjoint-lifecycle-4-2.dat: restored authenticated file-key envelope (fid=10895528705445602689)
+[PQC-FUSE 2026-06-29 20:05:17.947] OPEN /process-disjoint-lifecycle-4-3.dat: restored authenticated file-key envelope (fid=4796725008786082783)
+[PQC-FUSE 2026-06-29 20:05:17.947] OPEN /process-disjoint-lifecycle-4-1.dat: restored authenticated file-key envelope (fid=10248011551644079452)
+[PQC-FUSE 2026-06-29 20:05:17.947] OPEN /process-disjoint-lifecycle-4-0.dat: restored authenticated file-key envelope (fid=7915628874079517182)
+[PQC-FUSE 2026-06-29 20:05:17.949] OPEN /process-disjoint-lifecycle-4-2.dat: restored authenticated file-key envelope (fid=10895528705445602689)
+[PQC-FUSE 2026-06-29 20:05:17.950] OPEN /process-disjoint-lifecycle-4-3.dat: restored authenticated file-key envelope (fid=4796725008786082783)
+[PQC-FUSE 2026-06-29 20:05:17.957] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-29 20:05:17.957] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-29 20:05:17.958] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-06-29 20:05:17.958] Scheduler stats: submitted=168 cpu=168 gpu=0 bytes_cpu=0 bytes_gpu=58220544 migration_ns=3726114816
+[PQC-FUSE 2026-06-29 20:05:17.958] Durability sync stats: fdatasync=337 failures=0 total_ns=132784961 fsync=1 failures=0 total_ns=239027 syncfs=168 failures=0 total_ns=116421587 user_file=0 data_sidecar=168 journal_sidecar=168 epoch_log=0 anchor_file=0 marker_metadata=168 keyring_metadata=2 parent_dir=0 other=0
+[PQC-FUSE 2026-06-29 20:05:17.958] Durability mounted-operation sync stats: fdatasync=336 failures=0 total_ns=131935377 fsync=0 failures=0 total_ns=0 syncfs=168 failures=0 total_ns=116421587 user_file=0 data_sidecar=168 journal_sidecar=168 epoch_log=0 anchor_file=0 marker_metadata=168 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

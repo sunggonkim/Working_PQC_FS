@@ -1,0 +1,30 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-28 14:54:37.880] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 14:54:37.880]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-28 14:54:37.880]   Storage dir : /tmp/aegisq_single_client_s1_g1_storage__jl46iat
+[PQC-FUSE 2026-06-28 14:54:37.880]   Mount point : /tmp/aegisq_single_client_s1_g1_mnt_j2wcqhhk
+[PQC-FUSE 2026-06-28 14:54:37.880] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=artifacts/validation/parallel_commit_contract/telemetry_sweep/single_client_s1_g1/admission_trace.jsonl
+[PQC-FUSE 2026-06-28 14:54:37.881] Parallel commit mode enabled
+[PQC-FUSE 2026-06-28 14:54:37.881] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-28 14:54:37.881]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-28 14:54:37.881]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-28 14:54:37.881]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-28 14:54:37.881]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-28 14:54:37.883] Keypair generated in 1395.79 µs
+[PQC-FUSE 2026-06-28 14:54:38.054] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-28 14:54:38.054] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-28 14:54:38.054] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-28 14:54:38.054] Freshness anchor worker started
+[PQC-FUSE 2026-06-28 14:54:38.163] PQC background rekey worker started
+[PQC-FUSE 2026-06-28 14:54:38.163] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-28 14:54:38.441] CREATE /client_00_op_00.dat: authenticated file-key envelope initialized (fid=12438504199019232266)
+[PQC-FUSE 2026-06-28 14:54:38.444] CREATE /client_00_op_01.dat: authenticated file-key envelope initialized (fid=10290909856634314048)
+[PQC-FUSE 2026-06-28 14:54:38.448] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-28 14:54:38.448] PQC background rekey worker stopped

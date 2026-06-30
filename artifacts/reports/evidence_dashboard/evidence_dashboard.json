@@ -1,7 +1,7 @@
 {
   "verified_artifact_maps": {
-    "crash_audit_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/crash_audit_report/crash_audit_report.json",
-    "platform_inventory_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/platform_inventory_report/platform_inventory_report.json",
+    "crash_audit_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/reports/crash_audit_report/crash_audit_report.json",
+    "platform_inventory_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/reports/platform_inventory_report/platform_inventory_report.json",
     "tpm_freshness_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/tpm_freshness_report/tpm_freshness_report.json",
     "qos_repeated_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/qos_repeated_report/qos_repeated_report.json",
     "uma_storage_dma_report": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/uma_storage_dma_report/uma_storage_dma_report.json",

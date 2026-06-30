@@ -1,0 +1,1327 @@
+{
+  "aegisq": {
+    "durability": {
+      "anchor_file": 0,
+      "data_sidecar": 1070,
+      "epoch_log": 0,
+      "failures": 0,
+      "fdatasync": 2140,
+      "fsync": 0,
+      "journal_sidecar": 1070,
+      "keyring_metadata": 0,
+      "marker_metadata": 1070,
+      "other": 0,
+      "parent_dir": 0,
+      "syncfs": 1070,
+      "total_ns": 453966517,
+      "user_file": 0
+    },
+    "file_preparation": {
+      "artifact": "artifacts/validation/a2_gap_attribution/aegisq/file_preparation.json",
+      "end_realtime_ns": 1782772096537280896,
+      "error": null,
+      "method": "posix_fallocate",
+      "observed_size_bytes": 16777216,
+      "path": "/tmp/a2_aegisq_mnt_jl9d9rpu/contract/frozen_randrw_4k_fdatasync.0.0",
+      "requested_size_bytes": 16777216,
+      "returncode": 0,
+      "start_realtime_ns": 1782772096534060683,
+      "valid": true,
+      "wall_seconds": 0.003220213
+    },
+    "fio_client_strace": {
+      "available": true,
+      "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/a2_gap_attribution/aegisq/measured.strace_summary.txt",
+      "syscalls": {
+        "brk": {
+          "calls": 10,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "clock_nanosleep": {
+          "calls": 210,
+          "errors": 0,
+          "pct_time": 0.95,
+          "seconds": 0.000545,
+          "usecs_per_call": 2.0
+        },
+        "clone": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 1.14,
+          "seconds": 0.000658,
+          "usecs_per_call": 658.0
+        },
+        "clone3": {
+          "calls": 15,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "close": {
+          "calls": 479,
+          "errors": 0,
+          "pct_time": 1.01,
+          "seconds": 0.000578,
+          "usecs_per_call": 1.0
+        },
+        "execve": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "faccessat": {
+          "calls": 2,
+          "errors": 2,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "fadvise64": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "fcntl": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "fdatasync": {
+          "calls": 948,
+          "errors": 0,
+          "pct_time": 5.85,
+          "seconds": 0.003362,
+          "usecs_per_call": 3.0
+        },
+        "fstat": {
+          "calls": 472,
+          "errors": 0,
+          "pct_time": 0.86,
+          "seconds": 0.000497,
+          "usecs_per_call": 1.0
+        },
+        "futex": {
+          "calls": 63,
+          "errors": 3,
+          "pct_time": 0.61,
+          "seconds": 0.000349,
+          "usecs_per_call": 5.0
+        },
+        "getdents64": {
+          "calls": 748,
+          "errors": 0,
+          "pct_time": 1.91,
+          "seconds": 0.001097,
+          "usecs_per_call": 1.0
+        },
+        "getegid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "geteuid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "getgid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "getpid": {
+          "calls": 3,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 0.0
+        },
+        "getpriority": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "getrandom": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "getrusage": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 2e-06,
+          "usecs_per_call": 1.0
+        },
+        "gettid": {
+          "calls": 14,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "getuid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "lseek": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "madvise": {
+          "calls": 15,
+          "errors": 0,
+          "pct_time": 0.03,
+          "seconds": 1.6e-05,
+          "usecs_per_call": 1.0
+        },
+        "membarrier": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "mkdirat": {
+          "calls": 1,
+          "errors": 1,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "mmap": {
+          "calls": 276,
+          "errors": 0,
+          "pct_time": 0.68,
+          "seconds": 0.000392,
+          "usecs_per_call": 1.0
+        },
+        "mprotect": {
+          "calls": 143,
+          "errors": 0,
+          "pct_time": 0.64,
+          "seconds": 0.000368,
+          "usecs_per_call": 2.0
+        },
+        "munmap": {
+          "calls": 170,
+          "errors": 0,
+          "pct_time": 0.4,
+          "seconds": 0.000231,
+          "usecs_per_call": 1.0
+        },
+        "newfstatat": {
+          "calls": 1948,
+          "errors": 203,
+          "pct_time": 8.06,
+          "seconds": 0.004632,
+          "usecs_per_call": 2.0
+        },
+        "openat": {
+          "calls": 614,
+          "errors": 138,
+          "pct_time": 1.83,
+          "seconds": 0.001049,
+          "usecs_per_call": 1.0
+        },
+        "pipe2": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "prctl": {
+          "calls": 6,
+          "errors": 4,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "pread64": {
+          "calls": 655,
+          "errors": 0,
+          "pct_time": 4.53,
+          "seconds": 0.002604,
+          "usecs_per_call": 3.0
+        },
+        "prlimit64": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "pselect6": {
+          "calls": 14,
+          "errors": 1,
+          "pct_time": 46.91,
+          "seconds": 0.026962,
+          "usecs_per_call": 1925.0
+        },
+        "pwrite64": {
+          "calls": 297,
+          "errors": 0,
+          "pct_time": 2.01,
+          "seconds": 0.001153,
+          "usecs_per_call": 3.0
+        },
+        "read": {
+          "calls": 134,
+          "errors": 13,
+          "pct_time": 0.21,
+          "seconds": 0.000123,
+          "usecs_per_call": 0.0
+        },
+        "rseq": {
+          "calls": 16,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 0.0
+        },
+        "rt_sigaction": {
+          "calls": 6,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "rt_sigprocmask": {
+          "calls": 65,
+          "errors": 0,
+          "pct_time": 0.03,
+          "seconds": 1.5e-05,
+          "usecs_per_call": 0.0
+        },
+        "sched_getaffinity": {
+          "calls": 3,
+          "errors": 0,
+          "pct_time": 0.01,
+          "seconds": 3e-06,
+          "usecs_per_call": 1.0
+        },
+        "sched_setaffinity": {
+          "calls": 14,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "set_robust_list": {
+          "calls": 17,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 0.0
+        },
+        "set_tid_address": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 1.0
+        },
+        "setpriority": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "setsid": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "shmat": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.02,
+          "seconds": 9e-06,
+          "usecs_per_call": 9.0
+        },
+        "shmctl": {
+          "calls": 2,
+          "errors": 1,
+          "pct_time": 0.0,
+          "seconds": 2e-06,
+          "usecs_per_call": 1.0
+        },
+        "shmdt": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.06,
+          "seconds": 3.2e-05,
+          "usecs_per_call": 32.0
+        },
+        "shmget": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.02,
+          "seconds": 9e-06,
+          "usecs_per_call": 9.0
+        },
+        "statfs": {
+          "calls": 2,
+          "errors": 2,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "sysinfo": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.01,
+          "seconds": 3e-06,
+          "usecs_per_call": 3.0
+        },
+        "timerfd_create": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "timerfd_settime": {
+          "calls": 13,
+          "errors": 0,
+          "pct_time": 0.03,
+          "seconds": 1.9e-05,
+          "usecs_per_call": 1.0
+        },
+        "wait4": {
+          "calls": 200,
+          "errors": 0,
+          "pct_time": 22.1,
+          "seconds": 0.012701,
+          "usecs_per_call": 63.0
+        },
+        "write": {
+          "calls": 157,
+          "errors": 0,
+          "pct_time": 0.1,
+          "seconds": 5.8e-05,
+          "usecs_per_call": 0.0
+        }
+      },
+      "top_by_time": [
+        [
+          "pselect6",
+          {
+            "calls": 14,
+            "errors": 1,
+            "pct_time": 46.91,
+            "seconds": 0.026962,
+            "usecs_per_call": 1925.0
+          }
+        ],
+        [
+          "wait4",
+          {
+            "calls": 200,
+            "errors": 0,
+            "pct_time": 22.1,
+            "seconds": 0.012701,
+            "usecs_per_call": 63.0
+          }
+        ],
+        [
+          "newfstatat",
+          {
+            "calls": 1948,
+            "errors": 203,
+            "pct_time": 8.06,
+            "seconds": 0.004632,
+            "usecs_per_call": 2.0
+          }
+        ],
+        [
+          "fdatasync",
+          {
+            "calls": 948,
+            "errors": 0,
+            "pct_time": 5.85,
+            "seconds": 0.003362,
+            "usecs_per_call": 3.0
+          }
+        ],
+        [
+          "pread64",
+          {
+            "calls": 655,
+            "errors": 0,
+            "pct_time": 4.53,
+            "seconds": 0.002604,
+            "usecs_per_call": 3.0
+          }
+        ],
+        [
+          "pwrite64",
+          {
+            "calls": 297,
+            "errors": 0,
+            "pct_time": 2.01,
+            "seconds": 0.001153,
+            "usecs_per_call": 3.0
+          }
+        ],
+        [
+          "getdents64",
+          {
+            "calls": 748,
+            "errors": 0,
+            "pct_time": 1.91,
+            "seconds": 0.001097,
+            "usecs_per_call": 1.0
+          }
+        ],
+        [
+          "openat",
+          {
+            "calls": 614,
+            "errors": 138,
+            "pct_time": 1.83,
+            "seconds": 0.001049,
+            "usecs_per_call": 1.0
+          }
+        ],
+        [
+          "clone",
+          {
+            "calls": 1,
+            "errors": 0,
+            "pct_time": 1.14,
+            "seconds": 0.000658,
+            "usecs_per_call": 658.0
+          }
+        ],
+        [
+          "close",
+          {
+            "calls": 479,
+            "errors": 0,
+            "pct_time": 1.01,
+            "seconds": 0.000578,
+            "usecs_per_call": 1.0
+          }
+        ],
+        [
+          "clock_nanosleep",
+          {
+            "calls": 210,
+            "errors": 0,
+            "pct_time": 0.95,
+            "seconds": 0.000545,
+            "usecs_per_call": 2.0
+          }
+        ],
+        [
+          "fstat",
+          {
+            "calls": 472,
+            "errors": 0,
+            "pct_time": 0.86,
+            "seconds": 0.000497,
+            "usecs_per_call": 1.0
+          }
+        ]
+      ],
+      "total": {
+        "calls": 7778,
+        "errors": 368,
+        "seconds": 0.057473
+      }
+    },
+    "measured": {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/a2_gap_attribution/aegisq/fio_raw/measured.json",
+      "fio_stderr": "artifacts/validation/a2_gap_attribution/aegisq/fio_raw/measured.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "measured",
+      "latency_p50_us": 1482.752,
+      "latency_p95_us": 1695.744,
+      "latency_p99_9_us": 1794.048,
+      "latency_p99_us": 1712.128,
+      "read_clat_p50_us": 1482.752,
+      "read_clat_p95_us": 1695.744,
+      "read_clat_p99_9_us": 1794.048,
+      "read_clat_p99_us": 1712.128,
+      "read_io_bytes": 2682880,
+      "read_iops": 327.336332,
+      "read_ios": 655,
+      "repetition": 0,
+      "returncode": 0,
+      "throughput_mib_s": 1.858445167541504,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 952,
+      "valid": true,
+      "wall_seconds": 2.369363487,
+      "write_clat_p50_us": 32.64,
+      "write_clat_p95_us": 35.072,
+      "write_clat_p99_9_us": 51.968,
+      "write_clat_p99_us": 37.632,
+      "write_io_bytes": 1216512,
+      "write_iops": 148.425787,
+      "write_ios": 297
+    },
+    "mode": "aegisq",
+    "unmount": {
+      "argv": [
+        "fusermount3",
+        "-u",
+        "/tmp/a2_aegisq_mnt_jl9d9rpu"
+      ],
+      "fuse_returncode": 0,
+      "returncode": 0
+    },
+    "warmup": {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/a2_gap_attribution/aegisq/fio_raw/warmup.json",
+      "fio_stderr": "artifacts/validation/a2_gap_attribution/aegisq/fio_raw/warmup.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warmup",
+      "latency_p50_us": 18.816,
+      "latency_p95_us": 24.704,
+      "latency_p99_9_us": 86.528,
+      "latency_p99_us": 26.496,
+      "read_clat_p50_us": 18.816,
+      "read_clat_p95_us": 24.704,
+      "read_clat_p99_9_us": 72.192,
+      "read_clat_p99_us": 26.496,
+      "read_io_bytes": 7200768,
+      "read_iops": 877.683475,
+      "read_ios": 1758,
+      "repetition": 0,
+      "returncode": 0,
+      "throughput_mib_s": 4.9359540939331055,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 2531,
+      "valid": true,
+      "wall_seconds": 2.280896335,
+      "write_clat_p50_us": 14.4,
+      "write_clat_p95_us": 17.024,
+      "write_clat_p99_9_us": 86.528,
+      "write_clat_p99_us": 18.816,
+      "write_io_bytes": 3166208,
+      "write_iops": 385.921118,
+      "write_ios": 773
+    }
+  },
+  "gocryptfs": {
+    "file_preparation": {
+      "artifact": "artifacts/validation/a2_gap_attribution/gocryptfs/file_preparation.json",
+      "end_realtime_ns": 1782772101562503796,
+      "error": null,
+      "method": "posix_fallocate",
+      "observed_size_bytes": 16777216,
+      "path": "/tmp/a2_gocryptfs_mnt_ub7gak2c/contract/frozen_randrw_4k_fdatasync.0.0",
+      "requested_size_bytes": 16777216,
+      "returncode": 0,
+      "start_realtime_ns": 1782772101562241740,
+      "valid": true,
+      "wall_seconds": 0.000262056
+    },
+    "fio_client_strace": {
+      "available": true,
+      "path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/a2_gap_attribution/gocryptfs/measured.strace_summary.txt",
+      "syscalls": {
+        "brk": {
+          "calls": 10,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1.2e-05,
+          "usecs_per_call": 1.0
+        },
+        "clock_nanosleep": {
+          "calls": 210,
+          "errors": 0,
+          "pct_time": 0.2,
+          "seconds": 0.000804,
+          "usecs_per_call": 3.0
+        },
+        "clone": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.18,
+          "seconds": 0.00074,
+          "usecs_per_call": 740.0
+        },
+        "clone3": {
+          "calls": 15,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 3e-06,
+          "usecs_per_call": 0.0
+        },
+        "close": {
+          "calls": 479,
+          "errors": 0,
+          "pct_time": 0.22,
+          "seconds": 0.000881,
+          "usecs_per_call": 1.0
+        },
+        "execve": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "faccessat": {
+          "calls": 2,
+          "errors": 2,
+          "pct_time": 0.0,
+          "seconds": 3e-06,
+          "usecs_per_call": 1.0
+        },
+        "fadvise64": {
+          "calls": 4,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1.9e-05,
+          "usecs_per_call": 4.0
+        },
+        "fcntl": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 1.0
+        },
+        "fdatasync": {
+          "calls": 9292,
+          "errors": 0,
+          "pct_time": 8.72,
+          "seconds": 0.035601,
+          "usecs_per_call": 3.0
+        },
+        "fstat": {
+          "calls": 472,
+          "errors": 0,
+          "pct_time": 0.17,
+          "seconds": 0.000705,
+          "usecs_per_call": 1.0
+        },
+        "futex": {
+          "calls": 65,
+          "errors": 4,
+          "pct_time": 0.38,
+          "seconds": 0.001535,
+          "usecs_per_call": 23.0
+        },
+        "getdents64": {
+          "calls": 748,
+          "errors": 0,
+          "pct_time": 0.39,
+          "seconds": 0.001578,
+          "usecs_per_call": 2.0
+        },
+        "getegid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-05,
+          "usecs_per_call": 2.0
+        },
+        "geteuid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-05,
+          "usecs_per_call": 2.0
+        },
+        "getgid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 5e-06,
+          "usecs_per_call": 1.0
+        },
+        "getpid": {
+          "calls": 3,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 4e-06,
+          "usecs_per_call": 1.0
+        },
+        "getpriority": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "getrandom": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 0.0
+        },
+        "getrusage": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 3e-06,
+          "usecs_per_call": 1.0
+        },
+        "gettid": {
+          "calls": 14,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "getuid": {
+          "calls": 5,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 7e-06,
+          "usecs_per_call": 1.0
+        },
+        "lseek": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 0.0
+        },
+        "madvise": {
+          "calls": 15,
+          "errors": 0,
+          "pct_time": 0.56,
+          "seconds": 0.002275,
+          "usecs_per_call": 151.0
+        },
+        "membarrier": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 3e-06,
+          "usecs_per_call": 1.0
+        },
+        "mkdirat": {
+          "calls": 1,
+          "errors": 1,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 1.0
+        },
+        "mmap": {
+          "calls": 276,
+          "errors": 0,
+          "pct_time": 0.04,
+          "seconds": 0.000183,
+          "usecs_per_call": 0.0
+        },
+        "mprotect": {
+          "calls": 143,
+          "errors": 0,
+          "pct_time": 0.08,
+          "seconds": 0.000323,
+          "usecs_per_call": 2.0
+        },
+        "munmap": {
+          "calls": 169,
+          "errors": 0,
+          "pct_time": 0.68,
+          "seconds": 0.002775,
+          "usecs_per_call": 16.0
+        },
+        "newfstatat": {
+          "calls": 1948,
+          "errors": 203,
+          "pct_time": 1.61,
+          "seconds": 0.006588,
+          "usecs_per_call": 3.0
+        },
+        "openat": {
+          "calls": 614,
+          "errors": 138,
+          "pct_time": 0.35,
+          "seconds": 0.001414,
+          "usecs_per_call": 2.0
+        },
+        "pipe2": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "prctl": {
+          "calls": 6,
+          "errors": 4,
+          "pct_time": 0.0,
+          "seconds": 9e-06,
+          "usecs_per_call": 1.0
+        },
+        "pread64": {
+          "calls": 6456,
+          "errors": 0,
+          "pct_time": 9.69,
+          "seconds": 0.039556,
+          "usecs_per_call": 6.0
+        },
+        "prlimit64": {
+          "calls": 2,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 3e-06,
+          "usecs_per_call": 1.0
+        },
+        "pselect6": {
+          "calls": 13,
+          "errors": 0,
+          "pct_time": 38.34,
+          "seconds": 0.156569,
+          "usecs_per_call": 12043.0
+        },
+        "pwrite64": {
+          "calls": 2839,
+          "errors": 0,
+          "pct_time": 4.73,
+          "seconds": 0.019313,
+          "usecs_per_call": 6.0
+        },
+        "read": {
+          "calls": 134,
+          "errors": 13,
+          "pct_time": 0.04,
+          "seconds": 0.000162,
+          "usecs_per_call": 1.0
+        },
+        "rseq": {
+          "calls": 16,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 2e-06,
+          "usecs_per_call": 0.0
+        },
+        "rt_sigaction": {
+          "calls": 6,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 2e-06,
+          "usecs_per_call": 0.0
+        },
+        "rt_sigprocmask": {
+          "calls": 65,
+          "errors": 0,
+          "pct_time": 0.12,
+          "seconds": 0.000502,
+          "usecs_per_call": 7.0
+        },
+        "sched_getaffinity": {
+          "calls": 3,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 4e-06,
+          "usecs_per_call": 1.0
+        },
+        "sched_setaffinity": {
+          "calls": 14,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "set_robust_list": {
+          "calls": 17,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 0.0
+        },
+        "set_tid_address": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 1.0
+        },
+        "setpriority": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "setsid": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 0.0,
+          "usecs_per_call": 0.0
+        },
+        "shmat": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 7e-06,
+          "usecs_per_call": 7.0
+        },
+        "shmctl": {
+          "calls": 2,
+          "errors": 1,
+          "pct_time": 0.0,
+          "seconds": 5e-06,
+          "usecs_per_call": 2.0
+        },
+        "shmdt": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.07,
+          "seconds": 0.000288,
+          "usecs_per_call": 288.0
+        },
+        "shmget": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 8e-06,
+          "usecs_per_call": 8.0
+        },
+        "statfs": {
+          "calls": 2,
+          "errors": 2,
+          "pct_time": 0.0,
+          "seconds": 1.4e-05,
+          "usecs_per_call": 7.0
+        },
+        "sysinfo": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 8e-06,
+          "usecs_per_call": 8.0
+        },
+        "timerfd_create": {
+          "calls": 1,
+          "errors": 0,
+          "pct_time": 0.0,
+          "seconds": 1e-06,
+          "usecs_per_call": 1.0
+        },
+        "timerfd_settime": {
+          "calls": 13,
+          "errors": 0,
+          "pct_time": 0.01,
+          "seconds": 2.8e-05,
+          "usecs_per_call": 2.0
+        },
+        "wait4": {
+          "calls": 200,
+          "errors": 0,
+          "pct_time": 33.3,
+          "seconds": 0.135971,
+          "usecs_per_call": 679.0
+        },
+        "write": {
+          "calls": 157,
+          "errors": 0,
+          "pct_time": 0.1,
+          "seconds": 0.000425,
+          "usecs_per_call": 2.0
+        }
+      },
+      "top_by_time": [
+        [
+          "pselect6",
+          {
+            "calls": 13,
+            "errors": 0,
+            "pct_time": 38.34,
+            "seconds": 0.156569,
+            "usecs_per_call": 12043.0
+          }
+        ],
+        [
+          "wait4",
+          {
+            "calls": 200,
+            "errors": 0,
+            "pct_time": 33.3,
+            "seconds": 0.135971,
+            "usecs_per_call": 679.0
+          }
+        ],
+        [
+          "pread64",
+          {
+            "calls": 6456,
+            "errors": 0,
+            "pct_time": 9.69,
+            "seconds": 0.039556,
+            "usecs_per_call": 6.0
+          }
+        ],
+        [
+          "fdatasync",
+          {
+            "calls": 9292,
+            "errors": 0,
+            "pct_time": 8.72,
+            "seconds": 0.035601,
+            "usecs_per_call": 3.0
+          }
+        ],
+        [
+          "pwrite64",
+          {
+            "calls": 2839,
+            "errors": 0,
+            "pct_time": 4.73,
+            "seconds": 0.019313,
+            "usecs_per_call": 6.0
+          }
+        ],
+        [
+          "newfstatat",
+          {
+            "calls": 1948,
+            "errors": 203,
+            "pct_time": 1.61,
+            "seconds": 0.006588,
+            "usecs_per_call": 3.0
+          }
+        ],
+        [
+          "munmap",
+          {
+            "calls": 169,
+            "errors": 0,
+            "pct_time": 0.68,
+            "seconds": 0.002775,
+            "usecs_per_call": 16.0
+          }
+        ],
+        [
+          "madvise",
+          {
+            "calls": 15,
+            "errors": 0,
+            "pct_time": 0.56,
+            "seconds": 0.002275,
+            "usecs_per_call": 151.0
+          }
+        ],
+        [
+          "getdents64",
+          {
+            "calls": 748,
+            "errors": 0,
+            "pct_time": 0.39,
+            "seconds": 0.001578,
+            "usecs_per_call": 2.0
+          }
+        ],
+        [
+          "futex",
+          {
+            "calls": 65,
+            "errors": 4,
+            "pct_time": 0.38,
+            "seconds": 0.001535,
+            "usecs_per_call": 23.0
+          }
+        ],
+        [
+          "openat",
+          {
+            "calls": 614,
+            "errors": 138,
+            "pct_time": 0.35,
+            "seconds": 0.001414,
+            "usecs_per_call": 2.0
+          }
+        ],
+        [
+          "close",
+          {
+            "calls": 479,
+            "errors": 0,
+            "pct_time": 0.22,
+            "seconds": 0.000881,
+            "usecs_per_call": 1.0
+          }
+        ]
+      ],
+      "total": {
+        "calls": 24467,
+        "errors": 368,
+        "seconds": 0.408364
+      }
+    },
+    "init": {
+      "argv": [
+        "/usr/bin/gocryptfs",
+        "-quiet",
+        "-init",
+        "-passfile",
+        "${PASSFILE}",
+        "/tmp/a2_gocryptfs_cipher_qu48xdpz"
+      ],
+      "artifact": "artifacts/validation/a2_gap_attribution/gocryptfs/mount_logs/gocryptfs_init.command.json",
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782772101405005999,
+      "returncode": 0,
+      "start_realtime_ns": 1782772101256581071,
+      "stderr": "artifacts/validation/a2_gap_attribution/gocryptfs/mount_logs/gocryptfs_init.stderr.txt",
+      "stdout": "artifacts/validation/a2_gap_attribution/gocryptfs/mount_logs/gocryptfs_init.stdout.txt",
+      "wall_seconds": 0.148424928
+    },
+    "measured": {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/a2_gap_attribution/gocryptfs/fio_raw/measured.json",
+      "fio_stderr": "artifacts/validation/a2_gap_attribution/gocryptfs/fio_raw/measured.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "measured",
+      "latency_p50_us": 52.992,
+      "latency_p95_us": 60.16,
+      "latency_p99_9_us": 501.76,
+      "latency_p99_us": 65.28,
+      "read_clat_p50_us": 38.144,
+      "read_clat_p95_us": 60.16,
+      "read_clat_p99_9_us": 78.336,
+      "read_clat_p99_us": 65.28,
+      "read_io_bytes": 26443776,
+      "read_iops": 3226.386807,
+      "read_ios": 6456,
+      "repetition": 0,
+      "returncode": 0,
+      "throughput_mib_s": 18.14522361755371,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 9295,
+      "valid": true,
+      "wall_seconds": 2.367152301,
+      "write_clat_p50_us": 52.992,
+      "write_clat_p95_us": 57.6,
+      "write_clat_p99_9_us": 501.76,
+      "write_clat_p99_us": 65.28,
+      "write_io_bytes": 11628544,
+      "write_iops": 1418.790605,
+      "write_ios": 2839
+    },
+    "mode": "gocryptfs",
+    "unmount": {
+      "argv": [
+        "fusermount3",
+        "-u",
+        "/tmp/a2_gocryptfs_mnt_ub7gak2c"
+      ],
+      "gocryptfs_returncode": 0,
+      "returncode": 0
+    },
+    "warmup": {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/a2_gap_attribution/gocryptfs/fio_raw/warmup.json",
+      "fio_stderr": "artifacts/validation/a2_gap_attribution/gocryptfs/fio_raw/warmup.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warmup",
+      "latency_p50_us": 38.656,
+      "latency_p95_us": 46.336,
+      "latency_p99_9_us": 175.104,
+      "latency_p99_us": 56.064,
+      "read_clat_p50_us": 22.4,
+      "read_clat_p95_us": 46.336,
+      "read_clat_p99_9_us": 175.104,
+      "read_clat_p99_us": 56.064,
+      "read_io_bytes": 31481856,
+      "read_iops": 3841.07946,
+      "read_ios": 7686,
+      "repetition": 0,
+      "returncode": 0,
+      "throughput_mib_s": 21.452163696289062,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 10989,
+      "valid": true,
+      "wall_seconds": 2.2725888,
+      "write_clat_p50_us": 38.656,
+      "write_clat_p95_us": 44.288,
+      "write_clat_p99_9_us": 83.456,
+      "write_clat_p99_us": 55.552,
+      "write_io_bytes": 13529088,
+      "write_iops": 1650.674663,
+      "write_ios": 3303
+    }
+  },
+  "overall_pass": true,
+  "profile": {
+    "fdatasync": 1,
+    "profile_id": "fio_randrw_4k_70r30w_fdatasync_qd1_a2_short_16M_2s",
+    "runtime": "2s",
+    "rw": "randrw",
+    "rwmixread": 70,
+    "size": "16M",
+    "source_contract": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/frozen_workload_contract/frozen_workload_contract.json"
+  },
+  "scope": "short same-profile A2 gap attribution probe",
+  "summary": {
+    "aegisq_throughput_mib_s": 1.858445167541504,
+    "aegisq_to_gocryptfs_ratio": 0.1024206263153264,
+    "attribution": [
+      "AEGIS-Q uses extra authenticated-storage durability boundaries that gocryptfs does not expose in this trace.",
+      "fio client syscall counts quantify the same mounted workload issued through each FUSE filesystem.",
+      "Daemon-level strace is intentionally not used by default because ptraced fusermount can be rejected by the host.",
+      "This short probe is gap attribution, not a replacement for retained full frozen-contract rows."
+    ],
+    "durability_calls": {
+      "anchor_file": 0,
+      "data_sidecar": 1070,
+      "epoch_log": 0,
+      "fdatasync": 2140,
+      "fsync": 0,
+      "journal_sidecar": 1070,
+      "marker_metadata": 1070,
+      "parent_dir": 0,
+      "syncfs": 1070
+    },
+    "fio_client_syscall_calls": {
+      "aegisq_fsync_family": 948,
+      "aegisq_futex": 63,
+      "aegisq_total": 7778,
+      "gocryptfs_fsync_family": 9292,
+      "gocryptfs_futex": 65,
+      "gocryptfs_total": 24467
+    },
+    "gocryptfs_throughput_mib_s": 18.14522361755371
+  }
+}

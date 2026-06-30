@@ -1,0 +1,126 @@
+{
+  "abort_reason": null,
+  "client_run": {
+    "argv": [
+      "/usr/bin/strace",
+      "-f",
+      "-ttt",
+      "-T",
+      "-o",
+      "artifacts/validation/concurrency_contract/blocking_syscall_profile/strace_raw.txt",
+      "-e",
+      "trace=fdatasync,pwrite64,pread64,openat,close",
+      "--",
+      "python3",
+      "-c",
+      "<inline-mounted-path-client>",
+      "<mount_dir>",
+      "4096",
+      "4"
+    ],
+    "returncode": 0,
+    "stderr": "artifacts/validation/concurrency_contract/blocking_syscall_profile/client.stderr.txt",
+    "stdout": "artifacts/validation/concurrency_contract/blocking_syscall_profile/client.stdout.txt"
+  },
+  "command": [
+    "/usr/bin/strace",
+    "-f",
+    "-ttt",
+    "-T",
+    "-o",
+    "artifacts/validation/concurrency_contract/blocking_syscall_profile/strace_raw.txt",
+    "-e",
+    "trace=fdatasync,pwrite64,pread64,openat,close",
+    "--",
+    "python3",
+    "-c",
+    "<inline-mounted-path-client>",
+    "<mount_dir>",
+    "4096",
+    "4"
+  ],
+  "expected_syscalls_observed": [
+    "fdatasync",
+    "pread64",
+    "pwrite64"
+  ],
+  "negative_claim_guard": "This strace profile is user-visible blocking-syscall evidence for the strict mounted path; it is not daemon scheduler off-CPU profiling and does not justify scalability or parallel-commit claims.",
+  "overall_pass": true,
+  "scope": "Mounted-path client blocking-syscall profile collected with strace -f -T during a bounded strict-mode workload.  The traced pwrite/fdatasync/pread calls include user-visible FUSE wait time.",
+  "strace_version": {
+    "argv": [
+      "/usr/bin/strace",
+      "-V"
+    ],
+    "available": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "strace -- version 6.8\nCopyright (c) 1991-2024 The strace developers <https://strace.io>.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\nOptional features enabled: no-m32-mpers"
+  },
+  "summary": {
+    "by_syscall": {
+      "close": {
+        "count": 63,
+        "max_ns": 53000,
+        "p50_ns": 19000.0,
+        "p95_ns": 25000.0,
+        "p99_ns": 48000.0,
+        "total_ns": 1278000
+      },
+      "fdatasync": {
+        "count": 8,
+        "max_ns": 5674000,
+        "p50_ns": 2315000.0,
+        "p95_ns": 5674000.0,
+        "p99_ns": 5674000.0,
+        "total_ns": 22165000
+      },
+      "openat": {
+        "count": 80,
+        "max_ns": 3886000,
+        "p50_ns": 25000.0,
+        "p95_ns": 42000.0,
+        "p99_ns": 1487000.0,
+        "total_ns": 7367000
+      },
+      "pread64": {
+        "count": 8,
+        "max_ns": 120000,
+        "p50_ns": 84000.0,
+        "p95_ns": 120000.0,
+        "p99_ns": 120000.0,
+        "total_ns": 660999
+      },
+      "pwrite64": {
+        "count": 8,
+        "max_ns": 99000,
+        "p50_ns": 50000.0,
+        "p95_ns": 99000.0,
+        "p99_ns": 99000.0,
+        "total_ns": 461000
+      }
+    },
+    "line_count": 168,
+    "malformed_line_count": 1,
+    "observed_syscalls": [
+      "close",
+      "fdatasync",
+      "openat",
+      "pread64",
+      "pwrite64"
+    ],
+    "raw_trace": "artifacts/validation/concurrency_contract/blocking_syscall_profile/strace_raw.txt",
+    "syscall_count": 167
+  },
+  "tool": "strace",
+  "tool_available": true,
+  "unmount": {
+    "argv": [
+      "fusermount3",
+      "-u",
+      "/tmp/aegisq_blocking_mnt_fxv2qi75"
+    ],
+    "fuse_returncode": -2,
+    "returncode": 0
+  }
+}

@@ -10,41 +10,41 @@
         "deadline_ms": 10.0,
         "label": "App",
         "mode": "app_only",
-        "p99_ms": 6.43596154,
-        "telemetry_samples": 28
+        "p99_ms": 7.253253040000001,
+        "telemetry_samples": 0
       },
       {
         "acceptable": true,
-        "background_mb_s": 6.793162736869544,
-        "deadline_misses": 1,
+        "background_mb_s": 6.984360530500289,
+        "deadline_misses": 0,
         "deadline_ms": 10.0,
         "label": "Pressure",
         "mode": "unthrottled_storage",
-        "p99_ms": 13.822082770000009,
-        "telemetry_samples": 31
+        "p99_ms": 9.62087615,
+        "telemetry_samples": 0
       },
       {
         "acceptable": true,
-        "background_mb_s": 2.268259869303856,
+        "background_mb_s": 1.4970013728032954,
         "deadline_misses": 0,
         "deadline_ms": 10.0,
         "label": "Simple",
         "mode": "simple_controller",
-        "p99_ms": 8.185088930000001,
-        "telemetry_samples": 28
+        "p99_ms": 7.544277000000001,
+        "telemetry_samples": 0
       },
       {
         "acceptable": true,
-        "background_mb_s": 2.736089363877744,
+        "background_mb_s": 3.0160640171203785,
         "deadline_misses": 0,
         "deadline_ms": 10.0,
         "label": "AEGIS-Q",
         "mode": "aegis_policy",
-        "p99_ms": 8.75331646,
-        "telemetry_samples": 29
+        "p99_ms": 8.15053043,
+        "telemetry_samples": 0
       }
     ],
-    "source": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json"
+    "source": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json"
   },
   "overall_pass": true,
   "paper_audit": {
@@ -55,7 +55,7 @@
         "id": "C1",
         "intro_map_present": true,
         "mapped": true,
-        "title": "Secure-storage format and placement boundary"
+        "title": "Placement-safe storage format"
       },
       {
         "design_present": true,
@@ -63,7 +63,7 @@
         "id": "C2",
         "intro_map_present": true,
         "mapped": true,
-        "title": "Scoped placement and workflow evidence"
+        "title": "CPU data lane, GPU/PQC maintenance lane"
       },
       {
         "design_present": true,
@@ -71,7 +71,7 @@
         "id": "C3",
         "intro_map_present": true,
         "mapped": true,
-        "title": "Recovery/freshness evidence"
+        "title": "Recovery and replay boundary"
       },
       {
         "design_present": true,
@@ -79,13 +79,13 @@
         "id": "C4",
         "intro_map_present": true,
         "mapped": true,
-        "title": "Telemetry-to-storage QoS evidence"
+        "title": "Storage-visible QoS control"
       }
     ],
     "first_page_figure": {
       "figure": "Paper/Figures/fig_first_page_qos.pdf",
       "present": true,
-      "source": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+      "source": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json",
       "values_present": true
     },
     "first_page_table": {

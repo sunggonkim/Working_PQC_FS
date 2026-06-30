@@ -1,0 +1,19 @@
+{
+  "name": "chown_mount",
+  "result": {
+    "argv": [
+      "sudo",
+      "-S",
+      "-p",
+      "",
+      "chown",
+      "1000:1000",
+      "/tmp/dmcrypt_frozen_root_khmoav28/mnt"
+    ],
+    "available": true,
+    "password_supplied": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  }
+}

@@ -1,0 +1,3 @@
+set(PQC_COMMON_INCLUDE_DIRS
+    ${CODE_DIR}/common
+)

@@ -1,0 +1,86 @@
+{
+  "cases": [
+    {
+      "client": {
+        "matches": true,
+        "path": "/tmp/aegisq_default_strict_mnt_y9v22e5q/dispatch-smoke.dat",
+        "payload_len": 16422,
+        "read_len": 16422,
+        "written": 16422
+      },
+      "error": null,
+      "label": "default_strict",
+      "pass": true,
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_default_strict_mnt_y9v22e5q"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      }
+    },
+    {
+      "client": {
+        "matches": true,
+        "path": "/tmp/aegisq_explicit_strict_mnt_ky1bo8_2/dispatch-smoke.dat",
+        "payload_len": 16423,
+        "read_len": 16423,
+        "written": 16423
+      },
+      "error": null,
+      "label": "explicit_strict",
+      "pass": true,
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_explicit_strict_mnt_ky1bo8_2"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      }
+    }
+  ],
+  "explicit_strict_trace": {
+    "event_count": 2,
+    "events": [
+      {
+        "event": "publication_dispatch",
+        "mode": "strict",
+        "rc": 0
+      },
+      {
+        "event": "publication_dispatch",
+        "mode": "strict",
+        "rc": 0
+      }
+    ],
+    "exists": true,
+    "malformed_line_count": 0,
+    "modes": [
+      "strict"
+    ],
+    "path": "artifacts/validation/publication_protocol_fault_matrix/explicit_strict/publication_trace.jsonl"
+  },
+  "generated_by": "experiments/run_epoch_publish_dispatch_smoke.py",
+  "generated_utc": "2026-06-28T06:26:42Z",
+  "negative_claim_guard": "This artifact proves only that an epoch-publication module skeleton builds and strict mode dispatches through it. Epoch redo-log mounted-path behavior is covered by the Gate 0.9-S2 artifact; this S0 smoke is not evidence of checkpoint compaction, crash replay, fdatasync reduction, throughput improvement, or rollback resistance.",
+  "overall_pass": true,
+  "schema_version": 1,
+  "scope": "Gate 0.9-S0 skeleton dispatch proof only.",
+  "source_evidence": {
+    "dispatch_call_visible": true,
+    "epoch_redo_log_mode_visible": true,
+    "epoch_skeleton_unsupported_visible": true,
+    "header": "code/pqc_epoch_publish.h",
+    "header_exists": true,
+    "mode_env_visible": true,
+    "source": "code/pqc_epoch_publish.c",
+    "source_exists": true,
+    "strict_fallback_visible": true
+  },
+  "source_pass": true,
+  "trace_pass": true
+}

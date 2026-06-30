@@ -1,0 +1,853 @@
+{
+  "artifact_verdict": {
+    "covered_topics": {
+      "crash_model": true,
+      "filesystem_viability": true,
+      "freshness_ladder": true,
+      "fscrypt_dmcrypt_baselines": true,
+      "gpu_jetson": true,
+      "hero_generality": true,
+      "kdf": true,
+      "kernel_qos": true,
+      "narrative_overclaiming": true,
+      "posix_envelope": true
+    },
+    "invalid_status_ids": [],
+    "missing_boundary_ids": [],
+    "missing_primary_module_ids": [],
+    "overall_pass": true,
+    "status_counts": {
+      "artifact-required": 6,
+      "code-required": 4,
+      "dropped-claim": 0,
+      "negative-claim-only": 2,
+      "paper-required": 2
+    }
+  },
+  "freeze_context": {
+    "code_refactor_strategy_absent": null,
+    "diff_name_only_count": null,
+    "dirty_sidecar_sync_dedup_patch": null,
+    "exists": true,
+    "generated_utc": null,
+    "git_branch": null,
+    "paper_text_status": null,
+    "parent_checklist_closed": null,
+    "source": "artifacts/validation/refactor_inventory/worktree_freeze.json",
+    "untracked_files_count": null
+  },
+  "generated_by": "code/experiments/build_review_objection_map.py",
+  "generated_utc": "2026-06-30T03:54:31Z",
+  "next_cursor": {
+    "reason": "Refresh SOSP/OSDI/ATC/FAST venue readiness against the same frozen worktree and evidence map.",
+    "row_id": "0.3-S0"
+  },
+  "objection_count": 14,
+  "objections": [
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/frontend/pqc_fuse.c"
+        },
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_config.c"
+        },
+        {
+          "exists": true,
+          "path": "code/common/pqc_format.h"
+        },
+        {
+          "exists": true,
+          "path": "code/fs/pqc_file_io.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_publish.c"
+        },
+        {
+          "exists": false,
+          "path": "code/storage/pqc_recovery.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_anchor.c"
+        },
+        {
+          "exists": true,
+          "path": "code/support/pqc_test_hooks.c"
+        }
+      ],
+      "gate_links": [
+        "0.1",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.14"
+      ],
+      "id": "O01",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "Gate 0.14 behavior-equivalence closeout after decomposition"
+        },
+        {
+          "label": "required closure artifact",
+          "path": "paper negative guard for clean-module claims"
+        }
+      ],
+      "negative_guard": "No production-clean, modular-storage-runtime, or behavior-equivalent refactor claim before Gate 0.14 closes.",
+      "paper_claim_boundary": "Implementation text may describe current modules only as refactored components after behavior-equivalence evidence; until then, it must not claim a production-clean architecture.",
+      "primary_code_module": "code/frontend/pqc_fuse.c",
+      "retained_artifacts": [
+        {
+          "label": "worktree freeze",
+          "path": "artifacts/validation/refactor_inventory/worktree_freeze.json"
+        },
+        {
+          "label": "source ownership map",
+          "path": "artifacts/validation/refactor_inventory/source_ownership_map.json"
+        },
+        {
+          "label": "phase1 behavior equivalence",
+          "path": "artifacts/validation/refactor_inventory/phase1_behavior_equivalence.json"
+        }
+      ],
+      "reviewer_objection": "The current filesystem path still needs a defensible storage-runtime architecture, not a set of accumulated FUSE, CUDA, TPM, and checklist patches.",
+      "status": "code-required",
+      "title": "codebase architecture still looks patch-accumulated"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/fs/pqc_file_io.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_strict_publish.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_publish.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_log.c"
+        },
+        {
+          "exists": false,
+          "path": "code/storage/pqc_parallel_commit.c"
+        },
+        {
+          "exists": false,
+          "path": "code/support/pqc_metrics.c"
+        }
+      ],
+      "gate_links": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "0.9",
+        "0.15",
+        "0.16"
+      ],
+      "id": "O02",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "filesystem_viability_breakdown end-to-end component attribution"
+        },
+        {
+          "label": "required closure artifact",
+          "path": "strict-versus-epoch lock-hold and p99/p99.9 closeout"
+        },
+        {
+          "label": "required closure artifact",
+          "path": "paper text classifying the dominant bottleneck"
+        }
+      ],
+      "negative_guard": "No high-throughput, competitive-with-gocryptfs, or general-purpose filesystem wording before viability breakdown and epoch evidence close.",
+      "paper_claim_boundary": "The paper may report conservative strict-mode results and epoch-mode diagnostics, but no high-throughput or general-purpose filesystem implication is allowed until A1/A3 close.",
+      "primary_code_module": "code/fs/pqc_file_io.c",
+      "retained_artifacts": [
+        {
+          "label": "frozen AEGIS-Q contract",
+          "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json"
+        },
+        {
+          "label": "epoch publication comparison",
+          "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json"
+        },
+        {
+          "label": "parallel commit contract",
+          "path": "artifacts/validation/parallel_commit_contract/parallel_commit_contract.json"
+        }
+      ],
+      "reviewer_objection": "AEGIS-Q frozen-contract throughput is far below plaintext and gocryptfs, and the paper must explain whether the bottleneck is semantic, implementation, or redesign debt.",
+      "status": "artifact-required",
+      "title": "filesystem throughput viability remains the top blocker"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/experiments/build_kernel_baseline_feasibility.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_frozen_workload_contract.py"
+        }
+      ],
+      "gate_links": [
+        "B1",
+        "B4"
+      ],
+      "id": "O03",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "matched fscrypt fio row or environment-blocked proof"
+        }
+      ],
+      "negative_guard": "No fscrypt speedup or apples-to-apples implication without a measured fscrypt row.",
+      "paper_claim_boundary": "fscrypt must appear only as measured, environment-blocked, or removed from the comparison.",
+      "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+      "retained_artifacts": [
+        {
+          "label": "kernel baseline feasibility",
+          "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json"
+        },
+        {
+          "label": "frozen workload contract",
+          "path": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json"
+        }
+      ],
+      "reviewer_objection": "fscrypt is missing from the matched frozen-contract baseline table.",
+      "status": "artifact-required",
+      "title": "fscrypt matched baseline is unresolved"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/experiments/build_kernel_baseline_feasibility.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_frozen_workload_contract.py"
+        }
+      ],
+      "gate_links": [
+        "B2",
+        "B4"
+      ],
+      "id": "O04",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "LUKS/dmsetup setup logs and matched fio JSON for dm-crypt/ext4"
+        }
+      ],
+      "negative_guard": "Historical dm-crypt diagnostics are not a paper comparison row.",
+      "paper_claim_boundary": "dm-crypt is either a measured row or an unavailable row with root/device proof.",
+      "primary_code_module": "code/experiments/build_kernel_baseline_feasibility.py",
+      "retained_artifacts": [
+        {
+          "label": "kernel baseline feasibility",
+          "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json"
+        },
+        {
+          "label": "dm-crypt raw row",
+          "path": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json"
+        },
+        {
+          "label": "dm-crypt raw row",
+          "path": "artifacts/validation/frozen_dmcrypt_contract/paper_dmcrypt_verdict.json"
+        },
+        {
+          "label": "dm-crypt raw row",
+          "path": "artifacts/validation/frozen_dmcrypt_contract/platform_manifest.json"
+        }
+      ],
+      "reviewer_objection": "dm-crypt appears runnable but lacks a matched frozen-contract row.",
+      "status": "artifact-required",
+      "title": "dm-crypt matched baseline is unresolved"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_qos.c"
+        },
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_admission.c"
+        },
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_scheduler.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_qos_sqlite_hero_bundle.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_qos_repeated.py"
+        }
+      ],
+      "gate_links": [
+        "B3",
+        "E2"
+      ],
+      "id": "O05",
+      "missing_artifacts": [
+        {
+          "label": "QoS repeated report",
+          "path": "artifacts/reports/qos_repeated/*.json"
+        },
+        {
+          "label": "required closure artifact",
+          "path": "at least two cgroup/blk-throttle/ionice/BFQ baseline runs"
+        }
+      ],
+      "negative_guard": "No SQLite p99 uniqueness claim before two kernel QoS baselines exist.",
+      "paper_claim_boundary": "SQLite p99 improvement must be compared against kernel QoS or scoped as internal controller evidence.",
+      "primary_code_module": "code/runtime/pqc_qos.c",
+      "retained_artifacts": [
+        {
+          "label": "SQLite hero bundle",
+          "path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json"
+        }
+      ],
+      "reviewer_objection": "SQLite p99 recovery may be achievable with standard Linux QoS controls.",
+      "status": "artifact-required",
+      "title": "SQLite QoS lacks kernel-control baselines"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/fs/pqc_posix.c"
+        },
+        {
+          "exists": true,
+          "path": "code/fs/pqc_namespace.c"
+        },
+        {
+          "exists": true,
+          "path": "code/fs/pqc_file_io.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_posix_scope_audit.py"
+        }
+      ],
+      "gate_links": [
+        "C1",
+        "C2",
+        "0.14"
+      ],
+      "id": "O06",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "paper POSIX envelope table with support/formal rejection/paper limitation"
+        }
+      ],
+      "negative_guard": "No general-purpose POSIX wording before shared mmap and POSIX envelope evidence close.",
+      "paper_claim_boundary": "The paper must read as a scoped FUSE secure-storage prototype unless shared mmap and envelope semantics pass.",
+      "primary_code_module": "code/fs/pqc_posix.c",
+      "retained_artifacts": [
+        {
+          "label": "POSIX scope audit",
+          "path": "artifacts/validation/posix_scope_audit/posix_scope_audit.json"
+        },
+        {
+          "label": "shadow mmap matrix",
+          "path": "artifacts/validation/shadow_mmap_posix/shadow_mmap_decision.json"
+        }
+      ],
+      "reviewer_objection": "Shared mmap, rename, directory fsync, and concurrent writes are not closed enough for broad POSIX wording.",
+      "status": "paper-required",
+      "title": "POSIX envelope is too broad unless closed by tests or formal rejection"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/support/pqc_test_hooks.c"
+        },
+        {
+          "exists": false,
+          "path": "code/storage/pqc_recovery.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_log.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_generation_fault_matrix.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_daemon_power_fault_matrix.py"
+        }
+      ],
+      "gate_links": [
+        "C3",
+        "C4",
+        "0.8",
+        "0.9"
+      ],
+      "id": "O07",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "physical power-loss or explicit unavailable-environment boundary artifact"
+        }
+      ],
+      "negative_guard": "No power-loss safe, full crash certification, or crash-certified wording without physical or explicitly bounded evidence.",
+      "paper_claim_boundary": "Crash claims must be bounded to the strongest retained model: process kill, daemon kill, remount, or physical power cut.",
+      "primary_code_module": "code/support/pqc_test_hooks.c",
+      "retained_artifacts": [
+        {
+          "label": "generation fault matrix",
+          "path": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json"
+        },
+        {
+          "label": "daemon power fault campaign",
+          "path": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json"
+        },
+        {
+          "label": "epoch replay fault matrix",
+          "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json"
+        }
+      ],
+      "reviewer_objection": "SIGKILL-at-cutpoint evidence is not the same as power-loss certification.",
+      "status": "artifact-required",
+      "title": "crash and power-loss model is not fully bounded"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/storage/pqc_anchor.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_anchor_worker.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_checkpoint.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_tpm_monotonic_replay.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_tpm_pcr_policy_probe.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_tpm_freshness_policy_manifest.py"
+        }
+      ],
+      "gate_links": [
+        "C5",
+        "C6",
+        "D3"
+      ],
+      "id": "O08",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "production async Merkle or committed-prefix root plus TPM epoch evidence"
+        }
+      ],
+      "negative_guard": "No TPM rollback resistance, persistent PCR-bound freshness, sealed-key release, or full rollback-resistance wording before Gate C6.",
+      "paper_claim_boundary": "Freshness text must map to the retained ladder level and stop before PCR-bound rollback resistance unless C6 exists.",
+      "primary_code_module": "code/storage/pqc_anchor.c",
+      "retained_artifacts": [
+        {
+          "label": "TPM freshness bundle",
+          "path": "artifacts/validation/tpm_freshness_bundle/tpm_freshness_bundle.json"
+        },
+        {
+          "label": "TPM monotonic replay",
+          "path": "artifacts/validation/tpm_monotonic_replay/tpm_monotonic_replay.json"
+        },
+        {
+          "label": "TPM PCR policy probe",
+          "path": "artifacts/validation/tpm_pcr_policy_probe/tpm_pcr_policy_probe.json"
+        },
+        {
+          "label": "async Merkle TPM epoch",
+          "path": "artifacts/validation/async_merkle_tpm_epoch/anchor_trace_smoke.json"
+        },
+        {
+          "label": "async Merkle TPM epoch",
+          "path": "artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.json"
+        }
+      ],
+      "reviewer_objection": "File anchors and TPM NV evidence do not prove persistent PCR-bound rollback resistance.",
+      "status": "code-required",
+      "title": "freshness and rollback resistance remain overclaim-prone"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/crypto/pqc_keyring.c"
+        },
+        {
+          "exists": true,
+          "path": "code/crypto/pqc_crypto.c"
+        },
+        {
+          "exists": true,
+          "path": "code/crypto/pqc_key_lifecycle.c"
+        },
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_rekey.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_mount_key_lifecycle_manifest.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_keyplane_rekey_workflow.py"
+        }
+      ],
+      "gate_links": [
+        "D1",
+        "D2",
+        "D3"
+      ],
+      "id": "O09",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "Argon2id/scrypt implementation or PBKDF2 parameter/salt/offline-attack benchmark artifact"
+        }
+      ],
+      "negative_guard": "No offline-attack resistance or strong password-hardening claim while PBKDF2 remains unexplained.",
+      "paper_claim_boundary": "Security text must state the KDF, salt, parameters, offline attacker model, and PQC/data-plane separation.",
+      "primary_code_module": "code/crypto/pqc_keyring.c",
+      "retained_artifacts": [
+        {
+          "label": "mount key lifecycle",
+          "path": "artifacts/validation/mount_key_lifecycle/mount_key_lifecycle.json"
+        },
+        {
+          "label": "KDF crypto plane",
+          "path": "artifacts/validation/kdf_crypto_plane/kdf_current_state_verdict.json"
+        },
+        {
+          "label": "KDF crypto plane",
+          "path": "artifacts/validation/kdf_crypto_plane/kdf_scrypt_mounted_smoke.json"
+        }
+      ],
+      "reviewer_objection": "PBKDF2-HMAC-SHA256 and key lifecycle boundaries need a parameterized decision backed by artifacts.",
+      "status": "code-required",
+      "title": "KDF and key lifecycle need a security-facing decision"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/gpu/cuda_aead.cu"
+        },
+        {
+          "exists": true,
+          "path": "code/gpu/cuda_pqc.cu"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_jetson_memory_contract.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_jetson_power_thermal_contract.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_cuda_qos_contract.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_jetson_optimization_ladder.py"
+        }
+      ],
+      "gate_links": [
+        "0.10",
+        "0.11",
+        "0.12",
+        "0.18",
+        "A4",
+        "E5"
+      ],
+      "id": "O10",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "production mounted-path benefit traces before any NVIDIA term becomes a paper mechanism"
+        }
+      ],
+      "negative_guard": "No NVMe-to-UVM, GPUDirect, dma-buf zero-copy, CUDA isolation, or stream-priority QoS claim without production evidence.",
+      "paper_claim_boundary": "NVIDIA terms may appear only at their retained evidence level: API available, probe passed, diagnostic, or non-claim.",
+      "primary_code_module": "code/gpu/cuda_aead.cu",
+      "retained_artifacts": [
+        {
+          "label": "Jetson memory contract",
+          "path": "artifacts/validation/jetson_memory_contract/jetson_memory_contract.json"
+        },
+        {
+          "label": "Jetson memory contract",
+          "path": "artifacts/validation/jetson_memory_contract/jetson_memory_probe.stdout.json"
+        },
+        {
+          "label": "Jetson power thermal contract",
+          "path": "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json"
+        },
+        {
+          "label": "CUDA QoS contract",
+          "path": "artifacts/validation/cuda_qos_contract/cuda_qos_contract.json"
+        },
+        {
+          "label": "Jetson optimization ladder",
+          "path": "artifacts/validation/jetson_optimization_ladder/jetson_optimization_ladder.json"
+        }
+      ],
+      "reviewer_objection": "Pinned memory, UVM, dma-buf, GPUDirect, stream priority, and Jetson power claims need local probes, production traces, and official-document boundaries.",
+      "status": "negative-claim-only",
+      "title": "GPU and Jetson optimization claims need a ladder"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/experiments/run_qos_sqlite_hero_bundle.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_hero_result_contract.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_workload_diversity_matrix.py"
+        }
+      ],
+      "gate_links": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ],
+      "id": "O11",
+      "missing_artifacts": [
+        {
+          "label": "hero result contract",
+          "path": "artifacts/validation/hero_result_contract/*.json"
+        },
+        {
+          "label": "second macrobenchmark",
+          "path": "artifacts/validation/second_macrobenchmark/*.json"
+        },
+        {
+          "label": "required closure artifact",
+          "path": "RocksDB/WAL, checkpointing, or secure inference-log macrobenchmark runner and raw logs"
+        }
+      ],
+      "negative_guard": "No broad workload-general or SOSP/OSDI-ready claim before a second macrobenchmark exists.",
+      "paper_claim_boundary": "SQLite can remain the primary hero, but generality requires a second macrobenchmark or downgraded venue ambition.",
+      "primary_code_module": "code/experiments/run_qos_sqlite_hero_bundle.py",
+      "retained_artifacts": [
+        {
+          "label": "workload diversity matrix",
+          "path": "artifacts/validation/workload_diversity_matrix/workload_diversity_matrix.json"
+        }
+      ],
+      "reviewer_objection": "SQLite/FUSE QoS alone is not enough for SOSP/OSDI workload generality.",
+      "status": "code-required",
+      "title": "hero workload generality is too narrow"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/experiments/build_paper_spine_gate.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_first_two_pages_thesis_audit.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_recurring_review_elimination_audit.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_evaluation_completeness_matrix.py"
+        }
+      ],
+      "gate_links": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "id": "O12",
+      "missing_artifacts": [
+        {
+          "label": "first two pages audit",
+          "path": "artifacts/validation/first_two_pages_thesis_audit/*.json"
+        },
+        {
+          "label": "recurring review audit",
+          "path": "artifacts/validation/recurring_review_elimination_audit/*.json"
+        },
+        {
+          "label": "required closure artifact",
+          "path": "paper text pass with dangerous phrases absent, negated, or evidence-backed"
+        }
+      ],
+      "negative_guard": "Dangerous phrases must be absent, explicitly negated, or tied to a closed gate.",
+      "paper_claim_boundary": "Paper body must prioritize thesis, hard problem, mechanism, result, and loss case, not artifact-ledger narration.",
+      "primary_code_module": "code/experiments/build_paper_spine_gate.py",
+      "retained_artifacts": [
+        {
+          "label": "paper spine gate",
+          "path": "artifacts/reports/paper_spine_gate/paper_spine_gate.json"
+        }
+      ],
+      "reviewer_objection": "The paper can sound broader than the retained production evidence.",
+      "status": "paper-required",
+      "title": "paper narrative can overclaim the evidence"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_publish.c"
+        },
+        {
+          "exists": false,
+          "path": "code/storage/pqc_parallel_commit.c"
+        },
+        {
+          "exists": true,
+          "path": "code/fs/pqc_file_io.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_ebpf_iouring_scope_audit.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/bench_io_uring_ebpf.cu"
+        }
+      ],
+      "gate_links": [
+        "A5",
+        "0.9",
+        "0.15",
+        "0.16"
+      ],
+      "id": "O13",
+      "missing_artifacts": [
+        {
+          "label": "required closure artifact",
+          "path": "vfs_ebpf_fdatasync_storm context-switch/syscall/fdatasync/tail-latency breakdown"
+        }
+      ],
+      "negative_guard": "No eBPF passthrough, io_uring completion bypass, or async epoch fdatasync claim without production evidence.",
+      "paper_claim_boundary": "The design may claim fdatasync amortization only for the measured epoch path; eBPF/io_uring bypass remains a non-claim.",
+      "primary_code_module": "code/storage/pqc_epoch_publish.c",
+      "retained_artifacts": [
+        {
+          "label": "eBPF/io_uring scope audit",
+          "path": "artifacts/validation/ebpf_iouring_scope_audit/ebpf_iouring_scope_audit.json"
+        },
+        {
+          "label": "publication closeout",
+          "path": "artifacts/validation/publication_protocol_fault_matrix/publication_protocol_closeout.json"
+        },
+        {
+          "label": "parallel commit closure",
+          "path": "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json"
+        }
+      ],
+      "reviewer_objection": "FUSE context switching and per-write fdatasync can dominate the path and must be amortized or honestly measured.",
+      "status": "artifact-required",
+      "title": "FUSE and fdatasync storm need amortization or measured rejection"
+    },
+    {
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/experiments/run_sidechannel_eval.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_tvla_leakage_eval.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/build_integrity_comparison_manifest.py"
+        }
+      ],
+      "gate_links": [
+        "D4",
+        "F4",
+        "F5"
+      ],
+      "id": "O14",
+      "missing_artifacts": [
+        {
+          "label": "side-channel diagnostics",
+          "path": "artifacts/validation/sidechannel_eval/*.json"
+        },
+        {
+          "label": "TVLA diagnostics",
+          "path": "artifacts/validation/tvla_leakage_eval/*.json"
+        },
+        {
+          "label": "required closure artifact",
+          "path": "claim lint output proving out-of-scope language remains explicit"
+        }
+      ],
+      "negative_guard": "No side-channel protection, multi-tenant defense, compromised-kernel defense, deployment-ready, or ready-for-production wording.",
+      "paper_claim_boundary": "Security scope must exclude compromised kernel/driver/FUSE, privileged local attackers, multi-tenant isolation, and GPU side-channel defense.",
+      "primary_code_module": "code/experiments/run_sidechannel_eval.py",
+      "retained_artifacts": [],
+      "reviewer_objection": "GPU side channels, multi-tenant attackers, privileged local attackers, and deployment readiness are not implemented defenses.",
+      "status": "negative-claim-only",
+      "title": "attacker model and deployment claims must stay scoped"
+    }
+  ],
+  "paper_text_status": "not_updated",
+  "parent_checklist_closed": false,
+  "schema_version": 2,
+  "scope": "Gate 0.2-S0 recurring review-objection map against the frozen worktree and active gates.",
+  "status_values": [
+    "artifact-required",
+    "code-required",
+    "dropped-claim",
+    "negative-claim-only",
+    "paper-required"
+  ]
+}

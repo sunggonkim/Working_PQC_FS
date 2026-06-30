@@ -4,9 +4,133 @@
     "--out-dir",
     "artifacts/validation/posix_scope_audit"
   ],
+  "required_semantics": [
+    "shared_mmap",
+    "msync",
+    "rename",
+    "directory_fsync",
+    "open_fd_truncate",
+    "path_truncate",
+    "fallocate",
+    "hard_link",
+    "symlink",
+    "concurrent_disjoint_writes",
+    "concurrent_same_block_writes",
+    "crash_time_visibility"
+  ],
+  "semantic_status": {
+    "shared_mmap": {
+      "covered": true,
+      "status": "formal rejection",
+      "cases": [
+        "default_shared_mmap_msync_on_encrypted_file"
+      ],
+      "acceptable": true
+    },
+    "msync": {
+      "covered": true,
+      "status": "formal rejection",
+      "cases": [
+        "default_shared_mmap_msync_on_encrypted_file"
+      ],
+      "acceptable": true
+    },
+    "rename": {
+      "covered": true,
+      "status": "supported_subset",
+      "cases": [
+        "closed_file_rename_supported_subset",
+        "closed_file_overwrite_rename_supported_subset",
+        "open_source_rename_supported_subset",
+        "open_target_rename_supported_subset",
+        "empty_directory_rename_supported_subset",
+        "directory_tree_rename_supported_subset"
+      ],
+      "acceptable": true
+    },
+    "directory_fsync": {
+      "covered": true,
+      "status": "supported_subset",
+      "cases": [
+        "directory_fsync_supported_subset"
+      ],
+      "acceptable": true
+    },
+    "open_fd_truncate": {
+      "covered": true,
+      "status": "support",
+      "cases": [
+        "truncate_fallocate_visibility"
+      ],
+      "acceptable": true
+    },
+    "path_truncate": {
+      "covered": true,
+      "status": "formal rejection",
+      "cases": [
+        "path_only_truncate_rejection"
+      ],
+      "acceptable": true
+    },
+    "fallocate": {
+      "covered": true,
+      "status": "support",
+      "cases": [
+        "truncate_fallocate_visibility"
+      ],
+      "acceptable": true
+    },
+    "hard_link": {
+      "covered": true,
+      "status": "supported_subset",
+      "cases": [
+        "hard_link_supported_subset"
+      ],
+      "acceptable": true
+    },
+    "symlink": {
+      "covered": true,
+      "status": "supported_subset",
+      "cases": [
+        "symlink_supported_subset"
+      ],
+      "acceptable": true
+    },
+    "concurrent_disjoint_writes": {
+      "covered": true,
+      "status": "support",
+      "cases": [
+        "concurrent_disjoint_writers"
+      ],
+      "acceptable": true
+    },
+    "concurrent_same_block_writes": {
+      "covered": true,
+      "status": "supported_subset",
+      "cases": [
+        "concurrent_same_block_full_overwrite_writers",
+        "concurrent_same_block_partial_overlap_writers"
+      ],
+      "acceptable": true
+    },
+    "crash_time_visibility": {
+      "covered": true,
+      "status": "paper limitation",
+      "cases": [
+        "crash_time_visibility_scope"
+      ],
+      "acceptable": true
+    }
+  },
+  "required_semantics_all_covered": true,
   "rows": [
     {
-      "case": "default_mmap_on_encrypted_file",
+      "case": "default_shared_mmap_msync_on_encrypted_file",
+      "semantics": [
+        "shared_mmap",
+        "msync"
+      ],
+      "status": "formal rejection",
       "expected_behavior": "rejected",
       "observed_errno": 19,
       "observed_errno_name": "ENODEV",
@@ -16,6 +140,10 @@
     },
     {
       "case": "concurrent_disjoint_writers",
+      "semantics": [
+        "concurrent_disjoint_writes"
+      ],
+      "status": "support",
       "expected_behavior": "serialized_by_daemon_lock_for_disjoint_write_fsync_path",
       "errors": [],
       "result_sha256_prefix": {
@@ -26,25 +154,217 @@
       "scope": "Narrow disjoint write/fsync path only; arbitrary conflicting app-level concurrency is not certified."
     },
     {
-      "case": "rename_rejection",
-      "expected_behavior": "rejected_ENOTSUP",
-      "observed_errno": 95,
-      "observed_errno_name": "ENOTSUP",
-      "detail": "[Errno 95] Operation not supported: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin' -> '/tmp/posix_scope_mnt_u1kbyr7g/renamed.bin'",
+      "case": "concurrent_same_block_full_overwrite_writers",
+      "semantics": [
+        "concurrent_same_block_writes"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "same_block_full_overwrites_linearize_without_mixed_plaintext",
+      "errors": [],
+      "final_all_A": false,
+      "final_all_B": true,
+      "mixed_or_partial": false,
       "acceptable": true,
-      "scope": "Rename would need atomic marker/data/journal/checkpoint/anchor transition; not implemented."
+      "scope": "Same-block full-overwrite write/fsync races are serialized to one complete block; arbitrary overlapping byte ranges, mmap coherence, and application-level transactions are not certified."
     },
     {
-      "case": "directory_fsync_rejection",
-      "expected_behavior": "rejected_ENOTSUP",
+      "case": "concurrent_same_block_partial_overlap_writers",
+      "semantics": [
+        "concurrent_same_block_writes"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "overlapping_same_block_partial_writes_match_one_serial_order",
+      "errors": [],
+      "final_matches_a_then_b": false,
+      "final_matches_b_then_a": true,
+      "unexpected_mixed_or_corrupt": false,
+      "acceptable": true,
+      "scope": "One same-block overlapping partial-write/fsync race is serializable to a complete-block recovery order; arbitrary byte-range transactions, mmap coherence, and application-level locking semantics are not certified."
+    },
+    {
+      "case": "truncate_fallocate_visibility",
+      "semantics": [
+        "open_fd_truncate",
+        "fallocate"
+      ],
+      "status": "support",
+      "expected_behavior": "open_fd_ftruncate_and_fallocate_preserve_visible_size_and_zero_fill",
+      "observations": {
+        "after_truncate_4k_size": 4096,
+        "after_truncate_4k_all_A": true,
+        "after_truncate_zero_size": 0,
+        "after_truncate_zero_empty_read": true,
+        "posix_fallocate_available": true,
+        "after_fallocate_size": 8192,
+        "after_fallocate_zero_prefix": true,
+        "after_post_fallocate_write_C": true
+      },
+      "errors": [],
+      "acceptable": true,
+      "scope": "Open-file truncate/fallocate behavior only; path-only truncate, mmap coherence, and broad concurrent resize semantics are not certified."
+    },
+    {
+      "case": "path_only_truncate_rejection",
+      "semantics": [
+        "path_truncate"
+      ],
+      "status": "formal rejection",
+      "expected_behavior": "rejected_ENOTSUP_without_open_file_context",
       "observed_errno": 95,
       "observed_errno_name": "ENOTSUP",
-      "detail": "[Errno 95] Operation not supported",
+      "detail": "[Errno 95] Operation not supported: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'",
+      "size_before": 8192,
+      "size_after": 8192,
       "acceptable": true,
-      "scope": "Directory-entry durability is not a supported boundary in this prototype."
+      "scope": "Path-only truncate lacks an authenticated open-file context; open-fd ftruncate is tested separately."
+    },
+    {
+      "case": "closed_file_rename_supported_subset",
+      "semantics": [
+        "rename"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "rename new closed regular file with sidecars",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "renamed file recovered expected payload",
+      "acceptable": true,
+      "scope": "Closed regular-file rename to a non-existing target is supported; open-file and directory cases are tested separately, and crash-atomic rename remains outside this row."
+    },
+    {
+      "case": "closed_file_overwrite_rename_supported_subset",
+      "semantics": [
+        "rename"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "closed regular overwrite rename replaces closed target",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "closed overwrite rename replaced target with source payload",
+      "acceptable": true,
+      "scope": "Closed regular-file overwrite rename is supported only when the target is not open; open-target and crash-atomic multi-file rename remain outside this row."
+    },
+    {
+      "case": "open_source_rename_supported_subset",
+      "semantics": [
+        "rename"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "open source fd survives rename to new target",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "open source fd survived rename and post-rename fsync",
+      "acceptable": true,
+      "scope": "Open-source regular-file rename to a non-existing target is supported after fd-context path retargeting; open-target overwrite is tested separately and crash-atomic rename remains outside this row."
+    },
+    {
+      "case": "open_target_rename_supported_subset",
+      "semantics": [
+        "rename"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "rename over open target preserves stale target fd and publishes source at target path",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "open target fd retained old file while path exposed source payload",
+      "acceptable": true,
+      "scope": "Open-target regular-file overwrite rename is supported through FUSE hidden-file retargeting for the stale target fd; crash-atomic multi-file rename and open-subtree retargeting remain outside this row."
+    },
+    {
+      "case": "empty_directory_rename_supported_subset",
+      "semantics": [
+        "rename"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "empty directory rename to non-existing target succeeds",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "empty directory renamed to new target",
+      "acceptable": true,
+      "scope": "Empty-directory rename to a non-existing target is supported only when no file contexts are open; open-subtree retargeting and crash-atomic namespace publication remain outside this row."
+    },
+    {
+      "case": "directory_tree_rename_supported_subset",
+      "semantics": [
+        "rename"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "non-empty directory tree rename to non-existing target succeeds",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "directory tree renamed and child payload remained readable",
+      "acceptable": true,
+      "scope": "Directory-tree rename is supported only with no open file contexts and a non-existing target; open-subtree retargeting and crash-atomic multi-entry durability remain outside this row."
+    },
+    {
+      "case": "directory_fsync_supported_subset",
+      "semantics": [
+        "directory_fsync"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "lower directory fsync succeeds",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "directory fsync completed",
+      "acceptable": true,
+      "scope": "Directory fsync is forwarded to the lower directory; this does not by itself certify crash-atomic multi-file rename."
+    },
+    {
+      "case": "hard_link_supported_subset",
+      "semantics": [
+        "hard_link"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "no-open regular-file hard link shares marker and sidecar state",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "hard link shared marker/sidecar state and unlink preserved original",
+      "acceptable": true,
+      "scope": "Regular-file hard links are supported only with no open file contexts and linked marker/sidecar state; open hard-link creation, SQLite compatibility sidecars, crash-atomic multi-entry publication, and full link-count lifecycle certification remain outside this row."
+    },
+    {
+      "case": "symlink_supported_subset",
+      "semantics": [
+        "symlink"
+      ],
+      "status": "supported_subset",
+      "expected_behavior": "relative_symlink_readlink_and_read_through",
+      "observed_errno": null,
+      "observed_errno_name": null,
+      "detail": "symlink target and read-through payload matched",
+      "rejected_escape_targets": [
+        {
+          "target": "/etc/passwd",
+          "acceptable": true,
+          "observed_errno": 95,
+          "observed_errno_name": "ENOTSUP",
+          "detail": "[Errno 95] Operation not supported: '/etc/passwd' -> '/tmp/posix_scope_mnt_e9lw0t0b/absolute_target.sym'"
+        },
+        {
+          "target": "../outside.bin",
+          "acceptable": true,
+          "observed_errno": 95,
+          "observed_errno_name": "ENOTSUP",
+          "detail": "[Errno 95] Operation not supported: '../outside.bin' -> '/tmp/posix_scope_mnt_e9lw0t0b/parent_escape_target.sym'"
+        },
+        {
+          "target": "posix.bin.pqcdata",
+          "acceptable": true,
+          "observed_errno": 95,
+          "observed_errno_name": "ENOTSUP",
+          "detail": "[Errno 95] Operation not supported: 'posix.bin.pqcdata' -> '/tmp/posix_scope_mnt_e9lw0t0b/internal_sidecar_target.sym'"
+        }
+      ],
+      "acceptable": true,
+      "scope": "Relative symlink namespace objects are supported when they do not target internal sidecar names or escape through absolute/parent paths; this is not hard-link support or crash-atomic directory-tree certification."
     },
     {
       "case": "xattr_policy",
+      "semantics": [
+        "user_xattr",
+        "internal_xattr"
+      ],
+      "status": "support",
       "expected_behavior": "user_xattr_roundtrip_internal_xattrs_hidden_invalid_tier_rejected",
       "user_audit_value": "ok",
       "listxattr_before_tier": [
@@ -61,21 +381,21 @@
           "acceptable": true,
           "observed_errno": 1,
           "observed_errno_name": "EPERM",
-          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'"
         },
         {
           "name": "user.pqc_logical_size",
           "acceptable": true,
           "observed_errno": 1,
           "observed_errno_name": "EPERM",
-          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'"
         },
         {
           "name": "user.pqc_checkpoint",
           "acceptable": true,
           "observed_errno": 1,
           "observed_errno_name": "EPERM",
-          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+          "detail": "[Errno 1] Operation not permitted: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'"
         }
       ],
       "internal_get_results": [
@@ -84,28 +404,28 @@
           "acceptable": true,
           "observed_errno": 61,
           "observed_errno_name": "ENODATA",
-          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'"
         },
         {
           "name": "user.pqc_logical_size",
           "acceptable": true,
           "observed_errno": 61,
           "observed_errno_name": "ENODATA",
-          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'"
         },
         {
           "name": "user.pqc_checkpoint",
           "acceptable": true,
           "observed_errno": 61,
           "observed_errno_name": "ENODATA",
-          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+          "detail": "[Errno 61] No data available: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'"
         }
       ],
       "invalid_tier": {
         "acceptable": true,
         "observed_errno": 22,
         "observed_errno_name": "EINVAL",
-        "detail": "[Errno 22] Invalid argument: '/tmp/posix_scope_mnt_u1kbyr7g/posix.bin'"
+        "detail": "[Errno 22] Invalid argument: '/tmp/posix_scope_mnt_e9lw0t0b/posix.bin'"
       },
       "tier_value": "1",
       "acceptable": true,
@@ -113,6 +433,11 @@
     },
     {
       "case": "lower_filesystem_assumptions",
+      "semantics": [
+        "lower_filesystem_xattr",
+        "lower_directory_durability"
+      ],
+      "status": "paper limitation",
       "expected_behavior": "recorded_not_certified",
       "filesystem_type": "ext2/ext3",
       "stat_stderr": "",
@@ -127,14 +452,32 @@
     },
     {
       "case": "fuse_writeback_cache_and_direct_mmap_caps",
+      "semantics": [
+        "fuse_writeback_cache",
+        "direct_io_mmap_capability"
+      ],
+      "status": "formal rejection",
       "expected_behavior": "capabilities_not_requested",
       "source_disables_writeback_cache": true,
       "source_requests_writeback_cache": false,
       "source_disables_direct_io_mmap": true,
       "source_requests_direct_io_mmap": false,
-      "proc_mounts_line": "pqc_fuse /tmp/posix_scope_mnt_u1kbyr7g fuse.pqc_fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000 0 0",
+      "source_path": "code/runtime/pqc_lifecycle.c",
+      "proc_mounts_line": "pqc_fuse /tmp/posix_scope_mnt_e9lw0t0b fuse.pqc_fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000 0 0",
       "acceptable": true,
       "scope": "The daemon avoids FUSE writeback-cache and direct-IO mmap capabilities; no cache-coherence claim is made."
+    },
+    {
+      "case": "crash_time_visibility_scope",
+      "semantics": [
+        "crash_time_visibility"
+      ],
+      "status": "paper limitation",
+      "expected_behavior": "bounded_to_existing_fault_models_not_full_posix_crash_visibility",
+      "source_has_fsync_return_cutpoint": true,
+      "paper_has_non_certification_boundary": true,
+      "acceptable": true,
+      "scope": "Crash-time visibility is delegated to C3/C4 fault models; C1 does not certify full POSIX crash visibility."
     }
   ],
   "overall_pass": true

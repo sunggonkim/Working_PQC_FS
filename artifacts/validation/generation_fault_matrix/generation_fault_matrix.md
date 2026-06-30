@@ -12,6 +12,7 @@ Scope: final-binary FUSE generation/nonce regression matrix.  This is not full p
 | `self_test_older_generation_regression` | `latest_committed` | `True` |  |
 | `partial_update_and_remount` | `latest_committed` | `True` |  |
 | `torn_journal_write` | `latest_committed` | `True` |  |
+| `reserved_generation_skip_after_data_fsync_fault` | `latest_committed` | `True` | Daemon SIGKILL after reserved generation data fdatasync; proves remount skips the reserved high-water under this fault model, not physical power loss. |
 | `older_generation_append_after_newer_mapping` | `latest_committed` | `True` |  |
 | `stale_snapshot_replay_file_anchor_negative_control` | `previous_committed` | `True` | file-backed anchor is replayable with the backing directory; previous_committed is expected negative-control behavior, not rollback protection. |
 | `stale_snapshot_replay_tpm_anchor_existing_artifact` | `fail_closed` | `True` | existing hardware-backed TPM replay-after-advance artifact; not rerun by this generation matrix script. |

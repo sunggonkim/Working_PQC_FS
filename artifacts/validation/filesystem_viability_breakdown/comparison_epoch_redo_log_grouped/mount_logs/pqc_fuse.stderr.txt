@@ -1,0 +1,30 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-28 22:33:10.926] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 22:33:10.926]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-28 22:33:10.926]   Storage dir : /tmp/aegisq_epoch_redo_log_grouped_storage_acpj3khw
+[PQC-FUSE 2026-06-28 22:33:10.926]   Mount point : /tmp/aegisq_epoch_redo_log_grouped_mnt_c9_0yyw_
+[PQC-FUSE 2026-06-28 22:33:10.926] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=artifacts/validation/filesystem_viability_breakdown/comparison_epoch_redo_log_grouped/admission_trace.jsonl
+[PQC-FUSE 2026-06-28 22:33:10.926] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-28 22:33:10.926]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-28 22:33:10.926]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-28 22:33:10.926]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-28 22:33:10.926]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-28 22:33:10.929] Keypair generated in 1417.32 µs
+[PQC-FUSE 2026-06-28 22:33:11.099] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-28 22:33:11.099] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-28 22:33:11.099] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-28 22:33:11.099] Freshness anchor worker started
+[PQC-FUSE 2026-06-28 22:33:11.208] PQC background rekey worker started
+[PQC-FUSE 2026-06-28 22:33:11.208] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-28 22:33:11.287] CREATE /group_op_003.dat: authenticated file-key envelope initialized (fid=15946724013502956041)
+[PQC-FUSE 2026-06-28 22:33:11.287] CREATE /group_op_000.dat: authenticated file-key envelope initialized (fid=16092402528127761212)
+[PQC-FUSE 2026-06-28 22:33:11.288] CREATE /group_op_001.dat: authenticated file-key envelope initialized (fid=16556337139717949566)
+[PQC-FUSE 2026-06-28 22:33:11.289] CREATE /group_op_002.dat: authenticated file-key envelope initialized (fid=5561508837356363744)
+[PQC-FUSE 2026-06-28 22:33:11.340] Shutting down PQC-FUSE filesystem...

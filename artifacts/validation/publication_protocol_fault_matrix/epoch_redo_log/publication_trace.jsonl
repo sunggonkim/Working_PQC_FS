@@ -1,0 +1,2 @@
+{"event":"epoch_redo_log_append","mode":"epoch-redo-log","rc":0,"record_count":6,"barrier_rc":0,"log_path":"/tmp/aegisq_epoch_redo_log_storage_yhtajv1h/epoch-smoke.dat.pqcepoch"}
+{"event":"publication_dispatch","mode":"epoch-redo-log","rc":0}

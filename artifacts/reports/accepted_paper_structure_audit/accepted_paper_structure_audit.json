@@ -62,12 +62,12 @@
         ],
         "design_present": true,
         "evaluation_needles": [
-          "TPM replay-after-advance",
-          "hardware-freshness recovery matrix"
+          "replay-after-advance",
+          "hardware replay matrix"
         ],
         "evaluation_present": true,
         "mapped": true,
-        "mechanism": "external freshness boundary"
+        "mechanism": "external replay boundary"
       },
       {
         "design_needles": [

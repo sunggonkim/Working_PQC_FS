@@ -1,11 +1,11 @@
 {
-  "storage_dir": "/tmp/daemon_fault_fsync_store_y_tc83g_",
+  "storage_dir": "/tmp/daemon_fault_fsync_store_qae7o5u5",
   "entries": [
     {
       "path": ".anchor",
       "mode": 33152,
       "size": 88,
-      "sha256": "cec8276a0dad4bac49cc9525a483b715d9988f37c9cae3012ca52a6545546df0"
+      "sha256": "22504c71673706dff5d5b9722dd513b55871578ad748ba6d1e78f31da3074cb3"
     },
     {
       "path": "probe.bin",
@@ -15,7 +15,7 @@
       "xattrs": {
         "user.pqc_checkpoint": {
           "bytes": 80,
-          "sha256": "8b15c240238eba39fda6904873d3707a2136fd69e51785c1fd418a99f681c60a"
+          "sha256": "26b87fec7cd6361a56e2cb8081d9b6e51bd832bd7a5eef3a756fcd0510d5a089"
         },
         "user.pqc_logical_size": {
           "bytes": 8,
@@ -23,7 +23,7 @@
         },
         "user.pqc_metadata": {
           "bytes": 120,
-          "sha256": "e28a65cf9abee97628e3f4296767f422f10ed73d1ca74b3f44ad1bea200cbc4d"
+          "sha256": "2f6bce65e07e52dd13df0c49ddf4ab04decfa94288f9020f2ff9d4da696b16b0"
         }
       }
     },
@@ -31,13 +31,13 @@
       "path": "probe.bin.pqcdata",
       "mode": 33152,
       "size": 8192,
-      "sha256": "f0f54740e6b215c01ebc8afe88ab47df9e383597853182cfed02cfa9333f4b2d"
+      "sha256": "d3463ee39e953a0d310a6ccb420cceb398fd534aaaae9b50949e4282d5cb2adb"
     },
     {
       "path": "probe.bin.pqcmeta",
       "mode": 33152,
       "size": 192,
-      "sha256": "f84169a643423b56d31d722f5adc6addf17a6f35ea8807bdc052ad15d87c99f9"
+      "sha256": "8b022924d2064d5a774b53ce9f8acc52961458d8b9f2ecfae61833fdf28d6f02"
     }
   ]
 }

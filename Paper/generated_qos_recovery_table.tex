@@ -1,16 +1,18 @@
 \begin{table}[t]
 \centering
-\caption{SQLite foreground recovery under mounted secure-storage pressure; latencies are p50/p95/p99 in ms and CPU/GPU are utilization percent.}
+\caption{SQLite p99 under mounted secure-storage pressure.  Hero rows are five-run medians; kernel rows are 3 retained runs each.}
 \scriptsize
 \setlength{\tabcolsep}{2pt}
-\begin{tabularx}{\columnwidth}{P{0.18\columnwidth}|P{0.20\columnwidth}|r|r|r|r|r}
+\begin{tabularx}{\columnwidth}{P{0.18\columnwidth}|P{0.22\columnwidth}|r|r|r|P{0.18\columnwidth}}
 \toprule
-\textbf{Mode} & \textbf{p50/p95/p99} & \textbf{Miss} & \textbf{MB/s} & \textbf{CPU/GPU} & \textbf{Samp.} & \textbf{Thr.}\\
+\textbf{Row} & \textbf{Control} & \textbf{p99} & \textbf{Miss} & \textbf{MB/s} & \textbf{Evidence}\\
 \midrule
-App & 4.9/6.3/6.4 & 0 & 0.0 & 4/10 & 28 & 0\\
-Unthrottled & 6.1/9.6/13.8 & 1 & 6.8 & 10/10 & 31 & 0\\
-Simple & 5.3/7.0/8.2 & 0 & 2.3 & 4/10 & 28 & 26\\
-AEGIS-Q & 5.4/7.5/8.8 & 0 & 2.7 & 6/10 & 29 & 44\\
+App only & none & 7.25 & 0.00 & 0.00 & 5-run med.\\
+Unthrottled & none & 9.62 & 0.00 & 6.98 & 5-run med.\\
+Simple ctrl. & harness sleep & 7.54 & 0.00 & 1.50 & 5-run med.\\
+AEGIS-Q & storage class & 8.15 & 0.00 & 3.02 & 5-run med.\\
+Kernel ionice & \texttt{ionice -c 3} & 16.22 & 6.00 & 7.25 & 3-run proof\\
+Kernel IOWeight & \texttt{IOWeight=10} & 12.57 & 7.00 & 6.73 & 3-run proof\\
 \bottomrule
 \end{tabularx}
 \label{tab:qos_sqlite_recovery}

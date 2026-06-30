@@ -1,0 +1,88 @@
+{
+  "implemented_mitigations": [
+    {
+      "code_path": "pqc_fd_context_prepare_dirty_sidecar_sync_locked + pqc_fd_context_run_dirty_sidecar_sync",
+      "invariant": "A duplicated sidecar fd is synced outside fd_lock; dirty flags are cleared only if the captured dirty epoch still matches after reacquiring fd_lock.",
+      "name": "dirty-sidecar fdatasync outside fd_lock",
+      "remaining_limit": "Dirty-flag fault coverage and broad same-FD concurrency evidence are still missing."
+    },
+    {
+      "code_path": "pqc_checkpoint_reserve_generation + file_state publish_ticket + pqc_writeback_flush_locked",
+      "invariant": "A generation high-water mark is checkpointed before ciphertext generation; same-file publish turns remain ordered while prepare/crypto run outside commit_lock.",
+      "name": "strict generation reservation and publish ticket",
+      "remaining_limit": "Durable-publish lock splitting and broad contention evidence are still missing."
+    },
+    {
+      "code_path": "pqc_writeback_flush_locked + writeback_snapshot_take_locked",
+      "invariant": "The live fd write buffer is copied under fd_lock, cleared, and protected by a pending-job reference before prepare/crypto/publish run without fd_lock.",
+      "name": "write-buffer snapshot outside fd_lock",
+      "remaining_limit": "External process client-count smoke and strace blocking-syscall evidence exist, but long-duration client-count and scheduler off-CPU evidence are still missing."
+    },
+    {
+      "code_path": "pqc_read + pqc_recovery_load_authenticated_block_committed",
+      "invariant": "The read path snapshots sidecar fds, key material, file id, visible size, and committed generation under fd_lock, then authenticates blocks outside fd_lock while a pending-job reference prevents release from closing the fds.",
+      "name": "authenticated-read snapshot outside fd_lock",
+      "remaining_limit": "External process client-count smoke and strace blocking-syscall evidence exist, but scheduler off-CPU profiling and long-duration client-count paths still need lock-contract evidence."
+    },
+    {
+      "code_path": "pqc_truncate + pqc_fallocate + metadata_publish_turn_begin",
+      "invariant": "Truncate and fallocate snapshot fd state, hold a publish turn for same-file ordering, perform xattr/ftruncate/checkpoint work outside fd_lock and commit_lock, then update visible state with short lock holds.",
+      "name": "metadata resize publication outside hot locks",
+      "remaining_limit": "Strace blocking-syscall evidence exists, but scheduler off-CPU profiling and long-duration deadlock/livelock stress still need lock-contract evidence."
+    },
+    {
+      "code_path": "pqc_fd_context_clear + retired_resources_release",
+      "invariant": "Release waits for pending jobs, detaches sidecar fds, write buffer, and file-state reference under fd_lock, marks the context invalid, then closes/frees/releases detached resources after unlocking.",
+      "name": "release lifecycle detach outside fd_lock",
+      "remaining_limit": "Close/free latency is no longer in fd_lock and the smoke includes repeated thread/process lifecycle phases plus blocking-syscall evidence, but scheduler off-CPU and long-duration evidence are still missing."
+    }
+  ],
+  "negative_claim_guard": "This table is a measurement scaffold, not evidence that Gate 0.15 is closed.",
+  "order": [
+    {
+      "allowed_call_sites": [
+        "pqc_read",
+        "pqc_write",
+        "pqc_fsync",
+        "pqc_flush",
+        "pqc_truncate",
+        "pqc_fallocate",
+        "pqc_release"
+      ],
+      "current_status": "writeback_authenticated_read_truncate_fallocate_and_release_lifecycle_snapshot_or_detach_outside_fd_lock_but_broad_stress_still_needs_audit",
+      "forbidden_blocking_calls_for_closure": [
+        "crypto",
+        "pwrite",
+        "fdatasync",
+        "checkpoint update",
+        "anchor update",
+        "condition wait"
+      ],
+      "lock": "fd_lock",
+      "owner_module": "pqc_fd_context / pqc_file_io",
+      "protected_state": "per-FD validity, write buffer, logical size cache, sidecar dirty flags, QoS class, pending-job counter",
+      "rank": 10
+    },
+    {
+      "allowed_call_sites": [
+        "pqc_read",
+        "pqc_writeback_flush_locked",
+        "pqc_fallocate"
+      ],
+      "current_status": "strict_publish_split_but_truncate_fallocate_and_broad_lock_contract_still_need_audit",
+      "forbidden_blocking_calls_for_closure": [
+        "GPU/CPU crypto",
+        "pwrite",
+        "fdatasync",
+        "checkpoint write",
+        "TPM/anchor access"
+      ],
+      "lock": "commit_lock",
+      "owner_module": "pqc_state / pqc_writeback",
+      "protected_state": "per-inode generation high-water, reader-visible committed generation, publish tickets, and checkpoint-visible logical size",
+      "rank": 20
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Current strict-path lock order and known violations before Gate 0.15 refactor."
+}

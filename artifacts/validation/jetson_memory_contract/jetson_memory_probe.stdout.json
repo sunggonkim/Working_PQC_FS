@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "cuda_runtime_version": 13000,
+  "cuda_driver_version": 13000,
+  "cuda_runtime_version_status": "pass",
+  "cuda_driver_version_status": "pass",
+  "cuda_set_device_flags": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":""},
+  "cuda_get_device_count": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":""},
+  "device_count": 1,
+  "devices": [
+    {"device":0,"properties_status":"pass","name":"NVIDIA Thor","compute_capability":"11.0","integrated":1,"unified_addressing":1,"managed_memory":1,"host_register_supported":1,"pageable_memory_access":1,"pageable_memory_access_uses_host_page_tables":1,"concurrent_managed_access":1,"direct_managed_mem_access_from_host":0,"can_use_host_pointer_for_registered_mem":1,"gpudirect_rdma_supported":0,"gpudirect_rdma_flush_writes_options":1,"gpudirect_rdma_writes_ordering":100}
+  ],
+  "selected_device": 0,
+  "probes": {
+    "cudaHostAlloc": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":""},
+    "cudaHostAllocMappedKernel": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":"","host_alloc_mapped_error":"cudaSuccess","host_get_device_pointer_error":"cudaSuccess","value_observed":true},
+    "cudaHostRegister": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":"","posix_memalign_rc":0,"host_get_device_pointer_error":"cudaSuccess","mapped_kernel_error":"cudaSuccess","value_observed":true},
+    "cudaMallocManaged": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":""},
+    "cudaMemPrefetchAsyncManaged": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":""},
+    "cudaStreamAttachMemAsyncManaged": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":""},
+    "pageableMemoryPrefetch": {"status":"pass","cuda_error":"cudaSuccess","cuda_error_text":""}
+  }
+}

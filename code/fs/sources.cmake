@@ -1,0 +1,9 @@
+set(PQC_FUSE_FILESYSTEM_SOURCES
+    ${CODE_DIR}/fs/pqc_fd_context.c
+    ${CODE_DIR}/fs/pqc_file_io.c
+    ${CODE_DIR}/fs/pqc_file_lock.c
+    ${CODE_DIR}/fs/pqc_namespace.c
+    ${CODE_DIR}/fs/pqc_parallel_commit.c
+    ${CODE_DIR}/fs/pqc_posix.c
+    ${CODE_DIR}/fs/pqc_recovery.c
+)

@@ -1,0 +1,631 @@
+{
+  "artifact_verdict": {
+    "gate014_code_artifact_evidence_pass": true,
+    "overall_pass": true,
+    "paper_text_audit_done": false,
+    "parent_checklist_closed": false,
+    "parent_gate_missing_evidence_count": 2,
+    "required_behavior_evidence_missing_count": 0,
+    "submilestone_done": true
+  },
+  "behavior_evidence_checks": [
+    {
+      "artifact": "artifacts/validation/posix_scope_audit/posix_scope_audit.json",
+      "name": "POSIX scope audit",
+      "required_for_submilestone": true,
+      "status": "pass"
+    },
+    {
+      "artifact": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+      "name": "generation fault matrix",
+      "required_for_submilestone": true,
+      "status": "pass"
+    },
+    {
+      "artifact": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+      "name": "daemon power fault campaign",
+      "required_for_submilestone": true,
+      "status": "pass"
+    },
+    {
+      "artifact": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json",
+      "name": "frozen workload contract",
+      "required_for_submilestone": true,
+      "status": "pass"
+    },
+    {
+      "artifact": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+      "comparison_ready": false,
+      "name": "strict frozen AEGIS-Q warm-cache benchmark",
+      "required_for_submilestone": true,
+      "status": "pass"
+    },
+    {
+      "artifact": "artifacts/validation/concurrency_contract/lock_profile_summary.json",
+      "name": "concurrency contract smoke",
+      "required_for_submilestone": false,
+      "status": "pass"
+    }
+  ],
+  "behavior_evidence_status": {
+    "concurrency_contract_smoke_pass": true,
+    "daemon_power_fault_campaign_pass": true,
+    "frozen_workload_contract_pass": true,
+    "generation_fault_matrix_pass": true,
+    "new_mechanism_claims_added": false,
+    "paper_text_audit_done": false,
+    "posix_scope_audit_pass": true,
+    "strict_frozen_aegisq_comparison_ready": false,
+    "strict_frozen_aegisq_warm_cache_pass": true
+  },
+  "current_extracted_modules": {
+    "anchor_worker": [
+      "pqc_anchor_worker.c",
+      "pqc_anchor_worker.h"
+    ],
+    "checkpoint": [
+      "pqc_checkpoint.c",
+      "pqc_checkpoint.h"
+    ],
+    "config": [
+      "pqc_config.c",
+      "pqc_config.h"
+    ],
+    "data_crypto": [
+      "pqc_crypto.c",
+      "pqc_crypto.h"
+    ],
+    "entrypoint": [
+      "pqc_main.c",
+      "pqc_fuse.h"
+    ],
+    "fd_context": [
+      "pqc_fd_context.c",
+      "pqc_fd_context.h"
+    ],
+    "file_io": [
+      "pqc_file_io.c",
+      "pqc_file_io.h"
+    ],
+    "file_lock": [
+      "pqc_file_lock.c",
+      "pqc_file_lock.h"
+    ],
+    "flush_batch": [
+      "pqc_flush_batch.c",
+      "pqc_flush_batch.h"
+    ],
+    "flush_crypto": [
+      "pqc_flush_crypto.c",
+      "pqc_flush_crypto.h"
+    ],
+    "format": [
+      "pqc_format.h"
+    ],
+    "journal": [
+      "pqc_journal.c",
+      "pqc_journal.h"
+    ],
+    "keyring": [
+      "pqc_keyring.c",
+      "pqc_keyring.h"
+    ],
+    "lifecycle": [
+      "pqc_lifecycle.c",
+      "pqc_lifecycle.h"
+    ],
+    "lock_profile": [
+      "pqc_lock_profile.c",
+      "pqc_lock_profile.h"
+    ],
+    "metrics": [
+      "pqc_metrics.c",
+      "pqc_metrics.h"
+    ],
+    "namespace": [
+      "pqc_namespace.c",
+      "pqc_namespace.h"
+    ],
+    "parallel_commit": [
+      "pqc_parallel_commit.c",
+      "pqc_parallel_commit.h"
+    ],
+    "posix": [
+      "pqc_posix.c",
+      "pqc_posix.h"
+    ],
+    "publish_xattr": [
+      "pqc_publish.c",
+      "pqc_publish.h"
+    ],
+    "qos_runtime": [
+      "pqc_qos.c",
+      "pqc_qos.h"
+    ],
+    "recovery": [
+      "pqc_recovery.c",
+      "pqc_recovery.h"
+    ],
+    "rekey": [
+      "pqc_rekey.c",
+      "pqc_rekey.h"
+    ],
+    "runtime": [
+      "pqc_runtime.c",
+      "pqc_runtime.h"
+    ],
+    "scheduler": [
+      "pqc_scheduler.c",
+      "pqc_scheduler.h"
+    ],
+    "selftest": [
+      "pqc_selftest.c",
+      "pqc_selftest.h"
+    ],
+    "state_table": [
+      "pqc_state.c",
+      "pqc_state.h"
+    ],
+    "storage_path": [
+      "pqc_storage_path.c",
+      "pqc_storage_path.h"
+    ],
+    "strict_publish": [
+      "pqc_strict_publish.c",
+      "pqc_strict_publish.h"
+    ],
+    "test_hooks": [
+      "pqc_test_hooks.c",
+      "pqc_test_hooks.h"
+    ],
+    "writeback": [
+      "pqc_writeback.c",
+      "pqc_writeback.h"
+    ],
+    "xattr": [
+      "pqc_xattr.c",
+      "pqc_xattr.h"
+    ]
+  },
+  "function_counts": {
+    "pqc_fd_context.c": 43,
+    "pqc_file_io.c": 25,
+    "pqc_file_lock.c": 2,
+    "pqc_flush_batch.c": 4,
+    "pqc_flush_crypto.c": 3,
+    "pqc_fuse.c": 25,
+    "pqc_lifecycle.c": 2,
+    "pqc_lock_profile.c": 33,
+    "pqc_main.c": 2,
+    "pqc_namespace.c": 10,
+    "pqc_qos.c": 16,
+    "pqc_rekey.c": 29,
+    "pqc_runtime.c": 8,
+    "pqc_scheduler.c": 15,
+    "pqc_storage_path.c": 3,
+    "pqc_strict_publish.c": 2,
+    "pqc_writeback.c": 12,
+    "pqc_xattr.c": 3
+  },
+  "generated_by": "code/experiments/build_refactor_inventory.py",
+  "generated_utc": "2026-06-30T03:30:02Z",
+  "inventory_evidence": {
+    "daemon_power_fault_campaign_json": "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json",
+    "durability_barriers_json": "artifacts/validation/refactor_inventory/durability_barriers.json",
+    "environment_variables_json": "artifacts/validation/refactor_inventory/environment_variables.json",
+    "fault_cutpoints_json": "artifacts/validation/refactor_inventory/fault_cutpoints.json",
+    "frozen_workload_contract_json": "artifacts/validation/frozen_workload_contract/frozen_workload_contract.json",
+    "generation_fault_matrix_json": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+    "lock_inventory_json": "artifacts/validation/refactor_inventory/lock_inventory.json",
+    "on_disk_state_json": "artifacts/validation/refactor_inventory/on_disk_state.json",
+    "parallel_commit_contract_json": "artifacts/validation/parallel_commit_contract/parallel_commit_contract.json",
+    "posix_scope_audit_json": "artifacts/validation/posix_scope_audit/posix_scope_audit.json",
+    "source_ownership_json": "artifacts/validation/refactor_inventory/source_ownership_map.json",
+    "source_ownership_md": "docs/architecture/source_ownership_map.md",
+    "strict_frozen_aegisq_json": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+    "worktree_freeze_json": "artifacts/validation/refactor_inventory/worktree_freeze.json"
+  },
+  "missing_parent_gate_evidence": [
+    {
+      "category": "baseline-comparison",
+      "item": "strict_frozen_aegisq_comparison_ready",
+      "reason": "strict warm-cache AEGIS-Q run exists, but matched comparison rows are not complete enough for a broad performance claim"
+    },
+    {
+      "category": "paper",
+      "item": "paper_text_audit",
+      "reason": "paper text has not been audited to prove mechanical decomposition introduced no new mechanism claim"
+    }
+  ],
+  "module_classification": [
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_anchor_worker.c",
+        "pqc_anchor_worker.h"
+      ],
+      "gate014_role": "background freshness-anchor worker boundary",
+      "module": "anchor_worker",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_checkpoint.c",
+        "pqc_checkpoint.h"
+      ],
+      "gate014_role": "checkpoint/generation reservation helper boundary",
+      "module": "checkpoint",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_config.c",
+        "pqc_config.h"
+      ],
+      "gate014_role": "centralized runtime configuration and artifact dump boundary",
+      "module": "config",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_crypto.c",
+        "pqc_crypto.h"
+      ],
+      "gate014_role": "AES-GCM data-block crypto boundary",
+      "module": "data_crypto",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_main.c",
+        "pqc_fuse.h"
+      ],
+      "gate014_role": "process entrypoint and FUSE operation table declaration",
+      "module": "entrypoint",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_fd_context.c",
+        "pqc_fd_context.h"
+      ],
+      "gate014_role": "per-open context and sidecar descriptor ownership",
+      "module": "fd_context",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_file_io.c",
+        "pqc_file_io.h"
+      ],
+      "gate014_role": "mounted read/write/fsync/flush/release callback body",
+      "module": "file_io",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_file_lock.c",
+        "pqc_file_lock.h"
+      ],
+      "gate014_role": "fcntl/flock passthrough boundary",
+      "module": "file_lock",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_flush_batch.c",
+        "pqc_flush_batch.h"
+      ],
+      "gate014_role": "write-buffer block batching helper",
+      "module": "flush_batch",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_flush_crypto.c",
+        "pqc_flush_crypto.h"
+      ],
+      "gate014_role": "flush-time crypto job wrapper",
+      "module": "flush_crypto",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 1,
+      "files": [
+        "pqc_format.h"
+      ],
+      "gate014_role": "central persistent-format constant/struct boundary",
+      "module": "format",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_journal.c",
+        "pqc_journal.h"
+      ],
+      "gate014_role": "strict mapping journal append/read helper",
+      "module": "journal",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_keyring.c",
+        "pqc_keyring.h"
+      ],
+      "gate014_role": "mount/per-file key envelope boundary",
+      "module": "keyring",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_lifecycle.c",
+        "pqc_lifecycle.h"
+      ],
+      "gate014_role": "FUSE init/destroy lifecycle boundary",
+      "module": "lifecycle",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_lock_profile.c",
+        "pqc_lock_profile.h"
+      ],
+      "gate014_role": "lock hold-time trace hook boundary",
+      "module": "lock_profile",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_metrics.c",
+        "pqc_metrics.h"
+      ],
+      "gate014_role": "trace/log/metrics helper boundary",
+      "module": "metrics",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_namespace.c",
+        "pqc_namespace.h"
+      ],
+      "gate014_role": "namespace and metadata callback body",
+      "module": "namespace",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_parallel_commit.c",
+        "pqc_parallel_commit.h"
+      ],
+      "gate014_role": "parallel commit coordinator boundary; not a paper claim by itself",
+      "module": "parallel_commit",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_posix.c",
+        "pqc_posix.h"
+      ],
+      "gate014_role": "lower filesystem path/syscall helper boundary",
+      "module": "posix",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_publish.c",
+        "pqc_publish.h"
+      ],
+      "gate014_role": "logical-size/checkpoint xattr publication helper",
+      "module": "publish_xattr",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_qos.c",
+        "pqc_qos.h"
+      ],
+      "gate014_role": "QoS throttle/runtime telemetry boundary",
+      "module": "qos_runtime",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_recovery.c",
+        "pqc_recovery.h"
+      ],
+      "gate014_role": "authenticated mapping recovery helper boundary",
+      "module": "recovery",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_rekey.c",
+        "pqc_rekey.h"
+      ],
+      "gate014_role": "background rekey queue boundary",
+      "module": "rekey",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_runtime.c",
+        "pqc_runtime.h"
+      ],
+      "gate014_role": "process runtime initialization/shutdown boundary",
+      "module": "runtime",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_scheduler.c",
+        "pqc_scheduler.h"
+      ],
+      "gate014_role": "CPU/GPU routing policy boundary",
+      "module": "scheduler",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_selftest.c",
+        "pqc_selftest.h"
+      ],
+      "gate014_role": "binary self-test boundary",
+      "module": "selftest",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_state.c",
+        "pqc_state.h"
+      ],
+      "gate014_role": "shared per-file publish-state table boundary",
+      "module": "state_table",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_storage_path.c",
+        "pqc_storage_path.h"
+      ],
+      "gate014_role": "storage-root path resolution and sidecar naming boundary",
+      "module": "storage_path",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_strict_publish.c",
+        "pqc_strict_publish.h"
+      ],
+      "gate014_role": "strict durable publication ordering boundary",
+      "module": "strict_publish",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_test_hooks.c",
+        "pqc_test_hooks.h"
+      ],
+      "gate014_role": "single fault/pause cutpoint interface",
+      "module": "test_hooks",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_writeback.c",
+        "pqc_writeback.h"
+      ],
+      "gate014_role": "writeback snapshot/prepare/publish orchestration boundary",
+      "module": "writeback",
+      "status": "extracted-module-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "pqc_xattr.c",
+        "pqc_xattr.h"
+      ],
+      "gate014_role": "xattr callback policy boundary",
+      "module": "xattr",
+      "status": "extracted-module-inventory"
+    }
+  ],
+  "negative_claim_guard": "This artifact does not justify KDF-strength, crash-safety, power-loss, performance, epoch-mode, group-commit, fine-grained locking, parallel-commit, eBPF/io_uring bypass, GPUDirect, zero-copy, broad POSIX, deployment, QoS superiority, or clean architecture claims.",
+  "not_closed": [
+    "Gate 0.14 code/artifact evidence has advanced: POSIX audit, generation matrix, daemon matrix, frozen workload contract, and strict warm-cache AEGIS-Q frozen benchmark pass after decomposition. The checklist remains open until paper text and the final negative-claim audit prove no new mechanism or broad filesystem claim was added.",
+    "Gate 0.15 is not closed: a narrow production-mounted thread/process-count lock-profile sweep, repeated same-file/disjoint-file lifecycle phases, external OS-process lifecycle phases, a strace profile of client-visible blocking syscalls, and one paused-publish reader-visibility probe now exist, and strict full-tier writeback prepare/crypto/durable publication, authenticated-read recovery, truncate/fallocate metadata publication, and release resource teardown no longer run under fd_lock or commit_lock on their hot paths, but long-duration client-count sweep, scheduler off-CPU profile, and reserved-generation fault expansion are still missing.",
+    "Gate 0.16 parent closure is still blocked: sharded leader/follower coordinator, epoch-path integration, telemetry, fairness/starvation, and replay-order evidence exist, but broad closure still requires deliberate paper text and negative-claim guard updates.",
+    "Gate 0.9 parent closure is still blocked: strict/epoch publication code, redo-log, group sync, replay, fault matrix, measurement, and closeout artifacts exist, but broad closure still requires paper text and negative-claim guard updates.",
+    "The dirty-sidecar sync dedup patch remains pending-unclaimed because it is not isolated by before/after benchmark, syscall/fdatasync attribution, dirty-flag fault matrix, or paper negative-claim audit."
+  ],
+  "phase": "Gate 0.14 mechanical decomposition",
+  "preserved_behavior_contract": [
+    "No epoch redo log, group commit, sharded queue, eBPF/io_uring path, GPUDirect path, zero-copy path, or KDF upgrade is introduced by mechanical decomposition.",
+    "Strict writeback snapshots the live fd write buffer under fd_lock, clears it, marks a pending job, and runs full-tier prepare/crypto outside fd_lock and commit_lock after a persistent generation reservation and publish-ticket turn acquisition.",
+    "The current strict durable publication ordering remains owned by pqc_strict_publish_commit and is invoked from pqc_writeback_flush_locked while the publish turn is current.",
+    "Existing data_write_after_pwrite, data_fsync_after, journal_append_after, journal_fsync_after, logical_size_xattr_after, checkpoint_xattr_after, and fsync_before_return cutpoint names remain production-visible; generation_reservation_xattr_after is added for the reservation high-water boundary.",
+    "AES-GCM block nonce, AAD, tag, journal digest, metadata HMAC, checkpoint HMAC, logical-size xattr, storage-root path resolution, hidden sidecar, internal xattr filtering, SQLite WAL/SHM redirect, and QoS xattr parsing behavior are preserved by this extraction.",
+    "xattr callback behavior is preserved while moving tier, QoS, freshness-window, and internal-xattr filtering policy into pqc_xattr.[ch].",
+    "Namespace and metadata callbacks preserve hidden sidecar filtering, logical-size getattr, sidecar unlink cleanup, explicit rename/fsyncdir rejection, and utimens passthrough while moving into pqc_namespace.[ch].",
+    "Mounted file I/O callbacks preserve open/create key-envelope restoration, read authentication, write coalescing, strict fsync/flush/release dirty-sidecar behavior, truncate/fallocate logical-size updates, and shared file-state logical-size updates while moving into pqc_file_io.[ch].",
+    "File lock callbacks preserve fcntl/flock passthrough behavior while moving into pqc_file_lock.[ch].",
+    "FUSE init/destroy lifecycle preserves cache capability choices and shutdown ordering while moving into pqc_lifecycle.[ch].",
+    "pqc_fuse.c remains the FUSE callback adapter and still owns high-level callback sequencing; extracted modules do not imply a clean architecture claim until behavior and workload gates close."
+  ],
+  "schema_version": 3,
+  "scope": "Records current behavior-preserving ownership extraction before epoch mode, fine-grained lock changes, or new paper claims. This manifest is generated from the current source ownership map and does not claim POSIX, crash, performance, or publication-protocol closure.",
+  "source_layout": {
+    "authoritative_source_root": "code/",
+    "experiment_source_root": "code/experiments/",
+    "legacy_experiments_path": "removed; use code/experiments/",
+    "physical_experiments_source_files_allowed": false,
+    "production_native_source_root": "code/",
+    "root_source_files_allowed": false
+  },
+  "summary": {
+    "all_global_state_mapped": true,
+    "all_production_functions_mapped": true,
+    "ambiguous_function_count": 0,
+    "ambiguous_global_state_count": 0,
+    "extracted_module_count": 32,
+    "extracted_module_file_count": 63,
+    "gate014_code_artifact_evidence_pass": true,
+    "missing_parent_gate_evidence_count": 2,
+    "missing_required_behavior_evidence": [],
+    "ownership_blocker_count": 0,
+    "parent_checklist_closed": false,
+    "pqc_fuse_adapter_function_count": 25,
+    "production_function_count": 703,
+    "production_source_file_count": 92,
+    "required_behavior_evidence_count": 5,
+    "required_behavior_evidence_pass_count": 5,
+    "submilestone_status": "mechanical-decomposition-evidence-refreshed"
+  },
+  "verification_contract": [
+    "cat SUBMISSION_CHECKLIST.md",
+    "python3 -m py_compile code/experiments/build_refactor_inventory.py",
+    "cmake -S . -B build",
+    "cmake --build build --parallel 2",
+    "ctest --test-dir build --output-on-failure",
+    "build/pqc_fuse --scheduler-smoke",
+    "build/pqc_fuse --admission-telemetry-smoke",
+    "python3 code/experiments/run_posix_scope_audit.py --out-dir artifacts/validation/posix_scope_audit",
+    "python3 code/experiments/run_generation_fault_matrix.py --out-dir artifacts/validation/generation_fault_matrix",
+    "python3 code/experiments/run_daemon_power_fault_matrix.py --out-dir artifacts/validation/daemon_power_fault_campaign",
+    "python3 code/experiments/build_frozen_workload_contract.py --out-dir artifacts/validation/frozen_workload_contract",
+    "python3 code/experiments/run_frozen_aegisq_contract.py --out artifacts/validation/frozen_aegisq_contract --warmup-runs 1 --repetitions 5 --fio-timeout-s 180 --overwrite",
+    "python3 code/experiments/run_concurrency_contract_smoke.py --out artifacts/validation/concurrency_contract --iterations 4 --block-size 4096 --thread-counts 1,2,4 --phase-timeout-s 30 --overwrite",
+    "python3 code/experiments/build_parallel_commit_contract.py",
+    "python3 code/experiments/build_refactor_inventory.py",
+    "jq -e . artifacts/validation/refactor_inventory/*.json artifacts/validation/parallel_commit_contract/*.json >/dev/null",
+    "git diff --check --"
+  ]
+}

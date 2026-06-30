@@ -10,7 +10,7 @@
 | --- | --- | --- | ---: | ---: | ---: |
 | authenticated block format | `E1-generation-and-envelope-authentication` | RQ1 | `True` | `True` | `True` |
 | D/J/C publication | `E2-oracle-labeled-publication-cutpoints` | RQ4 | `True` | `True` | `True` |
-| TPM freshness | `E3-hardware-freshness-verdict-matrix` | RQ4 | `True` | `True` | `True` |
+| TPM replay check | `E3-hardware-freshness-verdict-matrix` | RQ4 | `True` | `True` | `True` |
 | QoS controller | `E4-sqlite-recovery-and-controller-sensitivity` | RQ3/RQ5 | `True` | `True` | `True` |
 | CPU/GPU placement | `E5-data-plane-placement-asymmetry` | RQ2/RQ5 | `True` | `True` | `True` |
 | optional ML-KEM batch lane | `E6-mounted-open-file-rekey-workflow` | RQ5 | `True` | `True` | `True` |
@@ -28,6 +28,5 @@
 | `tab:impl_boundaries` | implementation boundary summary | `True` | `True` |
 | `tab:threat_boundary` | security threat boundary | `True` | `True` |
 | `tab:benchmark_workloads` | evaluation provenance | `True` | `True` |
-| `fig:baseline_comparison` | placement evidence | `True` | `True` |
-| `tab:recovery_scope` | freshness/recovery interpretation | `True` | `True` |
+| `fig:evaluation_summary` | evaluation spine | `True` | `True` |
 | `tab:qos_sqlite_recovery` | SQLite QoS hero result | `True` | `True` |

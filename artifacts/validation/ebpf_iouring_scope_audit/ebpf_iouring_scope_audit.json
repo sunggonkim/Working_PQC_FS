@@ -3,28 +3,15 @@
   "decision": "scoped_out_no_mounted_ebpf_iouring_completion_bypass",
   "fuse_source": {
     "fuse_source_pass": true,
-    "mentions": [
-      {
-        "context": "prefetch, and stream synchronization * only within executor-owned buffers. They do not implement NVMe DMA into * managed memory, cudaHostRegister/GUP pinning, or an io_uring/eBPF path. * \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */ /** * Initialize the PQC subsystem and its optional ML-KEM-768 helper key",
-        "line": 1945,
-        "match": "io_uring",
-        "scoped": true
-      },
-      {
-        "context": "and stream synchronization * only within executor-owned buffers. They do not implement NVMe DMA into * managed memory, cudaHostRegister/GUP pinning, or an io_uring/eBPF path. * \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */ /** * Initialize the PQC subsystem and its optional ML-KEM-768 helper keypair.",
-        "line": 1945,
-        "match": "eBPF",
-        "scoped": true
-      }
-    ],
-    "path": "pqc_fuse.c",
-    "scope": "Mounted FUSE source contains only an explicit no-io_uring/eBPF-path boundary.",
-    "sha256": "a6a848f9f2a81a5af596a414a99e50e69aaabcec686afae5d4193928c6f873d5"
+    "mentions": [],
+    "path": "code/frontend/pqc_fuse.c",
+    "scope": "Mounted FUSE source contains no io_uring/eBPF mounted completion path.",
+    "sha256": "840c04897721a74d83b9d6fbf4a59c4e5a533fc7fc8c03dc54a47076763140b2"
   },
   "iouring_probe": {
     "checks": [
       {
-        "detail": "experiments/bench_io_uring_ebpf.cu",
+        "detail": "code/experiments/bench_io_uring_ebpf.cu",
         "name": "probe_source_exists",
         "passed": true
       },
@@ -40,7 +27,7 @@
       }
     ],
     "iouring_probe_pass": true,
-    "path": "experiments/bench_io_uring_ebpf.cu",
+    "path": "code/experiments/bench_io_uring_ebpf.cu",
     "scope": "Standalone prototype/simulation source; not a paper result.",
     "sha256": "69de8123ae49774a92c156a96daf776c14457e88184736786705affd8f58d76b"
   },
@@ -48,52 +35,34 @@
   "paper_scan": {
     "high_risk_mentions": [
       {
-        "context": "hat can fail closed when replayed state no longer matches protected freshness state. This is a narrower and more defensible thesis than claiming GPUDirect-like storage, eBPF completion bypass, or physical side-channel resistance. It is also stronger than a microbenchmark-only story because it ties placement decisions to format invariants an",
+        "context": "page_qos}. \\end{enumerate} The paper is conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack. The rest of",
         "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
         "file": "Paper/1_Introduction.tex",
-        "line": 27,
+        "line": 52,
         "match": "eBPF",
         "pattern": "ebpf",
         "scoped": true
       },
       {
-        "context": "d{enumerate} The paper is intentionally conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack. These exclu",
-        "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
-        "file": "Paper/1_Introduction.tex",
-        "line": 39,
-        "match": "eBPF",
-        "pattern": "ebpf",
-        "scoped": true
-      },
-      {
-        "context": "claim. \\end{enumerate} The paper is intentionally conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack. These",
+        "context": "{fig:first_page_qos}. \\end{enumerate} The paper is conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack. The r",
         "explanation": "io_uring wording must not imply a mounted completion-bypass path.",
         "file": "Paper/1_Introduction.tex",
-        "line": 39,
+        "line": 52,
         "match": "io\\_uring",
         "pattern": "io_uring",
         "scoped": true
       },
       {
-        "context": "an fail closed when replayed state no longer matches protected freshness state. This is a narrower and more defensible thesis than claiming GPUDirect-like storage, eBPF completion bypass, or physical side-channel resistance. It is also stronger than a microbenchmark-only story because it ties placement decisions to format invariants and recovery behavio",
+        "context": "qos}. \\end{enumerate} The paper is conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack. The rest of the paper follows",
         "explanation": "Completion-bypass language must be explicitly rejected or future work.",
         "file": "Paper/1_Introduction.tex",
-        "line": 27,
+        "line": 52,
         "match": "completion bypass",
         "pattern": "completion_bypass",
         "scoped": true
       },
       {
-        "context": "merate} The paper is intentionally conservative about unsupported mechanisms. It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-loss crash certification, or portability beyond the tested stack. These exclusions are not a su",
-        "explanation": "Completion-bypass language must be explicitly rejected or future work.",
-        "file": "Paper/1_Introduction.tex",
-        "line": 39,
-        "match": "completion bypass",
-        "pattern": "completion_bypass",
-        "scoped": true
-      },
-      {
-        "context": "ashed arrows denote optional accelerator or externally provisioned hardware paths. The final revision does not claim verified \\texttt{O\\_DIRECT} UMA pinning, a completed eBPF completion path, or a closed-loop hardware-QoS controller.} \\Description{Architecture diagram of the AEGIS-Q FUSE data path, key envelope, checkpoint, optional CUDA ex",
+        "context": "ests; orange dashed arrows denote optional accelerator or externally provisioned hardware paths. This revision does not claim \\texttt{O\\_DIRECT} UMA pinning, a completed eBPF completion path, or a closed-loop hardware-QoS controller.} \\Description{Architecture diagram of the AEGIS-Q FUSE data path, key envelope, checkpoint, optional CUDA ex",
         "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
         "file": "Paper/3_Design.tex",
         "line": 35,
@@ -102,7 +71,7 @@
         "scoped": true
       },
       {
-        "context": "tor-local access checks; not a verified storage-DMA path.\\\\ \\texttt{pread}/\\texttt{pwrite} sidecars & Verified & Backing ciphertext and journal use ordinary POSIX I/O.\\\\ eBPF tracepoint notification & Not claimed & No final eBPF notification path is part of the verified implementation.\\\\ Hardware QoS telemetry & Prototype-only & \\texttt{tegra",
+        "context": "nd executor-local access checks; not a storage-DMA path.\\\\ \\texttt{pread}/\\texttt{pwrite} sidecars & Exercised & Backing ciphertext and journal use ordinary POSIX I/O.\\\\ eBPF tracepoint notification & Not claimed & No eBPF notification path is part of the mounted implementation.\\\\ QoS telemetry & SQLite recovery only & Workload/CUPTI traces c",
         "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
         "file": "Paper/3_Design.tex",
         "line": 122,
@@ -111,7 +80,7 @@
         "scoped": true
       },
       {
-        "context": "th.\\\\ \\texttt{pread}/\\texttt{pwrite} sidecars & Verified & Backing ciphertext and journal use ordinary POSIX I/O.\\\\ eBPF tracepoint notification & Not claimed & No final eBPF notification path is part of the verified implementation.\\\\ Hardware QoS telemetry & Prototype-only & \\texttt{tegrastats}/CUPTI samples can drive mounted-FUSE throttling",
+        "context": "MA path.\\\\ \\texttt{pread}/\\texttt{pwrite} sidecars & Exercised & Backing ciphertext and journal use ordinary POSIX I/O.\\\\ eBPF tracepoint notification & Not claimed & No eBPF notification path is part of the mounted implementation.\\\\ QoS telemetry & SQLite recovery only & Workload/CUPTI traces can drive mounted-FUSE throttling; no foreground",
         "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
         "file": "Paper/3_Design.tex",
         "line": 122,
@@ -120,16 +89,16 @@
         "scoped": true
       },
       {
-        "context": "} or CUPTI PM samples drive mounted-FUSE throttling in the same execution. The paper still does not claim a validated foreground-inference p99 controller or a completed fast-notification bypass path. Any such extension would need its own measured workload, trace capture, and failure analysis. The producer-facing interface is deliberately conservative. A job",
+        "context": "2~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling elastic writes, not by claiming foreground-inference recovery or completion bypass. The producer-facing interface is conservative. A job enters the elastic lane only when its size and batch shape make GPU execution plausible and the producer supplies",
         "explanation": "Completion-bypass language must be explicitly rejected or future work.",
         "file": "Paper/3_Design.tex",
         "line": 131,
-        "match": "fast-notification bypass",
+        "match": "completion bypass",
         "pattern": "completion_bypass",
         "scoped": true
       },
       {
-        "context": "ocal access checks; not a verified storage-DMA path.\\\\ \\texttt{pread}/\\texttt{pwrite} sidecars & Verified & Backing ciphertext and journal use ordinary POSIX I/O.\\\\ eBPF tracepoint notification & Not claimed & No final eBPF notification path is part of the verified implementation.\\\\ Hardware QoS telemetry & Prototype-only & \\texttt{tegrastats}/CUPTI samples can",
+        "context": "ecutor-local access checks; not a storage-DMA path.\\\\ \\texttt{pread}/\\texttt{pwrite} sidecars & Exercised & Backing ciphertext and journal use ordinary POSIX I/O.\\\\ eBPF tracepoint notification & Not claimed & No eBPF notification path is part of the mounted implementation.\\\\ QoS telemetry & SQLite recovery only & Workload/CUPTI traces can drive mounted-FUSE th",
         "explanation": "Tracepoint-notification language must say it is not claimed.",
         "file": "Paper/3_Design.tex",
         "line": 122,
@@ -138,100 +107,64 @@
         "scoped": true
       },
       {
-        "context": "lesystem comparison\\\\ Managed-memory smoke & Managed allocation and host/device prefetch calls complete & Verified storage-DMA or O\\_DIRECT-to-UVM semantics\\\\ Standalone eBPF tracepoint & Raw \\texttt{nvme\\_complete\\_rq} histogram artifact is retained & No mounted eBPF/io\\_uring notification path is claimed \\\\ Hardware QoS Daemon & Scheduler p",
+        "context": "n throughput rows and cold-cache rows remain unavailable\\\\ RQ2/RQ5 UMA & Managed allocation and host/device prefetch complete & Storage-DMA or O\\_DIRECT-to-UVM\\\\ RQ2/RQ5 eBPF & \\texttt{nvme\\_complete\\_rq} diagnostic histogram & Mounted eBPF/io\\_uring path\\\\ RQ3 mounted telemetry & Telemetry reaches the FUSE write-throttle path & End-to-end AI",
         "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
         "file": "Paper/4_Evaluation.tex",
-        "line": 35,
+        "line": 37,
         "match": "eBPF",
         "pattern": "ebpf",
         "scoped": true
       },
       {
-        "context": "complete & Verified storage-DMA or O\\_DIRECT-to-UVM semantics\\\\ Standalone eBPF tracepoint & Raw \\texttt{nvme\\_complete\\_rq} histogram artifact is retained & No mounted eBPF/io\\_uring notification path is claimed \\\\ Hardware QoS Daemon & Scheduler prototype and telemetry scripts exist & No validated end-to-end AI p99 latency controller\\\\ Con",
+        "context": "UMA & Managed allocation and host/device prefetch complete & Storage-DMA or O\\_DIRECT-to-UVM\\\\ RQ2/RQ5 eBPF & \\texttt{nvme\\_complete\\_rq} diagnostic histogram & Mounted eBPF/io\\_uring path\\\\ RQ3 mounted telemetry & Telemetry reaches the FUSE write-throttle path & End-to-end AI p99 controller\\\\ RQ3 stress & 4-writer tail-latency probe under p",
         "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
         "file": "Paper/4_Evaluation.tex",
-        "line": 35,
+        "line": 37,
         "match": "eBPF",
         "pattern": "ebpf",
         "scoped": true
       },
       {
-        "context": "lete & Verified storage-DMA or O\\_DIRECT-to-UVM semantics\\\\ Standalone eBPF tracepoint & Raw \\texttt{nvme\\_complete\\_rq} histogram artifact is retained & No mounted eBPF/io\\_uring notification path is claimed \\\\ Hardware QoS Daemon & Scheduler prototype and telemetry scripts exist & No validated end-to-end AI p99 latency controller\\\\ Concurrent-pr",
+        "context": "& Managed allocation and host/device prefetch complete & Storage-DMA or O\\_DIRECT-to-UVM\\\\ RQ2/RQ5 eBPF & \\texttt{nvme\\_complete\\_rq} diagnostic histogram & Mounted eBPF/io\\_uring path\\\\ RQ3 mounted telemetry & Telemetry reaches the FUSE write-throttle path & End-to-end AI p99 controller\\\\ RQ3 stress & 4-writer tail-latency probe under pressure &",
         "explanation": "io_uring wording must not imply a mounted completion-bypass path.",
         "file": "Paper/4_Evaluation.tex",
-        "line": 35,
+        "line": 37,
         "match": "io\\_uring",
         "pattern": "io_uring",
         "scoped": true
       },
       {
-        "context": "that must be assessed separately from an ordinary FUSE \\texttt{pread}/\\texttt{pwrite} path. The initial AEGIS-Q draft incorrectly borrowed their vocabulary to imply an eBPF/io\\_uring/UVM DMA route. This revision does not do so. The broader edge setting has genuine shared-resource challenges~\\cite{breaking_edge}. FlashNeuron also illustra",
-        "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
-        "file": "Paper/5_Related_Works.tex",
-        "line": 13,
-        "match": "eBPF",
-        "pattern": "ebpf",
-        "scoped": true
-      },
-      {
-        "context": "must be assessed separately from an ordinary FUSE \\texttt{pread}/\\texttt{pwrite} path. The initial AEGIS-Q draft incorrectly borrowed their vocabulary to imply an eBPF/io\\_uring/UVM DMA route. This revision does not do so. The broader edge setting has genuine shared-resource challenges~\\cite{breaking_edge}. FlashNeuron also illustrates why st",
-        "explanation": "io_uring wording must not imply a mounted completion-bypass path.",
-        "file": "Paper/5_Related_Works.tex",
-        "line": 13,
-        "match": "io\\_uring",
-        "pattern": "io_uring",
-        "scoped": true
-      },
-      {
-        "context": "-file envelope refresh by 1.158$\\times$ when slack is available. Equally important, this revision removes unsupported claims. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, PCR-bound persistent freshness, power-loss crash certification, foreground AI p99 recovery, or portability beyon",
-        "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
-        "file": "Paper/6_Conclusion.tex",
-        "line": 6,
-        "match": "eBPF",
-        "pattern": "ebpf",
-        "scoped": true
-      },
-      {
-        "context": "envelope refresh by 1.158$\\times$ when slack is available. Equally important, this revision removes unsupported claims. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, PCR-bound persistent freshness, power-loss crash certification, foreground AI p99 recovery, or portability beyond the test",
-        "explanation": "io_uring wording must not imply a mounted completion-bypass path.",
-        "file": "Paper/6_Conclusion.tex",
-        "line": 6,
-        "match": "io\\_uring",
-        "pattern": "io_uring",
-        "scoped": true
-      },
-      {
-        "context": "refresh by 1.158$\\times$ when slack is available. Equally important, this revision removes unsupported claims. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, PCR-bound persistent freshness, power-loss crash certification, foreground AI p99 recovery, or portability beyond the tested stack. A futur",
+        "context": "m pressure reaching the mounted daemon: they record 8 and 5 daemon-throttled flushes, respectively. This remains wiring evidence rather than TensorRT/AI p99 recovery or fast-notification bypass. The app-level result uses SQLite transaction latency. Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and one-run kernel QoS controls. AEGIS-Q repo",
         "explanation": "Completion-bypass language must be explicitly rejected or future work.",
-        "file": "Paper/6_Conclusion.tex",
-        "line": 6,
-        "match": "completion bypass",
+        "file": "Paper/4_Evaluation.tex",
+        "line": 106,
+        "match": "fast-notification bypass",
         "pattern": "completion_bypass",
         "scoped": true
       },
       {
-        "context": "e, SQLite syscall-exact app-crash timing, and CUPTI/tegrastats mounted-throttle wiring. The paper deliberately does not claim direct NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, physical side-channel resistance, PCR-bound persistent freshness, power-loss certification, foreground AI-p99 restoration, or portability beyond the m",
+        "context": "Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability. The lesso",
         "explanation": "eBPF wording must be negated, scoped to a standalone tracepoint, or future work.",
-        "file": "Paper/main.tex",
-        "line": 89,
+        "file": "Paper/6_Conclusion.tex",
+        "line": 4,
         "match": "eBPF",
         "pattern": "ebpf",
         "scoped": true
       },
       {
-        "context": "ery evidence, SQLite syscall-exact app-crash timing, and CUPTI/tegrastats mounted-throttle wiring. The paper deliberately does not claim direct NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, physical side-channel resistance, PCR-bound persistent freshness, power-loss certification, foreground AI-p99 restoration, or portability beyond",
+        "context": "AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability. The lesson is that",
         "explanation": "io_uring wording must not imply a mounted completion-bypass path.",
-        "file": "Paper/main.tex",
-        "line": 89,
+        "file": "Paper/6_Conclusion.tex",
+        "line": 4,
         "match": "io\\_uring",
         "pattern": "io_uring",
         "scoped": true
       },
       {
-        "context": "Lite syscall-exact app-crash timing, and CUPTI/tegrastats mounted-throttle wiring. The paper deliberately does not claim direct NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, physical side-channel resistance, PCR-bound persistent freshness, power-loss certification, foreground AI-p99 restoration, or portability beyond the measured stack. \\en",
+        "context": "eports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability. The lesson is that edge secure storag",
         "explanation": "Completion-bypass language must be explicitly rejected or future work.",
-        "file": "Paper/main.tex",
-        "line": 89,
+        "file": "Paper/6_Conclusion.tex",
+        "line": 4,
         "match": "completion bypass",
         "pattern": "completion_bypass",
         "scoped": true
@@ -247,21 +180,22 @@
       "Paper/6_Conclusion.tex",
       "Paper/7_Implementation_Details.tex",
       "Paper/8_Security_Analysis.tex",
+      "Paper/generated_qos_recovery_table.tex",
       "Paper/main.tex"
     ],
     "paper_scope_pass": true,
     "required_scope_phrases": [
       {
         "found": true,
-        "phrase": "does not claim direct NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass"
-      },
-      {
-        "found": true,
         "phrase": "does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass"
       },
       {
         "found": true,
-        "phrase": "No final eBPF notification path"
+        "phrase": "Mounted eBPF/io\\_uring path"
+      },
+      {
+        "found": true,
+        "phrase": "No eBPF notification path is part of the mounted implementation"
       },
       {
         "found": true,
@@ -287,7 +221,7 @@
         "passed": true
       },
       {
-        "detail": "experiments/trace_nvme_lat.bt",
+        "detail": "code/experiments/trace_nvme_lat.bt",
         "name": "tracepoint_script_targets_nvme_completion",
         "passed": true
       },

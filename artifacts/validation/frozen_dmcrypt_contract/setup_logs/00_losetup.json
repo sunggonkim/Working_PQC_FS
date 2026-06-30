@@ -1,0 +1,20 @@
+{
+  "name": "losetup",
+  "result": {
+    "argv": [
+      "sudo",
+      "-S",
+      "-p",
+      "",
+      "losetup",
+      "--find",
+      "--show",
+      "/tmp/dmcrypt_frozen_root_khmoav28/dmcrypt.img"
+    ],
+    "available": true,
+    "password_supplied": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "/dev/loop9"
+  }
+}

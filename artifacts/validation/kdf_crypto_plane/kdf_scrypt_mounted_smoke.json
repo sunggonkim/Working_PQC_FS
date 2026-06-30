@@ -1,0 +1,81 @@
+{
+  "checks": {
+    "correct_remount_read_matches": true,
+    "initial_mount_started": true,
+    "kdf_hidden_initial": true,
+    "kdf_hidden_remount": true,
+    "kdf_metadata_exists": true,
+    "kdf_metadata_uses_scrypt": true,
+    "kdf_metadata_valid": true,
+    "kdf_salt_nonzero": true,
+    "source_checks_pass": true,
+    "wrong_password_fails_closed": true
+  },
+  "generated_by": "code/experiments/run_kdf_scrypt_mounted_smoke.py",
+  "generated_utc": "2026-06-28T23:19:55Z",
+  "initial_listing": [
+    "secret.bin"
+  ],
+  "kdf_metadata": {
+    "algorithm": 2,
+    "digest_valid": true,
+    "exists": true,
+    "magic_hex": "0x5051434b44463131",
+    "reserved": 0,
+    "salt_len": 32,
+    "salt_nonzero": true,
+    "salt_sha256": "13eafdad783bce9ad6ab4e8b04dcd562a98a5cd262e1568ed6bfe8a63a1a24e4",
+    "scrypt_maxmem": 67108864,
+    "scrypt_n": 32768,
+    "scrypt_p": 1,
+    "scrypt_r": 8,
+    "size": 112,
+    "valid": true,
+    "version": 1
+  },
+  "kdf_metadata_path": "/tmp/aegisq_kdf_scrypt_9tl0qajx/store/.pqc_kdf",
+  "mount_dir": "/tmp/aegisq_kdf_scrypt_9tl0qajx/mnt",
+  "overall_pass": true,
+  "remount_listing": [
+    "secret.bin"
+  ],
+  "runs": [
+    {
+      "label": "initial",
+      "mounted": true,
+      "returncode": -2,
+      "stderr": "artifacts/validation/kdf_crypto_plane/initial.stderr.txt",
+      "stdout": "artifacts/validation/kdf_crypto_plane/initial.stdout.txt"
+    },
+    {
+      "label": "remount_correct",
+      "mounted": true,
+      "read_error": "",
+      "returncode": -2,
+      "stderr": "artifacts/validation/kdf_crypto_plane/remount_correct.stderr.txt",
+      "stdout": "artifacts/validation/kdf_crypto_plane/remount_correct.stdout.txt"
+    },
+    {
+      "label": "remount_wrong_password",
+      "mounted": true,
+      "read_error": "errno=129",
+      "read_failed": true,
+      "returncode": -2,
+      "stderr": "artifacts/validation/kdf_crypto_plane/remount_wrong_password.stderr.txt",
+      "stdout": "artifacts/validation/kdf_crypto_plane/remount_wrong_password.stdout.txt"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "D1-S1 mounted smoke for production scrypt KDF metadata.  It does not close the full D1 paper/security gate.",
+  "source_checks": {
+    "kdf_filename_constant_present": true,
+    "kdf_metadata_format_present": true,
+    "legacy_pbkdf2_compatibility_present": true,
+    "metadata_hidden_from_path_ops": true,
+    "metadata_hidden_from_readdir": true,
+    "runtime_reports_kdf_name": true,
+    "scrypt_algorithm_constant_present": true,
+    "scrypt_derivation_present": true
+  },
+  "storage_dir": "/tmp/aegisq_kdf_scrypt_9tl0qajx/store"
+}

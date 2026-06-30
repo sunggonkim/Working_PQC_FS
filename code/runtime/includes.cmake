@@ -1,0 +1,3 @@
+set(PQC_RUNTIME_INCLUDE_DIRS
+    ${CODE_DIR}/runtime
+)

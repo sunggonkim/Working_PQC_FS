@@ -1,0 +1,457 @@
+{
+  "artifact": "o4_energy_thermal_result",
+  "checks": {
+    "checklist_o4_done": true,
+    "frozen_rows_present": true,
+    "keyplane_log_present": true,
+    "paper_mentions_o4": true,
+    "paper_no_energy_efficiency_win_claim": true,
+    "sqlite_log_present": true
+  },
+  "logs": {
+    "frozen_aegisq_contract": {
+      "estimated_duration_s": 420.0,
+      "estimated_vin_energy_j": 11932.803,
+      "interval_ms": 500,
+      "line_count": 840,
+      "path": "artifacts/validation/frozen_aegisq_contract/thermal_tegrastats.log",
+      "power_mw": {
+        "VDD_CPU_SOC_MSS": {
+          "max": 9896.0,
+          "mean": 9452.385714285714,
+          "p95": 9500.0,
+          "samples": 840
+        },
+        "VDD_GPU": {
+          "max": 5143.0,
+          "mean": 4680.113095238095,
+          "p95": 4748.0,
+          "samples": 840
+        },
+        "VIN": {
+          "max": 35022.0,
+          "mean": 28411.435714285715,
+          "p95": 29788.7,
+          "samples": 840
+        },
+        "VIN_SYS_5V0": {
+          "max": 6705.0,
+          "mean": 6417.097619047619,
+          "p95": 6492.0,
+          "samples": 840
+        }
+      },
+      "present": true,
+      "role": "strict AEGIS-Q frozen contract",
+      "temperature_c": {
+        "cpu": {
+          "max": 47.531,
+          "mean": 45.7679369047619,
+          "p95": 46.937,
+          "samples": 840
+        },
+        "gpu": {
+          "max": 46.812,
+          "mean": 46.56730119047619,
+          "p95": 46.718,
+          "samples": 840
+        },
+        "soc012": {
+          "max": 49.0,
+          "mean": 46.059583333333336,
+          "p95": 47.687,
+          "samples": 840
+        },
+        "soc345": {
+          "max": 44.531,
+          "mean": 44.29943333333333,
+          "p95": 44.468,
+          "samples": 840
+        },
+        "tj": {
+          "max": 49.0,
+          "mean": 46.71230119047619,
+          "p95": 47.687,
+          "samples": 840
+        }
+      }
+    },
+    "frozen_dmcrypt_contract": {
+      "estimated_duration_s": 419.5,
+      "estimated_vin_energy_j": 11487.812,
+      "interval_ms": 500,
+      "line_count": 839,
+      "path": "artifacts/validation/frozen_dmcrypt_contract/thermal_tegrastats.log",
+      "power_mw": {
+        "VDD_CPU_SOC_MSS": {
+          "max": 9900.0,
+          "mean": 8596.834326579261,
+          "p95": 8712.0,
+          "samples": 839
+        },
+        "VDD_GPU": {
+          "max": 4750.0,
+          "mean": 4360.135876042908,
+          "p95": 4354.0,
+          "samples": 839
+        },
+        "VIN": {
+          "max": 32104.0,
+          "mean": 27384.53396901073,
+          "p95": 29364.199999999997,
+          "samples": 839
+        },
+        "VIN_SYS_5V0": {
+          "max": 6908.0,
+          "mean": 6461.961859356376,
+          "p95": 6492.0,
+          "samples": 839
+        }
+      },
+      "present": true,
+      "role": "dm-crypt frozen contract",
+      "temperature_c": {
+        "cpu": {
+          "max": 42.562,
+          "mean": 40.33465911799762,
+          "p95": 40.906,
+          "samples": 839
+        },
+        "gpu": {
+          "max": 41.937,
+          "mean": 41.36526817640048,
+          "p95": 41.812,
+          "samples": 839
+        },
+        "soc012": {
+          "max": 41.875,
+          "mean": 40.642567342073896,
+          "p95": 41.343,
+          "samples": 839
+        },
+        "soc345": {
+          "max": 39.875,
+          "mean": 39.37228247914184,
+          "p95": 39.812,
+          "samples": 839
+        },
+        "tj": {
+          "max": 42.562,
+          "mean": 41.370363528009534,
+          "p95": 41.812,
+          "samples": 839
+        }
+      }
+    },
+    "frozen_gocryptfs_contract": {
+      "estimated_duration_s": 411.6,
+      "estimated_vin_energy_j": 11498.2214,
+      "interval_ms": 100,
+      "line_count": 4116,
+      "path": "artifacts/validation/frozen_gocryptfs_contract/thermal_tegrastats.log",
+      "power_mw": {
+        "VDD_CPU_SOC_MSS": {
+          "max": 9896.0,
+          "mean": 8547.927113702624,
+          "p95": 8708.0,
+          "samples": 4116
+        },
+        "VDD_GPU": {
+          "max": 4750.0,
+          "mean": 4734.43488824101,
+          "p95": 4748.0,
+          "samples": 4116
+        },
+        "VIN": {
+          "max": 40748.0,
+          "mean": 27935.426141885324,
+          "p95": 29726.5,
+          "samples": 4116
+        },
+        "VIN_SYS_5V0": {
+          "max": 7010.0,
+          "mean": 6580.428814382896,
+          "p95": 6705.0,
+          "samples": 4116
+        }
+      },
+      "present": true,
+      "role": "gocryptfs frozen contract",
+      "temperature_c": {
+        "cpu": {
+          "max": 47.343,
+          "mean": 45.28816763848396,
+          "p95": 45.687,
+          "samples": 4116
+        },
+        "gpu": {
+          "max": 46.656,
+          "mean": 46.381574101069,
+          "p95": 46.5,
+          "samples": 4116
+        },
+        "soc012": {
+          "max": 48.562,
+          "mean": 45.59037147716229,
+          "p95": 45.937,
+          "samples": 4116
+        },
+        "soc345": {
+          "max": 44.343,
+          "mean": 44.13455903790087,
+          "p95": 44.25,
+          "samples": 4116
+        },
+        "tj": {
+          "max": 48.562,
+          "mean": 46.387002429543244,
+          "p95": 46.5,
+          "samples": 4116
+        }
+      }
+    },
+    "frozen_plaintext_contract": {
+      "estimated_duration_s": 411.4,
+      "estimated_vin_energy_j": 11282.386799999998,
+      "interval_ms": 100,
+      "line_count": 4114,
+      "path": "artifacts/validation/frozen_plaintext_contract/thermal_tegrastats.log",
+      "power_mw": {
+        "VDD_CPU_SOC_MSS": {
+          "max": 9104.0,
+          "mean": 8133.886242100146,
+          "p95": 8312.0,
+          "samples": 4114
+        },
+        "VDD_GPU": {
+          "max": 4748.0,
+          "mean": 4685.914438502674,
+          "p95": 4748.0,
+          "samples": 4114
+        },
+        "VIN": {
+          "max": 42354.0,
+          "mean": 27424.372386971318,
+          "p95": 29199.4,
+          "samples": 4114
+        },
+        "VIN_SYS_5V0": {
+          "max": 6908.0,
+          "mean": 6519.524550315994,
+          "p95": 6593.0,
+          "samples": 4114
+        }
+      },
+      "present": true,
+      "role": "plaintext frozen contract",
+      "temperature_c": {
+        "cpu": {
+          "max": 47.25,
+          "mean": 45.10304739912494,
+          "p95": 45.468,
+          "samples": 4114
+        },
+        "gpu": {
+          "max": 46.531,
+          "mean": 46.33540666018474,
+          "p95": 46.437,
+          "samples": 4114
+        },
+        "soc012": {
+          "max": 47.281,
+          "mean": 45.437763976665046,
+          "p95": 45.687,
+          "samples": 4114
+        },
+        "soc345": {
+          "max": 44.25,
+          "mean": 44.07040228488089,
+          "p95": 44.156,
+          "samples": 4114
+        },
+        "tj": {
+          "max": 47.281,
+          "mean": 46.33898711716091,
+          "p95": 46.437,
+          "samples": 4114
+        }
+      }
+    },
+    "keyplane_rekey_methodology": {
+      "estimated_duration_s": 98.7,
+      "estimated_vin_energy_j": 2716.4926000000005,
+      "interval_ms": 100,
+      "line_count": 987,
+      "path": "artifacts/validation/keyplane_rekey_methodology/thermal_tegrastats.log",
+      "power_mw": {
+        "VDD_CPU_SOC_MSS": {
+          "max": 9900.0,
+          "mean": 8315.379939209726,
+          "p95": 9500.0,
+          "samples": 987
+        },
+        "VDD_GPU": {
+          "max": 5145.0,
+          "mean": 4708.730496453901,
+          "p95": 4750.0,
+          "samples": 987
+        },
+        "VIN": {
+          "max": 39684.0,
+          "mean": 27522.72137791287,
+          "p95": 31147.399999999998,
+          "samples": 987
+        },
+        "VIN_SYS_5V0": {
+          "max": 6908.0,
+          "mean": 6555.6393110435665,
+          "p95": 6807.0,
+          "samples": 987
+        }
+      },
+      "present": true,
+      "role": "mounted ML-KEM key-plane methodology run",
+      "temperature_c": {
+        "cpu": {
+          "max": 47.187,
+          "mean": 44.420639311043566,
+          "p95": 45.468,
+          "samples": 987
+        },
+        "gpu": {
+          "max": 45.968,
+          "mean": 45.58870111448835,
+          "p95": 45.75,
+          "samples": 987
+        },
+        "soc012": {
+          "max": 48.312,
+          "mean": 44.73504457953394,
+          "p95": 45.281,
+          "samples": 987
+        },
+        "soc345": {
+          "max": 43.531,
+          "mean": 43.36250455927052,
+          "p95": 43.437,
+          "samples": 987
+        },
+        "tj": {
+          "max": 48.312,
+          "mean": 45.62719554204661,
+          "p95": 45.906,
+          "samples": 987
+        }
+      }
+    },
+    "sqlite_qos_methodology": {
+      "estimated_duration_s": 25.0,
+      "estimated_vin_energy_j": 728.3758,
+      "interval_ms": 100,
+      "line_count": 250,
+      "path": "artifacts/validation/qos_sqlite_hero_methodology/thermal_tegrastats.log",
+      "power_mw": {
+        "VDD_CPU_SOC_MSS": {
+          "max": 9900.0,
+          "mean": 9128.032,
+          "p95": 9504.0,
+          "samples": 250
+        },
+        "VDD_GPU": {
+          "max": 5145.0,
+          "mean": 4756.344,
+          "p95": 4750.0,
+          "samples": 250
+        },
+        "VIN": {
+          "max": 40662.0,
+          "mean": 29135.032,
+          "p95": 33454.0,
+          "samples": 250
+        },
+        "VIN_SYS_5V0": {
+          "max": 6908.0,
+          "mean": 6671.132,
+          "p95": 6807.0,
+          "samples": 250
+        }
+      },
+      "present": true,
+      "role": "mounted SQLite QoS methodology run",
+      "temperature_c": {
+        "cpu": {
+          "max": 47.312,
+          "mean": 45.036588,
+          "p95": 46.437,
+          "samples": 250
+        },
+        "gpu": {
+          "max": 46.031,
+          "mean": 45.616364,
+          "p95": 45.843,
+          "samples": 250
+        },
+        "soc012": {
+          "max": 48.312,
+          "mean": 44.903616,
+          "p95": 45.659099999999995,
+          "samples": 250
+        },
+        "soc345": {
+          "max": 43.656,
+          "mean": 43.407868,
+          "p95": 43.531,
+          "samples": 250
+        },
+        "tj": {
+          "max": 48.312,
+          "mean": 45.780104,
+          "p95": 46.531,
+          "samples": 250
+        }
+      }
+    }
+  },
+  "non_claim": "This is not an energy-efficiency claim, not a fixed-clock proof, and not a replacement for per-mode energy experiments.",
+  "overall_pass": true,
+  "representative_summary": {
+    "frozen_aegisq_contract": {
+      "estimated_vin_energy_j": 11932.803,
+      "max_tj_c": 49.0,
+      "mean_vin_w": 28.411435714285716,
+      "samples": 840
+    },
+    "frozen_dmcrypt_contract": {
+      "estimated_vin_energy_j": 11487.812,
+      "max_tj_c": 42.562,
+      "mean_vin_w": 27.38453396901073,
+      "samples": 839
+    },
+    "frozen_gocryptfs_contract": {
+      "estimated_vin_energy_j": 11498.2214,
+      "max_tj_c": 48.562,
+      "mean_vin_w": 27.935426141885323,
+      "samples": 4116
+    },
+    "frozen_plaintext_contract": {
+      "estimated_vin_energy_j": 11282.386799999998,
+      "max_tj_c": 47.281,
+      "mean_vin_w": 27.424372386971317,
+      "samples": 4114
+    },
+    "keyplane_rekey_methodology": {
+      "estimated_vin_energy_j": 2716.4926000000005,
+      "max_tj_c": 48.312,
+      "mean_vin_w": 27.52272137791287,
+      "samples": 987
+    },
+    "sqlite_qos_methodology": {
+      "estimated_vin_energy_j": 728.3758,
+      "max_tj_c": 48.312,
+      "mean_vin_w": 29.135032,
+      "samples": 250
+    }
+  },
+  "scope": "Same-run tegrastats power/thermal summary for retained QoS, key-plane, and frozen-contract runs.",
+  "timestamp_utc": "2026-06-30T13:43:35.206485+00:00"
+}

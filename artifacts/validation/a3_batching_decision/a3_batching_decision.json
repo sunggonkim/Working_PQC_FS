@@ -1,0 +1,243 @@
+{
+  "a1_cost_boundary_summary": {
+    "overall_pass": true,
+    "path": "artifacts/validation/a1_throughput_decision/a1_throughput_decision.json",
+    "verdict": "cost-boundary-closeout"
+  },
+  "comparisons": {
+    "current_100us_viability": {
+      "derived": {
+        "epoch_grouped_journal_fsync_removed": true,
+        "grouped_p99_improved": true,
+        "grouped_sync_count_reduced": true,
+        "grouped_throughput_improved": true,
+        "single_epoch_not_general_win": true
+      },
+      "epoch_grouped": {
+        "client_count": 4,
+        "epoch_log_fsync_count_total": 2,
+        "epoch_sync_primitives": [
+          "fdatasync",
+          "none",
+          "syncfs"
+        ],
+        "journal_fsync_count_total": 0,
+        "max_epoch_append_group_size": 3,
+        "p99_ns": 40138994.73,
+        "sync_count_per_measured_op": 1.5,
+        "sync_count_total": 6,
+        "throughput_mib_s": 9.721212539283178
+      },
+      "epoch_single": {
+        "epoch_log_fsync_count_total": 5,
+        "journal_fsync_count_total": 0,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 10,
+        "throughput_mib_s": 68.78409799697955
+      },
+      "overall_pass": true,
+      "path": "artifacts/validation/filesystem_viability_breakdown/epoch_publication_comparison.json",
+      "strict_grouped": {
+        "client_count": 4,
+        "p99_ns": 47612792.88999999,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 8,
+        "throughput_mib_s": 9.051860598631222
+      },
+      "strict_single": {
+        "journal_fsync_count_total": 5,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 10,
+        "throughput_mib_s": 74.1881721856435
+      },
+      "verdict": "Grouped epoch redo-log amortized the metadata barrier in the concurrent mounted workload: total traced sync count is lower than strict while journal fsync remains off the foreground epoch path. Throughput is higher and client p99 is lower versus strict in this run, so claims must be scoped to the metrics that actually improve."
+    },
+    "fault_matrix_publication": {
+      "derived": {
+        "epoch_grouped_journal_fsync_removed": true,
+        "grouped_p99_improved": false,
+        "grouped_sync_count_reduced": true,
+        "grouped_throughput_improved": false,
+        "single_epoch_not_general_win": true
+      },
+      "epoch_grouped": {
+        "client_count": 4,
+        "epoch_log_fsync_count_total": 1,
+        "epoch_sync_primitives": [
+          "none",
+          "syncfs"
+        ],
+        "journal_fsync_count_total": 0,
+        "max_epoch_append_group_size": 4,
+        "p99_ns": 53136288.72,
+        "sync_count_per_measured_op": 1.25,
+        "sync_count_total": 5,
+        "throughput_mib_s": 1.0764902470241977
+      },
+      "epoch_single": {
+        "epoch_log_fsync_count_total": 5,
+        "journal_fsync_count_total": 0,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 10,
+        "throughput_mib_s": 10.880134274435354
+      },
+      "overall_pass": true,
+      "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json",
+      "strict_grouped": {
+        "client_count": 4,
+        "p99_ns": 2669886.0199999996,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 8,
+        "throughput_mib_s": 6.4461233014465105
+      },
+      "strict_single": {
+        "journal_fsync_count_total": 5,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 10,
+        "throughput_mib_s": 12.959676619366542
+      },
+      "verdict": "Grouped epoch redo-log amortized the metadata barrier in the concurrent mounted workload: total traced sync count is lower than strict while journal fsync remains off the foreground epoch path."
+    },
+    "wait1ms_viability": {
+      "derived": {
+        "epoch_grouped_journal_fsync_removed": true,
+        "grouped_p99_improved": true,
+        "grouped_sync_count_reduced": true,
+        "grouped_throughput_improved": true,
+        "single_epoch_not_general_win": true
+      },
+      "epoch_grouped": {
+        "client_count": 4,
+        "epoch_log_fsync_count_total": 2,
+        "epoch_sync_primitives": [
+          "fdatasync",
+          "none",
+          "syncfs"
+        ],
+        "journal_fsync_count_total": 0,
+        "max_epoch_append_group_size": 3,
+        "p99_ns": 40910277.78,
+        "sync_count_per_measured_op": 1.5,
+        "sync_count_total": 6,
+        "throughput_mib_s": 9.596901628792862
+      },
+      "epoch_single": {
+        "epoch_log_fsync_count_total": 5,
+        "journal_fsync_count_total": 0,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 10,
+        "throughput_mib_s": 67.28669834022017
+      },
+      "overall_pass": true,
+      "path": "artifacts/validation/filesystem_viability_breakdown_wait1ms/epoch_publication_comparison.json",
+      "strict_grouped": {
+        "client_count": 4,
+        "p99_ns": 45141936.230000004,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 8,
+        "throughput_mib_s": 9.217535487442495
+      },
+      "strict_single": {
+        "journal_fsync_count_total": 5,
+        "sync_count_per_measured_op": 2.0,
+        "sync_count_total": 10,
+        "throughput_mib_s": 69.59634620295977
+      },
+      "verdict": "Grouped epoch redo-log amortized the metadata barrier in the concurrent mounted workload: total traced sync count is lower than strict while journal fsync remains off the foreground epoch path."
+    }
+  },
+  "decision": {
+    "next_valid_code_work": "Only change publication performance further if the production protocol changes its crash ordering or grouping semantics and the same change is accompanied by replay/fault proof.",
+    "verdict": "batching-boundary-closeout",
+    "what_is_implemented": [
+      "opt-in epoch-redo-log publication mode",
+      "leader/follower bounded group barrier",
+      "shared syncfs barrier for joined epoch groups",
+      "journal-sidecar fsync removal from foreground epoch path",
+      "checkpoint compaction and committed-prefix replay",
+      "parallel commit coordinator integrated behind an explicit mode flag"
+    ],
+    "where_it_helps": "Concurrent grouped mounted writes can reduce traced publication sync count and can improve throughput or tail latency in the runs where the grouped barrier is actually formed.",
+    "where_it_loses_or_is_not_a_claim": "Single-client per-write fdatasync and frozen strict-path rows remain the authenticated-publication cost boundary. Evidence also contains grouped runs where throughput or p99 does not improve, so the paper must not claim a general fast-path or filesystem-wide throughput win."
+  },
+  "derived": {
+    "grouped_has_win_and_loss": true,
+    "grouped_sync_reduced_current": true,
+    "grouped_sync_reduced_somewhere": true,
+    "single_not_general_win": true
+  },
+  "inputs": {
+    "a1_decision": "artifacts/validation/a1_throughput_decision/a1_throughput_decision.json",
+    "current_viability": "artifacts/validation/filesystem_viability_breakdown/epoch_publication_comparison.json",
+    "fault_matrix_publication": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json",
+    "parallel_commit_closure": "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json",
+    "replay_fault_matrix": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json",
+    "wait1ms_viability": "artifacts/validation/filesystem_viability_breakdown_wait1ms/epoch_publication_comparison.json"
+  },
+  "non_claims": [
+    "not a general-purpose filesystem throughput claim",
+    "not a single-client frozen-contract speedup claim",
+    "not proof that fdatasync can be removed without crash-ordering evidence",
+    "not proof of physical power-loss certification"
+  ],
+  "overall_pass": true,
+  "paper_checks": {
+    "dangerous_general_win_claim": false,
+    "design_names_bounded_group": true,
+    "design_names_single_client_loss_case": true,
+    "design_names_sync_amortization": true,
+    "discussion_no_high_throughput_claim": true,
+    "evaluation_cost_boundary": true,
+    "evaluation_not_headline_win": true,
+    "files": {
+      "design": "Paper/3_Design.tex",
+      "discussion": "Paper/10_Discussion_and_Limitations.tex",
+      "evaluation": "Paper/4_Evaluation.tex"
+    }
+  },
+  "parallel_commit_summary": {
+    "closure_verdict": "closed",
+    "overall_pass": true,
+    "path": "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json"
+  },
+  "proof_checks": {
+    "current_grouped_sync_count_reduced": true,
+    "grouped_evidence_has_scoped_win_and_loss": true,
+    "negative_claim_guard_present": true,
+    "paper_scopes_batching_claim": true,
+    "parallel_commit_closure_passes": true,
+    "replay_fault_matrix_passes": true,
+    "single_or_frozen_path_not_general_win": true,
+    "source_epoch_group_commit_present": true
+  },
+  "replay_fault_matrix_summary": {
+    "case_labels": [
+      "replay_normal",
+      "replay_torn_tail",
+      "replay_duplicate_generation",
+      "replay_journal_loss"
+    ],
+    "overall_pass": true,
+    "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json"
+  },
+  "schema": "a3-batching-decision-v1",
+  "source_checks": {
+    "epoch_group_config": true,
+    "epoch_log_append_commit_records": true,
+    "epoch_mode_flag": true,
+    "epoch_replay_and_compaction": true,
+    "files": {
+      "epoch_log": "code/storage/pqc_epoch_log.c",
+      "epoch_publish": "code/storage/pqc_epoch_publish.c",
+      "fd_context": "code/fs/pqc_fd_context.c",
+      "parallel_commit": "code/fs/pqc_parallel_commit.c",
+      "strict_publish": "code/storage/pqc_strict_publish.c",
+      "writeback": "code/storage/pqc_writeback.c"
+    },
+    "journal_fsync_can_be_skipped": true,
+    "leader_follower_group_barrier": true,
+    "parallel_commit_runtime_integrated": true,
+    "parallel_commit_shards": true,
+    "shared_sync_barrier": true
+  }
+}

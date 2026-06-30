@@ -1,0 +1,133 @@
+{
+  "cases": [
+    {
+      "client": {
+        "matches": true,
+        "path": "/tmp/aegisq_strict_mnt_pkedk2jq/epoch-smoke.dat",
+        "payload_len": 16412,
+        "read_len": 16412,
+        "written": 16412
+      },
+      "epoch_logs": {
+        "block_records": 0,
+        "commit_records": 0,
+        "file_count": 0,
+        "files": [],
+        "malformed_records": 0,
+        "record_count": 0
+      },
+      "error": null,
+      "hidden_epoch_sidecar_visible": false,
+      "label": "strict",
+      "mount_listing": [
+        "epoch-smoke.dat"
+      ],
+      "pass": true,
+      "trace": {
+        "event_count": 1,
+        "event_names": [
+          "publication_dispatch"
+        ],
+        "events": [
+          {
+            "event": "publication_dispatch",
+            "mode": "strict",
+            "rc": 0
+          }
+        ],
+        "exists": true,
+        "malformed_line_count": 0,
+        "modes": [
+          "strict"
+        ],
+        "path": "artifacts/validation/publication_protocol_fault_matrix/strict_no_epoch_log/publication_trace.jsonl"
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_strict_mnt_pkedk2jq"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      }
+    },
+    {
+      "client": {
+        "matches": true,
+        "path": "/tmp/aegisq_epoch_redo_log_mnt_muzou8jo/epoch-smoke.dat",
+        "payload_len": 16420,
+        "read_len": 16420,
+        "written": 16420
+      },
+      "epoch_logs": {
+        "block_records": 5,
+        "commit_records": 1,
+        "file_count": 1,
+        "files": [
+          {
+            "block_records": 5,
+            "commit_records": 1,
+            "malformed_records": 0,
+            "path": "/tmp/aegisq_epoch_redo_log_storage_yhtajv1h/epoch-smoke.dat.pqcepoch",
+            "record_count": 6,
+            "size_bytes": 816,
+            "trailing_bytes": 0
+          }
+        ],
+        "malformed_records": 0,
+        "record_count": 6
+      },
+      "error": null,
+      "hidden_epoch_sidecar_visible": false,
+      "label": "epoch_redo_log",
+      "mount_listing": [
+        "epoch-smoke.dat"
+      ],
+      "pass": true,
+      "trace": {
+        "event_count": 2,
+        "event_names": [
+          "epoch_redo_log_append",
+          "publication_dispatch"
+        ],
+        "events": [
+          {
+            "barrier_rc": 0,
+            "event": "epoch_redo_log_append",
+            "log_path": "/tmp/aegisq_epoch_redo_log_storage_yhtajv1h/epoch-smoke.dat.pqcepoch",
+            "mode": "epoch-redo-log",
+            "rc": 0,
+            "record_count": 6
+          },
+          {
+            "event": "publication_dispatch",
+            "mode": "epoch-redo-log",
+            "rc": 0
+          }
+        ],
+        "exists": true,
+        "malformed_line_count": 0,
+        "modes": [
+          "epoch-redo-log"
+        ],
+        "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_redo_log/publication_trace.jsonl"
+      },
+      "unmount": {
+        "argv": [
+          "fusermount3",
+          "-u",
+          "/tmp/aegisq_epoch_redo_log_mnt_muzou8jo"
+        ],
+        "fuse_returncode": -2,
+        "returncode": 0
+      }
+    }
+  ],
+  "generated_by": "experiments/run_epoch_redo_log_mounted_smoke.py",
+  "generated_utc": "2026-06-28T06:36:24Z",
+  "negative_claim_guard": "This smoke proves that epoch-redo-log mode appends block and commit records to a per-file .pqcepoch sidecar and reaches a log fdatasync barrier before strict journal publication continues. It does not prove checkpoint compaction, crash replay, sync-count reduction, throughput improvement, or rollback resistance.",
+  "overall_pass": true,
+  "schema_version": 1,
+  "scope": "Gate 0.9-S2 mounted-path epoch redo-log append/barrier proof."
+}

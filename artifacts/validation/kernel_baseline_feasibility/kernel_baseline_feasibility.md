@@ -6,12 +6,12 @@
 - fscrypt runnable without interactive root: `false`
 - dm-crypt/ext4 runnable without interactive root: `false`
 - fscrypt runnable with supplied sudo password: `false`
-- dm-crypt/ext4 runnable with supplied sudo password: `true`
+- dm-crypt/ext4 runnable with supplied sudo password: `false`
 
 ## Blocking Reasons
 
-- fscrypt: `kernel_config_fs_encryption_disabled, root_ext4_encrypt_feature_not_enabled, fscrypt_status_nonzero, disposable_fscrypt_loop_probe_failed`
-- dm-crypt/ext4: `none`
+- fscrypt: `noninteractive_sudo_unavailable, kernel_config_fs_encryption_disabled, root_ext4_encrypt_feature_not_enabled, fscrypt_status_nonzero`
+- dm-crypt/ext4: `noninteractive_sudo_unavailable`
 
 ## Next Required Action
 

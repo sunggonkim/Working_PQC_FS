@@ -1,0 +1,914 @@
+{
+  "abort_reason": null,
+  "artifacts": {
+    "csv": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_repetitions.csv",
+    "file_preparation": "artifacts/validation/frozen_dmcrypt_contract/file_preparation.json",
+    "fio_raw_dir": "artifacts/validation/frozen_dmcrypt_contract/fio_raw",
+    "json": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json",
+    "platform_manifest": "artifacts/validation/frozen_dmcrypt_contract/platform_manifest.json",
+    "setup_logs": "artifacts/validation/frozen_dmcrypt_contract/setup_logs",
+    "storage_snapshot": "artifacts/validation/frozen_dmcrypt_contract/storage_snapshot.json",
+    "teardown_logs": "artifacts/validation/frozen_dmcrypt_contract/teardown_logs",
+    "thermal_log": "artifacts/validation/frozen_dmcrypt_contract/thermal_tegrastats.log"
+  },
+  "cold_cache": {
+    "reason": "cold-cache contract requires privileged cache dropping after unmount/remount; this run had no noninteractive sudo/root access",
+    "status": "invalid_not_run",
+    "sudo_probe": {
+      "argv": [
+        "sudo",
+        "-n",
+        "true"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782798160936520172,
+      "label": "warmup_00",
+      "returncode": 0,
+      "start_realtime_ns": 1782798090661338228,
+      "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warmup_00.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warmup_00.json",
+      "timed_out": false,
+      "timeout_s": null,
+      "wall_seconds": 70.275181944
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782798231210833676,
+      "label": "warm_rep_00",
+      "returncode": 0,
+      "start_realtime_ns": 1782798160937226182,
+      "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.json",
+      "timed_out": false,
+      "timeout_s": null,
+      "wall_seconds": 70.273607494
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782798301479720902,
+      "label": "warm_rep_01",
+      "returncode": 0,
+      "start_realtime_ns": 1782798231211521926,
+      "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_01.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_01.json",
+      "timed_out": false,
+      "timeout_s": null,
+      "wall_seconds": 70.268198976
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782798371753175657,
+      "label": "warm_rep_02",
+      "returncode": 0,
+      "start_realtime_ns": 1782798301480406253,
+      "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_02.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_02.json",
+      "timed_out": false,
+      "timeout_s": null,
+      "wall_seconds": 70.272769404
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782798442024423561,
+      "label": "warm_rep_03",
+      "returncode": 0,
+      "start_realtime_ns": 1782798371754065852,
+      "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.json",
+      "timed_out": false,
+      "timeout_s": null,
+      "wall_seconds": 70.270357709
+    },
+    {
+      "argv": [
+        "fio",
+        "--name=frozen_randrw_4k_fdatasync",
+        "--ioengine=psync",
+        "--rw=randrw",
+        "--rwmixread=70",
+        "--bs=4k",
+        "--direct=0",
+        "--fdatasync=1",
+        "--iodepth=1",
+        "--numjobs=1",
+        "--size=1G",
+        "--fallocate=none",
+        "--allow_file_create=0",
+        "--overwrite=1",
+        "--time_based",
+        "--runtime=60",
+        "--ramp_time=10",
+        "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+        "--output-format=json"
+      ],
+      "cwd": "/home/thor/skim/pqc_encrpyted_fs",
+      "end_realtime_ns": 1782798512297731970,
+      "label": "warm_rep_04",
+      "returncode": 0,
+      "start_realtime_ns": 1782798442025161765,
+      "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_04.stderr.txt",
+      "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_04.json",
+      "timed_out": false,
+      "timeout_s": null,
+      "wall_seconds": 70.272570205
+    }
+  ],
+  "contract_compliant_warm_cache": true,
+  "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+  "contract_path_sha256": "8e720b11ef1625cf6727e297a22d433f6eeed34384a9ed1d26241546254ac170",
+  "contract_sha256_recorded": "72248aae3fd02b92b88f23ac0989e38960f3cc935a9799d361293ea5e50101d6",
+  "file_preparation": {
+    "artifact": "artifacts/validation/frozen_dmcrypt_contract/file_preparation.json",
+    "end_realtime_ns": 1782798090661004996,
+    "error": null,
+    "method": "posix_fallocate",
+    "observed_size_bytes": 1073741824,
+    "path": "/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract/frozen_randrw_4k_fdatasync.0.0",
+    "requested_size_bytes": 1073741824,
+    "returncode": 0,
+    "start_realtime_ns": 1782798090660554274,
+    "valid": true,
+    "wall_seconds": 0.000450722
+  },
+  "filesystem_mode": "dm_crypt_ext4",
+  "fio_command": [
+    "fio",
+    "--name=frozen_randrw_4k_fdatasync",
+    "--ioengine=psync",
+    "--rw=randrw",
+    "--rwmixread=70",
+    "--bs=4k",
+    "--direct=0",
+    "--fdatasync=1",
+    "--iodepth=1",
+    "--numjobs=1",
+    "--size=1G",
+    "--fallocate=none",
+    "--allow_file_create=0",
+    "--overwrite=1",
+    "--time_based",
+    "--runtime=60",
+    "--ramp_time=10",
+    "--directory=${DMCRYPT_MOUNT}/contract",
+    "--output-format=json"
+  ],
+  "methodology": {
+    "cache_state_policy": {
+      "cold": "invalid unless privileged drop_caches after unmount/remount is available",
+      "warm": "one full fio warmup pass followed by measured repetitions without cache dropping"
+    },
+    "confidence_interval_method": {
+      "confidence_level": 0.95,
+      "metrics": [
+        "throughput_mib_s",
+        "latency_p50_us",
+        "latency_p95_us",
+        "latency_p99_us",
+        "latency_p99_9_us"
+      ],
+      "name": "nonparametric bootstrap",
+      "random_seed": 12648430,
+      "resamples": 10000,
+      "unit": "per-repetition summary rows"
+    },
+    "file_preparation": {
+      "observed": {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/file_preparation.json",
+        "end_realtime_ns": 1782798090661004996,
+        "error": null,
+        "method": "posix_fallocate",
+        "observed_size_bytes": 1073741824,
+        "path": "/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract/frozen_randrw_4k_fdatasync.0.0",
+        "requested_size_bytes": 1073741824,
+        "returncode": 0,
+        "start_realtime_ns": 1782798090660554274,
+        "valid": true,
+        "wall_seconds": 0.000450722
+      },
+      "required": {
+        "filename": "frozen_randrw_4k_fdatasync.0.0",
+        "procedure": "Before each mode's warm-cache sequence, create ${BENCH_DIR}, create ${BENCH_DIR}/frozen_randrw_4k_fdatasync.0.0, and set its logical length to 1 GiB with posix_fallocate or an equivalent sparse truncate path recorded by the harness.  fio then runs with allow_file_create=0, overwrite=1, and fallocate=none so file-layout writes are not folded into the random read/write workload."
+      }
+    },
+    "methodology_id": "dmcrypt-frozen-workload-contract-v1",
+    "outlier_policy": {
+      "infrastructure_failure_policy": "fail/mark invalid with raw log and return code",
+      "policy": "retain_all_completed_repetitions",
+      "winsorization": "disabled"
+    },
+    "run_count": {
+      "contract_repetitions": 5,
+      "matches_contract": true,
+      "measured_repetitions": 5
+    },
+    "warmup": {
+      "full_fio_profile_warmup": true,
+      "warmup_runs": 1
+    }
+  },
+  "mount_options": {
+    "backing": "disposable loop image",
+    "cryptsetup": "LUKS2, aes-xts-plain64, 512-bit key",
+    "discard": "disabled",
+    "filesystem": "ext4",
+    "mapper_name_recorded": false
+  },
+  "non_claims": [
+    "not a fscrypt row",
+    "not a cold-cache result when drop_caches is unavailable",
+    "not an AEGIS-Q speedup claim by itself"
+  ],
+  "overall_pass": true,
+  "platform_manifest": "artifacts/validation/frozen_dmcrypt_contract/platform_manifest.json",
+  "repetitions": [
+    {
+      "cache_state": "warmup",
+      "fio_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warmup_00.json",
+      "fio_stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warmup_00.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warmup_00",
+      "latency_p50_us": 4.576,
+      "latency_p95_us": 7.456,
+      "latency_p99_9_us": 790.528,
+      "latency_p99_us": 9.536,
+      "read_clat_p50_us": 3.152,
+      "read_clat_p95_us": 6.304,
+      "read_clat_p99_9_us": 790.528,
+      "read_clat_p99_us": 7.904,
+      "read_io_bytes": 283799552,
+      "read_iops": 1154.744842,
+      "read_ios": 69287,
+      "repetition": null,
+      "returncode": 0,
+      "throughput_mib_s": 6.433768272399902,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 98826,
+      "valid": true,
+      "wall_seconds": 70.275181944,
+      "write_clat_p50_us": 4.576,
+      "write_clat_p95_us": 7.456,
+      "write_clat_p99_9_us": 790.528,
+      "write_clat_p99_us": 9.536,
+      "write_io_bytes": 120991744,
+      "write_iops": 492.300257,
+      "write_ios": 29539
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.json",
+      "fio_stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_00.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_00",
+      "latency_p50_us": 4.384,
+      "latency_p95_us": 7.392,
+      "latency_p99_9_us": 823.296,
+      "latency_p99_us": 9.152,
+      "read_clat_p50_us": 3.184,
+      "read_clat_p95_us": 6.368,
+      "read_clat_p99_9_us": 823.296,
+      "read_clat_p99_us": 7.904,
+      "read_io_bytes": 397975552,
+      "read_iops": 1619.285702,
+      "read_ios": 97162,
+      "repetition": 0,
+      "returncode": 0,
+      "throughput_mib_s": 9.031514167785645,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 138731,
+      "valid": true,
+      "wall_seconds": 70.273607494,
+      "write_clat_p50_us": 4.384,
+      "write_clat_p95_us": 7.392,
+      "write_clat_p99_9_us": 798.72,
+      "write_clat_p99_us": 9.152,
+      "write_io_bytes": 170266624,
+      "write_iops": 692.782028,
+      "write_ios": 41569
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_01.json",
+      "fio_stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_01.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_01",
+      "latency_p50_us": 4.96,
+      "latency_p95_us": 259.072,
+      "latency_p99_9_us": 1220.608,
+      "latency_p99_us": 782.336,
+      "read_clat_p50_us": 4.048,
+      "read_clat_p95_us": 259.072,
+      "read_clat_p99_9_us": 1220.608,
+      "read_clat_p99_us": 782.336,
+      "read_io_bytes": 307171328,
+      "read_iops": 1249.862502,
+      "read_ios": 74993,
+      "repetition": 1,
+      "returncode": 0,
+      "throughput_mib_s": 6.966094017028809,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 107001,
+      "valid": true,
+      "wall_seconds": 70.268198976,
+      "write_clat_p50_us": 4.96,
+      "write_clat_p95_us": 7.072,
+      "write_clat_p99_9_us": 921.6,
+      "write_clat_p99_us": 9.28,
+      "write_io_bytes": 131104768,
+      "write_iops": 533.457776,
+      "write_ios": 32008
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_02.json",
+      "fio_stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_02.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_02",
+      "latency_p50_us": 4.32,
+      "latency_p95_us": 254.976,
+      "latency_p99_9_us": 823.296,
+      "latency_p99_us": 264.192,
+      "read_clat_p50_us": 3.376,
+      "read_clat_p95_us": 254.976,
+      "read_clat_p99_9_us": 823.296,
+      "read_clat_p99_us": 264.192,
+      "read_io_bytes": 533229568,
+      "read_iops": 2169.680505,
+      "read_ios": 130183,
+      "repetition": 2,
+      "returncode": 0,
+      "throughput_mib_s": 12.110279083251953,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 186017,
+      "valid": true,
+      "wall_seconds": 70.272769404,
+      "write_clat_p50_us": 4.32,
+      "write_clat_p95_us": 6.88,
+      "write_clat_p99_9_us": 798.72,
+      "write_clat_p99_us": 9.28,
+      "write_io_bytes": 228696064,
+      "write_iops": 930.551157,
+      "write_ios": 55834
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.json",
+      "fio_stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_03",
+      "latency_p50_us": 4.256,
+      "latency_p95_us": 254.976,
+      "latency_p99_9_us": 798.72,
+      "latency_p99_us": 264.192,
+      "read_clat_p50_us": 3.312,
+      "read_clat_p95_us": 254.976,
+      "read_clat_p99_9_us": 798.72,
+      "read_clat_p99_us": 264.192,
+      "read_io_bytes": 633675776,
+      "read_iops": 2578.39036,
+      "read_ios": 154706,
+      "repetition": 3,
+      "returncode": 0,
+      "throughput_mib_s": 14.399628639221191,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 221182,
+      "valid": true,
+      "wall_seconds": 70.270357709,
+      "write_clat_p50_us": 4.256,
+      "write_clat_p95_us": 6.304,
+      "write_clat_p99_9_us": 782.336,
+      "write_clat_p99_us": 8.64,
+      "write_io_bytes": 272285696,
+      "write_iops": 1107.914868,
+      "write_ios": 66476
+    },
+    {
+      "cache_state": "warm",
+      "fio_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_04.json",
+      "fio_stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_04.stderr.txt",
+      "fio_version": "fio-3.36",
+      "job_name": "frozen_randrw_4k_fdatasync",
+      "label": "warm_rep_04",
+      "latency_p50_us": 244.736,
+      "latency_p95_us": 259.072,
+      "latency_p99_9_us": 1253.376,
+      "latency_p99_us": 782.336,
+      "read_clat_p50_us": 244.736,
+      "read_clat_p95_us": 259.072,
+      "read_clat_p99_9_us": 1253.376,
+      "read_clat_p99_us": 782.336,
+      "read_io_bytes": 336310272,
+      "read_iops": 1368.427193,
+      "read_ios": 82107,
+      "repetition": 4,
+      "returncode": 0,
+      "throughput_mib_s": 7.630600929260254,
+      "timed_out": false,
+      "timeout_s": null,
+      "total_ios": 117208,
+      "valid": true,
+      "wall_seconds": 70.272570205,
+      "write_clat_p50_us": 4.896,
+      "write_clat_p95_us": 7.648,
+      "write_clat_p99_9_us": 921.6,
+      "write_clat_p99_us": 14.784,
+      "write_io_bytes": 143773696,
+      "write_iops": 585.006917,
+      "write_ios": 35101
+    }
+  ],
+  "scope": "dm-crypt/ext4 warm-cache execution of the frozen filesystem workload contract on a disposable loop-backed LUKS2 volume.",
+  "setup": {
+    "image_size_mib": 1536,
+    "key_file_retained": false,
+    "luks_key_material_retained": false,
+    "steps": [
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/setup_logs/00_losetup.json",
+        "name": "losetup",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "losetup",
+            "--find",
+            "--show",
+            "/tmp/dmcrypt_frozen_root_khmoav28/dmcrypt.img"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "/dev/loop9"
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/setup_logs/01_luks_format.json",
+        "name": "luks_format",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "cryptsetup",
+            "--batch-mode",
+            "--type",
+            "luks2",
+            "--cipher",
+            "aes-xts-plain64",
+            "--key-size",
+            "512",
+            "--pbkdf",
+            "pbkdf2",
+            "--pbkdf-force-iterations",
+            "1000",
+            "--key-file",
+            "/tmp/dmcrypt_frozen_root_khmoav28/luks.key",
+            "luksFormat",
+            "/dev/loop9"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/setup_logs/02_luks_open.json",
+        "name": "luks_open",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "cryptsetup",
+            "open",
+            "--key-file",
+            "/tmp/dmcrypt_frozen_root_khmoav28/luks.key",
+            "/dev/loop9",
+            "aegisq_dmcrypt_4157957"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/setup_logs/03_mkfs_ext4.json",
+        "name": "mkfs_ext4",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "mkfs.ext4",
+            "-q",
+            "/dev/mapper/aegisq_dmcrypt_4157957"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/setup_logs/04_mount.json",
+        "name": "mount",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "mount",
+            "/dev/mapper/aegisq_dmcrypt_4157957",
+            "/tmp/dmcrypt_frozen_root_khmoav28/mnt"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/setup_logs/05_chown_mount.json",
+        "name": "chown_mount",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "chown",
+            "1000:1000",
+            "/tmp/dmcrypt_frozen_root_khmoav28/mnt"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      }
+    ]
+  },
+  "storage_snapshot": {
+    "file_count": 3,
+    "files": [
+      {
+        "bytes": 1610612736,
+        "path": "dmcrypt.img"
+      },
+      {
+        "bytes": 64,
+        "path": "luks.key"
+      },
+      {
+        "bytes": 1073741824,
+        "path": "mnt/contract/frozen_randrw_4k_fdatasync.0.0"
+      }
+    ],
+    "path": "artifacts/validation/frozen_dmcrypt_contract/storage_snapshot.json",
+    "storage_dir": "/tmp/dmcrypt_frozen_root_khmoav28",
+    "total_file_bytes": 2684354624,
+    "truncated_to_files": 200
+  },
+  "teardown": {
+    "loopdev": "/dev/loop9",
+    "mapper_name": "aegisq_dmcrypt_4157957",
+    "removed": true,
+    "steps": [
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/teardown_logs/00_sync.json",
+        "name": "sync",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "sync"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/teardown_logs/01_umount.json",
+        "name": "umount",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "umount",
+            "/tmp/dmcrypt_frozen_root_khmoav28/mnt"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/teardown_logs/02_cryptsetup_close.json",
+        "name": "cryptsetup_close",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "cryptsetup",
+            "close",
+            "aegisq_dmcrypt_4157957"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      },
+      {
+        "artifact": "artifacts/validation/frozen_dmcrypt_contract/teardown_logs/03_losetup_detach.json",
+        "name": "losetup_detach",
+        "result": {
+          "argv": [
+            "sudo",
+            "-S",
+            "-p",
+            "",
+            "losetup",
+            "-d",
+            "/dev/loop9"
+          ],
+          "available": true,
+          "password_supplied": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        }
+      }
+    ],
+    "work_dir": "/tmp/dmcrypt_frozen_root_khmoav28"
+  },
+  "thermal_logging": {
+    "available": true,
+    "command": [
+      "tegrastats",
+      "--interval",
+      "500"
+    ],
+    "line_count": 839,
+    "nonempty": true,
+    "path": "artifacts/validation/frozen_dmcrypt_contract/thermal_tegrastats.log",
+    "returncode": -15,
+    "started": true
+  },
+  "verdict": "measured",
+  "warm_cache_summary": {
+    "cache_state": "warm",
+    "expected_repetitions": 5,
+    "latency_definition": "latency_pXX_us is the conservative maximum of read and write fio clat_ns percentile values for the mixed 70/30 workload; read/write direction percentiles are retained separately.",
+    "metrics": {
+      "latency_p50_us": {
+        "ci95_high": 244.736,
+        "ci95_low": 4.256,
+        "median": 4.384,
+        "p05": 4.256,
+        "p95": 244.736,
+        "samples": [
+          4.384,
+          4.96,
+          4.32,
+          4.256,
+          244.736
+        ]
+      },
+      "latency_p95_us": {
+        "ci95_high": 259.072,
+        "ci95_low": 7.392,
+        "median": 254.976,
+        "p05": 7.392,
+        "p95": 259.072,
+        "samples": [
+          7.392,
+          259.072,
+          254.976,
+          254.976,
+          259.072
+        ]
+      },
+      "latency_p99_9_us": {
+        "ci95_high": 1253.376,
+        "ci95_low": 798.72,
+        "median": 823.296,
+        "p05": 798.72,
+        "p95": 1253.376,
+        "samples": [
+          823.296,
+          1220.608,
+          823.296,
+          798.72,
+          1253.376
+        ]
+      },
+      "latency_p99_us": {
+        "ci95_high": 782.336,
+        "ci95_low": 9.152,
+        "median": 264.192,
+        "p05": 9.152,
+        "p95": 782.336,
+        "samples": [
+          9.152,
+          782.336,
+          264.192,
+          264.192,
+          782.336
+        ]
+      },
+      "read_clat_p99_us": {
+        "ci95_high": 782.336,
+        "ci95_low": 7.904,
+        "median": 264.192,
+        "p05": 7.904,
+        "p95": 782.336,
+        "samples": [
+          7.904,
+          782.336,
+          264.192,
+          264.192,
+          782.336
+        ]
+      },
+      "throughput_mib_s": {
+        "ci95_high": 14.399628639221191,
+        "ci95_low": 6.966094017028809,
+        "median": 9.031514167785645,
+        "p05": 6.966094017028809,
+        "p95": 14.399628639221191,
+        "samples": [
+          9.031514167785645,
+          6.966094017028809,
+          12.110279083251953,
+          14.399628639221191,
+          7.630600929260254
+        ]
+      },
+      "write_clat_p99_us": {
+        "ci95_high": 14.784,
+        "ci95_low": 8.64,
+        "median": 9.28,
+        "p05": 8.64,
+        "p95": 14.784,
+        "samples": [
+          9.152,
+          9.28,
+          9.28,
+          8.64,
+          14.784
+        ]
+      }
+    },
+    "valid_repetitions": 5
+  },
+  "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+}

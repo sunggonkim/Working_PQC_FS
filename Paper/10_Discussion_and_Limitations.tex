@@ -4,27 +4,23 @@
 \subsection{Interpretation of the placement result}
 \label{sec:disc_tradeoff}
 
-The useful result is asymmetry, not an aggregate ``GPU speedup.''  On Thor, CPU/OpenSSL fits the AES-GCM data path, while the GPU helps independent ML-KEM batches and measured envelope refresh.  AEGIS-Q therefore exposes an elastic maintenance lane; current telemetry can throttle mounted FUSE writes but still does not justify foreground AI-QoS recovery.
+The useful result is asymmetry, not aggregate ``GPU speedup.''  CPU/OpenSSL fits AES-GCM data writes, while GPU/cuPQC helps slack-tolerant ML-KEM maintenance.  Under UMA contention, secure file encryption needs admission and fallback rules that see both cryptographic role and foreground storage slack; AEGIS-Q trades peak background throughput for explicit publication, placement, QoS, and recovery boundaries.
 
 \subsection{Security limits}
 \label{sec:disc_energy}
 
-The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation.  File anchors are replayable.  TPM mode requires an administrator-provisioned index; retained probes cover fail-closed replay-after-advance and transient PCR-policy behavior, not persistent PCR-bound key release under provisioned TPM policy.
+The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  There is no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or side-channel evaluation.  TPM probes cover fail-closed replay-after-advance, not persistent PCR-bound key release.
 
 \subsection{Evaluation limits and roadmap}
 \label{sec:disc_roadmap}
 
-The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, and AEGIS-Q rows, but it is not yet a complete fscrypt, dm-crypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison.  Historical fscrypt and dm-crypt fio outputs are retained only for traceability, not current comparison evidence, because they do not sweep the same request sizes, cache states, queue depths, sync modes, and application workloads.
+The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is not reported as a throughput row.  The matrix exposes authenticated-publication cost; it is not a full fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison or free storage path.
 
-The POSIX envelope is also narrow: ordinary read/write/\texttt{fsync} and narrow disjoint writers are evaluated, while shared \texttt{mmap}, rename, directory \texttt{fsync}, and arbitrary conflicting writes are not deployment claims.
+AEGIS-Q is not a general POSIX filesystem: read/write/\texttt{fsync}, scoped rename, directory \texttt{fsync}, no-open hard links, relative symlinks, and bounded writer races are evaluated; shared \texttt{mmap}, full link lifecycle, open-subtree retargeting, arbitrary byte-range transactions, and application-level concurrency are not deployment claims.
 
-The crash story has the same boundary.  The repository retains a conservative crash-audit map, a daemon \texttt{SIGKILL} cutpoint matrix, a SQLite selected-boundary oracle campaign, SQLite/\texttt{dbm.dumb} same-store TPM replay-after-advance runs, and SQLite syscall-exact app-crash timing, but it still lacks physical power-loss, kernel-crash, drive-cache, and evidence across broader workloads.  Stronger claims still need kernel-encryption baseline rows, exact I/O/cache/clock controls, foreground p99 telemetry control, power-fail injection with a provisioned TPM policy, a non-NVIDIA UMA platform for CUDA-independent deployment, and side-channel testing if claimed.
+The crash story retains daemon crashes, SQLite/dbm recovery, append-log/cache-manifest remount, syscall-exact app-crash, and loopback ext4/device-mapper accepted-state recovery.  It still lacks physical power-loss, kernel-crash, drive-cache, broad workload-suite, non-NVIDIA UMA, and side-channel evidence.
+
+Kernel assistance is future work: D/J/C barrier issuance could move to a helper, but only if a same-format kernel path preserves the recovery oracle; Merkle/integrity jobs must stay independent, batched, slack-tolerant, and format-compatible.
 
 \subsection{Deployment takeaway}
-
-The evaluated deployment envelope is a local edge service whose foreground SQLite database shares mounted secure storage with elastic background writes.  This case study is the same \texttt{sqlite-mounted-qos-recovery-2026-06-27} contract used by Figure~\ref{fig:first_page_qos} and Table~\ref{tab:qos_sqlite_recovery}, not a separate anecdotal demo.  The useful property is policy separation plus TPM replay-after-advance fail-closed behavior; it does not extend to kernel-encryption replacement, TensorRT p99 recovery, unmanaged power loss, or CUDA-independent deployment.
-
-\subsection{CUDA-specific boundary}
-\label{sec:disc_portability}
-
-The implementation depends on CUDA managed memory and cuPQC.  It uses \texttt{cudaMemPrefetchAsync} and stream synchronization as executor-local locality and ordering operations, not storage-DMA registration or permissions.  Porting the policy requires a separate proof of the target API's allocation, synchronization, and device-I/O semantics.
+The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies.  The SQLite point is the same storage-pressure case summarized by Figure~\ref{fig:first_page_qos} and Table~\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote.  The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory.

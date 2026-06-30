@@ -1,0 +1,43 @@
+{
+  "checks": {
+    "forced_rekey_records_keyplane_work": true,
+    "no_unguarded_d2_overclaims": true,
+    "ordinary_io_has_aes_blocks": true,
+    "ordinary_io_has_no_keyplane_batches": true,
+    "paper_crypto_plane_boundary_present": true,
+    "trace_smoke_exists": true,
+    "trace_smoke_overall_pass": true
+  },
+  "findings": [],
+  "generated_at": "2026-06-29T08:31:43Z",
+  "generated_by": "code/experiments/build_crypto_plane_claim_guard.py",
+  "negative_claim_guard": "Bulk file data must remain described as AES-GCM block data. ML-KEM/Kyber may be described only as key/session/envelope-plane work, and ordinary read/write claims must not put rekey on the critical path unless mounted trace evidence changes.",
+  "overall_pass": true,
+  "paper": {
+    "all_present": true,
+    "requirements": {
+      "paper_says_aes_data_writes_cpu_first": true,
+      "paper_says_data_plane_aes_gcm": true,
+      "paper_says_mlkem_does_not_encrypt_blocks": true,
+      "paper_says_mlkem_limited_to_keyplane_envelope": true,
+      "paper_says_rekey_not_hardware_lifecycle": true
+    }
+  },
+  "parent_d2_closed": true,
+  "trace_smoke": {
+    "exists": true,
+    "forced_keyplane_batches": 1,
+    "forced_keyplane_refreshed_files": 1,
+    "forced_rekey_is_keyplane_only": true,
+    "ordinary_aes_decrypt_blocks": 4,
+    "ordinary_aes_encrypt_blocks": 4,
+    "ordinary_keyplane_batches": 0,
+    "ordinary_keyplane_refreshed_files": 0,
+    "ordinary_read_write_aes_gcm_only": true,
+    "overall_pass": true,
+    "path": "artifacts/validation/crypto_plane_separation/crypto_plane_trace_smoke.json",
+    "source_plane_boundary_present": true
+  },
+  "unguarded_count": 0,
+  "unguarded_findings": []
+}

@@ -1,0 +1,563 @@
+{
+  "checklist_state": {
+    "current_cursor": null,
+    "future_claim_expansions_listed": true,
+    "has_closed_gate_register": true,
+    "has_direction_lock": true,
+    "has_latest_review_diagnosis": true,
+    "no_current_p0_p1": true,
+    "path": "SUBMISSION_CHECKLIST.md",
+    "r_rows_present": []
+  },
+  "existing_gate_health": {
+    "artifacts": {
+      "architecture_claim_firewall": "artifacts/reports/architecture_claim_firewall/architecture_claim_firewall.json",
+      "dangerous_claim_lint": "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json",
+      "final_claim_manifest": "artifacts/reports/final_claim_evidence_manifest/final_claim_evidence_manifest.json",
+      "hero_result_contract": "artifacts/reports/hero_result_contract/hero_result_contract.json",
+      "paper_spine_gate": "artifacts/reports/paper_spine_gate/paper_spine_gate.json",
+      "parallel_commit": "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json",
+      "publication_closeout": "artifacts/validation/publication_protocol_fault_matrix/publication_protocol_closeout.json",
+      "related_work_applicability": "artifacts/reports/related_work_applicability/related_work_applicability.json"
+    },
+    "closed_claim_boundary_pass": true,
+    "pass_like": {
+      "architecture_claim_firewall": true,
+      "dangerous_claim_lint": true,
+      "final_claim_manifest": true,
+      "hero_result_contract": true,
+      "paper_spine_gate": true,
+      "parallel_commit": true,
+      "publication_closeout": true,
+      "related_work_applicability": true
+    }
+  },
+  "generated_utc": "2026-06-30T16:24:00Z",
+  "paper_strategy": [
+    "Lead with the runtime-boundary thesis, not the artifact ledger.",
+    "Use previous-paper pattern: early figure/table, concrete SOTA gap, named mechanism, quantitative outcome.",
+    "Make QoS/UVM/CPU-GPU placement the motivation-design-evaluation spine.",
+    "Motivation must show edge UMA contention and why static placement, GPU-everything, KEM-per-block PQC, and kernel QoS alone are insufficient.",
+    "Design must name CPU-first AES-GCM publication, slack/telemetry-gated ML-KEM/cuPQC maintenance, executor-local managed-memory locality, and mounted QoS admission.",
+    "Evaluation must close placement and QoS with negative controls, mounted key-plane admission, telemetry-to-FUSE wiring, SQLite p99 recovery, kernel-control comparisons, and sensitivity/ablation.",
+    "Keep caveats in boundary tables and limitations; do not let them replace the core contribution.",
+    "Turn negative results into design evidence, especially GPU data-plane offload under UMA contention.",
+    "Do not chase POSIX, physical power-loss, C6, or portability work unless the paper explicitly expands those claims.",
+    "Treat Jetson-class UMA as the representative edge platform unless the paper upgrades to a portability claim.",
+    "If O2 is closed by claim removal, keep fscrypt unavailable wording guarded until a supported-host measurement exists.",
+    "Do not delete direct baseline rows: measured plaintext/gocryptfs/dm-crypt/AEGIS-Q rows and the fscrypt unavailable proof are part of the defense."
+  ],
+  "previous_paper_strategy_basis": {
+    "aggregate": {
+      "explicit_bottleneck_count": 6,
+      "front_page_figure_or_table_count": 6,
+      "headline_metric_count": 4,
+      "scale_claim_count": 6,
+      "sota_comparison_count": 6
+    },
+    "derived_style": [
+      "front-load the problem and first quantitative signal",
+      "make the SOTA comparison table visible early",
+      "state a concrete bottleneck before mechanisms",
+      "tie each mechanism to a measurable result",
+      "use limitations as scoped boundaries, not as the main story"
+    ],
+    "paper_count": 6,
+    "papers": [
+      {
+        "path": "Paper/Previous paper/_Accepted___FGCS_2024__AS2.pdf",
+        "signals": {
+          "explicit_bottleneck": true,
+          "front_page_figure_or_table": true,
+          "headline_metric": false,
+          "scale_claim": true,
+          "sota_comparison": true
+        },
+        "title_guess": "AS2: Adaptive Sorting Algorithm Selection for Heterogeneous Workloads and Systems"
+      },
+      {
+        "path": "Paper/Previous paper/_Accepted___SIGMETRICS_26__ScaleQsim__Highly_Scalable_Quantum_Circuit_Simulation_Framework_for_Exascale_HPC_Systems__KCJ_.pdf",
+        "signals": {
+          "explicit_bottleneck": true,
+          "front_page_figure_or_table": true,
+          "headline_metric": true,
+          "scale_claim": true,
+          "sota_comparison": true
+        },
+        "title_guess": "ScaleQsim: Highly Scalable Quantum Circuit Simulation"
+      },
+      {
+        "path": "Paper/Previous paper/_Camera_Ready___ICDCS_26__AURORA_Q__Q_Simulation_Offloading__KCJ_.pdf",
+        "signals": {
+          "explicit_bottleneck": true,
+          "front_page_figure_or_table": true,
+          "headline_metric": true,
+          "scale_claim": true,
+          "sota_comparison": true
+        },
+        "title_guess": "AURORA-Q: Asynchronous Unified Resource"
+      },
+      {
+        "path": "Paper/Previous paper/_Camera_Ready___ICDCS_26__CITADEL.pdf",
+        "signals": {
+          "explicit_bottleneck": true,
+          "front_page_figure_or_table": true,
+          "headline_metric": true,
+          "scale_claim": true,
+          "sota_comparison": true
+        },
+        "title_guess": "CITADEL: Fortifying IoT via Context-Aware"
+      },
+      {
+        "path": "Paper/Previous paper/_Rejected___IPDPS_2025__TSALA.pdf",
+        "signals": {
+          "explicit_bottleneck": true,
+          "front_page_figure_or_table": true,
+          "headline_metric": false,
+          "scale_claim": true,
+          "sota_comparison": true
+        },
+        "title_guess": "TSALA: Improving Performance Prediction in"
+      },
+      {
+        "path": "Paper/Previous paper/previous paper.pdf",
+        "signals": {
+          "explicit_bottleneck": true,
+          "front_page_figure_or_table": true,
+          "headline_metric": true,
+          "scale_claim": true,
+          "sota_comparison": true
+        },
+        "title_guess": "1"
+      }
+    ]
+  },
+  "priority_summary": {
+    "p0_complete": true,
+    "p0_next": [],
+    "p1_complete": true,
+    "p1_next": [],
+    "p2_complete": true,
+    "p2_next": []
+  },
+  "rows": [
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "paper_only_guarded",
+      "evidence": {
+        "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json": [
+          "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json"
+        ],
+        "artifacts/reports/first_two_pages_thesis/first_two_pages_thesis.json": [
+          "artifacts/reports/first_two_pages_thesis/first_two_pages_thesis.json"
+        ],
+        "artifacts/reports/paper_spine_gate/paper_spine_gate.json": [
+          "artifacts/reports/paper_spine_gate/paper_spine_gate.json"
+        ]
+      },
+      "evidence_present_count": 3,
+      "id": "R1",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Follow previous-paper style: first page must expose a concrete problem figure/table and a measurable claim before long caveats.",
+      "primary_artifact_pass": true,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The review says caveats obscure the central contribution.",
+      "target": "Make the paper read like a systems result: bottleneck, invariant, mechanism, result, loss boundary.",
+      "title": "central story and first-two-pages spine"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "paper_with_existing_evidence",
+      "evidence": {
+        "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json": [
+          "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json"
+        ],
+        "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json": [
+          "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json"
+        ],
+        "artifacts/validation/publication_protocol_fault_matrix/publication_protocol_closeout.json": [
+          "artifacts/validation/publication_protocol_fault_matrix/publication_protocol_closeout.json"
+        ]
+      },
+      "evidence_present_count": 3,
+      "id": "R2",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Use one comparison table/paragraph rather than scattered option language.",
+      "primary_artifact_pass": true,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The review sees epoch redo-log as under-explained relative to strict mode.",
+      "target": "Present strict and epoch as one publication design with explicit wins, costs, replay rules, and loss cases.",
+      "title": "strict-versus-epoch design surface"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": true,
+      "complete_now": true,
+      "completion_kind": "paper_claim_removed",
+      "evidence": {},
+      "evidence_present_count": 0,
+      "id": "O1",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "The current target is claim removal: keep SQLite, encrypted logs, and cache-manifest updates as mounted edge-storage workloads.",
+      "primary_artifact_pass": false,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The latest review says the motivation invited a closed-loop foreground non-storage QoS result.",
+      "target": "Close this either by removing that axis from the venue-level claim, or by adding a same-run foreground workload with p50/p95/p99 evidence.",
+      "title": "closed-loop foreground impact or claim removal"
+    },
+    {
+      "claim_boundary_closed": true,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "platform_dependent_or_claim_removed",
+      "evidence": {
+        "artifacts/validation/frozen_fscrypt_supported_contract/frozen_fscrypt_supported_contract.json": [],
+        "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json": [
+          "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json"
+        ]
+      },
+      "evidence_present_count": 1,
+      "id": "O2",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "The current closeout is claim removal: the paper marks fscrypt unavailable with kernel/filesystem proof and does not imply a measured fscrypt speedup row.",
+      "primary_artifact_pass": false,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The latest review repeats that fscrypt is an important missing baseline even when Thor is environment-blocked.",
+      "target": "Run the frozen filesystem contract on a supported fscrypt environment, or remove OSDI-level baseline completeness language.",
+      "title": "fscrypt on a supported kernel"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "new_experiment_required",
+      "evidence": {
+        "artifacts/validation/strict_path_practicality/strict_path_practicality.json": [
+          "artifacts/validation/strict_path_practicality/strict_path_practicality.json"
+        ]
+      },
+      "evidence_present_count": 1,
+      "id": "O3",
+      "new_work_required": true,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Close with O3 evidence: X6 removes marker syncfs, and epoch/group publication is the implemented hybrid barrier path for concurrent or batched writes; strict single-client publication remains the cost boundary.",
+      "primary_artifact_pass": true,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The latest review says the strict FUSE path is still too slow and asks whether kernel or hybrid barrier schedules could reduce the penalty.",
+      "target": "Prototype or model a production-facing kernel-assist, log-structured, or hybrid strict/epoch path that reduces D/J/C barrier cost without changing the claim boundary.",
+      "title": "strict-path practicality beyond X6"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "new_experiment_required",
+      "evidence": {
+        "artifacts/reports/o4_energy_thermal_result/o4_energy_thermal_result.json": [
+          "artifacts/reports/o4_energy_thermal_result/o4_energy_thermal_result.json"
+        ],
+        "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json": [
+          "artifacts/validation/jetson_power_thermal_contract/jetson_power_thermal_contract.json"
+        ]
+      },
+      "evidence_present_count": 2,
+      "id": "O4",
+      "new_work_required": true,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "The existing Jetson power/thermal contract validates metadata eligibility; it is not an energy result by itself.",
+      "primary_artifact_pass": true,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The latest review says edge UMA placement needs energy/thermal evidence, not only metadata capture.",
+      "target": "Add a same-run energy/thermal summary for the placement and QoS rows or remove energy-relevant implications.",
+      "title": "energy and thermal result"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "new_experiment_required",
+      "evidence": {
+        "artifacts/reports/final_claim_evidence_manifest/final_claim_evidence_manifest.json": [
+          "artifacts/reports/final_claim_evidence_manifest/final_claim_evidence_manifest.json"
+        ],
+        "artifacts/validation/gpu_dataplane_negative_control/gpu_dataplane_negative_control.json": [
+          "artifacts/validation/gpu_dataplane_negative_control/gpu_dataplane_negative_control.json"
+        ]
+      },
+      "evidence_present_count": 2,
+      "id": "R3",
+      "new_work_required": true,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Turn the result into a thesis-strengthening negative result: placement is subordinate to publication and tail latency.",
+      "primary_artifact_pass": true,
+      "priority": "P1",
+      "required_terms_present": true,
+      "review_pressure": "The review asks for evidence that naive GPU data-plane offload hurts under UMA contention.",
+      "target": "Add a mounted-path or close-proxy negative-control experiment for GPU AES-GCM/data-plane offload.",
+      "title": "GPU data-plane negative control"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "platform_dependent_evidence",
+      "evidence": {
+        "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json": [
+          "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json"
+        ],
+        "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json": [
+          "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json"
+        ],
+        "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json": [
+          "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json"
+        ],
+        "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json": [
+          "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json"
+        ],
+        "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json": [
+          "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json"
+        ]
+      },
+      "evidence_present_count": 5,
+      "id": "R4",
+      "new_work_required": true,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Keep all rows mode-aligned; unavailable rows are acceptable only with concrete environment proof.",
+      "primary_artifact_pass": true,
+      "priority": "P1",
+      "required_terms_present": true,
+      "review_pressure": "The review remains skeptical without stronger fscrypt/dm-crypt and kernel-control baselines.",
+      "target": "Run matched kernel-encryption baselines where supported and broaden kernel QoS sweeps beyond one-off rows.",
+      "title": "matched kernel baselines and kernel QoS sweeps"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "new_experiment_required",
+      "evidence": {
+        "artifacts/validation/epoch_mode_depth/epoch_mode_depth.json": [
+          "artifacts/validation/epoch_mode_depth/epoch_mode_depth.json"
+        ],
+        "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json": [
+          "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json"
+        ],
+        "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json": [
+          "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json"
+        ]
+      },
+      "evidence_present_count": 3,
+      "id": "R5",
+      "new_work_required": true,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Report wins and losses; do not imply epoch is universally better.",
+      "primary_artifact_pass": true,
+      "priority": "P1",
+      "required_terms_present": true,
+      "review_pressure": "The review asks how epoch mode behaves at higher queue depth and multi-writer pressure.",
+      "target": "Extend epoch-mode evaluation to multi-writer or higher queue-depth workloads with replay-time and p99/p99.9 tradeoffs.",
+      "title": "epoch-mode depth"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "new_fault_evidence_required",
+      "evidence": {
+        "artifacts/reports/crash_audit_report/crash_audit_report.json": [
+          "artifacts/reports/crash_audit_report/crash_audit_report.json"
+        ],
+        "artifacts/validation/lowerfs_durability_assumptions/lowerfs_durability_assumptions.json": [
+          "artifacts/validation/lowerfs_durability_assumptions/lowerfs_durability_assumptions.json"
+        ]
+      },
+      "evidence_present_count": 2,
+      "id": "R6",
+      "new_work_required": true,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Move from generic limitation to an explicit assumption matrix.",
+      "primary_artifact_pass": true,
+      "priority": "P2",
+      "required_terms_present": true,
+      "review_pressure": "The review asks which lower filesystem semantics make D/J/C safe.",
+      "target": "Test or document xattr, directory-entry, rename, and ordering assumptions under fault injection.",
+      "title": "lower-filesystem crash assumptions"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "future_feature_or_nonclaim",
+      "evidence": {
+        "artifacts/reports/architecture_claim_firewall/architecture_claim_firewall.json": [
+          "artifacts/reports/architecture_claim_firewall/architecture_claim_firewall.json"
+        ],
+        "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json": [
+          "artifacts/reports/dangerous_claim_lint/dangerous_claim_lint.json"
+        ],
+        "artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.json": [
+          "artifacts/validation/async_merkle_tpm_epoch/tpm_epoch_freshness_probe.json"
+        ]
+      },
+      "evidence_present_count": 3,
+      "id": "R7",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Otherwise keep it as explicit future work.",
+      "primary_artifact_pass": true,
+      "priority": "P2",
+      "required_terms_present": true,
+      "review_pressure": "The review says replay-after-advance is useful but far from rollback resistance.",
+      "target": "Implement committed-prefix root maintenance plus TPM epoch/PCR lifecycle only if stronger freshness is claimed.",
+      "title": "C6 persistent freshness"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "new_semantics_required_for_claim_upgrade",
+      "evidence": {
+        "artifacts/validation/posix_scope_audit/posix_scope_audit.json": [
+          "artifacts/validation/posix_scope_audit/posix_scope_audit.json"
+        ],
+        "artifacts/validation/shadow_mmap_posix/shadow_mmap_decision.json": [
+          "artifacts/validation/shadow_mmap_posix/shadow_mmap_decision.json"
+        ]
+      },
+      "evidence_present_count": 2,
+      "id": "R8",
+      "new_work_required": true,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Keep deployability language out unless this row is implemented.",
+      "primary_artifact_pass": true,
+      "priority": "P2",
+      "required_terms_present": true,
+      "review_pressure": "The review says unsupported POSIX modes limit deployability.",
+      "target": "Only broaden POSIX claims after rename, directory fsync, mmap/msync, and conflict cases have tests or formal rejection.",
+      "title": "POSIX breadth"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "paper_positioning",
+      "evidence": {
+        "artifacts/reports/related_work_applicability/related_work_applicability.json": [
+          "artifacts/reports/related_work_applicability/related_work_applicability.json"
+        ],
+        "artifacts/validation/refactor_inventory/technique_transfer_matrix.json": [
+          "artifacts/validation/refactor_inventory/technique_transfer_matrix.json"
+        ]
+      },
+      "evidence_present_count": 2,
+      "id": "R9",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Use related work to say when AEGIS-Q loses and when its UMA/runtime boundary is the relevant tradeoff.",
+      "primary_artifact_pass": true,
+      "priority": "P2",
+      "required_terms_present": true,
+      "review_pressure": "The review wants sharper contrast with TEE-mediated secure storage.",
+      "target": "Position AEGIS-Q against TEE systems without implying unsupported isolation.",
+      "title": "TEE and attested-storage positioning"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "paper_positioning",
+      "evidence": {
+        "artifacts/reports/evaluation_completeness_matrix/evaluation_completeness_matrix.json": [
+          "artifacts/reports/evaluation_completeness_matrix/evaluation_completeness_matrix.json"
+        ],
+        "artifacts/reports/final_claim_evidence_manifest/final_claim_evidence_manifest.json": [
+          "artifacts/reports/final_claim_evidence_manifest/final_claim_evidence_manifest.json"
+        ],
+        "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json": [
+          "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json"
+        ]
+      },
+      "evidence_present_count": 3,
+      "id": "X13",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Do not delete baselines to avoid bad numbers; make the comparison family explicit in Related Work and Evaluation.",
+      "primary_artifact_pass": true,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The latest review asks whether removing baselines or leaving GPU-storage comparisons qualitative is enough.",
+      "target": "Preserve direct measured baselines, keep fscrypt as unavailable with proof, and separate GPU-storage/PQC systems as boundary comparisons rather than same-contract baselines.",
+      "title": "competitor and baseline boundary"
+    },
+    {
+      "claim_boundary_closed": null,
+      "claim_removed": null,
+      "complete_now": true,
+      "completion_kind": "paper_with_existing_evidence",
+      "evidence": {
+        "artifacts/reports/crash_audit_report/crash_audit_report.json": [
+          "artifacts/reports/crash_audit_report/crash_audit_report.json"
+        ],
+        "artifacts/validation/publication_protocol_fault_matrix/publication_protocol_closeout.json": [
+          "artifacts/validation/publication_protocol_fault_matrix/publication_protocol_closeout.json"
+        ],
+        "artifacts/validation/x1_block_fault_campaign/x1_block_fault_campaign.json": [
+          "artifacts/validation/x1_block_fault_campaign/x1_block_fault_campaign.json"
+        ]
+      },
+      "evidence_present_count": 3,
+      "id": "X1C",
+      "new_work_required": false,
+      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "paper_strategy": "Treat real power-loss, kernel-crash, and drive-cache campaigns as future claim expansion, not as the P0 for this edge-runtime paper.",
+      "primary_artifact_pass": true,
+      "priority": "P0",
+      "required_terms_present": true,
+      "review_pressure": "The paper claims authenticated publication recovery under a scoped crash model, not physical power-loss certification.",
+      "target": "Show previous/latest committed recovery within daemon cutpoints, D/J/C fault matrices, remount oracles, and lower-block interruption.",
+      "title": "scoped crash-consistency envelope"
+    }
+  ],
+  "schema_version": 1,
+  "surface_hygiene": {
+    "no_stale_workload_cues": true,
+    "policy": "Reviewer-facing surfaces must not reintroduce the old foreground non-storage workload cue unless a same-run workload row is added and the paper claim expands explicitly.",
+    "scope": [
+      "README.md",
+      "SUBMISSION_CHECKLIST.md",
+      "Paper/main.tex",
+      "Paper/1_Introduction.tex",
+      "Paper/2_Background.tex",
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/5_Related_Works.tex",
+      "Paper/6_Conclusion.tex",
+      "Paper/7_Implementation_Details.tex",
+      "Paper/8_Security_Analysis.tex",
+      "Paper/10_Discussion_and_Limitations.tex",
+      "Paper/references.bib",
+      "Paper/main.bbl",
+      "Paper/main.pdf"
+    ],
+    "stale_workload_cue_hits": []
+  },
+  "verdict": {
+    "answer_to_user": "Defensible for the scoped edge-runtime claim. O1 is closed by claim removal, O2 by fscrypt baseline-claim removal with kernel/filesystem proof, O3 by the hybrid strict/epoch barrier closeout, O4 by retained power/thermal observations, and X13 by preserving measured baselines while separating GPU-storage/PQC competitors as boundary comparisons. OSDI acceptance is still not guaranteed, but the repeated review no longer maps to an unsupported paper claim.",
+    "osdi_strengthening_complete": true,
+    "submission_defense_ready": true
+  }
+}

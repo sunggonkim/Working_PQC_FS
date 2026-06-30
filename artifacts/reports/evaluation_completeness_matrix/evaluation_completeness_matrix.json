@@ -11,30 +11,33 @@
   "duplicate_label_mappings": {},
   "extra_label_mappings": [],
   "figure_table_labels": [
-    "fig:baseline_comparison",
     "fig:djc_state_machine",
+    "fig:evaluation_summary",
     "fig:first_page_qos",
     "fig:overall_procedure",
+    "fig:problem_boundary",
     "tab:benchmark_workloads",
     "tab:capability_matrix",
     "tab:design_goals",
     "tab:impl_boundaries",
     "tab:memory_compat",
     "tab:qos_sqlite_recovery",
-    "tab:recovery_scope",
     "tab:threat_boundary"
   ],
   "label_to_matrix_row": {
-    "fig:baseline_comparison": [
-      "time_overhead_breakdown"
-    ],
     "fig:djc_state_machine": [
       "protocol_correctness_and_security_obligations"
+    ],
+    "fig:evaluation_summary": [
+      "time_overhead_breakdown"
     ],
     "fig:first_page_qos": [
       "scalability_pressure_behavior"
     ],
     "fig:overall_procedure": [
+      "protocol_correctness_and_security_obligations"
+    ],
+    "fig:problem_boundary": [
       "protocol_correctness_and_security_obligations"
     ],
     "tab:benchmark_workloads": [
@@ -54,9 +57,6 @@
     ],
     "tab:qos_sqlite_recovery": [
       "scalability_pressure_behavior"
-    ],
-    "tab:recovery_scope": [
-      "protocol_correctness_and_security_obligations"
     ],
     "tab:threat_boundary": [
       "protocol_correctness_and_security_obligations"
@@ -98,6 +98,14 @@
           "expected_overall_pass": true,
           "overall_pass": true,
           "passes": true,
+          "path": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
           "path": "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
           "role": "retained evidence"
         },
@@ -107,6 +115,14 @@
           "overall_pass": true,
           "passes": true,
           "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json",
+          "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json",
           "role": "retained evidence"
         },
         {
@@ -129,12 +145,10 @@
           "exists": true,
           "missing_terms": [],
           "passes": true,
-          "path": "Paper/4_Evaluation.tex",
+          "path": "Paper/1_Introduction.tex",
           "terms": [
-            "plaintext warm-cache row reports",
-            "gocryptfs reports",
-            "AEGIS-Q warm-cache row reports",
-            "broader kernel-encryption rows are discussed"
+            "Table~\\ref{tab:capability_matrix} positions that gap against plaintext, gocryptfs, fscrypt, dm-crypt",
+            "storage-visible policy at the edge encryption boundary"
           ]
         },
         {
@@ -143,15 +157,15 @@
           "passes": true,
           "path": "Paper/10_Discussion_and_Limitations.tex",
           "terms": [
-            "not yet a complete fscrypt, dm-crypt",
-            "Historical fscrypt and dm-crypt fio outputs"
+            "measured frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q",
+            "not a full fscrypt, fs-verity, dm-integrity"
           ]
         }
       ],
       "required": true,
       "requirement": "baseline/SOTA comparison",
       "scoped_out": [
-        "fscrypt/dm-crypt/fs-verity/dm-integrity rows are not current matched measurements",
+        "fscrypt/fs-verity/dm-integrity rows are not current matched throughput measurements",
         "cold-cache rows remain invalid without privileged cache-drop control"
       ],
       "status": "scoped_partial"
@@ -189,16 +203,16 @@
           "passes": true,
           "path": "Paper/4_Evaluation.tex",
           "terms": [
-            "Mounted storage pressure raises SQLite p99 from 6.4~ms to 13.8~ms",
-            "recovers to 8.8~ms p99",
-            "This is SQLite recovery, not general AI-inference QoS"
+            "AEGIS-Q reports 8.15~ms p99",
+            "unthrottled storage reports 9.62~ms",
+            "bounded storage-visible control, not a uniqueness or non-storage QoS claim"
           ]
         }
       ],
       "required": true,
       "requirement": "scalability or pressure behavior",
       "scoped_out": [
-        "pressure result is mounted SQLite storage pressure, not TensorRT/AI p99 recovery"
+        "pressure result is mounted SQLite storage pressure, not non-storage application p99 recovery"
       ],
       "status": "implemented_scoped"
     },
@@ -229,7 +243,7 @@
             "Table~\\ref{tab:benchmark_workloads}",
             "SQLite",
             "\\texttt{dbm.dumb}",
-            "TensorRT"
+            "append-log/cache-manifest"
           ]
         },
         {
@@ -238,7 +252,8 @@
           "passes": true,
           "path": "Paper/10_Discussion_and_Limitations.tex",
           "terms": [
-            "broader workloads"
+            "SQLite, elastic writes, secure append-log, and cache-manifest remounts",
+            "not a general POSIX"
           ]
         }
       ],
@@ -266,11 +281,19 @@
           "passes": true,
           "path": "artifacts/validation/keyplane_rekey_workflow/keyplane_rekey_workflow.json",
           "role": "retained evidence"
+        },
+        {
+          "exists": true,
+          "expected_overall_pass": true,
+          "overall_pass": true,
+          "passes": true,
+          "path": "artifacts/reports/x11_mlkem_break_even_model/x11_mlkem_break_even_model.json",
+          "role": "retained evidence"
         }
       ],
       "evidence_pass": true,
       "figure_table_labels": [
-        "fig:baseline_comparison"
+        "fig:evaluation_summary"
       ],
       "id": "time_overhead_breakdown",
       "paper_anchor_pass": true,
@@ -283,8 +306,9 @@
           "terms": [
             "CPU/OpenSSL reaches 1.61~GB/s",
             "cuPQC reaches 1.50~M operations/s",
-            "1.158$\\times$ speedup",
-            "ablation rows attribute observed behavior to four mechanisms"
+            "1.186$\\times$ median speedup",
+            "break-even model",
+            "The ablation manifest then attributes cost"
           ]
         }
       ],
@@ -362,9 +386,9 @@
           "passes": true,
           "path": "Paper/4_Evaluation.tex",
           "terms": [
-            "observed-range whiskers, not confidence intervals",
-            "single retained workflow artifacts, not statistical confidence claims",
-            "future headline comparisons require warmup, five repetitions, bootstrap 95\\% confidence intervals"
+            "same-run power/thermal observations",
+            "five repetitions",
+            "five-run methodology row"
           ]
         }
       ],
@@ -404,11 +428,11 @@
           "exists": true,
           "missing_terms": [],
           "passes": true,
-          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "path": "Paper/4_Evaluation.tex",
           "terms": [
-            "This case study is the same \\texttt{sqlite-mounted-qos-recovery-2026-06-27} contract",
-            "not a separate anecdotal demo",
-            "does not extend to kernel-encryption replacement"
+            "The app-level result uses SQLite transaction latency",
+            "secure append-log macro",
+            "cache-manifest workload"
           ]
         }
       ],
@@ -448,13 +472,13 @@
       ],
       "evidence_pass": true,
       "figure_table_labels": [
+        "fig:problem_boundary",
         "tab:design_goals",
         "fig:overall_procedure",
         "fig:djc_state_machine",
         "tab:memory_compat",
         "tab:impl_boundaries",
-        "tab:threat_boundary",
-        "tab:recovery_scope"
+        "tab:threat_boundary"
       ],
       "id": "protocol_correctness_and_security_obligations",
       "paper_anchor_pass": true,

@@ -1,0 +1,3 @@
+set(PQC_CRYPTO_INCLUDE_DIRS
+    ${CODE_DIR}/crypto
+)

@@ -1,0 +1,751 @@
+{
+  "blocking_items": [],
+  "complete_count": 9,
+  "gate_0_13_close_condition": "The spine is a secure edge-storage runtime bottleneck claim, and each borrowed OS/storage mechanism is classified as implemented analogue, measured comparison, baseline boundary, rejected non-claim, or scoped placement.",
+  "gate_0_17_close_condition": "No FAST/SOSP/OSDI/ATC mechanism is treated as an AEGIS-Q contribution unless the row maps to production code, artifact evidence, paper location, and a non-claim boundary.",
+  "generated_utc": "2026-06-30T02:43:57Z",
+  "overall_pass": true,
+  "schema_version": 1,
+  "technique_count": 9,
+  "techniques": [
+    {
+      "aegisq_analogue": "Strict journal plus opt-in epoch redo-log with replay of committed prefixes.",
+      "artifact_evidence": [
+        {
+          "path": "docs/architecture/publication_protocol.md",
+          "pattern": "docs/architecture/publication_protocol.md"
+        },
+        {
+          "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json",
+          "pattern": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json"
+        },
+        {
+          "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json",
+          "pattern": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/storage/pqc_journal.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_log.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_publish.c"
+        },
+        {
+          "exists": true,
+          "path": "code/fs/pqc_recovery.c"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q uses an append/replay pattern for its FUSE sidecar format; it does not claim an F2FS segment cleaner, NAT/SIT design, or kernel-integrated flash filesystem.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "Do not call the epoch log an F2FS implementation or a flash-translation/filesystem replacement.",
+      "paper_hit_count": 8,
+      "paper_hits": [
+        {
+          "line": 40,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "roll-forward|replay",
+          "text": "AEGIS-Q explores this gap as a UMA-aware secure-storage runtime.  Its thesis is that secure edge storage should expose one durable authenticated format while separating a CPU-first AES-GCM data plane, an elastic GPU/PQC maintenance lane, an"
+        },
+        {
+          "line": 99,
+          "path": "Paper/3_Design.tex",
+          "pattern": "epoch-redo-log",
+          "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+        },
+        {
+          "line": 99,
+          "path": "Paper/3_Design.tex",
+          "pattern": "committed epoch prefixes",
+          "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+        },
+        {
+          "line": 7,
+          "path": "Paper/3_Design.tex",
+          "pattern": "roll-forward|replay",
+          "text": "Figure~\\ref{fig:overall_procedure} separates the persistent secure-storage path from optional accelerator work.  The data plane is an AES-256-GCM block format.  The key-plane workflow contains optional batched ML-KEM envelope refresh for op"
+        },
+        {
+          "line": 82,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "epoch-redo-log",
+          "text": "The second macrobenchmark is a mounted secure-inference-log smoke.  It runs in both strict and epoch-redo-log modes, appending ordered 16~KiB inference records through the mounted path, syncing each append, reading the log before and after "
+        },
+        {
+          "line": 12,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "roll-forward|replay",
+          "text": "\\item \\textbf{RQ4: Freshness and recovery oracle.} Which daemon/app crash and TPM replay-after-advance outcomes are supported, and which rollback or power-loss claims remain outside scope?"
+        },
+        {
+          "line": 5,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "roll-forward|replay",
+          "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work; it is not a stronger deployed encryption layer.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}; gocryptfs is the closest user-sp"
+        },
+        {
+          "line": 12,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "pattern": "roll-forward|replay",
+          "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker d"
+        }
+      ],
+      "paper_patterns": [
+        "epoch-redo-log",
+        "committed epoch prefixes",
+        "roll-forward|replay"
+      ],
+      "prior_mechanism": "Append-only logging and roll-forward recovery",
+      "prior_source": "F2FS FAST'15",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "aegisq_analogue": "Operation-style epoch records and a sharded leader/follower commit coordinator.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/parallel_commit_contract/parallel_commit_contract.json",
+          "pattern": "artifacts/validation/parallel_commit_contract/parallel_commit_contract.json"
+        },
+        {
+          "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json",
+          "pattern": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_log.c"
+        },
+        {
+          "exists": true,
+          "path": "code/fs/pqc_parallel_commit.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_publish.c"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q borrows the idea of operation-shaped metadata records, but keeps a FUSE sidecar runtime with scoped parallel commit; it does not claim ScaleFS decentralization, kernel shared-memory metadata, or POSIX scalability.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "No ScaleFS-equivalent scalability or decentralized metadata claim is allowed.",
+      "paper_hit_count": 3,
+      "paper_hits": [
+        {
+          "line": 99,
+          "path": "Paper/3_Design.tex",
+          "pattern": "leader/follower",
+          "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+        },
+        {
+          "line": 99,
+          "path": "Paper/3_Design.tex",
+          "pattern": "epoch group",
+          "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+        },
+        {
+          "line": 9,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "leader/follower",
+          "text": "Filesystem logging work such as F2FS, ScaleFS, and FastCommit informs the append, replay, compact metadata, and group commit vocabulary used in AEGIS-Q, but the implemented analogue is only the scoped FUSE sidecar epoch log and bounded lead"
+        }
+      ],
+      "paper_patterns": [
+        "leader/follower",
+        "epoch group",
+        "operation log|operation logs"
+      ],
+      "prior_mechanism": "Operation logs and decentralized filesystem metadata",
+      "prior_source": "ScaleFS SOSP'17",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "aegisq_analogue": "Batched strict journal append, epoch commit records, checkpoint compaction, and opt-in windowed anchor flushing.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json",
+          "pattern": "artifacts/validation/publication_protocol_fault_matrix/epoch_publication_comparison.json"
+        },
+        {
+          "path": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json",
+          "pattern": "artifacts/validation/publication_protocol_fault_matrix/epoch_replay_fault_matrix.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/storage/pqc_strict_publish.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_log.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_publish.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_anchor_worker.c"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q has compact sidecar records and selective/windowed freshness tradeoffs, not an ext4 FastCommit path or a complete journaling filesystem redesign.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "Do not imply ext4 FastCommit semantics, broad selective flushing safety, or physical power-loss certification.",
+      "paper_hit_count": 2,
+      "paper_hits": [
+        {
+          "line": 99,
+          "path": "Paper/3_Design.tex",
+          "pattern": "sync-count amortization",
+          "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+        },
+        {
+          "line": 9,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "window|selective|compact",
+          "text": "Filesystem logging work such as F2FS, ScaleFS, and FastCommit informs the append, replay, compact metadata, and group commit vocabulary used in AEGIS-Q, but the implemented analogue is only the scoped FUSE sidecar epoch log and bounded lead"
+        }
+      ],
+      "paper_patterns": [
+        "checkpoint compaction",
+        "sync-count amortization",
+        "window|selective|compact"
+      ],
+      "prior_mechanism": "Compact metadata logging and selective flushing",
+      "prior_source": "FastCommit ATC'24",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "aegisq_analogue": "Opt-in epoch leader/follower group barrier with sharded runtime telemetry and replay ordering.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json",
+          "pattern": "artifacts/validation/parallel_commit_contract/parallel_commit_closure_audit.json"
+        },
+        {
+          "path": "artifacts/validation/parallel_commit_contract/parallel_commit_contract.json",
+          "pattern": "artifacts/validation/parallel_commit_contract/parallel_commit_contract.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/fs/pqc_parallel_commit.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_epoch_publish.c"
+        },
+        {
+          "exists": true,
+          "path": "code/support/pqc_lock_profile.c"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q can claim a scoped epoch-group mechanism only for the measured mounted path; it cannot claim broad multicore filesystem scalability without the concurrency-contract closeout.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "No broad scalability, multicore, or concurrent-client claim before Gate 0.15/A3 close.",
+      "paper_hit_count": 5,
+      "paper_hits": [
+        {
+          "line": 99,
+          "path": "Paper/3_Design.tex",
+          "pattern": "leader/follower",
+          "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+        },
+        {
+          "line": 99,
+          "path": "Paper/3_Design.tex",
+          "pattern": "bounded leader/follower",
+          "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+        },
+        {
+          "line": 9,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "group commit",
+          "text": "Filesystem logging work such as F2FS, ScaleFS, and FastCommit informs the append, replay, compact metadata, and group commit vocabulary used in AEGIS-Q, but the implemented analogue is only the scoped FUSE sidecar epoch log and bounded lead"
+        },
+        {
+          "line": 9,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "leader/follower",
+          "text": "Filesystem logging work such as F2FS, ScaleFS, and FastCommit informs the append, replay, compact metadata, and group commit vocabulary used in AEGIS-Q, but the implemented analogue is only the scoped FUSE sidecar epoch log and bounded lead"
+        },
+        {
+          "line": 9,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "bounded leader/follower",
+          "text": "Filesystem logging work such as F2FS, ScaleFS, and FastCommit informs the append, replay, compact metadata, and group commit vocabulary used in AEGIS-Q, but the implemented analogue is only the scoped FUSE sidecar epoch log and bounded lead"
+        }
+      ],
+      "paper_patterns": [
+        "group commit",
+        "leader/follower",
+        "bounded leader/follower"
+      ],
+      "prior_mechanism": "Group commit and parallel journaling",
+      "prior_source": "FAST/SOSP/OSDI storage systems",
+      "transfer_status": "implemented-scoped-analogue"
+    },
+    {
+      "aegisq_analogue": "Storage-visible QoS classification and throttle path compared against two kernel-level controls.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json",
+          "pattern": "artifacts/validation/sqlite_kernel_qos_comparison/sqlite_kernel_qos_comparison.json"
+        },
+        {
+          "path": "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json",
+          "pattern": "artifacts/validation/sqlite_kernel_qos_baseline/sqlite_kernel_qos_baseline.json"
+        },
+        {
+          "path": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json",
+          "pattern": "artifacts/validation/sqlite_kernel_qos_baseline_cgroup/sqlite_kernel_qos_baseline.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_qos.c"
+        },
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_admission.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_sqlite_kernel_qos_baseline.py"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q may claim storage-visible classification and observability tradeoffs; it may not claim kernel QoS is generally impossible or always worse.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "No SQLite uniqueness or general kernel-QoS impossibility claim.",
+      "paper_hit_count": 3,
+      "paper_hits": [
+        {
+          "line": 111,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "ionice",
+          "text": "The app-level result uses SQLite transaction latency.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and one-run kernel QoS controls.  AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; t"
+        },
+        {
+          "line": 111,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "IOWeight",
+          "text": "The app-level result uses SQLite transaction latency.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and one-run kernel QoS controls.  AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; t"
+        },
+        {
+          "line": 111,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "bounded storage-visible control",
+          "text": "The app-level result uses SQLite transaction latency.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and one-run kernel QoS controls.  AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; t"
+        }
+      ],
+      "paper_patterns": [
+        "ionice",
+        "IOWeight",
+        "bounded storage-visible control"
+      ],
+      "prior_mechanism": "Kernel QoS and I/O scheduling controls",
+      "prior_source": "Linux ionice/cgroup/BFQ-style controls",
+      "transfer_status": "measured-comparison"
+    },
+    {
+      "aegisq_analogue": "Mode-aligned baseline verdicts with measured, environment-blocked, or unavailable rows.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json",
+          "pattern": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json"
+        },
+        {
+          "path": "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json",
+          "pattern": "artifacts/validation/frozen_dmcrypt_contract/*.json"
+        },
+        {
+          "path": "artifacts/validation/frozen_dmcrypt_contract/paper_dmcrypt_verdict.json",
+          "pattern": "artifacts/validation/frozen_dmcrypt_contract/*.json"
+        },
+        {
+          "path": "artifacts/validation/frozen_dmcrypt_contract/platform_manifest.json",
+          "pattern": "artifacts/validation/frozen_dmcrypt_contract/*.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/experiments/build_kernel_baseline_feasibility.py"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_frozen_dmcrypt_contract.py"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q is positioned against kernel-native alternatives through measured or blocked rows, not by replacing their maturity or kernel trust boundary.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "No apples-to-apples fscrypt/dm-crypt speedup without matched measured rows.",
+      "paper_hit_count": 13,
+      "paper_hits": [
+        {
+          "line": 25,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "fscrypt",
+          "text": "fscrypt & \\cmark & \\xmark & \\xmark & In-kernel file encryption\\\\"
+        },
+        {
+          "line": 26,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "dm-crypt",
+          "text": "dm-crypt & \\cmark & \\xmark & \\xmark & Block-device encryption\\\\"
+        },
+        {
+          "line": 7,
+          "path": "Paper/2_Background.tex",
+          "pattern": "fscrypt",
+          "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs,"
+        },
+        {
+          "line": 7,
+          "path": "Paper/2_Background.tex",
+          "pattern": "dm-crypt",
+          "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs,"
+        },
+        {
+          "line": 22,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "fscrypt",
+          "text": "Table~\\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB "
+        },
+        {
+          "line": 22,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "dm-crypt",
+          "text": "Table~\\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB "
+        },
+        {
+          "line": 22,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "environment-blocked|unavailable",
+          "text": "Table~\\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB "
+        },
+        {
+          "line": 5,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "fscrypt",
+          "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work; it is not a stronger deployed encryption layer.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}; gocryptfs is the closest user-sp"
+        },
+        {
+          "line": 5,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "dm-crypt",
+          "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work; it is not a stronger deployed encryption layer.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}; gocryptfs is the closest user-sp"
+        },
+        {
+          "line": 5,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "environment-blocked|unavailable",
+          "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work; it is not a stronger deployed encryption layer.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}; gocryptfs is the closest user-sp"
+        },
+        {
+          "line": 17,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "pattern": "fscrypt",
+          "text": "The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, AEGIS-Q, plus fscrypt/dm-crypt environment"
+        },
+        {
+          "line": 17,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "pattern": "dm-crypt",
+          "text": "The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, AEGIS-Q, plus fscrypt/dm-crypt environment"
+        }
+      ],
+      "paper_patterns": [
+        "fscrypt",
+        "dm-crypt",
+        "environment-blocked|unavailable"
+      ],
+      "prior_mechanism": "Kernel-native encryption baselines",
+      "prior_source": "fscrypt and dm-crypt",
+      "transfer_status": "baseline-boundary"
+    },
+    {
+      "aegisq_analogue": "TPM NV replay-after-advance checks plus freshness ladder, without sealed-key release or PCR-bound rollback resistance.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/freshness_ladder_claim_guard/freshness_ladder_claim_guard.json",
+          "pattern": "artifacts/validation/freshness_ladder_claim_guard/*.json"
+        },
+        {
+          "path": "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json",
+          "pattern": "artifacts/validation/hardware_freshness_recovery_matrix/*.json"
+        },
+        {
+          "path": "artifacts/validation/tpm_freshness_bundle/tpm_freshness_bundle.json",
+          "pattern": "artifacts/validation/tpm_freshness_bundle/*.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/storage/pqc_anchor.c"
+        },
+        {
+          "exists": true,
+          "path": "code/storage/pqc_anchor_worker.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_hardware_freshness_recovery_matrix.py"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q may claim replay-after-advance fail-closed behavior under the retained model; it may not claim full rollback resistance, sealed-key release, or persistent PCR-bound freshness.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "No TPM rollback-resistance or PCR-bound freshness claim before Gate C6 closes.",
+      "paper_hit_count": 8,
+      "paper_hits": [
+        {
+          "line": 52,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "persistent PCR-bound",
+          "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-lo"
+        },
+        {
+          "line": 89,
+          "path": "Paper/3_Design.tex",
+          "pattern": "TPM replay-after-advance",
+          "text": "checkpoint/xattr $\\rightarrow$ anchor attempted & checkpoint field authenticated; anchor update attempted & TPM replay-after-advance fail-closed artifact; file-anchor negative control & Hardware freshness only after provisioned NV anchor; n"
+        },
+        {
+          "line": 24,
+          "path": "Paper/3_Design.tex",
+          "pattern": "persistent PCR-bound",
+          "text": "External-anchor freshness condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is ret"
+        },
+        {
+          "line": 42,
+          "path": "Paper/3_Design.tex",
+          "pattern": "sealed-key|rollback",
+          "text": "The password-derived mount key is never hardware-released; scrypt does not remove weak-password or offline-guessing risk.  There is no hardware-backed credential release path for the mount key.  The rekey is open-file DEK refresh rather tha"
+        },
+        {
+          "line": 12,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "TPM replay-after-advance",
+          "text": "\\item \\textbf{RQ4: Freshness and recovery oracle.} Which daemon/app crash and TPM replay-after-advance outcomes are supported, and which rollback or power-loss claims remain outside scope?"
+        },
+        {
+          "line": 12,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "sealed-key|rollback",
+          "text": "\\item \\textbf{RQ4: Freshness and recovery oracle.} Which daemon/app crash and TPM replay-after-advance outcomes are supported, and which rollback or power-loss claims remain outside scope?"
+        },
+        {
+          "line": 21,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "pattern": "TPM replay-after-advance",
+          "text": "The crash story has the same boundary.  The repository retains conservative crash-audit, daemon \\texttt{SIGKILL}, SQLite selected-boundary, SQLite/\\texttt{dbm.dumb} TPM replay-after-advance, and SQLite syscall-exact app-crash evidence, but "
+        },
+        {
+          "line": 12,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "pattern": "persistent PCR-bound",
+          "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  The implementation has no hardware-backed credential release, audited rotation protocol, privileged-attacker d"
+        }
+      ],
+      "paper_patterns": [
+        "TPM replay-after-advance",
+        "persistent PCR-bound",
+        "sealed-key|rollback"
+      ],
+      "prior_mechanism": "TPM/TEE freshness and rollback boundaries",
+      "prior_source": "TPM/TEE systems",
+      "transfer_status": "implemented-negative-boundary"
+    },
+    {
+      "aegisq_analogue": "Measured non-claim and ordinary FUSE path; no production bypass is part of the verified system.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/ebpf_iouring_scope_audit/ebpf_iouring_scope_audit.json",
+          "pattern": "artifacts/validation/ebpf_iouring_scope_audit/ebpf_iouring_scope_audit.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/frontend/pqc_fuse.c"
+        },
+        {
+          "exists": true,
+          "path": "code/experiments/run_ebpf_iouring_scope_audit.py"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q keeps ordinary FUSE semantics in the verified path; eBPF/io_uring completion bypass is not a contribution.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "No eBPF/io_uring bypass claim unless production mounted-path evidence exists.",
+      "paper_hit_count": 7,
+      "paper_hits": [
+        {
+          "line": 52,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "eBPF",
+          "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-lo"
+        },
+        {
+          "line": 52,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "io\\\\_uring|io_uring",
+          "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-lo"
+        },
+        {
+          "line": 52,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "completion bypass|not implemented",
+          "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-lo"
+        },
+        {
+          "line": 35,
+          "path": "Paper/3_Design.tex",
+          "pattern": "eBPF",
+          "text": "\\caption{Implemented AEGIS-Q control and persistence path. Solid arrows are the FUSE format used by the tests; orange dashed arrows denote optional accelerator or externally provisioned hardware paths. This revision does not claim \\texttt{O"
+        },
+        {
+          "line": 131,
+          "path": "Paper/3_Design.tex",
+          "pattern": "completion bypass|not implemented",
+          "text": "QoS follows Figure~\\ref{fig:first_page_qos}: unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling elastic writes, not by claiming foreground-"
+        },
+        {
+          "line": 37,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "eBPF",
+          "text": "RQ2/RQ5 eBPF & \\texttt{nvme\\_complete\\_rq} diagnostic histogram & Mounted eBPF/io\\_uring path\\\\"
+        },
+        {
+          "line": 37,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "io\\\\_uring|io_uring",
+          "text": "RQ2/RQ5 eBPF & \\texttt{nvme\\_complete\\_rq} diagnostic histogram & Mounted eBPF/io\\_uring path\\\\"
+        }
+      ],
+      "paper_patterns": [
+        "eBPF",
+        "io\\\\_uring|io_uring",
+        "completion bypass|not implemented"
+      ],
+      "prior_mechanism": "FUSE passthrough, eBPF, io_uring, and kernel-bypass completion",
+      "prior_source": "Modern kernel bypass and tracing paths",
+      "transfer_status": "rejected-nonclaim"
+    },
+    {
+      "aegisq_analogue": "CPU-first AES-GCM data path, optional GPU key-plane/maintenance lane, and explicit Jetson memory non-claims.",
+      "artifact_evidence": [
+        {
+          "path": "artifacts/validation/jetson_memory_contract/jetson_memory_contract.json",
+          "pattern": "artifacts/validation/jetson_memory_contract/*.json"
+        },
+        {
+          "path": "artifacts/validation/jetson_memory_contract/jetson_memory_probe.stdout.json",
+          "pattern": "artifacts/validation/jetson_memory_contract/*.json"
+        },
+        {
+          "path": "artifacts/validation/jetson_optimization_ladder/jetson_optimization_ladder.json",
+          "pattern": "artifacts/validation/jetson_optimization_ladder/*.json"
+        },
+        {
+          "path": "artifacts/validation/cuda_qos_contract/cuda_qos_contract.json",
+          "pattern": "artifacts/validation/cuda_qos_contract/*.json"
+        }
+      ],
+      "code_modules": [
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_scheduler.c"
+        },
+        {
+          "exists": true,
+          "path": "code/runtime/pqc_rekey.c"
+        },
+        {
+          "exists": true,
+          "path": "code/gpu/cuda_pqc.cu"
+        },
+        {
+          "exists": true,
+          "path": "code/gpu/cuda_aead.cu"
+        }
+      ],
+      "complete": true,
+      "contribution_boundary": "AEGIS-Q may claim measured placement asymmetry and optional GPU maintenance work; it may not claim direct storage DMA, GPUDirect, dma-buf zero-copy, or foreground AI QoS recovery.",
+      "missing_artifacts": [],
+      "missing_modules": [],
+      "nonclaim_boundary": "No NVIDIA mechanism is a paper mechanism without production mounted-path benefit evidence.",
+      "paper_hit_count": 6,
+      "paper_hits": [
+        {
+          "line": 40,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "CPU-first",
+          "text": "AEGIS-Q explores this gap as a UMA-aware secure-storage runtime.  Its thesis is that secure edge storage should expose one durable authenticated format while separating a CPU-first AES-GCM data plane, an elastic GPU/PQC maintenance lane, an"
+        },
+        {
+          "line": 52,
+          "path": "Paper/1_Introduction.tex",
+          "pattern": "NVMe-to-UVM|GPUDirect|zero-copy",
+          "text": "The paper is conservative about unsupported mechanisms.  It does not claim verified \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, an \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, true power-lo"
+        },
+        {
+          "line": 28,
+          "path": "Paper/2_Background.tex",
+          "pattern": "GPU elastic lane",
+          "text": "GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large learning workloads through storage hierarchies~\\cite{flashneu"
+        },
+        {
+          "line": 51,
+          "path": "Paper/4_Evaluation.tex",
+          "pattern": "CPU-first",
+          "text": "Figure~\\ref{fig:baseline_comparison} reports the diagnostic placement result.  For a 16~MiB AES-256-GCM input, CPU/OpenSSL reaches 1.61~GB/s (observed 1.59--1.63~GB/s), whereas the managed-buffer GPU path reaches 0.172~GB/s (0.172--0.172~GB"
+        },
+        {
+          "line": 7,
+          "path": "Paper/5_Related_Works.tex",
+          "pattern": "NVMe-to-UVM|GPUDirect|zero-copy",
+          "text": "Prior GPU/storage systems validate different assumptions.  FlashNeuron and Fastensor use SSD staging for learning workloads~\\cite{flashneuron, fastensor}; SnuQS and InfScaler target managed capacity~\\cite{snuqs_storage, infscaler}, while Sn"
+        },
+        {
+          "line": 17,
+          "path": "Paper/10_Discussion_and_Limitations.tex",
+          "pattern": "NVMe-to-UVM|GPUDirect|zero-copy",
+          "text": "The three-run primitive measurements cannot establish steady-state throughput, tail latency, energy efficiency, or portability.  The frozen-contract matrix provides warm-cache plaintext, gocryptfs, AEGIS-Q, plus fscrypt/dm-crypt environment"
+        }
+      ],
+      "paper_patterns": [
+        "CPU-first",
+        "GPU elastic lane",
+        "NVMe-to-UVM|GPUDirect|zero-copy"
+      ],
+      "prior_mechanism": "GPU/UMA scheduling and storage staging",
+      "prior_source": "GPUfs, GPUDirect, FlashNeuron/Fastensor-style staging",
+      "transfer_status": "implemented-scoped-placement"
+    }
+  ]
+}

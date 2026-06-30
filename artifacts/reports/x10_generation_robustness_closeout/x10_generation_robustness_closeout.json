@@ -1,0 +1,147 @@
+{
+  "artifact": "x10_generation_robustness_closeout",
+  "checklist_guard": {
+    "complete": true,
+    "required": {
+      "artifact_named": true,
+      "x10_done": true,
+      "x11_tracked": true
+    },
+    "source": "SUBMISSION_CHECKLIST.md"
+  },
+  "checks": {
+    "checklist_complete": true,
+    "concurrency_evidence_complete": true,
+    "generation_evidence_complete": true,
+    "paper_complete": true,
+    "source_complete": true
+  },
+  "concurrency_evidence": {
+    "checks": {
+      "contract_pass": true,
+      "no_errors_or_timeouts": true,
+      "process_clients_4": true,
+      "same_and_disjoint_phases": true,
+      "same_file_threads_4": true,
+      "summary_pass": true
+    },
+    "complete": true,
+    "contract": "artifacts/validation/concurrency_contract/concurrency_contract.json",
+    "coverage": {
+      "disjoint_lifecycle_phases": 3,
+      "disjoint_process_lifecycle_phases": 3,
+      "disjoint_writer_phases": 3,
+      "max_process_client_count": 4,
+      "max_thread_count": 4,
+      "same_file_lifecycle_phases": 3,
+      "same_file_process_lifecycle_phases": 3,
+      "same_file_writer_phases": 3
+    },
+    "residual": "Mounted writer stress exercises same-file/disjoint writers, not arbitrary application-level concurrency.",
+    "summary": "artifacts/validation/concurrency_contract/lock_profile_summary.json"
+  },
+  "generation_evidence": {
+    "checks": {
+      "matrix_overall_pass": true,
+      "no_generated_nonce_reuse": true,
+      "no_silent_corruption": true,
+      "nonce_verdict_pass": true,
+      "required_cases_present": true,
+      "unexpected_liveness_failures_zero": true
+    },
+    "complete": true,
+    "matrix": "artifacts/validation/generation_fault_matrix/generation_fault_matrix.json",
+    "nonce_verdict": "artifacts/validation/nonce_generation_fault_verdict/nonce_generation_fault_verdict.json",
+    "required_cases": [
+      "self_test_older_generation_regression",
+      "partial_update_and_remount",
+      "torn_journal_write",
+      "reserved_generation_skip_after_data_fsync_fault",
+      "older_generation_append_after_newer_mapping",
+      "stale_snapshot_replay_file_anchor_negative_control",
+      "stale_snapshot_replay_tpm_anchor_existing_artifact"
+    ]
+  },
+  "overall_pass": true,
+  "paper_guard": {
+    "complete": true,
+    "paper_files": [
+      "Paper/3_Design.tex",
+      "Paper/4_Evaluation.tex",
+      "Paper/10_Discussion_and_Limitations.tex"
+    ],
+    "required": {
+      "near_wrap_policy": true,
+      "not_broad_concurrency": true,
+      "not_power_loss": true,
+      "publish_ticket_serialization": true,
+      "stress_scope": true
+    }
+  },
+  "residual_risk": "This is not a physical power-loss proof, full POSIX concurrency proof, or long-running wraparound exhaustion campaign.",
+  "scope": "Generation monotonicity closeout for the current mounted runtime: per-file reservation/commit state, retained final-binary fault rows, mounted writer stress, and near-wrap fail-closed source guard.",
+  "source_guard": {
+    "complete": true,
+    "guards": {
+      "epoch_duplicate_rejection": {
+        "complete": true,
+        "path": "code/storage/pqc_epoch_log.c",
+        "present": {
+          "++summary.duplicate_generation_records": true,
+          "a->file_id == b->file_id": true,
+          "a->generation == b->generation": true,
+          "a->logical_block == b->logical_block": true,
+          "rc = -EEXIST;": true
+        }
+      },
+      "reservation_and_wrap": {
+        "complete": true,
+        "path": "code/storage/pqc_writeback.c",
+        "present": {
+          "UINT64_MAX - (uint64_t)block_count": true,
+          "first_generation = snapshot->state->next_generation + 1;": true,
+          "pqc_checkpoint_reserve_generation": true,
+          "publish_turn_finish_locked": true,
+          "reserved_generation = snapshot->state->next_generation + (uint64_t)block_count;": true,
+          "return -EFBIG;": true,
+          "snapshot->state->committed_generation = reserved_generation": true,
+          "snapshot->state->next_generation = reserved_generation": true,
+          "snapshot->state->next_generation >": true
+        }
+      },
+      "reservation_persistence": {
+        "complete": true,
+        "path": "code/storage/pqc_checkpoint.c",
+        "present": {
+          "Reservation records keep generation reuse from moving backward": true,
+          "generation_reservation_xattr_after": true,
+          "pqc_checkpoint_reserve_generation": true,
+          "pqc_publish_checkpoint_store_xattr": true
+        }
+      },
+      "state_contract": {
+        "complete": true,
+        "path": "code/storage/pqc_state.h",
+        "present": {
+          "committed_generation is the reader-visible journal boundary": true,
+          "next_generation is a high-water mark": true,
+          "publish_ticket serializes read-modify-publish turns": true,
+          "strict mode now reserves generation ranges before ciphertext can be written": true
+        }
+      },
+      "strict_highwater": {
+        "complete": true,
+        "path": "code/storage/pqc_journal.c",
+        "present": {
+          "#define PQC_JOURNAL_HIGHWATER_BLOCK UINT64_MAX": true,
+          "pqc_journal_append_highwater_unsynced": true,
+          "pqc_journal_tail_highwater_generation": true,
+          "record.mapping.generation <= max_generation": true,
+          "record.mapping.generation > best.generation": true
+        }
+      }
+    }
+  },
+  "timestamp_utc": "2026-06-30T13:30:30.892764+00:00",
+  "verdict": "X10 is closed under the current claim boundary: generation ranges are per-file serialized, reserved before encryption, advanced by checkpoint/high-water state, rejected near UINT64_MAX, and tested against retained fault and bounded writer-stress rows."
+}

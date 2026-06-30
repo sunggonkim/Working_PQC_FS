@@ -1,0 +1,18 @@
+{
+  "name": "umount",
+  "result": {
+    "argv": [
+      "sudo",
+      "-S",
+      "-p",
+      "",
+      "umount",
+      "/tmp/dmcrypt_frozen_root_khmoav28/mnt"
+    ],
+    "available": true,
+    "password_supplied": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": ""
+  }
+}

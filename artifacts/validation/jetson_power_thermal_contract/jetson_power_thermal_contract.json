@@ -1,0 +1,1039 @@
+{
+  "artifact_verdict": {
+    "overall_pass": true,
+    "paper_claim_guard": "No headline performance result is paper-eligible unless it carries this contract or an equivalent per-run contract with no invalid reasons.",
+    "runner_completed": true
+  },
+  "generated_by": "code/experiments/run_jetson_power_thermal_contract.py",
+  "generated_utc": "2026-06-29T08:33:11Z",
+  "headline_run_eligibility": {
+    "headline_run_eligible": true,
+    "invalid_reasons": [],
+    "rules": [
+      "A headline run is invalid if tegrastats is unavailable or produces no retained samples.",
+      "A headline run is invalid if current nvpmodel power mode cannot be retained.",
+      "A headline run is invalid if thermal-zone metadata cannot be retained.",
+      "A headline run is invalid if tegrastats or sysfs reports throttling, over-current, undervoltage, or thermal shutdown markers.",
+      "A headline run must retain raw tegrastats/nvpmodel logs, CPU/devfreq clock state, thermal zones, and platform manifest next to the benchmark artifact."
+    ],
+    "warnings": []
+  },
+  "non_claims": [
+    "This artifact does not prove stable clocks during any future benchmark by itself.",
+    "This artifact does not prove absence of throttling for a benchmark unless captured during that same run.",
+    "This artifact does not upgrade any performance number into a paper claim."
+  ],
+  "nvpmodel": {
+    "available": true,
+    "command": [
+      "/usr/sbin/nvpmodel",
+      "-q"
+    ],
+    "mode_lines": [
+      "NV Power Mode: MAXN",
+      "0"
+    ],
+    "path": "/usr/sbin/nvpmodel",
+    "raw_paths": {
+      "stderr_path": "artifacts/validation/jetson_power_thermal_contract/nvpmodel_q.stderr.txt",
+      "stdout_path": "artifacts/validation/jetson_power_thermal_contract/nvpmodel_q.stdout.txt"
+    },
+    "returncode": 0,
+    "timed_out": false
+  },
+  "official_basis": [
+    {
+      "name": "NVIDIA Jetson tegrastats utility",
+      "url": "https://docs.nvidia.com/jetson/archives/r38.2/DeveloperGuide/AT/JetsonLinuxDevelopmentTools/TegrastatsUtility.html",
+      "used_for": [
+        "tegrastats reports memory, CPU/GPU/EMC frequency, temperature, and power rails",
+        "foreground tegrastats sampling with --interval",
+        "invalid-run metadata requirements for headline performance runs"
+      ]
+    },
+    {
+      "name": "NVIDIA Jetson Thor power and thermal guidance",
+      "url": "https://docs.nvidia.com/jetson/archives/r38.2/DeveloperGuide/SD/PlatformPowerAndPerformance/JetsonThor.html",
+      "used_for": [
+        "nvpmodel -q as the current power-mode query",
+        "power mode persistence and reboot caveats",
+        "thermal throttling and shutdown boundary context"
+      ]
+    }
+  ],
+  "platform_manifest": {
+    "kernel_release": "6.8.12-tegra",
+    "machine": "aarch64",
+    "nv_boot_control": "TNSPEC 3834-400-0008-H.1-1-1-jetson-agx-thor-devkit-\nCOMPATIBLE_SPEC 3834-000-0008--1--jetson-agx-thor-devkit-\nTEGRA_BOOT_STORAGE nvme0n1\nTEGRA_CHIPID 0x26\nTEGRA_OTA_BOOT_DEVICE /dev/mtdblock0\nTEGRA_OTA_GPT_DEVICE /dev/mtdblock0",
+    "nv_tegra_release": "# R38 (release), REVISION: 4.0, GCID: 43443517, BOARD: generic, EABI: aarch64, DATE: Wed Dec 31 00:15:19 UTC 2025\n# KERNEL_VARIANT: oot\nTARGET_USERSPACE_LIB_DIR=nvidia\nTARGET_USERSPACE_LIB_DIR_PATH=usr/lib/aarch64-linux-gnu/nvidia\nINSTALL_TYPE=openrm",
+    "nvpmodel_conf_exists": true,
+    "platform": "Linux-6.8.12-tegra-aarch64-with-glibc2.39",
+    "processor": "aarch64",
+    "python": "3.12.3",
+    "uname": {
+      "machine": "aarch64",
+      "node": "thor",
+      "processor": "aarch64",
+      "release": "6.8.12-tegra",
+      "system": "Linux",
+      "version": "#1 SMP PREEMPT Tue Dec 30 15:40:41 PST 2025"
+    }
+  },
+  "platform_state": {
+    "cpu_frequency": [
+      {
+        "affected_cpus": "0 1",
+        "cpu": "cpu0",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "0 1",
+        "cpu": "cpu1",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "10 11",
+        "cpu": "cpu10",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "10 11",
+        "cpu": "cpu11",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "12 13",
+        "cpu": "cpu12",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "12 13",
+        "cpu": "cpu13",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "2 3",
+        "cpu": "cpu2",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "2 3",
+        "cpu": "cpu3",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "4 5",
+        "cpu": "cpu4",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "4 5",
+        "cpu": "cpu5",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "6 7",
+        "cpu": "cpu6",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "6 7",
+        "cpu": "cpu7",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "8 9",
+        "cpu": "cpu8",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      },
+      {
+        "affected_cpus": "8 9",
+        "cpu": "cpu9",
+        "cpufreq_available": true,
+        "cpuinfo_cur_freq": null,
+        "cpuinfo_max_freq": "2601000",
+        "cpuinfo_min_freq": "54000",
+        "online": "1",
+        "scaling_cur_freq": "2601000",
+        "scaling_driver": "tegra194",
+        "scaling_governor": "schedutil",
+        "scaling_max_freq": "2601000",
+        "scaling_min_freq": "2601000"
+      }
+    ],
+    "devfreq": [
+      {
+        "available_frequencies": "54000000 63000000 72000000 81000000 90000000 99000000 108000000 117000000 126000000 135000000 144000000 153000000 162000000 171000000 180000000 189000000 198000000 207000000 216000000 225000000 234000000 243000000 252000000 261000000 270000000 279000000 288000000 297000000 306000000 315000000 324000000 333000000 342000000 351000000 360000000 369000000 378000000 387000000 396000000 405000000 414000000 423000000 432000000 441000000 450000000 459000000 468000000 477000000 486000000 495000000 504000000 513000000 522000000 531000000 540000000 549000000 558000000 567000000 576000000 585000000 594000000 603000000 612000000 621000000 630000000 639000000 648000000 657000000 666000000 675000000 684000000 693000000 702000000 711000000 720000000 729000000 738000000 747000000 756000000 765000000 774000000 783000000 792000000 801000000 810000000 819000000 828000000 837000000 846000000 855000000 864000000 873000000 882000000 891000000 900000000 909000000 918000000 927000000 936000000 945000000 954000000 963000000 972000000 981000000 990000000 999000000 1008000000 1017000000 1026000000 1035000000 1044000000 1053000000 1062000000 1071000000 1080000000 1089000000 1098000000 1107000000",
+        "available_governors": "nvhost_podgov tegra_wmark userspace performance simple_ondemand",
+        "cur_freq": "54000000",
+        "governor": "tegra_wmark",
+        "load": null,
+        "max_freq": "1107000000",
+        "min_freq": "54000000",
+        "name": "8188050000.vic",
+        "path": "/sys/class/devfreq/8188050000.vic",
+        "target_freq": "54000000"
+      },
+      {
+        "available_frequencies": "665600000 2750000000 3200000000 4266000000",
+        "available_governors": "bpmp-bwmgr",
+        "cur_freq": "4266000000",
+        "governor": "bpmp-bwmgr",
+        "load": null,
+        "max_freq": "4266000000",
+        "min_freq": "4266000000",
+        "name": "bwmgr",
+        "path": "/sys/class/devfreq/bwmgr",
+        "target_freq": "4266000000"
+      },
+      {
+        "available_frequencies": "54000000 63000000 72000000 81000000 90000000 99000000 108000000 117000000 126000000 135000000 144000000 153000000 162000000 171000000 180000000 189000000 198000000 207000000 216000000 225000000 234000000 243000000 252000000 261000000 270000000 279000000 288000000 297000000 306000000 315000000 324000000 333000000 342000000 351000000 360000000 369000000 378000000 387000000 396000000 405000000 414000000 423000000 432000000 441000000 450000000 459000000 468000000 477000000 486000000 495000000 504000000 513000000 522000000 531000000 540000000 549000000 558000000 567000000 576000000 585000000 594000000 603000000 612000000 621000000 630000000 639000000 648000000 657000000 666000000 675000000 684000000 693000000 702000000 711000000 720000000 729000000 738000000 747000000 756000000 765000000 774000000 783000000 792000000 801000000 810000000 819000000 828000000 837000000 846000000 855000000 864000000 873000000 882000000 891000000 900000000 909000000 918000000 927000000 936000000 945000000 954000000 963000000 972000000 981000000 990000000 999000000 1008000000 1017000000 1026000000 1035000000 1044000000 1053000000 1062000000 1071000000 1080000000 1089000000 1098000000 1107000000 1116000000 1125000000 1134000000 1143000000 1152000000 1161000000 1170000000 1179000000 1188000000 1197000000 1206000000 1215000000 1224000000 1233000000 1242000000 1251000000 1260000000 1269000000 1278000000 1287000000 1296000000 1305000000 1314000000 1323000000 1332000000 1341000000 1350000000 1359000000 1368000000 1377000000 1386000000 1395000000 1404000000 1413000000 1422000000 1431000000 1440000000 1449000000 1458000000 1467000000 1476000000 1485000000 1494000000 1503000000 1512000000 1521000000 1530000000 1539000000 1548000000 1557000000 1566000000 1575000000",
+        "available_governors": "nvhost_podgov tegra_wmark userspace performance simple_ondemand",
+        "cur_freq": "1575000000",
+        "governor": "nvhost_podgov",
+        "load": null,
+        "max_freq": "1575000000",
+        "min_freq": "1575000000",
+        "name": "gpu-gpc-0",
+        "path": "/sys/class/devfreq/gpu-gpc-0",
+        "target_freq": "1575000000"
+      },
+      {
+        "available_frequencies": "54000000 63000000 72000000 81000000 90000000 99000000 108000000 117000000 126000000 135000000 144000000 153000000 162000000 171000000 180000000 189000000 198000000 207000000 216000000 225000000 234000000 243000000 252000000 261000000 270000000 279000000 288000000 297000000 306000000 315000000 324000000 333000000 342000000 351000000 360000000 369000000 378000000 387000000 396000000 405000000 414000000 423000000 432000000 441000000 450000000 459000000 468000000 477000000 486000000 495000000 504000000 513000000 522000000 531000000 540000000 549000000 558000000 567000000 576000000 585000000 594000000 603000000 612000000 621000000 630000000 639000000 648000000 657000000 666000000 675000000 684000000 693000000 702000000 711000000 720000000 729000000 738000000 747000000 756000000 765000000 774000000 783000000 792000000 801000000 810000000 819000000 828000000 837000000 846000000 855000000 864000000 873000000 882000000 891000000 900000000 909000000 918000000 927000000 936000000 945000000 954000000 963000000 972000000 981000000 990000000 999000000 1008000000 1017000000 1026000000 1035000000 1044000000 1053000000 1062000000 1071000000 1080000000 1089000000 1098000000 1107000000 1116000000 1125000000 1134000000 1143000000 1152000000 1161000000 1170000000 1179000000 1188000000 1197000000 1206000000 1215000000 1224000000 1233000000 1242000000 1251000000 1260000000 1269000000 1278000000 1287000000 1296000000 1305000000 1314000000 1323000000 1332000000 1341000000 1350000000 1359000000 1368000000 1377000000 1386000000 1395000000 1404000000 1413000000 1422000000 1431000000 1440000000 1449000000 1458000000 1467000000 1476000000 1485000000 1494000000 1503000000 1512000000 1521000000 1530000000 1539000000 1548000000 1557000000 1566000000 1575000000 1584000000 1593000000 1602000000 1611000000 1620000000 1629000000 1638000000 1647000000 1656000000 1665000000 1674000000 1683000000 1692000000",
+        "available_governors": "nvhost_podgov tegra_wmark userspace performance simple_ondemand",
+        "cur_freq": "1692000000",
+        "governor": "nvhost_podgov",
+        "load": null,
+        "max_freq": "1692000000",
+        "min_freq": "1692000000",
+        "name": "gpu-nvd-0",
+        "path": "/sys/class/devfreq/gpu-nvd-0",
+        "target_freq": "1692000000"
+      }
+    ],
+    "hwmon": [
+      {
+        "freq": [],
+        "name": "nvme",
+        "path": "/sys/class/hwmon/hwmon0",
+        "power": [],
+        "pwm": [],
+        "temps": [
+          {
+            "crit_raw": "87850",
+            "label": "Composite",
+            "max_raw": "83850",
+            "sensor": "temp1",
+            "temp_celsius": 40.85,
+            "temp_raw": "40850"
+          },
+          {
+            "crit_raw": null,
+            "label": "Sensor 1",
+            "max_raw": "65261850",
+            "sensor": "temp2",
+            "temp_celsius": 51.85,
+            "temp_raw": "51850"
+          },
+          {
+            "crit_raw": null,
+            "label": "Sensor 2",
+            "max_raw": "65261850",
+            "sensor": "temp3",
+            "temp_celsius": 40.85,
+            "temp_raw": "40850"
+          }
+        ]
+      },
+      {
+        "freq": [],
+        "name": "pwmfan",
+        "path": "/sys/class/hwmon/hwmon1",
+        "power": [],
+        "pwm": [
+          {
+            "enable": "1",
+            "sensor": "pwm1",
+            "value": "73"
+          }
+        ],
+        "temps": []
+      },
+      {
+        "freq": [],
+        "name": "pwm_tach",
+        "path": "/sys/class/hwmon/hwmon2",
+        "power": [],
+        "pwm": [],
+        "temps": []
+      },
+      {
+        "freq": [],
+        "name": "tmp451",
+        "path": "/sys/class/hwmon/hwmon3",
+        "power": [],
+        "pwm": [],
+        "temps": [
+          {
+            "crit_raw": "117000",
+            "label": null,
+            "max_raw": "116000",
+            "sensor": "temp1",
+            "temp_celsius": 38.25,
+            "temp_raw": "38250"
+          },
+          {
+            "crit_raw": "117000",
+            "label": null,
+            "max_raw": "116000",
+            "sensor": "temp2",
+            "temp_celsius": 37.937,
+            "temp_raw": "37937"
+          }
+        ]
+      },
+      {
+        "freq": [],
+        "name": "ina238",
+        "path": "/sys/class/hwmon/hwmon4",
+        "power": [
+          {
+            "average_raw": null,
+            "label": null,
+            "microwatts": 25382000,
+            "sensor": "power1"
+          }
+        ],
+        "pwm": [],
+        "temps": [
+          {
+            "crit_raw": null,
+            "label": null,
+            "max_raw": "255875",
+            "sensor": "temp1",
+            "temp_celsius": 43.75,
+            "temp_raw": "43750"
+          }
+        ]
+      },
+      {
+        "freq": [],
+        "name": "soctherm_oc",
+        "path": "/sys/class/hwmon/hwmon5",
+        "power": [],
+        "pwm": [],
+        "temps": []
+      },
+      {
+        "freq": [],
+        "name": "ina3221",
+        "path": "/sys/class/hwmon/hwmon6",
+        "power": [],
+        "pwm": [],
+        "temps": []
+      }
+    ],
+    "jetson_clocks": {
+      "path": "/usr/bin/jetson_clocks",
+      "show": {
+        "argv": [
+          "/usr/bin/jetson_clocks",
+          "--show"
+        ],
+        "returncode": 1,
+        "stderr": "",
+        "stdout": "SOC family:tegra264  Machine:NVIDIA Jetson AGX Thor Developer Kit\nError: Run this script(/usr/bin/jetson_clocks) as a root user\n",
+        "timed_out": false
+      }
+    },
+    "thermal_zones": [
+      {
+        "mode": "enabled",
+        "path": "/sys/class/thermal/thermal_zone0",
+        "policy": "user_space",
+        "temp_celsius": 42.593,
+        "temp_raw": "42593",
+        "trip_points": [
+          {
+            "name": "trip_point_0",
+            "temp_celsius": 114.5,
+            "temp_raw": "114500",
+            "type": "critical"
+          },
+          {
+            "name": "trip_point_1",
+            "temp_celsius": 80.0,
+            "temp_raw": "80000",
+            "type": "active"
+          },
+          {
+            "name": "trip_point_2",
+            "temp_celsius": 86.0,
+            "temp_raw": "86000",
+            "type": "active"
+          },
+          {
+            "name": "trip_point_3",
+            "temp_celsius": 91.0,
+            "temp_raw": "91000",
+            "type": "active"
+          },
+          {
+            "name": "trip_point_4",
+            "temp_celsius": 100.0,
+            "temp_raw": "100000",
+            "type": "active"
+          }
+        ],
+        "type": "tj-thermal"
+      },
+      {
+        "mode": "enabled",
+        "path": "/sys/class/thermal/thermal_zone1",
+        "policy": "step_wise",
+        "temp_celsius": 42.593,
+        "temp_raw": "42593",
+        "trip_points": [
+          {
+            "name": "trip_point_0",
+            "temp_celsius": 109.0,
+            "temp_raw": "109000",
+            "type": "passive"
+          },
+          {
+            "name": "trip_point_1",
+            "temp_celsius": 114.5,
+            "temp_raw": "114500",
+            "type": "critical"
+          }
+        ],
+        "type": "gpu-thermal"
+      },
+      {
+        "mode": "enabled",
+        "path": "/sys/class/thermal/thermal_zone2",
+        "policy": "step_wise",
+        "temp_celsius": 41.437,
+        "temp_raw": "41437",
+        "trip_points": [
+          {
+            "name": "trip_point_0",
+            "temp_celsius": 109.0,
+            "temp_raw": "109000",
+            "type": "passive"
+          },
+          {
+            "name": "trip_point_1",
+            "temp_celsius": 114.5,
+            "temp_raw": "114500",
+            "type": "critical"
+          }
+        ],
+        "type": "cpu-thermal"
+      },
+      {
+        "mode": "enabled",
+        "path": "/sys/class/thermal/thermal_zone3",
+        "policy": "step_wise",
+        "temp_celsius": 41.625,
+        "temp_raw": "41625",
+        "trip_points": [
+          {
+            "name": "trip_point_0",
+            "temp_celsius": 109.0,
+            "temp_raw": "109000",
+            "type": "passive"
+          },
+          {
+            "name": "trip_point_1",
+            "temp_celsius": 114.5,
+            "temp_raw": "114500",
+            "type": "critical"
+          }
+        ],
+        "type": "soc012-thermal"
+      },
+      {
+        "mode": "enabled",
+        "path": "/sys/class/thermal/thermal_zone4",
+        "policy": "step_wise",
+        "temp_celsius": 40.5,
+        "temp_raw": "40437",
+        "trip_points": [
+          {
+            "name": "trip_point_0",
+            "temp_celsius": 109.0,
+            "temp_raw": "109000",
+            "type": "passive"
+          },
+          {
+            "name": "trip_point_1",
+            "temp_celsius": 114.5,
+            "temp_raw": "114500",
+            "type": "critical"
+          }
+        ],
+        "type": "soc345-thermal"
+      }
+    ],
+    "throttling_sysfs": {
+      "bpmp_debug_available": false,
+      "cpu_thermal_throttle": [],
+      "thermal_cooling_devices": [
+        {
+          "cur_state": "0",
+          "max_state": "48",
+          "path": "/sys/class/thermal/cooling_device0",
+          "type": "cpufreq-cpu0"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "48",
+          "path": "/sys/class/thermal/cooling_device1",
+          "type": "cpufreq-cpu2"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "2",
+          "path": "/sys/class/thermal/cooling_device10",
+          "type": "soc012-throttle-alert"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "2",
+          "path": "/sys/class/thermal/cooling_device11",
+          "type": "soc345-throttle-alert"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "169",
+          "path": "/sys/class/thermal/cooling_device12",
+          "type": "devfreq-gpu-gpc-0"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "182",
+          "path": "/sys/class/thermal/cooling_device13",
+          "type": "devfreq-gpu-nvd-0"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "48",
+          "path": "/sys/class/thermal/cooling_device2",
+          "type": "cpufreq-cpu4"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "48",
+          "path": "/sys/class/thermal/cooling_device3",
+          "type": "cpufreq-cpu6"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "48",
+          "path": "/sys/class/thermal/cooling_device4",
+          "type": "cpufreq-cpu8"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "48",
+          "path": "/sys/class/thermal/cooling_device5",
+          "type": "cpufreq-cpu10"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "48",
+          "path": "/sys/class/thermal/cooling_device6",
+          "type": "cpufreq-cpu12"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "4",
+          "path": "/sys/class/thermal/cooling_device7",
+          "type": "pwm-fan"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "2",
+          "path": "/sys/class/thermal/cooling_device8",
+          "type": "cpu-throttle-alert"
+        },
+        {
+          "cur_state": "0",
+          "max_state": "2",
+          "path": "/sys/class/thermal/cooling_device9",
+          "type": "gpu-throttle-alert"
+        }
+      ]
+    }
+  },
+  "required_sections_present": {
+    "clock_frequency_state": true,
+    "invalid_run_rules": true,
+    "nvpmodel_section": true,
+    "tegrastats_section": true,
+    "thermal_state": true,
+    "throttling_markers": true
+  },
+  "schema_version": 1,
+  "scope": "Gate 0.11-S0 Jetson power/thermal/platform-state capture for headline-run eligibility.",
+  "tegrastats": {
+    "available": true,
+    "command": [
+      "/usr/bin/tegrastats",
+      "--interval",
+      "200"
+    ],
+    "duration_seconds": 1.2514860918745399,
+    "parsed": {
+      "cpu_freq_mhz": [
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601,
+        2601
+      ],
+      "emc_freq_mhz": [],
+      "gr3d_freq_mhz": [],
+      "power_rails": [
+        {
+          "average_mw": 4354,
+          "current_mw": 4354,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+          "name": "VDD_GPU"
+        },
+        {
+          "average_mw": 7920,
+          "current_mw": 7920,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+          "name": "VDD_CPU_SOC_MSS"
+        },
+        {
+          "average_mw": 4354,
+          "current_mw": 4354,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+          "name": "VDD_GPU"
+        },
+        {
+          "average_mw": 7920,
+          "current_mw": 7920,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+          "name": "VDD_CPU_SOC_MSS"
+        },
+        {
+          "average_mw": 4354,
+          "current_mw": 4354,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+          "name": "VDD_GPU"
+        },
+        {
+          "average_mw": 7920,
+          "current_mw": 7920,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+          "name": "VDD_CPU_SOC_MSS"
+        },
+        {
+          "average_mw": 4354,
+          "current_mw": 4354,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+          "name": "VDD_GPU"
+        },
+        {
+          "average_mw": 7821,
+          "current_mw": 7524,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+          "name": "VDD_CPU_SOC_MSS"
+        },
+        {
+          "average_mw": 4354,
+          "current_mw": 4354,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW",
+          "name": "VDD_GPU"
+        },
+        {
+          "average_mw": 7762,
+          "current_mw": 7524,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW",
+          "name": "VDD_CPU_SOC_MSS"
+        },
+        {
+          "average_mw": 4354,
+          "current_mw": 4354,
+          "line": "06-29-2026 17:33:11 RAM 10556/125772MB (lfb 2603x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.343C tj@42.625C soc012@41.531C gpu@42.625C soc345@40.468C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7722mW VIN_SYS_5V0 6289mW/6357mW VIN 25172mW/25566mW",
+          "name": "VDD_GPU"
+        },
+        {
+          "average_mw": 7722,
+          "current_mw": 7524,
+          "line": "06-29-2026 17:33:11 RAM 10556/125772MB (lfb 2603x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.343C tj@42.625C soc012@41.531C gpu@42.625C soc345@40.468C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7722mW VIN_SYS_5V0 6289mW/6357mW VIN 25172mW/25566mW",
+          "name": "VDD_CPU_SOC_MSS"
+        }
+      ],
+      "raw_line_preview": [
+        "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+        "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+        "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+        "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+        "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW"
+      ],
+      "sample_count": 6,
+      "temperatures": [
+        {
+          "celsius": 41.312,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+          "name": "cpu"
+        },
+        {
+          "celsius": 42.562,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+          "name": "tj"
+        },
+        {
+          "celsius": 41.718,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+          "name": "soc012"
+        },
+        {
+          "celsius": 42.562,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+          "name": "gpu"
+        },
+        {
+          "celsius": 40.531,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,16%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.562C soc012@41.718C gpu@42.562C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6492mW/6492mW VIN 26810mW/26810mW",
+          "name": "soc345"
+        },
+        {
+          "celsius": 41.406,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+          "name": "cpu"
+        },
+        {
+          "celsius": 42.625,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+          "name": "tj"
+        },
+        {
+          "celsius": 41.593,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+          "name": "soc012"
+        },
+        {
+          "celsius": 42.625,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+          "name": "gpu"
+        },
+        {
+          "celsius": 40.531,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.406C tj@42.625C soc012@41.593C gpu@42.625C soc345@40.531C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6441mW VIN 26346mW/26578mW",
+          "name": "soc345"
+        },
+        {
+          "celsius": 41.25,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+          "name": "cpu"
+        },
+        {
+          "celsius": 42.656,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+          "name": "tj"
+        },
+        {
+          "celsius": 41.562,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+          "name": "soc012"
+        },
+        {
+          "celsius": 42.656,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+          "name": "gpu"
+        },
+        {
+          "celsius": 40.5,
+          "line": "06-29-2026 17:33:10 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.562C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7920mW/7920mW VIN_SYS_5V0 6390mW/6424mW VIN 24928mW/26028mW",
+          "name": "soc345"
+        },
+        {
+          "celsius": 41.312,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+          "name": "cpu"
+        },
+        {
+          "celsius": 42.531,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+          "name": "tj"
+        },
+        {
+          "celsius": 41.625,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+          "name": "soc012"
+        },
+        {
+          "celsius": 42.531,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+          "name": "gpu"
+        },
+        {
+          "celsius": 40.5,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,5%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.312C tj@42.531C soc012@41.625C gpu@42.531C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7821mW VIN_SYS_5V0 6289mW/6390mW VIN 25564mW/25912mW",
+          "name": "soc345"
+        },
+        {
+          "celsius": 41.25,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW",
+          "name": "cpu"
+        },
+        {
+          "celsius": 42.656,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW",
+          "name": "tj"
+        },
+        {
+          "celsius": 41.593,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW",
+          "name": "soc012"
+        },
+        {
+          "celsius": 42.656,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW",
+          "name": "gpu"
+        },
+        {
+          "celsius": 40.5,
+          "line": "06-29-2026 17:33:11 RAM 10558/125772MB (lfb 2603x4MB) CPU [0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.25C tj@42.656C soc012@41.593C gpu@42.656C soc345@40.5C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7762mW VIN_SYS_5V0 6289mW/6370mW VIN 24578mW/25645mW",
+          "name": "soc345"
+        },
+        {
+          "celsius": 41.343,
+          "line": "06-29-2026 17:33:11 RAM 10556/125772MB (lfb 2603x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.343C tj@42.625C soc012@41.531C gpu@42.625C soc345@40.468C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7722mW VIN_SYS_5V0 6289mW/6357mW VIN 25172mW/25566mW",
+          "name": "cpu"
+        },
+        {
+          "celsius": 42.625,
+          "line": "06-29-2026 17:33:11 RAM 10556/125772MB (lfb 2603x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.343C tj@42.625C soc012@41.531C gpu@42.625C soc345@40.468C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7722mW VIN_SYS_5V0 6289mW/6357mW VIN 25172mW/25566mW",
+          "name": "tj"
+        },
+        {
+          "celsius": 41.531,
+          "line": "06-29-2026 17:33:11 RAM 10556/125772MB (lfb 2603x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.343C tj@42.625C soc012@41.531C gpu@42.625C soc345@40.468C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7722mW VIN_SYS_5V0 6289mW/6357mW VIN 25172mW/25566mW",
+          "name": "soc012"
+        },
+        {
+          "celsius": 42.625,
+          "line": "06-29-2026 17:33:11 RAM 10556/125772MB (lfb 2603x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.343C tj@42.625C soc012@41.531C gpu@42.625C soc345@40.468C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7722mW VIN_SYS_5V0 6289mW/6357mW VIN 25172mW/25566mW",
+          "name": "gpu"
+        },
+        {
+          "celsius": 40.468,
+          "line": "06-29-2026 17:33:11 RAM 10556/125772MB (lfb 2603x4MB) CPU [0%@2601,6%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601,0%@2601] cpu@41.343C tj@42.625C soc012@41.531C gpu@42.625C soc345@40.468C VDD_GPU 4354mW/4354mW VDD_CPU_SOC_MSS 7524mW/7722mW VIN_SYS_5V0 6289mW/6357mW VIN 25172mW/25566mW",
+          "name": "soc345"
+        }
+      ],
+      "throttle_markers": []
+    },
+    "path": "/usr/bin/tegrastats",
+    "raw_paths": {
+      "stderr_path": "artifacts/validation/jetson_power_thermal_contract/tegrastats.stderr.txt",
+      "stdout_path": "artifacts/validation/jetson_power_thermal_contract/tegrastats.stdout.txt"
+    },
+    "returncode": -15,
+    "sample_count": 6,
+    "timed_out_for_sampling": true
+  }
+}

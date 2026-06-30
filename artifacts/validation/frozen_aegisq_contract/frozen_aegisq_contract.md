@@ -10,11 +10,11 @@
 
 ## Warm-Cache Summary
 
-- `throughput_mib_s` median `0.358321`, 95% CI [`0.285963`, `0.546995`]
-- `latency_p50_us` median `10420.2`, 95% CI [`6782.98`, `13303.8`]
-- `latency_p95_us` median `11075.6`, 95% CI [`7634.94`, `13697`]
-- `latency_p99_us` median `11206.7`, 95% CI [`7700.48`, `13697`]
-- `latency_p99_9_us` median `11730.9`, 95% CI [`7962.62`, `13959.2`]
+- `throughput_mib_s` median `0.360061`, 95% CI [`0.287302`, `0.547749`]
+- `latency_p50_us` median `10551.3`, 95% CI [`6914.05`, `13303.8`]
+- `latency_p95_us` median `11206.7`, 95% CI [`7700.48`, `13828.1`]
+- `latency_p99_us` median `11206.7`, 95% CI [`7831.55`, `13828.1`]
+- `latency_p99_9_us` median `11599.9`, 95% CI [`7897.09`, `14221.3`]
 
 ## Retained Artifacts
 

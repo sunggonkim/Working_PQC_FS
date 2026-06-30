@@ -4,29 +4,68 @@
   │  CPU data plane; optional batch GPU helpers         │
   └─────────────────────────────────────────────────────┘
 
-[PQC-FUSE 2026-06-27 08:07:27.116] ════════════════════════════════════════════════════════════
-[PQC-FUSE 2026-06-27 08:07:27.116]   PQC-FUSE Session Started
-[PQC-FUSE 2026-06-27 08:07:27.116]   Storage dir : /tmp/posix_scope_store_zlm883bh
-[PQC-FUSE 2026-06-27 08:07:27.116]   Mount point : /tmp/posix_scope_mnt_u1kbyr7g
-[PQC-FUSE 2026-06-27 08:07:27.116] ════════════════════════════════════════════════════════════
-[PQC] Admission controller initialized: trace=experiments/scheduler_trace.jsonl
-[PQC-FUSE 2026-06-27 08:07:27.116] KEM algorithm : ML-KEM-768
-[PQC-FUSE 2026-06-27 08:07:27.116]   public key  : 1184 bytes
-[PQC-FUSE 2026-06-27 08:07:27.116]   secret key  : 2400 bytes
-[PQC-FUSE 2026-06-27 08:07:27.116]   ciphertext  : 1088 bytes
-[PQC-FUSE 2026-06-27 08:07:27.116]   shared secret: 32 bytes
-[PQC-FUSE 2026-06-27 08:07:27.118] Keypair generated in 1418.80 µs
-[PQC-FUSE 2026-06-27 08:07:27.288] Master Key derived successfully (PBKDF2-SHA256)
-[PQC-FUSE 2026-06-27 08:07:27.288] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
-[PQC-FUSE 2026-06-27 08:07:27.288] GPU load monitor started: /sys/devices/gpu.0/load
-[PQC-FUSE 2026-06-27 08:07:27.288] Freshness anchor worker started
-[PQC-FUSE 2026-06-27 08:07:27.393] PQC background rekey worker started
-[PQC-FUSE 2026-06-27 08:07:27.393] Starting FUSE main loop...
+[PQC-FUSE 2026-06-30 19:01:03.317] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-30 19:01:03.317]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-30 19:01:03.317]   Storage dir : /tmp/posix_scope_store_h6f9kpdi
+[PQC-FUSE 2026-06-30 19:01:03.317]   Mount point : /tmp/posix_scope_mnt_e9lw0t0b
+[PQC-FUSE 2026-06-30 19:01:03.317] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=disabled
+[PQC-FUSE 2026-06-30 19:01:03.317] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-30 19:01:03.317]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-30 19:01:03.317]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-30 19:01:03.317]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-30 19:01:03.317]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-30 19:01:03.320] Keypair generated in 1407.62 µs
+[PQC-FUSE 2026-06-30 19:01:03.379] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-06-30 19:01:03.380] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-30 19:01:03.380] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-30 19:01:03.380] Freshness anchor worker started
+[PQC-FUSE 2026-06-30 19:01:03.491] PQC background rekey worker started
+[PQC-FUSE 2026-06-30 19:01:03.491] Starting FUSE main loop...
 Ignoring invalid max threads value 4294967295 > max (100000).
-[PQC-FUSE 2026-06-27 08:07:27.428] CREATE /posix.bin: authenticated file-key envelope initialized (fid=2206078362193916086)
-[PQC-FUSE 2026-06-27 08:07:27.430] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
-[PQC-FUSE 2026-06-27 08:07:27.431] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
-[PQC-FUSE 2026-06-27 08:07:27.433] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
-[PQC-FUSE 2026-06-27 08:07:27.433] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
-[PQC-FUSE 2026-06-27 08:07:27.435] OPEN /posix.bin: restored authenticated file-key envelope (fid=2206078362193916086)
-[PQC-FUSE 2026-06-27 08:07:27.442] SETXATTR /posix.bin tier=1
+[PQC-FUSE 2026-06-30 19:01:03.526] CREATE /posix.bin: authenticated file-key envelope initialized (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.531] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.532] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.535] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.535] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.540] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.540] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.545] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.545] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.549] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.550] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.553] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.553] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.557] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.557] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.565] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.567] CREATE /rename_src.bin: authenticated file-key envelope initialized (fid=5162010402050372739)
+[PQC-FUSE 2026-06-30 19:01:03.577] OPEN /renamed.bin: restored authenticated file-key envelope (fid=5162010402050372739)
+[PQC-FUSE 2026-06-30 19:01:03.577] CREATE /overwrite_src.bin: authenticated file-key envelope initialized (fid=16263457160725573735)
+[PQC-FUSE 2026-06-30 19:01:03.584] CREATE /overwrite_dst.bin: authenticated file-key envelope initialized (fid=4526326394072853097)
+[PQC-FUSE 2026-06-30 19:01:03.588] OPEN /overwrite_dst.bin: restored authenticated file-key envelope (fid=16263457160725573735)
+[PQC-FUSE 2026-06-30 19:01:03.589] CREATE /open_rename_src.bin: authenticated file-key envelope initialized (fid=17678259872734892234)
+[PQC-FUSE 2026-06-30 19:01:03.592] OPEN /open_rename_src.bin: restored authenticated file-key envelope (fid=17678259872734892234)
+[PQC-FUSE 2026-06-30 19:01:03.595] OPEN /open_rename_dst.bin: restored authenticated file-key envelope (fid=17678259872734892234)
+[PQC-FUSE 2026-06-30 19:01:03.597] CREATE /open_target_src.bin: authenticated file-key envelope initialized (fid=12438224976347058538)
+[PQC-FUSE 2026-06-30 19:01:03.599] CREATE /open_target_dst.bin: authenticated file-key envelope initialized (fid=3934466711086681803)
+[PQC-FUSE 2026-06-30 19:01:03.603] OPEN /open_target_dst.bin: restored authenticated file-key envelope (fid=3934466711086681803)
+[PQC-FUSE 2026-06-30 19:01:03.606] OPEN /open_target_dst.bin: restored authenticated file-key envelope (fid=12438224976347058538)
+[PQC-FUSE 2026-06-30 19:01:03.608] OPEN /open_target_dst.bin: restored authenticated file-key envelope (fid=12438224976347058538)
+[PQC-FUSE 2026-06-30 19:01:03.609] CREATE /tree_dir_src/child.bin: authenticated file-key envelope initialized (fid=12883606874430053834)
+[PQC-FUSE 2026-06-30 19:01:03.612] OPEN /tree_dir_dst/child.bin: restored authenticated file-key envelope (fid=12883606874430053834)
+[PQC-FUSE 2026-06-30 19:01:03.613] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.614] OPEN /hardlink.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.614] OPEN /hardlink.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.616] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.617] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.617] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.618] OPEN /posix.bin: restored authenticated file-key envelope (fid=1967274231564761468)
+[PQC-FUSE 2026-06-30 19:01:03.618] SETXATTR /posix.bin tier=1
+[PQC-FUSE 2026-06-30 19:01:03.623] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-06-30 19:01:03.625] PQC background rekey worker stopped
+[PQC-FUSE 2026-06-30 19:01:03.625] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-06-30 19:01:03.625] Scheduler stats: submitted=23 cpu=23 gpu=0 bytes_cpu=0 bytes_gpu=115825 migration_ns=7412800
+[PQC-FUSE 2026-06-30 19:01:03.625] Durability sync stats: fdatasync=47 failures=0 total_ns=15587322 fsync=27 failures=0 total_ns=5492297 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=23 journal_sidecar=23 epoch_log=0 anchor_file=0 marker_metadata=26 keyring_metadata=2 parent_dir=0 other=0
+[PQC-FUSE 2026-06-30 19:01:03.625] Durability mounted-operation sync stats: fdatasync=46 failures=0 total_ns=14674294 fsync=26 failures=0 total_ns=5202862 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=23 journal_sidecar=23 epoch_log=0 anchor_file=0 marker_metadata=26 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

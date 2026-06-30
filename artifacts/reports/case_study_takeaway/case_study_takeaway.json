@@ -1,9 +1,10 @@
 {
   "boundary_terms": {
-    "CUDA-independent deployment": true,
-    "TensorRT p99 recovery": true,
-    "kernel-encryption replacement": true,
-    "unmanaged power loss": true
+    "CPU AES-GCM publication": true,
+    "Jetson/CUDA/TPM dependencies": true,
+    "executor-local managed memory": true,
+    "kernel/FUSE-daemon trust": true,
+    "slack-gated PQC maintenance": true
   },
   "checks": {
     "boundary_terms_present": true,
@@ -11,16 +12,15 @@
     "figure_label_present": true,
     "hero_artifact_present": true,
     "hero_contract_pass": true,
-    "hero_id_matches_takeaway": true,
     "paper_pages_12": true,
     "table_label_present": true,
     "takeaway_subsection_present": true,
     "takeaway_terms_present": true
   },
   "hero_contract": {
-    "artifact_path": "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json",
+    "artifact_path": "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json",
     "artifact_present": true,
-    "headline_claim_displayed": "Mounted secure-storage pressure raises foreground SQLite p99 from 6.4 ms to 13.8 ms with one deadline miss; AEGIS-Q recovers to 8.8 ms, zero misses, and 2.7 MB/s background progress.",
+    "headline_claim_displayed": "Unthrottled secure-storage pressure reports 9.62 ms SQLite p99 and 6.98 MB/s background writes; AEGIS-Q reports 8.15 ms p99, zero median misses, and 3.02 MB/s background writes.",
     "hero_id": "sqlite-mounted-qos-recovery-2026-06-27",
     "overall_pass": true,
     "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
@@ -36,14 +36,14 @@
   ],
   "takeaway_terms": {
     "Figure~\\ref{fig:first_page_qos}": true,
+    "SQLite": true,
     "Table~\\ref{tab:qos_sqlite_recovery}": true,
+    "append-log/cache-manifest remounts": true,
+    "authenticated FUSE": true,
     "elastic background writes": true,
-    "foreground SQLite database": true,
-    "local edge service": true,
-    "mounted secure storage": true,
-    "not a separate anecdotal demo": true,
-    "sqlite-mounted-qos-recovery-2026-06-27": true
+    "evaluated envelope is local": true,
+    "not a separate deployment anecdote": true
   },
-  "takeaway_text": "The evaluated deployment envelope is a local edge service whose foreground SQLite database shares mounted secure storage with elastic background writes. This case study is the same \\texttt{sqlite-mounted-qos-recovery-2026-06-27} contract used by Figure~\\ref{fig:first_page_qos} and Table~\\ref{tab:qos_sqlite_recovery}, not a separate anecdotal demo. The useful property is policy separation plus TPM replay-after-advance fail-closed behavior; it does not extend to kernel-encryption replacement, TensorRT p99 recovery, unmanaged power loss, or CUDA-independent deployment.",
+  "takeaway_text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies. The SQLite point is the same storage-pressure case summarized by Figure~\\ref{fig:first_page_qos} and Table~\\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote. The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory.",
   "violations": []
 }

@@ -1,0 +1,27 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-06-28 15:59:42.298] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-06-28 15:59:42.298]   PQC-FUSE Session Started
+[PQC-FUSE 2026-06-28 15:59:42.298]   Storage dir : /tmp/aegisq_replay_torn_tail_storage_dqi2x8v4
+[PQC-FUSE 2026-06-28 15:59:42.298]   Mount point : /tmp/aegisq_replay_torn_tail_mnt_4yt_nv6t
+[PQC-FUSE 2026-06-28 15:59:42.298] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/publication_protocol_fault_matrix/replay_torn_tail/write_mount/admission_trace.jsonl
+[PQC-FUSE 2026-06-28 15:59:42.298] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-06-28 15:59:42.298]   public key  : 1184 bytes
+[PQC-FUSE 2026-06-28 15:59:42.299]   secret key  : 2400 bytes
+[PQC-FUSE 2026-06-28 15:59:42.299]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-06-28 15:59:42.299]   shared secret: 32 bytes
+[PQC-FUSE 2026-06-28 15:59:42.301] Keypair generated in 1465.44 µs
+[PQC-FUSE 2026-06-28 15:59:42.471] Master Key derived successfully (PBKDF2-SHA256)
+[PQC-FUSE 2026-06-28 15:59:42.471] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-06-28 15:59:42.471] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-06-28 15:59:42.471] Freshness anchor worker started
+[PQC-FUSE 2026-06-28 15:59:42.582] PQC background rekey worker started
+[PQC-FUSE 2026-06-28 15:59:42.582] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-06-28 15:59:42.608] CREATE /replay.dat: authenticated file-key envelope initialized (fid=4685079166966213815)
+[PQC-FUSE 2026-06-28 15:59:42.612] Shutting down PQC-FUSE filesystem...

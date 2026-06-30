@@ -1,0 +1,37 @@
+{
+  "generated_by": "experiments/run_epoch_log_record_contract.py",
+  "generated_utc": "2026-06-28T06:26:02Z",
+  "mounted_path_integration_visible": true,
+  "overall_pass": true,
+  "schema_version": 1,
+  "scope": "Gate 0.9-S1 isolated epoch redo-log record codec proof.",
+  "self_test": {
+    "argv": [
+      "build/pqc_fuse",
+      "--self-test"
+    ],
+    "epoch_log_pass_line": true,
+    "fail_line_present": false,
+    "returncode": 0,
+    "stderr": "PQC-FUSE scheduler self-test: PASS\nPQC-FUSE parallel commit self-test: PASS\nPQC-FUSE epoch log self-test: PASS\nPQC-FUSE epoch publish self-test: PASS\nPQC-FUSE generation replay self-test: PASS\nPQC-FUSE checkpoint self-test: PASS\nPQC-FUSE anchor self-test: PASS\nPQC-FUSE storage self-test: PASS\n",
+    "stdout": ""
+  },
+  "self_test_pass": true,
+  "source_evidence": {
+    "checksum_digest_visible": true,
+    "checksum_rejection_selftest_visible": true,
+    "cmake_includes_module": true,
+    "decode_api_visible": true,
+    "encode_api_visible": true,
+    "format_magic_owned_by_pqc_format": true,
+    "header": "code/pqc_epoch_log.h",
+    "header_exists": true,
+    "mounted_writeback_uses_epoch_log": false,
+    "publication_dispatch_uses_epoch_log": true,
+    "source": "code/pqc_epoch_log.c",
+    "source_exists": true,
+    "version_rejection_selftest_visible": true
+  },
+  "source_pass": true,
+  "unsupported_durability_boundary": "This codec artifact does not by itself prove append durability, group commit, checkpoint compaction, crash replay, fdatasync reduction, or throughput improvement. Those remain Gate 0.9-S2 through 0.9-S4 work."
+}

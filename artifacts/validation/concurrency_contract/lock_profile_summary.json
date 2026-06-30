@@ -1,0 +1,1330 @@
+{
+  "abort_reason": null,
+  "artifacts": {
+    "blocking_syscall_profile": "artifacts/validation/concurrency_contract/blocking_syscall_profile/blocking_syscall_profile.json",
+    "commit_lock_refactor_feasibility": "artifacts/validation/concurrency_contract/commit_lock_refactor_feasibility.json",
+    "json": "artifacts/validation/concurrency_contract/lock_profile_summary.json",
+    "lock_order_table": "artifacts/validation/concurrency_contract/lock_order_table.json",
+    "markdown": "artifacts/validation/concurrency_contract/lock_profile_summary.md",
+    "mount_logs": "artifacts/validation/concurrency_contract/mount_logs",
+    "platform_manifest": "artifacts/validation/concurrency_contract/platform_manifest.json",
+    "reader_visibility_probe": "artifacts/validation/concurrency_contract/reader_visibility_probe/reader_visibility_probe.json",
+    "trace": "artifacts/validation/concurrency_contract/lock_profile_trace.jsonl"
+  },
+  "blocking_syscall_profile": {
+    "abort_reason": null,
+    "client_run": {
+      "argv": [
+        "/usr/bin/strace",
+        "-f",
+        "-ttt",
+        "-T",
+        "-o",
+        "artifacts/validation/concurrency_contract/blocking_syscall_profile/strace_raw.txt",
+        "-e",
+        "trace=fdatasync,pwrite64,pread64,openat,close",
+        "--",
+        "python3",
+        "-c",
+        "<inline-mounted-path-client>",
+        "<mount_dir>",
+        "4096",
+        "4"
+      ],
+      "returncode": 0,
+      "stderr": "artifacts/validation/concurrency_contract/blocking_syscall_profile/client.stderr.txt",
+      "stdout": "artifacts/validation/concurrency_contract/blocking_syscall_profile/client.stdout.txt"
+    },
+    "command": [
+      "/usr/bin/strace",
+      "-f",
+      "-ttt",
+      "-T",
+      "-o",
+      "artifacts/validation/concurrency_contract/blocking_syscall_profile/strace_raw.txt",
+      "-e",
+      "trace=fdatasync,pwrite64,pread64,openat,close",
+      "--",
+      "python3",
+      "-c",
+      "<inline-mounted-path-client>",
+      "<mount_dir>",
+      "4096",
+      "4"
+    ],
+    "expected_syscalls_observed": [
+      "fdatasync",
+      "pread64",
+      "pwrite64"
+    ],
+    "negative_claim_guard": "This strace profile is user-visible blocking-syscall evidence for the strict mounted path; it is not daemon scheduler off-CPU profiling and does not justify scalability or parallel-commit claims.",
+    "overall_pass": true,
+    "scope": "Mounted-path client blocking-syscall profile collected with strace -f -T during a bounded strict-mode workload.  The traced pwrite/fdatasync/pread calls include user-visible FUSE wait time.",
+    "strace_version": {
+      "argv": [
+        "/usr/bin/strace",
+        "-V"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "strace -- version 6.8\nCopyright (c) 1991-2024 The strace developers <https://strace.io>.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\nOptional features enabled: no-m32-mpers"
+    },
+    "summary": {
+      "by_syscall": {
+        "close": {
+          "count": 63,
+          "max_ns": 53000,
+          "p50_ns": 19000.0,
+          "p95_ns": 25000.0,
+          "p99_ns": 48000.0,
+          "total_ns": 1278000
+        },
+        "fdatasync": {
+          "count": 8,
+          "max_ns": 5674000,
+          "p50_ns": 2315000.0,
+          "p95_ns": 5674000.0,
+          "p99_ns": 5674000.0,
+          "total_ns": 22165000
+        },
+        "openat": {
+          "count": 80,
+          "max_ns": 3886000,
+          "p50_ns": 25000.0,
+          "p95_ns": 42000.0,
+          "p99_ns": 1487000.0,
+          "total_ns": 7367000
+        },
+        "pread64": {
+          "count": 8,
+          "max_ns": 120000,
+          "p50_ns": 84000.0,
+          "p95_ns": 120000.0,
+          "p99_ns": 120000.0,
+          "total_ns": 660999
+        },
+        "pwrite64": {
+          "count": 8,
+          "max_ns": 99000,
+          "p50_ns": 50000.0,
+          "p95_ns": 99000.0,
+          "p99_ns": 99000.0,
+          "total_ns": 461000
+        }
+      },
+      "line_count": 168,
+      "malformed_line_count": 1,
+      "observed_syscalls": [
+        "close",
+        "fdatasync",
+        "openat",
+        "pread64",
+        "pwrite64"
+      ],
+      "raw_trace": "artifacts/validation/concurrency_contract/blocking_syscall_profile/strace_raw.txt",
+      "syscall_count": 167
+    },
+    "tool": "strace",
+    "tool_available": true,
+    "unmount": {
+      "argv": [
+        "fusermount3",
+        "-u",
+        "/tmp/aegisq_blocking_mnt_fxv2qi75"
+      ],
+      "fuse_returncode": -2,
+      "returncode": 0
+    }
+  },
+  "cleanup": {
+    "mount_dir": "/tmp/aegisq_concurrency_mnt__jhiu1rn",
+    "removed": true,
+    "storage_dir": "/tmp/aegisq_concurrency_storage_95jeuvsk"
+  },
+  "commit_lock_refactor_feasibility": {
+    "blockers": [
+      "Read path does not use the pending-job lifetime guard while recovery runs outside fd_lock.",
+      "Release/lifecycle teardown is not yet proven to detach fds, buffers, and file-state references before close/free/release work.",
+      "Reader visibility is not yet bounded by a committed-generation journal lookup."
+    ],
+    "decision": "strict_prepare_crypto_outside_fd_and_commit_locks_but_gate_open",
+    "generated_by": "experiments/run_concurrency_contract_smoke.py",
+    "generated_utc": "2026-06-29T11:05:16Z",
+    "negative_claim_guard": "Do not claim fine-grained locking or parallel publication until fd_lock snapshotting, durable-publish lock splitting, fault evidence, and broad contention evidence exist.",
+    "required_before_safe_commit_lock_shrink": [
+      "expand strict durable-publication fault coverage after commit_lock splitting",
+      "fault matrix covering reserved-but-unpublished generations, crypto failure, data write failure, journal append failure, and remount",
+      "production lock-hold evidence before and after the refactor"
+    ],
+    "schema_version": 1,
+    "scope": "Gate 0.15/0.16 feasibility check for moving crypto out of commit_lock in strict mode.",
+    "source_evidence": {
+      "checkpoint_persists_max_generation_only": true,
+      "commit_lock_wraps_crypto_encrypt": false,
+      "commit_lock_wraps_flush_batch_prepare": false,
+      "commit_lock_wraps_strict_publish": false,
+      "fallocate_checkpoint_after_fd_unlock": true,
+      "fallocate_uses_pending_job_and_publish_turn": true,
+      "fd_lock_still_wraps_writeback_flush": true,
+      "fd_lock_wraps_authenticated_recovery": false,
+      "file_state_has_committed_generation": true,
+      "file_state_has_publish_order_condition": true,
+      "flush_batch_reads_next_generation_plus_one": false,
+      "generation_reservation_checkpoint_exists": true,
+      "journal_lookup_filters_max_generation": true,
+      "journal_lookup_uses_pread": true,
+      "journal_scans_max_generation_for_remount": true,
+      "metadata_publish_turn_helper_exists": true,
+      "open_promotes_journal_tail_only_on_state_initialization": false,
+      "read_copies_key_material_before_unlock": true,
+      "read_snapshots_committed_generation": true,
+      "read_uses_committed_recovery_bound": false,
+      "read_uses_pending_job": false,
+      "recovery_uses_committed_journal_lookup": true,
+      "release_closes_resources_after_unlock": false,
+      "release_detaches_resources_before_unlock": false,
+      "release_waits_pending_before_retire": false,
+      "remount_uses_checkpoint_max_generation": true,
+      "strict_publish_advances_generation_after_journal_fsync": false,
+      "truncate_uses_pending_job_and_publish_turn": true,
+      "truncate_zero_updates_visible_size_before_journal_truncate": true,
+      "writeback_accepts_fd_scope": true,
+      "writeback_clears_wbuf_before_unlock": true,
+      "writeback_relocks_fd_lock_before_return": true,
+      "writeback_snapshots_wbuf": true,
+      "writeback_unlocks_fd_lock": true
+    }
+  },
+  "deadlock_livelock_negative": {
+    "blocking_syscall_profile_pass": true,
+    "lifecycle_coverage_pass": true,
+    "phase_timeout_s": 30.0,
+    "process_client_coverage_pass": true,
+    "scope": "In-process mounted-path same-file, disjoint-file, same-file lifecycle, disjoint lifecycle, and external process lifecycle phases use a bounded timeout; absence of timed-out phases is a negative deadlock/livelock smoke, not a complete off-CPU or long-duration stress campaign.",
+    "timed_out_phase_count": 0,
+    "worker_error_count": 0
+  },
+  "generated_by": "experiments/run_concurrency_contract_smoke.py",
+  "generated_utc": "2026-06-29T11:05:19Z",
+  "lock_profile": {
+    "by_lock_and_site": {
+      "admission_state_lock@admission_init_policy": {
+        "count": 1,
+        "hold_ns": {
+          "max": 324,
+          "p50": 324.0,
+          "p95": 324.0,
+          "p99": 324.0
+        },
+        "wait_ns": {
+          "max": 92,
+          "p50": 92.0,
+          "p95": 92.0,
+          "p99": 92.0
+        }
+      },
+      "admission_state_lock@pqc_admission_shutdown": {
+        "count": 1,
+        "hold_ns": {
+          "max": 111,
+          "p50": 111.0,
+          "p95": 111.0,
+          "p99": 111.0
+        },
+        "wait_ns": {
+          "max": 222,
+          "p50": 222.0,
+          "p95": 222.0,
+          "p99": 222.0
+        }
+      },
+      "admission_trace_lock@admission_init_trace_fd": {
+        "count": 1,
+        "hold_ns": {
+          "max": 121,
+          "p50": 121.0,
+          "p95": 121.0,
+          "p99": 121.0
+        },
+        "wait_ns": {
+          "max": 111,
+          "p50": 111.0,
+          "p95": 111.0,
+          "p99": 111.0
+        }
+      },
+      "admission_trace_lock@admission_shutdown_trace": {
+        "count": 1,
+        "hold_ns": {
+          "max": 7213,
+          "p50": 7213.0,
+          "p95": 7213.0,
+          "p99": 7213.0
+        },
+        "wait_ns": {
+          "max": 222,
+          "p50": 222.0,
+          "p95": 222.0,
+          "p99": 222.0
+        }
+      },
+      "admission_trace_lock@admission_trace_append": {
+        "count": 1,
+        "hold_ns": {
+          "max": 4028,
+          "p50": 4028.0,
+          "p95": 4028.0,
+          "p99": 4028.0
+        },
+        "wait_ns": {
+          "max": 64,
+          "p50": 64.0,
+          "p95": 64.0,
+          "p99": 64.0
+        }
+      },
+      "anchor_epoch_record_lock@anchor_epoch_record_update": {
+        "count": 157,
+        "hold_ns": {
+          "max": 130,
+          "p50": 102.0,
+          "p95": 120.0,
+          "p99": 121.0
+        },
+        "wait_ns": {
+          "max": 324,
+          "p50": 111.0,
+          "p95": 260.0,
+          "p99": 287.0
+        }
+      },
+      "anchor_lifecycle_lock@pqc_anchor_worker_start_if_configured": {
+        "count": 1,
+        "hold_ns": {
+          "max": 31259,
+          "p50": 31259.0,
+          "p95": 31259.0,
+          "p99": 31259.0
+        },
+        "wait_ns": {
+          "max": 148,
+          "p50": 148.0,
+          "p95": 148.0,
+          "p99": 148.0
+        }
+      },
+      "anchor_lifecycle_lock@pqc_anchor_worker_stop": {
+        "count": 3,
+        "hold_ns": {
+          "max": 16157,
+          "p50": 83.0,
+          "p95": 16157.0,
+          "p99": 16157.0
+        },
+        "wait_ns": {
+          "max": 241,
+          "p50": 139.0,
+          "p95": 241.0,
+          "p99": 241.0
+        }
+      },
+      "anchor_worker_lock@anchor_worker_main": {
+        "count": 156,
+        "hold_ns": {
+          "max": 241592,
+          "p50": 3787.0,
+          "p95": 16389.0,
+          "p99": 42981.0
+        },
+        "wait_ns": {
+          "max": 0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      },
+      "anchor_worker_lock@anchor_worker_mark_committed": {
+        "count": 157,
+        "hold_ns": {
+          "max": 185,
+          "p50": 93.0,
+          "p95": 111.0,
+          "p99": 139.0
+        },
+        "wait_ns": {
+          "max": 16047,
+          "p50": 250.0,
+          "p95": 343.0,
+          "p99": 352.0
+        }
+      },
+      "anchor_worker_lock@anchor_worker_take_dirty": {
+        "count": 172,
+        "hold_ns": {
+          "max": 3296,
+          "p50": 1380.0,
+          "p95": 1713.0,
+          "p99": 3074.0
+        },
+        "wait_ns": {
+          "max": 18917,
+          "p50": 259.0,
+          "p95": 352.0,
+          "p99": 10019.0
+        }
+      },
+      "anchor_worker_lock@pqc_anchor_worker_stage": {
+        "count": 168,
+        "hold_ns": {
+          "max": 6537,
+          "p50": 1703.0,
+          "p95": 2325.0,
+          "p99": 4518.0
+        },
+        "wait_ns": {
+          "max": 408,
+          "p50": 250.0,
+          "p95": 351.0,
+          "p99": 361.0
+        }
+      },
+      "anchor_worker_lock@pqc_anchor_worker_start_if_configured": {
+        "count": 1,
+        "hold_ns": {
+          "max": 334,
+          "p50": 334.0,
+          "p95": 334.0,
+          "p99": 334.0
+        },
+        "wait_ns": {
+          "max": 74,
+          "p50": 74.0,
+          "p95": 74.0,
+          "p99": 74.0
+        }
+      },
+      "anchor_worker_lock@pqc_anchor_worker_stop": {
+        "count": 1,
+        "hold_ns": {
+          "max": 1694,
+          "p50": 1694.0,
+          "p95": 1694.0,
+          "p99": 1694.0
+        },
+        "wait_ns": {
+          "max": 84,
+          "p50": 84.0,
+          "p95": 84.0,
+          "p99": 84.0
+        }
+      },
+      "commit_lock@fd_context_state_generation_snapshot": {
+        "count": 126,
+        "hold_ns": {
+          "max": 84,
+          "p50": 74.0,
+          "p95": 84.0,
+          "p99": 84.0
+        },
+        "wait_ns": {
+          "max": 379,
+          "p50": 139.0,
+          "p95": 333.0,
+          "p99": 370.0
+        }
+      },
+      "commit_lock@pqc_fd_context_set": {
+        "count": 126,
+        "hold_ns": {
+          "max": 936750,
+          "p50": 75.0,
+          "p95": 507371.0,
+          "p99": 931426.0
+        },
+        "wait_ns": {
+          "max": 426,
+          "p50": 139.0,
+          "p95": 287.0,
+          "p99": 389.0
+        }
+      },
+      "commit_lock@pqc_file_state_mapping_cache_lookup": {
+        "count": 112,
+        "hold_ns": {
+          "max": 796,
+          "p50": 139.0,
+          "p95": 352.0,
+          "p99": 389.0
+        },
+        "wait_ns": {
+          "max": 287,
+          "p50": 83.0,
+          "p95": 84.0,
+          "p99": 101.0
+        }
+      },
+      "commit_lock@pqc_read": {
+        "count": 224,
+        "hold_ns": {
+          "max": 120,
+          "p50": 83.0,
+          "p95": 102.0,
+          "p99": 102.0
+        },
+        "wait_ns": {
+          "max": 407,
+          "p50": 83.0,
+          "p95": 268.0,
+          "p99": 380.0
+        }
+      },
+      "commit_lock@pqc_writeback_flush_locked": {
+        "count": 168,
+        "hold_ns": {
+          "max": 102,
+          "p50": 74.0,
+          "p95": 84.0,
+          "p99": 84.0
+        },
+        "wait_ns": {
+          "max": 268,
+          "p50": 74.0,
+          "p95": 84.0,
+          "p99": 213.0
+        }
+      },
+      "commit_lock@writeback_flush_authenticated_snapshot": {
+        "count": 504,
+        "hold_ns": {
+          "max": 2194,
+          "p50": 83.0,
+          "p95": 667.0,
+          "p99": 824.0
+        },
+        "wait_ns": {
+          "max": 2232,
+          "p50": 83.0,
+          "p95": 361.0,
+          "p99": 426.0
+        }
+      },
+      "committed_map_lock@build_prefix_anchor": {
+        "count": 157,
+        "hold_ns": {
+          "max": 250,
+          "p50": 84.0,
+          "p95": 176.0,
+          "p99": 213.0
+        },
+        "wait_ns": {
+          "max": 84,
+          "p50": 74.0,
+          "p95": 84.0,
+          "p99": 84.0
+        }
+      },
+      "committed_map_lock@pqc_anchor_load": {
+        "count": 90,
+        "hold_ns": {
+          "max": 84,
+          "p50": 74.0,
+          "p95": 84.0,
+          "p99": 84.0
+        },
+        "wait_ns": {
+          "max": 277,
+          "p50": 83.0,
+          "p95": 222.0,
+          "p99": 268.0
+        }
+      },
+      "committed_map_lock@pqc_anchor_record_file": {
+        "count": 673,
+        "hold_ns": {
+          "max": 1018,
+          "p50": 84.0,
+          "p95": 176.0,
+          "p99": 232.0
+        },
+        "wait_ns": {
+          "max": 472,
+          "p50": 84.0,
+          "p95": 379.0,
+          "p99": 416.0
+        }
+      },
+      "fd_lock@pqc_fd_context_clear": {
+        "count": 126,
+        "hold_ns": {
+          "max": 1130,
+          "p50": 556.0,
+          "p95": 1028.0,
+          "p99": 1084.0
+        },
+        "wait_ns": {
+          "max": 185,
+          "p50": 83.0,
+          "p95": 93.0,
+          "p99": 185.0
+        }
+      },
+      "fd_lock@pqc_fd_context_set": {
+        "count": 252,
+        "hold_ns": {
+          "max": 22157,
+          "p50": 510.0,
+          "p95": 9898.0,
+          "p99": 16676.0
+        },
+        "wait_ns": {
+          "max": 11231,
+          "p50": 93.0,
+          "p95": 426.0,
+          "p99": 10398.0
+        }
+      },
+      "fd_lock@pqc_flush": {
+        "count": 126,
+        "hold_ns": {
+          "max": 315,
+          "p50": 83.0,
+          "p95": 120.0,
+          "p99": 222.0
+        },
+        "wait_ns": {
+          "max": 527,
+          "p50": 222.0,
+          "p95": 407.0,
+          "p99": 472.0
+        }
+      },
+      "fd_lock@pqc_fsync": {
+        "count": 504,
+        "hold_ns": {
+          "max": 98148,
+          "p50": 1268.0,
+          "p95": 4194.0,
+          "p99": 12278.0
+        },
+        "wait_ns": {
+          "max": 537,
+          "p50": 84.0,
+          "p95": 371.0,
+          "p99": 472.0
+        }
+      },
+      "fd_lock@pqc_read": {
+        "count": 224,
+        "hold_ns": {
+          "max": 201889,
+          "p50": 5213.0,
+          "p95": 22453.0,
+          "p99": 40574.0
+        },
+        "wait_ns": {
+          "max": 546,
+          "p50": 84.0,
+          "p95": 352.0,
+          "p99": 444.0
+        }
+      },
+      "fd_lock@pqc_release": {
+        "count": 126,
+        "hold_ns": {
+          "max": 167,
+          "p50": 83.0,
+          "p95": 111.0,
+          "p99": 139.0
+        },
+        "wait_ns": {
+          "max": 426,
+          "p50": 213.0,
+          "p95": 398.0,
+          "p99": 417.0
+        }
+      },
+      "fd_lock@pqc_write": {
+        "count": 168,
+        "hold_ns": {
+          "max": 16953,
+          "p50": 398.0,
+          "p95": 833.0,
+          "p99": 1398.0
+        },
+        "wait_ns": {
+          "max": 528,
+          "p50": 241.0,
+          "p95": 426.0,
+          "p99": 509.0
+        }
+      },
+      "fd_lock@restore_qos_class_for_fd": {
+        "count": 126,
+        "hold_ns": {
+          "max": 157,
+          "p50": 74.0,
+          "p95": 84.0,
+          "p99": 102.0
+        },
+        "wait_ns": {
+          "max": 186,
+          "p50": 83.0,
+          "p95": 148.0,
+          "p99": 185.0
+        }
+      },
+      "file_anchor_commit_lock@file_anchor_already_committed": {
+        "count": 157,
+        "hold_ns": {
+          "max": 954,
+          "p50": 186.0,
+          "p95": 334.0,
+          "p99": 555.0
+        },
+        "wait_ns": {
+          "max": 454,
+          "p50": 232.0,
+          "p95": 370.0,
+          "p99": 425.0
+        }
+      },
+      "file_anchor_commit_lock@file_anchor_note_committed": {
+        "count": 156,
+        "hold_ns": {
+          "max": 1046,
+          "p50": 472.0,
+          "p95": 639.0,
+          "p99": 778.0
+        },
+        "wait_ns": {
+          "max": 648,
+          "p50": 83.0,
+          "p95": 296.0,
+          "p99": 407.0
+        }
+      },
+      "file_state_table_lock@pqc_file_state_acquire": {
+        "count": 126,
+        "hold_ns": {
+          "max": 2686,
+          "p50": 83.0,
+          "p95": 870.0,
+          "p99": 2490.0
+        },
+        "wait_ns": {
+          "max": 7815,
+          "p50": 222.0,
+          "p95": 361.0,
+          "p99": 445.0
+        }
+      },
+      "file_state_table_lock@pqc_file_state_release": {
+        "count": 126,
+        "hold_ns": {
+          "max": 335074,
+          "p50": 74.0,
+          "p95": 2704.0,
+          "p99": 4473.0
+        },
+        "wait_ns": {
+          "max": 417,
+          "p50": 185.0,
+          "p95": 287.0,
+          "p99": 333.0
+        }
+      },
+      "parallel_runtime_lock@pqc_parallel_commit_runtime_shutdown": {
+        "count": 1,
+        "hold_ns": {
+          "max": 158,
+          "p50": 158.0,
+          "p95": 158.0,
+          "p99": 158.0
+        },
+        "wait_ns": {
+          "max": 185,
+          "p50": 185.0,
+          "p95": 185.0,
+          "p99": 185.0
+        }
+      },
+      "qos_gpu_load_lock@pqc_qos_gpu_load_ewma_read": {
+        "count": 168,
+        "hold_ns": {
+          "max": 250,
+          "p50": 111.0,
+          "p95": 130.0,
+          "p99": 148.0
+        },
+        "wait_ns": {
+          "max": 7000,
+          "p50": 84.0,
+          "p95": 306.0,
+          "p99": 379.0
+        }
+      },
+      "rekey_lifecycle_lock@pqc_rekey_worker_start": {
+        "count": 1,
+        "hold_ns": {
+          "max": 73583,
+          "p50": 73583.0,
+          "p95": 73583.0,
+          "p99": 73583.0
+        },
+        "wait_ns": {
+          "max": 27352,
+          "p50": 27352.0,
+          "p95": 27352.0,
+          "p99": 27352.0
+        }
+      },
+      "rekey_lifecycle_lock@pqc_rekey_worker_stop": {
+        "count": 2,
+        "hold_ns": {
+          "max": 102,
+          "p50": 84.0,
+          "p95": 102.0,
+          "p99": 102.0
+        },
+        "wait_ns": {
+          "max": 7546,
+          "p50": 83.0,
+          "p95": 7546.0,
+          "p99": 7546.0
+        }
+      },
+      "rekey_queue_lock@pqc_rekey_queue_stats_snapshot": {
+        "count": 1,
+        "hold_ns": {
+          "max": 84,
+          "p50": 84.0,
+          "p95": 84.0,
+          "p99": 84.0
+        },
+        "wait_ns": {
+          "max": 176,
+          "p50": 176.0,
+          "p95": 176.0,
+          "p99": 176.0
+        }
+      },
+      "rekey_queue_lock@pqc_rekey_worker_start": {
+        "count": 1,
+        "hold_ns": {
+          "max": 1000,
+          "p50": 1000.0,
+          "p95": 1000.0,
+          "p99": 1000.0
+        },
+        "wait_ns": {
+          "max": 195,
+          "p50": 195.0,
+          "p95": 195.0,
+          "p99": 195.0
+        }
+      },
+      "rekey_queue_lock@pqc_rekey_worker_stop": {
+        "count": 2,
+        "hold_ns": {
+          "max": 7815,
+          "p50": 1963.0,
+          "p95": 7815.0,
+          "p99": 7815.0
+        },
+        "wait_ns": {
+          "max": 296,
+          "p50": 83.0,
+          "p95": 296.0,
+          "p99": 296.0
+        }
+      },
+      "rekey_queue_lock@rekey_worker_main": {
+        "count": 1,
+        "hold_ns": {
+          "max": 17630,
+          "p50": 17630.0,
+          "p95": 17630.0,
+          "p99": 17630.0
+        },
+        "wait_ns": {
+          "max": 0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      },
+      "scheduler_lock@scheduler_data_job_snapshot": {
+        "count": 168,
+        "hold_ns": {
+          "max": 232,
+          "p50": 111.0,
+          "p95": 167.0,
+          "p99": 213.0
+        },
+        "wait_ns": {
+          "max": 426,
+          "p50": 138.0,
+          "p95": 314.0,
+          "p99": 361.0
+        }
+      },
+      "scheduler_lock@scheduler_data_job_stats": {
+        "count": 168,
+        "hold_ns": {
+          "max": 121,
+          "p50": 102.0,
+          "p95": 111.0,
+          "p99": 112.0
+        },
+        "wait_ns": {
+          "max": 84,
+          "p50": 74.0,
+          "p95": 84.0,
+          "p99": 84.0
+        }
+      },
+      "scheduler_lock@scheduler_policy_snapshot": {
+        "count": 1,
+        "hold_ns": {
+          "max": 232,
+          "p50": 232.0,
+          "p95": 232.0,
+          "p99": 232.0
+        },
+        "wait_ns": {
+          "max": 74,
+          "p50": 74.0,
+          "p95": 74.0,
+          "p99": 74.0
+        }
+      },
+      "scheduler_lock@scheduler_record_data_bytes": {
+        "count": 168,
+        "hold_ns": {
+          "max": 370,
+          "p50": 112.0,
+          "p95": 176.0,
+          "p99": 213.0
+        },
+        "wait_ns": {
+          "max": 1167,
+          "p50": 83.0,
+          "p95": 305.0,
+          "p99": 352.0
+        }
+      },
+      "scheduler_lock@scheduler_reload_publish": {
+        "count": 1,
+        "hold_ns": {
+          "max": 112,
+          "p50": 112.0,
+          "p95": 112.0,
+          "p99": 112.0
+        },
+        "wait_ns": {
+          "max": 74,
+          "p50": 74.0,
+          "p95": 74.0,
+          "p99": 74.0
+        }
+      },
+      "scheduler_lock@scheduler_reload_snapshot": {
+        "count": 1,
+        "hold_ns": {
+          "max": 102,
+          "p50": 102.0,
+          "p95": 102.0,
+          "p99": 102.0
+        },
+        "wait_ns": {
+          "max": 74,
+          "p50": 74.0,
+          "p95": 74.0,
+          "p99": 74.0
+        }
+      },
+      "scheduler_lock@scheduler_stats_snapshot": {
+        "count": 1,
+        "hold_ns": {
+          "max": 129,
+          "p50": 129.0,
+          "p95": 129.0,
+          "p99": 129.0
+        },
+        "wait_ns": {
+          "max": 241,
+          "p50": 241.0,
+          "p95": 241.0,
+          "p99": 241.0
+        }
+      },
+      "trace_sink_lock@trace_sink_close": {
+        "count": 3,
+        "hold_ns": {
+          "max": 139,
+          "p50": 138.0,
+          "p95": 139.0,
+          "p99": 139.0
+        },
+        "wait_ns": {
+          "max": 9491,
+          "p50": 203.0,
+          "p95": 9491.0,
+          "p99": 9491.0
+        }
+      }
+    },
+    "line_count": 6573,
+    "lock_hold_event_count": 5906,
+    "malformed_line_count": 0,
+    "observed_locks": [
+      "admission_state_lock",
+      "admission_trace_lock",
+      "anchor_epoch_record_lock",
+      "anchor_lifecycle_lock",
+      "anchor_worker_lock",
+      "commit_lock",
+      "committed_map_lock",
+      "fd_lock",
+      "file_anchor_commit_lock",
+      "file_state_table_lock",
+      "parallel_runtime_lock",
+      "qos_gpu_load_lock",
+      "rekey_lifecycle_lock",
+      "rekey_queue_lock",
+      "scheduler_lock",
+      "trace_sink_lock"
+    ],
+    "trace": "artifacts/validation/concurrency_contract/lock_profile_trace.jsonl"
+  },
+  "negative_claim_guard": "Do not claim fine-grained locking, scalability, multicore scaling, or parallel commit from this smoke artifact.",
+  "not_closed": [
+    "Gate 0.15 is not closed: this thread/process-count sweep is still narrow and lacks off-CPU profiling and long-duration client-count coverage.",
+    "Strict full-tier writeback prepare, crypto, durable publication, authenticated-read recovery, truncate metadata publication, and fallocate metadata publication no longer run under fd_lock or commit_lock on their hot paths.",
+    "Release now detaches fds, buffers, and file-state references under fd_lock and closes/frees/releases detached resources after unlocking.",
+    "Same-file and disjoint-file lifecycle stress now exercises repeated open/write/fdatasync/read/close on the mounted path under bounded timeouts.",
+    "External process lifecycle stress now exercises same-file and disjoint-file client phases up to the maximum configured client count.",
+    "A strace blocking-syscall profile now records mounted-path client fdatasync/pwrite/pread syscall durations, but scheduler off-CPU sampling is still absent.",
+    "Reader visibility is bounded by committed_generation and covered by one paused-publish probe, but lifecycle stress is still short-duration.",
+    "Commit-lock shrinking remains incomplete until reserved-generation fault cases, concurrent reader visibility, and client-count sweeps are expanded.",
+    "No paper scalability or parallel-commit claim is justified by this artifact."
+  ],
+  "overall_pass": true,
+  "phase_timeout_s": 30.0,
+  "reader_visibility_probe": {
+    "after_publish_observed_new": true,
+    "after_publish_sha256": "725bcd6c66d02acf6ebeab9c92410e010ea22e336876256aaf05a211f4ce1902",
+    "block_size": 4096,
+    "during_pause_observed_new": false,
+    "during_pause_observed_old": true,
+    "during_pause_sha256": "6896d9ea3f73a4434f5832bc65714e7d066f177373f36f34dc8a6f735daa41b1",
+    "marker_observed": true,
+    "overall_pass": true,
+    "pause_cutpoint": "journal_append_after",
+    "pause_marker": "artifacts/validation/concurrency_contract/reader_visibility_probe/pause_marker.jsonl",
+    "paused_unmount": {
+      "argv": [
+        "fusermount3",
+        "-u",
+        "/tmp/aegisq_vis_mnt_i4yukovb"
+      ],
+      "fuse_returncode": -2,
+      "returncode": 0
+    },
+    "scope": "Mounted-path probe: pause an update after journal append but before journal fdatasync, then verify a concurrent reader sees only the previous committed generation.",
+    "writer_errors": [],
+    "writer_thread_alive_after_timeout": false
+  },
+  "schema_version": 1,
+  "scope": "production mounted-path lock timing smoke for current strict mode",
+  "thread_counts": [
+    1,
+    2,
+    4
+  ],
+  "unmount": {
+    "argv": [
+      "fusermount3",
+      "-u",
+      "/tmp/aegisq_concurrency_mnt__jhiu1rn"
+    ],
+    "fuse_returncode": 8,
+    "returncode": 0
+  },
+  "workload": {
+    "coverage": {
+      "disjoint_lifecycle_phases": 3,
+      "disjoint_process_lifecycle_phases": 3,
+      "disjoint_writer_phases": 3,
+      "max_process_client_count": 4,
+      "max_thread_count": 4,
+      "same_file_lifecycle_phases": 3,
+      "same_file_process_lifecycle_phases": 3,
+      "same_file_writer_phases": 3
+    },
+    "errors": [],
+    "phases": [
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "same_file",
+        "thread_count": 1,
+        "timed_out": false,
+        "wall_seconds": 0.015724713,
+        "worker": "writer_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "disjoint_files",
+        "thread_count": 1,
+        "timed_out": false,
+        "wall_seconds": 0.011867454,
+        "worker": "writer_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "same_file_lifecycle",
+        "thread_count": 1,
+        "timed_out": false,
+        "wall_seconds": 0.01486825,
+        "worker": "lifecycle_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "disjoint_lifecycle",
+        "thread_count": 1,
+        "timed_out": false,
+        "wall_seconds": 0.013082945,
+        "worker": "lifecycle_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "same_file",
+        "thread_count": 2,
+        "timed_out": false,
+        "wall_seconds": 0.021908556,
+        "worker": "writer_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "disjoint_files",
+        "thread_count": 2,
+        "timed_out": false,
+        "wall_seconds": 0.012749991,
+        "worker": "writer_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "same_file_lifecycle",
+        "thread_count": 2,
+        "timed_out": false,
+        "wall_seconds": 0.025178065,
+        "worker": "lifecycle_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "disjoint_lifecycle",
+        "thread_count": 2,
+        "timed_out": false,
+        "wall_seconds": 0.014374519,
+        "worker": "lifecycle_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "same_file",
+        "thread_count": 4,
+        "timed_out": false,
+        "wall_seconds": 0.041355102,
+        "worker": "writer_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "disjoint_files",
+        "thread_count": 4,
+        "timed_out": false,
+        "wall_seconds": 0.063352881,
+        "worker": "writer_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "same_file_lifecycle",
+        "thread_count": 4,
+        "timed_out": false,
+        "wall_seconds": 0.049140788,
+        "worker": "lifecycle_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "iterations_per_thread": 4,
+        "name": "disjoint_lifecycle",
+        "thread_count": 4,
+        "timed_out": false,
+        "wall_seconds": 0.024104009,
+        "worker": "lifecycle_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "client_count": 1,
+        "iterations_per_thread": 4,
+        "name": "same_file_process_lifecycle",
+        "process_count": 1,
+        "process_exitcodes": [
+          {
+            "exitcode": 0,
+            "worker_id": 12000
+          }
+        ],
+        "thread_count": 0,
+        "timed_out": false,
+        "wall_seconds": 0.019270407,
+        "worker": "lifecycle_process_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "client_count": 1,
+        "iterations_per_thread": 4,
+        "name": "disjoint_process_lifecycle",
+        "process_count": 1,
+        "process_exitcodes": [
+          {
+            "exitcode": 0,
+            "worker_id": 13000
+          }
+        ],
+        "thread_count": 0,
+        "timed_out": false,
+        "wall_seconds": 0.018141138,
+        "worker": "lifecycle_process_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "client_count": 2,
+        "iterations_per_thread": 4,
+        "name": "same_file_process_lifecycle",
+        "process_count": 2,
+        "process_exitcodes": [
+          {
+            "exitcode": 0,
+            "worker_id": 14000
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 14001
+          }
+        ],
+        "thread_count": 0,
+        "timed_out": false,
+        "wall_seconds": 0.028043092,
+        "worker": "lifecycle_process_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "client_count": 2,
+        "iterations_per_thread": 4,
+        "name": "disjoint_process_lifecycle",
+        "process_count": 2,
+        "process_exitcodes": [
+          {
+            "exitcode": 0,
+            "worker_id": 15000
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 15001
+          }
+        ],
+        "thread_count": 0,
+        "timed_out": false,
+        "wall_seconds": 0.020035148,
+        "worker": "lifecycle_process_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "client_count": 4,
+        "iterations_per_thread": 4,
+        "name": "same_file_process_lifecycle",
+        "process_count": 4,
+        "process_exitcodes": [
+          {
+            "exitcode": 0,
+            "worker_id": 16000
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 16001
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 16002
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 16003
+          }
+        ],
+        "thread_count": 0,
+        "timed_out": false,
+        "wall_seconds": 0.051194082,
+        "worker": "lifecycle_process_worker",
+        "worker_errors": []
+      },
+      {
+        "block_size": 4096,
+        "client_count": 4,
+        "iterations_per_thread": 4,
+        "name": "disjoint_process_lifecycle",
+        "process_count": 4,
+        "process_exitcodes": [
+          {
+            "exitcode": 0,
+            "worker_id": 17000
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 17001
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 17002
+          },
+          {
+            "exitcode": 0,
+            "worker_id": 17003
+          }
+        ],
+        "thread_count": 0,
+        "timed_out": false,
+        "wall_seconds": 0.029062184,
+        "worker": "lifecycle_process_worker",
+        "worker_errors": []
+      }
+    ]
+  }
+}

@@ -1,25 +1,35 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-\subsection{Methodology and provenance}
+\subsection{Methodology and claim scope}
 \label{sec:eval_setup}
 
-The evaluation answers five research questions:
+The evaluation follows the same spine as the design: RQ2 and RQ3 test the edge-runtime thesis, while RQ1, RQ4, and RQ5 bound the storage and recovery claims that make the placement result meaningful.  It answers five research questions:
 \begin{itemize}
-  \item \textbf{RQ1: Correctness.} Does the implemented authenticated format preserve nonce/generation, publication, and metadata-authentication invariants under retained remount, fault, and tamper campaigns?
-  \item \textbf{RQ2: Mode-aligned baselines.} What cost does AEGIS-Q impose relative to retained plaintext and gocryptfs rows under the frozen filesystem contract?
-  \item \textbf{RQ3: QoS/hero result.} Does AEGIS-Q recover foreground SQLite latency under mounted secure-storage pressure relative to unthrottled pressure and a simple controller?
-  \item \textbf{RQ4: Freshness and recovery.} What oracle-classified recovery and TPM-freshness outcomes are supported by the retained fault campaigns?
-  \item \textbf{RQ5: Ablation and sensitivity.} Which mechanisms account for the measured placement, controller, key-plane, and anchor behavior, and how sensitive is the SQLite controller?
+  \item \textbf{RQ1: Correctness of authenticated publication.} Does the implemented format preserve nonce/generation, publication, and metadata-auth invariants under remount, fault, and tamper campaigns?
+  \item \textbf{RQ2: CPU/GPU/PQC placement.} When should a UMA edge runtime keep AES-GCM file encryption on the CPU, and when can ML-KEM/cuPQC key-plane maintenance use the GPU?
+  \item \textbf{RQ3: Mounted application behavior.} Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?
+  \item \textbf{RQ4: Replay and recovery oracle.} Which daemon/app crash and TPM replay-after-advance outcomes are supported, and which rollback or power-loss claims remain outside scope?
+  \item \textbf{RQ5: Cost boundaries and sensitivity.} What strict-publication cost appears against mode-aligned baselines, and which controller/key-plane/anchor mechanisms account for the result?
 \end{itemize}
 
-The design/evaluation contract is one closure per main mechanism: authenticated block format closes through the generation/tamper evidence in RQ1; D/J/C publication closes through oracle-labeled daemon/app cut points in RQ4; CPU/GPU placement closes through the data-plane and key-plane measurements in RQ2/RQ5; TPM freshness closes through the hardware-freshness matrix in RQ4; the QoS controller closes through SQLite recovery and sensitivity traces in RQ3/RQ5; and the optional ML-KEM lane closes through the mounted open-file rekey workflow in RQ5.
+The design/evaluation contract is one closure per main mechanism: CPU/GPU/PQC placement through data-plane negative controls and key-plane measurements; QoS through SQLite recovery and kernel-control comparisons; managed-memory scope through executor-local diagnostics; format through generation/tamper checks; D/J/C publication through oracle-labeled cut points; and TPM replay checks through replay-after-advance.
 
-Primitive-placement numbers come from the verified microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness.  Both capture provenance and refuse to manufacture unsupported configurations.  The completeness gate keeps baseline cost, mounted pressure, workload diversity, placement breakdown, sensitivity, stability limits, and the SQLite case study retained while leaving missing kernel rows and statistical generalization to Discussion.
+Primitive-placement numbers come from the microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness.  Both refuse unsupported configurations rather than extrapolating missing rows.
 
-The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and the cuPQC libraries found by CMake.  The result is not an Orin Nano result and must not be generalized to other Jetson generations.  The current evidence has three tiers: Figure~\ref{fig:baseline_comparison} is a diagnostic placement result with three repetitions and observed-range whiskers, not confidence intervals; the key-plane and SQLite bundles are single retained workflow artifacts, not statistical confidence claims; future headline comparisons require warmup, five repetitions, bootstrap 95\% confidence intervals, outlier policy, fixed governor/clock/power capture, thermal logs, background-process control, cache policy, and fail-closed handling for missing logs or failed modes.
+The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result.  Retained O4 tegrastats logs give same-run power/thermal observations: mean VIN is 29.1~W for SQLite QoS, 27.5~W for key-plane rekey, and 28.4/27.4~W for AEGIS-Q/dm-crypt frozen rows, with max \texttt{tj}=49.0C.  These are observations, not energy-efficiency claims.
 
-Table~\ref{tab:benchmark_workloads} states what each experiment can and cannot establish.  The v2 filesystem contract fixes 4~KiB 70/30 random read/write, \texttt{psync}, per-write \texttt{fdatasync}, warm/cold cache policy, queue depth~1, one client, a sparse-prepared 1~GiB file, fixed mounts/platform, five repetitions, and bootstrap 95\% confidence intervals.  The plaintext warm-cache row reports 32.88~MiB/s median throughput and 0.165~ms conservative p99 (95\% CIs 30.16--36.96 and 0.157--0.167); gocryptfs reports 21.72~MiB/s and 0.060~ms (21.19--21.86 and 0.0596--0.0622); the AEGIS-Q warm-cache row reports 0.359~MiB/s and 11.21~ms (0.286--0.547 and 7.70--13.70).  The mechanism-ablation manifest uses these rows to gate the format gap and links the controller, key-plane, and anchor variants to the RQ5 evidence below; broader kernel-encryption rows are discussed in Section~\ref{sec:disc_roadmap}.
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.98\textwidth]{Figures/fig_evaluation_summary.pdf}
+  \caption{Evaluation summary generated from retained validation JSON.  Panel~(a) shows the strict frozen-contract cost boundary for RQ5; Panel~(b) shows mounted SQLite QoS and kernel-control rows for RQ3; Panel~(c) shows the mounted open-file key-plane refresh workflow for RQ2.}
+  \Description{Three-panel bar chart summarizing strict publication throughput, SQLite foreground p99 latency under storage pressure and kernel controls, and key-plane refresh throughput for CPU, GPU batch, and policy fallback modes.}
+  \label{fig:evaluation_summary}
+\end{figure*}
+
+Figure~\ref{fig:evaluation_summary} is the evaluation spine: AEGIS-Q keeps AES-GCM data on the CPU, uses the GPU only for a mounted maintenance workflow with explicit slack, and recovers bounded SQLite pressure while giving up background bandwidth.  The strict frozen-contract row is a cost boundary, not the headline claim.  Table~\ref{tab:benchmark_workloads} states what each experiment can establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \texttt{psync}, per-write \texttt{fdatasync}, queue depth~1, one client, a 1~GiB file, fixed mounts/platform, and five repetitions.  A same-profile attribution probe confirms that the strict path still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries per write-publication cycle.  The matched dm-crypt row runs on the same warm-cache contract: median throughput 9.03~MiB/s and median p99/p99.9 latency 264/823~\(\mu\)s; fscrypt remains environment-blocked because \texttt{CONFIG\_FS\_ENCRYPTION} is unset and the root ext4 encrypt feature is unavailable.
+
+X6/O3 answer strict-path practicality without upgrading crash claims.  X6 changes marker/checkpoint publication from filesystem-wide \texttt{syncfs} to marker-file \texttt{fsync} (1,070 retained A2 calls), leaving data and journal barriers.  O3 keeps strict per-write publication as the D/J/C barrier boundary and admits hybrid epoch grouping only for concurrent or batched writes that can share a barrier.  The grouped row cuts four-client syncs from eight to six and improves p99 from 47.6 to 40.1~ms and throughput from 9.05 to 9.72~MiB/s; the fault-matrix row cuts syncs from eight to five but worsens p99 to 53.1~ms, so this is conditional admission, not a general fast path.  Single-client epoch still pays a data plus epoch-log barrier; kernel-assist remains future work.
 
 \begin{table}[t]
 \centering
@@ -32,13 +42,13 @@ Table~\ref{tab:benchmark_workloads} states what each experiment can and cannot e
 \midrule
 RQ1 FUSE & Format functions after clean remount & Full SQLite/crash certification\\
 RQ1 hash & CUDA and OpenSSL digests agree & Side-channel resistance\\
-RQ2 Frozen contract & Plaintext, gocryptfs, and AEGIS-Q warm rows & fscrypt/dm-crypt and cold rows\\
-RQ2/RQ5 UMA & Managed allocation and host/device prefetch complete & Verified storage-DMA or O\_DIRECT-to-UVM\\
-RQ2/RQ5 eBPF & \texttt{nvme\_complete\_rq} histogram retained & Mounted eBPF/io\_uring path\\
-RQ3 daemon & Scheduler prototype and telemetry scripts exist & End-to-end AI p99 controller\\
-RQ3 stress & 4-writer tail-latency probe under pressure & End-to-end AI workload\\
-RQ3 TensorRT & Interference traces and samples are retained & Closed-loop QoS controller\\
-RQ4 file anchor & File snapshot rollback remains visible & TPM-anchor freshness\\
+RQ5 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\
+RQ2/RQ5 UMA & Managed allocation and host/device prefetch complete & Storage-DMA or O\_DIRECT-to-UVM\\
+RQ5 eBPF & \texttt{nvme\_complete\_rq} diagnostic histogram & Mounted eBPF/io\_uring path\\
+RQ3 mounted telemetry & Telemetry reaches the FUSE write-throttle path & Application scheduler or non-storage p99 controller\\
+RQ3 stress & 4-writer tail-latency probe under pressure & Broad foreground workload suite\\
+RQ3/RQ4 mounted apps & Secure append-log remount plus cache-manifest object publish/remount & Broad workload suite or non-storage p99 recovery\\
+RQ4 file anchor & File snapshot rollback remains visible & TPM-anchor replay protection\\
 \bottomrule
 \end{tabularx}
 \label{tab:benchmark_workloads}
@@ -47,68 +57,42 @@ RQ4 file anchor & File snapshot rollback remains visible & TPM-anchor freshness\
 \subsection{CPU for bulk data, GPU for batched ML-KEM}
 \label{sec:eval_performance}
 
-Figure~\ref{fig:baseline_comparison} reports the diagnostic placement result.  For a 16~MiB AES-256-GCM input, CPU/OpenSSL reaches 1.61~GB/s (observed 1.59--1.63~GB/s), whereas the managed-buffer GPU path reaches 0.172~GB/s (0.172--0.172~GB/s).  The GPU result includes managed-buffer staging and stream synchronization.  Smaller requests amplify the same effect.  This is why AEGIS-Q's data plane is CPU-first; a GPU label alone is not a performance result.
+The diagnostic placement harness explains the key asymmetry behind Figure~\ref{fig:evaluation_summary}(c).  For a 16~MiB AES-256-GCM input, CPU/OpenSSL reaches 1.61~GB/s (observed 1.59--1.63~GB/s), whereas the managed-buffer GPU path reaches 0.172~GB/s (0.172--0.172~GB/s).  The GPU result includes managed-buffer staging and stream synchronization.  The retained 4~KiB--256~KiB data-plane negative-control rows amplify the same effect, with the current CUDA path 51--2061$\times$ slower than CPU.  This is why AEGIS-Q's data plane is CPU-first; a GPU label alone is not a performance result.
 
 For a batch of 4,096 ML-KEM-768 key generations, liboqs on CPU reaches 64.8~K operations/s (64.3--64.9~K), while cuPQC reaches 1.50~M operations/s (1.49--1.51~M), a 23.2$\times$ ratio of medians.  The comparison is a primitive microbenchmark on one platform, not a claim that a FUSE write becomes 23.2$\times$ faster.  It supports the narrower policy of reserving GPU work for sufficiently large, independent key-plane batches.
 
-The retained mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-authenticated envelopes.  CPU-only refresh takes 24.399~ms (41,969.6 files/s).  With explicit slack, admission selects the GPU and finishes in 21.070~ms (48,599.0 files/s), a 1.158$\times$ speedup.  With zero slack and high memory-pressure telemetry, admission falls back to CPU in 24.411~ms with an AI-QoS-exhausted deferral.  This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or foreground AI QoS recovery.
+The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-protected envelopes.  In the five-run methodology row, CPU-only refresh takes 24.575~ms (41.7~K files/s); with explicit slack, admission selects the GPU and finishes in 20.729~ms (49.4~K files/s), a 1.186$\times$ median speedup; with zero slack and high memory-pressure telemetry, fallback remains CPU-equivalent at 24.572~ms.  The X11 break-even model explains why the workflow gain is modest: primitive cuPQC is faster by batch~16, but mounted envelope/FUSE/admission overhead shifts the positive workflow break-even to roughly 760--812 refreshed files, and an added 5~ms of UMA or staging pressure shifts it to roughly 1.09--1.10K files.  This supports only maintenance-visible open-file envelope refresh, not hardware-backed credential release, a persistent KEM hierarchy, or non-storage foreground recovery.
 
-These measurements produce the main placement rule used by the design: AES-GCM data writes are latency-sensitive and remain CPU-first, while ML-KEM batches are elastic and may use the GPU only when producer slack and telemetry permit it.  The result would be weaker if the paper reported only the faster GPU primitive; the important systems observation is the asymmetry between the data plane and the batch plane.
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.94\textwidth]{Figures/fig_verified_microbench.pdf}
-  \caption{Placement result for RQ2/RQ5. CPU AES-GCM exceeds managed-buffer GPU for the data plane; cuPQC improves batched ML-KEM-768. Bars are medians with observed 5th--95th-percentile whiskers.}
-  \Description{Two bar charts generated from three raw benchmark runs. The first shows CPU AES-GCM throughput exceeding the managed-buffer GPU path. The second shows GPU cuPQC ML-KEM key generation exceeding the CPU liboqs result for a batch of 4,096.}
-  \label{fig:baseline_comparison}
-\end{figure*}
+These measurements produce the main placement rule used by the design: AES-GCM data writes are latency-sensitive and remain CPU-first, while ML-KEM batches are elastic and may use the GPU only when producer slack and telemetry permit it.  The result would be weaker if the paper reported only the faster GPU primitive; the important systems observation is the boundary between the data plane and the slack-tolerant maintenance plane.
 
 \subsection{Correctness and negative controls}
 \label{sec:eval_workloads}
 
-The GPU integrity test passes leaf, Merkle, and empty-tree parity cases against OpenSSL.  The FUSE self-test passes journal/checkpoint/anchor unit checks and a generation-replay regression: appending an older generation after a newer mapping does not supersede the newer mapping, and decrypting a generation-2 ciphertext/tag under generation~1 fails.  The retained generation fault matrix then runs the final FUSE binary through partial update, clean remount, torn journal tail, stale snapshot replay, and adversarial older-generation append cases.  Its parsed journals show no duplicate generated \((\mathit{block},\mathit{generation})\) pairs; every trial receives an explicit oracle verdict, with no silent-corruption or unexpected-liveness verdict.  The clean-remount regression writes 128~KiB, calls \texttt{fsync}, remounts, byte-compares plaintext, and verifies that the sidecar does not contain the complete input sequence.  A separate final-binary test flips the persisted HMAC-authenticated envelopes and observes \texttt{EKEYREJECTED}.  These results strengthen the generation and envelope claims; the daemon matrix below supplies the selected daemon-crash evidence.
+The GPU integrity test passes leaf, Merkle, and empty-tree parity cases against OpenSSL.  The FUSE self-test covers journal/checkpoint/anchor units and a generation-replay regression.  The retained generation fault matrix covers partial update, clean remount, torn tails, stale snapshots, journal loss, older-generation append, and duplicate-generation replay across strict and epoch modes; every row has an oracle verdict without silent-corruption or unexpected-liveness outcomes.  X10 adds \texttt{UINT64\_MAX}/\texttt{EFBIG} near-wrap refusal, publish-ticket reservation, and same-file/disjoint 4-thread/4-process mounted writer stress, but not arbitrary application-level concurrency.  Clean remount byte-compares plaintext after \texttt{fsync}, and envelope tamper returns \texttt{EKEYREJECTED}.
 
-The POSIX-scope audit records the narrow interface: default encrypted-file \texttt{mmap} fails with \texttt{ENODEV}; disjoint writers recover the expected blocks; rename and directory \texttt{fsync} return \texttt{ENOTSUP}; user xattrs round-trip while internal xattrs are hidden; writeback-cache/direct-IO mmap capabilities are not requested; and lower-filesystem xattr atomicity and directory durability remain delegated.
+The POSIX-scope audit records a narrow mounted-workload interface: ordinary read/write/\texttt{fsync}, scoped rename, directory \texttt{fsync}, no-open hard links, symlinks, open-fd truncate/fallocate, user xattrs, and bounded writer races pass without mixed plaintext.  Encrypted-file \texttt{mmap}/\texttt{msync}, open-subtree retargeting, arbitrary byte-range transactions, lower-filesystem xattr atomicity, and full crash-time POSIX visibility are rejected, scoped, or delegated.
 
-Auxiliary storage/GPU diagnostics are deliberately scoped.  The retained host-pinning and managed-storage probes show same-buffer CPU/GPU checksum agreement plus CUDA pointer diagnostics, but they do not prove UVM migration suppression or final FUSE data-path DMA.
+Auxiliary storage/GPU diagnostics are deliberately scoped.  The host-pinning and managed-storage probes show same-buffer CPU/GPU checksum agreement plus CUDA pointer diagnostics, but they do not prove UVM migration suppression or final FUSE data-path DMA.
 
 The file-backed anchor produces the deliberately negative result: restoring an entire backing-directory snapshot is classified as \texttt{rollback\_visible}, i.e., the previous committed baseline remains readable.  The result remains a negative control rather than rollback resistance.
 
-The TPM artifacts record anchor latency, fixed properties, PCR reads, NV public attributes for index \texttt{0x01500010}, and a transient PCR-policy probe that unseals under the current PCR digest but rejects a drifted digest.  The hardware-freshness recovery matrix gives explicit oracle verdicts for stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance.  The real-TPM rows cover replay, missing index, changed-PCR probe behavior, and wrong authorization; the new-disk/stale-TPM and interrupted-update rows are final-binary command-path fault injection, not physical power-loss evidence.  This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed.
+The TPM runs record anchor latency, PCR reads, NV public attributes for index \texttt{0x01500010}, and a transient PCR-policy probe.  The hardware replay matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance.  This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed.
 
-The broader crash/replay matrices are selected-boundary regression evidence, not complete app-level crash coverage.  The daemon power-fault campaign kills the final binary at one-block data write, journal append/fsync, logical-size/checkpoint xattr, anchor update, \texttt{fsync}, remount-validation, and authenticated-read cut points; all nine rows retain a marker, daemon \texttt{SIGKILL}, and an acceptable oracle verdict.  The same manifest ties application-level commit coverage to 20 SQLite WAL/FULL selected-boundary trials, three SQLite DELETE/EXTRA \texttt{fdatasync} app-crash trials, and a \texttt{dbm.dumb} TPM replay row; a separate audit finds no unclassified retained recovery row.  This is selected daemon/app evidence, not physical power-loss, kernel-crash, drive-cache, arbitrary-workload, or multi-block raw-write atomicity certification.
+The broader crash/replay matrices are selected-boundary evidence, not complete app-level crash coverage.  The daemon campaign kills the final binary at D/J/C, anchor, \texttt{fsync}, remount, and authenticated-read cut points; application rows cover SQLite and \texttt{dbm.dumb} TPM replay.  X1 adds three loopback ext4/device-mapper lower-block \texttt{error} rows; after \texttt{e2fsck}/remount, pre-commit rows recover the previous committed payload and the post-\texttt{fsync} row recovers the latest committed payload.  This is not physical power-loss, kernel-crash, drive-cache, arbitrary-workload, or multi-block raw-write certification.
 
-Table~\ref{tab:recovery_scope} summarizes the interpretation and the next experiment required to strengthen each row.
+The scoped mounted-application rows are not synthetic fio rows.  The secure append-log macro appends ordered 16~KiB records in strict and epoch modes, remounts, and verifies hashes/order; retained p99 is 5.93~ms strict and 4.17~ms epoch.  A cache-manifest workload publishes 24 hashed 16~KiB objects with closed-file rename plus directory \texttt{fsync}, remounts, and verifies all hashes, reporting 4.22/28.09~ms p50/p99 at 2.00~MiB/s.  The multi-writer row shows the queue-depth limit: epoch grouping reduces traced syncs from 16 to 1 and replay reconstruction remains sub-ms, but p99.9 worsens to 67.90~ms versus 61.54~ms.  These are scoped mounted patterns, not a broad workload suite or non-storage application QoS claim.
 
-\begin{table}[t]
-\centering
-\caption{Recovery/freshness outcomes and their interpretation.}
-\scriptsize
-\setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\columnwidth}{P{0.28\columnwidth}|P{0.30\columnwidth}|Y}
-\toprule
-\textbf{Retained result} & \textbf{Interpretation} & \textbf{Still missing}\\
-\midrule
-Clean FUSE remount & Envelope/key hierarchy can recover the written file after clean unmount/remount & Crash timing across all D/J/C boundaries\\
-Metadata HMAC tamper & Unauthenticated envelope metadata fails closed & Full ciphertext/journal tamper campaign\\
-File-anchor replay visible & File-backed witness is a negative control & External freshness state\\
-TPM replay-after-advance fail closed & Current provisioned NV index can reject stale disk state after anchor advance & Persistent PCR policy and lifecycle\\
-Daemon/app fault matrix & Retained daemon and SQLite/\texttt{dbm.dumb} cut points recover to acceptable oracle states & Physical power loss, drive caches, and broader workloads\\
-SQLite/\texttt{dbm.dumb} stale snapshots & Two workloads fail closed on TPM-backed stale replay & Broader workload matrix\\
-\bottomrule
-\end{tabularx}
-\label{tab:recovery_scope}
-\end{table}
+Recovery/replay outcomes support the mounted runtime boundary; they are not the paper's central QoS/placement result.
 
 \subsection{QoS Recovery, Ablations, and Sensitivity}
 \label{sec:eval_qos}
 
-Retained tegrastats/CUPTI artifacts show platform pressure reaching the mounted daemon: they record 8 and 5 daemon-throttled flushes, respectively.  This remains wiring evidence rather than TensorRT/AI p99 recovery or fast-notification bypass.
+The tegrastats/CUPTI runs show platform pressure reaching the mounted daemon: they record 8 and 5 daemon-throttled flushes, respectively.  This remains wiring evidence rather than application-level p99 recovery or fast-notification bypass.
 
-The app-level result uses SQLite transaction latency as the foreground workload.  Table~\ref{tab:qos_sqlite_recovery} is generated from the retained four-mode bundle.  Mounted storage pressure raises SQLite p99 from 6.4~ms to 13.8~ms and causes one 10~ms deadline miss.  AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with no misses at 2.7~MB/s.  The simple controller reaches 8.2~ms p99 at 2.3~MB/s.  This is SQLite recovery, not general AI-inference QoS.
+The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together.  Table~\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls.  AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s.  This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress.  Kernel controls preserve background throughput but not the tail here: \texttt{ionice} reports 16.22~ms p99 with six misses, and \texttt{IOWeight} reports 12.57~ms p99 with seven misses.  This is bounded storage-visible control, not a uniqueness or non-storage QoS claim.
 
-The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity.  Its baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss).  No-throttle and no-slack fallbacks pass, and the scripted hysteresis trace records 9 transitions and 8 flips.
+The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity.  The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\(\mu\)s deadline margin, 250~ms telemetry-age limit, and 0.80 queue threshold.  Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss).  No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips.  This keeps the claim on mounted storage-visible control, not an external application scheduler.
 
-Together, the ablation rows attribute observed behavior to four mechanisms: the authenticated FUSE format accounts for the warm-cache filesystem cost, elastic-write throttling accounts for SQLite p99 recovery, the GPU lane helps only the mounted open-file key refresh workflow with slack, and the TPM anchor converts the file-anchor replay negative control into fail-closed replay-after-advance behavior.  The sensitivity sweep then tests whether the QoS result depends on one constant rather than a stable controller regime.
+The ablation manifest then attributes cost to the authenticated FUSE format, SQLite recovery to elastic-write throttling, key-plane speedup to slack-gated GPU maintenance, and replay refusal to the external anchor.
 
 \input{generated_qos_recovery_table}

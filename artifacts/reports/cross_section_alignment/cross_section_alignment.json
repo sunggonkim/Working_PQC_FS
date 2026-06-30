@@ -19,20 +19,18 @@
   "schema_version": 1,
   "scope": [
     "abstract, introduction, design, evaluation, and conclusion",
-    "rounded SQLite hero claim terms: 6.4, 13.8, 8.8, 2.7, deadline, background",
+    "rounded SQLite hero claim terms: 9.62, 8.15, 3.02, p99, background",
     "unsupported-claim scan for unnegated restored claims",
     "retained hero-result contract"
   ],
   "section_alignment": [
     {
       "hero_terms": {
-        "13.8": true,
-        "2.7": true,
-        "6.4": true,
-        "8.8": true,
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
         "SQLite": true,
         "background": true,
-        "deadline": true,
         "p99": true
       },
       "mode_terms": {
@@ -41,17 +39,24 @@
       },
       "passes": true,
       "path": "Paper/main.tex",
+      "required_terms": {
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
+        "SQLite": true,
+        "background": true,
+        "not deployed-filesystem": true,
+        "p99": true
+      },
       "section": "abstract"
     },
     {
       "hero_terms": {
-        "13.8": true,
-        "2.7": true,
-        "6.4": true,
-        "8.8": true,
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
         "SQLite": true,
         "background": true,
-        "deadline": true,
         "p99": true
       },
       "mode_terms": {
@@ -60,17 +65,23 @@
       },
       "passes": true,
       "path": "Paper/1_Introduction.tex",
+      "required_terms": {
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
+        "SQLite": true,
+        "not peak filesystem throughput": true,
+        "p99": true
+      },
       "section": "introduction"
     },
     {
       "hero_terms": {
-        "13.8": true,
-        "2.7": true,
-        "6.4": true,
-        "8.8": true,
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
         "SQLite": true,
         "background": true,
-        "deadline": true,
         "p99": true
       },
       "mode_terms": {
@@ -79,17 +90,22 @@
       },
       "passes": true,
       "path": "Paper/3_Design.tex",
+      "required_terms": {
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
+        "SQLite": true,
+        "not by claiming application scheduling": true
+      },
       "section": "design"
     },
     {
       "hero_terms": {
-        "13.8": true,
-        "2.7": true,
-        "6.4": true,
-        "8.8": true,
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
         "SQLite": true,
         "background": true,
-        "deadline": true,
         "p99": true
       },
       "mode_terms": {
@@ -98,17 +114,22 @@
       },
       "passes": true,
       "path": "Paper/4_Evaluation.tex",
+      "required_terms": {
+        "3.02": true,
+        "8.15": true,
+        "9.62": true,
+        "Table~\\ref{tab:qos_sqlite_recovery}": true,
+        "bounded storage-visible control": true
+      },
       "section": "evaluation"
     },
     {
       "hero_terms": {
-        "13.8": true,
-        "2.7": true,
-        "6.4": true,
-        "8.8": true,
+        "3.02": true,
+        "8.15": true,
+        "9.62": false,
         "SQLite": true,
         "background": true,
-        "deadline": true,
         "p99": true
       },
       "mode_terms": {
@@ -117,39 +138,46 @@
       },
       "passes": true,
       "path": "Paper/6_Conclusion.tex",
+      "required_terms": {
+        "8.15": true,
+        "CPU": true,
+        "ML-KEM": true,
+        "SQLite": true,
+        "secure edge file encryption": true
+      },
       "section": "conclusion"
     }
   ],
   "source_anchors": {
     "abstract": {
-      "line": 89,
+      "line": 91,
       "path": "Paper/main.tex",
       "present": true,
-      "text": "On a Jetson AGX Thor Developer Kit, retained mounted artifacts show the intended spine: under secure-storage pressure, foreground SQLite p99 rises from 6.4~ms to 13.8~ms and incurs a deadline miss; AEGIS-Q's policy recovers p99 to 8.8~ms with zero misses while retaining 2.7~MB/s of background progress. The same evidence set exercises remount/tamper checks, generation/fault matrices, rekey fallback, TPM replay-after-advance, app-crash timing, and telemetry-to-FUSE throttling. The result is an evidence-first secure edge-storage prototype with explicit scope boundaries, not a claim of deployed-filesystem superiority."
+      "text": "The core result is asymmetric placement under edge pressure. AES-GCM file records remain CPU-first; ML-KEM/cuPQC work uses the GPU only when it is independent, batched, and slack-tolerant; storage-visible QoS throttles elastic writes rather than weakening publication order. On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms. The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling. This is a scoped edge file-encryption runtime result, not deployed-filesystem or peak-throughput superiority."
     },
     "conclusion": {
       "line": 4,
       "path": "Paper/6_Conclusion.tex",
       "present": true,
-      "text": "AEGIS-Q is an evidence-first secure edge-storage prototype: secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms with one deadline miss; AEGIS-Q recovers 8.8~ms, zero misses, and 2.7~MB/s background progress. It does not claim direct NVMe-to-UVM DMA, eBPF/io\\_uring completion bypass, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, foreground AI p99 recovery, or portability."
+      "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime under secure-storage pressure, not blanket GPU offload. Its format keeps AES-GCM writes on CPU, admits ML-KEM/cuPQC maintenance only with slack, and reports 8.15~ms SQLite p99 with 3.02~MB/s background progress on Thor. Accelerator throughput matters only after publication order, QoS, and replay boundaries are explicit."
     },
     "design": {
-      "line": 131,
+      "line": 99,
       "path": "Paper/3_Design.tex",
       "present": true,
-      "text": "QoS follows the SQLite contract in Figure~\\ref{fig:first_page_qos}: secure-storage pressure raises AEGIS-Q p99 from 6.4~ms to 13.8~ms; classification recovers 8.8~ms, zero deadline misses, and 2.7~MB/s background progress, not foreground-inference p99 or completion-bypass control."
+      "text": "QoS follows Figure~\\ref{fig:first_page_qos}: unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling elastic writes, not by claiming application scheduling or completion bypass."
     },
     "evaluation": {
-      "line": 108,
+      "line": 92,
       "path": "Paper/4_Evaluation.tex",
       "present": true,
-      "text": "The app-level result uses SQLite transaction latency as the foreground workload. Table~\\ref{tab:qos_sqlite_recovery} is generated from the retained four-mode bundle. Mounted storage pressure raises SQLite p99 from 6.4~ms to 13.8~ms and causes one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with no misses at 2.7~MB/s. The simple controller reaches 8.2~ms p99 at 2.3~MB/s. This is SQLite recovery, not general AI-inference QoS."
+      "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together. Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls. AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s. This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress. Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 with six misses, and \\texttt{IOWeight} reports 12.57~ms p99 with seven misses. This is bounded storage-visible control, not a uniqueness or non-storage QoS claim."
     },
     "introduction": {
-      "line": 38,
+      "line": 39,
       "path": "Paper/1_Introduction.tex",
       "present": true,
-      "text": "Figure~\\ref{fig:first_page_qos} shows the retained first-page pressure result. Mounted secure-storage pressure raises foreground SQLite p99 from 6.4~ms to 13.8~ms and introduces one 10~ms deadline miss. AEGIS-Q marks foreground files latency-sensitive, throttles only elastic background writes, and recovers to 8.8~ms p99 with zero misses while retaining 2.7~MB/s of background progress. This result motivates the paper's spine: policy must be visible at the secure-storage layer, but persistent format correctness must remain independent of the accelerator."
+      "text": "Figure~\\ref{fig:first_page_qos} is the paper's edge-runtime result. Unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling only elastic writes. The point is visible storage-layer policy with accelerator-independent format correctness, not peak filesystem throughput. The low frozen-contract throughput row is a known cost boundary, not a hidden general-purpose claim."
     }
   },
   "unsupported_hits": [],
