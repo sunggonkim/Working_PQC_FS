@@ -61,7 +61,7 @@ CONTRIBUTION_MAP = [
         "id": "C1",
         "title": "Placement-safe storage format",
         "intro_needles": ["C1: Placement-safe storage format", "generation-bound AEAD", "persistent record format"],
-        "design_needles": ["\\label{sec:design_pipeline}", "Data-before-mapping publication"],
+        "design_needles": ["\\label{sec:design_pipeline}", "data reaches durable sidecar state before its journal mapping"],
         "evaluation_needles": ["\\label{sec:eval_workloads}", "generation fault matrix", "strict and epoch modes"],
     },
     {

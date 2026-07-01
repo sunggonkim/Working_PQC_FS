@@ -3,20 +3,20 @@
 - Overall pass: `True`
 - Paper pages: `13`
 - Required rows: `7`
-- Figure/table labels mapped: `13`
+- Figure/table labels mapped: `12`
 
 ## Matrix
 
 | Row | Required | Status | Primary labels | Evidence | Paper anchors | Scoped gaps |
 | --- | ---: | --- | --- | ---: | ---: | --- |
 | `baseline_sota_comparison` | `True` | `scoped_partial` | `tab:capability_matrix` | `True` | `True` | fscrypt/fs-verity/dm-integrity rows are not current matched throughput measurements; cold-cache rows remain invalid without privileged cache-drop control |
-| `scalability_pressure_behavior` | `True` | `implemented_scoped` | `fig:first_page_qos`, `tab:qos_sqlite_recovery` | `True` | `True` | pressure result is mounted SQLite storage pressure, not non-storage application p99 recovery |
-| `workload_diversity` | `True` | `implemented_scoped` | `tab:benchmark_workloads` | `True` | `True` | workloads do not establish broad workload generalization or full crash certification |
-| `time_overhead_breakdown` | `True` | `implemented_scoped` | `fig:dataplane_negative_control`, `fig:evaluation_summary` | `True` | `True` | primitive placement is not reported as an end-to-end FUSE write speedup |
-| `sensitivity_analysis` | `True` | `implemented_scoped` | - | `True` | `True` | sensitivity is controller-parameter coverage, not a statistical confidence study |
+| `scalability_pressure_behavior` | `True` | `implemented_scoped` | `fig:first_page_qos`, `fig:evaluation_summary` | `True` | `True` | pressure result is mounted SQLite storage pressure, not non-storage application p99 recovery |
+| `workload_diversity` | `True` | `implemented_scoped` | - | `True` | `True` | workloads do not establish broad workload generalization or full crash certification |
+| `time_overhead_breakdown` | `True` | `implemented_scoped` | `fig:dataplane_negative_control`, `fig:verified_microbench`, `fig:publication_cost_detail` | `True` | `True` | primitive placement is not reported as an end-to-end FUSE write speedup |
+| `sensitivity_analysis` | `True` | `implemented_scoped` | `fig:recovery_qos_detail` | `True` | `True` | sensitivity is controller-parameter coverage, not a statistical confidence study |
 | `stability_variance` | `True` | `scoped_partial` | - | `True` | `True` | SQLite QoS headline remains a single retained workflow artifact; future headline comparisons require the methodology gate before generalization |
 | `case_study` | `True` | `implemented_scoped` | - | `True` | `True` | deployment takeaway is the SQLite/FUSE hero contract, not a separate anecdote |
-| `protocol_correctness_and_security_obligations` | `False` | `implemented_scoped` | `fig:problem_boundary`, `tab:design_goals`, `fig:overall_procedure`, `fig:djc_state_machine`, `tab:memory_compat`, `tab:impl_boundaries`, `tab:threat_boundary` | `True` | `True` | protocol rows close design/security obligations rather than adding evaluation completeness rows |
+| `protocol_correctness_and_security_obligations` | `False` | `implemented_scoped` | `fig:problem_boundary`, `tab:component_contracts`, `fig:overall_procedure`, `fig:djc_state_machine`, `tab:threat_boundary` | `True` | `True` | protocol rows close design/security obligations rather than adding evaluation completeness rows |
 
 ## Label ownership
 
@@ -24,16 +24,15 @@
 | --- | --- |
 | `fig:dataplane_negative_control` | `time_overhead_breakdown` |
 | `fig:djc_state_machine` | `protocol_correctness_and_security_obligations` |
-| `fig:evaluation_summary` | `time_overhead_breakdown` |
+| `fig:evaluation_summary` | `scalability_pressure_behavior` |
 | `fig:first_page_qos` | `scalability_pressure_behavior` |
 | `fig:overall_procedure` | `protocol_correctness_and_security_obligations` |
 | `fig:problem_boundary` | `protocol_correctness_and_security_obligations` |
-| `tab:benchmark_workloads` | `workload_diversity` |
+| `fig:publication_cost_detail` | `time_overhead_breakdown` |
+| `fig:recovery_qos_detail` | `sensitivity_analysis` |
+| `fig:verified_microbench` | `time_overhead_breakdown` |
 | `tab:capability_matrix` | `baseline_sota_comparison` |
-| `tab:design_goals` | `protocol_correctness_and_security_obligations` |
-| `tab:impl_boundaries` | `protocol_correctness_and_security_obligations` |
-| `tab:memory_compat` | `protocol_correctness_and_security_obligations` |
-| `tab:qos_sqlite_recovery` | `scalability_pressure_behavior` |
+| `tab:component_contracts` | `protocol_correctness_and_security_obligations` |
 | `tab:threat_boundary` | `protocol_correctness_and_security_obligations` |
 
 ## Evidence contracts

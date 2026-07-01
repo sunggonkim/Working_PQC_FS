@@ -17,12 +17,11 @@
     "fig:first_page_qos",
     "fig:overall_procedure",
     "fig:problem_boundary",
-    "tab:benchmark_workloads",
+    "fig:publication_cost_detail",
+    "fig:recovery_qos_detail",
+    "fig:verified_microbench",
     "tab:capability_matrix",
-    "tab:design_goals",
-    "tab:impl_boundaries",
-    "tab:memory_compat",
-    "tab:qos_sqlite_recovery",
+    "tab:component_contracts",
     "tab:threat_boundary"
   ],
   "label_to_matrix_row": {
@@ -33,7 +32,7 @@
       "protocol_correctness_and_security_obligations"
     ],
     "fig:evaluation_summary": [
-      "time_overhead_breakdown"
+      "scalability_pressure_behavior"
     ],
     "fig:first_page_qos": [
       "scalability_pressure_behavior"
@@ -44,23 +43,20 @@
     "fig:problem_boundary": [
       "protocol_correctness_and_security_obligations"
     ],
-    "tab:benchmark_workloads": [
-      "workload_diversity"
+    "fig:publication_cost_detail": [
+      "time_overhead_breakdown"
+    ],
+    "fig:recovery_qos_detail": [
+      "sensitivity_analysis"
+    ],
+    "fig:verified_microbench": [
+      "time_overhead_breakdown"
     ],
     "tab:capability_matrix": [
       "baseline_sota_comparison"
     ],
-    "tab:design_goals": [
+    "tab:component_contracts": [
       "protocol_correctness_and_security_obligations"
-    ],
-    "tab:impl_boundaries": [
-      "protocol_correctness_and_security_obligations"
-    ],
-    "tab:memory_compat": [
-      "protocol_correctness_and_security_obligations"
-    ],
-    "tab:qos_sqlite_recovery": [
-      "scalability_pressure_behavior"
     ],
     "tab:threat_boundary": [
       "protocol_correctness_and_security_obligations"
@@ -161,8 +157,8 @@
           "passes": true,
           "path": "Paper/10_Discussion_and_Limitations.tex",
           "terms": [
-            "The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q",
-            "not a full fscrypt, fs-verity, dm-integrity"
+            "fscrypt is environment-blocked",
+            "measured mode alignment rather than exhaustive kernel comparison"
           ]
         }
       ],
@@ -196,7 +192,7 @@
       "evidence_pass": true,
       "figure_table_labels": [
         "fig:first_page_qos",
-        "tab:qos_sqlite_recovery"
+        "fig:evaluation_summary"
       ],
       "id": "scalability_pressure_behavior",
       "paper_anchor_pass": true,
@@ -232,9 +228,7 @@
         }
       ],
       "evidence_pass": true,
-      "figure_table_labels": [
-        "tab:benchmark_workloads"
-      ],
+      "figure_table_labels": [],
       "id": "workload_diversity",
       "paper_anchor_pass": true,
       "paper_anchors": [
@@ -244,7 +238,6 @@
           "passes": true,
           "path": "Paper/4_Evaluation.tex",
           "terms": [
-            "Table~\\ref{tab:benchmark_workloads}",
             "SQLite",
             "\\texttt{dbm.dumb}",
             "append-log/cache-manifest"
@@ -256,8 +249,8 @@
           "passes": true,
           "path": "Paper/10_Discussion_and_Limitations.tex",
           "terms": [
-            "SQLite, elastic background writes, append-log/cache-manifest remounts",
-            "not a general POSIX"
+            "elastic background writes and append-log/cache-manifest remounts",
+            "not a general POSIX filesystem"
           ]
         }
       ],
@@ -298,7 +291,8 @@
       "evidence_pass": true,
       "figure_table_labels": [
         "fig:dataplane_negative_control",
-        "fig:evaluation_summary"
+        "fig:verified_microbench",
+        "fig:publication_cost_detail"
       ],
       "id": "time_overhead_breakdown",
       "paper_anchor_pass": true,
@@ -336,7 +330,9 @@
         }
       ],
       "evidence_pass": true,
-      "figure_table_labels": [],
+      "figure_table_labels": [
+        "fig:recovery_qos_detail"
+      ],
       "id": "sensitivity_analysis",
       "paper_anchor_pass": true,
       "paper_anchors": [
@@ -346,7 +342,7 @@
           "passes": true,
           "path": "Paper/4_Evaluation.tex",
           "terms": [
-            "The sensitivity bundle varies budget",
+            "The QoS panel varies budget",
             "sampling interval",
             "queue depth",
             "writer intensity",
@@ -392,8 +388,8 @@
           "path": "Paper/4_Evaluation.tex",
           "terms": [
             "same-run power/thermal observations",
-            "five repetitions",
-            "five-run methodology row"
+            "five-run hero medians",
+            "three-run kernel QoS controls"
           ]
         }
       ],
@@ -436,7 +432,7 @@
           "path": "Paper/4_Evaluation.tex",
           "terms": [
             "The app-level result uses SQLite transaction latency",
-            "secure append-log macro",
+            "append-log verifies ordered 16~KiB records",
             "cache-manifest workload"
           ]
         }
@@ -478,11 +474,9 @@
       "evidence_pass": true,
       "figure_table_labels": [
         "fig:problem_boundary",
-        "tab:design_goals",
+        "tab:component_contracts",
         "fig:overall_procedure",
         "fig:djc_state_machine",
-        "tab:memory_compat",
-        "tab:impl_boundaries",
         "tab:threat_boundary"
       ],
       "id": "protocol_correctness_and_security_obligations",
@@ -495,9 +489,8 @@
           "path": "Paper/3_Design.tex",
           "terms": [
             "Figure~\\ref{fig:overall_procedure}",
-            "Table~\\ref{tab:design_goals}",
-            "Figure~\\ref{fig:djc_state_machine}",
-            "Table~\\ref{tab:memory_compat}"
+            "Table~\\ref{tab:component_contracts}",
+            "Figure~\\ref{fig:djc_state_machine}"
           ]
         },
         {
@@ -506,7 +499,7 @@
           "passes": true,
           "path": "Paper/7_Implementation_Details.tex",
           "terms": [
-            "Table~\\ref{tab:impl_boundaries}"
+            "The implementation boundaries are intentionally narrow"
           ]
         },
         {

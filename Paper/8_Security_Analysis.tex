@@ -6,6 +6,8 @@
 
 AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES-GCM protects the confidentiality and authenticity of published block records, while the HMAC-protected key envelope and checkpoint detect unauthenticated metadata changes.  The adversary can still deny service, delete records, replay a complete file-backed snapshot, or exploit vulnerabilities outside the FUSE process.  We make no claim against a privileged local attacker that can read process memory, substitute the CUDA driver, alter the mount executable, or use GPU microarchitectural side channels.
 
+Telemetry is not a trusted security input.  A noisy or adversarial telemetry source can make AEGIS-Q over-throttle elastic writes, defer GPU maintenance, or fall back to CPU, so denial of service and lost background progress remain possible.  It cannot authorize plaintext exposure, move foreground AES-GCM writes to the GPU, bypass D/J/C publication, or suppress AEAD/HMAC verification.
+
 The accepted encrypted state consists of a validated DEK envelope, a complete journal mapping, and ciphertext records referenced by that mapping.  A tag failure causes a read to fail.  A malformed or unauthenticated envelope/checkpoint causes open to fail.  Table~\ref{tab:threat_boundary} states the threat classes these mechanisms address and the boundaries left outside the paper.  These behaviors are necessary for a safe FUSE format, but they are not a formal proof of crash consistency.  In particular, xattr atomicity and directory durability are delegated to the underlying filesystem.
 
 For auditability, the selected crash model assumes three minimal lower-filesystem properties: \textbf{P1} acknowledged \texttt{fdatasync(.pqcdata)} persists referenced ciphertext bytes; \textbf{P2} acknowledged \texttt{fdatasync(.pqcmeta)} persists corresponding journal mappings after P1 order; \textbf{P3} checkpoint marker/xattr visibility is not lost silently after acknowledged sync.  If any of P1--P3 is violated, AEGIS-Q may fail closed or expose only an older committed prefix, but this paper does not claim device-level proof under arbitrary violation.
@@ -24,6 +26,7 @@ Backing-store tamper & AEAD tags, HMAC envelope, HMAC checkpoint & Denial of ser
 Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\
 Crash during update & Ordered publication plus selected daemon/app cutpoint tests & Physical power-loss and drive-cache certification remain open\\
 GPU side channel & No protection mechanism claimed & Integrity parity is not constant-time evidence\\
+Telemetry perturbation & Conservative admission and throttle fallback & Can cause denial of service or lost elastic progress, not plaintext exposure\\
 Privileged local attacker & Out of scope & Kernel/driver/FUSE process are trusted\\
 \bottomrule
 \end{tabularx}

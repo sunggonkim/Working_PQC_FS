@@ -17,9 +17,9 @@
       "source": "Paper/1_Introduction.tex"
     },
     {
-      "label": "tab:design_goals",
+      "label": "tab:component_contracts",
       "label_present": true,
-      "obligation": "formal invariant table",
+      "obligation": "architecture-indexed contract and invariant boundary",
       "referenced": true,
       "source": "Paper/3_Design.tex"
     },
@@ -43,13 +43,6 @@
       "obligation": "publication protocol state machine",
       "referenced": true,
       "source": "Paper/3_Design.tex"
-    },
-    {
-      "label": "tab:impl_boundaries",
-      "label_present": true,
-      "obligation": "implementation boundary summary",
-      "referenced": true,
-      "source": "Paper/7_Implementation_Details.tex"
     },
     {
       "label": "tab:threat_boundary",
@@ -91,7 +84,7 @@
       "design_needles": [
         "AES-GCM records",
         "file identifier",
-        "Table~\\ref{tab:design_goals}"
+        "Table~\\ref{tab:component_contracts}"
       ],
       "design_present": true,
       "evaluation_needles": [
@@ -117,7 +110,7 @@
       "closure_id": "E2-oracle-labeled-publication-cutpoints",
       "design_needles": [
         "Figure~\\ref{fig:djc_state_machine}",
-        "Data-before-mapping publication"
+        "data reaches durable sidecar state before its journal mapping"
       ],
       "design_present": true,
       "evaluation_needles": [

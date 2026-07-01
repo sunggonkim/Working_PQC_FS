@@ -3,23 +3,7 @@
 
 AEGIS-Q is implemented in C/CUDA on FUSE3.  The source tree splits the FUSE adapter, fd-context lifecycle, writeback/publication, epoch log, recovery, anchor, keyring/KDF, QoS, POSIX policy, and CUDA executors across \texttt{code/}; \texttt{pqc\_fuse.c} is mount-facing.  The build enables \texttt{-Wall -Wextra -Werror} for C/C++ and builds CUDA targets only when cuPQC is present.
 
-Table~\ref{tab:impl_boundaries} summarizes choices that are easy to misread.  Publication is a strict data/journal/checkpoint path plus opt-in epoch-redo-log grouping, not an accelerator path.  GPU AES-GCM is format-compatible and falls back to CPU, but evaluated data writes are CPU-first.  The GPU ML-KEM executor is not an in-place filesystem data path; integrity parity tests do not imply a persisted per-file Merkle tree or side-channel protection.
-
-\begin{table}[t]
-\centering
-\caption{Implementation boundaries that are easy to misread without an explicit summary.}
-\begin{tabularx}{\columnwidth}{P{0.28\columnwidth}|Y|Y}
-\toprule
-\textbf{Mechanism} & \textbf{Current implementation} & \textbf{Boundary}\\
-\midrule
-CUDA storage path & Managed allocation with explicit prefetch and stream synchronization & Not an NVMe-to-UVM storage-DMA path\\
-CUDA failure policy & CUDA executor falls back to CPU on failure & Does not change the on-disk record format\\
-Anchor backend & File witness plus optional hardware NV index backend & Hardware path requires administrator pre-provisioning\\
-Scheduler fallback & No-slack jobs route to CPU & No optimistic GPU admission without producer-supplied slack\\
-\bottomrule
-\end{tabularx}
-\label{tab:impl_boundaries}
-\end{table}
+The implementation boundaries are intentionally narrow.  Publication is a strict data/journal/checkpoint path plus opt-in epoch-redo-log grouping, not an accelerator path.  The CUDA storage path uses executor-local managed allocation with explicit prefetch and stream synchronization, not NVMe-to-UVM storage DMA.  CUDA failures fall back to CPU without changing the on-disk record format.  The anchor backend is a file witness plus optional administrator-provisioned TPM NV index.  No-slack jobs route to CPU, so GPU admission is never optimistic.
 
 The key-envelope path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before ciphertext is read.  ML-KEM is optional batched maintenance: ordinary mounts with no rekey trigger allocate no ML-KEM object, KEM keypair, background rekey worker, CUDA AES executor, elastic admission state, scheduler accounting, QoS monitor, external anchor, or managed GPU buffer.  Forced or interval rekey can refresh open-file DEK material and persist new HMAC envelopes, but the format does not pretend that a KEM benchmark is a persistent per-file key hierarchy.  The worker collects up to 128 envelopes with a 1~ms default window, skips admission setup until the candidate batch reaches the GPU byte gate, and suppresses successful per-batch logs unless diagnostic verbosity is requested.
 

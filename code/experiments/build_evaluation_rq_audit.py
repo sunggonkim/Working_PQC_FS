@@ -18,25 +18,25 @@ DEFAULT_OUT = ROOT / "artifacts" / "reports" / "evaluation_rq_audit"
 REQUIRED_RQS = [
     {
         "id": "RQ1",
-        "category": "correctness",
-        "terms": ["correctness", "authenticated", "nonce", "generation", "tamper"],
-        "evidence_needles": ["\\label{sec:eval_workloads}", "generation fault matrix", "EKEYREJECTED"],
-    },
-    {
-        "id": "RQ2",
         "category": "CPU/GPU/PQC placement",
         "terms": ["cpu", "gpu", "pqc", "placement", "ml-kem"],
         "evidence_needles": [
             "\\label{sec:eval_performance}",
-            "AES-GCM data writes are latency-sensitive and remain CPU-first",
+            "This is why AEGIS-Q's data plane is CPU-first",
             "mounted ML-KEM-768 key-plane workflow",
         ],
     },
     {
-        "id": "RQ3",
+        "id": "RQ2",
         "category": "mounted app QoS",
-        "terms": ["storage-visible", "sqlite", "latency", "secure-storage", "remount"],
+        "terms": ["storage-visible", "sqlite", "edge-storage", "remount"],
         "evidence_needles": ["\\label{sec:eval_qos}", "SQLite transaction latency", "Kernel controls preserve"],
+    },
+    {
+        "id": "RQ3",
+        "category": "correctness",
+        "terms": ["correctness", "authenticated", "publication"],
+        "evidence_needles": ["\\label{sec:eval_workloads}", "generation fault matrix", "EKEYREJECTED"],
     },
     {
         "id": "RQ4",
@@ -53,13 +53,11 @@ REQUIRED_RQS = [
 ]
 
 DISCUSSION_BOUNDARY_NEEDLES = [
-    "\\label{sec:disc_roadmap}",
     "fscrypt is environment-blocked",
     "physical power-loss",
     "kernel-crash",
-    "drive-cache",
-    "non-NVIDIA UMA",
-    "side-channel evidence",
+    "full cross-SoC portability",
+    "GPU side channels",
 ]
 
 DEFENSIVE_EVAL_PATTERNS = [

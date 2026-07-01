@@ -29,9 +29,9 @@
     "dangerous_fscrypt_claims": [],
     "fscrypt_lines": [
       {
-        "line": 17,
+        "line": 8,
         "path": "Paper/10_Discussion_and_Limitations.tex",
-        "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The measured frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is not reported as a throughput row.  The matrix is not a full fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison.  Its role is to expose authenticated-publication cost so the placement/QoS result is not mistaken for a free storage path."
+        "text": "Deployment scope is intentionally narrow.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked, so the matched baseline claim is measured mode alignment rather than exhaustive kernel comparison.  We evaluate read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, and bounded writer races, but AEGIS-Q is not a general POSIX filesystem and excludes shared \\texttt{mmap}/\\texttt{msync}, full POSIX edge cases, broad application concurrency, or full cross-SoC portability.  The crash matrix covers selected daemon/app cut points and loopback lower-block faults, not physical power-loss or kernel-crash certification."
       },
       {
         "line": 25,
@@ -46,37 +46,32 @@
       {
         "line": 7,
         "path": "Paper/2_Background.tex",
-        "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs, dmcrypt, optee}.  Those systems make encryption deployable at mature kernel, user, block, or hardware boundaries; AEGIS-Q asks a different runtime question at the mounted edge boundary.  It protects files represented by its own backing format and depends on the kernel, FUSE daemon, OpenSSL/liboqs, and the mount credential.  It is therefore evaluated as a placement/QoS/recovery prototype, not as a replacement for fscrypt or dm-crypt."
+        "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs, dmcrypt, optee}.  Those systems make encryption deployable at mature kernel, user, block, or hardware boundaries; AEGIS-Q asks a different runtime question at the mounted edge boundary.  It protects files represented by its own backing format and depends on the kernel, FUSE daemon, OpenSSL/liboqs, and the mount credential.  It is therefore evaluated as a placement/QoS/recovery runtime artifact, not as a replacement for fscrypt or dm-crypt."
       },
       {
         "line": 13,
         "path": "Paper/2_Background.tex",
-        "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption.  It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external freshness checks under one evidence contract.  In that setting, the storage layer exposes policy decisions that conventional encryption layers usually hide.  A FUSE daemon can decide whether a maintenance job is latency-sensitive, batch-shaped, or freshness-critical; it can also fail closed before exposing a file whose envelope, checkpoint, or external anchor is inconsistent."
+        "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption.  It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external replay-after-advance checks under one evidence contract.  The capability matrix on the first page and Figure~\\ref{fig:problem_boundary} are not performance rankings.  They explain why AEGIS-Q is evaluated as a placement/QoS runtime rather than as a replacement for mature deployed filesystems: existing encryption layers protect bytes, GPU-storage systems optimize data movement, and kernel controls shape I/O priority, but none of those boundaries simultaneously sees file-encryption state, accelerator slack, UMA pressure, and replay-aware recovery exposure."
       },
       {
-        "line": 36,
+        "line": 32,
         "path": "Paper/2_Background.tex",
-        "text": "GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large learning workloads through storage hierarchies~\\cite{flashneuron, fastensor}; their complementary staging perspectives are relevant to the batch boundary considered here~\\cite{fastensor, flashneuron}.  GPU-oriented work such as fscrypt-GPU and FlashNeuron motivates separating batch placement from the storage format~\\cite{fscrypt_gpu, flashneuron}.  They do not validate this FUSE format or its durability protocol.  Likewise, storage-oriented systems including SnuQS and InfScaler motivate explicit staging but do not make an NVMe/UVM correctness claim for this prototype~\\cite{snuqs_storage, infscaler}.  The evaluation therefore asks when a secure-storage runtime should use the CPU fast path, GPU elastic lane, or conservative fallback on the tested platform."
+        "text": "GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large GPU workloads through storage hierarchies~\\cite{flashneuron, fastensor}; their complementary staging perspectives are relevant to the batch boundary considered here~\\cite{fastensor, flashneuron}.  GPU-oriented work such as fscrypt-GPU and FlashNeuron motivates separating batch placement from the storage format~\\cite{fscrypt_gpu, flashneuron}.  They do not validate this FUSE format or its durability protocol.  Likewise, storage-oriented systems such as SnuQS motivate explicit staging but do not make an NVMe/UVM correctness claim for AEGIS-Q~\\cite{snuqs_storage}.  The evaluation therefore asks when a secure-storage runtime should use the CPU fast path, GPU elastic lane, or conservative fallback on the tested platform."
       },
       {
-        "line": 30,
+        "line": 28,
         "path": "Paper/4_Evaluation.tex",
-        "text": "Figure~\\ref{fig:evaluation_summary} is the evaluation spine: AEGIS-Q keeps AES-GCM data on the CPU, uses the GPU only for a mounted maintenance workflow with explicit slack, and recovers bounded SQLite pressure while giving up background bandwidth.  The strict frozen-contract row is a cost boundary, not the headline claim.  Table~\\ref{tab:benchmark_workloads} states what each experiment can establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB file, fixed mounts/platform, and five repetitions.  A same-profile attribution probe confirms that the strict path still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries per write-publication cycle.  The matched dm-crypt row runs on the same warm-cache contract: median throughput 9.03~MiB/s and median p99/p99.9 latency 264/823~\\(\\mu\\)s; fscrypt remains environment-blocked because \\texttt{CONFIG\\_FS\\_ENCRYPTION} is unset and the root ext4 encrypt feature is unavailable."
-      },
-      {
-        "line": 45,
-        "path": "Paper/4_Evaluation.tex",
-        "text": "RQ5 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\\\"
+        "text": "Figure~\\ref{fig:evaluation_summary} is the spine: CPU-first data plane, slack-gated GPU key plane, and storage-visible QoS recovery with explicit throughput tradeoff.  The frozen filesystem contract is a cost boundary under fixed 4~KiB 70/30 \\texttt{psync}/\\texttt{fdatasync}; the matched dm-crypt row uses the same warm-cache contract (9.03~MiB/s median; 264/823~\\(\\mu\\)s p99/p99.9).  fscrypt remains environment-blocked by kernel/filesystem proof on this host: \\texttt{CONFIG\\_FS\\_ENCRYPTION} is unset, the root ext4 encrypt feature is unavailable for the repository filesystem, and the retained verdict forbids a measured fscrypt row until the frozen contract runs on a supported host.  Panel~(c) is a loss/attribution plot: AEGIS-Q reports 0.360~MiB/s and 11.2~ms p99; retained A4 traces separately observe daemon-side FUSE latency and D/J/C publication barriers, including data/journal \\texttt{fdatasync} and marker metadata.  The O3 closeout is therefore not ``make strict single-client fast''; it is to expose format and implementation costs, keep the ordering invariant, and admit epoch/group publication only when work can share barriers."
       },
       {
         "line": 5,
         "path": "Paper/5_Related_Works.tex",
-        "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work; it is not a stronger deployed encryption layer.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\cite{gocryptfs}.  fs-verity and dm-integrity validate different boundaries; AEGIS-Q instead combines authenticated FUSE records, storage-visible policy, optional GPU maintenance, and external replay checks."
+        "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\cite{gocryptfs}.  The mode-aligned measured rows are plaintext/lowerfs, gocryptfs, dm-crypt, and AEGIS-Q; they expose publication and QoS costs, not an implied speedup.  fscrypt is unavailable with proof, not a measured comparison row, and gocryptfs marks a loss because AEGIS-Q targets placement/QoS/replay rather than kernel-replacement maturity."
       },
       {
-        "line": 7,
+        "line": 9,
         "path": "Paper/5_Related_Works.tex",
-        "text": "Prior GPU/storage systems validate different assumptions.  FlashNeuron and Fastensor use SSD staging for learning workloads~\\cite{flashneuron, fastensor}; SnuQS and InfScaler target managed capacity~\\cite{snuqs_storage, infscaler}, while SnuQS alone is not filesystem-format evidence~\\cite{snuqs_storage}.  GPUfs, SPDK, GPUDirect Storage, and fscrypt-GPU optimize movement or throughput, but not this FUSE format's accepted encrypted records, journal mappings, xattrs, and external anchors~\\cite{flashneuron, fscrypt_gpu, fastensor}.  Edge pressure is real~\\cite{breaking_edge}; OP-TEE/dm-crypt use different boundaries~\\cite{optee, dmcrypt}.  The portable idea is measured admission, while CUDA/cuPQC evidence is platform-specific."
+        "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize throughput-oriented encryption paths~\\cite{spec_gpu_cfs, fscrypt_gpu}; and GPUstore, GPUfs, GeminiFS, GPU4FS, and GPUDirect Storage expose GPU-side execution, storage, or direct movement~\\cite{gpustore,gpufs,geminifs,gpu4fs,gpudirect_storage}.  They motivate pressure but not AEGIS-Q's FUSE records, anchors, D/J/C publication, TPM replay, storage-visible QoS, SPDK, cuFile, or a direct storage/GPU data path."
       }
     ],
     "mentions_environment_blocked": true,
@@ -88,5 +83,5 @@
   },
   "parent_b1_gate_closed": true,
   "source_feasibility_artifact": "artifacts/validation/kernel_baseline_feasibility/kernel_baseline_feasibility.json",
-  "timestamp_utc": "2026-06-30T14:04:21.718200+00:00"
+  "timestamp_utc": "2026-07-01T23:11:33.537865+00:00"
 }

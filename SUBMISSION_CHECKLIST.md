@@ -143,18 +143,22 @@ Runtime default path:
   after acknowledged sync, lost xattrs, device-cache behavior, kernel crash, and
   physical power loss remain outside the selected crash model.
 
-Expected review-response state:
+Current review-response state after the latest figure/evaluation pass:
 
 ```text
 submission_defense_ready=True
-osdi_strengthening_complete=True
-p0_next=none
+osdi_strengthening_complete=False
+p0_next=O2,O3
 p1_next=none
 ```
 
-This means no known contradiction remains under the scoped edge-runtime claim.
-It does not mean guaranteed SOSP/OSDI acceptance; breadth preferences can still
-produce weak rejects.
+This means the scoped edge-runtime claim is defensible, but the draft is not
+"perfect" for SOSP/OSDI-style review.  The remaining P0 pressure is not to turn
+AEGIS-Q into a full filesystem paper; it is to make the strict-path cost and
+methodology/baseline boundary harder to dismiss.
+
+No P0 contradiction is open under the current claim boundary.  O2/O3 remain
+OSDI-strengthening work, not blockers that require changing the thesis.
 
 ## Latest Review Diagnosis
 
@@ -173,6 +177,45 @@ contradiction.
 | Single Jetson | Jetson-class accelerated UMA is the representative edge target. | Add cross-platform work unless the claim changes. |
 | fscrypt missing | Keep environment proof; no measured fscrypt speedup is claimed. | Delete baselines or invent rows. |
 | Baselines | Keep plaintext/lowerfs, gocryptfs, dm-crypt, AEGIS-Q; treat GPU-storage/PQC-only systems as boundary related work. | Remove uncomfortable baselines. |
+
+## Latest Review Delta (2026-07-02)
+
+The new review repeats the same root concern: AEGIS-Q is plausible as an
+edge secure file-encryption runtime, but it still looks narrow if the paper is
+read as a general encrypted filesystem.  Do not pivot the thesis.  Strengthen
+the runtime story with graph-driven evaluation, explicit cost attribution, and
+clear non-claims.
+
+| Review pressure | Paper/action response | Non-goal |
+| --- | --- | --- |
+| Strict 4 KiB/fdatasync path is much slower than mature baselines | Treat as O3: attribute barrier/publication/FUSE costs, report existing X6/epoch-grouping wins only where semantics remain intact, and optimize default-path overhead only when profiles show movement. Current paper numbers: strict AEGIS-Q 0.360 MiB/s and 11.2 ms p99; X6 removes marker `syncfs` but leaves three sync-family obligations per cycle; grouped epoch can reduce 8 to 6 sync-family operations in eligible batched/concurrent rows. | Hide the loss, remove baselines, or weaken D/J/C publication. |
+| fscrypt missing | Treat as O2: keep fscrypt environment-blocked with proof; current host has `CONFIG_FS_ENCRYPTION=not_set`, root ext4 encrypt feature unavailable for the repository filesystem, `fscrypt status` nonzero, and no noninteractive root path for a supported frozen-contract run.  Only add a measured row on a supported host. | Claim fscrypt superiority or delete the baseline family. |
+| End-to-end benefit versus microbenchmarks | Evaluation must be figure-first: CPU/GPU AES-GCM sweep, ML-KEM primitive, mounted rekey workflow, SQLite QoS, recovery/QoS sensitivity, and strict cost boundary. | Let tables or retained artifact lists carry the argument. |
+| GPU lane looks too narrow | Keep the claim narrow and honest: GPU/cuPQC is for elastic ML-KEM maintenance; foreground AES-GCM remains CPU because the 4 KiB--1 MiB sweep says so. | Force GPU onto writes just to make the story look more GPU-heavy. |
+| Telemetry may be noisy/adversarial | State that telemetry is not trusted security input: stale/noisy telemetry can lose elastic progress, force CPU fallback, or throttle too much; this is a DoS/background-progress risk, not a plaintext-exposure or publication-bypass risk. | Present telemetry as a secure scheduler, ML policy, or integrity oracle. |
+| Concurrency/ABA semantics | Paper now states per-file publish-ticket serialization, disjoint-file independence, file/block/generation/length AAD, checkpoint reachability, and duplicate-generation rejection. | Claim broad POSIX byte-range transactions or arbitrary app-level concurrency. |
+| TPM/PCR lifecycle incomplete | Keep replay-after-advance as the result; persistent PCR-bound key release, update/rollover, backup/restore, and rollback resistance are future hardening. | Claim hardware-backed credential release. |
+| Hybrid GPU pipelines and other GPU maintenance | Treat larger async AES-GCM pipelines, integrity-tree recomputation, and large re-encryption windows as future candidates that must preserve the same publication oracle. | Move foreground writes to GPU without a measured crossover and D/J/C-compatible recovery proof. |
+| POSIX/crash envelope narrow | Keep mounted workload guardrails and selected daemon/D/J/C/lower-block model. | Chase mmap, full rename semantics, kernel crash, physical power loss, or drive-cache certification as the current paper. |
+| Single Jetson | Keep Jetson-class UMA as representative edge target. | Add cross-platform portability unless the claim changes. |
+
+### Questions-for-Authors Response Map
+
+Use this map when editing the paper so the response stays thesis-aligned instead
+of turning into a general filesystem checklist.
+
+| Reviewer question | Current paper answer | Remaining action |
+| --- | --- | --- |
+| 4 KiB `fdatasync` loss: format vs implementation? | Evaluation now calls Panel (c) a loss/attribution plot. A4 traces separate daemon-side FUSE latency from D/J/C barriers (`data/journal fdatasync` plus marker metadata), while the frozen row reports strict AEGIS-Q 0.360 MiB/s and 11.2 ms p99. | Improve profiles/implementation only if D/J/C remains intact; do not hide the row or invent a percentage breakdown. |
+| SQLite modes, page sizes, other DBs/logging? | Current result is SQLite mounted pressure plus append-log/cache-manifest remounts; Discussion names wider SQLite/embedded-DB modes as future hardening. | Add workload breadth only as a real measured matrix. |
+| Noisy/adversarial telemetry and DoS? | Security states telemetry is not trusted: perturbation can over-throttle, defer GPU maintenance, or force CPU fallback, but cannot expose plaintext or bypass publication. | Keep mitigation conservative: fail closed to CPU/delay, not secure scheduling claims. |
+| Concurrency/ABA and lock bottlenecks? | Design states per-file publish-ticket serialization, disjoint-file independence, AAD/checkpoint reachability, and duplicate-generation rejection; evaluation reports bounded writer stress. | Do not claim arbitrary app-level concurrency or byte-range transactions. |
+| TPM PCR/rollover policy? | Security frames TPM as admin-provisioned replay-after-advance only; Discussion lists TPM NV/PCR rollover and backup policy as separate future hardening. | No persistent PCR-bound key-release claim without a real lifecycle design. |
+| Hybrid CPU/GPU AES-GCM for 256 KiB--1 MiB? | Negative-control graph keeps foreground AES-GCM on CPU through 1 MiB; larger pipelines are future only if publication oracle is unchanged. | Measure before claiming crossover; preserve D/J/C. |
+| Other GPU maintenance beyond ML-KEM? | Paper limits evaluated GPU lane to ML-KEM envelope refresh; Discussion allows GPU maintenance beyond ML-KEM as future work. | Do not imply unmeasured integrity-tree or re-encryption speedups. |
+| Portability beyond Jetson/CUDA? | Evaluation says Jetson AGX Thor is representative for placement/QoS, not cross-SoC evidence; Discussion lists portability limits. | Cross-platform rows only if actual host data exists. |
+| `fsync`/dir-`fsync`, rename, xattr durability? | Design and Security define D/J sidecar order, checkpoint/xattr visibility, scoped directory-`fsync`, and lower-fs assumptions; Evaluation keeps unsupported modes scoped. | Do not promote to physical power-loss/kernel-crash certification. |
+| Code/harness release? | Evaluation says retained pipeline regenerates figures from JSON; Discussion names packaged artifact release as future hardening. | Prepare release bundle separately; do not let artifact work displace paper evidence. |
 
 ## Closed Gate Register
 
@@ -215,8 +258,23 @@ Current baseline sufficiency decision:
 
 ## Active Queue
 
-No P0/P1 work is open under the current claim boundary.  Remaining useful work
-is P1 engineering on placement/strict-path overhead:
+P0 work is open for OSDI-strengthening, but it should stay thesis-aligned:
+
+- O2 baseline boundary: keep fscrypt as unavailable with proof unless a
+  supported host is used for a real frozen-contract run.  The current proof is
+  kernel/filesystem-level, not a benchmark: `CONFIG_FS_ENCRYPTION=not_set`,
+  root ext4 encrypt feature unavailable for the repository filesystem, and
+  `fscrypt status` nonzero.  Do not invent or imply a measured fscrypt row.
+- O3 strict-path practicality: reduce or attribute strict publication cost
+  while preserving AES-GCM records, D/J/C ordering, checkpoint/recovery, and
+  replay semantics.  X6 and epoch/group publication are conditional paths, not
+  universal replacement claims.  The paper should keep the strict single-client
+  row as the cost boundary and present epoch/grouping only as an admission rule
+  for work that can share barriers.
+- Methodology clarity: every Evaluation subsection should be driven by a graph
+  or figure and then explain what the graph closes.  Tables are secondary.
+
+Remaining useful engineering work is placement/strict-path overhead:
 
 - Reduce strict/publication/writeback overhead without changing AES-GCM records,
   D/J/C ordering, checkpoint/recovery, or replay semantics.

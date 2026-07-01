@@ -19,6 +19,7 @@ GENERATION = ROOT / "artifacts/validation/generation_fault_matrix/generation_fau
 DAEMON = ROOT / "artifacts/validation/daemon_power_fault_campaign/daemon_power_fault_campaign.json"
 TPM = ROOT / "artifacts/validation/hardware_freshness_recovery_matrix/hardware_freshness_recovery_matrix.json"
 QOS = ROOT / "artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_analysis.json"
+ADMISSION = ROOT / "artifacts/results/qos/m5_admission_sweep.json"
 
 
 def load_json(path: Path) -> dict:
@@ -128,12 +129,37 @@ def plot_qos(ax) -> None:
     ax.spines["right"].set_visible(False)
 
 
+def plot_admission(ax) -> None:
+    rows = load_json(ADMISSION)
+    budgets = np.array([row["budget_ns"] / 1_000_000 for row in rows], dtype=float)
+    gpu_jobs = np.array([row["gpu_jobs"] for row in rows], dtype=float)
+    cpu_jobs = np.array([row["cpu_jobs"] for row in rows], dtype=float)
+    total_jobs = gpu_jobs + cpu_jobs
+    gpu_ratio = np.divide(gpu_jobs, total_jobs, out=np.zeros_like(gpu_jobs), where=total_jobs > 0) * 100.0
+
+    ax.plot(budgets, gpu_ratio, marker="o", color="#197278", linewidth=1.4, markersize=3.8)
+    ax.fill_between(budgets, 0, gpu_ratio, color="#197278", alpha=0.12)
+    ax.set_xlabel("Slack budget (ms)")
+    ax.set_ylabel("GPU-admitted jobs (%)")
+    ax.set_ylim(0, 100)
+    ax.set_xticks(budgets)
+    ax.set_title("(c) Elastic key-plane admission")
+    ax.grid(axis="y", alpha=0.25)
+    for x, y, g, c in zip(budgets, gpu_ratio, gpu_jobs.astype(int), cpu_jobs.astype(int)):
+        ax.text(x, y + 4, f"{g}/{g + c}", ha="center", va="bottom", fontsize=5.6)
+    ax.text(0.99, 0.08, "GPU/total jobs", transform=ax.transAxes,
+            ha="right", va="bottom", fontsize=5.4)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+
 def main() -> int:
     plt.rcParams.update({"font.size": 7.2, "pdf.fonttype": 42, "ps.fonttype": 42})
-    fig, axes = plt.subplots(1, 2, figsize=(7.05, 2.35), gridspec_kw={"width_ratios": [0.92, 1.38]})
+    fig, axes = plt.subplots(1, 3, figsize=(7.05, 2.25), gridspec_kw={"width_ratios": [0.9, 1.18, 0.92]})
     plot_recovery(axes[0])
     plot_qos(axes[1])
-    fig.subplots_adjust(left=0.08, right=0.995, bottom=0.35, top=0.82, wspace=0.34)
+    plot_admission(axes[2])
+    fig.subplots_adjust(left=0.08, right=0.995, bottom=0.35, top=0.82, wspace=0.43)
     OUT_PDF.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT_PDF, bbox_inches="tight")
     fig.savefig(OUT_PNG, dpi=300, bbox_inches="tight")

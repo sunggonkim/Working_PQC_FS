@@ -1,13 +1,12 @@
 # Review acceptance/structure audit
 
 - Same-review exact repeat: unlikely for generation robustness, closed-loop foreground non-storage QoS mismatch, ML-KEM break-even, energy/thermal, strict-path hybrid-barrier criticism, unsupported fscrypt-speedup claims, and baseline-deletion criticism; a reviewer may still prefer a measured fscrypt row for OSDI, but it no longer contradicts the scoped paper claim
-- Logic structure: mostly aligned but missing at least one first-page/claim-spine anchor
-- Accept readiness: not safe to call OSDI/SOSP-ready; the paper is defensible as a scoped edge-runtime result, but the latest review can still repeat the supported-fscrypt baseline objection until that row is implemented or the venue-level baseline claim is removed
-- Gates OK: `False`
+- Logic structure: clear and aligned
+- Accept readiness: defensible under scoped edge-runtime claims; SOSP/OSDI acceptance is still not guaranteed because breadth, measured fscrypt preference, power-loss, and deployment expectations are venue-dependent, but they are no longer contradictions in the current paper claim
+- Gates OK: `True`
 
 ## Remaining risks
 
-- `energy_thermal_missing`
 
 ## Review map
 
@@ -26,8 +25,8 @@
 - `strict_fuse_impact`: low_repeat_risk_after_closeout
 - `closed_loop_foreground_nonstorage_core_motivation`: low_repeat_risk_after_claim_removal
 - `fscrypt_baseline_supported`: low_repeat_risk_after_closeout
-- `energy_thermal_missing`: high_repeat_risk_for_osdi_until_claim_removed_or_new_evidence
-- `kernel_integration_path`: medium_repeat_risk_future_kernel_claim_only
+- `energy_thermal_missing`: low_repeat_risk_after_closeout
+- `kernel_integration_path`: low_repeat_risk_after_kernel_assist_roadmap
 - `competitor_boundary`: low_repeat_risk_after_competitor_boundary
 
 ## Previous-paper pattern

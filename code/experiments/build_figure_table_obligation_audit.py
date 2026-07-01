@@ -38,11 +38,6 @@ EXPECTED_OBLIGATIONS = {
         "obligation": "capability table defining the design gap",
         "caption_terms": ["Capability", "design gap"],
     },
-    "tab:design_goals": {
-        "kind": "design",
-        "obligation": "formal storage-protocol invariant table",
-        "caption_terms": ["invariants", "boundaries"],
-    },
     "fig:overall_procedure": {
         "kind": "design",
         "obligation": "architecture and plane-separation figure",
@@ -57,11 +52,6 @@ EXPECTED_OBLIGATIONS = {
         "kind": "design",
         "obligation": "architecture-indexed component contract map",
         "caption_terms": ["Architecture-indexed", "component contracts"],
-    },
-    "tab:impl_boundaries": {
-        "kind": "design",
-        "obligation": "implementation boundary summary",
-        "caption_terms": ["Implementation", "boundaries"],
     },
     "tab:threat_boundary": {
         "kind": "RQ1/RQ4",
@@ -83,10 +73,20 @@ EXPECTED_OBLIGATIONS = {
         "obligation": "evaluation spine across cost, QoS, and key-plane placement",
         "caption_terms": ["Evaluation summary", "RQ1", "RQ2", "RQ5"],
     },
+    "fig:verified_microbench": {
+        "kind": "RQ1",
+        "obligation": "verified primitive placement graph for CPU/GPU/PQC policy",
+        "caption_terms": ["Verified", "RQ1", "AES-GCM", "ML-KEM"],
+    },
+    "fig:publication_cost_detail": {
+        "kind": "RQ5",
+        "obligation": "graph-driven strict-publication cost and grouped-publication boundary",
+        "caption_terms": ["RQ5", "cost", "strict", "grouped"],
+    },
     "fig:recovery_qos_detail": {
-        "kind": "RQ3",
-        "obligation": "recovery oracle and QoS sensitivity detail",
-        "caption_terms": ["Recovery", "QoS", "sensitivity"],
+        "kind": "RQ2/RQ3/RQ4",
+        "obligation": "recovery oracle, QoS sensitivity, and elastic GPU admission detail",
+        "caption_terms": ["Recovery", "QoS", "admission", "GPU"],
     },
 }
 

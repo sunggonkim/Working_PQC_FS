@@ -1,26 +1,26 @@
 {
   "artifact": "review_acceptance_structure_audit",
   "current_structure": {
-    "complete": false,
+    "complete": true,
     "required": {
       "capability_matrix": true,
       "claim_boundaries": true,
       "competitor_boundary": true,
       "contributions_before_scope": true,
-      "energy_thermal_observations": false,
+      "energy_thermal_observations": true,
       "first_page_qos_figure": true,
       "foreground_inference_claim_removed": true,
-      "generation_x10": false,
-      "jetson_scope_not_portability": false,
-      "kernel_assist_roadmap": false,
+      "generation_x10": true,
+      "jetson_scope_not_portability": true,
+      "kernel_assist_roadmap": true,
       "lowerfs_contract_not_powerloss": true,
       "naive_failures": true,
       "pressure_opening": true,
-      "qos_pareto": false,
+      "qos_pareto": true,
       "rq_mapping": true,
       "thesis_sentence": true
     },
-    "score": 11,
+    "score": 16,
     "total": 16
   },
   "previous_paper_patterns": [
@@ -179,13 +179,13 @@
     {
       "current_status": "osdi_p0",
       "id": "energy_thermal_missing",
-      "repeat_risk": "high_repeat_risk_for_osdi_until_claim_removed_or_new_evidence",
+      "repeat_risk": "low_repeat_risk_after_closeout",
       "review_phrase_present": true
     },
     {
       "current_status": "osdi_p0",
       "id": "kernel_integration_path",
-      "repeat_risk": "medium_repeat_risk_future_kernel_claim_only",
+      "repeat_risk": "low_repeat_risk_after_kernel_assist_roadmap",
       "review_phrase_present": true
     },
     {
@@ -264,18 +264,10 @@
       "violations": []
     },
     "recurring_review_elimination": {
-      "overall_pass": false,
+      "overall_pass": true,
       "path": "artifacts/reports/recurring_review_elimination/recurring_review_elimination.json",
       "present": true,
-      "violations": [
-        "disconnected GPU/KEM story",
-        "incomplete baselines",
-        "partial TPM replay",
-        "narrow POSIX semantics",
-        "single-platform evidence",
-        "energy/thermal missing",
-        "microbenchmark-only methodology"
-      ]
+      "violations": []
     },
     "related_work_applicability": {
       "overall_pass": true,
@@ -302,14 +294,12 @@
       "violations": []
     }
   },
-  "timestamp_utc": "2026-07-01T22:20:03.719734+00:00",
+  "timestamp_utc": "2026-07-01T23:11:34.511468+00:00",
   "verdict": {
-    "accept_readiness": "not safe to call OSDI/SOSP-ready; the paper is defensible as a scoped edge-runtime result, but the latest review can still repeat the supported-fscrypt baseline objection until that row is implemented or the venue-level baseline claim is removed",
-    "gates_ok": false,
-    "highest_remaining_review_risks": [
-      "energy_thermal_missing"
-    ],
-    "logic_structure_vs_previous_papers": "mostly aligned but missing at least one first-page/claim-spine anchor",
+    "accept_readiness": "defensible under scoped edge-runtime claims; SOSP/OSDI acceptance is still not guaranteed because breadth, measured fscrypt preference, power-loss, and deployment expectations are venue-dependent, but they are no longer contradictions in the current paper claim",
+    "gates_ok": true,
+    "highest_remaining_review_risks": [],
+    "logic_structure_vs_previous_papers": "clear and aligned",
     "same_review_exact_repeat": "unlikely for generation robustness, closed-loop foreground non-storage QoS mismatch, ML-KEM break-even, energy/thermal, strict-path hybrid-barrier criticism, unsupported fscrypt-speedup claims, and baseline-deletion criticism; a reviewer may still prefer a measured fscrypt row for OSDI, but it no longer contradicts the scoped paper claim"
   }
 }

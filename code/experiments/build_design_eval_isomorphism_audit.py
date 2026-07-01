@@ -19,7 +19,7 @@ MECHANISMS = [
     {
         "mechanism": "authenticated block format",
         "closure_id": "E1-generation-and-envelope-authentication",
-        "design_needles": ["AES-GCM records", "file identifier", "Table~\\ref{tab:design_goals}"],
+        "design_needles": ["AES-GCM records", "file identifier", "Table~\\ref{tab:component_contracts}"],
         "evaluation_needles": ["generation fault matrix", "EKEYREJECTED"],
         "rq": "RQ1",
         "artifact_paths": [
@@ -30,7 +30,7 @@ MECHANISMS = [
     {
         "mechanism": "D/J/C publication",
         "closure_id": "E2-oracle-labeled-publication-cutpoints",
-        "design_needles": ["Figure~\\ref{fig:djc_state_machine}", "Data-before-mapping publication"],
+        "design_needles": ["Figure~\\ref{fig:djc_state_machine}", "data reaches durable sidecar state before its journal mapping"],
         "evaluation_needles": ["daemon campaign kills", "D/J/C", "previous committed payload", "latest committed payload"],
         "rq": "RQ4",
         "artifact_paths": [
@@ -89,11 +89,10 @@ MECHANISMS = [
 FIGURE_TABLE_OBLIGATIONS = [
     {"label": "fig:first_page_qos", "source": "Paper/1_Introduction.tex", "obligation": "first-page QoS pressure/hero result"},
     {"label": "tab:capability_matrix", "source": "Paper/1_Introduction.tex", "obligation": "design-gap capability comparison"},
-    {"label": "tab:design_goals", "source": "Paper/3_Design.tex", "obligation": "formal invariant table"},
+    {"label": "tab:component_contracts", "source": "Paper/3_Design.tex", "obligation": "architecture-indexed contract and invariant boundary"},
     {"label": "fig:dataplane_negative_control", "source": "Paper/2_Background.tex", "obligation": "data-plane placement motivation"},
     {"label": "fig:overall_procedure", "source": "Paper/3_Design.tex", "obligation": "architecture and plane separation"},
     {"label": "fig:djc_state_machine", "source": "Paper/3_Design.tex", "obligation": "publication protocol state machine"},
-    {"label": "tab:impl_boundaries", "source": "Paper/7_Implementation_Details.tex", "obligation": "implementation boundary summary"},
     {"label": "tab:threat_boundary", "source": "Paper/8_Security_Analysis.tex", "obligation": "security threat boundary"},
     {"label": "fig:evaluation_summary", "source": "Paper/4_Evaluation.tex", "obligation": "evaluation spine"},
     {"label": "fig:recovery_qos_detail", "source": "Paper/4_Evaluation.tex", "obligation": "recovery/QoS detail result"},

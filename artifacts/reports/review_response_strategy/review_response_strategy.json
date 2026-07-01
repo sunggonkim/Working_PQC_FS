@@ -33,7 +33,7 @@
       "related_work_applicability": true
     }
   },
-  "generated_utc": "2026-07-01T22:24:14Z",
+  "generated_utc": "2026-07-01T23:11:33Z",
   "paper_strategy": [
     "Lead with the runtime-boundary thesis, not the artifact ledger.",
     "Use previous-paper pattern: early figure/table, concrete SOTA gap, named mechanism, quantitative outcome.",

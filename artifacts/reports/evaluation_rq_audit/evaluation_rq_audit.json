@@ -7,52 +7,28 @@
   ],
   "defensive_hits": [],
   "discussion_boundaries": {
-    "\\label{sec:disc_roadmap}": true,
-    "drive-cache": true,
+    "GPU side channels": true,
     "fscrypt is environment-blocked": true,
+    "full cross-SoC portability": true,
     "kernel-crash": true,
-    "non-NVIDIA UMA": true,
-    "physical power-loss": true,
-    "side-channel evidence": true
+    "physical power-loss": true
   },
   "overall_pass": true,
   "pages": 13,
   "rqs": [
     {
       "evidence_needles": [
-        "\\label{sec:eval_workloads}",
-        "generation fault matrix",
-        "EKEYREJECTED"
-      ],
-      "evidence_present": true,
-      "found_id": "RQ1",
-      "found_question": "Does the implemented format preserve nonce/generation, publication, and metadata-auth invariants under remount, fault, and tamper campaigns?",
-      "found_title": "Correctness of authenticated publication",
-      "passes": true,
-      "required_category": "correctness",
-      "required_id": "RQ1",
-      "terms": [
-        "correctness",
-        "authenticated",
-        "nonce",
-        "generation",
-        "tamper"
-      ],
-      "terms_present": true
-    },
-    {
-      "evidence_needles": [
         "\\label{sec:eval_performance}",
-        "AES-GCM data writes are latency-sensitive and remain CPU-first",
+        "This is why AEGIS-Q's data plane is CPU-first",
         "mounted ML-KEM-768 key-plane workflow"
       ],
       "evidence_present": true,
-      "found_id": "RQ2",
+      "found_id": "RQ1",
       "found_question": "When should a UMA edge runtime keep AES-GCM file encryption on the CPU, and when can ML-KEM/cuPQC key-plane maintenance use the GPU?",
       "found_title": "CPU/GPU/PQC placement",
       "passes": true,
       "required_category": "CPU/GPU/PQC placement",
-      "required_id": "RQ2",
+      "required_id": "RQ1",
       "terms": [
         "cpu",
         "gpu",
@@ -69,18 +45,37 @@
         "Kernel controls preserve"
       ],
       "evidence_present": true,
-      "found_id": "RQ3",
+      "found_id": "RQ2",
       "found_question": "Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?",
-      "found_title": "Mounted application behavior",
+      "found_title": "Mounted QoS and edge-storage behavior",
       "passes": true,
       "required_category": "mounted app QoS",
-      "required_id": "RQ3",
+      "required_id": "RQ2",
       "terms": [
         "storage-visible",
         "sqlite",
-        "latency",
-        "secure-storage",
+        "edge-storage",
         "remount"
+      ],
+      "terms_present": true
+    },
+    {
+      "evidence_needles": [
+        "\\label{sec:eval_workloads}",
+        "generation fault matrix",
+        "EKEYREJECTED"
+      ],
+      "evidence_present": true,
+      "found_id": "RQ3",
+      "found_question": "Does the implemented format preserve nonce/generation, publication, and metadata-auth invariants under remount, fault, and tamper campaigns?",
+      "found_title": "Correctness of authenticated publication",
+      "passes": true,
+      "required_category": "correctness",
+      "required_id": "RQ3",
+      "terms": [
+        "correctness",
+        "authenticated",
+        "publication"
       ],
       "terms_present": true
     },

@@ -52,7 +52,7 @@ MECHANISM_MAP = [
     },
     {
         "mechanism": "authenticated format and D/J/C publication",
-        "design_needles": ["tab:design_goals", "fig:djc_state_machine"],
+        "design_needles": ["tab:component_contracts", "fig:djc_state_machine"],
         "evaluation_needles": ["sec:eval_workloads", "generation fault matrix"],
     },
     {

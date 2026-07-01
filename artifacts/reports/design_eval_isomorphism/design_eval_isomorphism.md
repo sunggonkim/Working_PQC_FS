@@ -23,11 +23,10 @@
 | --- | --- | ---: | ---: |
 | `fig:first_page_qos` | first-page QoS pressure/hero result | `True` | `True` |
 | `tab:capability_matrix` | design-gap capability comparison | `True` | `True` |
-| `tab:design_goals` | formal invariant table | `True` | `True` |
+| `tab:component_contracts` | architecture-indexed contract and invariant boundary | `True` | `True` |
 | `fig:dataplane_negative_control` | data-plane placement motivation | `True` | `True` |
 | `fig:overall_procedure` | architecture and plane separation | `True` | `True` |
 | `fig:djc_state_machine` | publication protocol state machine | `True` | `True` |
-| `tab:impl_boundaries` | implementation boundary summary | `True` | `True` |
 | `tab:threat_boundary` | security threat boundary | `True` | `True` |
 | `fig:evaluation_summary` | evaluation spine | `True` | `True` |
 | `fig:recovery_qos_detail` | recovery/QoS detail result | `True` | `True` |

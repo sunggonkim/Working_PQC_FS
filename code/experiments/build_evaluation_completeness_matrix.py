@@ -82,8 +82,8 @@ MATRIX_ROWS: list[dict[str, Any]] = [
             {
                 "path": "Paper/10_Discussion_and_Limitations.tex",
                 "terms": [
-                    "The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q",
-                    "not a full fscrypt, fs-verity, dm-integrity",
+                    "fscrypt is environment-blocked",
+                    "measured mode alignment rather than exhaustive kernel comparison",
                 ],
             },
         ],
@@ -97,7 +97,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
         "required": True,
         "requirement": "scalability or pressure behavior",
         "status": "implemented_scoped",
-        "figure_table_labels": ["fig:first_page_qos", "fig:evaluation_summary", "fig:recovery_qos_detail"],
+        "figure_table_labels": ["fig:first_page_qos", "fig:evaluation_summary"],
         "evidence": [
             {
                 "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",
@@ -127,7 +127,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
         "required": True,
         "requirement": "workload diversity",
         "status": "implemented_scoped",
-        "figure_table_labels": ["tab:benchmark_workloads"],
+        "figure_table_labels": [],
         "evidence": [
             {
                 "path": "artifacts/validation/workload_diversity_matrix/workload_diversity_matrix.json",
@@ -138,7 +138,6 @@ MATRIX_ROWS: list[dict[str, Any]] = [
             {
                 "path": "Paper/4_Evaluation.tex",
                 "terms": [
-                    "Table~\\ref{tab:benchmark_workloads}",
                     "SQLite",
                     "\\texttt{dbm.dumb}",
                     "append-log/cache-manifest",
@@ -147,8 +146,8 @@ MATRIX_ROWS: list[dict[str, Any]] = [
             {
                 "path": "Paper/10_Discussion_and_Limitations.tex",
                 "terms": [
-                    "SQLite, elastic background writes, append-log/cache-manifest remounts",
-                    "not a general POSIX",
+                    "elastic background writes and append-log/cache-manifest remounts",
+                    "not a general POSIX filesystem",
                 ],
             },
         ],
@@ -161,7 +160,11 @@ MATRIX_ROWS: list[dict[str, Any]] = [
         "required": True,
         "requirement": "time/overhead breakdown",
         "status": "implemented_scoped",
-        "figure_table_labels": ["fig:dataplane_negative_control", "fig:evaluation_summary"],
+        "figure_table_labels": [
+            "fig:dataplane_negative_control",
+            "fig:verified_microbench",
+            "fig:publication_cost_detail",
+        ],
         "evidence": [
             {
                 "path": "artifacts/validation/mechanism_ablation_manifest/mechanism_ablation_manifest.json",
@@ -197,7 +200,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
         "required": True,
         "requirement": "sensitivity analysis",
         "status": "implemented_scoped",
-        "figure_table_labels": [],
+        "figure_table_labels": ["fig:recovery_qos_detail"],
         "evidence": [
             {
                 "path": "artifacts/validation/qos_sensitivity_analysis/qos_sensitivity_analysis.json",
@@ -208,7 +211,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
             {
                 "path": "Paper/4_Evaluation.tex",
                 "terms": [
-                    "The sensitivity bundle varies budget",
+                    "The QoS panel varies budget",
                     "sampling interval",
                     "queue depth",
                     "writer intensity",
@@ -242,8 +245,8 @@ MATRIX_ROWS: list[dict[str, Any]] = [
                 "path": "Paper/4_Evaluation.tex",
                 "terms": [
                     "same-run power/thermal observations",
-                    "five repetitions",
-                    "five-run methodology row",
+                    "five-run hero medians",
+                    "three-run kernel QoS controls",
                 ],
             },
         ],
@@ -273,7 +276,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
                 "path": "Paper/4_Evaluation.tex",
                 "terms": [
                     "The app-level result uses SQLite transaction latency",
-                    "secure append-log macro",
+                    "append-log verifies ordered 16~KiB records",
                     "cache-manifest workload",
                 ],
             },
@@ -289,11 +292,9 @@ MATRIX_ROWS: list[dict[str, Any]] = [
         "status": "implemented_scoped",
         "figure_table_labels": [
             "fig:problem_boundary",
-            "tab:design_goals",
+            "tab:component_contracts",
             "fig:overall_procedure",
             "fig:djc_state_machine",
-            "tab:memory_compat",
-            "tab:impl_boundaries",
             "tab:threat_boundary",
         ],
         "evidence": [
@@ -315,14 +316,13 @@ MATRIX_ROWS: list[dict[str, Any]] = [
                 "path": "Paper/3_Design.tex",
                 "terms": [
                     "Figure~\\ref{fig:overall_procedure}",
-                    "Table~\\ref{tab:design_goals}",
+                    "Table~\\ref{tab:component_contracts}",
                     "Figure~\\ref{fig:djc_state_machine}",
-                    "Table~\\ref{tab:memory_compat}",
                 ],
             },
             {
                 "path": "Paper/7_Implementation_Details.tex",
-                "terms": ["Table~\\ref{tab:impl_boundaries}"],
+                "terms": ["The implementation boundaries are intentionally narrow"],
             },
             {
                 "path": "Paper/8_Security_Analysis.tex",

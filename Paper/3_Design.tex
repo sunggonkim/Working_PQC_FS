@@ -81,7 +81,7 @@ The D/J/C publisher is the publication component.  Its journal is the publicatio
 
 Strict and epoch publication share one accepted-state invariant.  Strict publishes data then journal/checkpoint per sync and replays the newest authenticated mapping.  Epoch publishes only a complete grouped \texttt{syncfs} prefix and discards incomplete tails; it amortizes aligned writers but can lose to wait time, sparse groups, or replay work.  Thus epoch changes the barrier schedule, not the nonce, AAD, or replay semantics.
 
-The generation transition is per-file.  A publish-ticket serializes reservation turns; before encryption, near wraparound fails with \texttt{EFBIG} if the affected block count would pass \texttt{UINT64\_MAX}.  Otherwise AEGIS-Q reserves \([\mathit{next}+1,\mathit{next}+n]\) in checkpoint/high-water state, may skip interrupted reservations, advances committed generation only after publication, recovers only mappings reachable through the validated boundary, and rejects duplicate epoch records for the same file, block, and generation.  Misuse-resistant SIV-style AEAD would trade this state obligation for extra passes; AEGIS-Q instead tests older-generation replay while keeping the selected crash model explicit.
+The generation transition is per-file.  A publish-ticket serializes reservation turns; before encryption, near wraparound fails with \texttt{EFBIG} if the affected block count would pass \texttt{UINT64\_MAX}.  Otherwise AEGIS-Q reserves \([\mathit{next}+1,\mathit{next}+n]\) in checkpoint/high-water state, may skip interrupted reservations, advances committed generation only after publication, recovers only mappings reachable through the validated boundary, and rejects duplicate epoch records for the same file, block, and generation.  Same-file writers therefore serialize, disjoint files proceed independently, and ABA reuse is rejected by AAD plus checkpoint reachability.  Misuse-resistant SIV-style AEAD would trade this state obligation for extra passes; AEGIS-Q instead tests older-generation replay while keeping the selected crash model explicit.
 
 The envelope path is deliberately narrower than a full key-management system.  New roots use OpenSSL scrypt in versioned \texttt{.pqc\_kdf} metadata (random 32-byte per-filesystem salt; \(N=32768\), \(r=8\), \(p=1\), 64~MiB max memory); roots lacking it use the legacy PBKDF2-HMAC-SHA256 compatibility path.  The password-derived mount key is never hardware-released, and open-file rekey is an HMAC envelope refresh rather than a persistent credential-rotation protocol.
 
@@ -153,24 +153,4 @@ The external-anchor path is optional and narrower than full rollback protection.
 \noindent\textbf{Unsupported transitions.}
 The oracle does not reinterpret unsupported application states: shared \texttt{mmap}, arbitrary byte-range transactions, open-subtree retargeting, or lower filesystems that reorder acknowledged sidecar syncs and xattrs remain outside the exposed state machine.
 
-Table~\ref{tab:design_goals} summarizes the invariant boundary after the mechanisms have been introduced.  Its purpose is to bind each design claim to an implementation locus and exercised path; it is not a separate feature list.
-
-\begin{table*}[t]
-\centering
-\caption{Design invariants, implementation loci, exercised paths, and scope boundaries.}
-\tiny
-\setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\textwidth}{P{0.20\textwidth}|P{0.43\textwidth}|Y}
-\toprule
-\textbf{Invariant} & \textbf{Implementation locus and exercised path} & \textbf{Claim boundary}\\
-\midrule
-Envelope before DEK use & \texttt{metadata\_load()} verifies the HMAC envelope before \texttt{pqc\_open()}; clean remount and metadata tamper return \texttt{EKEYREJECTED}. & Remountable authenticated envelope; no hardware-bound credential release.\\
-AEAD nonce/generation & \texttt{derive\_block\_nonce()}, \texttt{build\_block\_aad()}, and \texttt{do\_flush\_wbuf\_locked()} bind file identifier, block, generation, and length; generation fault and clean-remount rows exercise replay. & Generation-bound record format; no physical power loss or broad workload certification.\\
-Data-before-mapping publication & \texttt{do\_flush\_wbuf\_locked()} syncs \texttt{.pqcdata} before \texttt{.pqcmeta}; journal, daemon cutpoint, lower-block, and SQLite rows exercise the selected D/J/C boundary. & D/J evidence only; no kernel-crash or drive-cache certification.\\
-Checkpoint and anchor & \texttt{checkpoint\_store()/load()} gate logical-size exposure and propagate hardware-anchor failures; TPM replay-after-advance fails closed and file-anchor replay is a negative control. & Authenticated checkpoint and replay-after-advance only; no persistent PCR-bound lifecycle.\\
-Unsupported modes & FUSE \texttt{direct\_io}, scoped rename, directory \texttt{fsync}, no-open hard links, symlinks, and hidden xattrs are audited. & Mounted workload subset only; no shared \texttt{mmap}, open-subtree retargeting, full link lifecycle, or full directory-entry crash durability.\\
-Controller fallback & \texttt{pqc\_block\_job\_choose\_target()} and \texttt{pqc\_admit()} return CPU on missing slack, stale telemetry, size, deadline, or queue pressure; scheduler/admission traces exercise this path. & Conservative fallback; no non-storage foreground scheduler claim.\\
-\bottomrule
-\end{tabularx}
-\label{tab:design_goals}
-\end{table*}
+The invariant boundary is therefore compact: envelopes are authenticated before DEK use; file identifier, logical block, generation, and length are bound into AEAD AAD; data reaches durable sidecar state before its journal mapping and checkpoint expose it; checkpoint and optional anchor state gate remount exposure; unsupported namespace modes remain outside the state machine; and missing slack, stale telemetry, or queue pressure forces CPU fallback.  Table~\ref{tab:component_contracts} binds these invariants to the architecture components and to the evaluation rows that exercise them.

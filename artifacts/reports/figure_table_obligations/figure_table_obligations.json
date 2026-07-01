@@ -14,11 +14,11 @@
     "fig:first_page_qos",
     "fig:overall_procedure",
     "fig:problem_boundary",
+    "fig:publication_cost_detail",
     "fig:recovery_qos_detail",
+    "fig:verified_microbench",
     "tab:capability_matrix",
     "tab:component_contracts",
-    "tab:design_goals",
-    "tab:impl_boundaries",
     "tab:threat_boundary"
   ],
   "figure_tables": [
@@ -126,7 +126,7 @@
       "obligation": "architecture-indexed component contract map",
       "passes": true,
       "path": "Paper/3_Design.tex",
-      "reference_count": 1
+      "reference_count": 2
     },
     {
       "caption": "D/J/C/xattr publication protocol. D is the durable ciphertext sidecar state, J is the journal mapping state, and C is the authenticated checkpoint/logical-size exposure state. The bottom row is the claim boundary: tails without J are unreachable, stale generations cannot supersede newer mappings, TPM replay-after-advance fails closed, and physical power-loss certification remains outside scope.",
@@ -146,40 +146,6 @@
       "reference_count": 1
     },
     {
-      "caption": "Design invariants, implementation loci, exercised paths, and scope boundaries.",
-      "caption_terms": [
-        "invariants",
-        "boundaries"
-      ],
-      "caption_terms_present": true,
-      "environment": "table*",
-      "extra_labels": [],
-      "kind": "design",
-      "label": "tab:design_goals",
-      "line": 158,
-      "obligation": "formal storage-protocol invariant table",
-      "passes": true,
-      "path": "Paper/3_Design.tex",
-      "reference_count": 1
-    },
-    {
-      "caption": "Implementation boundaries that are easy to misread without an explicit summary.",
-      "caption_terms": [
-        "Implementation",
-        "boundaries"
-      ],
-      "caption_terms_present": true,
-      "environment": "table",
-      "extra_labels": [],
-      "kind": "design",
-      "label": "tab:impl_boundaries",
-      "line": 8,
-      "obligation": "implementation boundary summary",
-      "passes": true,
-      "path": "Paper/7_Implementation_Details.tex",
-      "reference_count": 1
-    },
-    {
       "caption": "Threat classes and mechanism boundaries.",
       "caption_terms": [
         "Threat",
@@ -190,7 +156,7 @@
       "extra_labels": [],
       "kind": "RQ1/RQ4",
       "label": "tab:threat_boundary",
-      "line": 13,
+      "line": 15,
       "obligation": "threat-model and recovery boundary",
       "passes": true,
       "path": "Paper/8_Security_Analysis.tex",
@@ -216,19 +182,58 @@
       "reference_count": 4
     },
     {
-      "caption": "Recovery/QoS boundary checks beyond the headline summary. Panel~(a) aggregates generation-fault, daemon-cutpoint, and TPM/replay-after-advance oracle verdicts; acceptable outcomes are latest committed, previous committed, or fail closed under the selected crash/replay model. Panel~(b) shows SQLite QoS sensitivity: most tuned variants remain below the 10~ms foreground p99 target, while queue depth~2 exposes the fragile boundary. White labels report background secure-writer progress in MB/s.",
+      "caption": "Graph-driven RQ5 cost boundary. Panel~(a) shows daemon-side FUSE operation latency from retained traces; \\texttt{fsync} dominates ordinary read/write/create costs. Panel~(b) separates strict single-client publication from grouped epoch behavior: grouping can reduce traced sync-family operations, but the loss row shows why it is an admission rule rather than a replacement for strict publication.",
       "caption_terms": [
-        "Recovery",
-        "QoS",
-        "sensitivity"
+        "RQ5",
+        "cost",
+        "strict",
+        "grouped"
       ],
       "caption_terms_present": true,
       "environment": "figure*",
       "extra_labels": [],
-      "kind": "RQ3",
+      "kind": "RQ5",
+      "label": "fig:publication_cost_detail",
+      "line": 33,
+      "obligation": "graph-driven strict-publication cost and grouped-publication boundary",
+      "passes": true,
+      "path": "Paper/4_Evaluation.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Verified primitive placement graph for RQ1. The AES-GCM size sweep shows why foreground file records stay on CPU through the 4~KiB--1~MiB mounted-write range, while the ML-KEM panel shows why independent batched key-plane maintenance may use cuPQC.",
+      "caption_terms": [
+        "Verified",
+        "RQ1",
+        "AES-GCM",
+        "ML-KEM"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure",
+      "extra_labels": [],
+      "kind": "RQ1",
+      "label": "fig:verified_microbench",
+      "line": 41,
+      "obligation": "verified primitive placement graph for CPU/GPU/PQC policy",
+      "passes": true,
+      "path": "Paper/4_Evaluation.tex",
+      "reference_count": 1
+    },
+    {
+      "caption": "Recovery/QoS/admission boundary checks beyond the headline summary. Panel~(a) aggregates generation-fault, daemon-cutpoint, and TPM/replay-after-advance oracle verdicts; acceptable outcomes are latest committed, previous committed, or fail closed under the selected crash/replay model. Panel~(b) shows SQLite QoS sensitivity: most tuned variants remain below the 10~ms foreground p99 target, while queue depth~2 exposes the fragile boundary. White labels report background secure-writer progress in MB/s. Panel~(c) shows slack-gated GPU admission for elastic key-plane jobs.",
+      "caption_terms": [
+        "Recovery",
+        "QoS",
+        "admission",
+        "GPU"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure*",
+      "extra_labels": [],
+      "kind": "RQ2/RQ3/RQ4",
       "label": "fig:recovery_qos_detail",
-      "line": 42,
-      "obligation": "recovery oracle and QoS sensitivity detail",
+      "line": 60,
+      "obligation": "recovery oracle, QoS sensitivity, and elastic GPU admission detail",
       "passes": true,
       "path": "Paper/4_Evaluation.tex",
       "reference_count": 3
@@ -241,11 +246,11 @@
     "fig:first_page_qos",
     "fig:overall_procedure",
     "fig:problem_boundary",
+    "fig:publication_cost_detail",
     "fig:recovery_qos_detail",
+    "fig:verified_microbench",
     "tab:capability_matrix",
     "tab:component_contracts",
-    "tab:design_goals",
-    "tab:impl_boundaries",
     "tab:threat_boundary"
   ],
   "overall_pass": true,
