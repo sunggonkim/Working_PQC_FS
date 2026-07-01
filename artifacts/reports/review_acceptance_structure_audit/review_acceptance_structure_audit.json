@@ -1,7 +1,7 @@
 {
   "artifact": "review_acceptance_structure_audit",
   "current_structure": {
-    "complete": true,
+    "complete": false,
     "required": {
       "capability_matrix": true,
       "claim_boundaries": true,
@@ -12,7 +12,7 @@
       "foreground_inference_claim_removed": true,
       "generation_x10": true,
       "jetson_scope_not_portability": true,
-      "kernel_assist_roadmap": true,
+      "kernel_assist_roadmap": false,
       "lowerfs_contract_not_powerloss": true,
       "naive_failures": true,
       "pressure_opening": true,
@@ -20,7 +20,7 @@
       "rq_mapping": true,
       "thesis_sentence": true
     },
-    "score": 16,
+    "score": 15,
     "total": 16
   },
   "previous_paper_patterns": [
@@ -185,7 +185,7 @@
     {
       "current_status": "osdi_p0",
       "id": "kernel_integration_path",
-      "repeat_risk": "low_repeat_risk_after_kernel_assist_roadmap",
+      "repeat_risk": "medium_repeat_risk_future_kernel_claim_only",
       "review_phrase_present": true
     },
     {
@@ -294,12 +294,12 @@
       "violations": []
     }
   },
-  "timestamp_utc": "2026-07-01T23:11:34.511468+00:00",
+  "timestamp_utc": "2026-07-01T23:17:29.905139+00:00",
   "verdict": {
     "accept_readiness": "defensible under scoped edge-runtime claims; SOSP/OSDI acceptance is still not guaranteed because breadth, measured fscrypt preference, power-loss, and deployment expectations are venue-dependent, but they are no longer contradictions in the current paper claim",
     "gates_ok": true,
     "highest_remaining_review_risks": [],
-    "logic_structure_vs_previous_papers": "clear and aligned",
+    "logic_structure_vs_previous_papers": "mostly aligned but missing at least one first-page/claim-spine anchor",
     "same_review_exact_repeat": "unlikely for generation robustness, closed-loop foreground non-storage QoS mismatch, ML-KEM break-even, energy/thermal, strict-path hybrid-barrier criticism, unsupported fscrypt-speedup claims, and baseline-deletion criticism; a reviewer may still prefer a measured fscrypt row for OSDI, but it no longer contradicts the scoped paper claim"
   }
 }
