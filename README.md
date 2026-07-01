@@ -35,8 +35,7 @@ Claimed:
 - Scoped remount, tamper, generation, daemon cutpoint, lower-block interruption,
   and TPM replay-after-advance evidence.
 - Mode-aligned measured rows for plaintext/lowerfs, gocryptfs, dm-crypt, and
-  AEGIS-Q; fscrypt is explicitly unavailable on this host with
-  kernel/filesystem proof.
+  AEGIS-Q.
 
 Not claimed:
 
@@ -59,7 +58,7 @@ contradiction in the scoped claim.  The repeated issues map as follows:
 | Review concern | Current response |
 | --- | --- |
 | Slow strict FUSE path | Strict mode is the D/J/C cost boundary; epoch/group publication is the hybrid barrier path for concurrent or batched writes that can share barriers. |
-| Missing fscrypt | fscrypt is unavailable with kernel/filesystem proof and is not reported as measured throughput or speedup. |
+| Baseline scope | Active measured baseline set is plaintext/lowerfs, gocryptfs, dm-crypt, and AEGIS-Q. |
 | No foreground non-storage QoS | Removed from the paper claim; do not reintroduce it without a real same-run foreground workload. |
 | No physical power-loss | The claim is the selected crash model: daemon cutpoints, D/J/C matrices, remount oracles, and lower-block interruption. |
 | Narrow POSIX envelope | POSIX support is a mounted-workload guardrail, not the research contribution. |
@@ -118,8 +117,8 @@ Allowed now:
 
 - Small paper edits that keep the edge-runtime spine crisp.
 - Narrow script updates when a guard is stale.
-- A supported-host fscrypt run only if the environment actually supports it and
-  the paper deliberately wants that measured row.
+- Keep baseline runs focused on plaintext/lowerfs, gocryptfs, dm-crypt, and
+  AEGIS-Q unless the paper scope is explicitly changed.
 
 Not useful under the current claim:
 

@@ -7,7 +7,7 @@ write into the category below instead of adding loose files at `artifacts/`.
 
 - `results/`: derived experiment outputs that are still close to the raw run.
   Current subcategories are:
-  - `results/baselines/`: plaintext, fscrypt, dm-crypt, gocryptfs, and other
+  - `results/baselines/`: plaintext, dm-crypt, gocryptfs, AEGIS-Q, and other
     matched-baseline outputs.  Large loopback images are intentionally
     excluded; scripts must recreate them.
   - `results/freshness/`: anchor-refresh and freshness-window measurements.

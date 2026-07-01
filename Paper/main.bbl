@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{22}
+\begin{thebibliography}{20}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -96,17 +96,6 @@
   LUKS}.
 \newblock \bibinfo{journal}{\emph{Linux Journal}} \bibinfo{volume}{2005},
   \bibinfo{number}{138} (\bibinfo{year}{2005}).
-\newblock
-
-
-\bibitem[Halcrow et~al\mbox{.}(2015)]%
-        {fscrypt}
-\bibfield{author}{\bibinfo{person}{Michael Halcrow}, \bibinfo{person}{Theodore
-  Ts'o}, {et~al\mbox{.}}} \bibinfo{year}{2015}\natexlab{}.
-\newblock \showarticletitle{Ext4 Encryption: Design and Implementation of Linux
-  Filesystem Encryption}.
-\newblock \bibinfo{journal}{\emph{Proceedings of the Linux Symposium}}
-  (\bibinfo{year}{2015}).
 \newblock
 
 
@@ -274,15 +263,6 @@
   GPU for Deep Learning Training}.
 \newblock \bibinfo{journal}{\emph{ACM Trans. Archit. Code Optim.}}
   \bibinfo{volume}{20}, \bibinfo{number}{4} (\bibinfo{year}{2023}).
-\newblock
-
-
-\bibitem[Zhang et~al\mbox{.}(2023)]%
-        {fscrypt_gpu}
-\bibfield{author}{\bibinfo{person}{Xingjun Zhang}, \bibinfo{person}{Longxiang
-  Wang}, {et~al\mbox{.}}} \bibinfo{year}{2023}\natexlab{}.
-\newblock \showarticletitle{fscrypt-GPU}. In \bibinfo{booktitle}{\emph{ACM
-  SoCC}}.
 \newblock
 
 

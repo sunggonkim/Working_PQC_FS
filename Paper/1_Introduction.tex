@@ -22,7 +22,6 @@ Edge devices increasingly run local databases, encrypted logs, cache-manifest up
 \midrule
 Plaintext & \xmark & \xmark & \xmark & Lowerfs baseline only\\
 gocryptfs & \cmark & \xmark & \xmark & User-space encryption baseline\\
-fscrypt & \cmark & \xmark & \xmark & In-kernel file encryption\\
 dm-crypt & \cmark & \xmark & \xmark & Block-device encryption\\
 fs-verity/dm-integrity & \pmark & \xmark & \xmark & Read-only file or block integrity\\
 TPM/TEE-backed designs & \pmark & \cmark & \xmark & Hardware trust boundary\\
@@ -34,7 +33,7 @@ AEGIS-Q & \cmark & \pmark & \cmark & FUSE runtime with scoped evidence\\
 \label{tab:applicability_boundary}
 \end{table}
 
-Post-quantum key establishment is relevant to long-lived edge data, but it does not replace symmetric storage encryption.  ML-KEM establishes shared secrets, whereas AES-GCM remains the appropriate mechanism for bulk data records~\cite{mlkem}.  SHA-256 can bind committed-prefix anchor material to persisted metadata~\cite{sha256}.  The systems challenge is therefore to compose ordinary storage invariants---a key hierarchy that survives remount, nonce/generation state that remains safe across crashes, ciphertext durability before metadata publication, and fail-closed recovery---with accelerator placement and shared-resource control.  Table~\ref{tab:capability_matrix} positions that gap against plaintext, gocryptfs, fscrypt, dm-crypt, fs-verity/dm-integrity, TPM/TEE-backed designs, and GPU-storage systems~\cite{fscrypt, dmcrypt, gocryptfs, optee}; the missing cell is storage-visible policy at the edge encryption boundary.
+Post-quantum key establishment is relevant to long-lived edge data, but it does not replace symmetric storage encryption.  ML-KEM establishes shared secrets, whereas AES-GCM remains the appropriate mechanism for bulk data records~\cite{mlkem}.  SHA-256 can bind committed-prefix anchor material to persisted metadata~\cite{sha256}.  The systems challenge is therefore to compose ordinary storage invariants---a key hierarchy that survives remount, nonce/generation state that remains safe across crashes, ciphertext durability before metadata publication, and fail-closed recovery---with accelerator placement and shared-resource control.  Table~\ref{tab:capability_matrix} positions that gap against plaintext, gocryptfs, dm-crypt, fs-verity/dm-integrity, TPM/TEE-backed designs, and GPU-storage systems~\cite{dmcrypt, gocryptfs, optee}; the missing cell is storage-visible policy at the edge encryption boundary.
 
 Figure~\ref{fig:first_page_qos} is the paper's edge-runtime result.  Unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling only elastic writes.  This is a Pareto point rather than a free throughput improvement: visible storage-layer policy with accelerator-independent format correctness, not peak filesystem throughput.  The low frozen-contract throughput row is a known cost boundary, not a hidden general-purpose claim.
 
