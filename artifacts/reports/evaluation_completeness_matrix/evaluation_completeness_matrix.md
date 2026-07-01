@@ -1,9 +1,9 @@
 # Evaluation completeness matrix
 
 - Overall pass: `True`
-- Paper pages: `12`
+- Paper pages: `13`
 - Required rows: `7`
-- Figure/table labels mapped: `12`
+- Figure/table labels mapped: `13`
 
 ## Matrix
 
@@ -12,7 +12,7 @@
 | `baseline_sota_comparison` | `True` | `scoped_partial` | `tab:capability_matrix` | `True` | `True` | fscrypt/fs-verity/dm-integrity rows are not current matched throughput measurements; cold-cache rows remain invalid without privileged cache-drop control |
 | `scalability_pressure_behavior` | `True` | `implemented_scoped` | `fig:first_page_qos`, `tab:qos_sqlite_recovery` | `True` | `True` | pressure result is mounted SQLite storage pressure, not non-storage application p99 recovery |
 | `workload_diversity` | `True` | `implemented_scoped` | `tab:benchmark_workloads` | `True` | `True` | workloads do not establish broad workload generalization or full crash certification |
-| `time_overhead_breakdown` | `True` | `implemented_scoped` | `fig:evaluation_summary` | `True` | `True` | primitive placement is not reported as an end-to-end FUSE write speedup |
+| `time_overhead_breakdown` | `True` | `implemented_scoped` | `fig:dataplane_negative_control`, `fig:evaluation_summary` | `True` | `True` | primitive placement is not reported as an end-to-end FUSE write speedup |
 | `sensitivity_analysis` | `True` | `implemented_scoped` | - | `True` | `True` | sensitivity is controller-parameter coverage, not a statistical confidence study |
 | `stability_variance` | `True` | `scoped_partial` | - | `True` | `True` | SQLite QoS headline remains a single retained workflow artifact; future headline comparisons require the methodology gate before generalization |
 | `case_study` | `True` | `implemented_scoped` | - | `True` | `True` | deployment takeaway is the SQLite/FUSE hero contract, not a separate anecdote |
@@ -22,6 +22,7 @@
 
 | Figure/table label | Matrix row |
 | --- | --- |
+| `fig:dataplane_negative_control` | `time_overhead_breakdown` |
 | `fig:djc_state_machine` | `protocol_correctness_and_security_obligations` |
 | `fig:evaluation_summary` | `time_overhead_breakdown` |
 | `fig:first_page_qos` | `scalability_pressure_behavior` |
@@ -71,4 +72,4 @@
 | `all_rows_have_retained_evidence` | `True` |
 | `all_rows_have_paper_scope_anchors` | `True` |
 | `all_figure_table_labels_mapped_once` | `True` |
-| `paper_pages_12` | `True` |
+| `paper_pages_le_13` | `True` |

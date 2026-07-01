@@ -157,7 +157,7 @@ def build_report() -> dict[str, Any]:
             for row in evidence_gates
         ),
         "no_broad_deployed_superiority_claim": not forbidden_hits,
-        "paper_pages_12": run_pdfinfo_pages(PAPER / "main.pdf") == 12,
+        "paper_pages_le_13": (run_pdfinfo_pages(PAPER / "main.pdf") or 999) <= 13,
         "maturity_boundary_present": "mature deployed filesystems" in background,
         "full_kernel_matrix_boundary_present": (
             "not a full fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison"

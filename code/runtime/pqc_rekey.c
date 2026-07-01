@@ -49,12 +49,24 @@ static pqc_rekey_queue_t g_rekey_queue = {
 };
 
 static atomic_int g_rekey_stop = ATOMIC_VAR_INIT(1);
+static atomic_int g_rotation_interval_s = ATOMIC_VAR_INIT(-1);
 static atomic_int g_force_rekey_on_write = ATOMIC_VAR_INIT(-1);
 static atomic_int g_write_trigger_enabled = ATOMIC_VAR_INIT(-1);
+static atomic_int g_rekey_verbose_enabled = ATOMIC_VAR_INIT(-1);
 static pthread_mutex_t g_rekey_lifecycle_lock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t g_rekey_thread;
 static int g_rekey_thread_started = 0;
 static int g_rekey_thread_joining = 0;
+
+typedef struct {
+    size_t   max_batch;
+    long     collect_ms;
+    int      gpu_min_batch;
+    size_t   gpu_min_work_bytes;
+    uint64_t gpu_kernel_est_ns;
+    uint64_t deadline_ns;
+    int      gpu_burn_iters;
+} pqc_rekey_worker_policy_t;
 
 typedef struct {
     OQS_KEM *kem;
@@ -66,6 +78,7 @@ typedef struct {
     size_t   ss_batch_capacity;
     uint8_t *seed_batch;
     size_t   seed_batch_capacity;
+    pqc_rekey_worker_policy_t policy;
 } pqc_rekey_worker_ctx_t;
 
 static pqc_rekey_worker_ctx_t *g_rekey_worker_ctx = NULL;
@@ -116,12 +129,28 @@ typedef struct {
     uint64_t key_epoch;
 } pqc_rekey_snapshot_t;
 
+static void rekey_copy_cstr(char *dst, size_t dst_size, const char *src)
+{
+    if (!dst || dst_size == 0)
+        return;
+    if (!src) {
+        dst[0] = '\0';
+        return;
+    }
+    size_t len = strnlen(src, dst_size - 1);
+    memcpy(dst, src, len);
+    dst[len] = '\0';
+}
+
 static void rekey_snapshot_clear(pqc_rekey_snapshot_t *snapshot)
 {
     if (!snapshot)
         return;
     OPENSSL_cleanse(snapshot->ss, sizeof(snapshot->ss));
-    memset(snapshot, 0, sizeof(*snapshot));
+    snapshot->marker_path[0] = '\0';
+    snapshot->ss_len = 0;
+    snapshot->file_id = 0;
+    snapshot->key_epoch = 0;
 }
 
 static void rekey_worker_ctx_free(pqc_rekey_worker_ctx_t *ctx)
@@ -155,6 +184,65 @@ static uint8_t *rekey_scratch_alloc(size_t capacity)
     return malloc(capacity);
 }
 
+static int rekey_verbose_enabled(void)
+{
+    int cached = atomic_load_explicit(&g_rekey_verbose_enabled,
+                                      memory_order_acquire);
+    if (cached >= 0)
+        return cached;
+    int enabled = pqc_config_enabled("PQC_REKEY_VERBOSE") ? 1 : 0;
+    int expected = -1;
+    if (atomic_compare_exchange_strong_explicit(
+            &g_rekey_verbose_enabled, &expected, enabled,
+            memory_order_release, memory_order_acquire))
+        return enabled;
+    return atomic_load_explicit(&g_rekey_verbose_enabled,
+                                memory_order_acquire);
+}
+
+static pqc_rekey_worker_policy_t rekey_worker_policy_from_env(void)
+{
+    pqc_rekey_worker_policy_t policy = {
+        .max_batch = 128,
+        .collect_ms = 1,
+        .gpu_min_batch = 16,
+        .gpu_min_work_bytes = 131072,
+        .gpu_kernel_est_ns = 250000ULL,
+        .deadline_ns = 10000000ULL,
+        .gpu_burn_iters = 1,
+    };
+
+    long configured_max_batch =
+        pqc_config_positive_long_or_default("PQC_REKEY_BATCH_MAX",
+                                            (long)policy.max_batch);
+    if (configured_max_batch > PQC_REKEY_QUEUE_MAX)
+        configured_max_batch = PQC_REKEY_QUEUE_MAX;
+    policy.max_batch = (size_t)configured_max_batch;
+
+    policy.collect_ms =
+        pqc_config_long_legacy_or_default("PQC_REKEY_BATCH_COLLECT_MS",
+                                          policy.collect_ms);
+    if (policy.collect_ms < 0)
+        policy.collect_ms = 0;
+    policy.gpu_min_batch =
+        (int)pqc_config_long_legacy_or_default("PQC_GPU_MIN_BATCH",
+                                               policy.gpu_min_batch);
+    policy.gpu_min_work_bytes =
+        (size_t)pqc_config_u64_legacy_or_default("PQC_GPU_MIN_BATCH_BYTES",
+                                                 policy.gpu_min_work_bytes);
+    policy.gpu_kernel_est_ns =
+        (uint64_t)pqc_config_positive_long_or_default(
+            "PQC_REKEY_GPU_KERNEL_EST_NS",
+            (long)policy.gpu_kernel_est_ns);
+    policy.deadline_ns =
+        (uint64_t)pqc_config_positive_long_or_default(
+            "PQC_REKEY_DEADLINE_NS", (long)policy.deadline_ns);
+    policy.gpu_burn_iters =
+        (int)pqc_config_long_legacy_or_default("PQC_GPU_BURN_ITERS",
+                                               policy.gpu_burn_iters);
+    return policy;
+}
+
 static pqc_rekey_worker_ctx_t *rekey_worker_ctx_new(
     OQS_KEM *kem,
     const uint8_t *public_key)
@@ -170,6 +258,7 @@ static pqc_rekey_worker_ctx_t *rekey_worker_ctx_new(
     pqc_rekey_worker_ctx_t *ctx = calloc(1, sizeof(*ctx));
     if (!ctx)
         return NULL;
+    ctx->policy = rekey_worker_policy_from_env();
     ctx->kem = kem;
     ctx->public_key = malloc(kem->length_public_key);
     if (!ctx->public_key) {
@@ -200,9 +289,8 @@ static int rekey_snapshot_take_locked(const pqc_fd_ctx_t *ctx,
     if (ctx->ss_len == 0 || ctx->ss_len > sizeof(snapshot->ss))
         return -EINVAL;
 
-    memset(snapshot, 0, sizeof(*snapshot));
-    memcpy(snapshot->marker_path, ctx->marker_path,
-           sizeof(snapshot->marker_path) - 1);
+    rekey_copy_cstr(snapshot->marker_path, sizeof(snapshot->marker_path),
+                    ctx->marker_path);
     memcpy(snapshot->ss, ctx->ss, ctx->ss_len);
     snapshot->ss_len = ctx->ss_len;
     snapshot->file_id = ctx->file_id;
@@ -322,16 +410,25 @@ static void rekey_collect_wait_deadline(struct timespec *deadline,
 
 int pqc_rekey_rotation_interval_s(void)
 {
-    static int cached = -2;
-    if (cached != -2)
+    int cached = atomic_load_explicit(&g_rotation_interval_s,
+                                      memory_order_acquire);
+    if (cached >= 0)
         return cached;
 
     long v = pqc_config_long_or_default("PQC_KEY_ROTATION_INTERVAL_S",
                                         PQC_KEY_ROTATION_INTERVAL_S);
     if (v < 0)
         v = 0;
-    cached = (int)v;
-    return cached;
+    if (v > INT_MAX)
+        v = INT_MAX;
+    int computed = (int)v;
+    int expected = -1;
+    if (atomic_compare_exchange_strong_explicit(
+            &g_rotation_interval_s, &expected, computed,
+            memory_order_release, memory_order_acquire))
+        return computed;
+    return atomic_load_explicit(&g_rotation_interval_s,
+                                memory_order_acquire);
 }
 
 int pqc_rekey_force_on_write_enabled(void)
@@ -367,6 +464,37 @@ int pqc_rekey_write_trigger_enabled(void)
         return enabled ? 1 : 0;
     return atomic_load_explicit(&g_write_trigger_enabled,
                                 memory_order_acquire);
+}
+
+void pqc_rekey_write_policy_snapshot(int *trigger_enabled,
+                                     int *force_on_write,
+                                     int *rotation_interval_s)
+{
+    int trigger = pqc_rekey_write_trigger_enabled();
+    if (!trigger) {
+        if (trigger_enabled)
+            *trigger_enabled = 0;
+        if (force_on_write)
+            *force_on_write = 0;
+        if (rotation_interval_s)
+            *rotation_interval_s = 0;
+        return;
+    }
+    int force = pqc_rekey_force_on_write_enabled();
+    int interval = pqc_rekey_rotation_interval_s();
+    if (trigger_enabled)
+        *trigger_enabled = 1;
+    if (force_on_write)
+        *force_on_write = force;
+    if (rotation_interval_s)
+        *rotation_interval_s = interval;
+}
+
+void pqc_rekey_init_from_config(void)
+{
+    (void)pqc_rekey_rotation_interval_s();
+    (void)pqc_rekey_force_on_write_enabled();
+    (void)pqc_rekey_write_trigger_enabled();
 }
 
 pqc_rekey_enqueue_status_t pqc_rekey_queue_push(int fd)
@@ -430,12 +558,11 @@ static void *rekey_worker_main(void *arg)
     pqc_rekey_worker_ctx_t *worker_ctx = (pqc_rekey_worker_ctx_t *)arg;
     OQS_KEM *kem = worker_ctx ? worker_ctx->kem : NULL;
     const uint8_t *public_key = worker_ctx ? worker_ctx->public_key : NULL;
+    const pqc_rekey_worker_policy_t *policy =
+        worker_ctx ? &worker_ctx->policy : NULL;
     int fds[PQC_REKEY_QUEUE_MAX];
-    while (kem && public_key && !rekey_stop_requested()) {
-        long configured_max_batch =
-            pqc_config_positive_long_or_default("PQC_REKEY_BATCH_MAX", 64);
-        if (configured_max_batch > PQC_REKEY_QUEUE_MAX)
-            configured_max_batch = PQC_REKEY_QUEUE_MAX;
+    while (kem && public_key && policy && !rekey_stop_requested()) {
+        size_t configured_max_batch = policy->max_batch;
         pqc_lock_profile_scope_t queue_scope;
         rekey_queue_lock(&queue_scope, __func__);
         while (g_rekey_queue.count == 0 && !rekey_stop_requested()) {
@@ -450,12 +577,11 @@ static void *rekey_worker_main(void *arg)
         }
         size_t batch_size = 0;
         rekey_queue_collect_locked(fds, &batch_size,
-                                   (size_t)configured_max_batch);
+                                   configured_max_batch);
         rekey_queue_unlock(&queue_scope, __func__);
 
-        long collect_ms =
-            pqc_config_positive_long_or_default("PQC_REKEY_BATCH_COLLECT_MS", 0);
-        if (collect_ms > 0 && batch_size < (size_t)configured_max_batch) {
+        long collect_ms = policy->collect_ms;
+        if (collect_ms > 0 && batch_size < configured_max_batch) {
             rekey_queue_lock(&queue_scope, __func__);
             if (g_rekey_queue.count == 0 && !rekey_stop_requested()) {
                 struct timespec deadline;
@@ -469,7 +595,7 @@ static void *rekey_worker_main(void *arg)
                 }
             }
             rekey_queue_collect_locked(fds, &batch_size,
-                                       (size_t)configured_max_batch);
+                                       configured_max_batch);
             rekey_queue_unlock(&queue_scope, __func__);
         }
 
@@ -481,38 +607,40 @@ static void *rekey_worker_main(void *arg)
             continue;
 
         double t0 = pqc_metrics_time_us();
-        double load = 0.0;
-        if (getloadavg(&load, 1) < 0)
-            load = 0.0;
-        double gpu_ewma = pqc_qos_gpu_load_ewma_read();
         const size_t key_work_bytes =
             batch_size * (kem->length_ciphertext +
                           kem->length_shared_secret);
-        int min_batch =
-            (int)pqc_config_long_legacy_or_default("PQC_GPU_MIN_BATCH", 16);
+        int min_batch = policy->gpu_min_batch;
         pqc_job_target_t target = PQC_JOB_CPU;
-        pqc_admission_context_t admission_ctx;
-        memset(&admission_ctx, 0, sizeof(admission_ctx));
-        admission_ctx.batch_count = batch_size;
-        admission_ctx.bytes_total = key_work_bytes;
-        admission_ctx.batch_age_ns = (uint64_t)collect_ms * 1000000ULL;
-        admission_ctx.gpu_kernel_est_ns =
-            (uint64_t)pqc_config_positive_long_or_default(
-                "PQC_REKEY_GPU_KERNEL_EST_NS", 250000L);
-        admission_ctx.gpu_h2d_staging_ns = key_work_bytes;
-        admission_ctx.gpu_d2h_staging_ns =
-            batch_size * kem->length_shared_secret;
-        admission_ctx.cpu_queue_depth = batch_size;
-        admission_ctx.gpu_queue_depth = pqc_scheduler_gpu_inflight_jobs();
-        admission_ctx.cpu_load_avg = load;
-        admission_ctx.gpu_load_avg = gpu_ewma;
-        admission_ctx.ai_inference_deadline_ns =
-            (uint64_t)pqc_config_positive_long_or_default(
-                "PQC_REKEY_DEADLINE_NS", 10000000L);
-        admission_ctx.uma_migration_cost_ns = 0;
-        admission_ctx.uma_migration_bytes_est = 0;
-        if ((int)batch_size >= min_batch && pqc_admit(&admission_ctx) == 0)
-            target = admission_ctx.chosen_target;
+        uint64_t admission_budget_ns = 0;
+        unsigned admission_decision_reason = 0;
+        unsigned admission_deferral_reason = 0;
+        if ((int)batch_size >= min_batch &&
+            key_work_bytes >= policy->gpu_min_work_bytes) {
+            pqc_admission_context_t admission_ctx;
+            memset(&admission_ctx, 0, sizeof(admission_ctx));
+            admission_ctx.batch_count = batch_size;
+            admission_ctx.bytes_total = key_work_bytes;
+            admission_ctx.batch_age_ns = (uint64_t)collect_ms * 1000000ULL;
+            admission_ctx.gpu_kernel_est_ns = policy->gpu_kernel_est_ns;
+            admission_ctx.gpu_h2d_staging_ns = key_work_bytes;
+            admission_ctx.gpu_d2h_staging_ns =
+                batch_size * kem->length_shared_secret;
+            admission_ctx.cpu_queue_depth = batch_size;
+            admission_ctx.ai_inference_deadline_ns = policy->deadline_ns;
+            double load = 0.0;
+            if (getloadavg(&load, 1) < 0)
+                load = 0.0;
+            admission_ctx.gpu_queue_depth =
+                pqc_scheduler_gpu_inflight_jobs();
+            admission_ctx.cpu_load_avg = load;
+            admission_ctx.gpu_load_avg = pqc_qos_gpu_load_ewma_read();
+            if (pqc_admit(&admission_ctx) == 0)
+                target = admission_ctx.chosen_target;
+            admission_budget_ns = admission_ctx.ai_qos_budget_remaining_ns;
+            admission_decision_reason = (unsigned)admission_ctx.decision_reason;
+            admission_deferral_reason = (unsigned)admission_ctx.deferral_reason;
+        }
 
         size_t ct_required = 0;
         size_t ss_required = 0;
@@ -550,8 +678,7 @@ static void *rekey_worker_main(void *arg)
                                                    UINT32_MAX : key_work_bytes));
                 int rc = RAND_bytes(seed_batch, (int)seed_required) == 1 ?
                     0 : -1;
-                int burn_iters =
-                    (int)pqc_config_long_legacy_or_default("PQC_GPU_BURN_ITERS", 1);
+                int burn_iters = policy->gpu_burn_iters;
                 if (rc == 0) {
                     for (int iter = 0; iter < burn_iters; iter++) {
                         rc = skim_cuda_mlkem768_encaps_batch(
@@ -593,7 +720,6 @@ static void *rekey_worker_main(void *arg)
                 if (!ctx)
                     continue;
                 pqc_rekey_snapshot_t snapshot;
-                memset(&snapshot, 0, sizeof(snapshot));
                 pqc_lock_profile_scope_t fd_scope;
                 (void)pqc_profiled_mutex_lock(&ctx->fd_lock, "fd_lock",
                                               __func__, &fd_scope);
@@ -635,18 +761,20 @@ static void *rekey_worker_main(void *arg)
                                                 __func__, &fd_scope);
                 rekey_snapshot_clear(&snapshot);
             }
-            pqc_log("REKEY WORKER: batched %zu files %.1fµs (target=%s, run=%s)",
-                    batch_size, pqc_metrics_time_us() - t0,
-                    target == PQC_JOB_GPU ? "GPU" : "CPU",
-                    gpu_used ? "GPU" : "CPU");
+            if (rekey_verbose_enabled()) {
+                pqc_log("REKEY WORKER: batched %zu files %.1fµs (target=%s, run=%s)",
+                        batch_size, pqc_metrics_time_us() - t0,
+                        target == PQC_JOB_GPU ? "GPU" : "CPU",
+                        gpu_used ? "GPU" : "CPU");
+                pqc_log("REKEY WORKER DETAIL: work_bytes=%zu budget_ns=%llu decision_reason=%u deferral_reason=%u",
+                        key_work_bytes,
+                        (unsigned long long)admission_budget_ns,
+                        admission_decision_reason,
+                        admission_deferral_reason);
+            }
             if (metadata_failures > 0)
                 pqc_log("REKEY WORKER DETAIL: metadata_refresh_failed=%zu refreshed=%zu",
                         metadata_failures, refreshed);
-            pqc_log("REKEY WORKER DETAIL: work_bytes=%zu budget_ns=%llu decision_reason=%u deferral_reason=%u",
-                    key_work_bytes,
-                    (unsigned long long)admission_ctx.ai_qos_budget_remaining_ns,
-                    (unsigned int)admission_ctx.decision_reason,
-                    (unsigned int)admission_ctx.deferral_reason);
 
             pqc_scheduler_record_key_plane_batch(batch_size, gpu_used);
             pqc_plane_trace_record_keyplane_batch(

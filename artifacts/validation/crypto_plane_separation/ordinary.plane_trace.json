@@ -18,9 +18,9 @@
   "keyplane_gpu_batches": 0,
   "keyplane_gpu_fallback_events": 0,
   "keyplane_failed_batches": 0,
-  "freshness_anchor_events": 2,
-  "freshness_anchor_successes": 2,
+  "freshness_anchor_events": 0,
+  "freshness_anchor_successes": 0,
   "freshness_anchor_failures": 0,
-  "freshness_anchor_file_backend": 2,
+  "freshness_anchor_file_backend": 0,
   "freshness_anchor_hardware_backend": 0
 }

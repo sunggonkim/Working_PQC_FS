@@ -71,7 +71,6 @@ def start_fuse(
             "PQC_FRESHNESS_ANCHOR_BACKEND": "file",
             "PQC_FRESHNESS_ANCHOR_PATH": str(storage_dir / ".anchor"),
             "PQC_ADMISSION_TRACE_PATH": str(out_dir / "admission_trace.jsonl"),
-            "PQC_ENABLE_ADMISSION_ON_WRITE": "0",
             "PQC_ENABLE_QOS_THROTTLE_ON_WRITE": "0",
             "PQC_KEY_ROTATION_INTERVAL_S": "0",
         }

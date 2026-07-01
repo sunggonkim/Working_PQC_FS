@@ -1,22 +1,37 @@
 #include "pqc_scheduler.h"
 
-#include "cuda_aead.h"
-#include "pqc_admission.h"
 #include "pqc_config.h"
 #include "pqc_format.h"
 #include "pqc_lock_profile.h"
 
 #include <pthread.h>
 #include <stdint.h>
+#include <stdatomic.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+
+typedef struct {
+    atomic_ullong submitted;
+    atomic_ullong cpu_executed;
+    atomic_ullong gpu_executed;
+    atomic_ullong bytes_cpu;
+    atomic_ullong bytes_gpu;
+    atomic_ullong gpu_migration_ns;
+    atomic_ullong data_plane_cpu;
+    atomic_ullong key_plane_cpu;
+    atomic_ullong key_plane_gpu;
+    atomic_ullong integrity_plane_cpu;
+    atomic_ullong integrity_plane_gpu;
+    atomic_ullong freshness_plane_cpu;
+    atomic_ullong spilled_ai_budget;
+    atomic_ullong spilled_deadline;
+    atomic_ullong spilled_queue;
+} pqc_scheduler_atomic_stats_t;
 
 static pthread_mutex_t g_sched_lock = PTHREAD_MUTEX_INITIALIZER;
-static pqc_scheduler_stats_t g_sched_stats = {0};
-static uint64_t g_gpu_inflight_jobs = 0;
-static uint64_t g_gpu_inflight_bytes = 0;
+static pqc_scheduler_atomic_stats_t g_sched_stats;
+static atomic_ullong g_gpu_inflight_jobs;
+static atomic_ullong g_gpu_inflight_bytes;
+static atomic_int g_data_accounting_enabled = ATOMIC_VAR_INIT(0);
 static pqc_scheduler_policy_t g_sched_policy = {
     .gpu_min_bytes = 131072,
     .gpu_queue_penalty_ns = 25000,
@@ -40,11 +55,33 @@ static int scheduler_unlock(pqc_lock_profile_scope_t *scope, const char *site)
     return pqc_profiled_mutex_unlock(&g_sched_lock, "scheduler_lock", site, scope);
 }
 
-static uint64_t monotonic_now_ns(void)
+static void sched_stat_add(atomic_ullong *counter, uint64_t value)
 {
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return (uint64_t)ts.tv_sec * 1000000000ULL + (uint64_t)ts.tv_nsec;
+    if (value == 0)
+        return;
+    atomic_fetch_add_explicit(counter, (unsigned long long)value,
+                              memory_order_relaxed);
+}
+
+static uint64_t sched_stat_load(atomic_ullong *counter)
+{
+    return (uint64_t)atomic_load_explicit(counter, memory_order_relaxed);
+}
+
+static void sched_stat_saturating_sub(atomic_ullong *counter, uint64_t value)
+{
+    unsigned long long cur =
+        atomic_load_explicit(counter, memory_order_relaxed);
+    for (;;) {
+        unsigned long long next =
+            cur > (unsigned long long)value
+                ? cur - (unsigned long long)value
+                : 0;
+        if (atomic_compare_exchange_weak_explicit(
+                counter, &cur, next, memory_order_relaxed,
+                memory_order_relaxed))
+            return;
+    }
 }
 
 static pqc_scheduler_policy_t default_policy(void)
@@ -89,6 +126,18 @@ void pqc_scheduler_reload_runtime_policy_from_env(void)
     next.contention_score_ns =
         (uint64_t)pqc_config_positive_long_or_default("PQC_CONTENTION_SCORE_NS",
                                                       (long)next.contention_score_ns);
+    next.gpu_max_inflight_jobs =
+        (uint64_t)pqc_config_positive_long_or_default("PQC_GPU_MAX_INFLIGHT_JOBS",
+                                                      (long)next.gpu_max_inflight_jobs);
+    next.gpu_max_inflight_bytes =
+        (uint64_t)pqc_config_positive_long_or_default("PQC_GPU_MAX_INFLIGHT_BYTES",
+                                                      (long)next.gpu_max_inflight_bytes);
+    next.gpu_max_wait_ns =
+        (uint64_t)pqc_config_positive_long_or_default("PQC_GPU_MAX_WAIT_NS",
+                                                      (long)next.gpu_max_wait_ns);
+    next.ai_qos_min_budget_ns =
+        (uint64_t)pqc_config_positive_long_or_default("PQC_AI_QOS_MIN_BUDGET_NS",
+                                                      (long)next.ai_qos_min_budget_ns);
 
     if (scheduler_lock(&scope, "scheduler_reload_publish") == 0) {
         g_sched_policy = next;
@@ -223,6 +272,18 @@ void pqc_scheduler_smoke_report(FILE *out)
     fprintf(out, "{\"event\":\"scheduler_smoke_end\",\"jobs\":3}\n");
 }
 
+void pqc_scheduler_set_data_accounting_enabled(int enabled)
+{
+    atomic_store_explicit(&g_data_accounting_enabled, enabled ? 1 : 0,
+                          memory_order_release);
+}
+
+int pqc_scheduler_data_accounting_enabled(void)
+{
+    return atomic_load_explicit(&g_data_accounting_enabled,
+                                memory_order_acquire) != 0;
+}
+
 void pqc_scheduler_schedule_data_job(pqc_block_job_t *job,
                                      const pqc_scheduler_data_job_input_t *input)
 {
@@ -235,154 +296,83 @@ void pqc_scheduler_schedule_data_job(pqc_block_job_t *job,
                        input->logical_offset, input->length,
                        PQC_JOB_FLAG_ENCRYPT | PQC_JOB_FLAG_READMOD,
                        PQC_PLANE_DATA);
-    job->submit_ns = monotonic_now_ns();
-
-    double load = 0.0;
-    if (getloadavg(&load, 1) < 0)
-        load = 0.0;
-
-    job->cpu_queue_depth = 1 + (load > 1.5 ? 1 : 0);
-    job->gpu_queue_depth = 0;
-    job->coherence_cost_ns = skim_cuda_aead_is_uma() ? 0 : (uint64_t)input->length * 64ULL;
-
-    pqc_scheduler_policy_t policy;
-    uint64_t inflight_jobs = 0;
-    uint64_t inflight_bytes = 0;
-    pqc_lock_profile_scope_t scope;
-    if (scheduler_lock(&scope, "scheduler_data_job_snapshot") == 0) {
-        policy = g_sched_policy;
-        inflight_jobs = g_gpu_inflight_jobs;
-        inflight_bytes = g_gpu_inflight_bytes;
-        (void)scheduler_unlock(&scope, "scheduler_data_job_snapshot");
-    } else {
-        policy = default_policy();
-    }
-
-    if (input->length >= policy.gpu_min_bytes)
-        job->flags |= PQC_JOB_FLAG_GPU_ELIGIBLE;
-    job->gpu_queue_depth = inflight_jobs;
-    job->gpu_wait_ns = inflight_jobs * policy.gpu_queue_penalty_ns +
-                       inflight_bytes / 4096ULL * (policy.gpu_queue_penalty_ns / 4ULL);
-
-    int gpu_pressure_spill = (policy.gpu_max_inflight_jobs > 0 &&
-                              inflight_jobs >= policy.gpu_max_inflight_jobs) ||
-                             (policy.gpu_max_inflight_bytes > 0 &&
-                              inflight_bytes + input->length > policy.gpu_max_inflight_bytes);
-    if (gpu_pressure_spill) {
-        job->target = PQC_JOB_CPU;
-    } else if (pqc_config_present("PQC_ENABLE_ADMISSION_ON_WRITE") &&
-               pqc_block_job_gpu_eligible(job)) {
-        pqc_admission_context_t admission_ctx;
-        memset(&admission_ctx, 0, sizeof(admission_ctx));
-        admission_ctx.batch_count = 1;
-        admission_ctx.bytes_total = input->length;
-        admission_ctx.batch_age_ns = monotonic_now_ns() - job->submit_ns;
-        admission_ctx.gpu_kernel_est_ns = input->length / 4ULL + 100000ULL;
-        admission_ctx.gpu_h2d_staging_ns =
-            skim_cuda_aead_is_uma() ? 0ULL : (uint64_t)input->length * 8ULL;
-        admission_ctx.gpu_d2h_staging_ns =
-            skim_cuda_aead_is_uma() ? 0ULL : (uint64_t)input->length * 8ULL;
-        admission_ctx.cpu_queue_depth = job->cpu_queue_depth;
-        admission_ctx.gpu_queue_depth = job->gpu_queue_depth;
-        admission_ctx.cpu_load_avg = load;
-        admission_ctx.gpu_load_avg = input->gpu_load_ewma;
-        admission_ctx.ai_inference_deadline_ns =
-            (uint64_t)pqc_config_positive_long_or_default("PQC_ADMISSION_WRITE_DEADLINE_NS",
-                                                          10000000L);
-        admission_ctx.uma_migration_cost_ns = job->coherence_cost_ns;
-        admission_ctx.uma_migration_bytes_est = skim_cuda_aead_is_uma() ? 0ULL : input->length;
-        if (pqc_admit(&admission_ctx) == 0)
-            job->target = admission_ctx.chosen_target;
-        else
-            job->target = PQC_JOB_CPU;
-    } else {
-        job->target = pqc_block_job_choose_target(job, &policy, load, input->gpu_load_ewma);
-    }
-
-    if (scheduler_lock(&scope, "scheduler_data_job_stats") == 0) {
-        g_sched_stats.submitted++;
-        if (job->target == PQC_JOB_GPU) {
-            g_sched_stats.gpu_executed++;
-            g_sched_stats.gpu_migration_ns += job->coherence_cost_ns;
-        } else {
-            g_sched_stats.cpu_executed++;
-        }
-        (void)scheduler_unlock(&scope, "scheduler_data_job_stats");
-    }
+    job->target = PQC_JOB_CPU;
 }
 
 void pqc_scheduler_gpu_admit(uint32_t bytes)
 {
-    pqc_lock_profile_scope_t scope;
-    if (scheduler_lock(&scope, "scheduler_gpu_admit") != 0)
-        return;
-    ++g_gpu_inflight_jobs;
-    g_gpu_inflight_bytes += bytes;
-    (void)scheduler_unlock(&scope, "scheduler_gpu_admit");
+    atomic_fetch_add_explicit(&g_gpu_inflight_jobs, 1ULL,
+                              memory_order_relaxed);
+    sched_stat_add(&g_gpu_inflight_bytes, bytes);
 }
 
 void pqc_scheduler_gpu_release(uint32_t bytes)
 {
-    pqc_lock_profile_scope_t scope;
-    if (scheduler_lock(&scope, "scheduler_gpu_release") != 0)
-        return;
-    if (g_gpu_inflight_jobs > 0)
-        --g_gpu_inflight_jobs;
-    if (g_gpu_inflight_bytes >= bytes)
-        g_gpu_inflight_bytes -= bytes;
-    else
-        g_gpu_inflight_bytes = 0;
-    (void)scheduler_unlock(&scope, "scheduler_gpu_release");
+    sched_stat_saturating_sub(&g_gpu_inflight_jobs, 1);
+    sched_stat_saturating_sub(&g_gpu_inflight_bytes, bytes);
 }
 
 uint64_t pqc_scheduler_gpu_inflight_jobs(void)
 {
-    pqc_lock_profile_scope_t scope;
-    if (scheduler_lock(&scope, "scheduler_gpu_inflight_jobs") != 0)
-        return 0;
-    uint64_t jobs = g_gpu_inflight_jobs;
-    (void)scheduler_unlock(&scope, "scheduler_gpu_inflight_jobs");
-    return jobs;
+    return sched_stat_load(&g_gpu_inflight_jobs);
 }
 
 void pqc_scheduler_record_key_plane_batch(size_t batch_size, int gpu_used)
 {
-    pqc_lock_profile_scope_t scope;
-    if (scheduler_lock(&scope, "scheduler_record_key_plane_batch") != 0)
+    if (batch_size == 0)
         return;
-    g_sched_stats.submitted += batch_size;
+    sched_stat_add(&g_sched_stats.submitted, (uint64_t)batch_size);
     if (gpu_used) {
-        g_sched_stats.gpu_executed += batch_size;
-        g_sched_stats.key_plane_gpu += batch_size;
+        sched_stat_add(&g_sched_stats.gpu_executed, (uint64_t)batch_size);
+        sched_stat_add(&g_sched_stats.key_plane_gpu, (uint64_t)batch_size);
     } else {
-        g_sched_stats.cpu_executed += batch_size;
-        g_sched_stats.key_plane_cpu += batch_size;
+        sched_stat_add(&g_sched_stats.cpu_executed, (uint64_t)batch_size);
+        sched_stat_add(&g_sched_stats.key_plane_cpu, (uint64_t)batch_size);
     }
-    (void)scheduler_unlock(&scope, "scheduler_record_key_plane_batch");
 }
 
 void pqc_scheduler_record_data_bytes(uint64_t cpu_bytes,
                                      uint64_t gpu_bytes,
                                      uint64_t migration_ns)
 {
-    pqc_lock_profile_scope_t scope;
-    if (scheduler_lock(&scope, "scheduler_record_data_bytes") != 0)
+    if (!pqc_scheduler_data_accounting_enabled())
         return;
-    g_sched_stats.bytes_cpu += cpu_bytes;
-    g_sched_stats.bytes_gpu += gpu_bytes;
-    g_sched_stats.gpu_migration_ns += migration_ns;
-    (void)scheduler_unlock(&scope, "scheduler_record_data_bytes");
+    if (cpu_bytes > 0 || gpu_bytes > 0) {
+        sched_stat_add(&g_sched_stats.submitted, 1);
+        if (gpu_bytes > 0) {
+            sched_stat_add(&g_sched_stats.gpu_executed, 1);
+        } else {
+            sched_stat_add(&g_sched_stats.cpu_executed, 1);
+            sched_stat_add(&g_sched_stats.data_plane_cpu, 1);
+        }
+    }
+    sched_stat_add(&g_sched_stats.bytes_cpu, cpu_bytes);
+    sched_stat_add(&g_sched_stats.bytes_gpu, gpu_bytes);
+    sched_stat_add(&g_sched_stats.gpu_migration_ns, migration_ns);
 }
 
 void pqc_scheduler_stats_snapshot(pqc_scheduler_stats_t *out)
 {
     if (!out)
         return;
-    pqc_lock_profile_scope_t scope;
-    if (scheduler_lock(&scope, "scheduler_stats_snapshot") != 0) {
-        memset(out, 0, sizeof(*out));
-        return;
-    }
-    *out = g_sched_stats;
-    (void)scheduler_unlock(&scope, "scheduler_stats_snapshot");
+    out->submitted = sched_stat_load(&g_sched_stats.submitted);
+    out->cpu_executed = sched_stat_load(&g_sched_stats.cpu_executed);
+    out->gpu_executed = sched_stat_load(&g_sched_stats.gpu_executed);
+    out->bytes_cpu = sched_stat_load(&g_sched_stats.bytes_cpu);
+    out->bytes_gpu = sched_stat_load(&g_sched_stats.bytes_gpu);
+    out->gpu_migration_ns = sched_stat_load(&g_sched_stats.gpu_migration_ns);
+    out->data_plane_cpu = sched_stat_load(&g_sched_stats.data_plane_cpu);
+    out->key_plane_cpu = sched_stat_load(&g_sched_stats.key_plane_cpu);
+    out->key_plane_gpu = sched_stat_load(&g_sched_stats.key_plane_gpu);
+    out->integrity_plane_cpu =
+        sched_stat_load(&g_sched_stats.integrity_plane_cpu);
+    out->integrity_plane_gpu =
+        sched_stat_load(&g_sched_stats.integrity_plane_gpu);
+    out->freshness_plane_cpu =
+        sched_stat_load(&g_sched_stats.freshness_plane_cpu);
+    out->spilled_ai_budget =
+        sched_stat_load(&g_sched_stats.spilled_ai_budget);
+    out->spilled_deadline =
+        sched_stat_load(&g_sched_stats.spilled_deadline);
+    out->spilled_queue = sched_stat_load(&g_sched_stats.spilled_queue);
 }

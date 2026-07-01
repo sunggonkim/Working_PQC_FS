@@ -1,13 +1,13 @@
 {
   "artifact": "crypto_plane_separation",
   "fuse_binary": "build/pqc_fuse",
-  "generated_at": "2026-06-28T23:30:28Z",
+  "generated_at": "2026-07-01T13:04:33Z",
   "generated_by": "code/experiments/run_crypto_plane_trace_smoke.py",
   "runs": {
     "forced_keyplane": {
       "force_rekey": true,
       "label": "forced_keyplane",
-      "mount_dir": "/tmp/aegisq_forced_keyplane_voq6pl6_/mnt",
+      "mount_dir": "/tmp/aegisq_forced_keyplane_55d367lh/mnt",
       "mounted": true,
       "rekey_log_seen": true,
       "stderr": "artifacts/validation/crypto_plane_separation/forced_keyplane.stderr.txt",
@@ -16,7 +16,7 @@
         "returncode": 0,
         "unmounted": true
       },
-      "storage_dir": "/tmp/aegisq_forced_keyplane_voq6pl6_/store",
+      "storage_dir": "/tmp/aegisq_forced_keyplane_55d367lh/store",
       "trace": {
         "data_aes_gcm_decrypt_blocks": 5,
         "data_aes_gcm_decrypt_bytes": 16512,
@@ -27,11 +27,11 @@
         "data_route_cpu_blocks": 10,
         "data_route_gpu_blocks": 0,
         "exists": true,
-        "freshness_anchor_events": 2,
+        "freshness_anchor_events": 0,
         "freshness_anchor_failures": 0,
-        "freshness_anchor_file_backend": 2,
+        "freshness_anchor_file_backend": 0,
         "freshness_anchor_hardware_backend": 0,
-        "freshness_anchor_successes": 2,
+        "freshness_anchor_successes": 0,
         "freshness_plane_algorithm": "committed-prefix anchor",
         "key_plane_algorithm": "ML-KEM-768/Kyber768 envelope refresh",
         "keyplane_batches": 1,
@@ -45,7 +45,7 @@
         "version": 1
       },
       "trace_path": "artifacts/validation/crypto_plane_separation/forced_keyplane.plane_trace.json",
-      "work_dir": "/tmp/aegisq_forced_keyplane_voq6pl6_",
+      "work_dir": "/tmp/aegisq_forced_keyplane_55d367lh",
       "workload": {
         "payload_bytes": 16512,
         "readback_bytes": 16512,
@@ -55,7 +55,7 @@
     "ordinary": {
       "force_rekey": false,
       "label": "ordinary",
-      "mount_dir": "/tmp/aegisq_ordinary_vluxcq3q/mnt",
+      "mount_dir": "/tmp/aegisq_ordinary_85mu5lxo/mnt",
       "mounted": true,
       "rekey_log_seen": false,
       "stderr": "artifacts/validation/crypto_plane_separation/ordinary.stderr.txt",
@@ -64,7 +64,7 @@
         "returncode": 0,
         "unmounted": true
       },
-      "storage_dir": "/tmp/aegisq_ordinary_vluxcq3q/store",
+      "storage_dir": "/tmp/aegisq_ordinary_85mu5lxo/store",
       "trace": {
         "data_aes_gcm_decrypt_blocks": 4,
         "data_aes_gcm_decrypt_bytes": 13824,
@@ -75,11 +75,11 @@
         "data_route_cpu_blocks": 8,
         "data_route_gpu_blocks": 0,
         "exists": true,
-        "freshness_anchor_events": 2,
+        "freshness_anchor_events": 0,
         "freshness_anchor_failures": 0,
-        "freshness_anchor_file_backend": 2,
+        "freshness_anchor_file_backend": 0,
         "freshness_anchor_hardware_backend": 0,
-        "freshness_anchor_successes": 2,
+        "freshness_anchor_successes": 0,
         "freshness_plane_algorithm": "committed-prefix anchor",
         "key_plane_algorithm": "ML-KEM-768/Kyber768 envelope refresh",
         "keyplane_batches": 0,
@@ -93,7 +93,7 @@
         "version": 1
       },
       "trace_path": "artifacts/validation/crypto_plane_separation/ordinary.plane_trace.json",
-      "work_dir": "/tmp/aegisq_ordinary_vluxcq3q",
+      "work_dir": "/tmp/aegisq_ordinary_85mu5lxo",
       "workload": {
         "payload_bytes": 13824,
         "readback_bytes": 13824,
@@ -102,11 +102,37 @@
     }
   },
   "source_checks": {
+    "anchor_backend_is_cached": true,
+    "anchor_disabled_skips_window_policy": true,
     "bulk_data_path_has_no_oqs_kem": true,
     "data_crypto_uses_aes_gcm": true,
+    "fault_cutpoints_are_fast_gated": true,
+    "gpu_batch_fallback_owned_by_crypto_layer": true,
+    "gpu_batch_requires_explicit_request": true,
+    "gpu_batch_tags_not_recomputed_in_flush_wrapper": true,
     "keyplane_worker_uses_mlkem_or_kyber": true,
+    "ordinary_writeback_disables_gpu_batch": true,
     "plane_trace_dump_is_runtime_cleanup": true,
-    "plane_trace_records_aes_not_bulk_pqc": true
+    "plane_trace_records_aes_not_bulk_pqc": true,
+    "qos_open_xattr_load_is_throttle_gated": true,
+    "qos_writeback_uses_single_throttle_gate": true,
+    "read_eof_skips_scratch_acquire": true,
+    "read_marker_path_copy_is_epoch_gated": true,
+    "read_visible_size_snapshot_is_single_pass": true,
+    "rekey_batch_can_reach_gpu_byte_gate": true,
+    "rekey_policy_snapshot_is_trigger_gated": true,
+    "rekey_success_logs_are_verbose_gated": true,
+    "release_hidden_cleanup_is_conditional": true,
+    "runtime_disables_admission_when_unused": true,
+    "runtime_does_not_preallocate_cuda_aes_executor": true,
+    "runtime_skips_anchor_probe_when_disabled": true,
+    "runtime_skips_qos_monitors_when_unused": true,
+    "runtime_skips_scheduler_policy_when_unused": true,
+    "scheduler_data_accounting_is_gated": true,
+    "strict_open_allocates_epoch_cache_only_when_needed": true,
+    "trace_byte_aggregation_is_gated": true,
+    "writeback_reuses_published_logical_size": true,
+    "writeback_snapshots_secret_and_epoch_path_conditionally": true
   },
   "verdict": {
     "forced_rekey_is_keyplane_only": true,

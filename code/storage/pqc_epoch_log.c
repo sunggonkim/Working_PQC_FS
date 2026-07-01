@@ -50,19 +50,28 @@ static uint64_t get_u64_le(const uint8_t *src)
     return value;
 }
 
-static int epoch_log_digest(const uint8_t *buf, size_t len,
-                            uint8_t out[32])
+static int epoch_log_digest_with_ctx(const uint8_t *buf, size_t len,
+                                     uint8_t out[32], EVP_MD_CTX *md)
 {
-    EVP_MD_CTX *md = EVP_MD_CTX_new();
     unsigned int out_len = 0;
-    if (!md)
-        return -ENOMEM;
+    if (!buf || !out || !md)
+        return -EINVAL;
     int ok = EVP_DigestInit_ex(md, EVP_sha256(), NULL) == 1 &&
              EVP_DigestUpdate(md, buf, len) == 1 &&
              EVP_DigestFinal_ex(md, out, &out_len) == 1 &&
              out_len == 32U;
-    EVP_MD_CTX_free(md);
     return ok ? 0 : -EIO;
+}
+
+static int epoch_log_digest(const uint8_t *buf, size_t len,
+                            uint8_t out[32])
+{
+    EVP_MD_CTX *md = EVP_MD_CTX_new();
+    if (!md)
+        return -ENOMEM;
+    int rc = epoch_log_digest_with_ctx(buf, len, out, md);
+    EVP_MD_CTX_free(md);
+    return rc;
 }
 
 static int epoch_log_validate_record(const pqc_epoch_log_record_t *record)
@@ -130,6 +139,12 @@ static void epoch_log_trace_write_line(const char *line, size_t len)
                                    line, len);
 }
 
+static int epoch_log_trace_enabled(void)
+{
+    return pqc_trace_sink_enabled_env(&g_epoch_log_trace_sink,
+                                      "PQC_PUBLICATION_TRACE_PATH");
+}
+
 void pqc_epoch_log_trace_shutdown(void)
 {
     pqc_trace_sink_close(&g_epoch_log_trace_sink);
@@ -139,6 +154,8 @@ static void epoch_log_trace_compaction(
     const char *log_path, int rc,
     const pqc_epoch_log_replay_summary_t *summary)
 {
+    if (!epoch_log_trace_enabled())
+        return;
     char line[8192];
     int n = snprintf(
         line, sizeof(line),
@@ -249,14 +266,16 @@ static int epoch_log_repair_journal_prefix(
     return 0;
 }
 
-int pqc_epoch_log_encode_record(const pqc_epoch_log_record_t *record,
-                                uint8_t *out, size_t out_len,
-                                size_t *written)
+static int epoch_log_encode_record_with_ctx(
+    const pqc_epoch_log_record_t *record,
+    uint8_t *out, size_t out_len,
+    size_t *written,
+    EVP_MD_CTX *md)
 {
     int rc = epoch_log_validate_record(record);
     if (rc != 0)
         return rc;
-    if (!out)
+    if (!out || !md)
         return -EINVAL;
     if (out_len < PQC_EPOCH_LOG_RECORD_SIZE)
         return -EMSGSIZE;
@@ -277,13 +296,27 @@ int pqc_epoch_log_encode_record(const pqc_epoch_log_record_t *record,
     put_u32_le(out + 84, 0);
     memcpy(out + 88, record->tag, PQC_AEAD_TAG_SIZE);
 
-    rc = epoch_log_digest(out, PQC_EPOCH_LOG_RECORD_DIGEST_OFFSET,
-                          out + PQC_EPOCH_LOG_RECORD_DIGEST_OFFSET);
+    rc = epoch_log_digest_with_ctx(
+        out, PQC_EPOCH_LOG_RECORD_DIGEST_OFFSET,
+        out + PQC_EPOCH_LOG_RECORD_DIGEST_OFFSET, md);
     if (rc != 0)
         return rc;
     if (written)
         *written = PQC_EPOCH_LOG_RECORD_SIZE;
     return 0;
+}
+
+int pqc_epoch_log_encode_record(const pqc_epoch_log_record_t *record,
+                                uint8_t *out, size_t out_len,
+                                size_t *written)
+{
+    EVP_MD_CTX *md = EVP_MD_CTX_new();
+    if (!md)
+        return -ENOMEM;
+    int rc = epoch_log_encode_record_with_ctx(record, out, out_len, written,
+                                             md);
+    EVP_MD_CTX_free(md);
+    return rc;
 }
 
 int pqc_epoch_log_decode_record(const uint8_t *buf, size_t buf_len,
@@ -347,21 +380,26 @@ int pqc_epoch_log_append_records_fd(int fd,
 
     uint8_t encoded[(PQC_WRITEBACK_MAX_BLOCKS + 1U) *
                     PQC_EPOCH_LOG_RECORD_SIZE];
+    EVP_MD_CTX *md = EVP_MD_CTX_new();
+    if (!md)
+        return -ENOMEM;
     size_t total = 0;
     for (size_t i = 0; i < count; ++i) {
         size_t written = 0;
-        int rc = pqc_epoch_log_encode_record(
+        int rc = epoch_log_encode_record_with_ctx(
             &records[i], encoded + total, sizeof(encoded) - total,
-            &written);
+            &written, md);
         if (rc != 0) {
             size_t used = total;
             if (sizeof(encoded) - total >= PQC_EPOCH_LOG_RECORD_SIZE)
                 used += PQC_EPOCH_LOG_RECORD_SIZE;
             OPENSSL_cleanse(encoded, used);
+            EVP_MD_CTX_free(md);
             return rc;
         }
         total += written;
     }
+    EVP_MD_CTX_free(md);
 
     size_t done = 0;
     while (done < total) {

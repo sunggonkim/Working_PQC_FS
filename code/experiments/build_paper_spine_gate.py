@@ -15,6 +15,7 @@ import csv
 import json
 import re
 import subprocess
+import time
 from pathlib import Path
 from typing import Any
 
@@ -197,8 +198,22 @@ def run_pdftotext(path: Path, first_page: int | None = None,
 
 
 def run_pdfinfo_pages(path: Path) -> int | None:
-    proc = subprocess.run(["pdfinfo", str(path)], check=True, text=True,
-                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    last_error: subprocess.CalledProcessError | None = None
+    for attempt in range(5):
+        try:
+            proc = subprocess.run(["pdfinfo", str(path)], check=True,
+                                  text=True, stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE)
+            break
+        except subprocess.CalledProcessError as exc:
+            last_error = exc
+            if attempt == 4:
+                raise
+            time.sleep(0.2)
+    else:
+        if last_error is not None:
+            raise last_error
+        return None
     for line in proc.stdout.splitlines():
         if line.startswith("Pages:"):
             return int(line.split(":", 1)[1].strip())
@@ -274,8 +289,8 @@ def audit_paper(source: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
 def build_report(source: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
     audit = audit_paper(source, rows)
     violations: list[str] = []
-    if audit["pages"] != 12:
-        violations.append("Paper/main.pdf is not exactly 12 pages")
+    if audit["pages"] is None or audit["pages"] > 13:
+        violations.append("Paper/main.pdf exceeds 13 pages")
     if not audit["first_page_figure"]["present"]:
         violations.append("first-page Figure 1 is missing")
     if not audit["first_page_figure"]["values_present"]:

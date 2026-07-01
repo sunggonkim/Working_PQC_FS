@@ -642,6 +642,13 @@ int pqc_lock_profile_enabled(void)
     return atomic_load_explicit(&g_profile_enabled, memory_order_acquire);
 }
 
+static int profile_enabled_fast(void)
+{
+    if (atomic_load_explicit(&g_profile_initialized, memory_order_acquire))
+        return atomic_load_explicit(&g_profile_enabled, memory_order_relaxed);
+    return pqc_lock_profile_enabled();
+}
+
 void pqc_lock_profile_dump(FILE *out)
 {
     if (profile_internal_lock() != 0)
@@ -655,8 +662,8 @@ int pqc_profiled_mutex_lock(pthread_mutex_t *mutex, const char *lock_name,
                             pqc_lock_profile_scope_t *scope)
 {
     if (scope)
-        memset(scope, 0, sizeof(*scope));
-    if (!pqc_lock_profile_enabled())
+        scope->enabled = 0;
+    if (!profile_enabled_fast())
         return pthread_mutex_lock(mutex);
 
     int rank = lock_rank_for_name(lock_name);
@@ -694,8 +701,11 @@ int pqc_profiled_mutex_unlock(pthread_mutex_t *mutex, const char *lock_name,
                               const char *site,
                               pqc_lock_profile_scope_t *scope)
 {
+    if (!scope || !scope->enabled)
+        return pthread_mutex_unlock(mutex);
+
     int rank = lock_rank_for_name(lock_name);
-    uint64_t release_ns = (scope && scope->enabled) ? monotonic_ns() : 0;
+    uint64_t release_ns = monotonic_ns();
     int rc = pthread_mutex_unlock(mutex);
     if (rc == 0)
         lock_order_pop(mutex, lock_name, site, rank);
@@ -718,7 +728,7 @@ int pqc_profiled_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex,
     uint64_t cond_start_ns = monotonic_ns();
     int rc = pthread_cond_wait(cond, mutex);
     uint64_t acquired_ns = monotonic_ns();
-    if (pqc_lock_profile_enabled()) {
+    if (profile_enabled_fast()) {
         uint64_t cond_wait_ns = elapsed_ns(acquired_ns, cond_start_ns);
         if (profile_internal_lock() == 0) {
             profile_trace_appendf_locked(
@@ -761,7 +771,7 @@ int pqc_profiled_cond_timedwait(pthread_cond_t *cond,
     uint64_t cond_start_ns = monotonic_ns();
     int rc = pthread_cond_timedwait(cond, mutex, abstime);
     uint64_t acquired_ns = monotonic_ns();
-    if (pqc_lock_profile_enabled()) {
+    if (profile_enabled_fast()) {
         uint64_t cond_wait_ns = elapsed_ns(acquired_ns, cond_start_ns);
         if (profile_internal_lock() == 0) {
             profile_trace_appendf_locked(

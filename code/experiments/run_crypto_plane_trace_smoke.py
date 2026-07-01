@@ -134,15 +134,43 @@ def source_checks() -> dict[str, bool]:
     writeback = (ROOT / "code" / "storage" / "pqc_writeback.c").read_text(
         encoding="utf-8", errors="replace"
     )
+    file_io = (ROOT / "code" / "fs" / "pqc_file_io.c").read_text(
+        encoding="utf-8", errors="replace"
+    )
+    fd_context = (ROOT / "code" / "fs" / "pqc_fd_context.c").read_text(
+        encoding="utf-8", errors="replace"
+    )
     rekey = (ROOT / "code" / "runtime" / "pqc_rekey.c").read_text(
         encoding="utf-8", errors="replace"
     )
+    keyplane_workflow = (
+        ROOT / "code" / "experiments" / "run_keyplane_rekey_workflow.py"
+    ).read_text(encoding="utf-8", errors="replace")
     runtime = (ROOT / "code" / "runtime" / "pqc_runtime.c").read_text(
+        encoding="utf-8", errors="replace"
+    )
+    scheduler = (ROOT / "code" / "runtime" / "pqc_scheduler.c").read_text(
+        encoding="utf-8", errors="replace"
+    )
+    test_hooks_h = (ROOT / "code" / "support" / "pqc_test_hooks.h").read_text(
+        encoding="utf-8", errors="replace"
+    )
+    test_hooks_c = (ROOT / "code" / "support" / "pqc_test_hooks.c").read_text(
+        encoding="utf-8", errors="replace"
+    )
+    anchor = (ROOT / "code" / "storage" / "pqc_anchor.c").read_text(
+        encoding="utf-8", errors="replace"
+    )
+    anchor_worker = (
+        ROOT / "code" / "storage" / "pqc_anchor_worker.c"
+    ).read_text(encoding="utf-8", errors="replace")
+    flush_crypto = (ROOT / "code" / "crypto" / "pqc_flush_crypto.c").read_text(
         encoding="utf-8", errors="replace"
     )
     plane_trace = (ROOT / "code" / "runtime" / "pqc_plane_trace.c").read_text(
         encoding="utf-8", errors="replace"
     )
+    crypto_compact = "".join(crypto.split())
     return {
         "data_crypto_uses_aes_gcm":
             "EVP_aes_256_gcm" in crypto and
@@ -155,12 +183,145 @@ def source_checks() -> dict[str, bool]:
             "OQS_KEM_encaps" in rekey and
             ("OQS_KEM_alg_ml_kem_768" in runtime or
              "OQS_KEM_alg_kyber_768" in runtime),
+        "rekey_batch_can_reach_gpu_byte_gate":
+            ".max_batch = 128" in rekey and
+            ".collect_ms = 1" in rekey and
+            ".gpu_min_work_bytes = 131072" in rekey and
+            'pqc_config_long_legacy_or_default("PQC_REKEY_BATCH_COLLECT_MS"' in rekey and
+            'pqc_config_u64_legacy_or_default("PQC_GPU_MIN_BATCH_BYTES"' in rekey and
+            "key_work_bytes >= policy->gpu_min_work_bytes" in rekey,
+        "rekey_success_logs_are_verbose_gated":
+            "PQC_REKEY_VERBOSE" in rekey and
+            "if (rekey_verbose_enabled())" in rekey and
+            'env["PQC_REKEY_VERBOSE"] = "1"' in Path(__file__).read_text(
+                encoding="utf-8", errors="replace"
+            ) and
+            '"PQC_REKEY_VERBOSE": "1"' in keyplane_workflow,
+        "ordinary_writeback_disables_gpu_batch":
+            "pqc_flush_crypto_encrypt(snapshot->ss, snapshot->ss_len,\n"
+            "                                   snapshot->file_id, &batch, 0,"
+            in writeback,
+        "gpu_batch_requires_explicit_request":
+            "int use_gpu_batch" in flush_crypto and
+            "if (use_gpu_batch)" in flush_crypto,
+        "gpu_batch_tags_not_recomputed_in_flush_wrapper":
+            "pqc_crypto_gcm_compute_tag" not in flush_crypto and
+            "memcpy(blocks[i].tag, tags + i * PQC_AEAD_TAG_SIZE" in crypto,
+        "gpu_batch_fallback_owned_by_crypto_layer":
+            "!use_gpu_batch || res != 0" not in flush_crypto and
+            "rc = pqc_crypto_encrypt_block_batch_cpu_gcm(key, key_len, file_id, blocks" in crypto,
+        "runtime_does_not_preallocate_cuda_aes_executor":
+            "skim_cuda_executor_init" not in runtime,
+        "runtime_disables_admission_when_unused":
+            "Elastic admission controller disabled for this mount" in runtime and
+            "int admission_needed" in runtime,
+        "runtime_skips_scheduler_policy_when_unused":
+            "Elastic scheduler policy reload skipped for this mount" in runtime and
+            "if (admission_needed) {\n        pqc_scheduler_reload_runtime_policy_from_env();" in runtime,
+        "scheduler_data_accounting_is_gated":
+            "g_data_accounting_enabled = ATOMIC_VAR_INIT(0)" in scheduler and
+            "if (!pqc_scheduler_data_accounting_enabled())\n        return;" in scheduler and
+            "pqc_scheduler_set_data_accounting_enabled(1);" in runtime and
+            "pqc_scheduler_set_data_accounting_enabled(0);" in runtime,
+        "fault_cutpoints_are_fast_gated":
+            "extern atomic_int g_pqc_fault_cutpoint_enabled" in test_hooks_h and
+            "pqc_fault_cutpoint_enabled_fast" in test_hooks_h and
+            "if (pqc_fault_cutpoint_enabled_fast())" in test_hooks_h and
+            "pqc_fault_cutpoint_enabled_slow" in test_hooks_c and
+            "(void)pqc_fault_cutpoint_enabled_slow();" in runtime,
+        "rekey_policy_snapshot_is_trigger_gated":
+            "ctx->tier != PQC_TIER_NONE &&\n        pqc_rekey_write_trigger_enabled()" in file_io and
+            "pqc_rekey_write_policy_snapshot(&rekey_trigger_enabled" in file_io,
+        "qos_open_xattr_load_is_throttle_gated":
+            "if (pqc_qos_runtime_throttle_enabled()) {\n"
+            "        rc = pqc_qos_class_load_for_path(phys_path, &qos_class);"
+            in file_io,
+        "qos_writeback_uses_single_throttle_gate":
+            "if (pqc_qos_runtime_throttle_enabled())\n"
+            "        pqc_qos_apply_runtime_throttle_enabled(" in writeback and
+            "void pqc_qos_apply_runtime_throttle_enabled" in (
+                ROOT / "code" / "runtime" / "pqc_qos.c"
+            ).read_text(encoding="utf-8", errors="replace"),
+        "read_visible_size_snapshot_is_single_pass":
+            file_io.count(
+                "uint64_t visible_size = ctx->state->logical_size_valid"
+            ) == 1 and
+            "read_batch_scratch_acquire_locked" in file_io,
+        "read_eof_skips_scratch_acquire":
+            file_io.find("if ((uint64_t)offset >= visible_size)") <
+            file_io.find("int scratch_rc = read_batch_scratch_acquire_locked(") and
+            "pqc_fd_context_pending_job_end(ctx);\n"
+            "        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, \"fd_lock\", __func__,\n"
+            "                                        &fd_scope);\n"
+            "        return 0;" in file_io,
+        "read_marker_path_copy_is_epoch_gated":
+            "marker_path[0] = '\\0';" in file_io and
+            "if (epoch_fallback_enabled)\n"
+            "        file_io_copy_cstr(marker_path, sizeof(marker_path),\n"
+            "                          ctx->marker_path);" in file_io and
+            file_io.find("int epoch_fallback_enabled = ctx->epoch_fallback_enabled;") <
+            file_io.find("if (epoch_fallback_enabled)\n"
+                         "        file_io_copy_cstr(marker_path, sizeof(marker_path),"),
+        "writeback_reuses_published_logical_size":
+            "snapshot->logical_size_cache = published_logical_size;" in writeback and
+            "snapshot->logical_size_cache = final_size;" in writeback and
+            "ctx->logical_size = snapshot.logical_size_cache;" in writeback and
+            "snapshot.state->logical_size" not in writeback,
+        "writeback_snapshots_secret_and_epoch_path_conditionally":
+            "snapshot->ss_len = 0;" in writeback and
+            "if (ctx->tier != PQC_TIER_NONE) {\n"
+            "        if (ctx->ss_len > sizeof(snapshot->ss))" in writeback and
+            "snapshot->epoch_log_path[0] = '\\0';" in writeback and
+            "if (ctx->epoch_log_fd >= 0)\n"
+            "        writeback_copy_cstr(snapshot->epoch_log_path," in writeback,
+        "strict_open_allocates_epoch_cache_only_when_needed":
+            "int epoch_fallback_needed =\n"
+            "        epoch_has_committed_prefix || setup.epoch_log_fd >= 0;"
+            in fd_context and
+            "if (epoch_fallback_needed)\n"
+            "            setup.read_epoch_cache = fd_lifecycle_epoch_cache_alloc();"
+            in fd_context and
+            "ctx->epoch_fallback_enabled = epoch_fallback_needed;" in fd_context,
+        "release_hidden_cleanup_is_conditional":
+            "if (marker_path_is_hidden_unlinked(ctx->marker_path))\n"
+            "        file_io_copy_cstr(marker_path, sizeof(marker_path),"
+            in file_io and
+            "if (marker_path[0] != '\\0')\n"
+            "        cleanup_hidden_marker_and_sidecars(marker_path);"
+            in file_io,
+        "runtime_skips_qos_monitors_when_unused":
+            "QoS monitor startup skipped for this mount" in runtime and
+            "pqc_qos_disable_monitors_for_mount" in runtime,
+        "anchor_backend_is_cached":
+            "static atomic_int s_anchor_backend = ATOMIC_VAR_INIT(-1)" in anchor and
+            "atomic_load_explicit(&s_anchor_backend" in anchor and
+            "atomic_compare_exchange_strong_explicit(\n            &s_anchor_backend" in anchor,
+        "anchor_disabled_skips_window_policy":
+            "if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED)\n        return;"
+            in anchor and
+            "if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED) {\n"
+            "        atomic_store_explicit(&g_freshness_window_policy, 0,"
+            in anchor_worker and
+            "if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED)\n"
+            "        return 0;\n    const char *anchor_path" in anchor_worker,
+        "runtime_skips_anchor_probe_when_disabled":
+            "if (pqc_anchor_backend() != PQC_ANCHOR_BACKEND_DISABLED) {"
+            in runtime and
+            "Freshness anchor probe/worker skipped for this mount" in runtime,
         "plane_trace_dump_is_runtime_cleanup":
             "pqc_plane_trace_dump_if_requested" in runtime,
         "plane_trace_records_aes_not_bulk_pqc":
             "data_plane_algorithm" in plane_trace and
             "AES-256-GCM" in plane_trace and
             "key_plane_algorithm" in plane_trace,
+        "trace_byte_aggregation_is_gated":
+            "pqc_plane_trace_enabled" in (ROOT / "code" / "runtime" / "pqc_plane_trace.h").read_text(
+                encoding="utf-8", errors="replace"
+            ) and
+            "rc==0&&pqc_plane_trace_enabled()" in crypto_compact and
+            "if(pqc_plane_trace_enabled()){pqc_plane_trace_record_data_encrypt" in crypto_compact and
+            "if(pqc_plane_trace_enabled()){pqc_plane_trace_record_data_decrypt" in crypto_compact and
+            "crypto_block_desc_total_bytes(blocks,count)" in crypto_compact,
     }
 
 
@@ -193,15 +354,13 @@ def start_fuse(storage_dir: Path, mount_dir: Path, out_dir: Path,
     env.update({
         "PQC_MASTER_PASSWORD": f"crypto-plane-{label}",
         "PQC_PLANE_TRACE_PATH": str(trace_path),
-        "PQC_ADMISSION_TRACE_PATH": str(out_dir / f"{label}.admission.jsonl"),
-        "PQC_FRESHNESS_ANCHOR_BACKEND": "file",
-        "PQC_FRESHNESS_ANCHOR_PATH": str(storage_dir / ".anchor"),
-        "PQC_FRESHNESS_WINDOW_N": "1",
         "PQC_REKEY_BATCH_MAX": "1",
         "PQC_REKEY_BATCH_COLLECT_MS": "1",
     })
     if force_rekey:
+        env["PQC_ADMISSION_TRACE_PATH"] = str(out_dir / f"{label}.admission.jsonl")
         env["PQC_FORCE_REKEY_ON_WRITE"] = "1"
+        env["PQC_REKEY_VERBOSE"] = "1"
     stdout = stdout_path.open("wb")
     stderr = stderr_path.open("wb")
     try:

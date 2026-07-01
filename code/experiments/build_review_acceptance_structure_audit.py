@@ -28,6 +28,8 @@ CURRENT_FILES = [
     ROOT / "Paper" / "1_Introduction.tex",
     ROOT / "Paper" / "2_Background.tex",
     ROOT / "Paper" / "3_Design.tex",
+    ROOT / "Paper" / "7_Implementation_Details.tex",
+    ROOT / "Paper" / "8_Security_Analysis.tex",
     ROOT / "Paper" / "4_Evaluation.tex",
     ROOT / "Paper" / "5_Related_Works.tex",
     ROOT / "Paper" / "10_Discussion_and_Limitations.tex",
@@ -144,10 +146,15 @@ def current_structure_audit(text: str) -> dict[str, Any]:
             text.find("This paper makes four contributions.") != -1
             and text.find("This paper makes four contributions.") < text.find("The claim boundary excludes")
         ),
-        "rq_mapping": "RQ2: CPU/GPU/PQC placement" in text and "RQ3: Mounted application behavior" in text,
+        "rq_mapping": "RQ1: CPU/GPU/PQC placement" in text and "RQ2: Mounted QoS and edge-storage behavior" in text,
         "qos_pareto": "Pareto point rather than a free throughput improvement" in text,
         "generation_x10": "publish-ticket" in text and "UINT64\\_MAX" in text and "4-thread/4-process" in text,
         "claim_boundaries": "not a broad workload suite" in text and "physical power-loss" in text,
+        "jetson_scope_not_portability": (
+            "Jetson-style accelerated UMA edge storage" in text
+            and "representative Jetson-class accelerated UMA platform" in text
+            and "not as evidence of cross-SoC portability" in text
+        ),
         "foreground_inference_claim_removed": foreground_inference_claim_removed(text),
         "competitor_boundary": (
             "mode-aligned measured rows" in text
@@ -165,6 +172,12 @@ def current_structure_audit(text: str) -> dict[str, Any]:
             "kernel assistance" in lower
             and "d/j/c barrier issuance" in lower
             and "same-format kernel path preserves the recovery oracle" in lower
+        ),
+        "lowerfs_contract_not_powerloss": (
+            "\\texttt{.pqcdata}" in text
+            and "\\texttt{.pqcmeta}" in text
+            and "outside the selected crash model" in text
+            and "not a proof of device-cache flush ordering" in text
         ),
     }
     return {

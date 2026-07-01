@@ -25,6 +25,7 @@ typedef struct {
     int             data_fd;
     int             journal_fd;
     int             epoch_log_fd;
+    int             epoch_fallback_enabled;
     int             epoch_log_syncfs_domain_known;
     int             epoch_log_same_syncfs_domain;
     int             data_sidecar_dirty;
@@ -107,7 +108,9 @@ int pqc_fd_context_set(int fd,
                        const uint8_t *ss,
                        size_t ss_len,
                        uint64_t fid,
-                       int open_flags);
+                       int open_flags,
+                       int qos_class,
+                       int tier);
 void pqc_fd_context_clear(int fd);
 
 void pqc_fd_context_wait_pending_locked(pqc_fd_ctx_t *ctx,
@@ -160,5 +163,6 @@ int pqc_fd_context_fsync_dirty_epoch(const pqc_fd_ctx_t *ctx,
 int pqc_fd_context_fsync_epoch_repairable(const pqc_fd_ctx_t *ctx,
                                           uint64_t epoch);
 void pqc_fd_context_mark_fsync_synced(pqc_fd_ctx_t *ctx, uint64_t epoch);
+int pqc_fd_context_fsync_clean_locked(const pqc_fd_ctx_t *ctx);
 
 #endif /* PQC_FD_CONTEXT_H */

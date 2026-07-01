@@ -6,6 +6,7 @@
 
 #include <openssl/crypto.h>
 #include <openssl/evp.h>
+#include <openssl/sha.h>
 
 #include "cuda_aead.h"
 #include "pqc_plane_trace.h"
@@ -109,20 +110,12 @@ int pqc_crypto_derive_block_nonce(uint64_t file_id, uint64_t block,
 {
     uint8_t digest[32];
     uint8_t nonce_seed[24];
-    EVP_MD_CTX *md = NULL;
 
     memcpy(nonce_seed, &file_id, sizeof(file_id));
     memcpy(nonce_seed + 8, &block, sizeof(block));
     memcpy(nonce_seed + 16, &generation, sizeof(generation));
-    md = EVP_MD_CTX_new();
-    if (!md) return -ENOMEM;
-    if (EVP_DigestInit_ex(md, EVP_sha256(), NULL) != 1 ||
-        EVP_DigestUpdate(md, nonce_seed, sizeof(nonce_seed)) != 1 ||
-        EVP_DigestFinal_ex(md, digest, NULL) != 1) {
-        EVP_MD_CTX_free(md);
+    if (!SHA256(nonce_seed, sizeof(nonce_seed), digest))
         return -EIO;
-    }
-    EVP_MD_CTX_free(md);
     memcpy(nonce, digest, PQC_AEAD_NONCE_SIZE);
     OPENSSL_cleanse(digest, sizeof(digest));
     OPENSSL_cleanse(nonce_seed, sizeof(nonce_seed));
@@ -220,30 +213,53 @@ int pqc_crypto_crypt_block_gcm(const uint8_t *key, size_t key_len,
     return ok ? 0 : -EBADMSG;
 }
 
-static int pqc_crypto_crypt_block_batch_cpu(const uint8_t *key, size_t key_len,
-                                            uint64_t file_id,
-                                            pqc_crypto_block_desc_t *blocks,
-                                            size_t count,
-                                            const uint8_t *input,
-                                            uint8_t *output)
+int pqc_crypto_encrypt_block_batch_cpu_gcm(const uint8_t *key, size_t key_len,
+                                           uint64_t file_id,
+                                           pqc_crypto_block_desc_t *blocks,
+                                           size_t count,
+                                           const uint8_t *input,
+                                           uint8_t *output)
 {
+    (void)file_id;
+    if (!key || key_len < 32 || !blocks || !input || !output || count == 0)
+        return -EINVAL;
+
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (!ctx)
+        return -ENOMEM;
+
+    int rc = 0;
     for (size_t i = 0; i < count; ++i) {
-        uint8_t tag[PQC_AEAD_TAG_SIZE];
-        int rc = pqc_crypto_crypt_block_gcm(key, key_len, file_id,
-                                            blocks[i].block,
-                                            blocks[i].generation,
-                                            blocks[i].length,
-                                            input + blocks[i].input_offset,
-                                            output + blocks[i].output_offset,
-                                            tag, 1, 0);
-        if (rc != 0) {
-            OPENSSL_cleanse(tag, sizeof(tag));
-            return rc;
+        if (blocks[i].length > PQC_LOGICAL_BLOCK_SIZE) {
+            rc = -EINVAL;
+            break;
         }
-        memcpy(blocks[i].tag, tag, sizeof(tag));
-        OPENSSL_cleanse(tag, sizeof(tag));
+        int n = 0, total = 0;
+        int ok = EVP_CIPHER_CTX_reset(ctx) == 1 &&
+                 EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, key,
+                                    blocks[i].nonce) == 1 &&
+                 EVP_EncryptUpdate(ctx, NULL, &n, blocks[i].aad,
+                                   sizeof(blocks[i].aad)) == 1 &&
+                 EVP_EncryptUpdate(ctx, output + blocks[i].output_offset, &n,
+                                   input + blocks[i].input_offset,
+                                   (int)blocks[i].length) == 1;
+        total = n;
+        ok = ok && EVP_EncryptFinal_ex(
+            ctx, output + blocks[i].output_offset + total, &n) == 1 &&
+             EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG,
+                                 PQC_AEAD_TAG_SIZE, blocks[i].tag) == 1;
+        if (!ok) {
+            rc = -EBADMSG;
+            break;
+        }
     }
-    return 0;
+
+    EVP_CIPHER_CTX_free(ctx);
+    if (rc == 0 && pqc_plane_trace_enabled()) {
+        pqc_plane_trace_record_data_encrypt(
+            (uint64_t)count, crypto_block_desc_total_bytes(blocks, count), 0);
+    }
+    return rc;
 }
 
 static int pqc_crypto_decrypt_block_batch_cpu(const uint8_t *key,
@@ -290,7 +306,7 @@ static int pqc_crypto_decrypt_block_batch_cpu(const uint8_t *key,
     }
 
     EVP_CIPHER_CTX_free(ctx);
-    if (rc == 0) {
+    if (rc == 0 && pqc_plane_trace_enabled()) {
         pqc_plane_trace_record_data_decrypt(
             (uint64_t)count, crypto_block_desc_total_bytes(blocks, count), 0);
     }
@@ -301,14 +317,15 @@ int pqc_crypto_crypt_block_batch_gcm(const uint8_t *key, size_t key_len,
                                      uint64_t file_id,
                                      pqc_crypto_block_desc_t *blocks,
                                      size_t count, const uint8_t *input,
-                                     uint8_t *output)
+                                     uint8_t *output, int prefer_gpu)
 {
     if (!key || key_len < 32 || !blocks || !input || !output || count == 0)
         return -EINVAL;
 
-    if (count > PQC_WRITEBACK_MAX_BLOCKS)
-        return pqc_crypto_crypt_block_batch_cpu(key, key_len, file_id, blocks,
-                                                count, input, output);
+    if (count > PQC_WRITEBACK_MAX_BLOCKS || !prefer_gpu)
+        return pqc_crypto_encrypt_block_batch_cpu_gcm(key, key_len, file_id,
+                                                      blocks, count, input,
+                                                      output);
 
     size_t offsets[PQC_WRITEBACK_MAX_BLOCKS];
     size_t lengths[PQC_WRITEBACK_MAX_BLOCKS];
@@ -331,20 +348,23 @@ int pqc_crypto_crypt_block_batch_gcm(const uint8_t *key, size_t key_len,
                                                 output, offsets, lengths,
                                                 tags, count);
         if (gpu_rc == 0) {
-        for (size_t i = 0; i < count; ++i) {
-            memcpy(blocks[i].tag, tags + i * PQC_AEAD_TAG_SIZE,
-                   PQC_AEAD_TAG_SIZE);
-        }
-        pqc_plane_trace_record_data_encrypt(
-            (uint64_t)count, crypto_block_desc_total_bytes(blocks, count), 1);
-        rc = 0;
-        goto out;
+            for (size_t i = 0; i < count; ++i) {
+                memcpy(blocks[i].tag, tags + i * PQC_AEAD_TAG_SIZE,
+                       PQC_AEAD_TAG_SIZE);
+            }
+            if (pqc_plane_trace_enabled()) {
+                pqc_plane_trace_record_data_encrypt(
+                    (uint64_t)count,
+                    crypto_block_desc_total_bytes(blocks, count), 1);
+            }
+            rc = 0;
+            goto out;
         }
         pqc_plane_trace_record_data_gpu_fallback();
     }
 
-    rc = pqc_crypto_crypt_block_batch_cpu(key, key_len, file_id, blocks,
-                                          count, input, output);
+    rc = pqc_crypto_encrypt_block_batch_cpu_gcm(key, key_len, file_id, blocks,
+                                                count, input, output);
 out:
     OPENSSL_cleanse(tags, sizeof(tags));
     OPENSSL_cleanse(aads, sizeof(aads));
@@ -410,9 +430,11 @@ int pqc_crypto_decrypt_block_batch_gcm(const uint8_t *key, size_t key_len,
         rc = skim_cuda_aes256_gcm_ctr_batch(key, nonces, input, output,
                                             offsets, lengths, count);
         if (rc == 0) {
-            pqc_plane_trace_record_data_decrypt(
-                (uint64_t)count, crypto_block_desc_total_bytes(blocks, count),
-                1);
+            if (pqc_plane_trace_enabled()) {
+                pqc_plane_trace_record_data_decrypt(
+                    (uint64_t)count,
+                    crypto_block_desc_total_bytes(blocks, count), 1);
+            }
             goto out;
         }
         pqc_plane_trace_record_data_gpu_fallback();

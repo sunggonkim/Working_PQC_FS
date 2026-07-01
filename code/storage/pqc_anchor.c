@@ -81,10 +81,24 @@ static char              g_file_anchor_last_path[4096];
 static pqc_prefix_anchor_t g_file_anchor_last = {0};
 static pqc_trace_sink_t g_anchor_trace_sink = PQC_TRACE_SINK_INITIALIZER;
 
+static atomic_int s_anchor_backend = ATOMIC_VAR_INIT(-1);
 static atomic_int s_freshness_window = ATOMIC_VAR_INIT(-1);
 static atomic_int s_blocks_since_commit = ATOMIC_VAR_INIT(0);
 
 static int anchor_freshness_window(void);
+
+static void anchor_copy_cstr(char *dst, size_t dst_size, const char *src)
+{
+    if (!dst || dst_size == 0)
+        return;
+    if (!src) {
+        dst[0] = '\0';
+        return;
+    }
+    size_t len = strnlen(src, dst_size - 1U);
+    memcpy(dst, src, len);
+    dst[len] = '\0';
+}
 
 static int file_anchor_commit_lock(pqc_lock_profile_scope_t *scope,
                                    const char *site)
@@ -191,6 +205,12 @@ static void anchor_trace_write_line(const char *line, size_t len)
                                    line, len);
 }
 
+static int anchor_trace_enabled(void)
+{
+    return pqc_trace_sink_enabled_env(&g_anchor_trace_sink,
+                                      "PQC_ANCHOR_TRACE_PATH");
+}
+
 void pqc_anchor_trace_shutdown(void)
 {
     pqc_trace_sink_close(&g_anchor_trace_sink);
@@ -200,9 +220,7 @@ static void anchor_trace_event(const char *event, const char *backend, int rc,
                                const pqc_prefix_anchor_t *anchor,
                                uint64_t start_ns, uint64_t end_ns)
 {
-    const char *trace_path =
-        pqc_config_get_nonempty("PQC_ANCHOR_TRACE_PATH");
-    if (!trace_path || !event || !backend)
+    if (!anchor_trace_enabled() || !event || !backend)
         return;
 
     char root_hex[65] = {0};
@@ -246,9 +264,7 @@ static void anchor_trace_epoch_record(
     const char *cause, const pqc_anchor_epoch_record_t *record,
     uint64_t start_ns, uint64_t end_ns)
 {
-    const char *trace_path =
-        pqc_config_get_nonempty("PQC_ANCHOR_TRACE_PATH");
-    if (!trace_path || !cause || !record)
+    if (!anchor_trace_enabled() || !cause || !record)
         return;
 
     char root_hex[65] = {0};
@@ -362,9 +378,27 @@ static uint32_t tpm_nv_index(void)
 
 pqc_anchor_backend_t pqc_anchor_backend(void)
 {
-    if (anchor_path_is_hardware()) return PQC_ANCHOR_BACKEND_HARDWARE;
-    return anchor_path() ? PQC_ANCHOR_BACKEND_FILE
-                         : PQC_ANCHOR_BACKEND_DISABLED;
+    int cached = atomic_load_explicit(&s_anchor_backend,
+                                      memory_order_acquire);
+    if (cached >= 0)
+        return (pqc_anchor_backend_t)cached;
+
+    pqc_anchor_backend_t backend = PQC_ANCHOR_BACKEND_DISABLED;
+    if (anchor_path_is_hardware()) {
+        backend = PQC_ANCHOR_BACKEND_HARDWARE;
+    } else if (anchor_path()) {
+        backend = PQC_ANCHOR_BACKEND_FILE;
+    }
+
+    int expected = -1;
+    if (atomic_compare_exchange_strong_explicit(
+            &s_anchor_backend, &expected, (int)backend,
+            memory_order_release, memory_order_acquire)) {
+        return backend;
+    }
+
+    cached = atomic_load_explicit(&s_anchor_backend, memory_order_acquire);
+    return cached >= 0 ? (pqc_anchor_backend_t)cached : backend;
 }
 
 /* ── SHA-256 prefix root computation ────────────────────────────────────── */
@@ -932,9 +966,8 @@ static void file_anchor_note_committed(const char *path,
     pqc_lock_profile_scope_t scope;
     if (file_anchor_commit_lock(&scope, "file_anchor_note_committed") != 0)
         return;
-    memset(g_file_anchor_last_path, 0, sizeof(g_file_anchor_last_path));
-    strncpy(g_file_anchor_last_path, path,
-            sizeof(g_file_anchor_last_path) - 1U);
+    anchor_copy_cstr(g_file_anchor_last_path,
+                     sizeof(g_file_anchor_last_path), path);
     g_file_anchor_last = *anchor;
     g_file_anchor_last_valid = 1;
     (void)file_anchor_commit_unlock(&scope, "file_anchor_note_committed");
@@ -1030,6 +1063,13 @@ static int anchor_freshness_window(void)
 
     cached = atomic_load_explicit(&s_freshness_window, memory_order_acquire);
     return cached > 0 ? cached : configured;
+}
+
+void pqc_anchor_init_from_config(void)
+{
+    if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED)
+        return;
+    (void)anchor_freshness_window();
 }
 
 static int anchor_commit_current_prefix_sync(

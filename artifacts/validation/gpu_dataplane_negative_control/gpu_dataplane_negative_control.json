@@ -12,14 +12,14 @@
     "stderr": "artifacts/validation/gpu_dataplane_negative_control/bench_gpu_dataplane_negative_control.stderr.txt",
     "stdout_csv": "artifacts/validation/gpu_dataplane_negative_control/bench_gpu_dataplane_negative_control.stdout.csv"
   },
-  "generated_utc": "2026-06-30T05:09:26Z",
+  "generated_utc": "2026-06-30T22:02:56Z",
   "rows": [
     {
       "count": 1,
       "gpu_available": true,
-      "mib_s": 1335.013671,
+      "mib_s": 1343.73925,
       "mode": "cpu",
-      "ns": 2926,
+      "ns": 2907,
       "rep": 0,
       "total_bytes": 4096,
       "verified": true
@@ -27,9 +27,9 @@
     {
       "count": 1,
       "gpu_available": true,
-      "mib_s": 1401.596699,
+      "mib_s": 1233.812382,
       "mode": "cpu",
-      "ns": 2787,
+      "ns": 3166,
       "rep": 1,
       "total_bytes": 4096,
       "verified": true
@@ -37,9 +37,9 @@
     {
       "count": 1,
       "gpu_available": true,
-      "mib_s": 1430.336873,
+      "mib_s": 1406.64386,
       "mode": "cpu",
-      "ns": 2731,
+      "ns": 2777,
       "rep": 2,
       "total_bytes": 4096,
       "verified": true
@@ -47,20 +47,10 @@
     {
       "count": 1,
       "gpu_available": true,
-      "mib_s": 1439.82676,
+      "mib_s": 1444.619083,
       "mode": "cpu",
-      "ns": 2713,
+      "ns": 2704,
       "rep": 3,
-      "total_bytes": 4096,
-      "verified": true
-    },
-    {
-      "count": 1,
-      "gpu_available": true,
-      "mib_s": 1406.137509,
-      "mode": "cpu",
-      "ns": 2778,
-      "rep": 4,
       "total_bytes": 4096,
       "verified": true
     },
@@ -70,66 +60,6 @@
       "mib_s": 1465.210053,
       "mode": "cpu",
       "ns": 2666,
-      "rep": 5,
-      "total_bytes": 4096,
-      "verified": true
-    },
-    {
-      "count": 1,
-      "gpu_available": true,
-      "mib_s": 1420.454545,
-      "mode": "cpu",
-      "ns": 2750,
-      "rep": 6,
-      "total_bytes": 4096,
-      "verified": true
-    },
-    {
-      "count": 1,
-      "gpu_available": true,
-      "mib_s": 0.688725,
-      "mode": "gpu",
-      "ns": 5671713,
-      "rep": 0,
-      "total_bytes": 4096,
-      "verified": true
-    },
-    {
-      "count": 1,
-      "gpu_available": true,
-      "mib_s": 0.689361,
-      "mode": "gpu",
-      "ns": 5666481,
-      "rep": 1,
-      "total_bytes": 4096,
-      "verified": true
-    },
-    {
-      "count": 1,
-      "gpu_available": true,
-      "mib_s": 0.689271,
-      "mode": "gpu",
-      "ns": 5667222,
-      "rep": 2,
-      "total_bytes": 4096,
-      "verified": true
-    },
-    {
-      "count": 1,
-      "gpu_available": true,
-      "mib_s": 0.688412,
-      "mode": "gpu",
-      "ns": 5674287,
-      "rep": 3,
-      "total_bytes": 4096,
-      "verified": true
-    },
-    {
-      "count": 1,
-      "gpu_available": true,
-      "mib_s": 0.689862,
-      "mode": "gpu",
-      "ns": 5662361,
       "rep": 4,
       "total_bytes": 4096,
       "verified": true
@@ -137,9 +67,9 @@
     {
       "count": 1,
       "gpu_available": true,
-      "mib_s": 0.689747,
-      "mode": "gpu",
-      "ns": 5663305,
+      "mib_s": 1425.638686,
+      "mode": "cpu",
+      "ns": 2740,
       "rep": 5,
       "total_bytes": 4096,
       "verified": true
@@ -147,9 +77,79 @@
     {
       "count": 1,
       "gpu_available": true,
-      "mib_s": 0.688034,
+      "mib_s": 1469.620015,
+      "mode": "cpu",
+      "ns": 2658,
+      "rep": 6,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.690537,
       "mode": "gpu",
-      "ns": 5677407,
+      "ns": 5656833,
+      "rep": 0,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.693031,
+      "mode": "gpu",
+      "ns": 5636472,
+      "rep": 1,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.69211,
+      "mode": "gpu",
+      "ns": 5643972,
+      "rep": 2,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.693165,
+      "mode": "gpu",
+      "ns": 5635379,
+      "rep": 3,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.693101,
+      "mode": "gpu",
+      "ns": 5635907,
+      "rep": 4,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.69319,
+      "mode": "gpu",
+      "ns": 5635176,
+      "rep": 5,
+      "total_bytes": 4096,
+      "verified": true
+    },
+    {
+      "count": 1,
+      "gpu_available": true,
+      "mib_s": 0.692835,
+      "mode": "gpu",
+      "ns": 5638064,
       "rep": 6,
       "total_bytes": 4096,
       "verified": true
@@ -157,9 +157,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 1501.393293,
+      "mib_s": 1506.604956,
       "mode": "cpu",
-      "ns": 10407,
+      "ns": 10371,
       "rep": 0,
       "total_bytes": 16384,
       "verified": true
@@ -167,9 +167,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 1502.692826,
+      "mib_s": 1492.074102,
       "mode": "cpu",
-      "ns": 10398,
+      "ns": 10472,
       "rep": 1,
       "total_bytes": 16384,
       "verified": true
@@ -177,9 +177,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 1505.443684,
+      "mib_s": 1486.82082,
       "mode": "cpu",
-      "ns": 10379,
+      "ns": 10509,
       "rep": 2,
       "total_bytes": 16384,
       "verified": true
@@ -187,9 +187,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 1498.657203,
+      "mib_s": 1494.643199,
       "mode": "cpu",
-      "ns": 10426,
+      "ns": 10454,
       "rep": 3,
       "total_bytes": 16384,
       "verified": true
@@ -197,9 +197,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 1498.657203,
+      "mib_s": 1494.643199,
       "mode": "cpu",
-      "ns": 10426,
+      "ns": 10454,
       "rep": 4,
       "total_bytes": 16384,
       "verified": true
@@ -207,9 +207,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 1488.095238,
+      "mib_s": 1494.643199,
       "mode": "cpu",
-      "ns": 10500,
+      "ns": 10454,
       "rep": 5,
       "total_bytes": 16384,
       "verified": true
@@ -217,9 +217,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 1502.548322,
+      "mib_s": 1491.931634,
       "mode": "cpu",
-      "ns": 10399,
+      "ns": 10473,
       "rep": 6,
       "total_bytes": 16384,
       "verified": true
@@ -227,9 +227,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 2.470367,
+      "mib_s": 2.4826,
       "mode": "gpu",
-      "ns": 6324972,
+      "ns": 6293805,
       "rep": 0,
       "total_bytes": 16384,
       "verified": true
@@ -237,9 +237,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 2.475411,
+      "mib_s": 2.490841,
       "mode": "gpu",
-      "ns": 6312083,
+      "ns": 6272982,
       "rep": 1,
       "total_bytes": 16384,
       "verified": true
@@ -247,9 +247,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 2.469499,
+      "mib_s": 2.483129,
       "mode": "gpu",
-      "ns": 6327195,
+      "ns": 6292463,
       "rep": 2,
       "total_bytes": 16384,
       "verified": true
@@ -257,9 +257,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 2.476058,
+      "mib_s": 2.481158,
       "mode": "gpu",
-      "ns": 6310435,
+      "ns": 6297463,
       "rep": 3,
       "total_bytes": 16384,
       "verified": true
@@ -267,9 +267,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 2.47605,
+      "mib_s": 2.483981,
       "mode": "gpu",
-      "ns": 6310453,
+      "ns": 6290306,
       "rep": 4,
       "total_bytes": 16384,
       "verified": true
@@ -277,9 +277,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 2.466871,
+      "mib_s": 2.486041,
       "mode": "gpu",
-      "ns": 6333935,
+      "ns": 6285093,
       "rep": 5,
       "total_bytes": 16384,
       "verified": true
@@ -287,9 +287,9 @@
     {
       "count": 4,
       "gpu_available": true,
-      "mib_s": 2.47777,
+      "mib_s": 2.488556,
       "mode": "gpu",
-      "ns": 6306074,
+      "ns": 6278741,
       "rep": 6,
       "total_bytes": 16384,
       "verified": true
@@ -297,9 +297,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 1528.192088,
+      "mib_s": 1512.438293,
       "mode": "cpu",
-      "ns": 40898,
+      "ns": 41324,
       "rep": 0,
       "total_bytes": 65536,
       "verified": true
@@ -307,9 +307,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 1518.575212,
+      "mib_s": 1516.18068,
       "mode": "cpu",
-      "ns": 41157,
+      "ns": 41222,
       "rep": 1,
       "total_bytes": 65536,
       "verified": true
@@ -317,9 +317,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 1525.432002,
+      "mib_s": 1515.482166,
       "mode": "cpu",
-      "ns": 40972,
+      "ns": 41241,
       "rep": 2,
       "total_bytes": 65536,
       "verified": true
@@ -327,9 +327,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 1511.085322,
+      "mib_s": 1515.482166,
       "mode": "cpu",
-      "ns": 41361,
+      "ns": 41241,
       "rep": 3,
       "total_bytes": 65536,
       "verified": true
@@ -337,9 +337,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 1524.055695,
+      "mib_s": 1520.274379,
       "mode": "cpu",
-      "ns": 41009,
+      "ns": 41111,
       "rep": 4,
       "total_bytes": 65536,
       "verified": true
@@ -347,9 +347,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 1525.394772,
+      "mib_s": 1517.87449,
       "mode": "cpu",
-      "ns": 40973,
+      "ns": 41176,
       "rep": 5,
       "total_bytes": 65536,
       "verified": true
@@ -357,9 +357,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 1522.681869,
+      "mib_s": 1510.427995,
       "mode": "cpu",
-      "ns": 41046,
+      "ns": 41379,
       "rep": 6,
       "total_bytes": 65536,
       "verified": true
@@ -367,9 +367,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 8.239263,
+      "mib_s": 8.303901,
       "mode": "gpu",
-      "ns": 7585630,
+      "ns": 7526583,
       "rep": 0,
       "total_bytes": 65536,
       "verified": true
@@ -377,9 +377,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 8.286011,
+      "mib_s": 8.814842,
       "mode": "gpu",
-      "ns": 7542833,
+      "ns": 7090314,
       "rep": 1,
       "total_bytes": 65536,
       "verified": true
@@ -387,9 +387,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 8.254852,
+      "mib_s": 8.550625,
       "mode": "gpu",
-      "ns": 7571305,
+      "ns": 7309407,
       "rep": 2,
       "total_bytes": 65536,
       "verified": true
@@ -397,9 +397,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 8.839001,
+      "mib_s": 8.53059,
       "mode": "gpu",
-      "ns": 7070935,
+      "ns": 7326574,
       "rep": 3,
       "total_bytes": 65536,
       "verified": true
@@ -407,9 +407,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 7.787974,
+      "mib_s": 9.173264,
       "mode": "gpu",
-      "ns": 8025194,
+      "ns": 6813278,
       "rep": 4,
       "total_bytes": 65536,
       "verified": true
@@ -417,9 +417,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 8.822561,
+      "mib_s": 9.136425,
       "mode": "gpu",
-      "ns": 7084111,
+      "ns": 6840750,
       "rep": 5,
       "total_bytes": 65536,
       "verified": true
@@ -427,9 +427,9 @@
     {
       "count": 16,
       "gpu_available": true,
-      "mib_s": 8.272333,
+      "mib_s": 8.563381,
       "mode": "gpu",
-      "ns": 7555305,
+      "ns": 7298519,
       "rep": 6,
       "total_bytes": 65536,
       "verified": true
@@ -437,9 +437,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 1529.051988,
+      "mib_s": 1520.524033,
       "mode": "cpu",
-      "ns": 163500,
+      "ns": 164417,
       "rep": 0,
       "total_bytes": 262144,
       "verified": true
@@ -447,9 +447,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 1514.472297,
+      "mib_s": 1514.050388,
       "mode": "cpu",
-      "ns": 165074,
+      "ns": 165120,
       "rep": 1,
       "total_bytes": 262144,
       "verified": true
@@ -457,9 +457,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 1478.074247,
+      "mib_s": 1517.87449,
       "mode": "cpu",
-      "ns": 169139,
+      "ns": 164704,
       "rep": 2,
       "total_bytes": 262144,
       "verified": true
@@ -467,9 +467,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 1461.911361,
+      "mib_s": 1522.32953,
       "mode": "cpu",
-      "ns": 171009,
+      "ns": 164222,
       "rep": 3,
       "total_bytes": 262144,
       "verified": true
@@ -477,9 +477,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 1467.945933,
+      "mib_s": 1519.33198,
       "mode": "cpu",
-      "ns": 170306,
+      "ns": 164546,
       "rep": 4,
       "total_bytes": 262144,
       "verified": true
@@ -487,9 +487,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 1497.508146,
+      "mib_s": 1524.566871,
       "mode": "cpu",
-      "ns": 166944,
+      "ns": 163981,
       "rep": 5,
       "total_bytes": 262144,
       "verified": true
@@ -497,9 +497,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 1532.266467,
+      "mib_s": 1521.384582,
       "mode": "cpu",
-      "ns": 163157,
+      "ns": 164324,
       "rep": 6,
       "total_bytes": 262144,
       "verified": true
@@ -507,9 +507,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 30.83522,
+      "mib_s": 30.846143,
       "mode": "gpu",
-      "ns": 8107612,
+      "ns": 8104741,
       "rep": 0,
       "total_bytes": 262144,
       "verified": true
@@ -517,9 +517,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 30.835787,
+      "mib_s": 30.858094,
       "mode": "gpu",
-      "ns": 8107463,
+      "ns": 8101602,
       "rep": 1,
       "total_bytes": 262144,
       "verified": true
@@ -527,9 +527,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 27.690546,
+      "mib_s": 30.816007,
       "mode": "gpu",
-      "ns": 9028352,
+      "ns": 8112667,
       "rep": 2,
       "total_bytes": 262144,
       "verified": true
@@ -537,9 +537,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 29.16132,
+      "mib_s": 30.874962,
       "mode": "gpu",
-      "ns": 8573000,
+      "ns": 8097176,
       "rep": 3,
       "total_bytes": 262144,
       "verified": true
@@ -547,9 +547,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 29.206522,
+      "mib_s": 30.867231,
       "mode": "gpu",
-      "ns": 8559732,
+      "ns": 8099204,
       "rep": 4,
       "total_bytes": 262144,
       "verified": true
@@ -557,9 +557,9 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 29.166485,
+      "mib_s": 30.887218,
       "mode": "gpu",
-      "ns": 8571482,
+      "ns": 8093963,
       "rep": 5,
       "total_bytes": 262144,
       "verified": true
@@ -567,11 +567,151 @@
     {
       "count": 64,
       "gpu_available": true,
-      "mib_s": 30.835258,
+      "mib_s": 30.862395,
       "mode": "gpu",
-      "ns": 8107602,
+      "ns": 8100473,
       "rep": 6,
       "total_bytes": 262144,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 1521.062919,
+      "mode": "cpu",
+      "ns": 657435,
+      "rep": 0,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 1520.140339,
+      "mode": "cpu",
+      "ns": 657834,
+      "rep": 1,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 1518.688218,
+      "mode": "cpu",
+      "ns": 658463,
+      "rep": 2,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 1516.364607,
+      "mode": "cpu",
+      "ns": 659472,
+      "rep": 3,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 1516.939665,
+      "mode": "cpu",
+      "ns": 659222,
+      "rep": 4,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 1508.211457,
+      "mode": "cpu",
+      "ns": 663037,
+      "rep": 5,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 1523.981371,
+      "mode": "cpu",
+      "ns": 656176,
+      "rep": 6,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 78.293202,
+      "mode": "gpu",
+      "ns": 12772501,
+      "rep": 0,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 75.637879,
+      "mode": "gpu",
+      "ns": 13220889,
+      "rep": 1,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 75.524896,
+      "mode": "gpu",
+      "ns": 13240667,
+      "rep": 2,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 78.296439,
+      "mode": "gpu",
+      "ns": 12771973,
+      "rep": 3,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 75.567809,
+      "mode": "gpu",
+      "ns": 13233148,
+      "rep": 4,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 75.597275,
+      "mode": "gpu",
+      "ns": 13227990,
+      "rep": 5,
+      "total_bytes": 1048576,
+      "verified": true
+    },
+    {
+      "count": 256,
+      "gpu_available": true,
+      "mib_s": 78.326139,
+      "mode": "gpu",
+      "ns": 12767130,
+      "rep": 6,
+      "total_bytes": 1048576,
       "verified": true
     }
   ],
@@ -581,50 +721,62 @@
     "cases": [
       {
         "count": 1,
-        "cpu_median_mib_s": 1420.454545,
-        "cpu_median_ns": 2750,
+        "cpu_median_mib_s": 1425.638686,
+        "cpu_median_ns": 2740,
         "gpu_available": true,
-        "gpu_median_mib_s": 0.689271,
-        "gpu_median_ns": 5667222,
-        "gpu_slower_ratio": 2060.808,
+        "gpu_median_mib_s": 0.693031,
+        "gpu_median_ns": 5636472,
+        "gpu_slower_ratio": 2057.1065693430655,
         "negative_control_supports_cpu_first": true,
         "total_bytes": 4096,
         "verified": true
       },
       {
         "count": 4,
-        "cpu_median_mib_s": 1501.393293,
-        "cpu_median_ns": 10407,
+        "cpu_median_mib_s": 1494.643199,
+        "cpu_median_ns": 10454,
         "gpu_available": true,
-        "gpu_median_mib_s": 2.475411,
-        "gpu_median_ns": 6312083,
-        "gpu_slower_ratio": 606.5228211780533,
+        "gpu_median_mib_s": 2.483981,
+        "gpu_median_ns": 6290306,
+        "gpu_slower_ratio": 601.7128371915056,
         "negative_control_supports_cpu_first": true,
         "total_bytes": 16384,
         "verified": true
       },
       {
         "count": 16,
-        "cpu_median_mib_s": 1524.055695,
-        "cpu_median_ns": 41009,
+        "cpu_median_mib_s": 1515.482166,
+        "cpu_median_ns": 41241,
         "gpu_available": true,
-        "gpu_median_mib_s": 8.272333,
-        "gpu_median_ns": 7555305,
-        "gpu_slower_ratio": 184.23528981443098,
+        "gpu_median_mib_s": 8.563381,
+        "gpu_median_ns": 7298519,
+        "gpu_slower_ratio": 176.972406100725,
         "negative_control_supports_cpu_first": true,
         "total_bytes": 65536,
         "verified": true
       },
       {
         "count": 64,
-        "cpu_median_mib_s": 1497.508146,
-        "cpu_median_ns": 166944,
+        "cpu_median_mib_s": 1520.524033,
+        "cpu_median_ns": 164417,
         "gpu_available": true,
-        "gpu_median_mib_s": 29.206522,
-        "gpu_median_ns": 8559732,
-        "gpu_slower_ratio": 51.273073605520416,
+        "gpu_median_mib_s": 30.862395,
+        "gpu_median_ns": 8100473,
+        "gpu_slower_ratio": 49.26785551372425,
         "negative_control_supports_cpu_first": true,
         "total_bytes": 262144,
+        "verified": true
+      },
+      {
+        "count": 256,
+        "cpu_median_mib_s": 1518.688218,
+        "cpu_median_ns": 658463,
+        "gpu_available": true,
+        "gpu_median_mib_s": 75.637879,
+        "gpu_median_ns": 13220889,
+        "gpu_slower_ratio": 20.07840835400015,
+        "negative_control_supports_cpu_first": true,
+        "total_bytes": 1048576,
         "verified": true
       }
     ],

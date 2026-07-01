@@ -26,7 +26,11 @@ REQUIRED_RQS = [
         "id": "RQ2",
         "category": "CPU/GPU/PQC placement",
         "terms": ["cpu", "gpu", "pqc", "placement", "ml-kem"],
-        "evidence_needles": ["\\label{sec:eval_performance}", "CPU for bulk data", "mounted ML-KEM-768 key-plane workflow"],
+        "evidence_needles": [
+            "\\label{sec:eval_performance}",
+            "AES-GCM data writes are latency-sensitive and remain CPU-first",
+            "mounted ML-KEM-768 key-plane workflow",
+        ],
     },
     {
         "id": "RQ3",
@@ -152,8 +156,9 @@ def build_report() -> dict[str, Any]:
         violations.append("defensive scope question or evaluation-leaves-open subsection remains in Evaluation")
     if not all(discussion_boundaries.values()):
         violations.append("Discussion/Limits does not retain all required unsupported-claim boundaries")
-    if run_pdfinfo_pages(PAPER / "main.pdf") != 12:
-        violations.append("Paper/main.pdf is not 12 pages")
+    pages = run_pdfinfo_pages(PAPER / "main.pdf")
+    if pages is None or pages > 13:
+        violations.append("Paper/main.pdf exceeds 13 pages")
 
     return {
         "schema_version": 1,

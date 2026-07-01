@@ -8,6 +8,25 @@
 #include <string.h>
 #include <unistd.h>
 
+static int recovery_pread_full(int fd, uint8_t *buf, size_t len,
+                               off_t offset)
+{
+    size_t done = 0;
+    while (done < len) {
+        ssize_t n = pread(fd, buf + done, len - done,
+                          offset + (off_t)done);
+        if (n < 0) {
+            if (errno == EINTR)
+                continue;
+            return -errno;
+        }
+        if (n == 0)
+            return -EIO;
+        done += (size_t)n;
+    }
+    return 0;
+}
+
 void pqc_recovery_epoch_fallback_view_init(
     pqc_recovery_epoch_fallback_view_t *view)
 {
@@ -102,10 +121,10 @@ int pqc_recovery_load_authenticated_block_committed(
         return rc;
 
     uint8_t cipher[PQC_LOGICAL_BLOCK_SIZE] = {0};
-    if (pread(data_fd, cipher, map.plaintext_length,
-              (off_t)map.ciphertext_offset) !=
-        (ssize_t)map.plaintext_length)
-        return -EIO;
+    rc = recovery_pread_full(data_fd, cipher, map.plaintext_length,
+                             (off_t)map.ciphertext_offset);
+    if (rc != 0)
+        return rc;
     if (map.algorithm_id != PQC_ALGO_AES_256_GCM)
         return -EINVAL;
     return pqc_crypto_crypt_block_gcm(key, key_len, file_id, block,
@@ -212,10 +231,10 @@ int pqc_recovery_load_authenticated_block_committed_epoch_view(
     if (rc)
         return rc;
     uint8_t cipher[PQC_LOGICAL_BLOCK_SIZE] = {0};
-    if (pread(data_fd, cipher, map.plaintext_length,
-              (off_t)map.ciphertext_offset) !=
-        (ssize_t)map.plaintext_length)
-        return -EIO;
+    rc = recovery_pread_full(data_fd, cipher, map.plaintext_length,
+                             (off_t)map.ciphertext_offset);
+    if (rc != 0)
+        return rc;
     return pqc_crypto_crypt_block_gcm(key, key_len, file_id, block,
                                       map.generation, map.plaintext_length,
                                       cipher, plain, map.tag, 0, 0);

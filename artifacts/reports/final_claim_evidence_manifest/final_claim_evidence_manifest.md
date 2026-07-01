@@ -1,10 +1,10 @@
 # Final Claim-to-Evidence Manifest
 
-- Generated: `2026-06-30T14:33:17Z`
+- Generated: `2026-06-30T22:15:20Z`
 - Overall pass: `True`
-- Paper pages: `12`
-- Numeric claim candidates: `22`
-- Abstract/conclusion/security/recovery claims: `35`
+- Paper pages: `13`
+- Numeric claim candidates: `21`
+- Abstract/conclusion/security/recovery claims: `36`
 - Uncovered numeric candidates: `0`
 - Uncovered cross claims: `0`
 

@@ -827,7 +827,7 @@ def run_um_bench():
 def run_sqlite_bench():
     storage_dir = Path(tempfile.mkdtemp(prefix="skim_sqlite_store_"))
     mount_dir = Path(tempfile.mkdtemp(prefix="skim_sqlite_mnt_"))
-    proc = start_fuse(storage_dir, mount_dir, {"PQC_ALLOW_SQLITE_MMAP": "1"})
+    proc = start_fuse(storage_dir, mount_dir)
     try:
         rows = []
         for tier_name, tier in [("full", None), ("plain", 2)]:
@@ -971,7 +971,7 @@ def sqlite_exec_with_retry(conn, sql, params=None, attempts=5, delay=0.02):
 
 def run_sqlite_contention_bench(trials_per_tier=1, sessions=1, batches=2, seed_rows=50, timeout_s=20):
     def _contention_run(storage_dir, mount_dir, requested_mode):
-        proc = start_fuse(storage_dir, mount_dir, {"PQC_ALLOW_SQLITE_MMAP": "1"})
+        proc = start_fuse(storage_dir, mount_dir)
         try:
             rows = []
             errors = []

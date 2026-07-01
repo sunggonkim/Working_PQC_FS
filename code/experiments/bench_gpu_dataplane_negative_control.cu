@@ -34,12 +34,14 @@ static int cpu_gcm_batch(const uint8_t key[32],
                          const std::vector<size_t> &offsets,
                          const std::vector<size_t> &lengths)
 {
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (!ctx)
+        return -1;
+    int rc = 0;
     for (size_t i = 0; i < lengths.size(); ++i) {
-        EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
-        if (!ctx)
-            return -1;
         int out_len = 0;
-        int ok = EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), nullptr, key,
+        int ok = EVP_CIPHER_CTX_reset(ctx) == 1 &&
+                 EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), nullptr, key,
                                     nonces.data() + i * kNonceBytes) == 1 &&
                  EVP_EncryptUpdate(ctx, nullptr, &out_len,
                                    aads.data() + i * kAadBytes,
@@ -52,11 +54,13 @@ static int cpu_gcm_batch(const uint8_t key[32],
                  EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG,
                                      static_cast<int>(kTagBytes),
                                      tags.data() + i * kTagBytes) == 1;
-        EVP_CIPHER_CTX_free(ctx);
-        if (!ok)
-            return -1;
+        if (!ok) {
+            rc = -1;
+            break;
+        }
     }
-    return 0;
+    EVP_CIPHER_CTX_free(ctx);
+    return rc;
 }
 
 static uint64_t elapsed_ns(std::chrono::steady_clock::time_point start,
@@ -92,7 +96,7 @@ int main(int argc, char **argv)
     for (size_t i = 0; i < sizeof(key); ++i)
         key[i] = static_cast<uint8_t>(0x40u + i);
 
-    const size_t counts[] = {1, 4, 16, 64};
+    const size_t counts[] = {1, 4, 16, 64, 256};
     for (size_t count : counts) {
         const size_t total = count * kBlockBytes;
         std::vector<uint8_t> input(total), cpu_out(total), gpu_out(total);

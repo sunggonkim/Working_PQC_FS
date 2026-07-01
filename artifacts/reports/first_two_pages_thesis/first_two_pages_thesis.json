@@ -2,7 +2,7 @@
   "checks": {
     "compiled_first_two_pages_present": true,
     "no_overstrong_freshness_root_language": true,
-    "paper_pages_12": true,
+    "paper_pages_le_13": true,
     "positive_contributions_before_defensive_scope": true,
     "source_anchors_present": true,
     "support_gates_pass": true
@@ -20,7 +20,7 @@
     "positive_before_defensive": true
   },
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "pdf_checks": [
     {
       "name": "first_page_pressure_figure",
@@ -173,7 +173,7 @@
       "name": "not_weaker_component_stack",
       "path": "Paper/2_Background.tex",
       "present": true,
-      "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption. It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external replay-after-advance checks under one evidence contract. In that setting, the storage layer exposes policy decisions that conventional encryption layers usually hide. A FUSE daemon can decide whether a maintenance job is latency-sensitive, batch-shaped, or replay-critical; it can also fail closed before exposing a file whose envelope, checkpoint, or external anchor is inconsistent."
+      "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption. It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external replay-after-advance checks under one evidence contract. The capability matrix on the first page and Figure~\\ref{fig:problem_boundary} are not performance rankings. They explain why AEGIS-Q is evaluated as a placement/QoS runtime rather than as a replacement for mature deployed filesystems: existing encryption layers protect bytes, GPU-storage systems optimize data movement, and kernel controls shape I/O priority, but none of those boundaries simultaneously sees file-encryption state, accelerator slack, UMA pressure, and replay-aware recovery exposure."
     }
   ],
   "support_gates": [

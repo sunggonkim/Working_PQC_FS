@@ -38,6 +38,7 @@ void pqc_plane_trace_record_keyplane_batch(uint64_t candidate_files,
                                            int gpu_used,
                                            int success);
 void pqc_plane_trace_record_freshness_anchor(uint32_t backend, int rc);
+int pqc_plane_trace_enabled(void);
 void pqc_plane_trace_snapshot(pqc_plane_trace_snapshot_t *out);
 void pqc_plane_trace_reset(void);
 int pqc_plane_trace_dump_if_requested(void);

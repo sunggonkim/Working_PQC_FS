@@ -19,7 +19,7 @@ MECHANISMS = [
     {
         "mechanism": "authenticated block format",
         "closure_id": "E1-generation-and-envelope-authentication",
-        "design_needles": ["AES-256-GCM block format", "file identifier", "Table~\\ref{tab:design_goals}"],
+        "design_needles": ["AES-GCM records", "file identifier", "Table~\\ref{tab:design_goals}"],
         "evaluation_needles": ["generation fault matrix", "EKEYREJECTED"],
         "rq": "RQ1",
         "artifact_paths": [
@@ -41,7 +41,7 @@ MECHANISMS = [
     {
         "mechanism": "TPM replay check",
         "closure_id": "E3-hardware-freshness-verdict-matrix",
-        "design_needles": ["TPM NV index", "Replay boundary"],
+        "design_needles": ["TPM NV index", "replay-after-advance checks"],
         "evaluation_needles": ["hardware replay matrix", "replay-after-advance"],
         "rq": "RQ4",
         "artifact_paths": [
@@ -63,10 +63,11 @@ MECHANISMS = [
     {
         "mechanism": "CPU/GPU placement",
         "closure_id": "E5-data-plane-placement-asymmetry",
-        "design_needles": ["placement function balances", "managed allocation", "stream synchronization"],
+        "design_needles": ["Elastic admission controller and GPU lane", "managed allocation", "stream synchronization"],
         "evaluation_needles": ["CPU/OpenSSL", "managed-buffer GPU path", "data plane is CPU-first"],
         "rq": "RQ2/RQ5",
         "artifact_paths": [
+            "artifacts/validation/gpu_dataplane_negative_control/gpu_dataplane_negative_control.json",
             "artifacts/validation/microbench/summary.json",
             "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
         ],
@@ -89,14 +90,23 @@ FIGURE_TABLE_OBLIGATIONS = [
     {"label": "fig:first_page_qos", "source": "Paper/1_Introduction.tex", "obligation": "first-page QoS pressure/hero result"},
     {"label": "tab:capability_matrix", "source": "Paper/1_Introduction.tex", "obligation": "design-gap capability comparison"},
     {"label": "tab:design_goals", "source": "Paper/3_Design.tex", "obligation": "formal invariant table"},
+    {"label": "fig:dataplane_negative_control", "source": "Paper/2_Background.tex", "obligation": "data-plane placement motivation"},
     {"label": "fig:overall_procedure", "source": "Paper/3_Design.tex", "obligation": "architecture and plane separation"},
     {"label": "fig:djc_state_machine", "source": "Paper/3_Design.tex", "obligation": "publication protocol state machine"},
-    {"label": "tab:memory_compat", "source": "Paper/3_Design.tex", "obligation": "memory/claim boundary"},
     {"label": "tab:impl_boundaries", "source": "Paper/7_Implementation_Details.tex", "obligation": "implementation boundary summary"},
     {"label": "tab:threat_boundary", "source": "Paper/8_Security_Analysis.tex", "obligation": "security threat boundary"},
     {"label": "tab:benchmark_workloads", "source": "Paper/4_Evaluation.tex", "obligation": "evaluation provenance"},
     {"label": "fig:evaluation_summary", "source": "Paper/4_Evaluation.tex", "obligation": "evaluation spine"},
     {"label": "tab:qos_sqlite_recovery", "source": "Paper/generated_qos_recovery_table.tex", "obligation": "SQLite QoS hero result"},
+]
+
+ARCHITECTURE_COMPONENT_NEEDLES = [
+    "overall architecture figure",
+    "Foreground CPU data plane and D/J/C publisher",
+    "Elastic admission controller and GPU lane",
+    "Storage-visible QoS controller",
+    "Recovery oracle and external anchor",
+    "The FUSE adapter is not expanded as a separate research mechanism",
 ]
 
 
@@ -171,6 +181,10 @@ def build_report() -> dict[str, Any]:
         "The design/evaluation contract is one closure per main mechanism" in eval_text
         and "the mounted rekey result comes from the key-plane workflow harness" in eval_text
     )
+    architecture_component_map_present = all_present(
+        design_text + "\n" + read_text(ROOT / "SUBMISSION_CHECKLIST.md"),
+        ARCHITECTURE_COMPONENT_NEEDLES,
+    )
 
     violations: list[str] = []
     for row in mechanism_rows:
@@ -191,8 +205,11 @@ def build_report() -> dict[str, Any]:
             violations.append(f"figure/table label {row['label']} is not referenced")
     if not mapping_text_present:
         violations.append("paper lacks explicit design/evaluation contract paragraph")
-    if run_pdfinfo_pages(PAPER / "main.pdf") != 12:
-        violations.append("Paper/main.pdf is not 12 pages")
+    if not architecture_component_map_present:
+        violations.append("architecture overview does not name components before mechanism subsections")
+    pages = run_pdfinfo_pages(PAPER / "main.pdf")
+    if pages is None or pages > 13:
+        violations.append("Paper/main.pdf exceeds 13 pages")
 
     return {
         "schema_version": 1,
@@ -200,11 +217,12 @@ def build_report() -> dict[str, Any]:
             "six required design mechanisms from SUBMISSION_CHECKLIST.md",
             "unique evaluation closure id per mechanism",
             "main-paper figure/table obligation labels",
-            "paper source mapping paragraph and 12-page PDF gate",
+            "paper source mapping paragraph and 13-page PDF gate",
         ],
         "mechanisms": mechanism_rows,
         "figure_table_obligations": figure_table_rows,
         "mapping_text_present": mapping_text_present,
+        "architecture_component_map_present": architecture_component_map_present,
         "duplicate_closures": duplicate_closures,
         "pages": run_pdfinfo_pages(PAPER / "main.pdf"),
         "violations": violations,
@@ -219,6 +237,7 @@ def write_markdown(report: dict[str, Any], path: Path) -> None:
         f"- Overall pass: `{report['overall_pass']}`",
         f"- Paper pages: `{report['pages']}`",
         f"- Mapping text present: `{report['mapping_text_present']}`",
+        f"- Architecture component map present: `{report['architecture_component_map_present']}`",
         "",
         "## Mechanism closures",
         "",

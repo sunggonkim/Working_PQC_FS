@@ -1,5 +1,6 @@
 {
   "checklist_state": {
+    "active_p1_performance_cleanup": true,
     "current_cursor": null,
     "future_claim_expansions_listed": true,
     "has_closed_gate_register": true,
@@ -32,7 +33,7 @@
       "related_work_applicability": true
     }
   },
-  "generated_utc": "2026-06-30T16:24:00Z",
+  "generated_utc": "2026-07-01T13:02:10Z",
   "paper_strategy": [
     "Lead with the runtime-boundary thesis, not the artifact ledger.",
     "Use previous-paper pattern: early figure/table, concrete SOTA gap, named mechanism, quantitative outcome.",

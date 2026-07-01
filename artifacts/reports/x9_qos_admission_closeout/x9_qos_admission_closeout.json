@@ -120,7 +120,7 @@
         "guarded": true,
         "line": 96,
         "path": "Paper/4_Evaluation.tex",
-        "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity.  The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms slack freshness, and 0.80 queue threshold.  Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss).  No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips.  This keeps the claim on mounted storage-visible control, not an external application scheduler."
+        "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity.  The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are a 128~KiB minimum GPU byte gate, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms telemetry-age limit, and 0.80 queue threshold.  The key-plane workflow additionally requires an envelope-count gate and reports its separate break-even above, so a 4~KiB foreground record is never promoted to GPU merely because admission exists.  Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss).  No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips rather than per-sample oscillation.  We therefore interpret misclassification cost asymmetrically: a stale or conservative decision loses elastic background progress or ML-KEM speedup, while an aggressive threshold shows up as higher SQLite p99 and is bounded by the CPU/D/J/C foreground path.  This keeps the claim on mounted storage-visible control, not an external application scheduler."
       }
     ],
     "paper_files": [
@@ -269,7 +269,7 @@
     "defaults": {
       "ai_qos_min_budget_ns": 1730000,
       "deadline_margin_ns": 100000,
-      "gpu_min_batch_bytes": 4096,
+      "gpu_min_batch_bytes": 131072,
       "producer_slack_stale_ns": 250000000,
       "qos_enter_util": 0.7,
       "qos_exit_util": 0.6,
@@ -281,6 +281,6 @@
       "code/runtime/pqc_qos.c"
     ]
   },
-  "timestamp_utc": "2026-06-30T13:42:20.955835+00:00",
+  "timestamp_utc": "2026-07-01T12:29:23.732026+00:00",
   "verdict": "X9 is closed: the paper has enough retained evidence to answer the repeated QoS tradeoff review as a scoped Pareto/admission result, provided it keeps external application scheduling and free-throughput language out of claim scope."
 }

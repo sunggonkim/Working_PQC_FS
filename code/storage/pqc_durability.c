@@ -1,5 +1,6 @@
 #include "pqc_durability.h"
 
+#include "pqc_config.h"
 #include "pqc_metrics.h"
 
 #include <errno.h>
@@ -30,6 +31,22 @@ typedef struct {
 static pqc_durability_state_t g_durability;
 static pqc_durability_state_t g_mounted_durability;
 static atomic_int g_mounted_operations_active = ATOMIC_VAR_INIT(0);
+static atomic_int g_timing_enabled = ATOMIC_VAR_INIT(-1);
+
+static int durability_timing_enabled(void)
+{
+    int cached = atomic_load_explicit(&g_timing_enabled,
+                                      memory_order_relaxed);
+    if (cached >= 0)
+        return cached;
+    int enabled = pqc_config_enabled("PQC_DURABILITY_TIMING");
+    int expected = -1;
+    if (atomic_compare_exchange_strong_explicit(
+            &g_timing_enabled, &expected, enabled,
+            memory_order_relaxed, memory_order_relaxed))
+        return enabled;
+    return atomic_load_explicit(&g_timing_enabled, memory_order_relaxed);
+}
 
 static uint64_t monotonic_ns(void)
 {
@@ -81,14 +98,17 @@ static void state_record(pqc_durability_state_t *state,
 static int record_result(pqc_durability_op_t op,
                          pqc_durability_site_t site,
                          int rc, int saved_errno,
-                         uint64_t start_ns, uint64_t end_ns)
+                         uint64_t start_ns, uint64_t end_ns,
+                         int accounting_enabled)
 {
-    site = normalize_site(site);
-    uint64_t duration_ns = elapsed_ns(end_ns, start_ns);
-    state_record(&g_durability, op, site, rc, duration_ns);
-    if (atomic_load_explicit(&g_mounted_operations_active,
-                             memory_order_acquire)) {
-        state_record(&g_mounted_durability, op, site, rc, duration_ns);
+    if (accounting_enabled) {
+        site = normalize_site(site);
+        uint64_t duration_ns = elapsed_ns(end_ns, start_ns);
+        state_record(&g_durability, op, site, rc, duration_ns);
+        if (atomic_load_explicit(&g_mounted_operations_active,
+                                 memory_order_relaxed)) {
+            state_record(&g_mounted_durability, op, site, rc, duration_ns);
+        }
     }
     if (rc == 0)
         return 0;
@@ -124,49 +144,62 @@ const char *pqc_durability_site_name(pqc_durability_site_t site)
 
 int pqc_durability_fdatasync(int fd, pqc_durability_site_t site)
 {
-    uint64_t start_ns = monotonic_ns();
+    int accounting = durability_timing_enabled();
+    uint64_t start_ns = accounting ? monotonic_ns() : 0;
     int rc = fdatasync(fd);
     int saved_errno = errno;
-    uint64_t end_ns = monotonic_ns();
+    uint64_t end_ns = accounting ? monotonic_ns() : 0;
     return record_result(PQC_DURABILITY_OP_FDATASYNC, site, rc,
-                         saved_errno, start_ns, end_ns);
+                         saved_errno, start_ns, end_ns, accounting);
 }
 
 int pqc_durability_fsync(int fd, pqc_durability_site_t site)
 {
-    uint64_t start_ns = monotonic_ns();
+    int accounting = durability_timing_enabled();
+    uint64_t start_ns = accounting ? monotonic_ns() : 0;
     int rc = fsync(fd);
     int saved_errno = errno;
-    uint64_t end_ns = monotonic_ns();
+    uint64_t end_ns = accounting ? monotonic_ns() : 0;
     return record_result(PQC_DURABILITY_OP_FSYNC, site, rc,
-                         saved_errno, start_ns, end_ns);
+                         saved_errno, start_ns, end_ns, accounting);
 }
 
 int pqc_durability_syncfs(int fd, pqc_durability_site_t site)
 {
     int rc = -1;
     int saved_errno = ENOTSUP;
-    uint64_t start_ns = monotonic_ns();
+    int accounting = durability_timing_enabled();
+    uint64_t start_ns = accounting ? monotonic_ns() : 0;
 #ifdef SYS_syncfs
     rc = (int)syscall(SYS_syncfs, fd);
     saved_errno = errno;
 #endif
-    uint64_t end_ns = monotonic_ns();
+    uint64_t end_ns = accounting ? monotonic_ns() : 0;
     return record_result(PQC_DURABILITY_OP_SYNCFS, site, rc,
-                         saved_errno, start_ns, end_ns);
+                         saved_errno, start_ns, end_ns, accounting);
+}
+
+void pqc_durability_init_from_config(void)
+{
+    (void)durability_timing_enabled();
 }
 
 void pqc_durability_begin_mounted_operations(void)
 {
+    if (!durability_timing_enabled()) {
+        atomic_store_explicit(&g_mounted_operations_active, 0,
+                              memory_order_relaxed);
+        return;
+    }
     memset(&g_mounted_durability, 0, sizeof(g_mounted_durability));
     atomic_store_explicit(&g_mounted_operations_active, 1,
-                          memory_order_release);
+                          memory_order_relaxed);
 }
 
 void pqc_durability_end_mounted_operations(void)
 {
     atomic_store_explicit(&g_mounted_operations_active, 0,
-                          memory_order_release);
+                          memory_order_relaxed);
 }
 
 static void stats_snapshot_from_state(pqc_durability_state_t *state,
@@ -228,7 +261,8 @@ void pqc_durability_stats_reset(void)
     }
     memset(&g_mounted_durability, 0, sizeof(g_mounted_durability));
     atomic_store_explicit(&g_mounted_operations_active, 0,
-                          memory_order_release);
+                          memory_order_relaxed);
+    atomic_store_explicit(&g_timing_enabled, -1, memory_order_relaxed);
 }
 
 void pqc_durability_log_summary(void)
@@ -305,6 +339,18 @@ int pqc_durability_self_test(void)
         return -1;
 
     int rc = 0;
+    const char *old_timing = getenv("PQC_DURABILITY_TIMING");
+    int had_old_timing = old_timing != NULL;
+    int changed_timing_env = 0;
+    char *old_timing_copy = old_timing ? strdup(old_timing) : NULL;
+    if (old_timing && !old_timing_copy)
+        rc = -1;
+    if (rc == 0) {
+        if (setenv("PQC_DURABILITY_TIMING", "1", 1) != 0)
+            rc = -1;
+        else
+            changed_timing_env = 1;
+    }
     pqc_durability_stats_reset();
     if (write(fd, "x", 1) != 1)
         rc = -1;
@@ -343,5 +389,12 @@ int pqc_durability_self_test(void)
         rc = -1;
     unlink(path);
     pqc_durability_stats_reset();
+    if (changed_timing_env) {
+        if (had_old_timing && old_timing_copy)
+            (void)setenv("PQC_DURABILITY_TIMING", old_timing_copy, 1);
+        else
+            (void)unsetenv("PQC_DURABILITY_TIMING");
+    }
+    free(old_timing_copy);
     return rc;
 }

@@ -1,50 +1,52 @@
 \section{AEGIS-Q Design}
 \label{sec:design}
 
-\subsection{Planes and trusted state}
+\subsection{Overall procedure and component contracts}
 \label{sec:design_proc}
 
-Figure~\ref{fig:overall_procedure} separates the runtime into the three mechanisms needed by the edge thesis.  First, the persistent data plane uses an AES-256-GCM block format that is identical regardless of executor.  Second, the elastic lane admits only independent ML-KEM envelope-refresh and hash-maintenance work after slack and telemetry checks; it does not encrypt ordinary file blocks.  Third, the publication/replay plane decides when encrypted state becomes visible and when replayed state must fail closed.  Managed memory appears only inside the CUDA executor as a locality mechanism, so placement never changes the storage format or recovery rule.
-
-\begin{figure*}[t]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{Figures/fig_architecture.pdf}
-  \caption{AEGIS-Q runtime architecture after separating the paper's three boundaries.  Solid arrows are implemented mounted paths for foreground reads/writes, publication, recovery, and remount validation; dashed orange arrows are elastic maintenance paths that must pass admission and can fall back to CPU execution.  The bottom strip is the claim firewall enforced throughout the paper.}
+  \includegraphics[width=\columnwidth]{Figures/fig_architecture.pdf}
+  \caption{AEGIS-Q runtime architecture after separating the paper's three planes.  Solid arrows are implemented mounted paths for foreground reads/writes, publication, recovery, and remount validation; dashed orange arrows are elastic maintenance paths that must pass admission and can fall back to CPU execution.}
   \Description{Layered architecture diagram of the application boundary, mounted runtime, persistence and recovery layer, backing directory, optional GPU lane, optional TPM anchor, and non-claimed mechanisms.}
   \label{fig:overall_procedure}
-\end{figure*}
+\end{figure}
 
-The design is organized around seven invariants from the threat model and edge-runtime thesis: authenticated key exposure, nonce/generation safety, durable publication ordering, checkpoint exposure, external replay checks, unsupported-mode handling, and controller fallback.  These invariants are not the paper's main novelty by themselves; they are the constraints that allow the placement and QoS controller to use CPU, GPU, or fallback without changing what has been safely published.  Table~\ref{tab:design_goals} states the boundary; its POSIX row is only a mounted-workload guardrail, not the research axis.
+Figure~\ref{fig:overall_procedure} is the design map for AEGIS-Q.  The section starts from this overall procedure because the paper's claim depends on which component owns each boundary, not on a collection of independent optimizations.  The runtime is organized around three planes: \emph{foreground publication}, where read/write/\texttt{fsync} becomes authenticated 4~KiB AES-GCM records and is exposed only after D/J/C publication; \emph{elastic maintenance}, where rekey/hash batches may use the GPU only after slack-gated admission; and \emph{recovery exposure}, where remount validates envelope, checkpoint, generation, tamper, and optional anchor state before exposing plaintext.
+
+Reading Figure~\ref{fig:overall_procedure} from top to bottom gives the normal mounted procedure.  A write enters through the FUSE adapter, is serialized against per-file state, becomes one or more CPU AES-GCM records, and remains hidden until the D/J/C publisher exposes the mapping.  A read performs the inverse path after remount-time validation has accepted the envelope and checkpoint.  A maintenance request, such as open-file envelope refresh, enters a separate queue: admission first checks independence, batch size, slack, telemetry freshness, and GPU queue pressure, then either runs the batch in the CUDA/cuPQC lane or returns it to the CPU.  Remount starts from the bottom of the figure: the recovery oracle authenticates checkpoint state, replays only reachable journal mappings, and optionally compares the committed root with an external replay anchor before any plaintext is exposed.
+
+Table~\ref{tab:component_contracts} names the Figure~\ref{fig:overall_procedure} boxes that matter to the research claim.  Each row states the box's owned boundary, why the box is necessary for the edge-runtime thesis, and which evaluation row closes it.  This is the organizing rule for the rest of the section: subsection names are component or algorithm names from the figure, not incidental implementation topics.  The table is also a filter.  A mechanism that cannot be named from Figure~\ref{fig:overall_procedure} and cannot point to a closing evaluation row is implementation detail, limitation, or future work rather than a design subsection.
 
 \begin{table*}[t]
 \centering
-\caption{Formal storage-protocol invariants, implementation loci, exercised paths, and claim boundaries.}
-\scriptsize
+\caption{Architecture-indexed component contracts used to read Figure~\ref{fig:overall_procedure}.}
+\tiny
 \setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\textwidth}{P{0.20\textwidth}|P{0.27\textwidth}|P{0.25\textwidth}|Y}
+\begin{tabularx}{\textwidth}{P{0.20\textwidth}|P{0.26\textwidth}|P{0.27\textwidth}|Y}
 \toprule
-\textbf{Invariant} & \textbf{Implementation locus} & \textbf{Exercised path} & \textbf{Claim boundary}\\
+\textbf{Figure component} & \textbf{Owned boundary} & \textbf{Why it matters} & \textbf{Evaluation closure}\\
 \midrule
-Envelope authentication before DEK use & \texttt{metadata\_load()} verifies the HMAC-protected envelope before \texttt{pqc\_open()} installs file state & Clean-remount regression and \texttt{user.pqc\_metadata} tamper rejection returning \texttt{EKEYREJECTED} & Remountable authenticated envelope; no hardware-bound credential release\\
-AEAD nonce uniqueness & \texttt{derive\_block\_nonce()}, \texttt{build\_block\_aad()}, and \texttt{do\_flush\_wbuf\_locked()} bind file identifier, block, generation, and length & Generation fault matrix, self-test replay regression, clean-remount validation, and daemon cutpoint matrix & Generation-bound record format; physical power loss and broad workload certification remain open\\
-Data-before-mapping publication & \texttt{do\_flush\_wbuf\_locked()} writes \texttt{.pqcdata}, calls \texttt{fdatasync}, appends \texttt{.pqcmeta}, then syncs the journal & Journal self-test, daemon cutpoint matrix, and SQLite selected-boundary campaign & D/J ordering evidence; no physical power-loss or drive-cache certification\\
-Checkpoint exposure rule & \texttt{logical\_size\_store()}, \texttt{checkpoint\_store()}, \texttt{checkpoint\_load()}, and remount \texttt{ctx\_set()} expose size/checkpoint state only after journal publication & Checkpoint self-test, clean remount, and stale-replay fail-closed artifacts & Authenticated checkpoint exposure; lower-filesystem xattr/directory ordering is delegated\\
-External-anchor replay condition & \texttt{checkpoint\_store()} propagates hardware-anchor failures and \texttt{checkpoint\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retained as a negative control & Replay-after-advance check only; no persistent PCR-bound lifecycle claim\\
-Unsupported-mode boundary & \texttt{pqc\_open()} defaults to FUSE \texttt{direct\_io}; new-target, closed/open-target overwrite, open-source, empty/no-open directory-tree rename, directory \texttt{fsync}, no-open regular-file hard links, relative symlinks, and hidden internal xattrs are bounded callbacks & POSIX scope audit plus current remount/SQLite selected-boundary tests & Ordinary read/write/\texttt{fsync}, disjoint, same-block full-overwrite, and one partial-overlap writer subset; no shared \texttt{mmap}, open-subtree retargeting, full hard-link lifecycle, or full directory-entry crash durability\\
-Controller safety fallback & \texttt{pqc\_block\_job\_choose\_target()} and \texttt{pqc\_admit()} default to CPU on missing slack, stale telemetry, size, deadline, or queue-pressure constraints & Scheduler self-test, admission sweeps, and same-run CUPTI/tegrastats-to-mounted-FUSE throttle traces & Implemented conservative fallback; no non-storage foreground scheduler claim\\
+FUSE adapter & Namespace callbacks, fd context, and per-file locking; routes operations into the mechanism components. & Keeps the paper at the mounted edge-encryption boundary rather than a disconnected accelerator library. & POSIX scope audit and mounted workload rows.\\
+Foreground CPU data plane and D/J/C publisher & AES-GCM record creation, generation/AAD binding, data-before-journal-before-checkpoint exposure. & Makes CPU-first placement compatible with durable authenticated publication. & AES-GCM negative control, strict/epoch publication rows, generation and remount matrices.\\
+Elastic admission controller and GPU lane & Slack-gated ML-KEM/hash maintenance queue with CPU fallback and executor-local managed memory. & Preserves GPU use for independent batched PQC work without moving foreground writes onto the accelerator. & cuPQC primitive row, mounted rekey workflow, break-even and fallback sensitivity.\\
+Storage-visible QoS controller & File-class and telemetry driven throttling for elastic writes inside the mounted daemon. & Shows that placement is a storage-visible control problem under UMA pressure, not an external app scheduler. & SQLite p99/background Pareto row and admission sensitivity bundle.\\
+Recovery oracle and external anchor & Remount exposure, tamper rejection, generation replay checks, and optional replay-after-advance anchor. & Prevents placement and QoS claims from weakening the persistent security contract. & Tamper/remount, daemon cutpoint, lower-block, file-anchor negative-control, and TPM replay-after-advance rows.\\
 \bottomrule
 \end{tabularx}
-\label{tab:design_goals}
+\label{tab:component_contracts}
 \end{table*}
 
-New roots use OpenSSL scrypt in versioned \texttt{.pqc\_kdf} metadata (random 32-byte per-filesystem salt; \(N=32768\), \(r=8\), \(p=1\), 64~MiB max memory); roots lacking it use the legacy PBKDF2-HMAC-SHA256 compatibility path.  PBKDF2 is not the new-root default.  New files receive random 256-bit DEKs and file identifiers; each DEK is masked under mount-key/file-ID material and HMAC-authenticated before open accepts it.  The file identifier, generation, logical block number, and plaintext length are AES-GCM associated data, preventing valid records from moving to different logical positions.
+These names are the design units used by the implementation and evaluation; mechanisms that do not fit one of these contracts are treated as out of scope rather than hidden in the architecture.  The FUSE adapter is not expanded as a separate research mechanism because it routes operations into the four substantive components rather than changing placement, publication, QoS, or recovery semantics.  The section therefore follows the standard systems-paper pattern used by the prior work we model: motivation establishes why static placement fails, design starts from an overall architecture/procedure figure, the figure's components receive short contracts, and only the important boxes become mechanism subsections.
 
-The password-derived mount key is never hardware-released; scrypt does not remove weak-password or offline-guessing risk.  There is no hardware-backed credential release path for the mount key.  The rekey is open-file DEK refresh rather than deployed credential rotation: HMAC envelope rewrap for open files; runtime key epoch is in-memory bookkeeping, not a persistent anti-rollback journal.  There is no transactional rewrap recovery claim, and password-derived envelope alone is not rollback resistance; stale old envelopes fail only when generation/checkpoint/external-anchor evidence rejects them.
+This decomposition is deliberately asymmetric.  Foreground components are synchronous and format-defining; maintenance components are elastic and format-preserving; recovery components are exposure gates.  Placement is therefore subordinate to storage correctness.  It may change where elastic maintenance work executes, but it cannot change the durable format, nonce rule, publication order, or replay oracle.  Managed memory appears only inside the CUDA executor, so placement can change maintenance locality but not the storage format or recovery contract.  The following subsections therefore expand the named boxes in Figure~\ref{fig:overall_procedure}: Section~\ref{sec:design_pipeline} defines the foreground CPU data plane and D/J/C publisher, Section~\ref{sec:design_uma} defines the elastic admission controller and GPU lane, Section~\ref{sec:design_qos} defines the storage-visible QoS controller, and Section~\ref{sec:design_security} defines the recovery oracle and external anchor.
 
-\subsection{Durable encrypted-block publication}
+\subsection{Foreground CPU data plane and D/J/C publisher}
 \label{sec:design_pipeline}
 
-Writes are coalesced only when they are contiguous.  For each affected 4~KiB logical block, AEGIS-Q reads the current authenticated block if necessary, applies the modification, assigns a strictly increasing generation, and derives the GCM nonce from \((\mathit{fileID},\mathit{block},\mathit{generation})\).  The commit order is:
+The CPU data plane expands the teal foreground path in Figure~\ref{fig:overall_procedure}.  Its design goal is not GPU acceleration; it is to turn ordinary mounted writes into authenticated records whose exposure point is explicit.  New files receive random 256-bit DEKs and file identifiers.  The key envelope authenticates the DEK before open accepts it, and the data path then encrypts only with the installed DEK.
+
+Writes are coalesced only when they are contiguous.  For each affected 4~KiB logical block, AEGIS-Q reads the current authenticated block if necessary, applies the modification on the CPU AES-GCM path, assigns a strictly increasing generation, and derives the GCM nonce from \((\mathit{fileID},\mathit{block},\mathit{generation})\).  The file identifier, generation, logical block number, and plaintext length are AES-GCM associated data, preventing valid records from moving to different logical positions.  The commit order is:
 
 \begin{enumerate}
   \item write ciphertext records to \texttt{.pqcdata} and call \texttt{fdatasync};
@@ -62,47 +64,90 @@ Figure~\ref{fig:djc_state_machine} makes the publication protocol explicit.  It 
   \label{fig:djc_state_machine}
 \end{figure*}
 
-The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \texttt{fsync} flushes the coalescing buffer, waits for local pending work, and calls \texttt{fdatasync} on both sidecars before returning.  The lower-filesystem matrix assumes \texttt{fdatasync} D-before-J ordering and checkpoint xattr visibility after mapping publication; directory-entry operations are rejected rather than certified.
+The D/J/C publisher is the publication component.  Its journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \texttt{fsync} flushes the coalescing buffer, waits for local pending work, and calls \texttt{fdatasync} on both sidecars before returning.  The lower-filesystem contract is D/J sidecar order: \texttt{fdatasync} on \texttt{.pqcdata}, then \texttt{fdatasync} on \texttt{.pqcmeta}, followed by checkpoint/xattr visibility through the same lower filesystem.  Reordering after acknowledged sync or lost xattrs is outside the selected crash model; directory-entry durability is claimed only for scoped directory-\texttt{fsync} workloads.
 
 Strict and epoch publication share one accepted-state invariant.  Strict publishes data then journal/checkpoint per sync and replays the newest authenticated mapping.  Epoch publishes only a complete grouped \texttt{syncfs} prefix and discards incomplete tails; it amortizes aligned writers but can lose to wait time, sparse groups, or replay work.  Thus epoch changes the barrier schedule, not the nonce, AAD, or replay semantics.
 
-The generation transition is per-file.  A publish-ticket serializes reservation turns; before encryption, near wraparound fails with \texttt{EFBIG} if the affected block count would pass \texttt{UINT64\_MAX}.  Otherwise AEGIS-Q reserves \([\mathit{next}+1,\mathit{next}+n]\) in checkpoint/high-water state, may skip interrupted reservations, advances committed generation only after publication, recovers only mappings reachable through the validated boundary, and rejects duplicate epoch records for the same file, block, and generation.  Misuse-resistant SIV-style AEAD would trade this state obligation for extra passes; AEGIS-Q instead tests older-generation replay while not claiming physical power-loss, arbitrary application-level concurrency, or broad crash-consistency certification.
+The generation transition is per-file.  A publish-ticket serializes reservation turns; before encryption, near wraparound fails with \texttt{EFBIG} if the affected block count would pass \texttt{UINT64\_MAX}.  Otherwise AEGIS-Q reserves \([\mathit{next}+1,\mathit{next}+n]\) in checkpoint/high-water state, may skip interrupted reservations, advances committed generation only after publication, recovers only mappings reachable through the validated boundary, and rejects duplicate epoch records for the same file, block, and generation.  Misuse-resistant SIV-style AEAD would trade this state obligation for extra passes; AEGIS-Q instead tests older-generation replay while keeping the selected crash model explicit.
+
+The envelope path is deliberately narrower than a full key-management system.  New roots use OpenSSL scrypt in versioned \texttt{.pqc\_kdf} metadata (random 32-byte per-filesystem salt; \(N=32768\), \(r=8\), \(p=1\), 64~MiB max memory); roots lacking it use the legacy PBKDF2-HMAC-SHA256 compatibility path.  The password-derived mount key is never hardware-released, and open-file rekey is an HMAC envelope refresh rather than a persistent credential-rotation protocol.
 
 Unsupported POSIX modes are part of the design boundary, not the research axis.  The scope audit covers the ordinary read/write/\texttt{fsync}, scoped rename, directory \texttt{fsync}, no-open hard-link, symlink, and bounded writer subsets needed by the mounted workloads; it rejects or scopes out encrypted-file \texttt{mmap}/\texttt{msync}, open-subtree retargeting, arbitrary byte-range transactions, directory-entry crash durability, and full crash-time POSIX visibility.
 
-\subsection{Managed-memory boundary and scheduler}
+\subsection{Elastic admission controller and GPU lane}
 \label{sec:design_uma}
 
-Table~\ref{tab:memory_compat} summarizes the claims that the source code actually makes: accelerator placement must be subordinate to storage correctness, CPU/GPU ownership is protected by the FUSE per-file lock and stream completion, and CUDA prefetch is used only to influence locality.  No table entry is a statement about NVMe page pinning, cache coherence of a third-party DMA engine, or CUDA attach-mode permissions.
+The elastic placement controller expands the orange path in Figure~\ref{fig:overall_procedure}.  AEGIS-Q keeps CPU/GPU placement dynamic, but only for work whose semantics permit delay and fallback.  Foreground AES-GCM records are immediately classified as CPU work because Figure~\ref{fig:dataplane_negative_control} shows that 4~KiB--1~MiB managed-buffer GPU AES-GCM loses to CPU on the mounted-write range.  GPU use is therefore not removed; it is constrained to the GPU lane: independent, batched, slack-tolerant maintenance work where cuPQC can amortize launch and staging.
 
-\begin{table}[t]
-\centering
-\caption{Memory-path hardware claims and their exercised status.}
-\scriptsize
-\setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\columnwidth}{P{0.38\columnwidth}|P{0.20\columnwidth}|Y}
-\toprule
-\textbf{Mechanism} & \textbf{Status} & \textbf{Claim retained}\\
-\midrule
-\texttt{cudaMallocManaged} + prefetch & Exercised & Managed allocation and explicit device/host prefetch complete.\\
-\texttt{posix\_memalign} + \texttt{cudaHostRegister} & Prototype-only & Host-memory pinning and executor-local access checks; not a storage-DMA path.\\
-\texttt{pread}/\texttt{pwrite} sidecars & Exercised & Backing ciphertext and journal use ordinary POSIX I/O.\\
-eBPF tracepoint notification & Not claimed & No eBPF notification path is part of the mounted implementation.\\
-QoS telemetry & SQLite recovery only & Workload/CUPTI traces can drive mounted-FUSE throttling; no application scheduler or non-storage p99 recovery claim.\\
-\bottomrule
-\end{tabularx}
-\label{tab:memory_compat}
-\end{table}
+The hardware boundary is intentionally narrow: CUDA managed allocation, prefetch, and stream synchronization are executor-local; backing ciphertext and journals still use ordinary \texttt{pread}/\texttt{pwrite} sidecars.  Prototype host-pinning checks are not a storage-DMA path.
 
-The placement function balances work between the ARM CPUs and the Jetson GPU by classifying each job as foreground-sensitive data-plane work, elastic key-plane work, or unsupported optimistic offload.  The current revision does not expose an \texttt{O\_DIRECT} storage path into GPU memory.  The CUDA executor instead uses managed allocation, explicit prefetch, and stream synchronization as locality and ordering controls.
+The placement algorithm is a fast predicate rather than a general scheduler.  Each job first becomes foreground-sensitive data-plane work, elastic key-plane work, or unsupported optimistic offload.  For a job \(j\), AEGIS-Q chooses the GPU only when
+\[
+\begin{aligned}
+\mathrm{GPU}(j) \Leftarrow{}&
+\mathrm{maint}(j) \wedge \mathrm{indep}(j)
+\wedge \mathrm{batch}(j) \ge B_{\min} \\
+&\wedge \mathrm{slack}(j) > C_{\mathrm{launch}} + C_{\mathrm{stage}} + \Delta \\
+&\wedge \mathrm{fresh}(\mathrm{telemetry}) \wedge Q_{\mathrm{gpu}} < Q_{\max}.
+\end{aligned}
+\]
+This predicate is Algorithm~\ref{alg:placement} in the implementation: foreground data-plane jobs fail the first predicate and return CPU before taking the scheduler lock.  Maintenance jobs fail closed: missing telemetry is zero budget, stale slack returns CPU, deadline and queue-pressure gates must pass, and failed predicates record a deferral reason.  The error model is asymmetric: a false negative loses background progress or ML-KEM speedup; a false positive remains elastic maintenance and still produces the same persistent format after stream synchronization.  No telemetry decision can move foreground AES-GCM to the GPU, skip D/J/C publication, or expose data before the recovery oracle accepts it.
 
-QoS follows Figure~\ref{fig:first_page_qos}: unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling elastic writes, not by claiming application scheduling or completion bypass.
-
-The producer-facing interface is conservative.  A job enters the elastic lane only when its size and batch shape make GPU execution plausible, the producer supplies nonzero relative slack, and telemetry is fresh enough to avoid adding pressure to the foreground path.  Missing, zero, or stale slack falls back to CPU with the deferral reason.  The mounted path also exposes \texttt{user.pqc\_qos\_class}: latency files are traced but never daemon-slept, elastic files are throttle-eligible, and SQLite sidecars inherit the base-file class.
+\begin{algorithm}[t]
+\caption{Elastic placement admission}
+\label{alg:placement}
+\begin{algorithmic}[1]
+\Require job \(j\), producer slack, fresh telemetry snapshot
+\If{\(j\) is foreground AES-GCM or publication work}
+  \State \Return CPU
+\EndIf
+\If{\(j\) is not independent maintenance work}
+  \State \Return CPU
+\EndIf
+\If{batch \(< B_{\min}\) or slack \(\le C_{\mathrm{launch}}+C_{\mathrm{stage}}+\Delta\)}
+  \State \Return CPU
+\EndIf
+\If{telemetry is stale or GPU queue pressure exceeds \(Q_{\max}\)}
+  \State \Return CPU
+\EndIf
+\State \Return GPU lane with CPU fallback on execution failure
+\end{algorithmic}
+\end{algorithm}
 
 The evaluated key-plane workflow applies this rule by batching open-file descriptors for ML-KEM envelope refresh, encapsulating on the selected executor, installing 32-byte refreshed DEK material, and rewriting the HMAC-authenticated envelope.  It is not a persistent KEM hierarchy or hardware-backed credential lifecycle.
 
-\subsection{Replay boundary}
+\subsection{Storage-visible QoS controller}
+\label{sec:design_qos}
+
+The QoS controller is the storage-visible counterpart to admission.  It handles the case where elastic work is still legal but should slow down because foreground storage is under pressure.  A job enters the elastic lane only when its size and batch shape make GPU execution plausible, the producer supplies nonzero relative slack, and telemetry is fresh enough to avoid adding pressure to the foreground path.  Missing, zero, or stale slack falls back to CPU with the deferral reason.
+
+The mounted interface exposes \texttt{user.pqc\_qos\_class}: latency files are traced but never daemon-slept, elastic files are throttle-eligible, and SQLite sidecars inherit the base-file class.  This is mounted-FUSE throttling, not an external application scheduler.  Throttling can delay an elastic flush, but it cannot skip D/J/C publication, change generations, or make a GPU record visible earlier.  Thus Figure~\ref{fig:first_page_qos} is a storage-visible placement result: AEGIS-Q spends background progress to reduce foreground storage-tail pressure while keeping authenticated publication unchanged.
+
+\subsection{Recovery oracle and external anchor}
 \label{sec:design_security}
 
-The file anchor is an authenticated on-disk record.  Because an attacker able to restore the backing directory can restore that record as well, it is explicitly \emph{not} rollback protection.  The crash/replay harness treats this behavior as a negative control.  The optional hardware backend refuses to mount when its TPM NV index was not provisioned by an administrator; it never creates persistent TPM state implicitly.  The hardware claim is narrower: replay after the anchor advances fails closed.  A stronger rollback-resistance claim requires a separately protected TPM policy, defined NV authorization, a recovery protocol, and power-loss results for that exact configuration.
+The recovery oracle expands the bottom half of Figure~\ref{fig:overall_procedure}.  On remount, AEGIS-Q authenticates the key envelope and checkpoint, replays only journal mappings whose ciphertext records are reachable under D/J/C order, checks file/block/generation/length AAD on read, and exposes the logical size only after checkpoint validation.  A tail ciphertext record without a durable journal entry is ignored; a stale or tampered authenticated record fails before data is returned.
+
+The external-anchor path is optional and narrower than full rollback protection.  The file anchor is an authenticated on-disk record.  Because an attacker able to restore the backing directory can restore that record as well, it is explicitly \emph{not} rollback protection.  The crash/replay harness treats this behavior as a negative control.  The optional hardware backend refuses to mount when its TPM NV index was not provisioned by an administrator; it never creates persistent TPM state implicitly.  In that backend, replay after the anchor advances fails closed.  These are replay-after-advance checks, not a persistent freshness lifecycle.  A stronger rollback-resistance claim requires a separately protected TPM policy, defined NV authorization, a recovery protocol, and power-loss results for that exact configuration.
+
+Table~\ref{tab:design_goals} summarizes the invariant boundary after the mechanisms have been introduced.  Its purpose is to bind each design claim to an implementation locus and exercised path; it is not a separate feature list.
+
+\begin{table*}[t]
+\centering
+\caption{Design invariants, implementation loci, exercised paths, and scope boundaries.}
+\tiny
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{P{0.20\textwidth}|P{0.43\textwidth}|Y}
+\toprule
+\textbf{Invariant} & \textbf{Implementation locus and exercised path} & \textbf{Claim boundary}\\
+\midrule
+Envelope before DEK use & \texttt{metadata\_load()} verifies the HMAC envelope before \texttt{pqc\_open()}; clean remount and metadata tamper return \texttt{EKEYREJECTED}. & Remountable authenticated envelope; no hardware-bound credential release.\\
+AEAD nonce/generation & \texttt{derive\_block\_nonce()}, \texttt{build\_block\_aad()}, and \texttt{do\_flush\_wbuf\_locked()} bind file identifier, block, generation, and length; generation fault and clean-remount rows exercise replay. & Generation-bound record format; no physical power loss or broad workload certification.\\
+Data-before-mapping publication & \texttt{do\_flush\_wbuf\_locked()} syncs \texttt{.pqcdata} before \texttt{.pqcmeta}; journal, daemon cutpoint, lower-block, and SQLite rows exercise the selected D/J/C boundary. & D/J evidence only; no kernel-crash or drive-cache certification.\\
+Checkpoint and anchor & \texttt{checkpoint\_store()/load()} gate logical-size exposure and propagate hardware-anchor failures; TPM replay-after-advance fails closed and file-anchor replay is a negative control. & Authenticated checkpoint and replay-after-advance only; no persistent PCR-bound lifecycle.\\
+Unsupported modes & FUSE \texttt{direct\_io}, scoped rename, directory \texttt{fsync}, no-open hard links, symlinks, and hidden xattrs are audited. & Mounted workload subset only; no shared \texttt{mmap}, open-subtree retargeting, full link lifecycle, or full directory-entry crash durability.\\
+Controller fallback & \texttt{pqc\_block\_job\_choose\_target()} and \texttt{pqc\_admit()} return CPU on missing slack, stale telemetry, size, deadline, or queue pressure; scheduler/admission traces exercise this path. & Conservative fallback; no non-storage foreground scheduler claim.\\
+\bottomrule
+\end{tabularx}
+\label{tab:design_goals}
+\end{table*}

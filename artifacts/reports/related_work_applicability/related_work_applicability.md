@@ -1,14 +1,14 @@
 # Related-work and applicability audit
 
 - Overall pass: `True`
-- Paper pages: `12`
+- Paper pages: `13`
 - Dangerous unguarded claim hits: `0`
 
 ## Checks
 
 | Check | Pass |
 | --- | ---: |
-| `paper_pdf_pages_12` | `True` |
+| `paper_pdf_pages_le_13` | `True` |
 | `systems_literature_gate_passes` | `True` |
 | `technique_transfer_matrix_passes` | `True` |
 | `all_related_topics_present` | `True` |

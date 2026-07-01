@@ -11,15 +11,17 @@
       "first_page_qos_figure": true,
       "foreground_inference_claim_removed": true,
       "generation_x10": true,
+      "jetson_scope_not_portability": true,
       "kernel_assist_roadmap": true,
+      "lowerfs_contract_not_powerloss": true,
       "naive_failures": true,
       "pressure_opening": true,
       "qos_pareto": true,
       "rq_mapping": true,
       "thesis_sentence": true
     },
-    "score": 14,
-    "total": 14
+    "score": 16,
+    "total": 16
   },
   "previous_paper_patterns": [
     {
@@ -292,7 +294,7 @@
       "violations": []
     }
   },
-  "timestamp_utc": "2026-06-30T16:24:00.594157+00:00",
+  "timestamp_utc": "2026-07-01T13:02:10.169125+00:00",
   "verdict": {
     "accept_readiness": "defensible under scoped edge-runtime claims; SOSP/OSDI acceptance is still not guaranteed because breadth, measured fscrypt preference, power-loss, and deployment expectations are venue-dependent, but they are no longer contradictions in the current paper claim",
     "gates_ok": true,

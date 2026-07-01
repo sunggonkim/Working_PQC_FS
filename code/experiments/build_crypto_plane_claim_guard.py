@@ -201,12 +201,45 @@ def load_trace_smoke() -> dict[str, Any]:
         return {"exists": False}
     payload = json.loads(read(TRACE_SMOKE))
     verdict = payload.get("verdict", {})
+    ordinary_run = payload.get("runs", {}).get("ordinary", {})
+    forced_run = payload.get("runs", {}).get("forced_keyplane", {})
     ordinary = payload.get("runs", {}).get("ordinary", {}).get("trace", {})
     forced = payload.get("runs", {}).get("forced_keyplane", {}).get("trace", {})
+    ordinary_stderr = ROOT / str(ordinary_run.get("stderr", ""))
+    forced_stderr = ROOT / str(forced_run.get("stderr", ""))
+    ordinary_stderr_text = read(ordinary_stderr) if ordinary_stderr.exists() else ""
+    forced_stderr_text = read(forced_stderr) if forced_stderr.exists() else ""
     return {
         "exists": True,
         "path": relpath(TRACE_SMOKE),
         "overall_pass": verdict.get("overall_pass") is True,
+        "source_checks": payload.get("source_checks", {}),
+        "ordinary_stderr": ordinary_run.get("stderr"),
+        "forced_stderr": forced_run.get("stderr"),
+        "ordinary_keyplane_startup_disabled":
+            "PQC key-plane rekey disabled for this mount" in ordinary_stderr_text,
+        "ordinary_admission_startup_disabled":
+            "Elastic admission controller disabled for this mount" in ordinary_stderr_text and
+            "Admission controller initialized" not in ordinary_stderr_text,
+        "ordinary_scheduler_policy_skipped":
+            "Elastic scheduler policy reload skipped for this mount" in ordinary_stderr_text and
+            "Scheduler policy:" not in ordinary_stderr_text,
+        "ordinary_qos_monitor_skipped":
+            "QoS monitor startup skipped for this mount" in ordinary_stderr_text and
+            "GPU load monitor started" not in ordinary_stderr_text and
+            "Admission telemetry file monitor started" not in ordinary_stderr_text,
+        "ordinary_freshness_anchor_disabled":
+            ordinary.get("freshness_anchor_events", 0) == 0 and
+            ordinary.get("freshness_anchor_file_backend", 0) == 0 and
+            ordinary.get("freshness_anchor_hardware_backend", 0) == 0,
+        "ordinary_kem_keypair_absent":
+            "KEM algorithm" not in ordinary_stderr_text and
+            "Keypair generated" not in ordinary_stderr_text and
+            "PQC background rekey worker started" not in ordinary_stderr_text,
+        "forced_keyplane_worker_started":
+            forced_run.get("rekey_log_seen") is True and
+            forced.get("keyplane_batches", 0) > 0 and
+            forced.get("keyplane_refreshed_files", 0) > 0,
         "source_plane_boundary_present":
             verdict.get("source_plane_boundary_present") is True,
         "ordinary_aes_encrypt_blocks":
@@ -230,15 +263,24 @@ def paper_requirements() -> dict[str, Any]:
     paper = "\n".join(read(path) for path in sorted((ROOT / "Paper").glob("*.tex")))
     requirements = {
         "paper_says_data_plane_aes_gcm":
-            bool(re.search(r"data plane is an AES-256-GCM block format", paper)),
+            bool(re.search(r"AES-GCM encrypts and authenticates each data block", paper)),
         "paper_says_mlkem_limited_to_keyplane_envelope":
-            bool(re.search(r"key-plane workflow contains optional batched ML-KEM envelope refresh", paper)),
+            bool(re.search(r"ML-KEM only for the optional batched key-plane experiment", paper)),
         "paper_says_mlkem_does_not_encrypt_blocks":
-            bool(re.search(r"does not encrypt ordinary file blocks", paper)),
+            bool(re.search(r"ML-KEM establishes shared secrets, whereas AES-GCM remains the appropriate mechanism for bulk data records", paper)),
         "paper_says_aes_data_writes_cpu_first":
-            bool(re.search(r"AES-GCM data writes are latency-sensitive and remain CPU-first", paper)),
+            bool(re.search(r"keeps bulk data encryption on the CPU path", paper)),
         "paper_says_rekey_not_hardware_lifecycle":
             bool(re.search(r"not a persistent KEM hierarchy or hardware-backed credential lifecycle", paper)),
+        "paper_says_default_mount_skips_keyplane_startup":
+            bool(re.search(r"ordinary mounts with no rekey trigger do not allocate an ML-KEM object", paper)),
+        "paper_says_default_mount_skips_cuda_executor":
+            bool(re.search(r"do not preallocate the CUDA AES executor", paper)),
+        "paper_says_default_mount_skips_unused_admission":
+            "initialize elastic admission/scheduler/QoS monitor policy" in paper and
+            "update data-plane scheduler accounting unless rekey, QoS, telemetry, or admission tracing is configured" in paper,
+        "paper_says_external_anchor_is_optional":
+            bool(re.search(r"external freshness anchor remains disabled unless configured", paper)),
     }
     return {
         "requirements": requirements,
@@ -260,9 +302,52 @@ def build_report() -> dict[str, Any]:
         "ordinary_io_has_no_keyplane_batches":
             int(trace.get("ordinary_keyplane_batches") or 0) == 0 and
             int(trace.get("ordinary_keyplane_refreshed_files") or 0) == 0,
+        "ordinary_mount_skips_keyplane_startup":
+            trace.get("ordinary_keyplane_startup_disabled") is True and
+            trace.get("ordinary_kem_keypair_absent") is True,
+        "ordinary_mount_skips_admission_startup":
+            trace.get("ordinary_admission_startup_disabled") is True and
+            trace.get("ordinary_scheduler_policy_skipped") is True and
+            trace.get("ordinary_qos_monitor_skipped") is True,
+        "ordinary_mount_skips_freshness_anchor":
+            trace.get("ordinary_freshness_anchor_disabled") is True,
+        "forced_mount_starts_keyplane_worker":
+            trace.get("forced_keyplane_worker_started") is True,
         "forced_rekey_records_keyplane_work":
             int(trace.get("forced_keyplane_batches") or 0) > 0 and
             int(trace.get("forced_keyplane_refreshed_files") or 0) > 0,
+        "source_ordinary_writeback_cpu_first":
+            trace.get("source_checks", {}).get("ordinary_writeback_disables_gpu_batch") is True and
+            trace.get("source_checks", {}).get("gpu_batch_requires_explicit_request") is True and
+            trace.get("source_checks", {}).get("gpu_batch_tags_not_recomputed_in_flush_wrapper") is True and
+            trace.get("source_checks", {}).get("gpu_batch_fallback_owned_by_crypto_layer") is True,
+        "source_rekey_gpu_lane_reachable_by_default":
+            trace.get("source_checks", {}).get("rekey_batch_can_reach_gpu_byte_gate") is True and
+            trace.get("source_checks", {}).get("rekey_success_logs_are_verbose_gated") is True,
+        "source_runtime_no_cuda_aes_prealloc":
+            trace.get("source_checks", {}).get("runtime_does_not_preallocate_cuda_aes_executor") is True,
+        "source_runtime_disables_unused_admission":
+            trace.get("source_checks", {}).get("runtime_disables_admission_when_unused") is True and
+            trace.get("source_checks", {}).get("runtime_skips_scheduler_policy_when_unused") is True and
+            trace.get("source_checks", {}).get("scheduler_data_accounting_is_gated") is True and
+            trace.get("source_checks", {}).get("fault_cutpoints_are_fast_gated") is True and
+            trace.get("source_checks", {}).get("rekey_policy_snapshot_is_trigger_gated") is True and
+            trace.get("source_checks", {}).get("qos_open_xattr_load_is_throttle_gated") is True and
+            trace.get("source_checks", {}).get("qos_writeback_uses_single_throttle_gate") is True and
+            trace.get("source_checks", {}).get("read_visible_size_snapshot_is_single_pass") is True and
+            trace.get("source_checks", {}).get("read_eof_skips_scratch_acquire") is True and
+            trace.get("source_checks", {}).get("read_marker_path_copy_is_epoch_gated") is True and
+            trace.get("source_checks", {}).get("writeback_reuses_published_logical_size") is True and
+            trace.get("source_checks", {}).get("writeback_snapshots_secret_and_epoch_path_conditionally") is True and
+            trace.get("source_checks", {}).get("strict_open_allocates_epoch_cache_only_when_needed") is True and
+            trace.get("source_checks", {}).get("release_hidden_cleanup_is_conditional") is True and
+            trace.get("source_checks", {}).get("runtime_skips_qos_monitors_when_unused") is True,
+        "source_anchor_backend_cached":
+            trace.get("source_checks", {}).get("anchor_backend_is_cached") is True and
+            trace.get("source_checks", {}).get("anchor_disabled_skips_window_policy") is True and
+            trace.get("source_checks", {}).get("runtime_skips_anchor_probe_when_disabled") is True,
+        "source_trace_byte_aggregation_gated":
+            trace.get("source_checks", {}).get("trace_byte_aggregation_is_gated") is True,
         "paper_crypto_plane_boundary_present": paper["all_present"],
         "no_unguarded_d2_overclaims": len(unguarded) == 0,
     }
@@ -282,7 +367,8 @@ def build_report() -> dict[str, Any]:
             "Bulk file data must remain described as AES-GCM block data. "
             "ML-KEM/Kyber may be described only as key/session/envelope-plane "
             "work, and ordinary read/write claims must not put rekey on the "
-            "critical path unless mounted trace evidence changes."
+            "critical path or start key-plane machinery unless mounted trace "
+            "evidence changes."
         ),
     }
 

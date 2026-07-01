@@ -28,6 +28,35 @@ static int publish_pwrite_full(int fd, const uint8_t *buf, size_t len,
     return 0;
 }
 
+static int publish_prepare_mappings(const pqc_strict_publish_request_t *req,
+                                    block_mapping_t *mappings,
+                                    size_t mappings_capacity,
+                                    size_t *mapping_count)
+{
+    if (!req || !mappings || !mapping_count)
+        return -EINVAL;
+    *mapping_count = 0;
+    if (req->block_count > mappings_capacity)
+        return -E2BIG;
+
+    for (size_t bi = 0; bi < req->block_count; ++bi) {
+        const pqc_crypto_block_desc_t *block = &req->blocks[bi];
+        mappings[bi] = (block_mapping_t) {
+            .logical_block = block->block,
+            .generation = block->generation,
+            .ciphertext_offset = block->ciphertext_offset,
+            .plaintext_length = block->length,
+            .algorithm_id = req->algorithm_id,
+        };
+        memcpy(mappings[bi].tag, block->tag, sizeof(mappings[bi].tag));
+    }
+
+    if (req->published_mappings_count)
+        *req->published_mappings_count = req->block_count;
+    *mapping_count = req->block_count;
+    return 0;
+}
+
 int pqc_strict_publish_commit(const pqc_strict_publish_request_t *req)
 {
     if (!req || !req->marker_path || !req->blocks || !req->cipher_batch ||
@@ -37,27 +66,31 @@ int pqc_strict_publish_commit(const pqc_strict_publish_request_t *req)
         return -EINVAL;
     if (req->block_count == 0 || req->reserved_generation == 0)
         return -EINVAL;
+    if (req->block_count > PQC_WRITEBACK_MAX_BLOCKS)
+        return -E2BIG;
 
     int res = 0;
     int data_fsync_deferred = 0;
+    block_mapping_t local_mappings[PQC_WRITEBACK_MAX_BLOCKS];
+    block_mapping_t *mappings = local_mappings;
+    size_t mappings_capacity = PQC_WRITEBACK_MAX_BLOCKS;
+    size_t mapping_count = 0;
+    if (req->published_mappings) {
+        mappings = req->published_mappings;
+        mappings_capacity = req->published_mappings_capacity;
+    }
     if (req->data_sidecar_end_after_append_valid)
         *req->data_sidecar_end_after_append_valid = 0;
     if (req->journal_sidecar_end_after_append_valid)
         *req->journal_sidecar_end_after_append_valid = 0;
+    if (req->published_mappings_count)
+        *req->published_mappings_count = 0;
 
     /* Phase 1: append the encrypted batch.  None is visible yet because the
      * journal or epoch log has not published a mapping. */
-    size_t cipher_bytes = 0;
-    for (size_t bi = 0; bi < req->block_count; ++bi) {
-        pqc_crypto_block_desc_t *block = &req->blocks[bi];
-        size_t end = block->output_offset + (size_t)block->length;
-        if (end < block->output_offset) {
-            res = -EOVERFLOW;
-            break;
-        }
-        if (end > cipher_bytes)
-            cipher_bytes = end;
-    }
+    size_t cipher_bytes = req->cipher_batch_len;
+    if (cipher_bytes == 0)
+        res = -EINVAL;
     off_t batch_pos = -1;
     if (res == 0 && req->data_sidecar_append_offset_valid) {
         if (req->data_sidecar_append_offset > (uint64_t)INT64_MAX) {
@@ -81,12 +114,19 @@ int pqc_strict_publish_commit(const pqc_strict_publish_request_t *req)
     }
     for (size_t bi = 0; res == 0 && bi < req->block_count; ++bi) {
         pqc_crypto_block_desc_t *block = &req->blocks[bi];
-        ++*req->data_sidecar_dirty_epoch;
-        *req->data_sidecar_dirty = 1;
         block->ciphertext_offset =
             (uint64_t)batch_pos + (uint64_t)block->output_offset;
+    }
+    if (res == 0) {
+        *req->data_sidecar_dirty_epoch += req->block_count;
+        *req->data_sidecar_dirty = 1;
         pqc_fault_cutpoint("data_write_after_pwrite");
     }
+
+    if (res == 0)
+        res = publish_prepare_mappings(req, mappings,
+                                       mappings_capacity,
+                                       &mapping_count);
 
     /* Phase 2: establish the data-before-metadata durability boundary once.
      * Strict mode uses a direct data-sidecar fdatasync.  Epoch mode may hand
@@ -134,33 +174,18 @@ int pqc_strict_publish_commit(const pqc_strict_publish_request_t *req)
                 *req->journal_sidecar_dirty_epoch;
         pqc_fault_cutpoint("journal_append_skipped_epoch_after");
     } else {
-        if (req->block_count > PQC_WRITEBACK_MAX_BLOCKS) {
-            res = -E2BIG;
-        } else {
-            block_mapping_t mappings[PQC_WRITEBACK_MAX_BLOCKS];
+        if (res == 0) {
             int journal_end_after_append_reported = 0;
-            for (size_t bi = 0; bi < req->block_count; ++bi) {
-                const pqc_crypto_block_desc_t *block = &req->blocks[bi];
-                mappings[bi] = (block_mapping_t) {
-                    .logical_block = block->block,
-                    .generation = block->generation,
-                    .ciphertext_offset = block->ciphertext_offset,
-                    .plaintext_length = block->length,
-                    .algorithm_id = req->algorithm_id,
-                };
-                memcpy(mappings[bi].tag, block->tag,
-                       sizeof(mappings[bi].tag));
-            }
             if (req->journal_sidecar_append_offset_valid) {
                 res = pqc_journal_append_mappings_with_highwater_at_unsynced(
-                    req->journal_fd, mappings, req->block_count,
+                    req->journal_fd, mappings, mapping_count,
                     req->reserved_generation,
                     req->journal_sidecar_append_offset,
                     req->journal_sidecar_end_after_append);
                 journal_end_after_append_reported = 1;
             } else {
                 res = pqc_journal_append_mappings_with_highwater_unsynced(
-                    req->journal_fd, mappings, req->block_count,
+                    req->journal_fd, mappings, mapping_count,
                     req->reserved_generation);
             }
             if (res == 0 && journal_end_after_append_reported &&
@@ -168,10 +193,8 @@ int pqc_strict_publish_commit(const pqc_strict_publish_request_t *req)
                 req->journal_sidecar_end_after_append_valid)
                 *req->journal_sidecar_end_after_append_valid = 1;
         }
-        for (size_t bi = 0; res == 0 && bi < req->block_count; ++bi) {
-            const pqc_crypto_block_desc_t *block = &req->blocks[bi];
-            (void)block;
-            ++*req->journal_sidecar_dirty_epoch;
+        if (res == 0) {
+            *req->journal_sidecar_dirty_epoch += req->block_count;
             *req->journal_sidecar_dirty = 1;
             if (req->journal_sidecar_epoch_repairable)
                 *req->journal_sidecar_epoch_repairable = 0;
@@ -221,9 +244,10 @@ int pqc_strict_publish_commit(const pqc_strict_publish_request_t *req)
             pqc_fault_cutpoint("logical_size_xattr_after");
         }
         if (res == 0) {
-            res = pqc_checkpoint_store_and_stage_anchor(
+            res = pqc_checkpoint_store_and_stage_anchor_final(
                 req->marker_path, req->file_id, req->reserved_generation,
-                *req->logical_size, req->reserved_generation);
+                *req->logical_size, req->reserved_generation,
+                req->final_size == previous_logical_size);
         }
         if (res == 0 && req->final_size != previous_logical_size &&
             ftruncate(req->storage_fd,

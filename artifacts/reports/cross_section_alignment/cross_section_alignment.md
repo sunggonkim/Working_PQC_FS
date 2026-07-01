@@ -1,7 +1,7 @@
 # Cross-section alignment audit
 
 - Overall pass: `True`
-- Paper pages: `12`
+- Paper pages: `13`
 - Hero id: `sqlite-mounted-qos-recovery-2026-06-27`
 
 ## Section Alignment
@@ -20,7 +20,7 @@
 | --- | --- | ---: |
 | `abstract` | `Paper/main.tex:91` | `True` |
 | `introduction` | `Paper/1_Introduction.tex:39` | `True` |
-| `design` | `Paper/3_Design.tex:99` | `True` |
+| `design` | `Paper/3_Design.tex:101` | `True` |
 | `evaluation` | `Paper/4_Evaluation.tex:92` | `True` |
 | `conclusion` | `Paper/6_Conclusion.tex:4` | `True` |
 
@@ -28,7 +28,7 @@
 
 | Check | Pass |
 | --- | ---: |
-| `paper_pages_12` | `True` |
+| `paper_pages_le_13` | `True` |
 | `hero_contract_pass` | `True` |
 | `all_sections_have_same_rounded_hero_terms` | `True` |
 | `source_anchors_present` | `True` |

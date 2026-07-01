@@ -1,8 +1,8 @@
 # Architecture Claim Firewall
 
 - Overall pass: `True`
-- Scanned files: `336`
-- Candidate hits: `306`
+- Scanned files: `337`
+- Candidate hits: `305`
 - Violations: `0`
 
 ## Checks
@@ -26,7 +26,7 @@
 | `async_merkle` | `11` | `11` | `0` |
 | `merkle_root` | `13` | `13` | `0` |
 | `tpm_epoch` | `17` | `17` | `0` |
-| `tpm_rollback_resistance` | `42` | `42` | `0` |
+| `tpm_rollback_resistance` | `41` | `41` | `0` |
 | `pcr` | `170` | `170` | `0` |
 | `jetson_zero_copy` | `15` | `15` | `0` |
 | `cuda_stream_priority` | `6` | `6` | `0` |

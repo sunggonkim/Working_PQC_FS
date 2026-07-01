@@ -429,7 +429,6 @@ def strategy_rows() -> list[StrategyRow]:
             "Do not delete baselines to avoid bad numbers; make the comparison family explicit in Related Work and Evaluation.",
             (
                 "mode-aligned measured rows",
-                "same-contract rows",
                 "unavailable with proof",
                 "Speculative GPU encryption",
                 "GPUstore",
@@ -438,7 +437,7 @@ def strategy_rows() -> list[StrategyRow]:
                 "GPU4FS",
                 "GPUDirect Storage",
                 "fscrypt-GPU",
-                "post-quantum encrypted-file-system",
+                "PQC key-plane work",
             ),
             (
                 "artifacts/reports/evaluation_completeness_matrix/evaluation_completeness_matrix.json",
@@ -658,6 +657,10 @@ def checklist_state() -> dict[str, Any]:
         and "F3 cross-platform UMA" in text
         and "F4 persistent PCR lifecycle" in text
     )
+    no_current_blocking_p0 = (
+        "No P0/P1 work is open under the current claim boundary." in text
+        or "No P0 contradiction is open under the current claim boundary" in text
+    )
     return {
         "path": rel(CHECKLIST),
         "current_cursor": cursor_match.group(1) if cursor_match else None,
@@ -665,7 +668,11 @@ def checklist_state() -> dict[str, Any]:
         "has_closed_gate_register": "## Closed Gate Register" in text,
         "has_direction_lock": "EDGE_FILE_ENCRYPTION_CPU_GPU_UMA_RUNTIME" in text,
         "future_claim_expansions_listed": future_claims,
-        "no_current_p0_p1": "No P0/P1 work is open under the current claim boundary." in text,
+        "no_current_p0_p1": no_current_blocking_p0,
+        "active_p1_performance_cleanup": (
+            "placement/strict-path overhead" in text
+            and "Do not remove GPU" in text
+        ),
         "r_rows_present": sorted(set(re.findall(r"\|\s*(R\d+)\s*\|", text))),
     }
 

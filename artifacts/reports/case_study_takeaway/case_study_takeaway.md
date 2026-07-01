@@ -1,13 +1,13 @@
 # Case-study takeaway audit
 
 - Overall pass: `True`
-- Paper pages: `12`
+- Paper pages: `13`
 - Hero id: `sqlite-mounted-qos-recovery-2026-06-27`
 - Hero artifact: `artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json`
 
 ## Takeaway
 
-The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies. The SQLite point is the same storage-pressure case summarized by Figure~\ref{fig:first_page_qos} and Table~\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote. The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory.
+The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies. The SQLite point is the same storage-pressure case summarized by Figure~\ref{fig:first_page_qos} and Table~\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote. The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory, with recovery exposure through an explicit oracle.
 
 ## Required Terms
 
@@ -44,4 +44,4 @@ The evaluated envelope is local: SQLite, elastic background writes, append-log/c
 | `figure_label_present` | `True` |
 | `table_label_present` | `True` |
 | `evaluation_uses_same_table` | `True` |
-| `paper_pages_12` | `True` |
+| `paper_pages_le_13` | `True` |

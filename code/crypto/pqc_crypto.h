@@ -36,11 +36,17 @@ int pqc_crypto_crypt_block_gcm(const uint8_t *key, size_t key_len,
                                const uint8_t *in, uint8_t *out,
                                uint8_t tag[PQC_AEAD_TAG_SIZE],
                                int encrypt, int prefer_gpu);
+int pqc_crypto_encrypt_block_batch_cpu_gcm(const uint8_t *key, size_t key_len,
+                                           uint64_t file_id,
+                                           pqc_crypto_block_desc_t *blocks,
+                                           size_t count,
+                                           const uint8_t *input,
+                                           uint8_t *output);
 int pqc_crypto_crypt_block_batch_gcm(const uint8_t *key, size_t key_len,
                                      uint64_t file_id,
                                      pqc_crypto_block_desc_t *blocks,
                                      size_t count, const uint8_t *input,
-                                     uint8_t *output);
+                                     uint8_t *output, int prefer_gpu);
 int pqc_crypto_decrypt_block_batch_gcm(const uint8_t *key, size_t key_len,
                                        uint64_t file_id,
                                        pqc_crypto_block_desc_t *blocks,

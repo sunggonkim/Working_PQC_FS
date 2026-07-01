@@ -17,7 +17,7 @@
       "line": 2,
       "path": "Paper/main.tex",
       "section": "abstract",
-      "text": "Unified-memory edge devices co-locate local databases, encrypted logs, cache-manifest updates, and encrypted state on shared DRAM/storage. A secure file-encryption runtime must place cryptographic work, not merely accelerate it: GPU work can steal bandwidth from foreground storage and durable publication. Its thesis is that secure edge storage should expose \\mbox{one durable authenticated format} with a CPU-first AES-GCM data plane and an elastic GPU/PQC maintenance lane. AEGIS-Q explores that boundary as a boundary-aware UMA FUSE prototype with optional batched PQC key-plane maintenance, executor-local managed-memory use, and fail-closed external-anchor replay-after-advance checks."
+      "text": "Unified-memory edge devices co-locate local databases, encrypted logs, cache-manifest updates, and encrypted state on shared DRAM/storage. A secure file-encryption runtime must place cryptographic work, not merely accelerate it: GPU work can steal bandwidth from foreground storage and durable publication. Its thesis is that secure edge storage should expose \\mbox{one durable authenticated format} with a CPU-first AES-GCM data plane and an elastic GPU/PQC maintenance lane. AEGIS-Q explores that boundary as a boundary-aware UMA FUSE runtime with optional batched PQC key-plane maintenance, executor-local managed-memory use, and fail-closed external-anchor replay-after-advance checks."
     },
     {
       "categories": [
@@ -39,21 +39,17 @@
     },
     {
       "categories": [
-        "negative-claim",
-        "numeric-performance",
-        "security-recovery-claim"
+        "numeric-performance"
       ],
       "claim_ids": [
         "sqlite_hero_repeated_medians",
-        "primitive_and_keyplane_placement",
-        "tpm_freshness_boundary",
-        "claim_firewalls"
+        "primitive_and_keyplane_placement"
       ],
       "covered": true,
       "line": 4,
       "path": "Paper/6_Conclusion.tex",
       "section": "conclusion",
-      "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem. Its authenticated format keeps AES-GCM data writes on the CPU, admits ML-KEM/cuPQC maintenance only for slack-tolerant batches, uses managed memory only as executor-local locality, and separates replayable file witnesses from externally anchored replay-after-advance checks. On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure. It does not claim direct NVMe-to-UVM DMA, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, non-storage scheduler recovery, or portability. The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+      "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime under secure-storage pressure, not blanket GPU offload. Its format keeps AES-GCM writes on CPU, admits ML-KEM/cuPQC maintenance only with slack, and reports 8.15~ms SQLite p99 with 3.02~MB/s background progress on Thor. Accelerator throughput matters only after publication order, QoS, and replay boundaries are explicit."
     },
     {
       "categories": [
@@ -152,7 +148,7 @@
       "line": 34,
       "path": "Paper/8_Security_Analysis.tex",
       "section": "security",
-      "text": "The source tree contains two anchor modes. The file mode is only an integrity witness; copying the directory copies the witness. The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \\emph{rollback visible}, not as successful protection. This negative result is important: an HMAC alone does not create freshness when its entire state is replayable."
+      "text": "The source tree contains two anchor modes. The file mode is only an integrity witness; copying the directory copies the witness. The corrected crash/replay run therefore reports four of four file-backed snapshot restores as \\emph{rollback visible}, not as successful protection. This negative result is important: an HMAC alone does not prevent rollback when its entire state is replayable."
     },
     {
       "categories": [
@@ -206,7 +202,20 @@
       "line": 16,
       "path": "Paper/4_Evaluation.tex",
       "section": "recovery",
-      "text": "The design/evaluation contract is one closure per main mechanism: CPU/GPU/PQC placement through data-plane negative controls and key-plane measurements; QoS through SQLite recovery and kernel-control comparisons; managed-memory scope through executor-local diagnostics; format through generation/tamper checks; D/J/C publication through oracle-labeled cut points; and TPM freshness through replay-after-advance."
+      "text": "The design/evaluation contract is one closure per main mechanism: CPU/GPU/PQC placement through data-plane negative controls and key-plane measurements; QoS through SQLite recovery and kernel-control comparisons; managed-memory scope through executor-local diagnostics; format through generation/tamper checks; D/J/C publication through oracle-labeled cut points; and TPM replay checks through replay-after-advance."
+    },
+    {
+      "categories": [
+        "numeric-performance"
+      ],
+      "claim_ids": [
+        "cache_manifest_workload"
+      ],
+      "covered": true,
+      "line": 18,
+      "path": "Paper/4_Evaluation.tex",
+      "section": "recovery",
+      "text": "Primitive-placement numbers come from the microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness. Both refuse unsupported configurations rather than extrapolating missing rows. The workload set is scoped to edge-storage patterns: SQLite pressure, ordered append-log, cache-manifest publish/remount, and bounded multi-writer stress, not a broad RocksDB/NGINX suite."
     },
     {
       "categories": [
@@ -321,7 +330,7 @@
       "line": 51,
       "path": "Paper/4_Evaluation.tex",
       "section": "recovery",
-      "text": "RQ4 file anchor & File snapshot rollback remains visible & TPM-anchor freshness\\\\"
+      "text": "RQ4 file anchor & File snapshot rollback remains visible & TPM-anchor replay protection\\\\"
     },
     {
       "categories": [
@@ -420,7 +429,7 @@
       "line": 79,
       "path": "Paper/4_Evaluation.tex",
       "section": "recovery",
-      "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe. The hardware-freshness recovery matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
+      "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe. The hardware replay matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
     },
     {
       "categories": [
@@ -466,7 +475,7 @@
       "line": 85,
       "path": "Paper/4_Evaluation.tex",
       "section": "recovery",
-      "text": "Recovery/freshness outcomes support the mounted runtime boundary; they are not the paper's central QoS/placement result."
+      "text": "Recovery/replay outcomes support the mounted runtime boundary; they are not the paper's central QoS/placement result."
     },
     {
       "categories": [
@@ -495,7 +504,7 @@
       "line": 94,
       "path": "Paper/4_Evaluation.tex",
       "section": "recovery",
-      "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity. The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms slack freshness, and 0.80 queue threshold. Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss). No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips. This keeps the claim on mounted storage-visible control, not an external application scheduler."
+      "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity. The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms telemetry-age limit, and 0.80 queue threshold. Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss). No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips. This keeps the claim on mounted storage-visible control, not an external application scheduler."
     },
     {
       "categories": [
@@ -515,7 +524,7 @@
     "abstract_conclusion_security_recovery_claims_covered": true,
     "all_evidence_rules_complete": true,
     "all_numeric_candidates_covered": true,
-    "paper_pages_12": true
+    "paper_pages_le_13": true
   },
   "evidence_rules": [
     {
@@ -1164,7 +1173,7 @@
       ]
     }
   ],
-  "generated_utc": "2026-06-30T14:33:17Z",
+  "generated_utc": "2026-06-30T22:15:20Z",
   "incomplete_evidence_rules": [],
   "numeric_claim_candidates": [
     {
@@ -1203,7 +1212,7 @@
         "generation_and_tamper_safety"
       ],
       "covered": true,
-      "line": 40,
+      "line": 42,
       "numbers": [
         "32",
         "32768",
@@ -1226,12 +1235,12 @@
         "generation_and_tamper_safety"
       ],
       "covered": true,
-      "line": 47,
+      "line": 49,
       "numbers": [
         "4"
       ],
       "path": "Paper/3_Design.tex",
-      "text": "Writes are coalesced only when they are contiguous. For each affected 4~KiB logical block, AEGIS-Q reads the current authenticated block if necessary, applies the modification, assigns a strictly increasing generation, and derives the GCM nonce from \\((\\mathit{fileID},\\mathit{block},\\mathit{generation})\\). The commit order is:"
+      "text": "The writeback/publication manager implements the authenticated publication algorithm. Writes are coalesced only when they are contiguous. For each affected 4~KiB logical block, AEGIS-Q reads the current authenticated block if necessary, applies the modification, assigns a strictly increasing generation, and derives the GCM nonce from \\((\\mathit{fileID},\\mathit{block},\\mathit{generation})\\). The commit order is:"
     },
     {
       "categories": [
@@ -1241,13 +1250,13 @@
         "crash_and_recovery_boundary"
       ],
       "covered": true,
-      "line": 69,
+      "line": 71,
       "numbers": [
         "4",
         "1"
       ],
       "path": "Paper/3_Design.tex",
-      "text": "The generation transition is per-file. A publish-ticket serializes reservation turns; before encryption, near wraparound fails with \\texttt{EFBIG} if the affected block count would pass \\texttt{UINT64\\_MAX}. Otherwise AEGIS-Q reserves \\([\\mathit{next}+1,\\mathit{next}+n]\\) in checkpoint/high-water state, may skip interrupted reservations, advances committed generation only after publication, recovers only mappings reachable through the validated boundary, and rejects duplicate epoch \\((\\mathit{fileID},\\mathit{block},\\mathit{generation})\\) records. Misuse-resistant SIV-style AEAD would trade this state obligation for extra passes; AEGIS-Q instead tests older-generation replay while not claiming physical power-loss, arbitrary application-level concurrency, or broad crash-consistency certification."
+      "text": "The generation transition is per-file. A publish-ticket serializes reservation turns; before encryption, near wraparound fails with \\texttt{EFBIG} if the affected block count would pass \\texttt{UINT64\\_MAX}. Otherwise AEGIS-Q reserves \\([\\mathit{next}+1,\\mathit{next}+n]\\) in checkpoint/high-water state, may skip interrupted reservations, advances committed generation only after publication, recovers only mappings reachable through the validated boundary, and rejects duplicate epoch records for the same file, block, and generation. Misuse-resistant SIV-style AEAD would trade this state obligation for extra passes; AEGIS-Q instead tests older-generation replay while not claiming physical power-loss, arbitrary application-level concurrency, or broad crash-consistency certification."
     },
     {
       "categories": [
@@ -1257,7 +1266,7 @@
         "telemetry_and_sensitivity"
       ],
       "covered": true,
-      "line": 91,
+      "line": 93,
       "numbers": [
         "9 "
       ],
@@ -1274,7 +1283,7 @@
         "tpm_freshness_boundary"
       ],
       "covered": true,
-      "line": 103,
+      "line": 105,
       "numbers": [
         "32"
       ],
@@ -1466,7 +1475,7 @@
         "1500010"
       ],
       "path": "Paper/4_Evaluation.tex",
-      "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe. The hardware-freshness recovery matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
+      "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe. The hardware replay matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
     },
     {
       "categories": [
@@ -1555,7 +1564,7 @@
         "8 flips"
       ],
       "path": "Paper/4_Evaluation.tex",
-      "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity. The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms slack freshness, and 0.80 queue threshold. Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss). No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips. This keeps the claim on mounted storage-visible control, not an external application scheduler."
+      "text": "The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity. The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are 4~KiB minimum GPU batches, 1.73~ms minimum producer slack, 100~\\(\\mu\\)s deadline margin, 250~ms telemetry-age limit, and 0.80 queue threshold. Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss). No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips. This keeps the claim on mounted storage-visible control, not an external application scheduler."
     },
     {
       "categories": [
@@ -1614,49 +1623,25 @@
     },
     {
       "categories": [
-        "numeric-performance",
-        "security-recovery-claim",
-        "workload-boundary"
-      ],
-      "claim_ids": [
-        "tpm_freshness_boundary",
-        "second_macrobenchmark",
-        "cache_manifest_workload",
-        "foreground_inference_claim_removal"
-      ],
-      "covered": true,
-      "line": 24,
-      "numbers": [
-        "9"
-      ],
-      "path": "Paper/10_Discussion_and_Limitations.tex",
-      "text": "The evaluated envelope is local: SQLite, elastic writes, secure append-log, and cache-manifest remounts under authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies; it is not a general POSIX, PCR-bound freshness, non-storage p99, power-loss, or CUDA-independent deployment claim. Within that envelope, the portable lesson is the policy split: keep latency-sensitive AES-GCM publication on the CPU, admit batched PQC maintenance only with slack and fresh telemetry, and treat managed memory as executor-local locality rather than a storage-DMA contract."
-    },
-    {
-      "categories": [
-        "negative-claim",
-        "numeric-performance",
-        "security-recovery-claim"
+        "numeric-performance"
       ],
       "claim_ids": [
         "sqlite_hero_repeated_medians",
-        "primitive_and_keyplane_placement",
-        "tpm_freshness_boundary",
-        "claim_firewalls"
+        "primitive_and_keyplane_placement"
       ],
       "covered": true,
       "line": 4,
       "numbers": [
         "8.15",
-        "9",
+        "9 ",
         "3.02"
       ],
       "path": "Paper/6_Conclusion.tex",
-      "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime rather than a blanket GPU-offload problem. Its authenticated format keeps AES-GCM data writes on the CPU, admits ML-KEM/cuPQC maintenance only for slack-tolerant batches, uses managed memory only as executor-local locality, and separates replayable file witnesses from externally anchored replay-after-advance checks. On Thor, AEGIS-Q reports 8.15~ms SQLite p99, zero median misses, and 3.02~MB/s background progress under secure-storage pressure. It does not claim direct NVMe-to-UVM DMA, GPU constant-time behavior, persistent PCR-bound freshness, power-loss certification, non-storage scheduler recovery, or portability. The lesson is that edge secure storage needs explicit placement, durability ordering, QoS boundaries, and freshness failure modes before accelerator throughput numbers are meaningful."
+      "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime under secure-storage pressure, not blanket GPU offload. Its format keeps AES-GCM writes on CPU, admits ML-KEM/cuPQC maintenance only with slack, and reports 8.15~ms SQLite p99 with 3.02~MB/s background progress on Thor. Accelerator throughput matters only after publication order, QoS, and replay boundaries are explicit."
     }
   ],
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "schema_version": 1,
   "scope": [
     "main-paper numeric claim candidates in content files",

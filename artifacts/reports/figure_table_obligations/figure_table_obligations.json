@@ -4,10 +4,11 @@
     "all_figure_tables_have_obligations": true,
     "no_duplicate_labels": true,
     "no_rendered_artifact_path_lists": true,
-    "paper_pages_12": true
+    "paper_pages_le_13": true
   },
   "duplicate_labels": [],
   "expected_labels": [
+    "fig:dataplane_negative_control",
     "fig:djc_state_machine",
     "fig:evaluation_summary",
     "fig:first_page_qos",
@@ -15,30 +16,30 @@
     "fig:problem_boundary",
     "tab:benchmark_workloads",
     "tab:capability_matrix",
+    "tab:component_contracts",
     "tab:design_goals",
     "tab:impl_boundaries",
-    "tab:memory_compat",
     "tab:qos_sqlite_recovery",
     "tab:threat_boundary"
   ],
   "figure_tables": [
     {
-      "caption": "SQLite pressure result for RQ3; labels show deadline misses and background throughput.",
+      "caption": "SQLite pressure result for RQ2; labels show deadline misses and background throughput.",
       "caption_terms": [
         "SQLite",
-        "RQ3",
+        "RQ2",
         "deadline"
       ],
       "caption_terms_present": true,
       "environment": "figure",
       "extra_labels": [],
-      "kind": "RQ3",
+      "kind": "RQ2",
       "label": "fig:first_page_qos",
       "line": 6,
       "obligation": "first-page SQLite pressure/hero result",
       "passes": true,
       "path": "Paper/1_Introduction.tex",
-      "reference_count": 4
+      "reference_count": 3
     },
     {
       "caption": "Capability comparison that defines AEGIS-Q's design gap. ``Policy'' means storage-visible accelerator/QoS/replay policy, not implementation maturity.",
@@ -66,46 +67,64 @@
         "authenticated publication"
       ],
       "caption_terms_present": true,
-      "environment": "figure*",
+      "environment": "figure",
       "extra_labels": [],
       "kind": "motivation",
       "label": "fig:problem_boundary",
-      "line": 17,
+      "line": 15,
       "obligation": "problem boundary for the edge-runtime thesis",
       "passes": true,
       "path": "Paper/2_Background.tex",
       "reference_count": 1
     },
     {
-      "caption": "AEGIS-Q runtime architecture after separating the paper's three boundaries. Solid arrows are implemented mounted paths for foreground reads/writes, publication, recovery, and remount validation; dashed orange arrows are elastic maintenance paths that must pass admission and can fall back to CPU execution. The bottom strip is the claim firewall enforced throughout the paper.",
+      "caption": "AES-GCM data-plane negative control from one 4~KiB authenticated block to 1~MiB. The 4~KiB tick matches AEGIS-Q's logical block and the common OS page granularity; GPU managed-buffer offload remains slower across this mounted-write range.",
       "caption_terms": [
-        "runtime architecture",
-        "claim firewall"
+        "AES-GCM",
+        "4~KiB",
+        "1~MiB"
       ],
       "caption_terms_present": true,
-      "environment": "figure*",
+      "environment": "figure",
+      "extra_labels": [],
+      "kind": "motivation/RQ2",
+      "label": "fig:dataplane_negative_control",
+      "line": 34,
+      "obligation": "AES-GCM data-plane size sweep motivating CPU-first placement",
+      "passes": true,
+      "path": "Paper/2_Background.tex",
+      "reference_count": 3
+    },
+    {
+      "caption": "AEGIS-Q runtime architecture after separating the paper's three planes. Solid arrows are implemented mounted paths for foreground reads/writes, publication, recovery, and remount validation; dashed orange arrows are elastic maintenance paths that must pass admission and can fall back to CPU execution.",
+      "caption_terms": [
+        "runtime architecture",
+        "planes"
+      ],
+      "caption_terms_present": true,
+      "environment": "figure",
       "extra_labels": [],
       "kind": "design",
       "label": "fig:overall_procedure",
-      "line": 9,
+      "line": 7,
       "obligation": "architecture and plane-separation figure",
       "passes": true,
       "path": "Paper/3_Design.tex",
-      "reference_count": 1
+      "reference_count": 8
     },
     {
-      "caption": "Formal storage-protocol invariants, implementation loci, exercised paths, and claim boundaries.",
+      "caption": "Architecture-indexed component contracts used to read Figure~\\ref{fig:overall_procedure}.",
       "caption_terms": [
-        "invariants",
-        "boundaries"
+        "Architecture-indexed",
+        "component contracts"
       ],
       "caption_terms_present": true,
       "environment": "table*",
       "extra_labels": [],
       "kind": "design",
-      "label": "tab:design_goals",
-      "line": 19,
-      "obligation": "formal storage-protocol invariant table",
+      "label": "tab:component_contracts",
+      "line": 21,
+      "obligation": "architecture-indexed component contract map",
       "passes": true,
       "path": "Paper/3_Design.tex",
       "reference_count": 1
@@ -121,25 +140,25 @@
       "extra_labels": [],
       "kind": "design",
       "label": "fig:djc_state_machine",
-      "line": 57,
+      "line": 59,
       "obligation": "D/J/C/xattr publication state machine",
       "passes": true,
       "path": "Paper/3_Design.tex",
       "reference_count": 1
     },
     {
-      "caption": "Memory-path hardware claims and their exercised status.",
+      "caption": "Design invariants, implementation loci, exercised paths, and scope boundaries.",
       "caption_terms": [
-        "Memory-path",
-        "hardware"
+        "invariants",
+        "boundaries"
       ],
       "caption_terms_present": true,
-      "environment": "table",
+      "environment": "table*",
       "extra_labels": [],
-      "kind": "design/RQ2/RQ5",
-      "label": "tab:memory_compat",
-      "line": 78,
-      "obligation": "memory-path claim boundary",
+      "kind": "design",
+      "label": "tab:design_goals",
+      "line": 135,
+      "obligation": "formal storage-protocol invariant table",
       "passes": true,
       "path": "Paper/3_Design.tex",
       "reference_count": 1
@@ -179,11 +198,11 @@
       "reference_count": 1
     },
     {
-      "caption": "Evaluation summary generated from retained validation JSON. Panel~(a) shows the strict frozen-contract cost boundary for RQ5; Panel~(b) shows mounted SQLite QoS and kernel-control rows for RQ3; Panel~(c) shows the mounted open-file key-plane refresh workflow for RQ2.",
+      "caption": "Evaluation summary generated from retained validation JSON. Panel~(a) shows the mounted open-file key-plane refresh workflow for RQ1; Panel~(b) shows mounted SQLite QoS and kernel-control rows for RQ2; Panel~(c) shows the strict frozen-contract cost boundary for RQ5.",
       "caption_terms": [
         "Evaluation summary",
+        "RQ1",
         "RQ2",
-        "RQ3",
         "RQ5"
       ],
       "caption_terms_present": true,
@@ -230,10 +249,11 @@
       "obligation": "SQLite QoS recovery hero result",
       "passes": true,
       "path": "Paper/generated_qos_recovery_table.tex",
-      "reference_count": 2
+      "reference_count": 1
     }
   ],
   "found_labels": [
+    "fig:dataplane_negative_control",
     "fig:djc_state_machine",
     "fig:evaluation_summary",
     "fig:first_page_qos",
@@ -241,21 +261,21 @@
     "fig:problem_boundary",
     "tab:benchmark_workloads",
     "tab:capability_matrix",
+    "tab:component_contracts",
     "tab:design_goals",
     "tab:impl_boundaries",
-    "tab:memory_compat",
     "tab:qos_sqlite_recovery",
     "tab:threat_boundary"
   ],
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "rendered_path_list_hits": [],
   "schema_version": 1,
   "scope": [
     "all figure/table environments in the main paper inputs",
     "one obligation mapping per figure/table label",
     "caption text names the RQ/design obligation rather than a raw artifact path",
-    "labels are referenced from the paper and Paper/main.pdf has 12 pages"
+    "labels are referenced from the paper and Paper/main.pdf has at most 13 pages"
   ],
   "violations": []
 }

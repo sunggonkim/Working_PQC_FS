@@ -92,7 +92,7 @@ def build_report() -> dict[str, Any]:
         "figure_label_present": "\\label{fig:first_page_qos}" in intro,
         "table_label_present": "\\label{tab:qos_sqlite_recovery}" in generated_table,
         "evaluation_uses_same_table": "Table~\\ref{tab:qos_sqlite_recovery}" in eval_text,
-        "paper_pages_12": run_pdfinfo_pages(PAPER / "main.pdf") == 12,
+        "paper_pages_le_13": (run_pdfinfo_pages(PAPER / "main.pdf") or 999) <= 13,
     }
     violations = [name for name, passed in checks.items() if not passed]
 

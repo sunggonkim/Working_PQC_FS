@@ -63,7 +63,7 @@ def frozen_panel(ax) -> None:
     ax.set_yscale("log")
     ax.set_xticks(x, labels)
     ax.set_ylabel("MiB/s, log")
-    ax.set_title("(a) Frozen 4 KiB fdatasync cost")
+    ax.set_title("(c) Frozen 4 KiB fdatasync cost")
     ax.grid(axis="y", which="both", alpha=0.25)
     for xpos, value in zip(x, vals):
         ax.text(xpos, value * 1.28, f"{value:.2g}", ha="center", va="bottom", fontsize=6.6)
@@ -144,7 +144,7 @@ def keyplane_panel(ax) -> None:
     ax.bar(x, vals, color=colors, width=0.64, yerr=asym_error(vals, lows, highs), capsize=2.5)
     ax.set_xticks(x, labels)
     ax.set_ylabel("Files/s ($10^3$)")
-    ax.set_title("(c) Mounted key-plane refresh")
+    ax.set_title("(a) Mounted key-plane refresh")
     ax.grid(axis="y", alpha=0.25)
     speedup = payload["gpu_vs_cpu_speedup_summary"]["median"]
     ax.text(1, max(vals) * 1.04, f"{speedup:.2f}$\\times$", ha="center", va="bottom", fontsize=6.8)
@@ -160,9 +160,9 @@ def main() -> int:
 
     plt.rcParams.update({"font.size": 7.4, "pdf.fonttype": 42, "ps.fonttype": 42})
     fig, axes = plt.subplots(1, 3, figsize=(7.1, 2.25))
-    frozen_panel(axes[0])
+    keyplane_panel(axes[0])
     sqlite_panel(axes[1])
-    keyplane_panel(axes[2])
+    frozen_panel(axes[2])
     for ax in axes:
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)

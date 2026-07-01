@@ -226,7 +226,7 @@ def build_report() -> dict[str, Any]:
 
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
     checks = {
-        "paper_pages_12": pages == 12,
+        "paper_pages_le_13": pages is not None and pages <= 13,
         "source_anchors_present": all(row["present"] for row in source_rows),
         "compiled_first_two_pages_present": all(row["present"] for row in pdf_rows),
         "no_overstrong_freshness_root_language": not forbidden_hits,

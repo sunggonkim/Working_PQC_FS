@@ -1,7 +1,7 @@
 # First-two-pages positive-thesis audit
 
 - Overall pass: `True`
-- Paper pages: `12`
+- Paper pages: `13`
 
 ## Source Anchors
 
@@ -47,7 +47,7 @@
 
 | Check | Pass |
 | --- | ---: |
-| `paper_pages_12` | `True` |
+| `paper_pages_le_13` | `True` |
 | `source_anchors_present` | `True` |
 | `compiled_first_two_pages_present` | `True` |
 | `no_overstrong_freshness_root_language` | `True` |

@@ -9,40 +9,67 @@
 #include <fcntl.h>
 #include <pthread.h>
 #include <stdint.h>
+#include <stdatomic.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
 
-static pthread_mutex_t g_gpu_load_lock = PTHREAD_MUTEX_INITIALIZER;
+#define PQC_GPU_LOAD_EWMA_SCALE 1000.0
+#define PQC_QOS_PRESSURE_SCALE 10000.0
+
 static pthread_t g_gpu_load_thread;
 static int g_gpu_load_thread_started = 0;
-static int g_gpu_load_stop = 0;
-static double g_gpu_load_ewma = 0.0;
+static atomic_int g_gpu_load_stop = ATOMIC_VAR_INIT(0);
+static atomic_uint g_gpu_load_ewma_milli = ATOMIC_VAR_INIT(0);
 
 static pthread_t g_admission_telemetry_thread;
 static int g_admission_telemetry_thread_started = 0;
-static int g_admission_telemetry_stop = 0;
+static atomic_int g_admission_telemetry_stop = ATOMIC_VAR_INIT(0);
 static char g_admission_telemetry_path[4096] = {0};
 
 static pthread_mutex_t g_qos_throttle_lock = PTHREAD_MUTEX_INITIALIZER;
 static int g_qos_throttle_state = 0;
 static double g_qos_pressure_value = 0.0;
+static atomic_int g_qos_throttle_state_snapshot = ATOMIC_VAR_INIT(0);
+static atomic_uint g_qos_pressure_milli = ATOMIC_VAR_INIT(0);
 static unsigned g_qos_below_exit_count = 0;
+static double g_qos_mem_enter_util = 0.70;
+static double g_qos_mem_exit_util = 0.60;
+static unsigned g_qos_hold_samples = 2;
+static long g_qos_throttle_sleep_us = 50000;
+static long g_qos_telemetry_poll_ms = 50;
+static atomic_int g_qos_runtime_throttle_enabled = ATOMIC_VAR_INIT(-1);
+static atomic_int g_qos_trace_enabled = ATOMIC_VAR_INIT(-1);
+static char g_qos_trace_path[4096] = {0};
 
-static int qos_gpu_load_lock(pqc_lock_profile_scope_t *scope,
-                             const char *site)
+static unsigned qos_gpu_load_to_milli(double load)
 {
-    return pqc_profiled_mutex_lock(&g_gpu_load_lock, "qos_gpu_load_lock",
-                                   site, scope);
+    if (load < 0.0)
+        load = 0.0;
+    if (load > 100.0)
+        load = 100.0;
+    return (unsigned)(load * PQC_GPU_LOAD_EWMA_SCALE + 0.5);
 }
 
-static int qos_gpu_load_unlock(pqc_lock_profile_scope_t *scope,
-                               const char *site)
+static double qos_gpu_load_from_milli(unsigned milli)
 {
-    return pqc_profiled_mutex_unlock(&g_gpu_load_lock, "qos_gpu_load_lock",
-                                     site, scope);
+    return (double)milli / PQC_GPU_LOAD_EWMA_SCALE;
+}
+
+static unsigned qos_pressure_to_milli(double pressure)
+{
+    if (pressure < 0.0)
+        pressure = 0.0;
+    if (pressure > 1.0)
+        pressure = 1.0;
+    return (unsigned)(pressure * PQC_QOS_PRESSURE_SCALE + 0.5);
+}
+
+static double qos_pressure_from_milli(unsigned milli)
+{
+    return (double)milli / PQC_QOS_PRESSURE_SCALE;
 }
 
 static int qos_throttle_lock(pqc_lock_profile_scope_t *scope,
@@ -65,9 +92,84 @@ static const char *gpu_load_path(void)
                                           "/sys/devices/gpu.0/load");
 }
 
-static int qos_runtime_throttle_enabled(void)
+int pqc_qos_runtime_throttle_enabled(void)
 {
-    return pqc_config_enabled("PQC_ENABLE_QOS_THROTTLE_ON_WRITE");
+    int enabled = atomic_load_explicit(&g_qos_runtime_throttle_enabled,
+                                       memory_order_relaxed);
+    if (enabled >= 0)
+        return enabled;
+    enabled = pqc_config_enabled("PQC_ENABLE_QOS_THROTTLE_ON_WRITE") ? 1 : 0;
+    atomic_store_explicit(&g_qos_runtime_throttle_enabled, enabled,
+                          memory_order_relaxed);
+    return enabled;
+}
+
+static const char *qos_throttle_trace_path(void)
+{
+    int enabled = atomic_load_explicit(&g_qos_trace_enabled,
+                                       memory_order_acquire);
+    return enabled == 1 ? g_qos_trace_path : NULL;
+}
+
+static int qos_throttle_trace_enabled(void)
+{
+    return atomic_load_explicit(&g_qos_trace_enabled,
+                                memory_order_acquire) == 1;
+}
+
+static void qos_throttle_trace_configure(void)
+{
+    const char *path = pqc_config_get_nonempty("PQC_QOS_THROTTLE_TRACE_PATH");
+    if (path) {
+        snprintf(g_qos_trace_path, sizeof(g_qos_trace_path), "%s", path);
+        atomic_store_explicit(&g_qos_trace_enabled, 1,
+                              memory_order_release);
+    } else {
+        g_qos_trace_path[0] = '\0';
+        atomic_store_explicit(&g_qos_trace_enabled, 0,
+                              memory_order_release);
+    }
+}
+
+static void qos_runtime_policy_configure(void)
+{
+    double enter =
+        pqc_config_double_prefix_or_default("PQC_QOS_MEM_ENTER_UTIL", 0.70);
+    double exit =
+        pqc_config_double_prefix_or_default("PQC_QOS_MEM_EXIT_UTIL", 0.60);
+    long hold =
+        pqc_config_positive_long_or_default("PQC_QOS_HOLD_SAMPLES", 2);
+    long sleep_us =
+        pqc_config_positive_long_or_default("PQC_QOS_THROTTLE_SLEEP_US",
+                                            50000);
+    long poll_ms =
+        pqc_config_positive_long_or_default("PQC_TELEMETRY_POLL_MS", 50);
+
+    if (enter < 0.0)
+        enter = 0.0;
+    if (enter > 1.0)
+        enter = 1.0;
+    if (exit < 0.0)
+        exit = 0.0;
+    if (exit > 1.0)
+        exit = 1.0;
+    if (exit > enter)
+        exit = enter;
+
+    g_qos_mem_enter_util = enter;
+    g_qos_mem_exit_util = exit;
+    g_qos_hold_samples = hold > 0 ? (unsigned)hold : 1U;
+    g_qos_throttle_sleep_us = sleep_us > 0 ? sleep_us : 0;
+    g_qos_telemetry_poll_ms = poll_ms > 0 ? poll_ms : 50;
+}
+
+void pqc_qos_disable_monitors_for_mount(void)
+{
+    atomic_store_explicit(&g_qos_runtime_throttle_enabled, 0,
+                          memory_order_relaxed);
+    atomic_store_explicit(&g_qos_trace_enabled, 0, memory_order_release);
+    g_qos_trace_path[0] = '\0';
+    g_admission_telemetry_path[0] = '\0';
 }
 
 static void qos_trace_emit_line(const char *path, const char *line)
@@ -100,12 +202,12 @@ static void qos_trace_emit_line(const char *path, const char *line)
 
 static void qos_update_runtime_pressure(double mem_util, double tensor_util)
 {
-    if (!qos_runtime_throttle_enabled())
+    if (!pqc_qos_runtime_throttle_enabled())
         return;
 
-    const double enter = pqc_config_double_prefix_or_default("PQC_QOS_MEM_ENTER_UTIL", 0.70);
-    const double exit = pqc_config_double_prefix_or_default("PQC_QOS_MEM_EXIT_UTIL", 0.60);
-    const unsigned hold = (unsigned)pqc_config_positive_long_or_default("PQC_QOS_HOLD_SAMPLES", 2);
+    const double enter = g_qos_mem_enter_util;
+    const double exit = g_qos_mem_exit_util;
+    const unsigned hold = g_qos_hold_samples;
     const double pressure = mem_util > tensor_util ? mem_util : tensor_util;
 
     pqc_lock_profile_scope_t throttle_scope;
@@ -126,30 +228,36 @@ static void qos_update_runtime_pressure(double mem_util, double tensor_util)
             g_qos_below_exit_count = 0;
         }
     }
+    atomic_store_explicit(&g_qos_throttle_state_snapshot,
+                          g_qos_throttle_state,
+                          memory_order_release);
+    atomic_store_explicit(&g_qos_pressure_milli,
+                          qos_pressure_to_milli(g_qos_pressure_value),
+                          memory_order_release);
     (void)qos_throttle_unlock(&throttle_scope, __func__);
 }
 
-void pqc_qos_apply_runtime_throttle(size_t bytes, int qos_class)
+void pqc_qos_apply_runtime_throttle_enabled(size_t bytes, int qos_class)
 {
-    if (!qos_runtime_throttle_enabled())
+    const int trace_enabled = qos_throttle_trace_enabled();
+    const int eligible = qos_class != PQC_QOS_CLASS_LATENCY;
+    if (!eligible && !trace_enabled)
+        return;
+    const long configured_sleep_us = g_qos_throttle_sleep_us;
+    if (eligible && configured_sleep_us <= 0 && !trace_enabled)
         return;
 
-    int throttled = 0;
-    double pressure = 0.0;
-    pqc_lock_profile_scope_t throttle_scope;
-    if (qos_throttle_lock(&throttle_scope, __func__) == 0) {
-        throttled = g_qos_throttle_state;
-        pressure = g_qos_pressure_value;
-        (void)qos_throttle_unlock(&throttle_scope, __func__);
-    }
+    int throttled = atomic_load_explicit(
+        &g_qos_throttle_state_snapshot, memory_order_acquire);
+    double pressure = qos_pressure_from_milli(atomic_load_explicit(
+        &g_qos_pressure_milli, memory_order_acquire));
 
-    const int eligible = qos_class != PQC_QOS_CLASS_LATENCY;
     const long sleep_us = (throttled && eligible) ?
-        pqc_config_positive_long_or_default("PQC_QOS_THROTTLE_SLEEP_US", 50000) : 0;
+        configured_sleep_us : 0;
     if (sleep_us > 0)
         usleep((useconds_t)sleep_us);
 
-    const char *trace_path = pqc_config_get_nonempty("PQC_QOS_THROTTLE_TRACE_PATH");
+    const char *trace_path = trace_enabled ? qos_throttle_trace_path() : NULL;
     if (trace_path) {
         struct timespec ts;
         clock_gettime(CLOCK_REALTIME, &ts);
@@ -167,6 +275,13 @@ void pqc_qos_apply_runtime_throttle(size_t bytes, int qos_class)
     }
 }
 
+void pqc_qos_apply_runtime_throttle(size_t bytes, int qos_class)
+{
+    if (!pqc_qos_runtime_throttle_enabled())
+        return;
+    pqc_qos_apply_runtime_throttle_enabled(bytes, qos_class);
+}
+
 static void *gpu_load_monitor_main(void *arg)
 {
     (void)arg;
@@ -175,7 +290,7 @@ static void *gpu_load_monitor_main(void *arg)
     if (fd < 0)
         return NULL;
     char buf[32];
-    while (!g_gpu_load_stop) {
+    while (!atomic_load_explicit(&g_gpu_load_stop, memory_order_acquire)) {
         ssize_t n = pread(fd, buf, sizeof(buf) - 1, 0);
         if (n > 0) {
             buf[n] = '\0';
@@ -186,11 +301,13 @@ static void *gpu_load_monitor_main(void *arg)
                 sample = 0.0;
             if (sample > 100.0)
                 sample = 100.0;
-            pqc_lock_profile_scope_t gpu_scope;
-            if (qos_gpu_load_lock(&gpu_scope, __func__) == 0) {
-                g_gpu_load_ewma = 0.2 * sample + 0.8 * g_gpu_load_ewma;
-                (void)qos_gpu_load_unlock(&gpu_scope, __func__);
-            }
+            unsigned prior = atomic_load_explicit(
+                &g_gpu_load_ewma_milli, memory_order_relaxed);
+            double ewma = 0.2 * sample +
+                          0.8 * qos_gpu_load_from_milli(prior);
+            atomic_store_explicit(&g_gpu_load_ewma_milli,
+                                  qos_gpu_load_to_milli(ewma),
+                                  memory_order_relaxed);
         }
         usleep(5000);
     }
@@ -232,13 +349,14 @@ static int qos_read_telemetry_file(const char *path,
 static void *admission_telemetry_file_main(void *arg)
 {
     const char *path = (const char *)arg;
-    const long poll_ms = pqc_config_positive_long_or_default("PQC_TELEMETRY_POLL_MS", 50);
+    const long poll_ms = g_qos_telemetry_poll_ms;
     uint64_t last_budget_ns = UINT64_MAX;
     uint64_t last_queue_depth = UINT64_MAX;
     double last_mem = -1.0;
     double last_tensor = -1.0;
 
-    while (!g_admission_telemetry_stop) {
+    while (!atomic_load_explicit(&g_admission_telemetry_stop,
+                                 memory_order_acquire)) {
         double mem = 0.0;
         double tensor = 0.0;
         unsigned long long budget_ns = 0;
@@ -276,21 +394,41 @@ void pqc_qos_start_monitors(pqc_qos_monitor_status_t *status)
 {
     if (status)
         memset(status, 0, sizeof(*status));
+    const int runtime_throttle_requested =
+        pqc_config_enabled("PQC_ENABLE_QOS_THROTTLE_ON_WRITE") ? 1 : 0;
+    const char *telemetry_path =
+        pqc_config_get_nonempty("PQC_TELEMETRY_FILE");
+    const int explicit_gpu_monitor =
+        pqc_config_enabled("PQC_ENABLE_GPU_LOAD_MONITOR") ||
+        pqc_config_present("PQC_GPU_LOAD_PATH");
 
-    const char *gpu_path = gpu_load_path();
-    if (status && gpu_path)
-        snprintf(status->gpu_load_path, sizeof(status->gpu_load_path), "%s", gpu_path);
-    g_gpu_load_stop = 0;
-    int rc = pthread_create(&g_gpu_load_thread, NULL, gpu_load_monitor_main, NULL);
-    if (rc == 0) {
-        g_gpu_load_thread_started = 1;
-        if (status)
-            status->gpu_monitor_started = 1;
-    } else if (status) {
-        status->gpu_monitor_errno = rc;
+    atomic_store_explicit(&g_qos_runtime_throttle_enabled,
+                          runtime_throttle_requested,
+                          memory_order_relaxed);
+    qos_runtime_policy_configure();
+
+    qos_throttle_trace_configure();
+
+    if (runtime_throttle_requested || telemetry_path || explicit_gpu_monitor) {
+        const char *gpu_path = gpu_load_path();
+        if (status) {
+            status->gpu_monitor_configured = 1;
+            if (gpu_path)
+                snprintf(status->gpu_load_path,
+                         sizeof(status->gpu_load_path), "%s", gpu_path);
+        }
+        atomic_store_explicit(&g_gpu_load_stop, 0, memory_order_release);
+        int rc = pthread_create(&g_gpu_load_thread, NULL,
+                                gpu_load_monitor_main, NULL);
+        if (rc == 0) {
+            g_gpu_load_thread_started = 1;
+            if (status)
+                status->gpu_monitor_started = 1;
+        } else if (status) {
+            status->gpu_monitor_errno = rc;
+        }
     }
 
-    const char *telemetry_path = pqc_config_get_nonempty("PQC_TELEMETRY_FILE");
     if (!telemetry_path)
         return;
     if (status) {
@@ -298,9 +436,11 @@ void pqc_qos_start_monitors(pqc_qos_monitor_status_t *status)
         snprintf(status->telemetry_path, sizeof(status->telemetry_path), "%s", telemetry_path);
     }
     snprintf(g_admission_telemetry_path, sizeof(g_admission_telemetry_path), "%s", telemetry_path);
-    g_admission_telemetry_stop = 0;
-    rc = pthread_create(&g_admission_telemetry_thread, NULL,
-                        admission_telemetry_file_main, g_admission_telemetry_path);
+    atomic_store_explicit(&g_admission_telemetry_stop, 0,
+                          memory_order_release);
+    int rc = pthread_create(&g_admission_telemetry_thread, NULL,
+                            admission_telemetry_file_main,
+                            g_admission_telemetry_path);
     if (rc == 0) {
         g_admission_telemetry_thread_started = 1;
         if (status)
@@ -314,7 +454,7 @@ int pqc_qos_stop_gpu_monitor(void)
 {
     if (!g_gpu_load_thread_started)
         return 0;
-    g_gpu_load_stop = 1;
+    atomic_store_explicit(&g_gpu_load_stop, 1, memory_order_release);
     pthread_join(g_gpu_load_thread, NULL);
     g_gpu_load_thread_started = 0;
     return 1;
@@ -324,7 +464,8 @@ int pqc_qos_stop_admission_telemetry(void)
 {
     if (!g_admission_telemetry_thread_started)
         return 0;
-    g_admission_telemetry_stop = 1;
+    atomic_store_explicit(&g_admission_telemetry_stop, 1,
+                          memory_order_release);
     pthread_join(g_admission_telemetry_thread, NULL);
     g_admission_telemetry_thread_started = 0;
     return 1;
@@ -332,11 +473,7 @@ int pqc_qos_stop_admission_telemetry(void)
 
 double pqc_qos_gpu_load_ewma_read(void)
 {
-    double v = 0.0;
-    pqc_lock_profile_scope_t gpu_scope;
-    if (qos_gpu_load_lock(&gpu_scope, __func__) == 0) {
-        v = g_gpu_load_ewma;
-        (void)qos_gpu_load_unlock(&gpu_scope, __func__);
-    }
-    return v;
+    unsigned milli = atomic_load_explicit(&g_gpu_load_ewma_milli,
+                                          memory_order_relaxed);
+    return qos_gpu_load_from_milli(milli);
 }

@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-"""Run a mounted-FUSE writer under live telemetry and a retained admission path.
+"""Run a mounted-FUSE writer under live telemetry and retained throttle path.
 
 This harness is intentionally conservative:
 
   * It mounts the real FUSE filesystem and writes through it.
   * It samples live `tegrastats` while optional GPU pressure is active.
   * The mounted FUSE process reads the same live samples through
-    `PQC_TELEMETRY_FILE`, so the real write flush path calls `pqc_admit()` with
-    workload-time pressure rather than a separate smoke-process state.
+    `PQC_TELEMETRY_FILE`, so the real write flush path applies the in-daemon
+    throttle with workload-time pressure rather than a separate smoke-process
+    state.
   * The same live samples are also replayed through
     `pqc_fuse --admission-telemetry-smoke` to retain per-sample decision
     diagnostics.
 
-The result is stronger than a pure smoke test because real FUSE routing changes
-inside the mounted daemon in the same execution. It is still not a full
+The result is stronger than a pure smoke test because real FUSE flushes are
+delayed inside the mounted daemon in the same execution. It is still not a full
 PMU/CUPTI/Nsight-backed controller proof; the live source is `tegrastats`.
 """
 
@@ -117,16 +118,12 @@ def start_fuse(storage_dir: Path,
                mount_dir: Path,
                log_dir: Path,
                telemetry_file: Path,
-               runtime_trace: Path,
                throttle_trace: Path) -> subprocess.Popen[str]:
     env = os.environ.copy()
     env["PQC_MASTER_PASSWORD"] = env.get("PQC_MASTER_PASSWORD", "test-password")
-    env["PQC_ENABLE_ADMISSION_ON_WRITE"] = "1"
-    env["PQC_ADMISSION_TRACE_PATH"] = str(runtime_trace)
     env["PQC_TELEMETRY_FILE"] = str(telemetry_file)
     env["PQC_TELEMETRY_POLL_MS"] = env.get("PQC_TELEMETRY_POLL_MS", "25")
     env["PQC_ADMISSION_INITIAL_BUDGET_NS"] = env.get("PQC_ADMISSION_INITIAL_BUDGET_NS", "2000000")
-    env["PQC_ADMISSION_WRITE_DEADLINE_NS"] = env.get("PQC_ADMISSION_WRITE_DEADLINE_NS", "10000000")
     env["PQC_ENABLE_QOS_THROTTLE_ON_WRITE"] = "1"
     env["PQC_QOS_THROTTLE_TRACE_PATH"] = str(throttle_trace)
     env["PQC_QOS_THROTTLE_SLEEP_US"] = env.get("PQC_QOS_THROTTLE_SLEEP_US", "50000")
@@ -325,7 +322,7 @@ def main() -> int:
     samples: list[dict[str, Any]] = []
     try:
         fuse_proc = start_fuse(storage_dir, mount_dir, mount_log_dir,
-                               telemetry_file, runtime_trace, throttle_trace)
+                               telemetry_file, throttle_trace)
         writer_proc = ctx.Process(
             target=writer_worker,
             args=(str(mount_dir), stop_flag, throttle_flag, result_queue,

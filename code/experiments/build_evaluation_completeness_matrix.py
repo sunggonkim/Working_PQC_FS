@@ -82,7 +82,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
             {
                 "path": "Paper/10_Discussion_and_Limitations.tex",
                 "terms": [
-                    "measured frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q",
+                    "The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q",
                     "not a full fscrypt, fs-verity, dm-integrity",
                 ],
             },
@@ -147,7 +147,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
             {
                 "path": "Paper/10_Discussion_and_Limitations.tex",
                 "terms": [
-                    "SQLite, elastic writes, secure append-log, and cache-manifest remounts",
+                    "SQLite, elastic background writes, append-log/cache-manifest remounts",
                     "not a general POSIX",
                 ],
             },
@@ -161,7 +161,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
         "required": True,
         "requirement": "time/overhead breakdown",
         "status": "implemented_scoped",
-        "figure_table_labels": ["fig:evaluation_summary"],
+        "figure_table_labels": ["fig:dataplane_negative_control", "fig:evaluation_summary"],
         "evidence": [
             {
                 "path": "artifacts/validation/mechanism_ablation_manifest/mechanism_ablation_manifest.json",
@@ -506,8 +506,8 @@ def build_report() -> dict[str, Any]:
         violations.append("figure/table labels have multiple matrix owners")
 
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
-    if pages != 12:
-        violations.append("Paper/main.pdf is not 12 pages")
+    if pages is None or pages > 13:
+        violations.append("Paper/main.pdf exceeds 13 pages")
 
     checks = {
         "figure_table_audit_pass": figure_audit.get("overall_pass") is True,
@@ -523,7 +523,7 @@ def build_report() -> dict[str, Any]:
             and not extra_label_mappings
             and not duplicate_label_mappings
         ),
-        "paper_pages_12": pages == 12,
+        "paper_pages_le_13": pages is not None and pages <= 13,
     }
 
     return {

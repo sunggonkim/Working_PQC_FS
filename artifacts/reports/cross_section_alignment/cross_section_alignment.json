@@ -3,7 +3,7 @@
     "all_sections_have_same_rounded_hero_terms": true,
     "hero_contract_pass": true,
     "no_unsupported_positive_claims": true,
-    "paper_pages_12": true,
+    "paper_pages_le_13": true,
     "source_anchors_present": true
   },
   "hero_contract": {
@@ -15,7 +15,7 @@
     "violations": 0
   },
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "schema_version": 1,
   "scope": [
     "abstract, introduction, design, evaluation, and conclusion",
@@ -162,7 +162,7 @@
       "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime under secure-storage pressure, not blanket GPU offload. Its format keeps AES-GCM writes on CPU, admits ML-KEM/cuPQC maintenance only with slack, and reports 8.15~ms SQLite p99 with 3.02~MB/s background progress on Thor. Accelerator throughput matters only after publication order, QoS, and replay boundaries are explicit."
     },
     "design": {
-      "line": 99,
+      "line": 101,
       "path": "Paper/3_Design.tex",
       "present": true,
       "text": "QoS follows Figure~\\ref{fig:first_page_qos}: unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling elastic writes, not by claiming application scheduling or completion bypass."

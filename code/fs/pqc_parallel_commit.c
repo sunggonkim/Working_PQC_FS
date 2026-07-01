@@ -55,6 +55,7 @@ static pqc_parallel_commit_config_t g_runtime_config;
 static char *g_runtime_trace_path = NULL;
 static uint32_t g_runtime_active_calls = 0;
 static atomic_int g_runtime_advisory_enabled = ATOMIC_VAR_INIT(0);
+static atomic_int g_runtime_trace_enabled = ATOMIC_VAR_INIT(0);
 static int g_runtime_enabled = 0;
 
 typedef struct {
@@ -607,6 +608,12 @@ static void runtime_trace_emit(pqc_parallel_runtime_trace_record_t *record)
     runtime_trace_record_clear(record);
 }
 
+static int runtime_trace_enabled(void)
+{
+    return atomic_load_explicit(&g_runtime_trace_enabled,
+                                memory_order_acquire) != 0;
+}
+
 static pqc_parallel_commit_coordinator_t *runtime_coordinator_acquire(void)
 {
     pqc_parallel_commit_coordinator_t *coordinator = NULL;
@@ -695,6 +702,8 @@ int pqc_parallel_commit_runtime_init_from_config(void)
     }
     atomic_store_explicit(&g_runtime_advisory_enabled, 0,
                           memory_order_release);
+    atomic_store_explicit(&g_runtime_trace_enabled, 0,
+                          memory_order_release);
     g_runtime_enabled = 0;
     old_coordinator = g_runtime_coordinator;
     g_runtime_coordinator = NULL;
@@ -705,6 +714,9 @@ int pqc_parallel_commit_runtime_init_from_config(void)
     g_runtime_trace_path = trace_path_copy;
     trace_path_copy = NULL;
     g_runtime_enabled = 1;
+    atomic_store_explicit(&g_runtime_trace_enabled,
+                          g_runtime_trace_path ? 1 : 0,
+                          memory_order_release);
     atomic_store_explicit(&g_runtime_advisory_enabled, 1,
                           memory_order_release);
     runtime_trace_snapshot_locked(&trace_record, "runtime_init", 0, 0,
@@ -723,6 +735,8 @@ void pqc_parallel_commit_runtime_shutdown(void)
     if (parallel_runtime_lock(&runtime_scope, __func__) != 0)
         return;
     atomic_store_explicit(&g_runtime_advisory_enabled, 0,
+                          memory_order_release);
+    atomic_store_explicit(&g_runtime_trace_enabled, 0,
                           memory_order_release);
     g_runtime_enabled = 0;
     pqc_parallel_commit_coordinator_t *coordinator = g_runtime_coordinator;
@@ -765,11 +779,13 @@ int pqc_parallel_commit_runtime_begin(uint64_t file_id,
         ticket->runtime_ref_held = 1;
     }
     pqc_parallel_runtime_trace_record_t trace_record = {0};
-    pqc_lock_profile_scope_t runtime_scope;
-    if (parallel_runtime_lock(&runtime_scope, __func__) == 0) {
-        runtime_trace_snapshot_locked(&trace_record, "begin", file_id,
-                                      bytes, ticket, rc);
-        (void)parallel_runtime_unlock(&runtime_scope, __func__);
+    if (runtime_trace_enabled()) {
+        pqc_lock_profile_scope_t runtime_scope;
+        if (parallel_runtime_lock(&runtime_scope, __func__) == 0) {
+            runtime_trace_snapshot_locked(&trace_record, "begin", file_id,
+                                          bytes, ticket, rc);
+            (void)parallel_runtime_unlock(&runtime_scope, __func__);
+        }
     }
     if (!leader_ref)
         runtime_coordinator_release();
@@ -791,12 +807,14 @@ int pqc_parallel_commit_runtime_finish(pqc_parallel_commit_ticket_t *ticket,
 
     int rc = pqc_parallel_commit_finish(coordinator, ticket, result_rc);
     pqc_parallel_runtime_trace_record_t trace_record = {0};
-    pqc_lock_profile_scope_t runtime_scope;
-    if (parallel_runtime_lock(&runtime_scope, __func__) == 0) {
-        runtime_trace_snapshot_locked(&trace_record, "finish", 0,
-                                      ticket->group_bytes, ticket,
-                                      rc == 0 ? result_rc : rc);
-        (void)parallel_runtime_unlock(&runtime_scope, __func__);
+    if (runtime_trace_enabled()) {
+        pqc_lock_profile_scope_t runtime_scope;
+        if (parallel_runtime_lock(&runtime_scope, __func__) == 0) {
+            runtime_trace_snapshot_locked(&trace_record, "finish", 0,
+                                          ticket->group_bytes, ticket,
+                                          rc == 0 ? result_rc : rc);
+            (void)parallel_runtime_unlock(&runtime_scope, __func__);
+        }
     }
     if (held_ref) {
         ticket->runtime_ref_held = 0;

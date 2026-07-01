@@ -16,13 +16,14 @@ typedef struct {
     uint64_t next_generation;
     uint64_t logical_offset;
     uint32_t length;
-    double gpu_load_ewma;
 } pqc_scheduler_data_job_input_t;
 
 void pqc_scheduler_reload_runtime_policy_from_env(void);
 pqc_scheduler_policy_t pqc_scheduler_policy_from_env(void);
 void pqc_scheduler_runtime_policy_snapshot(pqc_scheduler_policy_t *out);
 void pqc_scheduler_smoke_report(FILE *out);
+void pqc_scheduler_set_data_accounting_enabled(int enabled);
+int pqc_scheduler_data_accounting_enabled(void);
 
 void pqc_scheduler_schedule_data_job(pqc_block_job_t *job,
                                      const pqc_scheduler_data_job_input_t *input);

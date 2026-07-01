@@ -438,8 +438,7 @@ class FuseHandle:
 
 
 def start_fuse(storage_dir: Path, mount_dir: Path, mode_dir: Path,
-               telemetry_file: Path, admission_trace: Path,
-               throttle_trace: Path, config: ModeConfig,
+               telemetry_file: Path, throttle_trace: Path, config: ModeConfig,
                args: argparse.Namespace) -> FuseHandle:
     log_dir = mode_dir / "mount_logs"
     log_dir.mkdir(parents=True, exist_ok=True)
@@ -452,12 +451,8 @@ def start_fuse(storage_dir: Path, mount_dir: Path, mode_dir: Path,
             "PQC_MASTER_PASSWORD": "sqlite-hero-password",
             "PQC_FRESHNESS_ANCHOR_BACKEND": "file",
             "PQC_FRESHNESS_ANCHOR_PATH": str(mode_dir / "anchor.bin"),
-            "PQC_ALLOW_SQLITE_MMAP": "1",
             "PQC_KEY_ROTATION_INTERVAL_S": "0",
-            "PQC_ENABLE_ADMISSION_ON_WRITE": "1",
-            "PQC_ADMISSION_TRACE_PATH": str(admission_trace),
             "PQC_ADMISSION_INITIAL_BUDGET_NS": str(int(args.deadline_ms * 1_000_000)),
-            "PQC_ADMISSION_WRITE_DEADLINE_NS": str(int(args.deadline_ms * 1_000_000)),
             "PQC_TELEMETRY_FILE": str(telemetry_file),
             "PQC_TELEMETRY_POLL_MS": str(args.telemetry_poll_ms),
             "PQC_ENABLE_QOS_THROTTLE_ON_WRITE": "1" if config.daemon_throttle else "0",
@@ -892,7 +887,7 @@ def run_mode(config: ModeConfig, out_root: Path, args: argparse.Namespace) -> di
 
     try:
         fuse = start_fuse(storage_dir, mount_dir, mode_dir, telemetry_file,
-                          admission_trace, throttle_trace, config, args)
+                          throttle_trace, config, args)
         if config.background_writer:
             for writer_id in range(args.background_writers):
                 proc = ctx.Process(

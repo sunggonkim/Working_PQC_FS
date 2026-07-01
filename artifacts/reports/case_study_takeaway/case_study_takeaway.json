@@ -12,7 +12,7 @@
     "figure_label_present": true,
     "hero_artifact_present": true,
     "hero_contract_pass": true,
-    "paper_pages_12": true,
+    "paper_pages_le_13": true,
     "table_label_present": true,
     "takeaway_subsection_present": true,
     "takeaway_terms_present": true
@@ -27,7 +27,7 @@
     "present": true
   },
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "schema_version": 1,
   "scope": [
     "Deployment takeaway in Paper/10_Discussion_and_Limitations.tex",
@@ -44,6 +44,6 @@
     "evaluated envelope is local": true,
     "not a separate deployment anecdote": true
   },
-  "takeaway_text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies. The SQLite point is the same storage-pressure case summarized by Figure~\\ref{fig:first_page_qos} and Table~\\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote. The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory.",
+  "takeaway_text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies. The SQLite point is the same storage-pressure case summarized by Figure~\\ref{fig:first_page_qos} and Table~\\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote. The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory, with recovery exposure through an explicit oracle.",
   "violations": []
 }

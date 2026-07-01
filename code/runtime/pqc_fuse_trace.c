@@ -18,6 +18,7 @@ typedef struct {
 } pqc_fuse_trace_counter_t;
 
 static pqc_fuse_trace_counter_t g_fuse_trace[PQC_FUSE_TRACE_COUNT];
+static atomic_int g_fuse_trace_enabled = ATOMIC_VAR_INIT(-1);
 
 static uint64_t monotonic_ns(void)
 {
@@ -50,13 +51,34 @@ static uint64_t load_counter(const atomic_ullong *counter)
                                          memory_order_relaxed);
 }
 
+static int trace_enabled(void)
+{
+    int enabled = atomic_load_explicit(&g_fuse_trace_enabled,
+                                       memory_order_relaxed);
+    if (enabled >= 0)
+        return enabled;
+    enabled = pqc_config_get_nonempty("PQC_FUSE_TRACE_PATH") ? 1 : 0;
+    atomic_store_explicit(&g_fuse_trace_enabled, enabled,
+                          memory_order_relaxed);
+    return enabled;
+}
+
 uint64_t pqc_fuse_trace_begin(void)
 {
+    if (!trace_enabled())
+        return 0;
     return monotonic_ns();
+}
+
+int pqc_fuse_trace_is_enabled(void)
+{
+    return trace_enabled();
 }
 
 void pqc_fuse_trace_end(pqc_fuse_trace_op_t op, uint64_t start_ns, int rc)
 {
+    if (!trace_enabled() || start_ns == 0)
+        return;
     if (op < 0 || op >= PQC_FUSE_TRACE_COUNT)
         return;
     uint64_t duration_ns = elapsed_ns(monotonic_ns(), start_ns);
@@ -73,6 +95,10 @@ void pqc_fuse_trace_end(pqc_fuse_trace_op_t op, uint64_t start_ns, int rc)
 
 void pqc_fuse_trace_reset(void)
 {
+    atomic_store_explicit(
+        &g_fuse_trace_enabled,
+        pqc_config_get_nonempty("PQC_FUSE_TRACE_PATH") ? 1 : 0,
+        memory_order_relaxed);
     for (size_t i = 0; i < PQC_FUSE_TRACE_COUNT; ++i) {
         atomic_store_explicit(&g_fuse_trace[i].calls, 0,
                               memory_order_relaxed);

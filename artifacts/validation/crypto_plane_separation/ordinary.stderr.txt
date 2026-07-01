@@ -4,32 +4,21 @@
   │  CPU data plane; optional batch GPU helpers         │
   └─────────────────────────────────────────────────────┘
 
-[PQC-FUSE 2026-06-29 08:30:28.428] ════════════════════════════════════════════════════════════
-[PQC-FUSE 2026-06-29 08:30:28.428]   PQC-FUSE Session Started
-[PQC-FUSE 2026-06-29 08:30:28.428]   Storage dir : /tmp/aegisq_ordinary_vluxcq3q/store
-[PQC-FUSE 2026-06-29 08:30:28.428]   Mount point : /tmp/aegisq_ordinary_vluxcq3q/mnt
-[PQC-FUSE 2026-06-29 08:30:28.428] ════════════════════════════════════════════════════════════
-[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/crypto_plane_separation/ordinary.admission.jsonl
-[PQC-FUSE 2026-06-29 08:30:28.428] KEM algorithm : ML-KEM-768
-[PQC-FUSE 2026-06-29 08:30:28.428]   public key  : 1184 bytes
-[PQC-FUSE 2026-06-29 08:30:28.428]   secret key  : 2400 bytes
-[PQC-FUSE 2026-06-29 08:30:28.428]   ciphertext  : 1088 bytes
-[PQC-FUSE 2026-06-29 08:30:28.428]   shared secret: 32 bytes
-[PQC-FUSE 2026-06-29 08:30:28.430] Keypair generated in 1398.44 µs
-[PQC-FUSE 2026-06-29 08:30:28.489] Master Key derived successfully (scrypt)
-[PQC-FUSE 2026-06-29 08:30:28.490] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
-[PQC-FUSE 2026-06-29 08:30:28.490] GPU load monitor started: /sys/devices/gpu.0/load
-[PQC-FUSE 2026-06-29 08:30:28.490] Freshness anchor worker started
-[PQC-FUSE 2026-06-29 08:30:28.652] PQC background rekey worker started
-[PQC-FUSE 2026-06-29 08:30:28.652] Starting FUSE main loop...
+[PQC-FUSE 2026-07-01 22:04:33.361] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-01 22:04:33.361]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-01 22:04:33.361]   Storage dir : /tmp/aegisq_ordinary_85mu5lxo/store
+[PQC-FUSE 2026-07-01 22:04:33.361]   Mount point : /tmp/aegisq_ordinary_85mu5lxo/mnt
+[PQC-FUSE 2026-07-01 22:04:33.361] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-01 22:04:33.361] Elastic admission controller disabled for this mount
+[PQC-FUSE 2026-07-01 22:04:33.361] Elastic scheduler policy reload skipped for this mount
+[PQC-FUSE 2026-07-01 22:04:33.362] PQC key-plane rekey disabled for this mount
+[PQC-FUSE 2026-07-01 22:04:33.424] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-01 22:04:33.424] QoS monitor startup skipped for this mount
+[PQC-FUSE 2026-07-01 22:04:33.424] Freshness anchor probe/worker skipped for this mount
+[PQC-FUSE 2026-07-01 22:04:33.424] Starting FUSE main loop...
 Ignoring invalid max threads value 4294967295 > max (100000).
-[PQC-FUSE 2026-06-29 08:30:28.691] CREATE /payload.bin: authenticated file-key envelope initialized (fid=1622884321219389582)
-[PQC-FUSE 2026-06-29 08:30:28.700] OPEN /payload.bin: restored authenticated file-key envelope (fid=1622884321219389582)
-[PQC-FUSE 2026-06-29 08:30:28.704] Shutting down PQC-FUSE filesystem...
-[PQC-FUSE 2026-06-29 08:30:28.720] PQC background rekey worker stopped
-[PQC-FUSE 2026-06-29 08:30:28.720] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
-[PQC-FUSE 2026-06-29 08:30:28.721] Scheduler stats: submitted=1 cpu=1 gpu=0 bytes_cpu=0 bytes_gpu=13824 migration_ns=884736
-[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0
-[PQC-FUSE 2026-06-29 08:30:28.721] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
-[PQC-FUSE 2026-06-29 08:30:28.721] Scheduler stats: submitted=1 cpu=1 gpu=0 bytes_cpu=0 bytes_gpu=13824 migration_ns=884736
-[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0
+[PQC-FUSE 2026-07-01 22:04:33.469] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-07-01 22:04:33.469] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-07-01 22:04:33.469] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-07-01 22:04:33.469] Durability sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-07-01 22:04:33.469] Durability mounted-operation sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0

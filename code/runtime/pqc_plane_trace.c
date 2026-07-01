@@ -33,6 +33,73 @@ typedef struct {
 } pqc_plane_trace_state_t;
 
 static pqc_plane_trace_state_t g_plane_trace;
+static atomic_int g_plane_trace_enabled = ATOMIC_VAR_INIT(-1);
+static char g_plane_trace_path[4096] = {0};
+
+static int path_is_absolute(const char *path)
+{
+    return path && path[0] == '/';
+}
+
+static void plane_trace_set_path_locked(const char *raw)
+{
+    if (!raw || !*raw) {
+        g_plane_trace_path[0] = '\0';
+        return;
+    }
+    if (path_is_absolute(raw)) {
+        snprintf(g_plane_trace_path, sizeof(g_plane_trace_path), "%s", raw);
+        return;
+    }
+    char cwd[sizeof(g_plane_trace_path)];
+    if (getcwd(cwd, sizeof(cwd))) {
+        size_t cwd_len = strlen(cwd);
+        size_t raw_len = strlen(raw);
+        if (cwd_len + 1U + raw_len >= sizeof(g_plane_trace_path)) {
+            g_plane_trace_path[0] = '\0';
+            return;
+        }
+        memcpy(g_plane_trace_path, cwd, cwd_len);
+        g_plane_trace_path[cwd_len] = '/';
+        memcpy(g_plane_trace_path + cwd_len + 1U, raw, raw_len + 1U);
+    } else {
+        snprintf(g_plane_trace_path, sizeof(g_plane_trace_path), "%s", raw);
+    }
+}
+
+static int plane_trace_configure_from_env(int force)
+{
+    for (;;) {
+        int enabled = atomic_load_explicit(&g_plane_trace_enabled,
+                                           memory_order_acquire);
+        if (!force && enabled >= 0)
+            return enabled;
+        if (enabled == -2)
+            continue;
+        int expected = enabled;
+        if (atomic_compare_exchange_strong_explicit(
+                &g_plane_trace_enabled, &expected, -2,
+                memory_order_acq_rel, memory_order_acquire))
+            break;
+    }
+
+    const char *path = pqc_config_get_nonempty("PQC_PLANE_TRACE_PATH");
+    int enabled = 0;
+    if (path) {
+        plane_trace_set_path_locked(path);
+        enabled = g_plane_trace_path[0] != '\0' ? 1 : 0;
+    } else {
+        g_plane_trace_path[0] = '\0';
+    }
+    atomic_store_explicit(&g_plane_trace_enabled, enabled,
+                          memory_order_release);
+    return enabled;
+}
+
+int pqc_plane_trace_enabled(void)
+{
+    return plane_trace_configure_from_env(0);
+}
 
 static void trace_add(atomic_ullong *counter, uint64_t value)
 {
@@ -67,6 +134,8 @@ static int write_all(int fd, const char *buf, size_t len)
 void pqc_plane_trace_record_data_encrypt(uint64_t blocks, uint64_t bytes,
                                          int gpu_used)
 {
+    if (!pqc_plane_trace_enabled())
+        return;
     trace_add(&g_plane_trace.data_aes_gcm_encrypt_blocks, blocks);
     trace_add(&g_plane_trace.data_aes_gcm_encrypt_bytes, bytes);
     trace_add(gpu_used ? &g_plane_trace.data_route_gpu_blocks
@@ -77,6 +146,8 @@ void pqc_plane_trace_record_data_encrypt(uint64_t blocks, uint64_t bytes,
 void pqc_plane_trace_record_data_decrypt(uint64_t blocks, uint64_t bytes,
                                          int gpu_used)
 {
+    if (!pqc_plane_trace_enabled())
+        return;
     trace_add(&g_plane_trace.data_aes_gcm_decrypt_blocks, blocks);
     trace_add(&g_plane_trace.data_aes_gcm_decrypt_bytes, bytes);
     trace_add(gpu_used ? &g_plane_trace.data_route_gpu_blocks
@@ -86,6 +157,8 @@ void pqc_plane_trace_record_data_decrypt(uint64_t blocks, uint64_t bytes,
 
 void pqc_plane_trace_record_data_gpu_fallback(void)
 {
+    if (!pqc_plane_trace_enabled())
+        return;
     trace_add(&g_plane_trace.data_gpu_fallback_events, 1);
 }
 
@@ -96,6 +169,8 @@ void pqc_plane_trace_record_keyplane_batch(uint64_t candidate_files,
                                            int gpu_used,
                                            int success)
 {
+    if (!pqc_plane_trace_enabled())
+        return;
     trace_add(&g_plane_trace.keyplane_batches, 1);
     trace_add(&g_plane_trace.keyplane_candidate_files, candidate_files);
     trace_add(&g_plane_trace.keyplane_refreshed_files, refreshed_files);
@@ -111,6 +186,8 @@ void pqc_plane_trace_record_keyplane_batch(uint64_t candidate_files,
 
 void pqc_plane_trace_record_freshness_anchor(uint32_t backend, int rc)
 {
+    if (!pqc_plane_trace_enabled())
+        return;
     trace_add(&g_plane_trace.freshness_anchor_events, 1);
     if (rc == 0)
         trace_add(&g_plane_trace.freshness_anchor_successes, 1);
@@ -169,6 +246,7 @@ void pqc_plane_trace_snapshot(pqc_plane_trace_snapshot_t *out)
 
 void pqc_plane_trace_reset(void)
 {
+    (void)plane_trace_configure_from_env(1);
     atomic_store_explicit(&g_plane_trace.data_aes_gcm_encrypt_blocks, 0,
                           memory_order_relaxed);
     atomic_store_explicit(&g_plane_trace.data_aes_gcm_encrypt_bytes, 0,
@@ -213,8 +291,10 @@ void pqc_plane_trace_reset(void)
 
 int pqc_plane_trace_dump_if_requested(void)
 {
-    const char *path = pqc_config_get_nonempty("PQC_PLANE_TRACE_PATH");
-    if (!path)
+    if (!plane_trace_configure_from_env(0))
+        return 0;
+    const char *path = g_plane_trace_path;
+    if (!path || !*path)
         return 0;
 
     pqc_plane_trace_snapshot_t s;

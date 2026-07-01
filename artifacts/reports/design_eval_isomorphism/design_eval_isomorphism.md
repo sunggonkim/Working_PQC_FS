@@ -1,8 +1,9 @@
 # Design-evaluation isomorphism audit
 
 - Overall pass: `True`
-- Paper pages: `12`
+- Paper pages: `13`
 - Mapping text present: `True`
+- Architecture component map present: `True`
 
 ## Mechanism closures
 
@@ -22,9 +23,9 @@
 | `fig:first_page_qos` | first-page QoS pressure/hero result | `True` | `True` |
 | `tab:capability_matrix` | design-gap capability comparison | `True` | `True` |
 | `tab:design_goals` | formal invariant table | `True` | `True` |
+| `fig:dataplane_negative_control` | data-plane placement motivation | `True` | `True` |
 | `fig:overall_procedure` | architecture and plane separation | `True` | `True` |
 | `fig:djc_state_machine` | publication protocol state machine | `True` | `True` |
-| `tab:memory_compat` | memory/claim boundary | `True` | `True` |
 | `tab:impl_boundaries` | implementation boundary summary | `True` | `True` |
 | `tab:threat_boundary` | security threat boundary | `True` | `True` |
 | `tab:benchmark_workloads` | evaluation provenance | `True` | `True` |

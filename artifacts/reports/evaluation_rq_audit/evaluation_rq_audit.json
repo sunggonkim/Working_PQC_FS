@@ -16,7 +16,7 @@
     "side-channel evidence": true
   },
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "rqs": [
     {
       "evidence_needles": [
@@ -43,7 +43,7 @@
     {
       "evidence_needles": [
         "\\label{sec:eval_performance}",
-        "CPU for bulk data",
+        "AES-GCM data writes are latency-sensitive and remain CPU-first",
         "mounted ML-KEM-768 key-plane workflow"
       ],
       "evidence_present": true,

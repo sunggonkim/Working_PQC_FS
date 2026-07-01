@@ -1,26 +1,19 @@
 /**
- * pqc_admission.h — QoS-Aware Admission Control Framework (M5)
+ * pqc_admission.h — Elastic maintenance-lane admission.
  *
- * Purpose:
- *   Replace threshold-only routing with explicit admission control:
- *   - Track batch age, expected service time, queue depth, staging cost.
- *   - Make route decision based on AI SLO budget, coherence cost, queue pressure.
- *   - Log route reason for scheduler trace analysis (E3/E4 evaluation).
+ * The admission controller is the only route into GPU/cuPQC work.  It does
+ * not schedule foreground AES-GCM file publication and it does not change the
+ * persistent format.  Its contract is intentionally narrow:
+ *   - foreground or non-independent work returns to the CPU path;
+ *   - small batches, expired deadlines, stale slack, stale telemetry, high
+ *     queue pressure, or high UMA-pressure estimates fail closed to CPU;
+ *   - accepted work is independent, batched, slack-tolerant maintenance work
+ *     that can fall back to CPU without changing D/J/C publication semantics;
+ *   - optional trace records make the decision reproducible.
  *
- * Design:
- *   The admission controller is the central policy arbiter:
- *   - Input:  pqc_admission_context_t (batch characteristics + system state)
- *   - Output: route decision (CPU or GPU) + reason code
- *   - Side effect: log decision to scheduler trace for reproducibility
- *
- * Evaluation Contract (M5 Gate):
- *   "Scheduler traces show a causal route change when the SLO budget changes.
- *    CPU fast-lane p99 remains bounded under a saturated elastic queue."
- *
- *   This requires:
- *   - Route decision is deterministic given input state.
- *   - Trace records exact state at decision time.
- *   - E4 can replay traces and verify SLO protection causality.
+ * Some public context fields retain historical "ai_*" names for ABI/source
+ * compatibility.  They now carry producer-supplied slack/budget for elastic
+ * maintenance, not a claim of a foreground AI scheduler.
  *
  * Copyright 2025 AEGIS-Q Authors. Apache-2.0.
  */
@@ -45,8 +38,8 @@ extern "C" {
  *
  * Initialize the admission controller.
  *   - Open scheduler trace file when explicitly configured.
- *   - Load policy parameters (AI SLO budget, queue thresholds, etc.).
- *   - Initialize telemetry buffers.
+ *   - Load cached policy parameters for slack, queue, and UMA thresholds.
+ *   - Initialize relaxed telemetry counters.
  *
  * Called once during pqc_fuse startup.
  * Returns: 0 on success, -1 on explicit trace-file or config loading error.
@@ -68,7 +61,7 @@ void pqc_admission_shutdown(void);
 /**
  * pqc_admit()
  *
- * Core admission control decision function.
+ * Core admission control decision function for elastic maintenance work.
  *
  * Input:
  *   - ctx->batch_count, bytes_total: job characteristics
@@ -77,7 +70,9 @@ void pqc_admission_shutdown(void);
  *   - ctx->cpu_queue_depth, gpu_queue_depth: current queue lengths
  *   - ctx->cpu_load_avg, gpu_load_avg: rolling load estimates
  *   - ctx->ai_inference_deadline_ns: producer-supplied relative deadline/slack
- *   - ctx->ai_qos_budget_remaining_ns: GPU slack after AI inference reservation
+ *     for elastic maintenance
+ *   - ctx->ai_qos_budget_remaining_ns: remaining producer slack/budget; the
+ *     field name is retained for compatibility
  *   - ctx->producer_slack_age_ns/stale_after_ns/stale: filled by controller
  *   - ctx->uma_migration_cost_ns: UVM stall cost derived from a rolling proxy
  *     when CUPTI counters are unavailable
@@ -93,7 +88,7 @@ void pqc_admission_shutdown(void);
  *      - request too small for GPU overhead amortization
  *      - batch_age > ai_inference_deadline_ns
  *
- *   2. AI QoS protection (priority for inference):
+ *   2. Producer-slack protection:
  *      - if producer slack is stale:
  *          → CPU (reason = STALE_TELEMETRY)
  *      - if ai_qos_budget_remaining_ns < gpu_kernel_est_ns + staging:
@@ -112,22 +107,22 @@ void pqc_admission_shutdown(void);
  *
  * Returns: 0 on success, -1 on internal error (do not use for routing).
  *
- * M5 Gate Criterion:
- *   "Scheduler traces show a causal route change when the SLO budget changes.
- *    CPU fast-lane p99 remains bounded under a saturated elastic queue."
+ * The caller must not use this function to route foreground AES-GCM writes to
+ * GPU.  Those jobs are rejected before admission by the block-job eligibility
+ * predicate and remain CPU-first.
  */
 int pqc_admit(pqc_admission_context_t *ctx);
 
 /**
  * pqc_admission_update_ai_budget()
  *
- * Called periodically by the AI load monitor to update GPU SLO budget.
+ * Update the producer-supplied slack/budget for elastic GPU maintenance.
  *
  * Input:
  *   - ai_budget_ns: remaining GPU slack for elastic jobs (nanoseconds)
- *   - ai_inference_queue_depth: number of pending AI jobs
+ *   - ai_inference_queue_depth: producer queue-depth hint retained in the
+ *     existing field name for compatibility
  *
- * The admission controller uses this to make QoS-aware decisions.
  * Called by a foreground producer or telemetry bridge.  The sample is treated
  * as stale after PQC_PRODUCER_SLACK_STALE_NS (default 250 ms), and missing or
  * stale slack fails closed to CPU.
@@ -175,7 +170,7 @@ int pqc_qos_class_load_for_path(const char *phys_path, int *out);
  *   "expected_service_ns": <uint64>
  * }
  *
- * Used for E3/E4 reproducibility and causal analysis.
+ * Used for reproduction and admission-sensitivity analysis.
  * Thread-safe (uses mutex lock on trace file).
  */
 void pqc_scheduler_trace_log(const pqc_admission_context_t *ctx);
@@ -210,7 +205,7 @@ typedef struct {
 void pqc_scheduler_trace_stats(pqc_admission_stats_t *out_stats);
 
 /* ──────────────────────────────────────────────────────────────────────────
- *  Telemetry Integration (software rolling proxy + CUPTI-ready hooks)
+ *  Telemetry Integration (software rolling proxy + optional profiler hooks)
  * ────────────────────────────────────────────────────────────────────────── */
 
 /**
@@ -233,7 +228,8 @@ extern void pqc_admission_record_uma_event(size_t uma_bytes,
  * pqc_admission_update_telemetry()
  *
  * Update global telemetry values for memory bandwidth and Tensor Core utilization.
- * Used by the co-running stress test and profilers to drive phase-aware decisions.
+ * Profiler/tegrastats bridges use these samples to bias elastic maintenance
+ * admission.  Stale or absent samples fail closed to CPU.
  */
 extern void pqc_admission_update_telemetry(double mem_bandwidth_util,
                                            double tensor_core_util);

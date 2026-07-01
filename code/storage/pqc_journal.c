@@ -11,19 +11,27 @@
 
 #define PQC_JOURNAL_HIGHWATER_BLOCK UINT64_MAX
 
-static int journal_digest(journal_record_t *record)
+static int journal_digest_with_ctx(journal_record_t *record, EVP_MD_CTX *md)
 {
-    EVP_MD_CTX *md = EVP_MD_CTX_new();
     unsigned int out_len = 0;
-    if (!md)
-        return -ENOMEM;
+    if (!record || !md)
+        return -EINVAL;
     int ok = EVP_DigestInit_ex(md, EVP_sha256(), NULL) == 1 &&
              EVP_DigestUpdate(md, record,
                               offsetof(journal_record_t, digest)) == 1 &&
              EVP_DigestFinal_ex(md, record->digest, &out_len) == 1 &&
              out_len == sizeof(record->digest);
-    EVP_MD_CTX_free(md);
     return ok ? 0 : -EIO;
+}
+
+static int journal_digest(journal_record_t *record)
+{
+    EVP_MD_CTX *md = EVP_MD_CTX_new();
+    if (!md)
+        return -ENOMEM;
+    int rc = journal_digest_with_ctx(record, md);
+    EVP_MD_CTX_free(md);
+    return rc;
 }
 
 static int journal_record_valid(journal_record_t *record)
@@ -87,6 +95,23 @@ static int journal_record_from_mapping(journal_record_t *record,
         .mapping = *mapping,
     };
     return journal_digest(record);
+}
+
+static int journal_record_from_mapping_with_ctx(journal_record_t *record,
+                                                const block_mapping_t *mapping,
+                                                EVP_MD_CTX *md)
+{
+    if (!record || !mapping ||
+        mapping->plaintext_length > PQC_LOGICAL_BLOCK_SIZE ||
+        mapping->algorithm_id != PQC_ALGO_AES_256_GCM)
+        return -EINVAL;
+    *record = (journal_record_t) {
+        .magic = PQC_JOURNAL_MAGIC,
+        .version = PQC_JOURNAL_VERSION,
+        .committed = PQC_JOURNAL_COMMITTED,
+        .mapping = *mapping,
+    };
+    return journal_digest_with_ctx(record, md);
 }
 
 int pqc_journal_append_mapping(int journal_fd, const block_mapping_t *mapping)
@@ -174,11 +199,16 @@ int pqc_journal_append_mappings_with_highwater_at_unsynced(
         append_offset > UINT64_MAX - total_bytes)
         return -EOVERFLOW;
     journal_record_t records[PQC_WRITEBACK_MAX_BLOCKS + 1U];
-    memset(records, 0, sizeof(records));
+    EVP_MD_CTX *md = EVP_MD_CTX_new();
+    if (!md)
+        return -ENOMEM;
     for (size_t i = 0; i < count; ++i) {
-        int rc = journal_record_from_mapping(&records[i], &mappings[i]);
-        if (rc != 0)
+        int rc = journal_record_from_mapping_with_ctx(
+            &records[i], &mappings[i], md);
+        if (rc != 0) {
+            EVP_MD_CTX_free(md);
             return rc;
+        }
     }
     records[count] = (journal_record_t) {
         .magic = PQC_JOURNAL_MAGIC,
@@ -193,7 +223,8 @@ int pqc_journal_append_mappings_with_highwater_at_unsynced(
             .algorithm_id = PQC_ALGO_AES_256_GCM,
         },
     };
-    int rc = journal_digest(&records[count]);
+    int rc = journal_digest_with_ctx(&records[count], md);
+    EVP_MD_CTX_free(md);
     if (rc != 0)
         return rc;
     rc = journal_write_full(journal_fd, records, (size_t)total_bytes);

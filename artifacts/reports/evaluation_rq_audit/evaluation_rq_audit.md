@@ -1,7 +1,7 @@
 # Evaluation RQ audit
 
 - Overall pass: `True`
-- AEGIS-Q page count at audit time: `12`
+- AEGIS-Q page count at audit time: `13`
 - Defensive Evaluation hits: `0`
 
 ## Research-question shape

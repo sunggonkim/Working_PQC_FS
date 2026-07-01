@@ -5,12 +5,31 @@
 
 ## FUSE Operation Counters
 
-- `create` calls `1`, errors `0`, total_ns `1644658`, max_ns `1644658`
-- `write` calls `1`, errors `0`, total_ns `38287`, max_ns `38287`
-- `fsync` calls `1`, errors `0`, total_ns `6801778`, max_ns `6801778`
-- `read` calls `1`, errors `0`, total_ns `227037`, max_ns `227037`
-- `release` calls `1`, errors `0`, total_ns `492296`, max_ns `492296`
-- `readdir` calls `1`, errors `0`, total_ns `19454`, max_ns `19454`
+- `create` calls `1`, errors `0`, total_ns `295945`, max_ns `295945`
+- `write` calls `1`, errors `0`, total_ns `31389`, max_ns `31389`
+- `fsync` calls `1`, errors `0`, total_ns `110509441`, max_ns `110509441`
+- `read` calls `1`, errors `0`, total_ns `237648`, max_ns `237648`
+- `release` calls `1`, errors `0`, total_ns `789509`, max_ns `789509`
+- `readdir` calls `1`, errors `0`, total_ns `27028`, max_ns `27028`
+
+## Publication Trace Counters
+
+- Publication events: `27`
+- Publication elapsed_ns total: `36355851`
+- Publication sync_count total: `54`
+- Data fdatasync count: `27`
+- Journal fdatasync count: `27`
+- Epoch-log fdatasync count: `0`
+
+## Mounted Durability Counters
+
+- fdatasync: `2`
+- fsync: `1`
+- syncfs: `0`
+- data_sidecar: `1`
+- journal_sidecar: `1`
+- marker_metadata: `1`
+- failures: `0`
 
 ## Proof Checks
 

@@ -84,7 +84,7 @@
         "mechanism": "telemetry-to-storage QoS"
       }
     ],
-    "pages": 12,
+    "pages": 13,
     "pdf": "Paper/main.pdf",
     "top_level_order": {
       "design_before_evaluation": true,

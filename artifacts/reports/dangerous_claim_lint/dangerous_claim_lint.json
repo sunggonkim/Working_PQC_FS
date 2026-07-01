@@ -50,7 +50,7 @@
     "ready_for_deployment": true,
     "side_channel_protection": true
   },
-  "scanned_file_count": 336,
+  "scanned_file_count": 337,
   "schema_version": 1,
   "scope": "Gate F4 dangerous claim lint",
   "term_counts": {

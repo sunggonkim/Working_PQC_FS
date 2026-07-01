@@ -103,7 +103,7 @@
         "gocryptfs": true
       }
     },
-    "pages": 12,
+    "pages": 13,
     "positive_before_defensive": {
       "defensive_hits_before_contributions": [],
       "pass": true

@@ -1,6 +1,5 @@
 #include "pqc_writeback.h"
 
-#include "pqc_block_job.h"
 #include "pqc_checkpoint.h"
 #include "pqc_flush_batch.h"
 #include "pqc_flush_crypto.h"
@@ -66,12 +65,41 @@ static void publish_turn_finish_locked(file_state_t *state, uint64_t ticket)
     }
 }
 
+static int writeback_pwrite_full(int fd, const uint8_t *buf, size_t len,
+                                 off_t offset)
+{
+    size_t done = 0;
+    while (done < len) {
+        ssize_t written = pwrite(fd, buf + done, len - done,
+                                 offset + (off_t)done);
+        if (written < 0) {
+            if (errno == EINTR)
+                continue;
+            return -errno;
+        }
+        if (written == 0)
+            return -EIO;
+        done += (size_t)written;
+    }
+    return 0;
+}
+
 static int writeback_use_outer_parallel_commit(void)
 {
-    pqc_publication_mode_t mode = PQC_PUBLICATION_MODE_STRICT;
-    if (pqc_publication_mode_from_config(&mode) != 0)
-        return 1;
-    return mode != PQC_PUBLICATION_MODE_EPOCH_REDO_LOG;
+    return !pqc_publication_mode_is_epoch_redo_log_fast();
+}
+
+static void writeback_copy_cstr(char *dst, size_t dst_size, const char *src)
+{
+    if (!dst || dst_size == 0)
+        return;
+    if (!src) {
+        dst[0] = '\0';
+        return;
+    }
+    size_t len = strnlen(src, dst_size - 1);
+    memcpy(dst, src, len);
+    dst[len] = '\0';
 }
 
 static void writeback_snapshot_cleanup(pqc_writeback_snapshot_t *snapshot)
@@ -161,7 +189,6 @@ static int writeback_snapshot_take_locked(int storage_fd,
     if (!ctx->state)
         return -EIO;
 
-    memset(snapshot, 0, sizeof(*snapshot));
     snapshot->storage_fd = storage_fd;
     snapshot->data_fd = ctx->data_fd;
     snapshot->journal_fd = ctx->journal_fd;
@@ -174,14 +201,27 @@ static int writeback_snapshot_take_locked(int storage_fd,
     snapshot->qos_class = ctx->qos_class;
     snapshot->state = ctx->state;
     snapshot->file_id = ctx->file_id;
-    if (ctx->ss_len > sizeof(snapshot->ss))
-        return -EINVAL;
-    snapshot->ss_len = ctx->ss_len;
-    memcpy(snapshot->ss, ctx->ss, ctx->ss_len);
-    memcpy(snapshot->marker_path, ctx->marker_path,
-           sizeof(snapshot->marker_path) - 1);
-    memcpy(snapshot->epoch_log_path, ctx->epoch_log_path,
-           sizeof(snapshot->epoch_log_path) - 1);
+    snapshot->buf = NULL;
+    snapshot->buf_capacity = 0;
+    snapshot->snapshot_buf_acquired = 0;
+    snapshot->flush_plain_batch = NULL;
+    snapshot->flush_cipher_batch = NULL;
+    snapshot->flush_batch_capacity = 0;
+    snapshot->flush_scratch_acquired = 0;
+    snapshot->ss_len = 0;
+    if (ctx->tier != PQC_TIER_NONE) {
+        if (ctx->ss_len > sizeof(snapshot->ss))
+            return -EINVAL;
+        snapshot->ss_len = ctx->ss_len;
+        memcpy(snapshot->ss, ctx->ss, ctx->ss_len);
+    }
+    writeback_copy_cstr(snapshot->marker_path, sizeof(snapshot->marker_path),
+                        ctx->marker_path);
+    snapshot->epoch_log_path[0] = '\0';
+    if (ctx->epoch_log_fd >= 0)
+        writeback_copy_cstr(snapshot->epoch_log_path,
+                            sizeof(snapshot->epoch_log_path),
+                            ctx->epoch_log_path);
     snapshot->logical_size_cache = ctx->logical_size;
     snapshot->base = (uint64_t)ctx->wbuf_base_off;
     snapshot->write_size = ctx->wbuf_used;
@@ -211,7 +251,6 @@ static int writeback_flush_plain_snapshot(pqc_writeback_snapshot_t *snapshot)
         return -EFBIG;
 
     uint64_t final_size = snapshot->base + bytes;
-    uint64_t next_generation = 0;
     uint64_t publish_ticket = 0;
     int res = 0;
 
@@ -224,7 +263,6 @@ static int writeback_flush_plain_snapshot(pqc_writeback_snapshot_t *snapshot)
                                      &snapshot->state->commit_lock,
                                      "commit_lock", __func__,
                                      &commit_scope);
-    next_generation = snapshot->state->next_generation;
     uint64_t current_size = snapshot->state->logical_size_valid
         ? snapshot->state->logical_size
         : snapshot->logical_size_cache;
@@ -233,26 +271,11 @@ static int writeback_flush_plain_snapshot(pqc_writeback_snapshot_t *snapshot)
     (void)pqc_profiled_mutex_unlock(&snapshot->state->commit_lock,
                                     "commit_lock", __func__, &commit_scope);
 
-    pqc_block_job_t job;
-    pqc_scheduler_data_job_input_t sched_input = {
-        .file_id = snapshot->file_id,
-        .next_generation = next_generation,
-        .logical_offset = snapshot->base,
-        .length = (uint32_t)bytes,
-        .gpu_load_ewma = pqc_qos_gpu_load_ewma_read(),
-    };
-    pqc_scheduler_schedule_data_job(&job, &sched_input);
-
-    ssize_t written = pwrite(snapshot->storage_fd, snapshot->buf,
-                             snapshot->write_size, (off_t)snapshot->base);
-    if (written < 0) {
-        res = -errno;
+    res = writeback_pwrite_full(snapshot->storage_fd, snapshot->buf,
+                                snapshot->write_size,
+                                (off_t)snapshot->base);
+    if (res != 0)
         goto finish_publish_turn;
-    }
-    if ((size_t)written != snapshot->write_size) {
-        res = -EIO;
-        goto finish_publish_turn;
-    }
 
     if (final_size != current_size)
         res = pqc_publish_logical_size_store(snapshot->marker_path,
@@ -273,6 +296,8 @@ finish_publish_turn:
                                     "commit_lock", __func__, &commit_scope);
     if (res == 0)
         pqc_scheduler_record_data_bytes(bytes, 0, 0);
+    if (res == 0)
+        snapshot->logical_size_cache = final_size;
     return res;
 }
 
@@ -293,13 +318,12 @@ static int writeback_flush_authenticated_snapshot(
     uint64_t publish_ticket = 0;
     int publish_turn_active = 0;
     pqc_flush_batch_t batch;
-    pqc_flush_batch_init(&batch);
+    int batch_active = 0;
     pqc_parallel_commit_ticket_t parallel_ticket;
-    memset(&parallel_ticket, 0, sizeof(parallel_ticket));
     int parallel_commit_active = 0;
     int parallel_commit_finished = 0;
     int res = 0;
-    int gpu_admitted = 0;
+    uint64_t scheduled_bytes = 0;
 
     pqc_lock_profile_scope_t commit_scope;
     (void)pqc_profiled_mutex_lock(&snapshot->state->commit_lock, "commit_lock",
@@ -354,6 +378,7 @@ static int writeback_flush_authenticated_snapshot(
         (snapshot->epoch_log_fd >= 0 || snapshot->epoch_log_path[0] != '\0')
             ? snapshot->marker_path
             : NULL;
+    batch_active = 1;
     res = pqc_flush_batch_prepare(&batch, snapshot->journal_fd,
                                   snapshot->data_fd,
                                   epoch_fallback_marker_path,
@@ -369,22 +394,10 @@ static int writeback_flush_authenticated_snapshot(
     if (res != 0)
         goto out_batch;
 
-    pqc_block_job_t job;
-    pqc_scheduler_data_job_input_t sched_input = {
-        .file_id = snapshot->file_id,
-        .next_generation = reserved_generation,
-        .logical_offset = base,
-        .length = (uint32_t)batch.write_size,
-        .gpu_load_ewma = pqc_qos_gpu_load_ewma_read(),
-    };
-    pqc_scheduler_schedule_data_job(&job, &sched_input);
-    int use_gpu_batch = (job.target == PQC_JOB_GPU && batch.block_count > 1);
+    scheduled_bytes = (uint64_t)batch.write_size;
     uint32_t algorithm_id = PQC_ALGO_AES_256_GCM;
-    if (use_gpu_batch)
-        pqc_scheduler_gpu_admit((uint32_t)(final_size - base));
-    gpu_admitted = use_gpu_batch;
     res = pqc_flush_crypto_encrypt(snapshot->ss, snapshot->ss_len,
-                                   snapshot->file_id, &batch, use_gpu_batch,
+                                   snapshot->file_id, &batch, 0,
                                    NULL);
     if (res != 0)
         goto out_batch;
@@ -398,6 +411,8 @@ static int writeback_flush_authenticated_snapshot(
     int journal_sidecar_append_offset_valid = 0;
     uint64_t journal_sidecar_end_after_append = 0;
     int journal_sidecar_end_after_append_valid = 0;
+    block_mapping_t live_mappings[PQC_WRITEBACK_MAX_BLOCKS];
+    size_t live_mapping_count = 0;
     (void)pqc_profiled_mutex_lock(&snapshot->state->commit_lock,
                                   "commit_lock", __func__, &commit_scope);
     if (snapshot->state->data_sidecar_end_valid) {
@@ -442,6 +457,10 @@ static int writeback_flush_authenticated_snapshot(
         .blocks = batch.blocks,
         .block_count = batch.block_count,
         .cipher_batch = batch.cipher_batch,
+        .cipher_batch_len = batch.packed_bytes,
+        .published_mappings = live_mappings,
+        .published_mappings_capacity = PQC_WRITEBACK_MAX_BLOCKS,
+        .published_mappings_count = &live_mapping_count,
         .data_sidecar_dirty = &ctx->data_sidecar_dirty,
         .journal_sidecar_dirty = &ctx->journal_sidecar_dirty,
         .epoch_log_dirty = &ctx->epoch_log_dirty,
@@ -462,8 +481,7 @@ static int writeback_flush_authenticated_snapshot(
     if (pqc_parallel_commit_runtime_enabled() &&
         writeback_use_outer_parallel_commit()) {
         int parallel_rc = pqc_parallel_commit_runtime_begin(
-            snapshot->file_id, (uint64_t)(final_size - base),
-            &parallel_ticket);
+            snapshot->file_id, scheduled_bytes, &parallel_ticket);
         if (parallel_ticket.role != PQC_PARALLEL_COMMIT_ROLE_INVALID)
             parallel_commit_active = 1;
         if (parallel_rc != 0 &&
@@ -490,21 +508,9 @@ static int writeback_flush_authenticated_snapshot(
         snapshot->state->journal_sidecar_end_valid = 0;
     }
     if (res == 0) {
-        block_mapping_t live_mappings[PQC_WRITEBACK_MAX_BLOCKS];
-        for (size_t bi = 0; bi < batch.block_count; ++bi) {
-            const pqc_crypto_block_desc_t *block = &batch.blocks[bi];
-            live_mappings[bi] = (block_mapping_t) {
-                .logical_block = block->block,
-                .generation = block->generation,
-                .ciphertext_offset = block->ciphertext_offset,
-                .plaintext_length = block->length,
-                .algorithm_id = algorithm_id,
-            };
-            memcpy(live_mappings[bi].tag, block->tag,
-                   sizeof(live_mappings[bi].tag));
-        }
-        (void)pqc_file_state_mapping_cache_store_locked(
-            snapshot->state, live_mappings, batch.block_count);
+        if (live_mapping_count > 0)
+            (void)pqc_file_state_mapping_cache_store_locked(
+                snapshot->state, live_mappings, live_mapping_count);
         snapshot->state->logical_size = published_logical_size;
         snapshot->state->logical_size_valid = 1;
         if (snapshot->state->committed_generation < reserved_generation)
@@ -534,16 +540,14 @@ out_batch:
                                         "commit_lock", __func__,
                                         &commit_scope);
     }
-    if (gpu_admitted)
-        pqc_scheduler_gpu_release((uint32_t)(final_size - base));
-    pqc_flush_batch_cleanup(&batch);
+    if (batch_active)
+        pqc_flush_batch_cleanup(&batch);
     if (res != 0)
         pqc_log("authenticated flush failed: %s", strerror(-res));
-    if (res == 0) {
-        pqc_scheduler_record_data_bytes(0,
-                                        (uint64_t)(final_size - base),
-                                        (uint64_t)(final_size - base) * 64ULL);
-    }
+    if (res == 0)
+        pqc_scheduler_record_data_bytes(scheduled_bytes, 0, 0);
+    if (res == 0)
+        snapshot->logical_size_cache = published_logical_size;
     return res;
 }
 
@@ -561,7 +565,9 @@ int pqc_writeback_flush_locked(int storage_fd,
 
     (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock",
                                     fd_site, fd_scope);
-    pqc_qos_apply_runtime_throttle(snapshot.write_size, snapshot.qos_class);
+    if (pqc_qos_runtime_throttle_enabled())
+        pqc_qos_apply_runtime_throttle_enabled(snapshot.write_size,
+                                               snapshot.qos_class);
     int res = snapshot.tier == PQC_TIER_NONE
         ? writeback_flush_plain_snapshot(&snapshot)
         : writeback_flush_authenticated_snapshot(ctx, &snapshot,
@@ -576,15 +582,7 @@ int pqc_writeback_flush_locked(int storage_fd,
         pqc_fd_context_mark_fsync_dirty(ctx);
         if (ctx->journal_sidecar_epoch_repairable)
             pqc_fd_context_mark_fsync_epoch_repairable(ctx);
-        pqc_lock_profile_scope_t commit_scope;
-        (void)pqc_profiled_mutex_lock(&snapshot.state->commit_lock,
-                                      "commit_lock", __func__,
-                                      &commit_scope);
-        if (snapshot.state->logical_size_valid)
-            ctx->logical_size = snapshot.state->logical_size;
-        (void)pqc_profiled_mutex_unlock(&snapshot.state->commit_lock,
-                                        "commit_lock", __func__,
-                                        &commit_scope);
+        ctx->logical_size = snapshot.logical_size_cache;
     }
     pqc_fd_context_writeback_job_end(ctx);
     return res;

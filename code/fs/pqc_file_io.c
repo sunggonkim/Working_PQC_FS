@@ -21,6 +21,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <linux/falloc.h>
 #include <oqs/oqs.h>
 #include <openssl/rand.h>
@@ -46,6 +47,19 @@ static int marker_path_is_hidden_unlinked(const char *path)
     const char *base = strrchr(path, '/');
     base = base ? base + 1 : path;
     return strncmp(base, ".fuse_hidden", strlen(".fuse_hidden")) == 0;
+}
+
+static void file_io_copy_cstr(char *dst, size_t dst_size, const char *src)
+{
+    if (!dst || dst_size == 0)
+        return;
+    if (!src) {
+        dst[0] = '\0';
+        return;
+    }
+    size_t len = strnlen(src, dst_size - 1);
+    memcpy(dst, src, len);
+    dst[len] = '\0';
 }
 
 static void cleanup_hidden_marker_and_sidecars(const char *marker_path)
@@ -96,12 +110,14 @@ static void log_rekey_enqueue_drop(pqc_rekey_enqueue_status_t status, int fd)
                 reason, fd, count);
 }
 
-static int rekey_due_locked(const pqc_fd_ctx_t *ctx)
+static int rekey_due_locked(const pqc_fd_ctx_t *ctx,
+                            int force_on_write,
+                            int rotation_interval_s)
 {
-    int interval = pqc_rekey_rotation_interval_s();
-    if (pqc_rekey_force_on_write_enabled())
+    if (force_on_write)
         return 1;
-    return interval > 0 && (time(NULL) - ctx->last_rekey) >= interval;
+    return rotation_interval_s > 0 &&
+        (time(NULL) - ctx->last_rekey) >= rotation_interval_s;
 }
 
 static int write_buffered_locked(int fd, pqc_fd_ctx_t *ctx,
@@ -144,6 +160,22 @@ static int drain_writeback_locked(int fd, pqc_fd_ctx_t *ctx,
     return res;
 }
 
+static int writeback_idle_locked(const pqc_fd_ctx_t *ctx)
+{
+    return ctx &&
+           (!ctx->wbuf || ctx->wbuf_used == 0) &&
+           ctx->pending_writeback_jobs == 0 &&
+           !ctx->snapshot_buf_in_use &&
+           !ctx->flush_scratch_in_use;
+}
+
+static int release_idle_locked(const pqc_fd_ctx_t *ctx)
+{
+    return writeback_idle_locked(ctx) &&
+           ctx->pending_jobs == 0 &&
+           !ctx->read_scratch_in_use;
+}
+
 static int load_tier_for_path(const char *phys_path, int *out)
 {
     if (!phys_path || !out)
@@ -162,29 +194,26 @@ static int load_tier_for_path(const char *phys_path, int *out)
     return 0;
 }
 
-static void restore_open_policy_for_fd(int fd, const char *phys_path)
+static void load_open_policy_for_path(const char *phys_path,
+                                      int *qos_class_out,
+                                      int *tier_out)
 {
     int qos_class = PQC_QOS_CLASS_ELASTIC;
-    int rc = pqc_qos_class_load_for_path(phys_path, &qos_class);
-    if (rc != 0)
-        qos_class = PQC_QOS_CLASS_ELASTIC;
+    int rc = 0;
+    if (pqc_qos_runtime_throttle_enabled()) {
+        rc = pqc_qos_class_load_for_path(phys_path, &qos_class);
+        if (rc != 0)
+            qos_class = PQC_QOS_CLASS_ELASTIC;
+    }
     int tier = PQC_TIER_FULL;
     rc = load_tier_for_path(phys_path, &tier);
     if (rc != 0)
         tier = PQC_TIER_FULL;
 
-    pqc_fd_ctx_t *ctx = pqc_fd_context_for_fd(fd);
-    if (!ctx)
-        return;
-    pqc_lock_profile_scope_t fd_scope;
-    (void)pqc_profiled_mutex_lock(&ctx->fd_lock, "fd_lock", __func__,
-                                  &fd_scope);
-    if (ctx->valid) {
-        ctx->tier = tier;
-        ctx->qos_class = qos_class;
-    }
-    (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
-                                    &fd_scope);
+    if (qos_class_out)
+        *qos_class_out = qos_class;
+    if (tier_out)
+        *tier_out = tier;
 }
 
 static void metadata_publish_turn_finish_locked(file_state_t *state,
@@ -311,6 +340,46 @@ static void read_batch_scratch_finish_job_locked(pqc_fd_ctx_t *ctx)
     pqc_fd_context_pending_job_end(ctx);
 }
 
+static int file_io_pwrite_full(int fd, const char *buf, size_t len,
+                               off_t offset)
+{
+    if (len > (size_t)INT_MAX)
+        return -EOVERFLOW;
+    size_t done = 0;
+    while (done < len) {
+        ssize_t written = pwrite(fd, buf + done, len - done,
+                                 offset + (off_t)done);
+        if (written < 0) {
+            if (errno == EINTR)
+                continue;
+            return -errno;
+        }
+        if (written == 0)
+            return -EIO;
+        done += (size_t)written;
+    }
+    return (int)done;
+}
+
+static int file_io_pread_full(int fd, uint8_t *buf, size_t len,
+                              off_t offset)
+{
+    size_t done = 0;
+    while (done < len) {
+        ssize_t n = pread(fd, buf + done, len - done,
+                          offset + (off_t)done);
+        if (n < 0) {
+            if (errno == EINTR)
+                continue;
+            return -errno;
+        }
+        if (n == 0)
+            return -EIO;
+        done += (size_t)n;
+    }
+    return 0;
+}
+
 static int marker_metadata_fsync(void *opaque)
 {
     if (!opaque)
@@ -385,17 +454,14 @@ static int read_authenticated_block_batch(
             memset(plain_batch + packed_offset, 0,
                    PQC_LOGICAL_BLOCK_SIZE);
         if (map.plaintext_length > 0) {
-            ssize_t n = pread(data_fd, cipher_batch + packed_offset,
-                              map.plaintext_length,
-                              (off_t)map.ciphertext_offset);
-            if (n != (ssize_t)map.plaintext_length) {
-                rc = n < 0 ? -errno : -EIO;
+            rc = file_io_pread_full(data_fd, cipher_batch + packed_offset,
+                                    map.plaintext_length,
+                                    (off_t)map.ciphertext_offset);
+            if (rc != 0)
                 goto out;
-            }
         }
 
         pqc_crypto_block_desc_t *desc = &descs[decrypt_count++];
-        memset(desc, 0, sizeof(*desc));
         desc->block = block;
         desc->generation = map.generation;
         desc->length = map.plaintext_length;
@@ -456,25 +522,12 @@ int pqc_open(const char *path, struct fuse_file_info *fi)
     char phys_path[4096];
     pqc_storage_path_resolve(phys_path, sizeof(phys_path), path);
 
-    char compat_path[4096];
-    const char *open_path = phys_path;
-    if (pqc_sqlite_sidecar_redirect_path(compat_path, sizeof(compat_path), path) == 0)
-        open_path = compat_path;
-
-    int fd = open(open_path, fi->flags, 0600);
+    int fd = open(phys_path, fi->flags, 0600);
     if (fd == -1)
         return -errno;
 
     fi->fh = (uint64_t)fd;
-    /* SQLite WAL uses a shared-memory sidecar (`-shm`) and expects mmap-capable
-     * file descriptors.  The default direct-IO path breaks that contract on
-     * this FUSE stack, so we allow a compatibility mode that keeps buffered I/O
-     * only for redirected WAL-visible files while preserving encrypted data
-     * files as non-mmap direct-I/O handles. */
-    int sqlite_mmap_sidecar = (open_path == compat_path);
-    fi->direct_io = sqlite_mmap_sidecar ? 0 : 1;
-    if (sqlite_mmap_sidecar)
-        fi->keep_cache = 1;
+    fi->direct_io = 1;
 
     /* A persistent per-file data-encryption key is wrapped under the
      * mount-derived key and authenticated before use.  The prior experimental
@@ -486,18 +539,18 @@ int pqc_open(const char *path, struct fuse_file_info *fi)
     size_t ss_len = 0;
     uint64_t fid = 0;
     int metadata_rc = pqc_keyring_metadata_load(phys_path, ss, &ss_len, &fid);
+    int qos_class = PQC_QOS_CLASS_ELASTIC;
+    int tier = PQC_TIER_FULL;
+    if (metadata_rc == 0)
+        load_open_policy_for_path(phys_path, &qos_class, &tier);
     if (metadata_rc != 0 ||
         pqc_fd_context_set(fd, path, phys_path, ss, ss_len, fid,
-                            fi->flags) != 0) {
+                            fi->flags, qos_class, tier) != 0) {
         OQS_MEM_cleanse(ss, sizeof(ss));
         close(fd);
         return metadata_rc == -EKEYREJECTED ? -EKEYREJECTED : -EIO;
     }
     OQS_MEM_cleanse(ss, sizeof(ss));
-    pqc_log("OPEN %s: restored authenticated file-key envelope (fid=%llu)",
-            path, (unsigned long long)fid);
-
-    restore_open_policy_for_fd(fd, phys_path);
     return 0;
 }
 
@@ -522,30 +575,51 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
         int res = (int)pread(fd, buf, size, offset);
         return res <= 0 ? (res == -1 ? -errno : 0) : res;
     }
-    {
-        pqc_lock_profile_scope_t commit_scope;
-        (void)pqc_profiled_mutex_lock(&ctx->state->commit_lock, "commit_lock",
-                                      __func__, &commit_scope);
-        uint64_t visible_size = ctx->state->logical_size_valid
-            ? ctx->state->logical_size
-            : ctx->logical_size;
-        ctx->logical_size = visible_size;
-        if ((uint64_t)offset >= visible_size) {
-            (void)pqc_profiled_mutex_unlock(&ctx->state->commit_lock,
-                                            "commit_lock", __func__,
-                                            &commit_scope);
-            (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock",
-                                            __func__, &fd_scope);
-            return 0;
-        }
-        (void)pqc_profiled_mutex_unlock(&ctx->state->commit_lock,
-                                        "commit_lock", __func__,
-                                        &commit_scope);
-    }
     uint8_t *read_plain_batch = NULL;
     uint8_t *read_cipher_batch = NULL;
     size_t read_batch_capacity = 0;
     pqc_fd_context_pending_job_begin(ctx);
+    if (!ctx->valid) {
+        pqc_fd_context_pending_job_end(ctx);
+        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
+                                        &fd_scope);
+        return -EBADF;
+    }
+    if (ctx->tier == PQC_TIER_NONE) {
+        pqc_fd_context_pending_job_end(ctx);
+        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
+                                        &fd_scope);
+        int res = (int)pread(fd, buf, size, offset);
+        return res <= 0 ? (res == -1 ? -errno : 0) : res;
+    }
+    pqc_lock_profile_scope_t commit_scope;
+    (void)pqc_profiled_mutex_lock(&ctx->state->commit_lock, "commit_lock",
+                                  __func__, &commit_scope);
+    uint64_t visible_size = ctx->state->logical_size_valid
+        ? ctx->state->logical_size
+        : ctx->logical_size;
+    uint64_t visible_generation = ctx->state->committed_generation;
+    ctx->logical_size = visible_size;
+    if ((uint64_t)offset >= visible_size) {
+        (void)pqc_profiled_mutex_unlock(&ctx->state->commit_lock,
+                                        "commit_lock", __func__,
+                                        &commit_scope);
+        pqc_fd_context_pending_job_end(ctx);
+        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
+                                        &fd_scope);
+        return 0;
+    }
+    size_t want = size;
+    if (want > visible_size - (uint64_t)offset)
+        want = visible_size - (uint64_t)offset;
+    (void)pqc_profiled_mutex_unlock(&ctx->state->commit_lock, "commit_lock",
+                                    __func__, &commit_scope);
+    if (want == 0) {
+        pqc_fd_context_pending_job_end(ctx);
+        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
+                                        &fd_scope);
+        return 0;
+    }
     int scratch_rc = read_batch_scratch_acquire_locked(
         ctx, &fd_scope, __func__, &read_plain_batch, &read_cipher_batch,
         &read_batch_capacity);
@@ -568,38 +642,10 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
         int res = (int)pread(fd, buf, size, offset);
         return res <= 0 ? (res == -1 ? -errno : 0) : res;
     }
-    pqc_lock_profile_scope_t commit_scope;
-    (void)pqc_profiled_mutex_lock(&ctx->state->commit_lock, "commit_lock",
-                                  __func__, &commit_scope);
-    uint64_t visible_size = ctx->state->logical_size_valid
-        ? ctx->state->logical_size
-        : ctx->logical_size;
-    uint64_t visible_generation = ctx->state->committed_generation;
-    ctx->logical_size = visible_size;
-    if ((uint64_t)offset >= visible_size) {
-        (void)pqc_profiled_mutex_unlock(&ctx->state->commit_lock,
-                                        "commit_lock", __func__,
-                                        &commit_scope);
-        read_batch_scratch_finish_job_locked(ctx);
-        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
-                                        &fd_scope);
-        return 0;
-    }
-    size_t want = size;
-    if (want > visible_size - (uint64_t)offset)
-        want = visible_size - (uint64_t)offset;
-    (void)pqc_profiled_mutex_unlock(&ctx->state->commit_lock, "commit_lock",
-                                    __func__, &commit_scope);
-    if (want == 0) {
-        read_batch_scratch_finish_job_locked(ctx);
-        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
-                                        &fd_scope);
-        return 0;
-    }
     int journal_fd = ctx->journal_fd;
     int data_fd = ctx->data_fd;
     char marker_path[sizeof(ctx->marker_path)];
-    memcpy(marker_path, ctx->marker_path, sizeof(marker_path));
+    marker_path[0] = '\0';
     uint8_t ss[64] = {0};
     if (ctx->ss_len > sizeof(ss)) {
         read_batch_scratch_finish_job_locked(ctx);
@@ -618,6 +664,10 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
     uint64_t first = base / PQC_LOGICAL_BLOCK_SIZE;
     uint64_t last = (end - 1) / PQC_LOGICAL_BLOCK_SIZE;
     uint64_t file_id = ctx->file_id;
+    int epoch_fallback_enabled = ctx->epoch_fallback_enabled;
+    if (epoch_fallback_enabled)
+        file_io_copy_cstr(marker_path, sizeof(marker_path),
+                          ctx->marker_path);
     pqc_journal_lookup_view_t journal_view;
     uint64_t read_journal_cache_epoch = 0;
     int journal_cache_hit =
@@ -626,8 +676,9 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
             &read_journal_cache_epoch);
     pqc_epoch_log_lookup_view_t epoch_lookup_view;
     uint64_t read_epoch_cache_epoch = 0;
-    int epoch_cache_hit =
-        pqc_fd_context_read_epoch_cache_snapshot_locked(
+    int epoch_cache_hit = 0;
+    if (epoch_fallback_enabled)
+        epoch_cache_hit = pqc_fd_context_read_epoch_cache_snapshot_locked(
             ctx, first, last, visible_generation, file_id,
             &epoch_lookup_view, &read_epoch_cache_epoch);
     size_t ss_len = ctx->ss_len;
@@ -637,23 +688,28 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
     if (!journal_cache_hit)
         pqc_journal_lookup_view_init(&journal_view, first, last,
                                      visible_generation);
-    if (!epoch_cache_hit)
+    if (epoch_fallback_enabled && !epoch_cache_hit)
         pqc_epoch_log_lookup_view_init(&epoch_lookup_view, first, last,
                                        visible_generation, file_id);
 
     int rc = 0;
     pqc_recovery_epoch_fallback_view_t epoch_view;
-    pqc_recovery_epoch_fallback_view_init(&epoch_view);
-    pqc_recovery_epoch_fallback_view_set_lookup(&epoch_view,
-                                                &epoch_lookup_view);
+    pqc_recovery_epoch_fallback_view_t *epoch_view_arg = NULL;
+    if (epoch_fallback_enabled) {
+        pqc_recovery_epoch_fallback_view_init(&epoch_view);
+        pqc_recovery_epoch_fallback_view_set_lookup(&epoch_view,
+                                                    &epoch_lookup_view);
+        epoch_view_arg = &epoch_view;
+    }
     for (uint64_t block = first; block <= last; ) {
         uint64_t remaining_blocks = last - block + 1U;
         size_t batch_blocks = remaining_blocks > PQC_READ_BATCH_MAX_BLOCKS
             ? PQC_READ_BATCH_MAX_BLOCKS
             : (size_t)remaining_blocks;
         rc = read_authenticated_block_batch(
-            ctx->state, journal_fd, data_fd, marker_path, &journal_view,
-            &epoch_view,
+            ctx->state, journal_fd, data_fd,
+            epoch_fallback_enabled ? marker_path : NULL,
+            &journal_view, epoch_view_arg,
             ss, ss_len, file_id, visible_generation, base, end, block,
             batch_blocks, read_cipher_batch, read_plain_batch,
             read_batch_capacity, buf);
@@ -661,7 +717,8 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
             break;
         block += batch_blocks;
     }
-    pqc_recovery_epoch_fallback_view_close(&epoch_view);
+    if (epoch_fallback_enabled)
+        pqc_recovery_epoch_fallback_view_close(&epoch_view);
     OQS_MEM_cleanse(ss, sizeof(ss));
     (void)pqc_profiled_mutex_lock(&ctx->fd_lock, "fd_lock", __func__,
                                   &fd_scope);
@@ -669,7 +726,7 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
         ctx->journal_fd == journal_fd && ctx->file_id == file_id)
         pqc_fd_context_read_journal_cache_store_locked(
             ctx, &journal_view, read_journal_cache_epoch);
-    if (rc == 0 && !epoch_cache_hit && ctx->valid &&
+    if (rc == 0 && epoch_fallback_enabled && !epoch_cache_hit && ctx->valid &&
         ctx->file_id == file_id)
         pqc_fd_context_read_epoch_cache_store_locked(
             ctx, &epoch_lookup_view, read_epoch_cache_epoch);
@@ -677,7 +734,8 @@ int pqc_read(const char *path, char *buf, size_t size, off_t offset,
     (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                     &fd_scope);
     pqc_journal_lookup_view_clear(&journal_view);
-    pqc_epoch_log_lookup_view_clear(&epoch_lookup_view);
+    if (epoch_fallback_enabled)
+        pqc_epoch_log_lookup_view_clear(&epoch_lookup_view);
     return rc ? rc : (int)want;
 }
 
@@ -707,15 +765,14 @@ int pqc_create(const char *path, mode_t mode,
     }
     if (pqc_keyring_metadata_store(phys_path, ss, sizeof(ss), fid) != 0 ||
         pqc_fd_context_set(fd, path, phys_path, ss, sizeof(ss), fid,
-                            fi->flags) != 0) {
+                            fi->flags, PQC_QOS_CLASS_ELASTIC,
+                            PQC_TIER_FULL) != 0) {
         OQS_MEM_cleanse(ss, sizeof(ss));
         close(fd);
         unlink(phys_path);
         return -EIO;
     }
     OQS_MEM_cleanse(ss, sizeof(ss));
-    pqc_log("CREATE %s: authenticated file-key envelope initialized (fid=%llu)",
-            path, (unsigned long long)fid);
     return 0;
 }
 
@@ -738,8 +795,7 @@ int pqc_write(const char *path, const char *buf, size_t size,
     if (!ctx->valid) {
         (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                         &fd_scope);
-        int res = (int)pwrite(fd, buf, size, offset);
-        return res == -1 ? -errno : (int)size;
+        return file_io_pwrite_full(fd, buf, size, offset);
     }
     if (!ctx->wbuf) {
         (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
@@ -765,9 +821,20 @@ int pqc_write(const char *path, const char *buf, size_t size,
                                         &fd_scope);
         return wr;
     }
-    int rekey_due = pqc_rekey_write_trigger_enabled()
-        ? rekey_due_locked(ctx)
-        : 0;
+    int rekey_due = 0;
+    if (ctx->valid && ctx->tier != PQC_TIER_NONE &&
+        pqc_rekey_write_trigger_enabled()) {
+        int rekey_trigger_enabled = 0;
+        int rekey_force_on_write = 0;
+        int rekey_rotation_interval_s = 0;
+        pqc_rekey_write_policy_snapshot(&rekey_trigger_enabled,
+                                        &rekey_force_on_write,
+                                        &rekey_rotation_interval_s);
+        rekey_due = rekey_trigger_enabled
+            ? rekey_due_locked(ctx, rekey_force_on_write,
+                               rekey_rotation_interval_s)
+            : 0;
+    }
     (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                     &fd_scope);
     if (rekey_due) {
@@ -796,8 +863,15 @@ int pqc_fsync(const char *path, int datasync,
     pqc_lock_profile_scope_t fd_scope;
     (void)pqc_profiled_mutex_lock(&ctx->fd_lock, "fd_lock", __func__,
                                   &fd_scope);
-    res = drain_writeback_locked(fd, ctx, &fd_scope, __func__, 1,
-                                 DRAIN_WAIT_ALL);
+    int release_idle = release_idle_locked(ctx);
+    if (release_idle && pqc_fd_context_fsync_clean_locked(ctx)) {
+        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
+                                        &fd_scope);
+        return 0;
+    }
+    if (!release_idle)
+        res = drain_writeback_locked(fd, ctx, &fd_scope, __func__, 1,
+                                     DRAIN_WAIT_ALL);
     if (res == 0) {
         res = sync_dirty_sidecars_without_fd_lock(ctx, &fd_scope, __func__);
         if (res == 0) {
@@ -816,15 +890,22 @@ int pqc_fsync(const char *path, int datasync,
                     ? PQC_DURABILITY_SITE_MARKER_METADATA
                     : PQC_DURABILITY_SITE_USER_FILE;
             need_anchor_flush =
-                metadata_dirty && ctx->valid && ctx->tier != PQC_TIER_NONE;
+                metadata_dirty && ctx->valid && ctx->tier != PQC_TIER_NONE &&
+                pqc_anchor_backend() != PQC_ANCHOR_BACKEND_DISABLED;
         }
     }
     (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                     &fd_scope);
     if (res != 0)
         return res;
-    if (!need_final_sync && !need_anchor_flush)
+    if (!need_final_sync && !need_anchor_flush) {
+        (void)pqc_profiled_mutex_lock(&ctx->fd_lock, "fd_lock", __func__,
+                                      &fd_scope);
+        pqc_fd_context_mark_fsync_synced(ctx, fsync_epoch);
+        (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
+                                        &fd_scope);
         return 0;
+    }
 
     if (need_anchor_flush && need_final_sync &&
         final_sync_site == PQC_DURABILITY_SITE_MARKER_METADATA) {
@@ -872,8 +953,9 @@ int pqc_flush(const char *path, struct fuse_file_info *fi)
     pqc_lock_profile_scope_t fd_scope;
     (void)pqc_profiled_mutex_lock(&ctx->fd_lock, "fd_lock", __func__,
                                   &fd_scope);
-    res = drain_writeback_locked(fd, ctx, &fd_scope, __func__, 0,
-                                 DRAIN_WAIT_WRITEBACK);
+    if (!writeback_idle_locked(ctx))
+        res = drain_writeback_locked(fd, ctx, &fd_scope, __func__, 0,
+                                     DRAIN_WAIT_WRITEBACK);
     (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                     &fd_scope);
     return res;
@@ -914,7 +996,7 @@ int pqc_truncate(const char *path, off_t size,
         file_state_t *state = ctx->state;
         int journal_fd = ctx->journal_fd;
         char marker_path[sizeof(ctx->marker_path)];
-        memcpy(marker_path, ctx->marker_path, sizeof(marker_path));
+        file_io_copy_cstr(marker_path, sizeof(marker_path), ctx->marker_path);
         pqc_fd_context_pending_job_begin(ctx);
         (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                         &fd_scope);
@@ -1026,7 +1108,7 @@ int pqc_fallocate(const char *path, int mode, off_t offset,
         file_state_t *state = ctx->state;
         uint64_t file_id = ctx->file_id;
         char marker_path[sizeof(ctx->marker_path)];
-        memcpy(marker_path, ctx->marker_path, sizeof(marker_path));
+        file_io_copy_cstr(marker_path, sizeof(marker_path), ctx->marker_path);
         pqc_fd_context_pending_job_begin(ctx);
         (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                         &fd_scope);
@@ -1111,14 +1193,18 @@ int pqc_release(const char *path, struct fuse_file_info *fi)
     pqc_lock_profile_scope_t fd_scope;
     (void)pqc_profiled_mutex_lock(&ctx->fd_lock, "fd_lock", __func__,
                                   &fd_scope);
-    memcpy(marker_path, ctx->marker_path, sizeof(marker_path));
-    res = drain_writeback_locked(fd, ctx, &fd_scope, __func__, 0,
-                                 DRAIN_WAIT_ALL);
+    if (marker_path_is_hidden_unlinked(ctx->marker_path))
+        file_io_copy_cstr(marker_path, sizeof(marker_path),
+                          ctx->marker_path);
+    if (!release_idle_locked(ctx))
+        res = drain_writeback_locked(fd, ctx, &fd_scope, __func__, 0,
+                                     DRAIN_WAIT_ALL);
     (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                     &fd_scope);
 
     pqc_fd_context_clear(fd);
     close(fd);
-    cleanup_hidden_marker_and_sidecars(marker_path);
+    if (marker_path[0] != '\0')
+        cleanup_hidden_marker_and_sidecars(marker_path);
     return res;
 }

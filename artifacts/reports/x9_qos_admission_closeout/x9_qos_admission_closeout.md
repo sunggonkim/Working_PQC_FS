@@ -12,7 +12,7 @@ AEGIS-Q improves p99 over unthrottled storage while spending background throughp
 
 ## Controller constants
 
-- GPU min batch: `4096` bytes
+- GPU min batch: `131072` bytes
 - Producer slack budget: `1730000` ns
 - Deadline margin: `100000` ns
 - Producer slack stale: `250000000` ns

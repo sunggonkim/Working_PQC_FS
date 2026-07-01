@@ -34,6 +34,7 @@ typedef enum {
 
 uint64_t pqc_fuse_trace_begin(void);
 void pqc_fuse_trace_end(pqc_fuse_trace_op_t op, uint64_t start_ns, int rc);
+int pqc_fuse_trace_is_enabled(void);
 void pqc_fuse_trace_reset(void);
 int pqc_fuse_trace_dump_if_requested(void);
 const char *pqc_fuse_trace_op_name(pqc_fuse_trace_op_t op);

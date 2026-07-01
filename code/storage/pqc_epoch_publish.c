@@ -44,6 +44,34 @@ typedef struct {
     int trace_emitted;
 } pqc_epoch_publish_context_t;
 
+static void pqc_epoch_publish_context_init(pqc_epoch_publish_context_t *ctx)
+{
+    if (!ctx)
+        return;
+    ctx->log_path[0] = '\0';
+    ctx->record_count = 0;
+    ctx->barrier_rc = 0;
+    ctx->epoch_log_sync_count = 0;
+    ctx->group_size = 0;
+    ctx->group_epoch = 0;
+    ctx->group_wait_ns = 0;
+    ctx->group_open_wait_ns = 0;
+    ctx->group_sync_ns = 0;
+    ctx->group_completion_wait_ns = 0;
+    ctx->group_role = NULL;
+    ctx->sync_primitive = NULL;
+    ctx->file_id = 0;
+    ctx->payload_bytes = 0;
+    ctx->log_fd = -1;
+    ctx->owns_log_fd = 0;
+    ctx->force_syncfs = 0;
+    ctx->defer_durability = 0;
+    ctx->windowed_file_anchor = 0;
+    ctx->data_fsync_fallback_count = 0;
+    ctx->epoch_dirty_epoch = 0;
+    ctx->trace_emitted = 0;
+}
+
 typedef struct {
     pthread_mutex_t lock;
     pthread_cond_t cv;
@@ -177,6 +205,19 @@ int pqc_publication_mode_from_config(pqc_publication_mode_t *out)
     return 0;
 }
 
+int pqc_publication_mode_is_epoch_redo_log_fast(void)
+{
+    int cached = atomic_load_explicit(&g_publication_mode_cached,
+                                      memory_order_acquire);
+    if (cached >= 0)
+        return cached == PQC_PUBLICATION_MODE_EPOCH_REDO_LOG;
+
+    pqc_publication_mode_t mode = PQC_PUBLICATION_MODE_STRICT;
+    if (pqc_publication_mode_from_config(&mode) != 0)
+        return 0;
+    return mode == PQC_PUBLICATION_MODE_EPOCH_REDO_LOG;
+}
+
 static uint64_t pqc_publication_now_ns(void)
 {
     struct timespec ts;
@@ -239,6 +280,17 @@ static uint64_t pqc_epoch_group_wait_ns_from_config(void)
     atomic_store_explicit(&g_epoch_group_wait_ns_ready, 1,
                           memory_order_release);
     return value;
+}
+
+int pqc_publication_init_from_config(void)
+{
+    pqc_publication_mode_t mode;
+    int rc = pqc_publication_mode_from_config(&mode);
+    if (rc != 0)
+        return rc;
+    (void)pqc_epoch_group_max_from_config();
+    (void)pqc_epoch_group_wait_ns_from_config();
+    return 0;
 }
 
 static int pqc_epoch_sync_fd(int fd, uint32_t group_size, int force_syncfs,
@@ -448,6 +500,12 @@ static void pqc_publication_trace_write_line(const char *line, size_t len)
                                    line, len);
 }
 
+static int pqc_publication_trace_enabled(void)
+{
+    return pqc_trace_sink_enabled_env(&g_publication_trace_sink,
+                                      "PQC_PUBLICATION_TRACE_PATH");
+}
+
 void pqc_publication_trace_shutdown(void)
 {
     pqc_trace_sink_close(&g_publication_trace_sink);
@@ -458,6 +516,8 @@ static void pqc_publication_trace_decision(
     uint64_t elapsed_ns, uint32_t data_fsync_count,
     uint32_t journal_fsync_count, uint32_t epoch_log_fsync_count)
 {
+    if (!pqc_publication_trace_enabled())
+        return;
     uint32_t sync_count = data_fsync_count + journal_fsync_count +
                           epoch_log_fsync_count;
     char line[1024];
@@ -480,6 +540,8 @@ static void pqc_publication_trace_decision(
 static void pqc_publication_trace_epoch_append(
     const pqc_epoch_publish_context_t *ctx, int rc)
 {
+    if (!pqc_publication_trace_enabled())
+        return;
     char line[8192];
     int n = snprintf(line, sizeof(line),
                      "{\"event\":\"epoch_redo_log_append\","
@@ -677,30 +739,33 @@ static int pqc_epoch_publish_after_metadata(
 
 int pqc_publication_dispatch_commit(const pqc_strict_publish_request_t *req)
 {
-    uint64_t start_ns = pqc_publication_now_ns();
+    int trace_enabled = pqc_publication_trace_enabled();
+    uint64_t start_ns = trace_enabled ? pqc_publication_now_ns() : 0;
     pqc_publication_mode_t mode = PQC_PUBLICATION_MODE_STRICT;
     int rc = pqc_publication_mode_from_config(&mode);
     if (rc != 0) {
-        uint64_t end_ns = pqc_publication_now_ns();
-        pqc_publication_trace_decision("invalid", rc, req,
-                                       end_ns >= start_ns ? end_ns - start_ns : 0,
-                                       0, 0, 0);
+        if (trace_enabled) {
+            uint64_t end_ns = pqc_publication_now_ns();
+            pqc_publication_trace_decision(
+                "invalid", rc, req,
+                end_ns >= start_ns ? end_ns - start_ns : 0, 0, 0, 0);
+        }
         return rc;
     }
     if (mode == PQC_PUBLICATION_MODE_STRICT) {
         rc = pqc_strict_publish_commit(req);
-        uint64_t end_ns = pqc_publication_now_ns();
-        pqc_publication_trace_decision(
-            pqc_publication_mode_name(mode), rc, req,
-            end_ns >= start_ns ? end_ns - start_ns : 0,
-            rc == 0 ? 1U : 0U, rc == 0 ? 1U : 0U, 0);
+        if (trace_enabled) {
+            uint64_t end_ns = pqc_publication_now_ns();
+            pqc_publication_trace_decision(
+                pqc_publication_mode_name(mode), rc, req,
+                end_ns >= start_ns ? end_ns - start_ns : 0,
+                rc == 0 ? 1U : 0U, rc == 0 ? 1U : 0U, 0);
+        }
         return rc;
     }
     if (mode == PQC_PUBLICATION_MODE_EPOCH_REDO_LOG) {
         pqc_epoch_publish_context_t ctx;
-        memset(&ctx, 0, sizeof(ctx));
-        ctx.log_fd = -1;
-        ctx.owns_log_fd = 0;
+        pqc_epoch_publish_context_init(&ctx);
         ctx.defer_durability =
             (req->defer_data_fsync || req->defer_journal_fsync);
         ctx.windowed_file_anchor =
@@ -726,20 +791,24 @@ int pqc_publication_dispatch_commit(const pqc_strict_publish_request_t *req)
             pqc_publication_trace_epoch_append(&ctx, rc);
             ctx.trace_emitted = 1;
         }
-        uint64_t end_ns = pqc_publication_now_ns();
-        pqc_publication_trace_decision(
-            pqc_publication_mode_name(mode), rc, req,
-            end_ns >= start_ns ? end_ns - start_ns : 0,
-            (rc == 0 && ctx.data_fsync_fallback_count > 0) ? 1U : 0U, 0,
-            (rc == 0 && ctx.barrier_rc == 0)
-                ? ctx.epoch_log_sync_count : 0U);
+        if (trace_enabled) {
+            uint64_t end_ns = pqc_publication_now_ns();
+            pqc_publication_trace_decision(
+                pqc_publication_mode_name(mode), rc, req,
+                end_ns >= start_ns ? end_ns - start_ns : 0,
+                (rc == 0 && ctx.data_fsync_fallback_count > 0) ? 1U : 0U, 0,
+                (rc == 0 && ctx.barrier_rc == 0)
+                    ? ctx.epoch_log_sync_count : 0U);
+        }
         return rc;
     }
 
     rc = -ENOTSUP;
-    uint64_t end_ns = pqc_publication_now_ns();
-    pqc_publication_trace_decision(pqc_publication_mode_name(mode), rc, req,
-                                   end_ns >= start_ns ? end_ns - start_ns : 0,
-                                   0, 0, 0);
+    if (trace_enabled) {
+        uint64_t end_ns = pqc_publication_now_ns();
+        pqc_publication_trace_decision(
+            pqc_publication_mode_name(mode), rc, req,
+            end_ns >= start_ns ? end_ns - start_ns : 0, 0, 0, 0);
+    }
     return rc;
 }

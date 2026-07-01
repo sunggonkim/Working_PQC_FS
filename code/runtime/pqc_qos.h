@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 typedef struct {
+    int gpu_monitor_configured;
     int gpu_monitor_started;
     int gpu_monitor_errno;
     char gpu_load_path[4096];
@@ -18,10 +19,13 @@ typedef struct {
 } pqc_qos_monitor_status_t;
 
 void pqc_qos_start_monitors(pqc_qos_monitor_status_t *status);
+void pqc_qos_disable_monitors_for_mount(void);
 int pqc_qos_stop_gpu_monitor(void);
 int pqc_qos_stop_admission_telemetry(void);
 double pqc_qos_gpu_load_ewma_read(void);
+int pqc_qos_runtime_throttle_enabled(void);
 void pqc_qos_apply_runtime_throttle(size_t bytes, int qos_class);
+void pqc_qos_apply_runtime_throttle_enabled(size_t bytes, int qos_class);
 
 #ifdef __cplusplus
 }

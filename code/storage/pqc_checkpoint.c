@@ -49,6 +49,10 @@ int pqc_checkpoint_store_and_stage_anchor(const char *path,
 
     pqc_fault_cutpoint("checkpoint_xattr_after");
 
+    pqc_anchor_backend_t backend = pqc_anchor_backend();
+    if (backend == PQC_ANCHOR_BACKEND_DISABLED)
+        return 0;
+
     pqc_anchor_state_t state = {0};
     rc = pqc_checkpoint_record_file_anchor(file_id, sequence, logical_size,
                                            max_generation, &state);
@@ -56,12 +60,41 @@ int pqc_checkpoint_store_and_stage_anchor(const char *path,
         return rc;
 
     pqc_anchor_worker_stage(&state);
-    if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_HARDWARE) {
+    if (backend == PQC_ANCHOR_BACKEND_HARDWARE) {
         rc = pqc_anchor_store(&state);
         if (rc != 0)
             return rc;
     }
     return 0;
+}
+
+int pqc_checkpoint_store_and_stage_anchor_final(
+    const char *path,
+    uint64_t file_id,
+    uint64_t sequence,
+    uint64_t logical_size,
+    uint64_t max_generation,
+    int reservation_matches_final)
+{
+    if (!path)
+        return -EINVAL;
+
+    if (reservation_matches_final && sequence == max_generation &&
+        max_generation != 0 &&
+        pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED) {
+        /*
+         * Strict writeback reserved this exact checkpoint before encryption.
+         * For in-place overwrites, final publication would rewrite identical
+         * xattr bytes.  Keep the generation high-water and fault boundary while
+         * avoiding a redundant setxattr on the default no-anchor path.
+        */
+        pqc_fault_cutpoint("checkpoint_xattr_after");
+        pqc_fault_cutpoint("checkpoint_xattr_reused_after");
+        return 0;
+    }
+
+    return pqc_checkpoint_store_and_stage_anchor(path, file_id, sequence,
+                                                 logical_size, max_generation);
 }
 
 int pqc_checkpoint_reserve_generation(const char *path,
@@ -78,6 +111,10 @@ int pqc_checkpoint_reserve_generation(const char *path,
 
     pqc_fault_cutpoint("generation_reservation_xattr_after");
 
+    pqc_anchor_backend_t backend = pqc_anchor_backend();
+    if (backend == PQC_ANCHOR_BACKEND_DISABLED)
+        return 0;
+
     pqc_anchor_state_t state = {0};
     rc = pqc_checkpoint_record_file_anchor(file_id, reserved_generation,
                                            logical_size, reserved_generation,
@@ -93,7 +130,7 @@ int pqc_checkpoint_reserve_generation(const char *path,
      * fail-closed reservation behavior because losing the generation advance is
      * worse than rejecting the mount after an interrupted publication.
      */
-    if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_HARDWARE)
+    if (backend == PQC_ANCHOR_BACKEND_HARDWARE)
         return pqc_anchor_store(&state);
     return 0;
 }
@@ -109,6 +146,11 @@ int pqc_checkpoint_load_and_verify_anchor(const char *path,
     int rc = pqc_publish_checkpoint_load_xattr(path, expected_file_id, &ckpt);
     if (rc != 0)
         return rc;
+
+    if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED) {
+        *out = ckpt;
+        return 0;
+    }
 
     pqc_anchor_state_t expected = {0};
     rc = pqc_checkpoint_record_file_anchor(ckpt.file_id, ckpt.sequence,

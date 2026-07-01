@@ -50,6 +50,10 @@ struct pqc_strict_publish_request {
     pqc_crypto_block_desc_t *blocks;
     size_t block_count;
     const uint8_t *cipher_batch;
+    size_t cipher_batch_len;
+    block_mapping_t *published_mappings;
+    size_t published_mappings_capacity;
+    size_t *published_mappings_count;
     int *data_sidecar_dirty;
     int *journal_sidecar_dirty;
     int *epoch_log_dirty;

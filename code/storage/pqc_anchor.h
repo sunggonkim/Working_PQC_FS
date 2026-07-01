@@ -51,6 +51,7 @@ pqc_anchor_backend_t pqc_anchor_backend(void);
 const char *pqc_anchor_epoch_status_name(uint32_t status);
 int pqc_anchor_epoch_record_snapshot(pqc_anchor_epoch_record_t *out);
 
+void pqc_anchor_init_from_config(void);
 int pqc_anchor_probe(void);
 int pqc_anchor_self_test(void);
 

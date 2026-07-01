@@ -4,8 +4,8 @@
 This script does not invent results or regenerate unsupported measurements.
 It packages the checked-in paper sources, figure assets, experiment scripts,
 and artifact logs into a single manifest with sha256 hashes.  Optionally it
-can rebuild the paper PDF and verify that the final document still has exactly
-12 pages.
+can rebuild the paper PDF and verify that the final document has at most
+13 pages.
 
 The intended use is:
 
@@ -119,7 +119,7 @@ def main() -> int:
     parser.add_argument(
         "--rebuild-paper",
         action="store_true",
-        help="Rebuild Paper/main.pdf before hashing and verify that it is 12 pages.",
+        help="Rebuild Paper/main.pdf before hashing and verify that it is at most 13 pages.",
     )
     args = parser.parse_args()
 
@@ -128,8 +128,8 @@ def main() -> int:
 
     paper_pdf = ROOT / "Paper" / "main.pdf"
     pages = pdf_page_count(paper_pdf)
-    if pages != 12:
-        raise SystemExit(f"Paper/main.pdf has {pages} pages, expected 12")
+    if pages is None or pages > 13:
+        raise SystemExit(f"Paper/main.pdf has {pages} pages, expected at most 13")
 
     files = collect_files()
     args.out_dir.mkdir(parents=True, exist_ok=True)

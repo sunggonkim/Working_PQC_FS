@@ -20,6 +20,7 @@ static int               g_anchor_dirty = 0;
 static pqc_anchor_state_t g_anchor_state = {0};
 static time_t            g_anchor_last_commit = 0;
 static atomic_int        g_windowed_file_anchor_policy = ATOMIC_VAR_INIT(-1);
+static atomic_int        g_freshness_window_policy = ATOMIC_VAR_INIT(-1);
 
 static void anchor_lifecycle_lock(pqc_lock_profile_scope_t *scope,
                                   const char *site)
@@ -56,6 +57,36 @@ static int anchor_worker_timedwait(pqc_lock_profile_scope_t *scope,
     return pqc_profiled_cond_timedwait(&g_anchor_cv, &g_anchor_lock,
                                        "anchor_worker_lock", site, scope,
                                        deadline);
+}
+
+static int anchor_worker_freshness_window_enabled(void)
+{
+    int cached = atomic_load_explicit(&g_freshness_window_policy,
+                                      memory_order_acquire);
+    if (cached >= 0)
+        return cached;
+
+    int enabled = pqc_config_present("PQC_FRESHNESS_WINDOW_N") ? 1 : 0;
+    int expected = -1;
+    if (atomic_compare_exchange_strong_explicit(
+            &g_freshness_window_policy, &expected, enabled,
+            memory_order_release, memory_order_acquire))
+        return enabled;
+    return atomic_load_explicit(&g_freshness_window_policy,
+                                memory_order_acquire);
+}
+
+void pqc_anchor_worker_init_from_config(void)
+{
+    if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED) {
+        atomic_store_explicit(&g_freshness_window_policy, 0,
+                              memory_order_release);
+        atomic_store_explicit(&g_windowed_file_anchor_policy, 0,
+                              memory_order_release);
+        return;
+    }
+    (void)anchor_worker_freshness_window_enabled();
+    (void)pqc_anchor_worker_windowed_file_anchor_enabled();
 }
 
 static void anchor_worker_mark_committed(void)
@@ -137,7 +168,7 @@ static void *anchor_worker_main(void *arg)
         }
         struct timespec batch_deadline;
         clock_gettime(CLOCK_REALTIME, &batch_deadline);
-        if (pqc_config_present("PQC_FRESHNESS_WINDOW_N")) {
+        if (anchor_worker_freshness_window_enabled()) {
             batch_deadline.tv_sec += 86400; /* Wait effectively forever */
         } else {
             batch_deadline.tv_nsec += 250000000L;
@@ -192,6 +223,8 @@ void pqc_anchor_worker_stage(const pqc_anchor_state_t *state)
 
 int pqc_anchor_worker_start_if_configured(void)
 {
+    if (pqc_anchor_backend() == PQC_ANCHOR_BACKEND_DISABLED)
+        return 0;
     const char *anchor_path = pqc_config_get_nonempty("PQC_FRESHNESS_ANCHOR_PATH");
     if (!anchor_path)
         return 0;

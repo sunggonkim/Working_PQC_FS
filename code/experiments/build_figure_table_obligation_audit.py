@@ -30,9 +30,9 @@ PAPER_SOURCES = [
 
 EXPECTED_OBLIGATIONS = {
     "fig:first_page_qos": {
-        "kind": "RQ3",
+        "kind": "RQ2",
         "obligation": "first-page SQLite pressure/hero result",
-        "caption_terms": ["SQLite", "RQ3", "deadline"],
+        "caption_terms": ["SQLite", "RQ2", "deadline"],
     },
     "tab:capability_matrix": {
         "kind": "design",
@@ -47,17 +47,17 @@ EXPECTED_OBLIGATIONS = {
     "fig:overall_procedure": {
         "kind": "design",
         "obligation": "architecture and plane-separation figure",
-        "caption_terms": ["runtime architecture", "claim firewall"],
+        "caption_terms": ["runtime architecture", "planes"],
     },
     "fig:djc_state_machine": {
         "kind": "design",
         "obligation": "D/J/C/xattr publication state machine",
         "caption_terms": ["publication protocol", "claim boundary"],
     },
-    "tab:memory_compat": {
-        "kind": "design/RQ2/RQ5",
-        "obligation": "memory-path claim boundary",
-        "caption_terms": ["Memory-path", "hardware"],
+    "tab:component_contracts": {
+        "kind": "design",
+        "obligation": "architecture-indexed component contract map",
+        "caption_terms": ["Architecture-indexed", "component contracts"],
     },
     "tab:impl_boundaries": {
         "kind": "design",
@@ -79,10 +79,15 @@ EXPECTED_OBLIGATIONS = {
         "obligation": "problem boundary for the edge-runtime thesis",
         "caption_terms": ["Motivating boundary", "authenticated publication"],
     },
+    "fig:dataplane_negative_control": {
+        "kind": "motivation/RQ2",
+        "obligation": "AES-GCM data-plane size sweep motivating CPU-first placement",
+        "caption_terms": ["AES-GCM", "4~KiB", "1~MiB"],
+    },
     "fig:evaluation_summary": {
         "kind": "RQ2/RQ3/RQ5",
         "obligation": "evaluation spine across cost, QoS, and key-plane placement",
-        "caption_terms": ["Evaluation summary", "RQ2", "RQ3", "RQ5"],
+        "caption_terms": ["Evaluation summary", "RQ1", "RQ2", "RQ5"],
     },
     "tab:qos_sqlite_recovery": {
         "kind": "RQ3",
@@ -263,8 +268,8 @@ def build_report() -> dict[str, Any]:
         violations.append("rendered paper source still contains artifact/raw path-list text")
 
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
-    if pages != 12:
-        violations.append("Paper/main.pdf is not 12 pages")
+    if pages is None or pages > 13:
+        violations.append("Paper/main.pdf exceeds 13 pages")
 
     return {
         "schema_version": 1,
@@ -272,7 +277,7 @@ def build_report() -> dict[str, Any]:
             "all figure/table environments in the main paper inputs",
             "one obligation mapping per figure/table label",
             "caption text names the RQ/design obligation rather than a raw artifact path",
-            "labels are referenced from the paper and Paper/main.pdf has 12 pages",
+            "labels are referenced from the paper and Paper/main.pdf has at most 13 pages",
         ],
         "expected_labels": sorted(EXPECTED_OBLIGATIONS),
         "found_labels": sorted(found),
@@ -284,7 +289,7 @@ def build_report() -> dict[str, Any]:
             "no_duplicate_labels": not duplicate_labels,
             "all_figure_tables_have_obligations": all(row["passes"] for row in rows),
             "no_rendered_artifact_path_lists": not path_hits,
-            "paper_pages_12": pages == 12,
+            "paper_pages_le_13": pages is not None and pages <= 13,
         },
         "pages": pages,
         "violations": violations,

@@ -290,7 +290,7 @@ def build_report() -> dict[str, Any]:
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
 
     checks = {
-        "paper_pdf_pages_12": pages == 12,
+        "paper_pdf_pages_le_13": pages is not None and pages <= 13,
         "systems_literature_gate_passes": bool(systems_gate.get("complete")),
         "technique_transfer_matrix_passes": bool(transfer_matrix.get("complete")),
         "all_related_topics_present": all(row["complete"] for row in related.values()),

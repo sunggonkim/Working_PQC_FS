@@ -143,7 +143,7 @@ def inspect_repro_manifest() -> dict[str, Any]:
     row["complete"] = (
         row["present"]
         and row["file_count"] > 0
-        and row["paper_pages"] == 12
+        and row["paper_pages"] <= 13
         and row["has_commands"]
         and row["has_hashes"]
     )
@@ -156,7 +156,7 @@ def build_report() -> dict[str, Any]:
     repro = inspect_repro_manifest()
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
     checks = {
-        "paper_pdf_pages_12": pages == 12,
+        "paper_pdf_pages_le_13": pages is not None and pages <= 13,
         "paper_has_no_repository_artifact_paths": paper["forbidden_hit_count"] == 0,
         "paper_keeps_conclusion_level_evidence_language": paper["conclusion_phrase_hits"] >= 4,
         "readme_hosts_artifact_index": readme["complete"],

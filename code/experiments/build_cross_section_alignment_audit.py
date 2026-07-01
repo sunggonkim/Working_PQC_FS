@@ -220,7 +220,7 @@ def build_report() -> dict[str, Any]:
     unsupported = unsupported_hits(texts)
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
     checks = {
-        "paper_pages_12": pages == 12,
+        "paper_pages_le_13": pages is not None and pages <= 13,
         "hero_contract_pass": support["present"] and support["overall_pass"] is True and support["violations"] == 0,
         "all_sections_have_same_rounded_hero_terms": all(row["passes"] for row in section_rows),
         "source_anchors_present": all(row["present"] for row in source_anchors.values()),

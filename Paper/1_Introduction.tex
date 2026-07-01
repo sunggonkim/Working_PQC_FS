@@ -6,7 +6,7 @@ Edge devices increasingly run local databases, encrypted logs, cache-manifest up
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.98\columnwidth]{Figures/fig_first_page_qos.pdf}
-  \caption{SQLite pressure result for RQ3; labels show deadline misses and background throughput.}
+  \caption{SQLite pressure result for RQ2; labels show deadline misses and background throughput.}
   \Description{Bar chart of foreground SQLite p99 latency for app-only, unthrottled pressure, simple-controller, and AEGIS-Q policy modes.}
   \label{fig:first_page_qos}
 \end{figure}
@@ -50,6 +50,6 @@ This paper makes four contributions.
 \item \textbf{C4: Storage-visible QoS control.}  AEGIS-Q includes deterministic admission, platform telemetry to mounted-FUSE throttling, and the bounded mounted SQLite result in Figure~\ref{fig:first_page_qos}.
 \end{enumerate}
 
-The claim boundary excludes unproven \texttt{O\_DIRECT} NVMe-to-UVM DMA, \texttt{io\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, power-loss certification, and portability beyond the tested stack.
+The claim boundary excludes \texttt{O\_DIRECT} NVMe-to-UVM DMA, \texttt{io\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, physical power-loss certification, and portability outside Jetson-style accelerated UMA edge storage.
 
-The rest of the paper follows the structure of a systems design argument.  Section~\ref{sec:background} states the storage and UMA assumptions, Section~\ref{sec:design} presents the format and placement design, Section~\ref{sec:design_impl} records implementation choices that determine the boundary, Section~\ref{sec:security} states the security and recovery model, Section~\ref{sec:evaluation} evaluates the scoped claims, and Sections~\ref{sec:discussion}--\ref{sec:conclusion} discuss implications, related work, and limits.
+The rest of the paper follows the structure of a systems design argument.  Section~\ref{sec:background} states the storage and UMA assumptions and the motivating CPU/GPU placement comparison, Section~\ref{sec:design} presents the format and placement design, Section~\ref{sec:design_impl} records implementation choices that determine the boundary, Section~\ref{sec:security} states the security and recovery model, Section~\ref{sec:evaluation} evaluates the scoped claims, and Sections~\ref{sec:discussion}--\ref{sec:conclusion} discuss implications, related work, and limits.

@@ -117,7 +117,6 @@ def start_fuse(storage_dir: Path, mount_dir: Path, out_dir: Path,
         "PQC_MASTER_PASSWORD": password,
         "PQC_FRESHNESS_ANCHOR_BACKEND": "file",
         "PQC_FRESHNESS_ANCHOR_PATH": str(storage_dir / ".anchor"),
-        "PQC_ENABLE_ADMISSION_ON_WRITE": "0",
         "PQC_ENABLE_QOS_THROTTLE_ON_WRITE": "0",
         "PQC_KEY_ROTATION_INTERVAL_S": "0",
     })

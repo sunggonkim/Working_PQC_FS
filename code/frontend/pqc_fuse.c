@@ -1,10 +1,10 @@
 /**
  * ============================================================================
- *  pqc_fuse.c — PQC-based FUSE Filesystem for Edge AI Bottleneck Profiling
+ *  pqc_fuse.c — AEGIS-Q mounted secure edge-encryption runtime
  * ============================================================================
  *
  *  Purpose:
- *    Transparent FUSE prototype for authenticated encrypted block storage.
+ *    Mounted FUSE runtime for authenticated encrypted block storage.
  *    Every file receives a random data-encryption key (DEK), stored in an
  *    HMAC-authenticated envelope under a mount-derived key.  AES-256-GCM
  *    protects data records; ciphertext is synchronized before journal
@@ -258,7 +258,7 @@ static int trace_listxattr(const char *path, char *list, size_t size)
 }
 
 /* ── FUSE operations table ── */
-static const struct fuse_operations pqc_oper = {
+static const struct fuse_operations pqc_oper_traced = {
     .init       = pqc_fuse_init,
     .getattr    = trace_getattr,
     .readdir    = trace_readdir,
@@ -288,7 +288,37 @@ static const struct fuse_operations pqc_oper = {
     .listxattr  = trace_listxattr,
 };
 
+static const struct fuse_operations pqc_oper_untraced = {
+    .init       = pqc_fuse_init,
+    .getattr    = pqc_getattr,
+    .readdir    = pqc_readdir,
+    .open       = pqc_open,
+    .read       = pqc_read,
+    .write      = pqc_write,
+    .flush      = pqc_flush,
+    .fsync      = pqc_fsync,
+    .create     = pqc_create,
+    .truncate   = pqc_truncate,
+    .fallocate  = pqc_fallocate,
+    .unlink     = pqc_unlink,
+    .mkdir      = pqc_mkdir,
+    .rmdir      = pqc_rmdir,
+    .release    = pqc_release,
+    .lock       = pqc_lock,
+    .flock      = pqc_flock,
+    .rename     = pqc_rename,
+    .link       = pqc_link,
+    .readlink   = pqc_readlink,
+    .symlink    = pqc_symlink,
+    .fsyncdir   = pqc_fsyncdir,
+    .utimens    = pqc_utimens,
+    .destroy    = pqc_destroy,
+    .setxattr   = pqc_setxattr,
+    .getxattr   = pqc_getxattr,
+    .listxattr  = pqc_listxattr,
+};
+
 const struct fuse_operations *pqc_fuse_operations(void)
 {
-    return &pqc_oper;
+    return pqc_fuse_trace_is_enabled() ? &pqc_oper_traced : &pqc_oper_untraced;
 }

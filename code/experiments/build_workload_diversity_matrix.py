@@ -168,7 +168,7 @@ def build_sqlite_wal_row(oracle: dict[str, Any], motivation_script: str) -> dict
         "artifact_paths": [relpath(SQLITE_ORACLE), *source_paths],
         "script_paths": [relpath(MOTIVATION_SCRIPT), relpath(SQLITE_ORACLE_SCRIPT)],
         "filesystem_modes": {
-            "fuse_cache_setting": "historical motivation runner mounts pqc_fuse with -o writeback_cache and PQC_ALLOW_SQLITE_MMAP=1",
+            "fuse_cache_setting": "motivation runner does not rely on a SQLite mmap redirect; WAL may fall back to DELETE when the mounted stack rejects it",
             "sync_fsync_behavior": "SQLite commit path uses PRAGMA synchronous=FULL and retained strace observes fsync/fdatasync boundaries",
             "journal_or_wal_mode": "PRAGMA journal_mode=WAL, actual_mode=WAL, PRAGMA integrity_check=ok",
             "cache_state": "no cold/warm filesystem claim; retained samples are application workload observations",
@@ -193,7 +193,7 @@ def build_sqlite_wal_row(oracle: dict[str, Any], motivation_script: str) -> dict
                 ["PRAGMA journal_mode=WAL", "PRAGMA synchronous=FULL"],
             ),
             "script_records_writeback_cache_mode": '"-o", "writeback_cache"' in motivation_script,
-            "script_records_sqlite_mmap_env": "PQC_ALLOW_SQLITE_MMAP" in motivation_script,
+            "script_avoids_sqlite_mmap_redirect_env": "PQC_ALLOW_SQLITE_MMAP" not in motivation_script,
         },
     }
 

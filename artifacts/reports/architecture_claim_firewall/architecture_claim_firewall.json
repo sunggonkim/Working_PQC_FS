@@ -13,7 +13,7 @@
     "jetson_zero_copy",
     "cuda_stream_priority"
   ],
-  "candidate_count": 306,
+  "candidate_count": 305,
   "checks": {
     "all_terms_configured": true,
     "guarded_contexts_not_serialized": true,
@@ -22,7 +22,7 @@
   },
   "finding_context_policy": "Guarded candidate contexts are intentionally not serialized; the reviewer-facing report contains only aggregate counts and unguarded violations.",
   "generated_by": "code/experiments/build_architecture_claim_firewall.py",
-  "guarded_count": 306,
+  "guarded_count": 305,
   "guarded_counts": {
     "argon2id": 7,
     "async_epoch_fdatasync": 3,
@@ -35,11 +35,11 @@
     "pcr": 170,
     "shadow_mmap": 4,
     "tpm_epoch": 17,
-    "tpm_rollback_resistance": 42
+    "tpm_rollback_resistance": 41
   },
   "negative_claim_guard": "Architecture mechanism phrases may appear only when they are tied to an implemented gate, explicit future/blocked work, a probe or diagnostic, related-work comparison, or an explicit non-claim.",
   "overall_pass": true,
-  "scanned_file_count": 336,
+  "scanned_file_count": 337,
   "schema_version": 1,
   "scope": "Gate F5 architecture claim firewall",
   "term_counts": {
@@ -54,7 +54,7 @@
     "pcr": 170,
     "shadow_mmap": 4,
     "tpm_epoch": 17,
-    "tpm_rollback_resistance": 42
+    "tpm_rollback_resistance": 41
   },
   "violation_count": 0,
   "violation_counts": {

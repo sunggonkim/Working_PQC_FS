@@ -18,6 +18,7 @@
 #include "pqc_lock_profile.h"
 #include "pqc_parallel_commit.h"
 #include "pqc_rekey.h"
+#include "pqc_scheduler.h"
 #include "pqc_trust_boundary.h"
 
 #include <errno.h>
@@ -70,7 +71,9 @@ int pqc_selftest_crypto(void)
         enum { batch_count = 3 };
         static const uint32_t batch_lengths[batch_count] = {64U, 127U, 19U};
         pqc_crypto_block_desc_t batch[batch_count];
+        pqc_crypto_block_desc_t cpu_batch[batch_count];
         uint8_t batch_plain[256] = {0};
+        uint8_t cpu_cipher[sizeof(batch_plain)] = {0};
         uint8_t batch_cipher[sizeof(batch_plain)] = {0};
         uint8_t batch_recovered[sizeof(batch_plain)] = {0};
         size_t packed = 0;
@@ -93,10 +96,30 @@ int pqc_selftest_crypto(void)
                                        batch[i].generation, batch[i].length);
             packed += batch[i].length;
         }
+        memcpy(cpu_batch, batch, sizeof(batch));
+        if (tamper_rejected &&
+            pqc_crypto_encrypt_block_batch_cpu_gcm(
+                key, sizeof(key), 7, cpu_batch, batch_count, batch_plain,
+                cpu_cipher) != 0) {
+            tamper_rejected = 0;
+        }
+        for (size_t i = 0; tamper_rejected && i < batch_count; ++i) {
+            if (pqc_crypto_crypt_block_gcm(
+                    key, sizeof(key), 7, cpu_batch[i].block,
+                    cpu_batch[i].generation, cpu_batch[i].length,
+                    cpu_cipher + cpu_batch[i].output_offset,
+                    batch_recovered + cpu_batch[i].input_offset,
+                    cpu_batch[i].tag, 0, 0) != 0 ||
+                memcmp(batch_plain + cpu_batch[i].input_offset,
+                       batch_recovered + cpu_batch[i].input_offset,
+                       cpu_batch[i].length) != 0)
+                tamper_rejected = 0;
+        }
+        memset(batch_recovered, 0, sizeof(batch_recovered));
         if (tamper_rejected &&
             pqc_crypto_crypt_block_batch_gcm(key, sizeof(key), 7, batch,
                                              batch_count, batch_plain,
-                                             batch_cipher) != 0) {
+                                             batch_cipher, 1) != 0) {
             tamper_rejected = 0;
         }
         for (size_t i = 0; tamper_rejected && i < batch_count; ++i) {
@@ -110,8 +133,14 @@ int pqc_selftest_crypto(void)
                        batch[i].length) != 0)
                 tamper_rejected = 0;
         }
+        if (tamper_rejected &&
+            (memcmp(cpu_cipher, batch_cipher, packed) != 0 ||
+             CRYPTO_memcmp(cpu_batch, batch, sizeof(batch)) != 0))
+            tamper_rejected = 0;
         OPENSSL_cleanse(batch, sizeof(batch));
+        OPENSSL_cleanse(cpu_batch, sizeof(cpu_batch));
         OPENSSL_cleanse(batch_plain, sizeof(batch_plain));
+        OPENSSL_cleanse(cpu_cipher, sizeof(cpu_cipher));
         OPENSSL_cleanse(batch_cipher, sizeof(batch_cipher));
         OPENSSL_cleanse(batch_recovered, sizeof(batch_recovered));
     }
@@ -211,8 +240,8 @@ int pqc_selftest_checkpoint(void)
     int ok = pqc_keyring_derive_master_key("checkpoint-self-test") == 0;
     if (ok) {
         ok = pqc_checkpoint_store_and_stage_anchor(path, 42, 7, 8192, 11) == 0;
-        if (ok && pqc_anchor_backend() == PQC_ANCHOR_BACKEND_HARDWARE)
-            ok = pqc_anchor_flush() == 0;
+        if (ok && pqc_anchor_backend() != PQC_ANCHOR_BACKEND_DISABLED)
+            ok = pqc_anchor_worker_flush_now() == 0;
         pqc_checkpoint_t ckpt = {0};
         ok = ok && pqc_checkpoint_load_and_verify_anchor(path, 42, &ckpt) == 0 &&
              ckpt.sequence == 7 && ckpt.logical_size == 8192 && ckpt.max_generation == 11;
@@ -279,6 +308,30 @@ int pqc_selftest_scheduler(void)
     if (pqc_block_job_choose_target(&small, &policy, 0.5, 0.0) != PQC_JOB_CPU)
         return -1;
     if (pqc_block_job_choose_target(&large, &policy, 0.5, 0.0) != PQC_JOB_GPU)
+        return -1;
+    pqc_scheduler_stats_t before;
+    pqc_scheduler_stats_t after;
+    memset(&before, 0, sizeof(before));
+    memset(&after, 0, sizeof(after));
+    pqc_scheduler_set_data_accounting_enabled(1);
+    pqc_scheduler_stats_snapshot(&before);
+    pqc_block_job_t data_job = {0};
+    pqc_scheduler_data_job_input_t data_input = {
+        .file_id = 7,
+        .next_generation = 41,
+        .logical_offset = 0,
+        .length = 1024U * 1024U,
+    };
+    pqc_scheduler_schedule_data_job(&data_job, &data_input);
+    pqc_scheduler_record_data_bytes(data_input.length, 0, 0);
+    pqc_scheduler_stats_snapshot(&after);
+    int target_ok = data_job.target == PQC_JOB_CPU;
+    int stats_ok = after.submitted == before.submitted + 1 &&
+        after.cpu_executed == before.cpu_executed + 1 &&
+        after.gpu_executed == before.gpu_executed &&
+        after.data_plane_cpu == before.data_plane_cpu + 1;
+    pqc_scheduler_set_data_accounting_enabled(0);
+    if (!target_ok || !stats_ok)
         return -1;
     return 0;
 }

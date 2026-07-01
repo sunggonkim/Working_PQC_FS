@@ -4,10 +4,10 @@
 - Scope: producer-facing slack/deadline interface only; not an end-to-end QoS result.
 
 ## Cases
-- `slack_available_gpu` acceptable=`true`, target=`GPU`, decision_reason=`4`, deferral_reason=`0`, deadline_ns=`10000000`, batch_age_ns=`0`, slack_age_ns=`3750`, stale=`False`
-- `no_slack_cpu` acceptable=`true`, target=`CPU`, decision_reason=`2`, deferral_reason=`2`, deadline_ns=`10000000`, batch_age_ns=`0`, slack_age_ns=`1139`, stale=`False`
-- `deadline_elapsed_cpu` acceptable=`true`, target=`CPU`, decision_reason=`8`, deferral_reason=`8`, deadline_ns=`10000000`, batch_age_ns=`20000000`, slack_age_ns=`4805`, stale=`False`
-- `stale_slack_cpu` acceptable=`true`, target=`CPU`, decision_reason=`128`, deferral_reason=`128`, deadline_ns=`10000000`, batch_age_ns=`0`, slack_age_ns=`2067102`, stale=`True`
+- `slack_available_gpu` acceptable=`true`, target=`GPU`, decision_reason=`4`, deferral_reason=`0`, deadline_ns=`10000000`, batch_age_ns=`0`, slack_age_ns=`8408`, stale=`False`
+- `no_slack_cpu` acceptable=`true`, target=`CPU`, decision_reason=`2`, deferral_reason=`2`, deadline_ns=`10000000`, batch_age_ns=`0`, slack_age_ns=`6342`, stale=`False`
+- `deadline_elapsed_cpu` acceptable=`true`, target=`CPU`, decision_reason=`8`, deferral_reason=`8`, deadline_ns=`10000000`, batch_age_ns=`20000000`, slack_age_ns=`0`, stale=`False`
+- `stale_slack_cpu` acceptable=`true`, target=`CPU`, decision_reason=`128`, deferral_reason=`128`, deadline_ns=`10000000`, batch_age_ns=`0`, slack_age_ns=`2071028`, stale=`True`
 
 ## Interface Contract
 - Deadline source: producer-supplied relative deadline/slack in nanoseconds.

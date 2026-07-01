@@ -2,7 +2,7 @@
 
 - Overall pass: `True`
 - Required source examples found: `5` / `5`
-- AEGIS-Q page count at audit time: `12`
+- AEGIS-Q page count at audit time: `13`
 
 ## Required local sources
 

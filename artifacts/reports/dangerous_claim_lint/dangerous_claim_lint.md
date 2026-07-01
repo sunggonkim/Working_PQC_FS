@@ -1,7 +1,7 @@
 # Dangerous Claim Lint
 
 - Overall pass: `True`
-- Scanned files: `336`
+- Scanned files: `337`
 - Candidate hits: `291`
 - Violations: `0`
 

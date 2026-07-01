@@ -20,9 +20,9 @@
       "hits": {
         "free storage path": [
           {
-            "line": 17,
-            "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "line": 5,
+            "path": "Paper/5_Related_Works.tex",
+            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           }
         ],
         "gocryptfs": [
@@ -37,7 +37,7 @@
             "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs,"
           },
           {
-            "line": 45,
+            "line": 50,
             "path": "Paper/4_Evaluation.tex",
             "text": "RQ5 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\\\"
           },
@@ -47,9 +47,9 @@
             "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ]
       },
@@ -63,9 +63,9 @@
       "hits": {
         "Jetson/CUDA/TPM dependencies": [
           {
-            "line": 26,
+            "line": 19,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies.  The SQLite point is the same storage-pressure case summ"
+            "text": "The evaluated envelope is local: SQLite, elastic writes, append-log/cache-manifest remounts, authenticated FUSE, and Jetson/CUDA/TPM dependencies.  The SQLite point is the storage-pressure case in Figure~\\ref{fig:first_page_qos} and Table~\\"
           }
         ]
       },
@@ -78,19 +78,14 @@
       "hits": {
         "authenticated FUSE": [
           {
-            "line": 96,
+            "line": 98,
             "path": "Paper/4_Evaluation.tex",
             "text": "The ablation manifest then attributes cost to the authenticated FUSE format, SQLite recovery to elastic-write throttling, key-plane speedup to slack-gated GPU maintenance, and replay refusal to the external anchor."
           },
           {
-            "line": 5,
-            "path": "Paper/5_Related_Works.tex",
-            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
-          },
-          {
-            "line": 26,
+            "line": 19,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies.  The SQLite point is the same storage-pressure case summ"
+            "text": "The evaluated envelope is local: SQLite, elastic writes, append-log/cache-manifest remounts, authenticated FUSE, and Jetson/CUDA/TPM dependencies.  The SQLite point is the storage-pressure case in Figure~\\ref{fig:first_page_qos} and Table~\\"
           }
         ],
         "mounted runtime": [
@@ -100,19 +95,19 @@
             "text": "\\subsection{Why a mounted runtime?}"
           },
           {
-            "line": 13,
+            "line": 11,
             "path": "Paper/3_Design.tex",
             "text": "\\Description{Layered architecture diagram of the application boundary, mounted runtime, persistence and recovery layer, backing directory, optional GPU lane, optional TPM anchor, and non-claimed mechanisms.}"
           },
           {
-            "line": 85,
+            "line": 87,
             "path": "Paper/4_Evaluation.tex",
             "text": "Recovery/replay outcomes support the mounted runtime boundary; they are not the paper's central QoS/placement result."
           },
           {
-            "line": 13,
+            "line": 9,
             "path": "Paper/5_Related_Works.tex",
-            "text": "ML-KEM establishes shared secrets rather than per-block bulk encryption~\\cite{mlkem}; post-quantum encrypted-file-system cost models reinforce that primitive choice is not a mounted runtime~\\cite{pppqefs}.  AEGIS-Q keeps AES-GCM in the data"
+            "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           }
         ]
       },
@@ -126,9 +121,9 @@
       "hits": {
         "kernel/FUSE-daemon trust": [
           {
-            "line": 26,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies.  The SQLite point is the same storage-pressure case summ"
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ]
       },
@@ -143,10 +138,10 @@
           {
             "line": 53,
             "path": "Paper/1_Introduction.tex",
-            "text": "The claim boundary excludes unproven \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, power-loss certification, and portability beyond the tested sta"
+            "text": "The claim boundary excludes \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, physical power-loss certification, and portability outside Jetson-style "
           },
           {
-            "line": 32,
+            "line": 135,
             "path": "Paper/3_Design.tex",
             "text": "External-anchor replay condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retain"
           },
@@ -156,16 +151,16 @@
             "text": "The older \\texttt{pqc\\_file\\_key.*} epoch/grace helper remains source-only and is not linked into \\texttt{pqc\\_fuse}; evaluated epochs are open-file refresh bookkeeping, not stale-handle, rollback, or TPM/PCR-bound rollback proof."
           },
           {
-            "line": 12,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  There is no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or sid"
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ],
         "not a general POSIX": [
           {
-            "line": 19,
+            "line": 10,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "AEGIS-Q is not a general POSIX filesystem: read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, relative symlinks, and bounded writer races are evaluated; shared \\texttt{mmap}, full link lifecycle, open-su"
+            "text": "AEGIS-Q is not a general POSIX filesystem: read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, symlinks, and bounded writer races are evaluated; shared \\texttt{mmap}, full link lifecycle, open-subtree ret"
           }
         ],
         "power-loss": [
@@ -175,9 +170,9 @@
             "text": "\\item \\textbf{C3: Recovery and replay boundary.}  AEGIS-Q separates replayable file witnesses from externally anchored replay-after-advance checks and labels clean-remount, tamper, stale-replay, selected app-crash, and non-claimed power-los"
           },
           {
-            "line": 30,
+            "line": 49,
             "path": "Paper/3_Design.tex",
-            "text": "Data-before-mapping publication & \\texttt{do\\_flush\\_wbuf\\_locked()} writes \\texttt{.pqcdata}, calls \\texttt{fdatasync}, appends \\texttt{.pqcmeta}, then syncs the journal & Journal self-test, daemon cutpoint matrix, and SQLite selected-boun"
+            "text": "\\caption{D/J/C/xattr publication protocol.  D is the durable ciphertext sidecar state, J is the journal mapping state, and C is the authenticated checkpoint/logical-size exposure state.  The bottom row is the claim boundary: tails without J"
           },
           {
             "line": 12,
@@ -185,14 +180,19 @@
             "text": "\\item \\textbf{RQ4: Replay and recovery oracle.} Which daemon/app crash and TPM replay-after-advance outcomes are supported, and which rollback or power-loss claims remain outside scope?"
           },
           {
+            "line": 34,
+            "path": "Paper/7_Implementation_Details.tex",
+            "text": "The layout also creates concrete assumptions.  AEGIS-Q relies on the lower filesystem to honor completed \\texttt{fdatasync} order for data then metadata sidecars and to preserve checkpoint xattrs according to documented semantics.  The remo"
+          },
+          {
             "line": 23,
             "path": "Paper/8_Security_Analysis.tex",
             "text": "Crash during update & Ordered publication plus selected daemon/app cutpoint tests & Physical power-loss and drive-cache certification remain open\\\\"
           },
           {
-            "line": 21,
+            "line": 12,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The crash story retains daemon crashes, SQLite/dbm recovery, append-log/cache-manifest remount, syscall-exact app-crash, and loopback ext4/device-mapper accepted-state recovery.  It still lacks physical power-loss, kernel-crash, drive-cache"
+            "text": "The crash story retains daemon crashes, SQLite/dbm recovery, append-log/cache-manifest remounts, syscall-exact app-crash, and loopback ext4/device-mapper recovery.  It assumes lower-filesystem \\texttt{fdatasync} ordering for \\texttt{.pqcdat"
           }
         ]
       },
@@ -317,40 +317,40 @@
     "bibliography_competitor_set_present": true,
     "checklist_competitor_strategy_present": true,
     "dangerous_claims_guarded": true,
-    "paper_pdf_pages_12": true,
+    "paper_pdf_pages_le_13": true,
     "systems_literature_gate_passes": true,
     "technique_transfer_matrix_passes": true,
     "win_loss_nonapply_language_present": true
   },
   "dangerous_claim_hits": [],
   "overall_pass": true,
-  "paper_pages": 12,
+  "paper_pages": 13,
   "related_topics": {
     "gpu_crypto_storage_staging": {
       "complete": true,
       "hits": {
         "Fastensor": [
           {
-            "line": 36,
+            "line": 32,
             "path": "Paper/2_Background.tex",
             "text": "GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large GPU workloads through storage hierarchies~\\cite{flashneuron, "
           },
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "FlashNeuron": [
           {
-            "line": 36,
+            "line": 32,
             "path": "Paper/2_Background.tex",
             "text": "GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large GPU workloads through storage hierarchies~\\cite{flashneuron, "
           },
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "GPU": [
@@ -365,14 +365,14 @@
             "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption.  It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep a"
           },
           {
-            "line": 13,
+            "line": 11,
             "path": "Paper/3_Design.tex",
             "text": "\\Description{Layered architecture diagram of the application boundary, mounted runtime, persistence and recovery layer, backing directory, optional GPU lane, optional TPM anchor, and non-claimed mechanisms.}"
           },
           {
-            "line": 10,
+            "line": 9,
             "path": "Paper/4_Evaluation.tex",
-            "text": "\\item \\textbf{RQ2: CPU/GPU/PQC placement.} When should a UMA edge runtime keep AES-GCM file encryption on the CPU, and when can ML-KEM/cuPQC key-plane maintenance use the GPU?"
+            "text": "\\item \\textbf{RQ1: CPU/GPU/PQC placement.} When should a UMA edge runtime keep AES-GCM file encryption on the CPU, and when can ML-KEM/cuPQC key-plane maintenance use the GPU?"
           },
           {
             "line": 5,
@@ -395,40 +395,40 @@
             "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES"
           },
           {
-            "line": 7,
+            "line": 4,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The useful result is asymmetry, not aggregate ``GPU speedup.''  CPU/OpenSSL fits AES-GCM data writes, while GPU/cuPQC helps slack-tolerant ML-KEM maintenance.  Under UMA contention, secure file encryption needs admission and fallback rules "
+            "text": "The useful result is asymmetry, not aggregate ``GPU speedup.''  CPU/OpenSSL fits AES-GCM data writes, while GPU/cuPQC helps slack-tolerant ML-KEM maintenance.  AEGIS-Q trades peak background throughput for explicit publication, placement, Q"
           }
         ],
         "SnuQS": [
           {
-            "line": 36,
+            "line": 32,
             "path": "Paper/2_Background.tex",
             "text": "GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large GPU workloads through storage hierarchies~\\cite{flashneuron, "
           },
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "Speculative GPU encryption": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "fscrypt-GPU": [
           {
-            "line": 36,
+            "line": 32,
             "path": "Paper/2_Background.tex",
             "text": "GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large GPU workloads through storage hierarchies~\\cite{flashneuron, "
           },
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ]
       },
@@ -446,37 +446,37 @@
       "hits": {
         "GPU-side execution": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "GPU4FS": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "GPUfs": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "GPUstore": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "GeminiFS": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ]
       },
@@ -498,14 +498,9 @@
             "text": "fs-verity/dm-integrity & \\pmark & \\xmark & \\xmark & Read-only file or block integrity\\\\"
           },
           {
-            "line": 5,
-            "path": "Paper/5_Related_Works.tex",
-            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
-          },
-          {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "fs-verity": [
@@ -515,14 +510,9 @@
             "text": "fs-verity/dm-integrity & \\pmark & \\xmark & \\xmark & Read-only file or block integrity\\\\"
           },
           {
-            "line": 5,
-            "path": "Paper/5_Related_Works.tex",
-            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
-          },
-          {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ]
       },
@@ -536,9 +526,9 @@
       "hits": {
         "barrier": [
           {
-            "line": 65,
+            "line": 54,
             "path": "Paper/3_Design.tex",
-            "text": "The journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \\texttt{fsync} flushe"
+            "text": "The D/J/C publisher is the publication component.  Its journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed "
           },
           {
             "line": 32,
@@ -546,36 +536,26 @@
             "text": "X6/O3 answer strict-path practicality without upgrading crash claims.  X6 changes marker/checkpoint publication from filesystem-wide \\texttt{syncfs} to marker-file \\texttt{fsync} (1,070 retained A2 calls), leaving data and journal barriers."
           },
           {
-            "line": 11,
-            "path": "Paper/5_Related_Works.tex",
-            "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
-          },
-          {
-            "line": 38,
+            "line": 46,
             "path": "Paper/7_Implementation_Details.tex",
-            "text": "The evaluated path uses ordinary FUSE read, write, flush, fsync, open, and release operations.  Recent hot-path cleanup moves repeated policy parsing, same-daemon metadata reloads, sidecar EOF probes, read/write scratch allocation, and redu"
+            "text": "Strict publication still drains coalesced writes before sync returns.  It updates sidecar dirty epochs and D/J append cutpoints at batch boundaries while recording per-block ciphertext offsets before journal mapping preparation.  When no ex"
           },
           {
-            "line": 23,
+            "line": 14,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "Kernel assistance is future work: D/J/C barrier issuance could move to a helper, but only if a same-format kernel path preserves the recovery oracle; Merkle/integrity jobs must stay independent, batched, slack-tolerant, and format-compatibl"
+            "text": "AEGIS-Q fixes 4~KiB authenticated records and coalesces larger writes into bounded 512~KiB batches; 16/64/128~KiB chunks change amortization, not nonce/AAD format.  The remaining strict cost is barrier publication."
           }
         ],
         "epoch": [
           {
-            "line": 42,
+            "line": 56,
             "path": "Paper/3_Design.tex",
-            "text": "The password-derived mount key is never hardware-released; scrypt does not remove weak-password or offline-guessing risk.  There is no hardware-backed credential release path for the mount key.  The rekey is open-file DEK refresh rather tha"
+            "text": "Strict and epoch publication share one accepted-state invariant.  Strict publishes data then journal/checkpoint per sync and replays the newest authenticated mapping.  Epoch publishes only a complete grouped \\texttt{syncfs} prefix and disca"
           },
           {
             "line": 32,
             "path": "Paper/4_Evaluation.tex",
             "text": "X6/O3 answer strict-path practicality without upgrading crash claims.  X6 changes marker/checkpoint publication from filesystem-wide \\texttt{syncfs} to marker-file \\texttt{fsync} (1,070 retained A2 calls), leaving data and journal barriers."
-          },
-          {
-            "line": 11,
-            "path": "Paper/5_Related_Works.tex",
-            "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           },
           {
             "line": 4,
@@ -590,14 +570,14 @@
             "text": "The central tension is that the accelerator is both a compute resource and an interference source.  GPU-everything file encryption loses on small authenticated writes; KEM-per-block \"full PQC\" confuses the key plane with the data plane; sta"
           },
           {
-            "line": 45,
+            "line": 49,
             "path": "Paper/2_Background.tex",
             "text": "\\item \\textbf{Publication before exposure.} A write is not visible merely because ciphertext bytes exist; a validated journal mapping and checkpoint determine exposure."
           },
           {
-            "line": 30,
+            "line": 17,
             "path": "Paper/3_Design.tex",
-            "text": "Data-before-mapping publication & \\texttt{do\\_flush\\_wbuf\\_locked()} writes \\texttt{.pqcdata}, calls \\texttt{fdatasync}, appends \\texttt{.pqcmeta}, then syncs the journal & Journal self-test, daemon cutpoint matrix, and SQLite selected-boun"
+            "text": "Reading Figure~\\ref{fig:overall_procedure} from top to bottom gives the normal mounted procedure.  A write enters through the FUSE adapter, is serialized against per-file state, becomes one or more CPU AES-GCM records, and remains hidden un"
           },
           {
             "line": 30,
@@ -639,7 +619,7 @@
           {
             "line": 20,
             "path": "Paper/4_Evaluation.tex",
-            "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result.  Retained O4 tegrasta"
+            "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result.  We use Thor as a rep"
           },
           {
             "line": 5,
@@ -647,9 +627,9 @@
             "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "fscrypt": [
@@ -674,9 +654,9 @@
             "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "kernel": [
@@ -711,9 +691,9 @@
             "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES"
           },
           {
-            "line": 17,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ]
       },
@@ -728,24 +708,24 @@
       "hits": {
         "IOWeight": [
           {
-            "line": 92,
+            "line": 94,
             "path": "Paper/4_Evaluation.tex",
             "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero median"
           },
           {
-            "line": 11,
+            "line": 9,
             "path": "Paper/5_Related_Works.tex",
             "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           }
         ],
         "ionice": [
           {
-            "line": 92,
+            "line": 94,
             "path": "Paper/4_Evaluation.tex",
             "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero median"
           },
           {
-            "line": 11,
+            "line": 9,
             "path": "Paper/5_Related_Works.tex",
             "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           }
@@ -757,7 +737,7 @@
             "text": "The central tension is that the accelerator is both a compute resource and an interference source.  GPU-everything file encryption loses on small authenticated writes; KEM-per-block \"full PQC\" confuses the key plane with the data plane; sta"
           },
           {
-            "line": 92,
+            "line": 94,
             "path": "Paper/4_Evaluation.tex",
             "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together.  Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero median"
           }
@@ -774,21 +754,21 @@
       "hits": {
         "F2FS": [
           {
-            "line": 11,
+            "line": 9,
             "path": "Paper/5_Related_Works.tex",
             "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           }
         ],
         "FastCommit": [
           {
-            "line": 11,
+            "line": 9,
             "path": "Paper/5_Related_Works.tex",
             "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           }
         ],
         "ScaleFS": [
           {
-            "line": 11,
+            "line": 9,
             "path": "Paper/5_Related_Works.tex",
             "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           }
@@ -805,23 +785,23 @@
       "hits": {
         "artificial throughput row": [
           {
-            "line": 7,
+            "line": 5,
             "path": "Paper/5_Related_Works.tex",
-            "text": "The comparison is asymmetric rather than deleted: plaintext/lowerfs, gocryptfs, dm-crypt, and AEGIS-Q are mode-aligned measured rows; fscrypt is unavailable with proof, not an implied speedup.  These direct same-contract rows expose publica"
+            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           }
         ],
         "mode-aligned measured rows": [
           {
-            "line": 7,
+            "line": 5,
             "path": "Paper/5_Related_Works.tex",
-            "text": "The comparison is asymmetric rather than deleted: plaintext/lowerfs, gocryptfs, dm-crypt, and AEGIS-Q are mode-aligned measured rows; fscrypt is unavailable with proof, not an implied speedup.  These direct same-contract rows expose publica"
+            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           }
         ],
         "same-contract rows": [
           {
-            "line": 7,
+            "line": 5,
             "path": "Paper/5_Related_Works.tex",
-            "text": "The comparison is asymmetric rather than deleted: plaintext/lowerfs, gocryptfs, dm-crypt, and AEGIS-Q are mode-aligned measured rows; fscrypt is unavailable with proof, not an implied speedup.  These direct same-contract rows expose publica"
+            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           }
         ]
       },
@@ -846,14 +826,14 @@
             "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs,"
           },
           {
-            "line": 33,
+            "line": 17,
             "path": "Paper/3_Design.tex",
-            "text": "Unsupported-mode boundary & \\texttt{pqc\\_open()} defaults to FUSE \\texttt{direct\\_io}; new-target, closed/open-target overwrite, open-source, empty/no-open directory-tree rename, directory \\texttt{fsync}, no-open regular-file hard links, re"
+            "text": "Reading Figure~\\ref{fig:overall_procedure} from top to bottom gives the normal mounted procedure.  A write enters through the FUSE adapter, is serialized against per-file state, becomes one or more CPU AES-GCM records, and remains hidden un"
           },
           {
             "line": 18,
             "path": "Paper/4_Evaluation.tex",
-            "text": "Primitive-placement numbers come from the microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness.  Both refuse unsupported configurations rather than extrapolating missing rows."
+            "text": "Primitive-placement numbers come from the microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness.  Both refuse unsupported configurations rather than extrapolating missing rows.  Retained scripts regenera"
           },
           {
             "line": 5,
@@ -871,47 +851,47 @@
             "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES"
           },
           {
-            "line": 26,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies.  The SQLite point is the same storage-pressure case summ"
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ],
         "GPUDirect Storage": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "SPDK": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "cuFile": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ],
         "direct storage/GPU data path": [
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ]
       },
@@ -930,27 +910,27 @@
           {
             "line": 9,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "PCR": [
           {
             "line": 53,
             "path": "Paper/1_Introduction.tex",
-            "text": "The claim boundary excludes unproven \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, power-loss certification, and portability beyond the tested sta"
+            "text": "The claim boundary excludes \\texttt{O\\_DIRECT} NVMe-to-UVM DMA, \\texttt{io\\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, physical power-loss certification, and portability outside Jetson-style "
           },
           {
-            "line": 32,
+            "line": 135,
             "path": "Paper/3_Design.tex",
             "text": "External-anchor replay condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retain"
           },
           {
-            "line": 79,
+            "line": 81,
             "path": "Paper/4_Evaluation.tex",
             "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe.  The hardware replay matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, aut"
           },
@@ -965,9 +945,9 @@
             "text": "The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record.  PCR binding is a transient probe rath"
           },
           {
-            "line": 12,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  There is no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or sid"
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ],
         "TEE": [
@@ -984,12 +964,12 @@
           {
             "line": 9,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "Linux storage QoS mechanisms such as blk-throttle, \\texttt{io.latency}/\\texttt{IO.cost}, BFQ, and CFQ operate below file-encryption semantics; AEGIS-Q's \\texttt{ionice}/\\texttt{IOWeight} rows are controls, not an exhaustive scheduler study."
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "TPM": [
@@ -1004,7 +984,7 @@
             "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption.  It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep a"
           },
           {
-            "line": 13,
+            "line": 11,
             "path": "Paper/3_Design.tex",
             "text": "\\Description{Layered architecture diagram of the application boundary, mounted runtime, persistence and recovery layer, backing directory, optional GPU lane, optional TPM anchor, and non-claimed mechanisms.}"
           },
@@ -1014,9 +994,9 @@
             "text": "\\item \\textbf{RQ4: Replay and recovery oracle.} Which daemon/app crash and TPM replay-after-advance outcomes are supported, and which rollback or power-loss claims remain outside scope?"
           },
           {
-            "line": 9,
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "GPU/storage systems validate different contracts.  FlashNeuron and Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}, while SnuQS alone is not filesystem-format eviden"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           },
           {
             "line": 26,
@@ -1029,9 +1009,9 @@
             "text": "Whole-directory replay & Optional external TPM anchor can fail closed after advance & File-only witness is replayable; full rollback resistance is not claimed\\\\"
           },
           {
-            "line": 12,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  There is no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or sid"
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ]
       },
@@ -1057,14 +1037,14 @@
             "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs,"
           },
           {
-            "line": 33,
+            "line": 17,
             "path": "Paper/3_Design.tex",
-            "text": "Unsupported-mode boundary & \\texttt{pqc\\_open()} defaults to FUSE \\texttt{direct\\_io}; new-target, closed/open-target overwrite, open-source, empty/no-open directory-tree rename, directory \\texttt{fsync}, no-open regular-file hard links, re"
+            "text": "Reading Figure~\\ref{fig:overall_procedure} from top to bottom gives the normal mounted procedure.  A write enters through the FUSE adapter, is serialized against per-file state, becomes one or more CPU AES-GCM records, and remains hidden un"
           },
           {
             "line": 18,
             "path": "Paper/4_Evaluation.tex",
-            "text": "Primitive-placement numbers come from the microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness.  Both refuse unsupported configurations rather than extrapolating missing rows."
+            "text": "Primitive-placement numbers come from the microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness.  Both refuse unsupported configurations rather than extrapolating missing rows.  Retained scripts regenera"
           },
           {
             "line": 5,
@@ -1082,9 +1062,9 @@
             "text": "AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing directory but cannot obtain the mount credential or compromise the running kernel, FUSE daemon, CUDA driver, or cryptographic libraries.  Under that scope, AES"
           },
           {
-            "line": 26,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies.  The SQLite point is the same storage-pressure case summ"
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ],
         "gocryptfs": [
@@ -1099,7 +1079,7 @@
             "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs,"
           },
           {
-            "line": 45,
+            "line": 50,
             "path": "Paper/4_Evaluation.tex",
             "text": "RQ5 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\\\"
           },
@@ -1109,9 +1089,9 @@
             "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ]
       },
@@ -1148,16 +1128,16 @@
       "hits": {
         "not a full fscrypt": [
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "not a general POSIX": [
           {
-            "line": 19,
+            "line": 10,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "AEGIS-Q is not a general POSIX filesystem: read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, relative symlinks, and bounded writer races are evaluated; shared \\texttt{mmap}, full link lifecycle, open-su"
+            "text": "AEGIS-Q is not a general POSIX filesystem: read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, symlinks, and bounded writer races are evaluated; shared \\texttt{mmap}, full link lifecycle, open-subtree ret"
           }
         ],
         "not as a replacement": [
@@ -1179,9 +1159,9 @@
       "hits": {
         "free storage path": [
           {
-            "line": 17,
-            "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "line": 5,
+            "path": "Paper/5_Related_Works.tex",
+            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           }
         ],
         "gocryptfs": [
@@ -1196,7 +1176,7 @@
             "text": "Secure-storage systems choose a protection boundary as well as a cipher.  Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs,"
           },
           {
-            "line": 45,
+            "line": 50,
             "path": "Paper/4_Evaluation.tex",
             "text": "RQ5 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\\\"
           },
@@ -1206,16 +1186,16 @@
             "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           },
           {
-            "line": 17,
+            "line": 8,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by kernel/filesystem proof and is "
+            "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack.  The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environm"
           }
         ],
         "not kernel-replacement maturity": [
           {
-            "line": 7,
+            "line": 5,
             "path": "Paper/5_Related_Works.tex",
-            "text": "The comparison is asymmetric rather than deleted: plaintext/lowerfs, gocryptfs, dm-crypt, and AEGIS-Q are mode-aligned measured rows; fscrypt is unavailable with proof, not an implied speedup.  These direct same-contract rows expose publica"
+            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
           }
         ]
       },
@@ -1232,22 +1212,17 @@
           {
             "line": 9,
             "path": "Paper/1_Introduction.tex",
-            "text": "\\caption{SQLite pressure result for RQ3; labels show deadline misses and background throughput.}"
+            "text": "\\caption{SQLite pressure result for RQ2; labels show deadline misses and background throughput.}"
           },
           {
-            "line": 38,
-            "path": "Paper/2_Background.tex",
-            "text": "The asymmetric answer is useful for system design.  Bulk data encryption sits on small writes, SQLite commits, and foreground reads, so launch, staging, synchronization, and UMA contention costs matter.  Key refresh, batch encapsulation, an"
-          },
-          {
-            "line": 30,
+            "line": 111,
             "path": "Paper/3_Design.tex",
-            "text": "Data-before-mapping publication & \\texttt{do\\_flush\\_wbuf\\_locked()} writes \\texttt{.pqcdata}, calls \\texttt{fdatasync}, appends \\texttt{.pqcmeta}, then syncs the journal & Journal self-test, daemon cutpoint matrix, and SQLite selected-boun"
+            "text": "The mounted interface exposes \\texttt{user.pqc\\_qos\\_class}: latency files are traced but never daemon-slept, elastic files are throttle-eligible, and SQLite sidecars inherit the base-file class.  This is mounted-FUSE throttling, not an ext"
           },
           {
-            "line": 11,
+            "line": 10,
             "path": "Paper/4_Evaluation.tex",
-            "text": "\\item \\textbf{RQ3: Mounted application behavior.} Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?"
+            "text": "\\item \\textbf{RQ2: Mounted QoS and edge-storage behavior.} Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?"
           },
           {
             "line": 4,
@@ -1255,9 +1230,9 @@
             "text": "AEGIS-Q treats secure edge file encryption as a placement, QoS, and recovery-boundary runtime under secure-storage pressure, not blanket GPU offload.  Its format keeps AES-GCM writes on CPU, admits ML-KEM/cuPQC maintenance only with slack, "
           },
           {
-            "line": 38,
+            "line": 46,
             "path": "Paper/7_Implementation_Details.tex",
-            "text": "The evaluated path uses ordinary FUSE read, write, flush, fsync, open, and release operations.  Recent hot-path cleanup moves repeated policy parsing, same-daemon metadata reloads, sidecar EOF probes, read/write scratch allocation, and redu"
+            "text": "Strict publication still drains coalesced writes before sync returns.  It updates sidecar dirty epochs and D/J append cutpoints at batch boundaries while recording per-block ciphertext offsets before journal mapping preparation.  When no ex"
           },
           {
             "line": 36,
@@ -1265,9 +1240,9 @@
             "text": "The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record.  PCR binding is a transient probe rath"
           },
           {
-            "line": 21,
+            "line": 12,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The crash story retains daemon crashes, SQLite/dbm recovery, append-log/cache-manifest remount, syscall-exact app-crash, and loopback ext4/device-mapper accepted-state recovery.  It still lacks physical power-loss, kernel-crash, drive-cache"
+            "text": "The crash story retains daemon crashes, SQLite/dbm recovery, append-log/cache-manifest remounts, syscall-exact app-crash, and loopback ext4/device-mapper recovery.  It assumes lower-filesystem \\texttt{fdatasync} ordering for \\texttt{.pqcdat"
           }
         ],
         "replay-after-advance": [
@@ -1282,9 +1257,9 @@
             "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption.  It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep a"
           },
           {
-            "line": 32,
+            "line": 25,
             "path": "Paper/3_Design.tex",
-            "text": "External-anchor replay condition & \\texttt{checkpoint\\_store()} propagates hardware-anchor failures and \\texttt{checkpoint\\_load()} rejects mismatched anchor state & TPM NV replay-after-advance run fails closed; file-anchor replay is retain"
+            "text": "\\item \\textbf{Recovery oracle and external anchor}: gates remount exposure and optional replay-after-advance checks."
           },
           {
             "line": 12,
@@ -1297,9 +1272,9 @@
             "text": "The hardware mode stores an authenticated prefix record in an owner-authorized TPM NV index: administrators create and rotate the index outside the daemon, and AEGIS-Q reads or writes only that record.  PCR binding is a transient probe rath"
           },
           {
-            "line": 12,
+            "line": 6,
             "path": "Paper/10_Discussion_and_Limitations.tex",
-            "text": "The per-file envelope is authenticated and block records are AEAD-protected, but the mount password remains the root credential.  There is no hardware-backed credential release, audited rotation protocol, privileged-attacker defense, or sid"
+            "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks.  The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluati"
           }
         ],
         "storage-visible": [
@@ -1314,14 +1289,19 @@
             "text": "AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption.  It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep a"
           },
           {
-            "line": 11,
-            "path": "Paper/4_Evaluation.tex",
-            "text": "\\item \\textbf{RQ3: Mounted application behavior.} Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?"
+            "line": 24,
+            "path": "Paper/3_Design.tex",
+            "text": "\\item \\textbf{Storage-visible QoS controller}: throttles elastic writes from fresh telemetry and file class."
           },
           {
-            "line": 5,
+            "line": 10,
+            "path": "Paper/4_Evaluation.tex",
+            "text": "\\item \\textbf{RQ2: Mounted QoS and edge-storage behavior.} Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?"
+          },
+          {
+            "line": 7,
             "path": "Paper/5_Related_Works.tex",
-            "text": "AEGIS-Q separates storage protection, GPU/storage placement, and PQC key-plane work.  fscrypt and dm-crypt are mature kernel baselines~\\cite{fscrypt, dmcrypt}, and gocryptfs is the closest user-space encrypted-filesystem comparison point~\\c"
+            "text": "GPU/storage systems validate different contracts.  FlashNeuron/Fastensor stage large GPU workloads~\\cite{flashneuron, fastensor}; SnuQS manages out-of-core capacity~\\cite{snuqs_storage}; Speculative GPU encryption and fscrypt-GPU optimize t"
           }
         ]
       },

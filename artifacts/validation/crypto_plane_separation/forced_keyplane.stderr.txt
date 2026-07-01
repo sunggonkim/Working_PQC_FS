@@ -4,34 +4,31 @@
   │  CPU data plane; optional batch GPU helpers         │
   └─────────────────────────────────────────────────────┘
 
-[PQC-FUSE 2026-06-29 08:30:28.824] ════════════════════════════════════════════════════════════
-[PQC-FUSE 2026-06-29 08:30:28.824]   PQC-FUSE Session Started
-[PQC-FUSE 2026-06-29 08:30:28.824]   Storage dir : /tmp/aegisq_forced_keyplane_voq6pl6_/store
-[PQC-FUSE 2026-06-29 08:30:28.824]   Mount point : /tmp/aegisq_forced_keyplane_voq6pl6_/mnt
-[PQC-FUSE 2026-06-29 08:30:28.824] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-01 22:04:33.477] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-01 22:04:33.477]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-01 22:04:33.477]   Storage dir : /tmp/aegisq_forced_keyplane_55d367lh/store
+[PQC-FUSE 2026-07-01 22:04:33.477]   Mount point : /tmp/aegisq_forced_keyplane_55d367lh/mnt
+[PQC-FUSE 2026-07-01 22:04:33.477] ════════════════════════════════════════════════════════════
 [PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/crypto_plane_separation/forced_keyplane.admission.jsonl
-[PQC-FUSE 2026-06-29 08:30:28.824] KEM algorithm : ML-KEM-768
-[PQC-FUSE 2026-06-29 08:30:28.824]   public key  : 1184 bytes
-[PQC-FUSE 2026-06-29 08:30:28.824]   secret key  : 2400 bytes
-[PQC-FUSE 2026-06-29 08:30:28.824]   ciphertext  : 1088 bytes
-[PQC-FUSE 2026-06-29 08:30:28.825]   shared secret: 32 bytes
-[PQC-FUSE 2026-06-29 08:30:28.827] Keypair generated in 1426.08 µs
-[PQC-FUSE 2026-06-29 08:30:28.887] Master Key derived successfully (scrypt)
-[PQC-FUSE 2026-06-29 08:30:28.887] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
-[PQC-FUSE 2026-06-29 08:30:28.887] GPU load monitor started: /sys/devices/gpu.0/load
-[PQC-FUSE 2026-06-29 08:30:28.887] Freshness anchor worker started
-[PQC-FUSE 2026-06-29 08:30:29.067] PQC background rekey worker started
-[PQC-FUSE 2026-06-29 08:30:29.067] Starting FUSE main loop...
+[PQC-FUSE 2026-07-01 22:04:33.479] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-07-01 22:04:33.479]   public key  : 1184 bytes
+[PQC-FUSE 2026-07-01 22:04:33.479]   secret key  : 2400 bytes
+[PQC-FUSE 2026-07-01 22:04:33.479]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-07-01 22:04:33.479]   shared secret: 32 bytes
+[PQC-FUSE 2026-07-01 22:04:33.480] Keypair generated in 1397.49 µs
+[PQC-FUSE 2026-07-01 22:04:33.541] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-01 22:04:33.541] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-07-01 22:04:33.541] QoS monitor startup skipped for this mount
+[PQC-FUSE 2026-07-01 22:04:33.541] Freshness anchor probe/worker skipped for this mount
+[PQC-FUSE 2026-07-01 22:04:33.541] PQC background rekey worker started
+[PQC-FUSE 2026-07-01 22:04:33.541] Starting FUSE main loop...
 Ignoring invalid max threads value 4294967295 > max (100000).
-[PQC-FUSE 2026-06-29 08:30:29.088] CREATE /payload.bin: authenticated file-key envelope initialized (fid=3154412879375178685)
-[PQC-FUSE 2026-06-29 08:30:29.089] REKEY WORKER: batched 1 files 225.6µs (target=CPU, run=CPU)
-[PQC-FUSE 2026-06-29 08:30:29.089] REKEY WORKER DETAIL: work_bytes=1120 budget_ns=0 decision_reason=0 deferral_reason=0
-[PQC-FUSE 2026-06-29 08:30:29.101] OPEN /payload.bin: restored authenticated file-key envelope (fid=3154412879375178685)
-[PQC-FUSE 2026-06-29 08:30:29.103] Shutting down PQC-FUSE filesystem...
-[PQC-FUSE 2026-06-29 08:30:29.106] PQC background rekey worker stopped
-[PQC-FUSE 2026-06-29 08:30:29.106] Rekey queue stats: accepted=1 duplicate=0 invalid_fd=0 queue_full=0
-[PQC-FUSE 2026-06-29 08:30:29.106] Scheduler stats: submitted=2 cpu=2 gpu=0 bytes_cpu=0 bytes_gpu=16512 migration_ns=1056768
-[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0
-[PQC-FUSE 2026-06-29 08:30:29.107] Rekey queue stats: accepted=1 duplicate=0 invalid_fd=0 queue_full=0
-[PQC-FUSE 2026-06-29 08:30:29.107] Scheduler stats: submitted=2 cpu=2 gpu=0 bytes_cpu=0 bytes_gpu=16512 migration_ns=1056768
+[PQC-FUSE 2026-07-01 22:04:33.582] REKEY WORKER: batched 1 files 254.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-01 22:04:33.582] REKEY WORKER DETAIL: work_bytes=1120 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-01 22:04:33.587] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-07-01 22:04:33.588] PQC background rekey worker stopped
+[PQC-FUSE 2026-07-01 22:04:33.588] Rekey queue stats: accepted=1 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-07-01 22:04:33.588] Scheduler stats: submitted=2 cpu=2 gpu=0 bytes_cpu=16512 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-07-01 22:04:33.588] Durability sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-07-01 22:04:33.588] Durability mounted-operation sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
 [PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

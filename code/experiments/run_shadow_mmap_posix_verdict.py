@@ -3,8 +3,8 @@
 
 The production decision today is rejection, not shadow paging.  This runner
 mounts the final binary and proves that encrypted files reject shared
-``mmap``/``msync`` even when SQLite mmap compatibility is enabled for redirected
-WAL sidecars.  It also guards paper-facing text against accidentally claiming a
+``mmap``/``msync`` and that no SQLite WAL/SHM mmap redirect remains in the
+runtime.  It also guards paper-facing text against accidentally claiming a
 shadow-mmap or general POSIX implementation.
 """
 
@@ -45,20 +45,17 @@ def errno_name(value: int | None) -> str | None:
     return errno.errorcode.get(value, f"ERRNO_{value}")
 
 
-def start_fuse(storage_dir: Path, mount_dir: Path, out_dir: Path,
-               allow_sqlite_mmap: bool) -> tuple[subprocess.Popen[bytes], Any, Any]:
+def start_fuse(storage_dir: Path, mount_dir: Path,
+               out_dir: Path) -> tuple[subprocess.Popen[bytes], Any, Any]:
     env = os.environ.copy()
     env["PQC_MASTER_PASSWORD"] = "shadow-mmap-boundary-password"
     env["PQC_FRESHNESS_ANCHOR_BACKEND"] = "file"
     env["PQC_FRESHNESS_ANCHOR_PATH"] = str(storage_dir / ".anchor")
-    if allow_sqlite_mmap:
-        env["PQC_ALLOW_SQLITE_MMAP"] = "1"
-    else:
-        env.pop("PQC_ALLOW_SQLITE_MMAP", None)
+    env.pop("PQC_ALLOW_SQLITE_MMAP", None)
 
     log_dir = out_dir / "mount_logs"
     log_dir.mkdir(parents=True, exist_ok=True)
-    label = "compat" if allow_sqlite_mmap else "default"
+    label = "default"
     stdout = (log_dir / f"{label}.stdout.txt").open("wb")
     stderr = (log_dir / f"{label}.stderr.txt").open("wb")
     proc = subprocess.Popen(
@@ -164,14 +161,14 @@ def attempt_shared_mmap(path: Path) -> dict[str, Any]:
             os.close(fd)
 
 
-def run_mount_probe(label: str, allow_sqlite_mmap: bool) -> dict[str, Any]:
+def run_mount_probe(label: str) -> dict[str, Any]:
     storage_dir = Path(tempfile.mkdtemp(prefix=f"shadow_mmap_{label}_store_"))
     mount_dir = Path(tempfile.mkdtemp(prefix=f"shadow_mmap_{label}_mnt_"))
     proc = None
     stdout = None
     stderr = None
     try:
-        proc, stdout, stderr = start_fuse(storage_dir, mount_dir, OUT_DIR, allow_sqlite_mmap)
+        proc, stdout, stderr = start_fuse(storage_dir, mount_dir, OUT_DIR)
         target = mount_dir / "encrypted.bin"
         write_fsync(target, b"M" * 8192)
         mmap_result = attempt_shared_mmap(target)
@@ -180,17 +177,17 @@ def run_mount_probe(label: str, allow_sqlite_mmap: bool) -> dict[str, Any]:
         accepted = bool(mmap_result["accepted"]) and size_after == 8192 and retained_payload
         return {
             "case": label,
-            "allow_sqlite_mmap": allow_sqlite_mmap,
+            "sqlite_mmap_redirect": False,
             "mmap_msync_rejection": mmap_result,
             "size_after": size_after,
             "retained_payload_prefix": retained_payload,
             "acceptable": accepted,
-            "scope": "Encrypted data files must reject shared mmap/msync; SQLite WAL sidecar compatibility must not change that boundary.",
+            "scope": "Encrypted data files reject shared mmap/msync; the runtime no longer provides a SQLite WAL/SHM mmap redirect.",
         }
     except BaseException as exc:  # noqa: BLE001 - retained in verdict.
         return {
             "case": label,
-            "allow_sqlite_mmap": allow_sqlite_mmap,
+            "sqlite_mmap_redirect": False,
             "acceptable": False,
             "detail": repr(exc),
         }
@@ -206,7 +203,7 @@ def source_checks() -> dict[str, Any]:
     checks = {
         "fuse_direct_io_mmap_capability_disabled": "conn->want &= ~FUSE_DIRECT_IO_ALLOW_MMAP" in lifecycle,
         "writeback_cache_disabled": "conn->want &= ~FUSE_CAP_WRITEBACK_CACHE" in lifecycle,
-        "sqlite_mmap_limited_to_redirected_sidecar": "sqlite_mmap_sidecar ? 0 : 1" in file_io,
+        "sqlite_mmap_redirect_removed": "PQC_ALLOW_SQLITE_MMAP" not in file_io and "sqlite_mmap_sidecar" not in file_io,
         "old_global_allow_mmap_pattern_absent": "allow_mmap ? 0 : 1" not in file_io,
     }
     return {
@@ -285,8 +282,7 @@ def claim_guard() -> dict[str, Any]:
 
 def build_report() -> dict[str, Any]:
     probes = [
-        run_mount_probe("default_env_encrypted_file", allow_sqlite_mmap=False),
-        run_mount_probe("sqlite_mmap_env_encrypted_file", allow_sqlite_mmap=True),
+        run_mount_probe("default_env_encrypted_file"),
     ]
     source = source_checks()
     posix = posix_audit_checks()

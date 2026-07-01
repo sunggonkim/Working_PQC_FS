@@ -32,6 +32,12 @@ int pqc_checkpoint_store_and_stage_anchor(const char *path,
                                           uint64_t sequence,
                                           uint64_t logical_size,
                                           uint64_t max_generation);
+int pqc_checkpoint_store_and_stage_anchor_final(const char *path,
+                                                uint64_t file_id,
+                                                uint64_t sequence,
+                                                uint64_t logical_size,
+                                                uint64_t max_generation,
+                                                int reservation_matches_final);
 
 int pqc_checkpoint_reserve_generation(const char *path,
                                       uint64_t file_id,

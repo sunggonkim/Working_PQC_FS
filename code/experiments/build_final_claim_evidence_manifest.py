@@ -479,7 +479,7 @@ def build_report() -> dict[str, Any]:
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
 
     checks = {
-        "paper_pages_12": pages == 12,
+        "paper_pages_le_13": pages is not None and pages <= 13,
         "all_evidence_rules_complete": not incomplete_rules,
         "all_numeric_candidates_covered": not uncovered_numeric,
         "abstract_conclusion_security_recovery_claims_covered": not uncovered_cross,

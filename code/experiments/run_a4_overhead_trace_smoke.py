@@ -167,13 +167,13 @@ def start_fuse(storage_dir: Path, mount_dir: Path, out_dir: Path
         "PQC_MASTER_PASSWORD": "a4-overhead-smoke",
         "PQC_FRESHNESS_ANCHOR_BACKEND": "file",
         "PQC_FRESHNESS_ANCHOR_PATH": str(storage_dir / ".anchor"),
-        "PQC_ENABLE_ADMISSION_ON_WRITE": "0",
         "PQC_ENABLE_QOS_THROTTLE_ON_WRITE": "0",
         "PQC_KEY_ROTATION_INTERVAL_S": "0",
         "PQC_FUSE_TRACE_PATH": str(out_dir / "fuse_trace.json"),
         "PQC_PLANE_TRACE_PATH": str(out_dir / "plane_trace.json"),
         "PQC_PUBLICATION_TRACE_PATH": str(out_dir / "publication_trace.jsonl"),
         "PQC_LOCK_PROFILE_PATH": str(out_dir / "lock_profile.jsonl"),
+        "PQC_DURABILITY_TIMING": "1",
     })
     stdout = stdout_path.open("wb")
     stderr = stderr_path.open("wb")
@@ -356,6 +356,31 @@ def markdown(report: dict[str, Any]) -> str:
             f"total_ns `{op.get('total_ns', 0)}`, "
             f"max_ns `{op.get('max_ns', 0)}`"
         )
+    pub = report.get("publication_trace", {})
+    lines.extend([
+        "",
+        "## Publication Trace Counters",
+        "",
+        f"- Publication events: `{pub.get('publication_count', 0)}`",
+        f"- Publication elapsed_ns total: `{pub.get('publication_elapsed_ns_total', 0)}`",
+        f"- Publication sync_count total: `{pub.get('publication_sync_count_total', 0)}`",
+        f"- Data fdatasync count: `{pub.get('publication_data_fsync_count_total', 0)}`",
+        f"- Journal fdatasync count: `{pub.get('publication_journal_fsync_count_total', 0)}`",
+        f"- Epoch-log fdatasync count: `{pub.get('publication_epoch_log_fsync_count_total', 0)}`",
+    ])
+    durability = report.get("durability_mounted_operation_stats", {})
+    lines.extend([
+        "",
+        "## Mounted Durability Counters",
+        "",
+        f"- fdatasync: `{durability.get('fdatasync', 0)}`",
+        f"- fsync: `{durability.get('fsync', 0)}`",
+        f"- syncfs: `{durability.get('syncfs', 0)}`",
+        f"- data_sidecar: `{durability.get('data_sidecar', 0)}`",
+        f"- journal_sidecar: `{durability.get('journal_sidecar', 0)}`",
+        f"- marker_metadata: `{durability.get('marker_metadata', 0)}`",
+        f"- failures: `{durability.get('failures', 0)}`",
+    ])
     lines.extend(["", "## Proof Checks", ""])
     for key, value in report["proof_checks"].items():
         lines.append(f"- `{key}`: `{value}`")

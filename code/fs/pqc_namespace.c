@@ -83,8 +83,6 @@ int pqc_unlink(const char *path)
         return -ENOENT;
     char phys_path[4096];
     pqc_storage_path_resolve(phys_path, sizeof(phys_path), path);
-    char compat_path[4096];
-    int compat_rc = pqc_sqlite_sidecar_redirect_path(compat_path, sizeof(compat_path), path);
     char data_path[4096 + 16], journal_path[4096 + 16];
     char epoch_path[4096 + 16];
     int res = pqc_sidecar_path(data_path, sizeof(data_path), phys_path, ".pqcdata");
@@ -100,8 +98,6 @@ int pqc_unlink(const char *path)
     if (unlink(journal_path) == -1 && errno != ENOENT)
         return -errno;
     if (unlink(epoch_path) == -1 && errno != ENOENT)
-        return -errno;
-    if (compat_rc == 0 && unlink(compat_path) == -1 && errno != ENOENT)
         return -errno;
     if (unlink(phys_path) == -1)
         return -errno;
@@ -329,17 +325,6 @@ int pqc_rename(const char *from, const char *to, unsigned int flags)
         !pqc_fd_context_all_open_markers_hidden())
         return -ENOTSUP;
 
-    char from_compat[4096];
-    char to_compat[4096];
-    int from_compat_rc = pqc_sqlite_sidecar_redirect_path(
-        from_compat, sizeof(from_compat), from);
-    int to_compat_rc = pqc_sqlite_sidecar_redirect_path(
-        to_compat, sizeof(to_compat), to);
-    if ((from_compat_rc == 0 && to_compat_rc != 0) ||
-        (from_compat_rc != 0 && to_compat_rc == 0))
-        return -ENOTSUP;
-    if (to_compat_rc == 0 && path_exists(to_compat) && !to_exists)
-        return -EEXIST;
     char hidden_logical[4096];
     char hidden_phys[4096];
     hidden_logical[0] = '\0';
@@ -369,10 +354,6 @@ int pqc_rename(const char *from, const char *to, unsigned int flags)
         rc = rename_optional_sidecar(from_phys, to_phys, ".pqcmeta");
     if (rc == 0)
         rc = rename_optional_sidecar(from_phys, to_phys, ".pqcepoch");
-    if (rc == 0 && from_compat_rc == 0 && path_exists(from_compat)) {
-        if (rename(from_compat, to_compat) != 0)
-            rc = -errno;
-    }
     if (rc != 0)
         return rc;
     if (rename(from_phys, to_phys) != 0)
@@ -397,14 +378,6 @@ int pqc_link(const char *from, const char *to)
     if (is_fuse_hidden_path(from) || is_fuse_hidden_path(to))
         return -ENOTSUP;
     if (pqc_fd_context_any_open())
-        return -ENOTSUP;
-
-    char from_compat[4096];
-    char to_compat[4096];
-    if (pqc_sqlite_sidecar_redirect_path(from_compat, sizeof(from_compat),
-                                         from) == 0 ||
-        pqc_sqlite_sidecar_redirect_path(to_compat, sizeof(to_compat),
-                                         to) == 0)
         return -ENOTSUP;
 
     char from_phys[4096];

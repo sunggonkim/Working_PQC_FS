@@ -5,12 +5,13 @@
     "all_rows_have_paper_scope_anchors": true,
     "all_rows_have_retained_evidence": true,
     "figure_table_audit_pass": true,
-    "paper_pages_12": true,
+    "paper_pages_le_13": true,
     "required_rows_have_allowed_status": true
   },
   "duplicate_label_mappings": {},
   "extra_label_mappings": [],
   "figure_table_labels": [
+    "fig:dataplane_negative_control",
     "fig:djc_state_machine",
     "fig:evaluation_summary",
     "fig:first_page_qos",
@@ -25,6 +26,9 @@
     "tab:threat_boundary"
   ],
   "label_to_matrix_row": {
+    "fig:dataplane_negative_control": [
+      "time_overhead_breakdown"
+    ],
     "fig:djc_state_machine": [
       "protocol_correctness_and_security_obligations"
     ],
@@ -64,7 +68,7 @@
   },
   "missing_label_mappings": [],
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "required_row_ids": [
     "baseline_sota_comparison",
     "case_study",
@@ -157,7 +161,7 @@
           "passes": true,
           "path": "Paper/10_Discussion_and_Limitations.tex",
           "terms": [
-            "measured frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q",
+            "The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q",
             "not a full fscrypt, fs-verity, dm-integrity"
           ]
         }
@@ -252,7 +256,7 @@
           "passes": true,
           "path": "Paper/10_Discussion_and_Limitations.tex",
           "terms": [
-            "SQLite, elastic writes, secure append-log, and cache-manifest remounts",
+            "SQLite, elastic background writes, append-log/cache-manifest remounts",
             "not a general POSIX"
           ]
         }
@@ -293,6 +297,7 @@
       ],
       "evidence_pass": true,
       "figure_table_labels": [
+        "fig:dataplane_negative_control",
         "fig:evaluation_summary"
       ],
       "id": "time_overhead_breakdown",

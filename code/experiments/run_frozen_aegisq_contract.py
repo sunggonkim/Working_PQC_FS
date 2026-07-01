@@ -250,7 +250,8 @@ def fusermount_command() -> str:
     return "fusermount3"
 
 
-def start_fuse(storage_dir: Path, mount_dir: Path, out_dir: Path, password: str) -> FuseHandle:
+def start_fuse(storage_dir: Path, mount_dir: Path, out_dir: Path,
+               password: str, extra_env: dict[str, str] | None = None) -> FuseHandle:
     log_dir = out_dir / "mount_logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     stdout = (log_dir / "pqc_fuse.stdout.txt").open("wb")
@@ -261,11 +262,12 @@ def start_fuse(storage_dir: Path, mount_dir: Path, out_dir: Path, password: str)
             "PQC_MASTER_PASSWORD": password,
             "PQC_FRESHNESS_ANCHOR_BACKEND": "file",
             "PQC_FRESHNESS_ANCHOR_PATH": str(storage_dir / ".anchor"),
-            "PQC_ENABLE_ADMISSION_ON_WRITE": "0",
             "PQC_ENABLE_QOS_THROTTLE_ON_WRITE": "0",
             "PQC_KEY_ROTATION_INTERVAL_S": "0",
         }
     )
+    if extra_env:
+        env.update(extra_env)
     proc = subprocess.Popen(
         [str(FUSE_BIN), str(storage_dir), str(mount_dir), "-f"],
         cwd=ROOT,

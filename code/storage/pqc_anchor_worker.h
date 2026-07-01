@@ -13,6 +13,7 @@
 
 void pqc_anchor_worker_stage(const pqc_anchor_state_t *state);
 
+void pqc_anchor_worker_init_from_config(void);
 int pqc_anchor_worker_start_if_configured(void);
 void pqc_anchor_worker_stop(void);
 

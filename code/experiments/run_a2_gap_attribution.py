@@ -191,7 +191,10 @@ def run_aegisq(profile: dict[str, Any], out_dir: Path, password: str) -> dict[st
     mount_dir = Path(tempfile.mkdtemp(prefix="a2_aegisq_mnt_"))
     handle: aegisq.FuseHandle | None = None
     try:
-        handle = aegisq.start_fuse(storage_dir, mount_dir, out_dir / "aegisq", password)
+        handle = aegisq.start_fuse(
+            storage_dir, mount_dir, out_dir / "aegisq", password,
+            {"PQC_DURABILITY_TIMING": "1"},
+        )
         bench_dir = mount_dir / "contract"
         bench_dir.mkdir(parents=True, exist_ok=True)
         prep = aegisq.precreate_fio_file(profile, bench_dir, out_dir / "aegisq")

@@ -395,6 +395,7 @@ def mode_env(base: dict[str, str], out_dir: Path, mode: str, files: int, collect
             "PQC_ADMISSION_TRACE_PATH": str(out_dir / "admission_trace.jsonl"),
             "PQC_FORCE_REKEY_ON_WRITE": "1",
             "PQC_KEY_ROTATION_INTERVAL_S": "0",
+            "PQC_REKEY_VERBOSE": "1",
             "PQC_REKEY_BATCH_COLLECT_MS": str(collect_ms),
             "PQC_REKEY_BATCH_MAX": str(files),
             "PQC_GPU_MIN_BATCH_BYTES": "4096",

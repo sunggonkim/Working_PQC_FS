@@ -34,6 +34,7 @@ const char *pqc_durability_site_name(pqc_durability_site_t site);
 int pqc_durability_fdatasync(int fd, pqc_durability_site_t site);
 int pqc_durability_fsync(int fd, pqc_durability_site_t site);
 int pqc_durability_syncfs(int fd, pqc_durability_site_t site);
+void pqc_durability_init_from_config(void);
 void pqc_durability_begin_mounted_operations(void);
 void pqc_durability_end_mounted_operations(void);
 void pqc_durability_stats_snapshot(pqc_durability_stats_t *out);

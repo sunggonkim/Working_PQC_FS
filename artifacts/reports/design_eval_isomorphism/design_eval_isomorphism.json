@@ -1,4 +1,5 @@
 {
+  "architecture_component_map_present": true,
   "duplicate_closures": [],
   "figure_table_obligations": [
     {
@@ -23,6 +24,13 @@
       "source": "Paper/3_Design.tex"
     },
     {
+      "label": "fig:dataplane_negative_control",
+      "label_present": true,
+      "obligation": "data-plane placement motivation",
+      "referenced": true,
+      "source": "Paper/2_Background.tex"
+    },
+    {
       "label": "fig:overall_procedure",
       "label_present": true,
       "obligation": "architecture and plane separation",
@@ -33,13 +41,6 @@
       "label": "fig:djc_state_machine",
       "label_present": true,
       "obligation": "publication protocol state machine",
-      "referenced": true,
-      "source": "Paper/3_Design.tex"
-    },
-    {
-      "label": "tab:memory_compat",
-      "label_present": true,
-      "obligation": "memory/claim boundary",
       "referenced": true,
       "source": "Paper/3_Design.tex"
     },
@@ -95,7 +96,7 @@
       "artifacts_present": true,
       "closure_id": "E1-generation-and-envelope-authentication",
       "design_needles": [
-        "AES-256-GCM block format",
+        "AES-GCM records",
         "file identifier",
         "Table~\\ref{tab:design_goals}"
       ],
@@ -151,7 +152,7 @@
       "closure_id": "E3-hardware-freshness-verdict-matrix",
       "design_needles": [
         "TPM NV index",
-        "Replay boundary"
+        "replay-after-advance checks"
       ],
       "design_present": true,
       "evaluation_needles": [
@@ -192,6 +193,10 @@
     {
       "artifacts": [
         {
+          "path": "artifacts/validation/gpu_dataplane_negative_control/gpu_dataplane_negative_control.json",
+          "present": true
+        },
+        {
           "path": "artifacts/validation/microbench/summary.json",
           "present": true
         },
@@ -203,7 +208,7 @@
       "artifacts_present": true,
       "closure_id": "E5-data-plane-placement-asymmetry",
       "design_needles": [
-        "placement function balances",
+        "Elastic admission controller and GPU lane",
         "managed allocation",
         "stream synchronization"
       ],
@@ -252,13 +257,13 @@
     }
   ],
   "overall_pass": true,
-  "pages": 12,
+  "pages": 13,
   "schema_version": 1,
   "scope": [
     "six required design mechanisms from SUBMISSION_CHECKLIST.md",
     "unique evaluation closure id per mechanism",
     "main-paper figure/table obligation labels",
-    "paper source mapping paragraph and 12-page PDF gate"
+    "paper source mapping paragraph and 13-page PDF gate"
   ],
   "violations": []
 }

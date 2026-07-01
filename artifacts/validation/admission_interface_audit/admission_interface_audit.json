@@ -28,14 +28,14 @@
         "gpu_kernel_est_ns": 100000,
         "gpu_load_avg": 0.0,
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 3750,
+        "producer_slack_age_ns": 8408,
         "producer_slack_stale": false,
         "producer_slack_stale_after_ns": 250000000,
         "queue_delay_ns": 4000,
         "service_time_ns": 300000,
         "telemetry_mem_bandwidth_util": 0.1,
         "telemetry_tensor_core_util": 0.1,
-        "timestamp_ns": 1782519132054062484,
+        "timestamp_ns": 1782906052630029407,
         "trace_timestamp_clock": "CLOCK_REALTIME",
         "uma_migration_bytes_est": 0,
         "uma_migration_cost_ns": 0
@@ -48,7 +48,7 @@
       "stderr": "artifacts/validation/admission_interface_audit/slack_available_gpu/stderr.txt",
       "stderr_sha256": "457ea1990fb5865f2772e22eae0d04fd2843de6caf14eba45db962f7bad24a2a",
       "stdout": "artifacts/validation/admission_interface_audit/slack_available_gpu/stdout.txt",
-      "stdout_sha256": "66b063b868c0643d347f61de96672f2584d3d446c4025b6e4286700b66a77c0b",
+      "stdout_sha256": "5260196f1558e761b21c251c40c8f5ee21338f21a1d4a16374a9ab3c0276a95a",
       "summary": {
         "ai_budget_ns": 2000000,
         "batch_age_ns": 0,
@@ -60,7 +60,7 @@
         "deferral_reason": 0,
         "event": "admission_telemetry_smoke",
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 3750,
+        "producer_slack_age_ns": 8408,
         "producer_slack_stale": false,
         "producer_slack_stale_after_ns": 250000000,
         "rc": 0,
@@ -72,7 +72,7 @@
         "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/admission_interface_audit/slack_available_gpu/admission_trace.jsonl"
       },
       "trace": "artifacts/validation/admission_interface_audit/slack_available_gpu/admission_trace.jsonl",
-      "trace_sha256": "1960d80fb890dbc549a1664268b6317a730055362f81175c8dd67fc2f0ebbb0e"
+      "trace_sha256": "892e16ea909773bd63dab66ca1b79eddebdbb0d39522cddf8c4e41e3ef6d108f"
     },
     {
       "acceptable": true,
@@ -101,14 +101,14 @@
         "gpu_kernel_est_ns": 100000,
         "gpu_load_avg": 0.0,
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 1139,
+        "producer_slack_age_ns": 6342,
         "producer_slack_stale": false,
         "producer_slack_stale_after_ns": 250000000,
         "queue_delay_ns": 4000,
         "service_time_ns": 300000,
         "telemetry_mem_bandwidth_util": 0.1,
         "telemetry_tensor_core_util": 0.1,
-        "timestamp_ns": 1782519132057313725,
+        "timestamp_ns": 1782906052633617759,
         "trace_timestamp_clock": "CLOCK_REALTIME",
         "uma_migration_bytes_est": 0,
         "uma_migration_cost_ns": 0
@@ -121,7 +121,7 @@
       "stderr": "artifacts/validation/admission_interface_audit/no_slack_cpu/stderr.txt",
       "stderr_sha256": "ecc0c19cfdbab6a65d9fb068a4c5dddfb15d8cce9acba65e6c52a2848ff2786f",
       "stdout": "artifacts/validation/admission_interface_audit/no_slack_cpu/stdout.txt",
-      "stdout_sha256": "b279b8da8ac0ecb916efb863240ab12e785423d4d503050d7c6fd8d87a44cc5f",
+      "stdout_sha256": "2491252518ee7632c84522a4a2dcaa347fe2f596b52f5884afa5ae844c830fa8",
       "summary": {
         "ai_budget_ns": 0,
         "batch_age_ns": 0,
@@ -133,7 +133,7 @@
         "deferral_reason": 2,
         "event": "admission_telemetry_smoke",
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 1139,
+        "producer_slack_age_ns": 6342,
         "producer_slack_stale": false,
         "producer_slack_stale_after_ns": 250000000,
         "rc": 0,
@@ -145,7 +145,7 @@
         "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/admission_interface_audit/no_slack_cpu/admission_trace.jsonl"
       },
       "trace": "artifacts/validation/admission_interface_audit/no_slack_cpu/admission_trace.jsonl",
-      "trace_sha256": "e2a0c2c5f62aff7976dcf3fdc4185225b4f9c8434647bfb7d2caea275ca3ac5c"
+      "trace_sha256": "97178f051af60975f6fd98aa1b6fafd0ad5f27d788d3d8333e3a7fb1cde1686b"
     },
     {
       "acceptable": true,
@@ -174,14 +174,14 @@
         "gpu_kernel_est_ns": 100000,
         "gpu_load_avg": 0.0,
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 4805,
+        "producer_slack_age_ns": 0,
         "producer_slack_stale": false,
         "producer_slack_stale_after_ns": 250000000,
         "queue_delay_ns": 4000,
         "service_time_ns": 300000,
         "telemetry_mem_bandwidth_util": 0.1,
         "telemetry_tensor_core_util": 0.1,
-        "timestamp_ns": 1782519132060080614,
+        "timestamp_ns": 1782906052636716750,
         "trace_timestamp_clock": "CLOCK_REALTIME",
         "uma_migration_bytes_est": 0,
         "uma_migration_cost_ns": 0
@@ -194,7 +194,7 @@
       "stderr": "artifacts/validation/admission_interface_audit/deadline_elapsed_cpu/stderr.txt",
       "stderr_sha256": "422c6ba1e1fd58a8a3fed52562e4742cdb9f4f9ad9b2abe18aaeba613b87e8e7",
       "stdout": "artifacts/validation/admission_interface_audit/deadline_elapsed_cpu/stdout.txt",
-      "stdout_sha256": "7731b6b2cf4d087688194c243c2fdb2c8bbac5f601451990514ae7c502270121",
+      "stdout_sha256": "23f15ccc73c61e2344e64b74aa1356a6678c86ec5afaf46a37c7740bb185b483",
       "summary": {
         "ai_budget_ns": 2000000,
         "batch_age_ns": 20000000,
@@ -206,7 +206,7 @@
         "deferral_reason": 8,
         "event": "admission_telemetry_smoke",
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 4805,
+        "producer_slack_age_ns": 0,
         "producer_slack_stale": false,
         "producer_slack_stale_after_ns": 250000000,
         "rc": 0,
@@ -218,7 +218,7 @@
         "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/admission_interface_audit/deadline_elapsed_cpu/admission_trace.jsonl"
       },
       "trace": "artifacts/validation/admission_interface_audit/deadline_elapsed_cpu/admission_trace.jsonl",
-      "trace_sha256": "20394d018b6c2539279055f16518627af797f92cc21c41ebcfeb05438cd00866"
+      "trace_sha256": "e7313db5ef00ed9a3513edac7679c17a95b806be101842bf7fb5efb5177baf81"
     },
     {
       "acceptable": true,
@@ -247,14 +247,14 @@
         "gpu_kernel_est_ns": 100000,
         "gpu_load_avg": 0.0,
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 2067102,
+        "producer_slack_age_ns": 2071028,
         "producer_slack_stale": true,
         "producer_slack_stale_after_ns": 1,
         "queue_delay_ns": 4000,
         "service_time_ns": 300000,
         "telemetry_mem_bandwidth_util": 0.1,
         "telemetry_tensor_core_util": 0.1,
-        "timestamp_ns": 1782519132064823818,
+        "timestamp_ns": 1782906052641589741,
         "trace_timestamp_clock": "CLOCK_REALTIME",
         "uma_migration_bytes_est": 0,
         "uma_migration_cost_ns": 0
@@ -267,7 +267,7 @@
       "stderr": "artifacts/validation/admission_interface_audit/stale_slack_cpu/stderr.txt",
       "stderr_sha256": "539352461447dd19d9d06ca324697a3227d5918b7861c7884be734dac15ad403",
       "stdout": "artifacts/validation/admission_interface_audit/stale_slack_cpu/stdout.txt",
-      "stdout_sha256": "afd78ccc7746b756706afdbc97e60e4f5c977bbb8ab348512fc8866793bb8d6e",
+      "stdout_sha256": "ea8a96d5adc5ea487d0933433fd745f5e8542e90b3522bf791785e1bc89c0b85",
       "summary": {
         "ai_budget_ns": 2000000,
         "batch_age_ns": 0,
@@ -279,7 +279,7 @@
         "deferral_reason": 128,
         "event": "admission_telemetry_smoke",
         "gpu_queue_depth": 0,
-        "producer_slack_age_ns": 2067102,
+        "producer_slack_age_ns": 2071028,
         "producer_slack_stale": true,
         "producer_slack_stale_after_ns": 1,
         "rc": 0,
@@ -291,7 +291,7 @@
         "trace_path": "/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/admission_interface_audit/stale_slack_cpu/admission_trace.jsonl"
       },
       "trace": "artifacts/validation/admission_interface_audit/stale_slack_cpu/admission_trace.jsonl",
-      "trace_sha256": "77b9647fa7ccd58d6351cf48f3e7c5d000d2b7b8d5e98e6a51013c39df864257"
+      "trace_sha256": "82e1c803887e36bf2b418006d59a923c0578fd00005d0a5e327abb457b8f9112"
     }
   ],
   "interface_contract": [

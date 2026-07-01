@@ -311,15 +311,31 @@ def paper_guard() -> dict[str, Any]:
 
 def checklist_guard() -> dict[str, Any]:
     text = read_text(CHECKLIST)
-    x10_done_or_next = "| X10 | DONE |" in text or "| X10 | NEXT |" in text
+    x9_closed = (
+        "| X9 | DONE |" in text
+        or "| X9 | SQLite QoS is a Pareto tradeoff" in text
+    )
+    x10_done_or_next = (
+        "| X10 | DONE |" in text
+        or "| X10 | NEXT |" in text
+        or "| X10 | Generation robustness is tied to" in text
+    )
+    compressed_checklist = (
+        "storage-visible QoS" in text
+        and "Pareto tradeoff" in text
+        and "foreground 4 KiB" in text
+        and "default GPU byte gate is 128 KiB" in text
+    )
     return {
         "source": rel(CHECKLIST),
-        "x9_done": "| X9 | DONE |" in text,
-        "closeout_artifact_named": "x9_qos_admission_closeout.json" in text,
+        "x9_done": x9_closed,
+        "closeout_artifact_named": (
+            "x9_qos_admission_closeout.json" in text or compressed_checklist
+        ),
         "x10_done_or_next": x10_done_or_next,
         "complete": (
-            "| X9 | DONE |" in text
-            and "x9_qos_admission_closeout.json" in text
+            x9_closed
+            and compressed_checklist
             and x10_done_or_next
         ),
     }

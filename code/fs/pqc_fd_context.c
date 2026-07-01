@@ -1,6 +1,5 @@
 #include "pqc_fd_context.h"
 
-#include "cuda_aead.h"
 #include "pqc_checkpoint.h"
 #include "pqc_durability.h"
 #include "pqc_epoch_log.h"
@@ -11,6 +10,7 @@
 #include "pqc_lock_profile.h"
 #include "pqc_posix.h"
 #include "pqc_publish.h"
+#include "pqc_rekey.h"
 #include "pqc_test_hooks.h"
 
 #include <errno.h>
@@ -37,6 +37,19 @@ static int fd_context_logical_path_equal(const char *a, const char *b)
     return 0;
 }
 
+static void fd_context_copy_cstr(char *dst, size_t dst_size, const char *src)
+{
+    if (!dst || dst_size == 0)
+        return;
+    if (!src) {
+        dst[0] = '\0';
+        return;
+    }
+    size_t len = strnlen(src, dst_size - 1);
+    memcpy(dst, src, len);
+    dst[len] = '\0';
+}
+
 typedef struct {
     int           data_fd;
     int           journal_fd;
@@ -56,23 +69,15 @@ typedef struct {
 } pqc_fd_retired_resources_t;
 
 /*
- * Mounted writeback scratch is allocated once during fd-context publication
- * and borrowed by flushes.  Keep allocator calls in this lifecycle helper so a
- * source scan cannot confuse open/close ownership with per-flush heap churn.
+ * Mounted write/read scratch is CPU-owned foreground memory.  The CUDA
+ * executor owns its own managed buffers; keeping FUSE scratch ordinary memory
+ * avoids UVM placement work on the AES-GCM data path.
  */
 static uint8_t *fd_lifecycle_scratch_alloc(size_t capacity)
 {
-    uint8_t *buf = NULL;
-
     if (capacity == 0)
         return NULL;
-    if (skim_cuda_aead_is_uma())
-        buf = (uint8_t *)skim_cuda_managed_alloc(capacity);
-    else
-        buf = (uint8_t *)malloc(capacity);
-    if (buf && skim_cuda_aead_is_uma())
-        (void)skim_cuda_mem_prefetch(buf, capacity, skim_cuda_current_device());
-    return buf;
+    return (uint8_t *)malloc(capacity);
 }
 
 static void fd_lifecycle_scratch_free(uint8_t **buf, size_t capacity)
@@ -80,10 +85,7 @@ static void fd_lifecycle_scratch_free(uint8_t **buf, size_t capacity)
     if (!buf || !*buf)
         return;
     OQS_MEM_cleanse(*buf, capacity);
-    if (skim_cuda_aead_is_uma())
-        skim_cuda_managed_free(*buf);
-    else
-        free(*buf);
+    free(*buf);
     *buf = NULL;
 }
 
@@ -275,6 +277,7 @@ void pqc_fd_context_table_init(void)
         g_fd_ctx[i].data_fd = -1;
         g_fd_ctx[i].journal_fd = -1;
         g_fd_ctx[i].epoch_log_fd = -1;
+        g_fd_ctx[i].epoch_fallback_enabled = 0;
         g_fd_ctx[i].epoch_log_syncfs_domain_known = 0;
         g_fd_ctx[i].epoch_log_same_syncfs_domain = 0;
         g_fd_ctx[i].logical_path[0] = '\0';
@@ -412,7 +415,6 @@ int pqc_fd_context_rename_path(const char *from_marker_path,
         return -ENAMETOOLONG;
 
     char to_epoch_log_path[sizeof(g_fd_ctx[0].epoch_log_path)];
-    memset(to_epoch_log_path, 0, sizeof(to_epoch_log_path));
     int epoch_path_rc = pqc_sidecar_path(to_epoch_log_path,
                                          sizeof(to_epoch_log_path),
                                          to_marker_path, ".pqcepoch");
@@ -438,14 +440,13 @@ int pqc_fd_context_rename_path(const char *from_marker_path,
         if (match) {
             pqc_fd_context_wait_pending_locked(ctx, &scope, __func__);
             pqc_fd_context_wait_writeback_locked(ctx, &scope, __func__);
-            memset(ctx->marker_path, 0, sizeof(ctx->marker_path));
-            strncpy(ctx->marker_path, to_marker_path,
-                    sizeof(ctx->marker_path) - 1);
-            if (ctx->epoch_log_path[0] != '\0') {
-                memset(ctx->epoch_log_path, 0, sizeof(ctx->epoch_log_path));
-                memcpy(ctx->epoch_log_path, to_epoch_log_path,
-                       sizeof(ctx->epoch_log_path));
-            }
+            fd_context_copy_cstr(ctx->marker_path,
+                                 sizeof(ctx->marker_path),
+                                 to_marker_path);
+            if (ctx->epoch_log_path[0] != '\0')
+                fd_context_copy_cstr(ctx->epoch_log_path,
+                                     sizeof(ctx->epoch_log_path),
+                                     to_epoch_log_path);
         }
         (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                         &scope);
@@ -472,9 +473,9 @@ int pqc_fd_context_rename_logical_path(const char *from_logical_path,
         if (match) {
             pqc_fd_context_wait_pending_locked(ctx, &scope, __func__);
             pqc_fd_context_wait_writeback_locked(ctx, &scope, __func__);
-            memset(ctx->logical_path, 0, sizeof(ctx->logical_path));
-            strncpy(ctx->logical_path, to_logical_path,
-                    sizeof(ctx->logical_path) - 1);
+            fd_context_copy_cstr(ctx->logical_path,
+                                 sizeof(ctx->logical_path),
+                                 to_logical_path);
         }
         (void)pqc_profiled_mutex_unlock(&ctx->fd_lock, "fd_lock", __func__,
                                         &scope);
@@ -488,7 +489,9 @@ int pqc_fd_context_set(int fd,
                        const uint8_t *ss,
                        size_t ss_len,
                        uint64_t fid,
-                       int open_flags)
+                       int open_flags,
+                       int qos_class,
+                       int tier)
 {
     pqc_fd_ctx_t *ctx = pqc_fd_context_for_fd(fd);
     if (!ctx)
@@ -496,6 +499,11 @@ int pqc_fd_context_set(int fd,
     if (!logical_path || strlen(logical_path) >= sizeof(ctx->logical_path))
         return -ENAMETOOLONG;
     if (ss_len > sizeof(ctx->ss))
+        return -EINVAL;
+    if (qos_class != PQC_QOS_CLASS_ELASTIC &&
+        qos_class != PQC_QOS_CLASS_LATENCY)
+        return -EINVAL;
+    if (tier != PQC_TIER_FULL && tier != PQC_TIER_NONE)
         return -EINVAL;
 
     pqc_lock_profile_scope_t fd_scope;
@@ -529,7 +537,7 @@ int pqc_fd_context_set(int fd,
     int readable_open = fd_context_open_is_readable(open_flags);
     char data_path[4096 + 16], journal_path[4096 + 16];
     char epoch_log_path[4096 + 16];
-    memset(epoch_log_path, 0, sizeof(epoch_log_path));
+    epoch_log_path[0] = '\0';
     if (pqc_sidecar_path(data_path, sizeof(data_path), marker_path, ".pqcdata") ||
         pqc_sidecar_path(journal_path, sizeof(journal_path), marker_path, ".pqcmeta")) {
         retired_resources_release(&setup);
@@ -696,6 +704,8 @@ int pqc_fd_context_set(int fd,
             return -ENOMEM;
         }
     }
+    int epoch_fallback_needed =
+        epoch_has_committed_prefix || setup.epoch_log_fd >= 0;
     if (readable_open) {
         setup.read_batch_capacity = PQC_READ_BATCH_SCRATCH_SIZE;
         setup.read_plain_batch =
@@ -711,8 +721,9 @@ int pqc_fd_context_set(int fd,
             retired_resources_release(&setup);
             return -ENOMEM;
         }
-        setup.read_epoch_cache = fd_lifecycle_epoch_cache_alloc();
-        if (!setup.read_epoch_cache) {
+        if (epoch_fallback_needed)
+            setup.read_epoch_cache = fd_lifecycle_epoch_cache_alloc();
+        if (epoch_fallback_needed && !setup.read_epoch_cache) {
             retired_resources_release(&setup);
             return -ENOMEM;
         }
@@ -787,6 +798,7 @@ int pqc_fd_context_set(int fd,
     setup.journal_fd = -1;
     ctx->epoch_log_fd = setup.epoch_log_fd;
     setup.epoch_log_fd = -1;
+    ctx->epoch_fallback_enabled = epoch_fallback_needed;
     ctx->epoch_log_syncfs_domain_known = epoch_log_syncfs_domain_known;
     ctx->epoch_log_same_syncfs_domain = epoch_log_same_syncfs_domain;
     ctx->data_sidecar_dirty = 0;
@@ -801,21 +813,19 @@ int pqc_fd_context_set(int fd,
     ctx->fsync_metadata_synced_epoch = 0;
     ctx->fsync_metadata_epoch_repairable = 0;
     ctx->fsync_metadata_epoch_repairable_epoch = 0;
-    memset(ctx->logical_path, 0, sizeof(ctx->logical_path));
-    strncpy(ctx->logical_path, logical_path, sizeof(ctx->logical_path) - 1);
-    memset(ctx->marker_path, 0, sizeof(ctx->marker_path));
-    strncpy(ctx->marker_path, marker_path, sizeof(ctx->marker_path) - 1);
-    memset(ctx->epoch_log_path, 0, sizeof(ctx->epoch_log_path));
-    if (epoch_log_path[0] != '\0')
-        memcpy(ctx->epoch_log_path, epoch_log_path,
-               sizeof(ctx->epoch_log_path));
+    fd_context_copy_cstr(ctx->logical_path, sizeof(ctx->logical_path),
+                         logical_path);
+    fd_context_copy_cstr(ctx->marker_path, sizeof(ctx->marker_path),
+                         marker_path);
+    fd_context_copy_cstr(ctx->epoch_log_path, sizeof(ctx->epoch_log_path),
+                         epoch_log_path);
     ctx->logical_size = logical_size;
     ctx->valid = 1;
     ctx->pending_writeback_jobs = 0;
-    ctx->tier = PQC_TIER_FULL;
-    ctx->qos_class = PQC_QOS_CLASS_ELASTIC;
+    ctx->tier = tier;
+    ctx->qos_class = qos_class;
     ctx->key_epoch = 0;
-    ctx->last_rekey = time(NULL);
+    ctx->last_rekey = pqc_rekey_write_trigger_enabled() ? time(NULL) : 0;
     ctx->wbuf = setup.wbuf;
     setup.wbuf = NULL;
     ctx->snapshot_buf = setup.snapshot_buf;
@@ -906,6 +916,7 @@ void pqc_fd_context_clear(int fd)
     ctx->data_fd = -1;
     ctx->journal_fd = -1;
     ctx->epoch_log_fd = -1;
+    ctx->epoch_fallback_enabled = 0;
     ctx->epoch_log_syncfs_domain_known = 0;
     ctx->epoch_log_same_syncfs_domain = 0;
     ctx->data_sidecar_dirty = 0;
@@ -921,9 +932,9 @@ void pqc_fd_context_clear(int fd)
     ctx->fsync_metadata_epoch_repairable = 0;
     ctx->fsync_metadata_epoch_repairable_epoch = 0;
     ctx->logical_size = 0;
-    memset(ctx->logical_path, 0, sizeof(ctx->logical_path));
-    memset(ctx->marker_path, 0, sizeof(ctx->marker_path));
-    memset(ctx->epoch_log_path, 0, sizeof(ctx->epoch_log_path));
+    ctx->logical_path[0] = '\0';
+    ctx->marker_path[0] = '\0';
+    ctx->epoch_log_path[0] = '\0';
     ctx->file_id = 0;
     ctx->tier = 0;
     ctx->qos_class = 0;
@@ -1290,4 +1301,14 @@ void pqc_fd_context_mark_fsync_synced(pqc_fd_ctx_t *ctx, uint64_t epoch)
         ctx->fsync_metadata_epoch_repairable = 0;
         ctx->fsync_metadata_epoch_repairable_epoch = 0;
     }
+}
+
+int pqc_fd_context_fsync_clean_locked(const pqc_fd_ctx_t *ctx)
+{
+    if (!ctx || !ctx->valid)
+        return 0;
+    if (ctx->data_sidecar_dirty || ctx->journal_sidecar_dirty ||
+        ctx->epoch_log_dirty)
+        return 0;
+    return ctx->fsync_metadata_epoch == ctx->fsync_metadata_synced_epoch;
 }

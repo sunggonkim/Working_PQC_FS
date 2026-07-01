@@ -1,7 +1,7 @@
 # Paper spine gate
 
 - Overall pass: `True`
-- Page count: `12`
+- Page count: `13`
 - Figure source: `artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json`
 
 ## First-page figure data
