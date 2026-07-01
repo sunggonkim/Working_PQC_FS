@@ -64,6 +64,12 @@ Figure~\ref{fig:djc_state_machine} makes the publication protocol explicit.  It 
   \label{fig:djc_state_machine}
 \end{figure*}
 
+To make terminology auditable, we define a compact reference state machine for one logical write unit \(w\):
+\[
+S_0\xrightarrow{\mathrm{enc}}S_D\xrightarrow{\mathrm{fdatasync}(D)}S_{D^+}\xrightarrow{\mathrm{append}(J)}S_{DJ}\xrightarrow{\mathrm{fdatasync}(J)}S_{DJ^+}\xrightarrow{\mathrm{marker/xattr}+C}S_{DJC}.
+\]
+\(S_{DJC}\) is the only exposed state.  Here, \(D\) is ciphertext sidecar persistence, \(J\) is journal mapping persistence, and \(C\) is authenticated checkpoint with logical-size marker/xattr update.  Recovery accepts only prefixes that reach \(S_{DJC}\); tails in \(S_D\), \(S_{D^+}\), or \(S_{DJ}\) are non-exposed by construction.
+
 The D/J/C publisher is the publication component.  Its journal is the publication point: a ciphertext tail with no durable mapping is unreachable after recovery.  Conversely, a mapping is written only after its ciphertext range has crossed the data durability barrier.  \texttt{fsync} flushes the coalescing buffer, waits for local pending work, and calls \texttt{fdatasync} on both sidecars before returning.  The lower-filesystem contract is D/J sidecar order: \texttt{fdatasync} on \texttt{.pqcdata}, then \texttt{fdatasync} on \texttt{.pqcmeta}, followed by checkpoint/xattr visibility through the same lower filesystem.  Reordering after acknowledged sync or lost xattrs is outside the selected crash model; directory-entry durability is claimed only for scoped directory-\texttt{fsync} workloads.
 
 Strict and epoch publication share one accepted-state invariant.  Strict publishes data then journal/checkpoint per sync and replays the newest authenticated mapping.  Epoch publishes only a complete grouped \texttt{syncfs} prefix and discards incomplete tails; it amortizes aligned writers but can lose to wait time, sparse groups, or replay work.  Thus epoch changes the barrier schedule, not the nonce, AAD, or replay semantics.

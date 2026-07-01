@@ -8,6 +8,8 @@ AEGIS-Q considers an attacker who can read, copy, modify, and replay the backing
 
 The accepted encrypted state consists of a validated DEK envelope, a complete journal mapping, and ciphertext records referenced by that mapping.  A tag failure causes a read to fail.  A malformed or unauthenticated envelope/checkpoint causes open to fail.  Table~\ref{tab:threat_boundary} states the threat classes these mechanisms address and the boundaries left outside the paper.  These behaviors are necessary for a safe FUSE format, but they are not a formal proof of crash consistency.  In particular, xattr atomicity and directory durability are delegated to the underlying filesystem.
 
+For auditability, the selected crash model assumes three minimal lower-filesystem properties: \textbf{P1} acknowledged \texttt{fdatasync(.pqcdata)} persists referenced ciphertext bytes; \textbf{P2} acknowledged \texttt{fdatasync(.pqcmeta)} persists corresponding journal mappings after P1 order; \textbf{P3} checkpoint marker/xattr visibility is not lost silently after acknowledged sync.  If any of P1--P3 is violated, AEGIS-Q may fail closed or expose only an older committed prefix, but this paper does not claim device-level proof under arbitrary violation.
+
 \begin{table}[t]
 \centering
 \caption{Threat classes and mechanism boundaries.}
