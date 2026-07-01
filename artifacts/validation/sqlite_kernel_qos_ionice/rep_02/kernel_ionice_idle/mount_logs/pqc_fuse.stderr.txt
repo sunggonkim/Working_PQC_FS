@@ -1,0 +1,23 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-07-02 08:18:10.297] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 08:18:10.297]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-02 08:18:10.297]   Storage dir : /tmp/aegis_qos_kernel_ionice_idle_a05ci7kn/store
+[PQC-FUSE 2026-07-02 08:18:10.297]   Mount point : /tmp/aegis_qos_kernel_ionice_idle_a05ci7kn/mnt
+[PQC-FUSE 2026-07-02 08:18:10.297] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=disabled
+[PQC-FUSE 2026-07-02 08:18:10.299] PQC key-plane rekey disabled for this mount
+[PQC-FUSE 2026-07-02 08:18:10.360] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-02 08:18:10.360] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-07-02 08:18:10.360] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-07-02 08:18:10.360] Admission telemetry file monitor started: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/runtime_telemetry.txt
+[PQC-FUSE 2026-07-02 08:18:10.360] Freshness anchor worker started
+[PQC-FUSE 2026-07-02 08:18:10.360] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-07-02 08:18:10.462] SETXATTR /background_0.bin qos_class=elastic
+[PQC-FUSE 2026-07-02 08:18:10.501] SETXATTR /foreground.db qos_class=latency
+[PQC-FUSE 2026-07-02 08:18:10.961] Shutting down PQC-FUSE filesystem...

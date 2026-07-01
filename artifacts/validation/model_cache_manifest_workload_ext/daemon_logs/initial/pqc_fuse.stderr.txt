@@ -1,0 +1,24 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-07-02 08:18:11.640] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 08:18:11.640]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-02 08:18:11.640]   Storage dir : /tmp/aegisq-model-cache-nn_e23jr/storage
+[PQC-FUSE 2026-07-02 08:18:11.640]   Mount point : /tmp/aegisq-model-cache-nn_e23jr/mnt
+[PQC-FUSE 2026-07-02 08:18:11.640] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 08:18:11.640] Elastic admission controller disabled for this mount
+[PQC-FUSE 2026-07-02 08:18:11.640] Elastic scheduler policy reload skipped for this mount
+[PQC-FUSE 2026-07-02 08:18:11.641] PQC key-plane rekey disabled for this mount
+[PQC-FUSE 2026-07-02 08:18:11.702] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-02 08:18:11.702] QoS monitor startup skipped for this mount
+[PQC-FUSE 2026-07-02 08:18:11.702] Freshness anchor worker started
+[PQC-FUSE 2026-07-02 08:18:11.702] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-07-02 08:18:11.961] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-07-02 08:18:11.961] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-07-02 08:18:11.961] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-07-02 08:18:11.961] Durability sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-07-02 08:18:11.961] Durability mounted-operation sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0

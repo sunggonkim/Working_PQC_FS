@@ -1,0 +1,29 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-07-02 08:18:09.507] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 08:18:09.507]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-02 08:18:09.507]   Storage dir : /tmp/aegis_qos_kernel_ionice_idle_lbd16uqs/store
+[PQC-FUSE 2026-07-02 08:18:09.507]   Mount point : /tmp/aegis_qos_kernel_ionice_idle_lbd16uqs/mnt
+[PQC-FUSE 2026-07-02 08:18:09.507] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=disabled
+[PQC-FUSE 2026-07-02 08:18:09.509] PQC key-plane rekey disabled for this mount
+[PQC-FUSE 2026-07-02 08:18:09.569] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-02 08:18:09.569] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-07-02 08:18:09.569] GPU load monitor started: /sys/devices/gpu.0/load
+[PQC-FUSE 2026-07-02 08:18:09.569] Admission telemetry file monitor started: /home/thor/skim/pqc_encrpyted_fs/artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/runtime_telemetry.txt
+[PQC-FUSE 2026-07-02 08:18:09.569] Freshness anchor worker started
+[PQC-FUSE 2026-07-02 08:18:09.569] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-07-02 08:18:09.666] SETXATTR /background_0.bin qos_class=elastic
+[PQC-FUSE 2026-07-02 08:18:09.711] SETXATTR /foreground.db qos_class=latency
+[PQC-FUSE 2026-07-02 08:18:10.175] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-07-02 08:18:10.184] Admission telemetry file monitor stopped
+[PQC-FUSE 2026-07-02 08:18:10.184] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-07-02 08:18:10.184] Scheduler stats: submitted=297 cpu=297 gpu=0 bytes_cpu=12580696 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-07-02 08:18:10.184] Durability sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-07-02 08:18:10.184] Durability mounted-operation sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

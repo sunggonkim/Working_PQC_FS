@@ -1,0 +1,321 @@
+{
+  "checks": {
+    "all_rows_have_filesystem_modes": true,
+    "dbm_dumb_tpm_stale_snapshot_pass": true,
+    "paper_scope_gate_pass": false,
+    "required_workloads_present": true,
+    "sqlite_delete_full_qos_recovery_pass": true,
+    "sqlite_qos_extra_row_pass": true,
+    "sqlite_wal_full_retained_samples_pass": true,
+    "synthetic_fio_frozen_aegisq_pass": true,
+    "tensorrt_yolo_secure_io_corun_pass": true
+  },
+  "non_claims": [
+    "no fscrypt/dm-crypt frozen-contract execution",
+    "no cold-cache filesystem result outside the invalid recorded row",
+    "no broad application-workload generalization beyond SQLite/dbm.dumb and TensorRT trace scope",
+    "no foreground TensorRT/AI p99 recovery claim",
+    "no full crash or power-loss certification"
+  ],
+  "overall_pass": false,
+  "paper_scope_gate": {
+    "keeps_no_ai_recovery_claim": false,
+    "keeps_tensorrt_trace_only": false,
+    "mentions_sqlite_dbm_application_scope": false,
+    "mentions_workload_diversity_manifest": false,
+    "separates_fio_and_application_evidence": false
+  },
+  "passed_required_categories": [
+    "foreground_inference_co_run_workload",
+    "key_value_or_append_log_workload",
+    "sqlite_wal_full",
+    "synthetic_fio_style_filesystem_workload"
+  ],
+  "required_categories": [
+    "foreground_inference_co_run_workload",
+    "key_value_or_append_log_workload",
+    "sqlite_wal_full",
+    "synthetic_fio_style_filesystem_workload"
+  ],
+  "rows": [
+    {
+      "artifact_paths": [
+        "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json"
+      ],
+      "checks": {
+        "aegisq_mode": true,
+        "artifact_pass": true,
+        "cold_cache_invalid_recorded": true,
+        "direct_buffered_contract": true,
+        "fdatasync_contract": true,
+        "script_mounts_final_fuse": true,
+        "warm_repetitions_5": true
+      },
+      "evidence_type": "filesystem microbenchmark",
+      "filesystem_modes": {
+        "cache_state": "warm-cache row valid after one warmup pass; cold-cache row invalid when privileged cache dropping is unavailable",
+        "fuse_cache_setting": "final pqc_fuse mount with no writeback_cache option in the runner",
+        "journal_or_wal_mode": "AEGIS-Q encrypted record plus journal/checkpoint path, not an application WAL",
+        "sync_fsync_behavior": "fio psync with --fdatasync=1, queue depth 1, one client"
+      },
+      "metrics": {
+        "cold_cache_status": "invalid_not_run",
+        "contract_id": "aegisq-fs-frozen-v2-2026-06-27",
+        "fio_command": [
+          "fio",
+          "--name=frozen_randrw_4k_fdatasync",
+          "--ioengine=psync",
+          "--rw=randrw",
+          "--rwmixread=70",
+          "--bs=4k",
+          "--direct=0",
+          "--fdatasync=1",
+          "--iodepth=1",
+          "--numjobs=1",
+          "--size=1G",
+          "--fallocate=none",
+          "--allow_file_create=0",
+          "--overwrite=1",
+          "--time_based",
+          "--runtime=60",
+          "--ramp_time=10",
+          "--directory=${AEGIS_MOUNT}/contract",
+          "--output-format=json"
+        ],
+        "warm_valid_repetitions": 5,
+        "workload_profile": "fio_randrw_4k_70r30w_fdatasync_qd1"
+      },
+      "paper_claim_scope": "AEGIS-Q-only warm-cache frozen-contract row; not a cross-system superiority claim",
+      "required_category": "synthetic_fio_style_filesystem_workload",
+      "row_id": "synthetic_fio_frozen_aegisq",
+      "script_paths": [
+        "code/experiments/run_frozen_aegisq_contract.py"
+      ],
+      "workload": "fio 4 KiB 70/30 random read/write, psync, per-write fdatasync"
+    },
+    {
+      "artifact_paths": [
+        "artifacts/validation/sqlite_recovery_oracle/sqlite_recovery_oracle.json",
+        "artifacts/results/motivation/sqlite_contention_latency.csv",
+        "artifacts/results/motivation/sqlite_latency.csv"
+      ],
+      "checks": {
+        "integrity_ok": true,
+        "oracle_exists": true,
+        "raw_sources_exist": true,
+        "script_avoids_sqlite_mmap_redirect_env": true,
+        "script_records_writeback_cache_mode": true,
+        "script_requests_wal_full": true,
+        "wal_full_rows_present": true
+      },
+      "evidence_type": "application-level WAL/FULL samples and recovery-oracle definition",
+      "filesystem_modes": {
+        "cache_state": "no cold/warm filesystem claim; retained samples are application workload observations",
+        "fuse_cache_setting": "motivation runner does not rely on a SQLite mmap redirect; WAL may fall back to DELETE when the mounted stack rejects it",
+        "journal_or_wal_mode": "PRAGMA journal_mode=WAL, actual_mode=WAL, PRAGMA integrity_check=ok",
+        "sync_fsync_behavior": "SQLite commit path uses PRAGMA synchronous=FULL and retained strace observes fsync/fdatasync boundaries"
+      },
+      "metrics": {
+        "cut_points_observed": [
+          "before_sqlite_journal_header_sync",
+          "after_journal_header_before_db_sync",
+          "after_db_fsync_before_journal_unlink",
+          "wal_file_created_before_checkpoint"
+        ],
+        "retained_sample_rows": 4,
+        "source_path_taxonomy_remaps": [
+          {
+            "declared": "artifacts/motivation/sqlite_latency.csv",
+            "exists": true,
+            "resolved": "artifacts/results/motivation/sqlite_latency.csv",
+            "taxonomy_remap": true
+          },
+          {
+            "declared": "artifacts/motivation/sqlite_latency.csv",
+            "exists": true,
+            "resolved": "artifacts/results/motivation/sqlite_latency.csv",
+            "taxonomy_remap": true
+          },
+          {
+            "declared": "artifacts/motivation/sqlite_contention_latency.csv",
+            "exists": true,
+            "resolved": "artifacts/results/motivation/sqlite_contention_latency.csv",
+            "taxonomy_remap": true
+          },
+          {
+            "declared": "artifacts/motivation/sqlite_contention_latency.csv",
+            "exists": true,
+            "resolved": "artifacts/results/motivation/sqlite_contention_latency.csv",
+            "taxonomy_remap": true
+          }
+        ],
+        "wal_full_rows": 4
+      },
+      "paper_claim_scope": "WAL/FULL workload evidence only; not the SQLite QoS recovery table and not crash certification",
+      "required_category": "sqlite_wal_full",
+      "row_id": "sqlite_wal_full_retained_samples",
+      "script_paths": [
+        "code/experiments/run_motivation_bench.py",
+        "code/experiments/build_sqlite_recovery_oracle.py"
+      ],
+      "workload": "SQLite transactions and contention samples using WAL/FULL"
+    },
+    {
+      "artifact_paths": [
+        "artifacts/validation/qos_sqlite_hero_bundle/qos_sqlite_hero_bundle.json"
+      ],
+      "checks": {
+        "aegis_mode_acceptable": true,
+        "artifact_pass": true,
+        "qos_script_classifies_files": true,
+        "qos_script_delete_full": true,
+        "required_modes_present": true
+      },
+      "evidence_type": "application-level QoS recovery",
+      "filesystem_modes": {
+        "cache_state": "fresh temporary lower directory per mode; not a cold-cache filesystem baseline",
+        "fuse_cache_setting": "final pqc_fuse mount; foreground file marked latency, background file marked elastic with user.pqc_qos_class",
+        "journal_or_wal_mode": "PRAGMA journal_mode=DELETE for the QoS bundle",
+        "sync_fsync_behavior": "SQLite PRAGMA synchronous=FULL; background writer uses secure-storage writes and daemon throttle traces"
+      },
+      "metrics": {
+        "aegis_background_mb_s": 2.736089363877744,
+        "aegis_deadline_misses": 0,
+        "aegis_policy_p99_ms": 8.75331646,
+        "component_coverage": {
+          "aegis_daemon_throttle_trace": true,
+          "background_secure_writer_logs": true,
+          "foreground_sqlite_logs": true,
+          "mounted_fuse_logs": true,
+          "policy_trace_logs": true,
+          "required_modes_present": true,
+          "simple_controller_trace": true,
+          "telemetry_sampler_logs": true
+        },
+        "simple_p99_ms": 8.185088930000001,
+        "unthrottled_p99_ms": 13.822082770000009
+      },
+      "paper_claim_scope": "SQLite DELETE/FULL recovery under mounted AEGIS-Q pressure, not SQLite WAL/FULL and not TensorRT/AI recovery",
+      "required_category": "additional_sqlite_application_qos_row",
+      "row_id": "sqlite_delete_full_qos_recovery",
+      "script_paths": [
+        "code/experiments/run_qos_sqlite_hero_bundle.py"
+      ],
+      "workload": "SQLite foreground transactions under mounted secure-storage pressure"
+    },
+    {
+      "artifact_paths": [
+        "artifacts/validation/combined_durability_bundle/combined_durability_bundle.json"
+      ],
+      "checks": {
+        "artifact_exists": true,
+        "dbm_advanced_three_rows": true,
+        "dbm_baseline_one_row": true,
+        "dbm_replay_acceptable": true,
+        "dbm_replay_fail_closed": true,
+        "script_mounts_hardware_anchor": true,
+        "script_uses_dbm_dumb": true
+      },
+      "evidence_type": "application-level key-value stale-snapshot recovery",
+      "filesystem_modes": {
+        "cache_state": "same-backing-store stale snapshot replay, not cold/warm cache benchmarking",
+        "fuse_cache_setting": "TPM-backed pqc_fuse mounted without writeback_cache option in the combined durability runner",
+        "journal_or_wal_mode": "dbm.dumb persistent .dat/.dir key-value files, no SQLite WAL",
+        "sync_fsync_behavior": "dbm.dumb sync is invoked when available; replay verdict is oracle-based rather than a throughput result"
+      },
+      "metrics": {
+        "advanced_row_count": 3,
+        "baseline_row_count": 1,
+        "replay_detail": "stale dbm snapshot mounted but dbm read failed closed rc=1",
+        "replay_verdict": "fail_closed"
+      },
+      "paper_claim_scope": "dbm.dumb stale-snapshot fail-closed evidence; not RocksDB, LMDB, or arbitrary append-log certification",
+      "required_category": "key_value_or_append_log_workload",
+      "row_id": "dbm_dumb_tpm_stale_snapshot",
+      "script_paths": [
+        "code/experiments/run_combined_durability_bundle.py"
+      ],
+      "workload": "Python dbm.dumb key-value store on TPM-backed AEGIS-Q FUSE backing store"
+    },
+    {
+      "artifact_paths": [
+        "artifacts/reports/tensorrt_ci_report/tensorrt_ci_report.json",
+        "artifacts/results/motivation/tensorrt_interference.json"
+      ],
+      "checks": {
+        "raw_source_exists": true,
+        "report_exists": true,
+        "required_modes_present": true,
+        "script_fsyncs_writer": true,
+        "script_mounts_final_fuse": true,
+        "script_refuses_cpu_fallback": true,
+        "three_trials_each_mode": true
+      },
+      "evidence_type": "foreground-inference interference trace",
+      "filesystem_modes": {
+        "cache_state": "temporary mount per trial; no cold/warm cache distinction or filesystem-comparison claim",
+        "fuse_cache_setting": "benchmark_tensorrt_interference.py mounts final pqc_fuse without writeback_cache option",
+        "journal_or_wal_mode": "secure-storage stream workload, no application WAL",
+        "sync_fsync_behavior": "background secure_writer writes mounted stream.bin and calls os.fsync every sync cycle"
+      },
+      "metrics": {
+        "modes": [
+          "adaptive",
+          "cpu_only",
+          "gpu_only",
+          "inference_only"
+        ],
+        "p99_trial_values_ms": {
+          "adaptive": [
+            2.804909572005272,
+            2.853055540472269,
+            2.8414591774344444
+          ],
+          "cpu_only": [
+            0.9102912992238998,
+            0.9206379484385252,
+            0.9114225022494793
+          ],
+          "gpu_only": [
+            5.458448547869921,
+            4.9503616988658905,
+            3.959701070562005
+          ],
+          "inference_only": [
+            1.0814527329057455,
+            0.9160312823951244,
+            0.9111105278134346
+          ]
+        },
+        "sample_count_total_by_mode": {
+          "adaptive": 9361,
+          "cpu_only": 11914,
+          "gpu_only": 6402,
+          "inference_only": 11866
+        },
+        "source_path": {
+          "declared": "artifacts/motivation/tensorrt_interference.json",
+          "exists": true,
+          "resolved": "artifacts/results/motivation/tensorrt_interference.json",
+          "taxonomy_remap": true
+        },
+        "trials_by_mode": {
+          "adaptive": 3,
+          "cpu_only": 3,
+          "gpu_only": 3,
+          "inference_only": 3
+        }
+      },
+      "paper_claim_scope": "co-run interference evidence only; not a validated closed-loop foreground AI p99 recovery claim",
+      "required_category": "foreground_inference_co_run_workload",
+      "row_id": "tensorrt_yolo_secure_io_corun",
+      "script_paths": [
+        "code/experiments/benchmark_tensorrt_interference.py"
+      ],
+      "workload": "TensorRT YOLOv8 foreground inference co-run with mounted AEGIS-Q secure writer"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Scoped workload-diversity matrix over retained artifacts.  It separates synthetic fio evidence, SQLite WAL/FULL samples, SQLite DELETE/FULL QoS recovery, dbm.dumb stale-snapshot recovery, and TensorRT/YOLO co-run traces.  It does not create a broad filesystem baseline matrix or a foreground-AI recovery claim.",
+  "timestamp_utc": "2026-07-01T23:18:45.253982+00:00"
+}

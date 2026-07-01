@@ -1,0 +1,160 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-07-02 08:18:32.046] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 08:18:32.046]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-02 08:18:32.046]   Storage dir : /tmp/aegis_keyplane_gpu_batch_58_jfe2t/store
+[PQC-FUSE 2026-07-02 08:18:32.046]   Mount point : /tmp/aegis_keyplane_gpu_batch_58_jfe2t/mnt
+[PQC-FUSE 2026-07-02 08:18:32.046] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/keyplane_rekey_sweep/files_128/gpu_batch/admission_trace.jsonl
+[PQC-FUSE 2026-07-02 08:18:32.047] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-07-02 08:18:32.047]   public key  : 1184 bytes
+[PQC-FUSE 2026-07-02 08:18:32.047]   secret key  : 2400 bytes
+[PQC-FUSE 2026-07-02 08:18:32.047]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-07-02 08:18:32.047]   shared secret: 32 bytes
+[PQC-FUSE 2026-07-02 08:18:32.049] Keypair generated in 1428.39 µs
+[PQC-FUSE 2026-07-02 08:18:32.108] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-02 08:18:32.108] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-07-02 08:18:32.108] QoS monitor startup skipped for this mount
+[PQC-FUSE 2026-07-02 08:18:32.108] Freshness anchor worker started
+[PQC-FUSE 2026-07-02 08:18:32.108] PQC background rekey worker started
+[PQC-FUSE 2026-07-02 08:18:32.108] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-07-02 08:18:32.149] REKEY WORKER: batched 2 files 170.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.149] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.149] REKEY WORKER: batched 2 files 55.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.149] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.149] REKEY WORKER: batched 2 files 49.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.149] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.150] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.150] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.150] REKEY WORKER: batched 2 files 47.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.150] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.150] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.150] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.151] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.151] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.151] REKEY WORKER: batched 2 files 47.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.151] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.151] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.151] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.152] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.152] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.152] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.152] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.152] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.152] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.153] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.153] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.153] REKEY WORKER: batched 2 files 48.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.153] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.153] REKEY WORKER: batched 2 files 47.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.153] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.154] REKEY WORKER: batched 2 files 47.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.154] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.154] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.154] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.154] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.154] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.155] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.155] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.155] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.155] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER: batched 2 files 63.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER: batched 2 files 56.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER: batched 2 files 54.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.173] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER: batched 2 files 51.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER: batched 2 files 53.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER: batched 2 files 54.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.174] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER: batched 2 files 57.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER: batched 2 files 52.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER: batched 2 files 52.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER: batched 2 files 54.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.175] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER: batched 2 files 53.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.176] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.177] REKEY WORKER: batched 2 files 53.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.177] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.177] REKEY WORKER: batched 2 files 53.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.177] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.177] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.177] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.178] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.178] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.178] REKEY WORKER: batched 2 files 53.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.178] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.212] REKEY WORKER: batched 2 files 52.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.212] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.213] REKEY WORKER: batched 2 files 53.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.213] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.213] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.213] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.213] REKEY WORKER: batched 2 files 53.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.213] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER: batched 2 files 52.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER: batched 2 files 53.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER: batched 2 files 53.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.214] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER: batched 2 files 53.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER: batched 2 files 52.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER: batched 2 files 53.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.215] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER: batched 2 files 51.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER: batched 2 files 53.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.216] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER: batched 2 files 53.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER: batched 2 files 50.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER: batched 2 files 51.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.217] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.218] REKEY WORKER: batched 2 files 52.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.218] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.218] REKEY WORKER: batched 2 files 51.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.218] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:32.218] REKEY WORKER: batched 2 files 51.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:18:32.218] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:18:36.185] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-07-02 08:18:36.186] PQC background rekey worker stopped
+[PQC-FUSE 2026-07-02 08:18:36.186] Rekey queue stats: accepted=128 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-07-02 08:18:36.186] Scheduler stats: submitted=256 cpu=256 gpu=0 bytes_cpu=524288 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-07-02 08:18:36.186] Durability sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-07-02 08:18:36.186] Durability mounted-operation sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

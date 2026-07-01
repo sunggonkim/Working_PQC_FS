@@ -1,0 +1,1569 @@
+
+  ┌─────────────────────────────────────────────────────┐
+  │  PQC-FUSE v0.1 — Authenticated Encrypted Storage   │
+  │  CPU data plane; optional batch GPU helpers         │
+  └─────────────────────────────────────────────────────┘
+
+[PQC-FUSE 2026-07-02 08:19:54.260] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 08:19:54.260]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-02 08:19:54.260]   Storage dir : /tmp/aegis_keyplane_gpu_batch_w2f3jx1a/store
+[PQC-FUSE 2026-07-02 08:19:54.260]   Mount point : /tmp/aegis_keyplane_gpu_batch_w2f3jx1a/mnt
+[PQC-FUSE 2026-07-02 08:19:54.260] ════════════════════════════════════════════════════════════
+[PQC] Admission controller initialized: trace=/home/thor/skim/pqc_encrpyted_fs/artifacts/validation/keyplane_rekey_sweep/files_1024/gpu_batch/admission_trace.jsonl
+[PQC-FUSE 2026-07-02 08:19:54.261] KEM algorithm : ML-KEM-768
+[PQC-FUSE 2026-07-02 08:19:54.261]   public key  : 1184 bytes
+[PQC-FUSE 2026-07-02 08:19:54.261]   secret key  : 2400 bytes
+[PQC-FUSE 2026-07-02 08:19:54.261]   ciphertext  : 1088 bytes
+[PQC-FUSE 2026-07-02 08:19:54.261]   shared secret: 32 bytes
+[PQC-FUSE 2026-07-02 08:19:54.263] Keypair generated in 1397.96 µs
+[PQC-FUSE 2026-07-02 08:19:54.324] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-02 08:19:54.324] Scheduler policy: gpu_min_bytes=131072 coherence_penalty_ns=25000
+[PQC-FUSE 2026-07-02 08:19:54.324] QoS monitor startup skipped for this mount
+[PQC-FUSE 2026-07-02 08:19:54.324] Freshness anchor worker started
+[PQC-FUSE 2026-07-02 08:19:54.324] PQC background rekey worker started
+[PQC-FUSE 2026-07-02 08:19:54.324] Starting FUSE main loop...
+Ignoring invalid max threads value 4294967295 > max (100000).
+[PQC-FUSE 2026-07-02 08:19:54.362] REKEY WORKER: batched 2 files 173.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.362] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.362] REKEY WORKER: batched 2 files 62.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.362] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER: batched 2 files 55.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER: batched 2 files 53.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.363] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER: batched 2 files 53.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER: batched 2 files 53.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.364] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.365] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.365] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.365] REKEY WORKER: batched 2 files 53.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.365] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.365] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.365] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER: batched 2 files 52.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER: batched 2 files 50.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER: batched 2 files 52.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.366] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.367] REKEY WORKER: batched 2 files 49.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.367] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.367] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.367] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.367] REKEY WORKER: batched 2 files 54.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.367] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER: batched 2 files 52.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER: batched 2 files 53.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.401] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER: batched 2 files 53.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER: batched 2 files 53.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.402] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER: batched 2 files 51.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER: batched 2 files 52.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER: batched 2 files 51.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.403] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER: batched 2 files 50.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER: batched 2 files 53.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.404] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER: batched 2 files 52.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER: batched 2 files 52.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.405] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.406] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.406] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.432] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.432] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER: batched 2 files 52.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER: batched 2 files 53.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.433] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER: batched 2 files 49.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER: batched 2 files 53.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER: batched 2 files 50.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.434] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.435] REKEY WORKER: batched 2 files 54.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.435] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.435] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.435] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.435] REKEY WORKER: batched 2 files 52.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.435] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER: batched 2 files 52.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.436] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER: batched 2 files 52.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.437] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER: batched 2 files 51.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER: batched 2 files 51.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.438] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER: batched 2 files 52.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.439] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER: batched 2 files 51.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER: batched 2 files 50.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.440] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER: batched 2 files 52.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER: batched 2 files 52.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.441] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER: batched 2 files 52.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER: batched 2 files 48.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.442] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.443] REKEY WORKER: batched 2 files 52.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.443] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.443] REKEY WORKER: batched 2 files 50.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.443] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.443] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.443] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER: batched 2 files 52.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER: batched 2 files 52.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.457] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER: batched 2 files 51.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.458] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER: batched 2 files 47.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.459] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER: batched 2 files 52.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER: batched 2 files 54.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.460] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER: batched 2 files 52.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.461] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER: batched 2 files 53.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.462] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER: batched 2 files 50.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER: batched 2 files 51.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.463] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER: batched 2 files 49.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER: batched 2 files 48.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.464] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER: batched 2 files 51.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER: batched 2 files 50.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER: batched 2 files 53.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.465] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.466] REKEY WORKER: batched 2 files 50.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.466] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.466] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.466] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER: batched 2 files 50.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.467] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER: batched 2 files 50.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.468] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.469] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER: batched 2 files 47.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.470] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER: batched 2 files 51.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.471] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER: batched 2 files 52.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.472] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER: batched 2 files 51.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER: batched 2 files 51.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER: batched 2 files 51.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.473] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER: batched 2 files 51.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.474] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.475] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER: batched 2 files 50.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.476] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.477] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.477] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.477] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.477] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.477] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.477] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER: batched 2 files 52.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.478] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.500] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.500] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.501] REKEY WORKER: batched 2 files 53.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.501] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.501] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.501] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.501] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.501] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.502] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER: batched 2 files 50.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER: batched 2 files 51.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.503] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER: batched 2 files 48.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER: batched 2 files 53.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER: batched 2 files 52.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.504] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER: batched 2 files 52.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.505] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER: batched 2 files 47.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER: batched 2 files 50.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER: batched 2 files 50.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.506] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER: batched 2 files 51.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.507] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER: batched 2 files 51.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.508] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER: batched 2 files 50.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.509] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.510] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.510] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.510] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.510] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.510] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.510] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.510] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.511] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.511] REKEY WORKER: batched 2 files 51.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.511] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.511] REKEY WORKER: batched 2 files 50.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.511] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.511] REKEY WORKER: batched 2 files 48.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.511] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.512] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER: batched 2 files 47.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.513] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER: batched 2 files 50.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.514] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.515] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.515] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.515] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.515] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.515] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.515] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.515] REKEY WORKER: batched 2 files 46.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.516] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.516] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.516] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.516] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.516] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.516] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.516] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.517] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.518] REKEY WORKER: batched 2 files 47.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.518] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.518] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.518] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.518] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.518] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.519] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.519] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.519] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.519] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.519] REKEY WORKER: batched 2 files 52.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.519] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER: batched 2 files 50.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.520] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER: batched 2 files 47.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.521] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.522] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.523] REKEY WORKER: batched 2 files 50.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.523] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.523] REKEY WORKER: batched 2 files 50.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.523] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.523] REKEY WORKER: batched 2 files 50.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.523] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.524] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.525] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER: batched 2 files 51.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.526] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER: batched 2 files 51.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.527] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER: batched 2 files 52.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER: batched 2 files 47.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.528] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.529] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.529] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.529] REKEY WORKER: batched 2 files 47.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.529] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.529] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.529] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER: batched 2 files 52.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.530] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER: batched 2 files 51.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.531] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.532] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER: batched 2 files 50.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.533] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.534] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.535] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.535] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.535] REKEY WORKER: batched 2 files 50.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.535] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.535] REKEY WORKER: batched 2 files 50.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.535] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER: batched 2 files 50.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER: batched 2 files 56.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.536] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.537] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.538] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.538] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.538] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.538] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.538] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.538] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER: batched 2 files 50.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.539] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER: batched 2 files 51.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER: batched 2 files 52.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER: batched 2 files 52.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.540] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER: batched 2 files 50.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER: batched 2 files 49.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.541] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.542] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.543] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.543] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.543] REKEY WORKER: batched 2 files 47.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.543] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.543] REKEY WORKER: batched 2 files 48.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.543] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER: batched 2 files 50.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER: batched 2 files 47.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.544] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.545] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.569] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.570] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.571] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.571] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.571] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.571] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.571] REKEY WORKER: batched 2 files 51.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.571] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER: batched 2 files 48.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.572] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER: batched 2 files 51.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.573] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.574] REKEY WORKER: batched 2 files 47.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.574] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.574] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.574] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.574] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.574] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.575] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER: batched 2 files 53.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.576] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER: batched 2 files 50.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.577] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.578] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.578] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.578] REKEY WORKER: batched 2 files 47.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.578] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.578] REKEY WORKER: batched 2 files 48.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.578] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER: batched 2 files 47.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.579] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER: batched 2 files 47.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER: batched 2 files 52.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.580] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER: batched 2 files 48.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER: batched 2 files 46.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.581] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.582] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.582] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.582] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.582] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.582] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.582] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER: batched 2 files 51.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.583] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER: batched 2 files 50.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER: batched 2 files 50.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.584] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER: batched 2 files 49.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER: batched 2 files 48.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.585] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.586] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.586] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.586] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.586] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.586] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.586] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER: batched 2 files 47.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.587] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.588] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.588] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.588] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.588] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.588] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.588] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER: batched 2 files 48.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.589] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.590] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.591] REKEY WORKER: batched 2 files 50.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.591] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.591] REKEY WORKER: batched 2 files 51.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.591] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.591] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.591] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER: batched 2 files 50.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER: batched 2 files 52.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.592] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER: batched 2 files 51.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER: batched 2 files 50.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER: batched 2 files 47.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER: batched 2 files 47.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.593] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.594] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.594] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.594] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.594] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.594] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.594] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.595] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.596] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.596] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.596] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.596] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.596] REKEY WORKER: batched 2 files 47.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.596] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER: batched 2 files 50.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER: batched 2 files 46.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.597] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER: batched 2 files 47.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER: batched 2 files 50.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER: batched 2 files 47.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.598] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.599] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.599] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.599] REKEY WORKER: batched 2 files 47.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.599] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.599] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.599] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER: batched 2 files 49.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.600] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.601] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.601] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.601] REKEY WORKER: batched 2 files 49.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.601] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.601] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.601] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.601] REKEY WORKER: batched 2 files 47.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.602] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.602] REKEY WORKER: batched 2 files 47.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.602] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.602] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.602] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.602] REKEY WORKER: batched 2 files 47.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.602] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.603] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.603] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.603] REKEY WORKER: batched 2 files 48.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.603] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.603] REKEY WORKER: batched 2 files 50.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.603] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER: batched 2 files 47.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.604] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.605] REKEY WORKER: batched 2 files 49.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.605] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.605] REKEY WORKER: batched 2 files 51.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.605] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.605] REKEY WORKER: batched 2 files 49.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.605] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.606] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.606] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.606] REKEY WORKER: batched 2 files 49.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.606] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.606] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.606] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER: batched 2 files 48.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.607] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.608] REKEY WORKER: batched 2 files 47.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.608] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.608] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.608] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.608] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.608] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER: batched 2 files 48.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER: batched 2 files 49.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER: batched 2 files 46.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.609] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.610] REKEY WORKER: batched 2 files 49.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.610] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.610] REKEY WORKER: batched 2 files 48.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.610] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.610] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.610] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER: batched 2 files 48.5µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER: batched 2 files 50.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER: batched 2 files 47.1µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.611] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.612] REKEY WORKER: batched 2 files 48.6µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.612] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.612] REKEY WORKER: batched 2 files 49.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.612] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.612] REKEY WORKER: batched 2 files 47.7µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.612] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER: batched 2 files 48.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.613] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.614] REKEY WORKER: batched 2 files 47.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.614] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.614] REKEY WORKER: batched 2 files 48.2µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.614] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.614] REKEY WORKER: batched 2 files 48.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.614] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER: batched 2 files 49.9µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER: batched 2 files 47.8µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER: batched 2 files 48.4µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.615] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.616] REKEY WORKER: batched 2 files 49.3µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.616] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:54.616] REKEY WORKER: batched 2 files 48.0µs (target=CPU, run=CPU)
+[PQC-FUSE 2026-07-02 08:19:54.616] REKEY WORKER DETAIL: work_bytes=2240 budget_ns=0 decision_reason=0 deferral_reason=0
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.774] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.775] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.775] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.775] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.776] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.777] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.778] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.779] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.780] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.781] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.782] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.783] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.784] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.785] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.786] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.787] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.788] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.789] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.790] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.791] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.792] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.793] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.794] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.795] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.796] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.797] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.798] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.799] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.799] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.799] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.799] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.799] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:58.799] authenticated flush failed: No space left on device
+[PQC-FUSE 2026-07-02 08:19:59.520] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-07-02 08:19:59.521] PQC background rekey worker stopped
+[PQC-FUSE 2026-07-02 08:19:59.521] Rekey queue stats: accepted=1024 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-07-02 08:19:59.521] Scheduler stats: submitted=1535 cpu=1535 gpu=0 bytes_cpu=2093056 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-07-02 08:19:59.521] Durability sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-07-02 08:19:59.521] Durability mounted-operation sync stats: fdatasync=0 failures=0 total_ns=0 fsync=0 failures=0 total_ns=0 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=0 journal_sidecar=0 epoch_log=0 anchor_file=0 marker_metadata=0 keyring_metadata=0 parent_dir=0 other=0
+[PQC] Admission stats: total=0, gpu=0, cpu=0, ai_exhausted=0, deadline=0, size_small=0, stale=0

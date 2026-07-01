@@ -1,0 +1,53 @@
+{
+  "acceptable": false,
+  "background": {
+    "bytes_written": 0,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 0.0,
+    "write_events": 0,
+    "writer_started": false,
+    "writer_stop_rows": []
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "systemd_io_weight",
+    "daemon_throttle": false,
+    "harness_throttle": false
+  },
+  "error": "start_fuse() takes 7 positional arguments but 8 were given",
+  "foreground": {
+    "deadline_misses": 0,
+    "error": "start_fuse() takes 7 positional arguments but 8 were given",
+    "integrity_check": "error",
+    "latency_log": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+    "row_count": 0,
+    "rows_written": 0,
+    "samples": 0
+  },
+  "kernel_control": {
+    "control": "systemd_io_weight",
+    "io_weight": 10,
+    "systemd_run_returncode": null,
+    "systemd_run_stderr": "",
+    "systemd_run_stdout": "",
+    "systemd_unit_probe": {
+      "available": false,
+      "reason": "not_started"
+    },
+    "writer_kernel_qos_rows": [],
+    "writer_start_rows": 0
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/background_writer.jsonl",
+    "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+    "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/runtime_telemetry.txt",
+    "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/systemd_run.stderr.txt",
+    "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/systemd_run.stdout.txt"
+  },
+  "mode": "kernel_systemd_io_weight"
+}

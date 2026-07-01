@@ -1,0 +1,355 @@
+{
+  "args": {
+    "background_chunk_bytes": 65536,
+    "background_fsync_every": 1,
+    "background_pressure_pattern": "",
+    "background_pressure_util": 0.85,
+    "background_warmup_ms": 100,
+    "background_writers": 1,
+    "cgroup_io_weight": 10,
+    "control": "systemd_io_weight",
+    "controller_warmup_transactions": 2,
+    "daemon_throttle_sleep_us": 30000,
+    "deadline_ms": 10.0,
+    "enter_util": 0.7,
+    "exit_util": 0.6,
+    "harness_throttle_sleep_us": 5000,
+    "hold_samples": 1,
+    "inter_transaction_sleep_ms": 1.0,
+    "ionice_class": "3",
+    "ionice_level": null,
+    "overwrite": false,
+    "post_foreground_drain_ms": 150,
+    "repetitions": 3,
+    "rows_per_txn": 8,
+    "sqlite_payload_bytes": 256,
+    "telemetry_interval_ms": 20,
+    "telemetry_poll_ms": 10,
+    "telemetry_window": 12,
+    "thermal_interval_ms": 100,
+    "transactions": 24
+  },
+  "artifact": "sqlite_kernel_qos_baseline",
+  "artifacts": {
+    "json": "artifacts/validation/sqlite_kernel_qos_ioweight/sqlite_kernel_qos_baseline.json",
+    "markdown": "artifacts/validation/sqlite_kernel_qos_ioweight/sqlite_kernel_qos_baseline.md",
+    "raw_dir": "artifacts/validation/sqlite_kernel_qos_ioweight",
+    "thermal_log": "artifacts/validation/sqlite_kernel_qos_ioweight/thermal_tegrastats.log"
+  },
+  "kernel_control": {
+    "applied_rows": 0,
+    "control": "systemd_io_weight",
+    "details": [
+      {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": null,
+        "systemd_run_stderr": "",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "available": false,
+          "reason": "not_started"
+        },
+        "writer_kernel_qos_rows": [],
+        "writer_start_rows": 0
+      },
+      {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": null,
+        "systemd_run_stderr": "",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "available": false,
+          "reason": "not_started"
+        },
+        "writer_kernel_qos_rows": [],
+        "writer_start_rows": 0
+      },
+      {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": null,
+        "systemd_run_stderr": "",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "available": false,
+          "reason": "not_started"
+        },
+        "writer_kernel_qos_rows": [],
+        "writer_start_rows": 0
+      }
+    ],
+    "failed_rows": 3,
+    "io_weight": 10,
+    "missing_rows": 3,
+    "successful_rows": 0,
+    "writer_start_rows": 0
+  },
+  "modes": [
+    {
+      "acceptable": false,
+      "background": {
+        "bytes_written": 0,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 0.0,
+        "write_events": 0,
+        "writer_started": false,
+        "writer_stop_rows": []
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "systemd_io_weight",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "error": "start_fuse() takes 7 positional arguments but 8 were given",
+      "foreground": {
+        "deadline_misses": 0,
+        "error": "start_fuse() takes 7 positional arguments but 8 were given",
+        "integrity_check": "error",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "row_count": 0,
+        "rows_written": 0,
+        "samples": 0
+      },
+      "kernel_control": {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": null,
+        "systemd_run_stderr": "",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "available": false,
+          "reason": "not_started"
+        },
+        "writer_kernel_qos_rows": [],
+        "writer_start_rows": 0
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/background_writer.jsonl",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/runtime_telemetry.txt",
+        "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/systemd_run.stderr.txt",
+        "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/systemd_run.stdout.txt"
+      },
+      "mode": "kernel_systemd_io_weight"
+    },
+    {
+      "acceptable": false,
+      "background": {
+        "bytes_written": 0,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 0.0,
+        "write_events": 0,
+        "writer_started": false,
+        "writer_stop_rows": []
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "systemd_io_weight",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "error": "start_fuse() takes 7 positional arguments but 8 were given",
+      "foreground": {
+        "deadline_misses": 0,
+        "error": "start_fuse() takes 7 positional arguments but 8 were given",
+        "integrity_check": "error",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "row_count": 0,
+        "rows_written": 0,
+        "samples": 0
+      },
+      "kernel_control": {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": null,
+        "systemd_run_stderr": "",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "available": false,
+          "reason": "not_started"
+        },
+        "writer_kernel_qos_rows": [],
+        "writer_start_rows": 0
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/background_writer.jsonl",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/runtime_telemetry.txt",
+        "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/systemd_run.stderr.txt",
+        "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/systemd_run.stdout.txt"
+      },
+      "mode": "kernel_systemd_io_weight"
+    },
+    {
+      "acceptable": false,
+      "background": {
+        "bytes_written": 0,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 0.0,
+        "write_events": 0,
+        "writer_started": false,
+        "writer_stop_rows": []
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "systemd_io_weight",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "error": "start_fuse() takes 7 positional arguments but 8 were given",
+      "foreground": {
+        "deadline_misses": 0,
+        "error": "start_fuse() takes 7 positional arguments but 8 were given",
+        "integrity_check": "error",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "row_count": 0,
+        "rows_written": 0,
+        "samples": 0
+      },
+      "kernel_control": {
+        "control": "systemd_io_weight",
+        "io_weight": 10,
+        "systemd_run_returncode": null,
+        "systemd_run_stderr": "",
+        "systemd_run_stdout": "",
+        "systemd_unit_probe": {
+          "available": false,
+          "reason": "not_started"
+        },
+        "writer_kernel_qos_rows": [],
+        "writer_start_rows": 0
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/background_writer.jsonl",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/mount_logs/pqc_fuse.stdout.txt",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/runtime_telemetry.txt",
+        "systemd_run_stderr": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/systemd_run.stderr.txt",
+        "systemd_run_stdout": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/systemd_run.stdout.txt"
+      },
+      "mode": "kernel_systemd_io_weight"
+    }
+  ],
+  "non_claims": [
+    "not evidence that AEGIS-Q beats kernel QoS",
+    "not a complete kernel QoS comparison by itself",
+    "not foreground AI/TensorRT QoS recovery evidence"
+  ],
+  "overall_pass": false,
+  "platform": {
+    "cpu_count": 14,
+    "device_model": "NVIDIA Jetson AGX Thor Developer Kit",
+    "fuse_binary": {
+      "exists": true,
+      "path": "build/pqc_fuse",
+      "sha256": "81b9ac0c92c394ce5d09864491a7886b6e0c0197bd8bf2154a78db04b9b1f155"
+    },
+    "git_dirty_short": "M Paper/10_Discussion_and_Limitations.tex\n M Paper/4_Evaluation.tex\n M Paper/5_Related_Works.tex\n M Paper/Figures/fig_first_page_qos.pdf\n M Paper/main.pdf\n M artifacts/reports/case_study_takeaway/case_study_takeaway.json\n M artifacts/reports/case_study_takeaway/case_study_takeaway.md\n M artifacts/reports/recurring_review_elimination/recurring_review_elimination.json\n M artifacts/reports/review_acceptance_structure_audit/review_acceptance_structure_audit.json\n M artifacts/reports/review_acceptance_structure_audit/review_acceptance_structure_audit.md\n M artifacts/reports/review_response_strategy/review_response_strategy.json\n M artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json\n?? artifacts/validation/sqlite_kernel_qos_ionice/\n?? artifacts/validation/sqlite_kernel_qos_ioweight/",
+    "git_head": "691f209c0e687996680b7400fd0105c948cd7bd7",
+    "kernel": "Linux thor 6.8.12-tegra #1 SMP PREEMPT Tue Dec 30 15:40:41 PST 2025 aarch64 aarch64 aarch64 GNU/Linux",
+    "machine": "aarch64",
+    "nvcc": {
+      "argv": [
+        "nvcc",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jul_16_07:31:19_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.48\nBuild cuda_13.0.r13.0/compiler.36260728_0"
+    },
+    "python": "3.12.3",
+    "system": "Linux-6.8.12-tegra-aarch64-with-glibc2.39",
+    "timestamp_utc": "2026-07-01T23:18:11.379556+00:00"
+  },
+  "repetitions": 3,
+  "rows": [
+    {
+      "acceptable": false,
+      "background_bytes_written": 0,
+      "background_throughput_mb_s": 0.0,
+      "deadline_misses": 0,
+      "foreground_p95_ms": null,
+      "foreground_p99_ms": null,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_00/kernel_systemd_io_weight/mode_summary.json",
+      "repetition": 0
+    },
+    {
+      "acceptable": false,
+      "background_bytes_written": 0,
+      "background_throughput_mb_s": 0.0,
+      "deadline_misses": 0,
+      "foreground_p95_ms": null,
+      "foreground_p99_ms": null,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_01/kernel_systemd_io_weight/mode_summary.json",
+      "repetition": 1
+    },
+    {
+      "acceptable": false,
+      "background_bytes_written": 0,
+      "background_throughput_mb_s": 0.0,
+      "deadline_misses": 0,
+      "foreground_p95_ms": null,
+      "foreground_p99_ms": null,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_ioweight/rep_02/kernel_systemd_io_weight/mode_summary.json",
+      "repetition": 2
+    }
+  ],
+  "scope": [
+    "First kernel-control baseline for SQLite foreground p99 under mounted secure-storage pressure.",
+    "Applies the selected Linux kernel control only to the background secure-storage writer.",
+    "Does not close Gate B3 by itself because the parent gate requires at least two kernel-level baselines plus paper text."
+  ],
+  "summary": {
+    "background_throughput_mb_s": {
+      "max": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "samples": 3
+    },
+    "deadline_misses": {
+      "max": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "samples": 3
+    },
+    "foreground_p99_ms": {
+      "max": null,
+      "median": null,
+      "min": null,
+      "samples": 0
+    }
+  },
+  "thermal_logging": {
+    "available": true,
+    "command": [
+      "tegrastats",
+      "--interval",
+      "100"
+    ],
+    "line_count": 2,
+    "nonempty": true,
+    "path": "artifacts/validation/sqlite_kernel_qos_ioweight/thermal_tegrastats.log",
+    "returncode": -15,
+    "started": true
+  },
+  "timestamp_utc": "2026-07-01T23:18:11.379484+00:00",
+  "verdict": "invalid-run"
+}

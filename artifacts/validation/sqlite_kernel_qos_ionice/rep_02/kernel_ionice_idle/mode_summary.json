@@ -1,0 +1,91 @@
+{
+  "acceptable": true,
+  "admission": {
+    "deferrals": {},
+    "rows": 0,
+    "targets": {}
+  },
+  "background": {
+    "bytes_written": 11075584,
+    "harness_throttle_sleep_us_total": 0,
+    "harness_throttle_sleeps": 0,
+    "throughput_mb_s": 22.015962810099943,
+    "write_events": 169,
+    "writer_started": true,
+    "writer_stop_rows": [
+      {
+        "bytes_written": 11075584,
+        "chunks_written": 169,
+        "elapsed_ns": 479765527,
+        "event": "writer_stop",
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 22.015962810099943,
+        "timestamp_ns": 1782947890942666638,
+        "writer_id": 0
+      }
+    ]
+  },
+  "config": {
+    "background_writer": true,
+    "controller_label": "kernel_ionice_idle",
+    "daemon_throttle": false,
+    "harness_throttle": false
+  },
+  "daemon_throttle": {
+    "open_rows": 0,
+    "rows": 0,
+    "sleep_us_total": 0,
+    "throttled_rows": 0
+  },
+  "error": null,
+  "foreground": {
+    "deadline_misses": 0,
+    "deadline_ms": 10.0,
+    "integrity_check": "ok",
+    "latency_log": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+    "max_ms": 9.959584,
+    "mean_ms": 7.61750425,
+    "p50_ms": 7.443741,
+    "p95_ms": 9.5905534,
+    "p99_ms": 9.890588139999998,
+    "row_count": 192,
+    "rows_written": 192,
+    "samples": 24
+  },
+  "logs": {
+    "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/background_writer.jsonl",
+    "foreground_csv": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/foreground_sqlite_latency.csv",
+    "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+    "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/mount_logs/pqc_fuse.stderr.txt",
+    "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/mount_logs/pqc_fuse.stdout.txt",
+    "policy_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/policy_trace.jsonl",
+    "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/runtime_fuse_admission_trace.jsonl",
+    "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/runtime_fuse_throttle_trace.jsonl",
+    "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/runtime_telemetry.txt",
+    "telemetry_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/telemetry_trace.jsonl"
+  },
+  "mode": "kernel_ionice_idle",
+  "policy": {
+    "events": {
+      "enter": 1,
+      "hold": 21
+    },
+    "rows": 22,
+    "states": {
+      "open": 5,
+      "throttled": 17
+    },
+    "throttle_rows": 17
+  },
+  "telemetry": {
+    "avg_cpu_utilization": 0.16750730284286086,
+    "avg_gpu_utilization": 0.1,
+    "gpu_utilization_sources": [
+      "telemetry_tensor_proxy"
+    ],
+    "high_pressure_rows": 17,
+    "rows": 22,
+    "zero_budget_rows": 0
+  }
+}

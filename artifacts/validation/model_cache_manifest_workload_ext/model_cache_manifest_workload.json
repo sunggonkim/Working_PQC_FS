@@ -1,0 +1,784 @@
+{
+  "command": [
+    "python3",
+    "code/experiments/run_model_cache_manifest_workload.py",
+    "--objects",
+    "24",
+    "--payload-bytes",
+    "16384"
+  ],
+  "created_utc": "2026-07-01T23:18:12Z",
+  "fuse_bin": "build/pqc_fuse",
+  "kept_work_dir": null,
+  "manifest": {
+    "bytes": 2068,
+    "directory_fsync_us": 323.018,
+    "path": "manifest.v1",
+    "publish_us": 3445.175,
+    "rename_us": 748.759,
+    "sha256": "8ca00cc955e6c9772dd9c0b07c3ad644ec07fd3db1c172d454f6b95afb9daac2",
+    "write_fsync_close_us": 2373.398
+  },
+  "mounted_verify": {
+    "errors": [],
+    "objects_verified": 24,
+    "pass": true,
+    "rows": [
+      {
+        "expected_sha256": "a7807f49397770038df5027e7ae05e727dc440dd34a4dab79dca3f9084897d15",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0000.bin",
+        "observed_sha256": "a7807f49397770038df5027e7ae05e727dc440dd34a4dab79dca3f9084897d15",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "b70b94de5ce4855bdc5029276c66a1064a6e5773de5530ce1bcdcde9657bbf2c",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0001.bin",
+        "observed_sha256": "b70b94de5ce4855bdc5029276c66a1064a6e5773de5530ce1bcdcde9657bbf2c",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "0d51102be0cc7647d82307395a435d9f8cb9544c400af4113b1823a273580be9",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0002.bin",
+        "observed_sha256": "0d51102be0cc7647d82307395a435d9f8cb9544c400af4113b1823a273580be9",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "f7e890e47c7ebedbdbc739ad0963a68c6db8d44c25427d118f000a264c02c4ed",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0003.bin",
+        "observed_sha256": "f7e890e47c7ebedbdbc739ad0963a68c6db8d44c25427d118f000a264c02c4ed",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "81849680cee47ca2fd3bb1733741734399b03fcd92454aa59adec25b64db48ae",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0004.bin",
+        "observed_sha256": "81849680cee47ca2fd3bb1733741734399b03fcd92454aa59adec25b64db48ae",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "dff2e8c78c944172256e9178e790fb4dca0e02417a7900dfc5f2537bf807003a",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0005.bin",
+        "observed_sha256": "dff2e8c78c944172256e9178e790fb4dca0e02417a7900dfc5f2537bf807003a",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "8e50c0f7c5a56a0b53fa5273627b1f3a282a5bcc1e3c3d3a82272871789135a2",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0006.bin",
+        "observed_sha256": "8e50c0f7c5a56a0b53fa5273627b1f3a282a5bcc1e3c3d3a82272871789135a2",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "34661bb354146377770932d3f09e2cca8a5996df0b71ff494e0906d333dfa885",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0007.bin",
+        "observed_sha256": "34661bb354146377770932d3f09e2cca8a5996df0b71ff494e0906d333dfa885",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "78af865c7e8e17a14b7d9d378dc2378ca5d4ac40f646d0f738ab3c43e0111319",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0008.bin",
+        "observed_sha256": "78af865c7e8e17a14b7d9d378dc2378ca5d4ac40f646d0f738ab3c43e0111319",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "80e8223287d1657a15f93770b308d8d7087b5d89ad6a0d37ec8b7e6d392c4680",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0009.bin",
+        "observed_sha256": "80e8223287d1657a15f93770b308d8d7087b5d89ad6a0d37ec8b7e6d392c4680",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "313b3027ce098476648a3174c6d72155af001fb3d38153412009a7d3e563a589",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0010.bin",
+        "observed_sha256": "313b3027ce098476648a3174c6d72155af001fb3d38153412009a7d3e563a589",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "0322eb7b1ae254717f8626fa6d9c48230a47bdc6bca5c1fad098d4d57dd83124",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0011.bin",
+        "observed_sha256": "0322eb7b1ae254717f8626fa6d9c48230a47bdc6bca5c1fad098d4d57dd83124",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "a1df4deab325dcf4fa760e0be5b242cdaa7f35527c605a5114e4df19fb8e1fe9",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0012.bin",
+        "observed_sha256": "a1df4deab325dcf4fa760e0be5b242cdaa7f35527c605a5114e4df19fb8e1fe9",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "e67acfc548c1d8d281b9130fb19518c3ccb4e94899a8ffc39302d237498d24b8",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0013.bin",
+        "observed_sha256": "e67acfc548c1d8d281b9130fb19518c3ccb4e94899a8ffc39302d237498d24b8",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "401324954b6ab331f62e16743e662f433f0640a732f9d0e37a798ee9a55b6cf1",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0014.bin",
+        "observed_sha256": "401324954b6ab331f62e16743e662f433f0640a732f9d0e37a798ee9a55b6cf1",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "2835fa9f9a75a382092a5891f4d3e35b37929e70c59d6cc0a74cab2036d11232",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0015.bin",
+        "observed_sha256": "2835fa9f9a75a382092a5891f4d3e35b37929e70c59d6cc0a74cab2036d11232",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "3d59627deb490dfeef1748fc3b9549088fe131eacfe0cbb1422f44e988e196a1",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0016.bin",
+        "observed_sha256": "3d59627deb490dfeef1748fc3b9549088fe131eacfe0cbb1422f44e988e196a1",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "26c9aaa043568325db7cf8d2aa3be2d760eca27e41b35018edb7075be8da6ffd",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0017.bin",
+        "observed_sha256": "26c9aaa043568325db7cf8d2aa3be2d760eca27e41b35018edb7075be8da6ffd",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "c63fad53d2a8c6d172b93a6604aef0c1b5046deb77f55951023688e3e2e8ac21",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0018.bin",
+        "observed_sha256": "c63fad53d2a8c6d172b93a6604aef0c1b5046deb77f55951023688e3e2e8ac21",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "fd66ec5ceb5e93d4178e9f12e52c5b238b41d53fd1e729ddc64ef378dfde4f97",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0019.bin",
+        "observed_sha256": "fd66ec5ceb5e93d4178e9f12e52c5b238b41d53fd1e729ddc64ef378dfde4f97",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "6fd844b4c7d512ff0b4ba436ea3ea6b9f900d6e35c21aafeee29c19fa2ab24af",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0020.bin",
+        "observed_sha256": "6fd844b4c7d512ff0b4ba436ea3ea6b9f900d6e35c21aafeee29c19fa2ab24af",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "43ac44a4ad8d33eb02d8cf129805438b45d2350c3b9791847eac5c6bfcb6149a",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0021.bin",
+        "observed_sha256": "43ac44a4ad8d33eb02d8cf129805438b45d2350c3b9791847eac5c6bfcb6149a",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "3a366efee9ed2079e9dd97ddc625e5defd514ef073588f626b50a58a705a5af7",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0022.bin",
+        "observed_sha256": "3a366efee9ed2079e9dd97ddc625e5defd514ef073588f626b50a58a705a5af7",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "cc38eada9e4458331483ca6b88465d757bf63f7293c796586a4ca1c97d4f00d8",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0023.bin",
+        "observed_sha256": "cc38eada9e4458331483ca6b88465d757bf63f7293c796586a4ca1c97d4f00d8",
+        "observed_size": 16384
+      }
+    ],
+    "verify_us": 4634.731
+  },
+  "objects_requested": 24,
+  "overall_pass": true,
+  "payload_bytes": 16384,
+  "publish": {
+    "expected": [
+      {
+        "name": "obj-0000.bin",
+        "sha256": "a7807f49397770038df5027e7ae05e727dc440dd34a4dab79dca3f9084897d15",
+        "size": 16384
+      },
+      {
+        "name": "obj-0001.bin",
+        "sha256": "b70b94de5ce4855bdc5029276c66a1064a6e5773de5530ce1bcdcde9657bbf2c",
+        "size": 16384
+      },
+      {
+        "name": "obj-0002.bin",
+        "sha256": "0d51102be0cc7647d82307395a435d9f8cb9544c400af4113b1823a273580be9",
+        "size": 16384
+      },
+      {
+        "name": "obj-0003.bin",
+        "sha256": "f7e890e47c7ebedbdbc739ad0963a68c6db8d44c25427d118f000a264c02c4ed",
+        "size": 16384
+      },
+      {
+        "name": "obj-0004.bin",
+        "sha256": "81849680cee47ca2fd3bb1733741734399b03fcd92454aa59adec25b64db48ae",
+        "size": 16384
+      },
+      {
+        "name": "obj-0005.bin",
+        "sha256": "dff2e8c78c944172256e9178e790fb4dca0e02417a7900dfc5f2537bf807003a",
+        "size": 16384
+      },
+      {
+        "name": "obj-0006.bin",
+        "sha256": "8e50c0f7c5a56a0b53fa5273627b1f3a282a5bcc1e3c3d3a82272871789135a2",
+        "size": 16384
+      },
+      {
+        "name": "obj-0007.bin",
+        "sha256": "34661bb354146377770932d3f09e2cca8a5996df0b71ff494e0906d333dfa885",
+        "size": 16384
+      },
+      {
+        "name": "obj-0008.bin",
+        "sha256": "78af865c7e8e17a14b7d9d378dc2378ca5d4ac40f646d0f738ab3c43e0111319",
+        "size": 16384
+      },
+      {
+        "name": "obj-0009.bin",
+        "sha256": "80e8223287d1657a15f93770b308d8d7087b5d89ad6a0d37ec8b7e6d392c4680",
+        "size": 16384
+      },
+      {
+        "name": "obj-0010.bin",
+        "sha256": "313b3027ce098476648a3174c6d72155af001fb3d38153412009a7d3e563a589",
+        "size": 16384
+      },
+      {
+        "name": "obj-0011.bin",
+        "sha256": "0322eb7b1ae254717f8626fa6d9c48230a47bdc6bca5c1fad098d4d57dd83124",
+        "size": 16384
+      },
+      {
+        "name": "obj-0012.bin",
+        "sha256": "a1df4deab325dcf4fa760e0be5b242cdaa7f35527c605a5114e4df19fb8e1fe9",
+        "size": 16384
+      },
+      {
+        "name": "obj-0013.bin",
+        "sha256": "e67acfc548c1d8d281b9130fb19518c3ccb4e94899a8ffc39302d237498d24b8",
+        "size": 16384
+      },
+      {
+        "name": "obj-0014.bin",
+        "sha256": "401324954b6ab331f62e16743e662f433f0640a732f9d0e37a798ee9a55b6cf1",
+        "size": 16384
+      },
+      {
+        "name": "obj-0015.bin",
+        "sha256": "2835fa9f9a75a382092a5891f4d3e35b37929e70c59d6cc0a74cab2036d11232",
+        "size": 16384
+      },
+      {
+        "name": "obj-0016.bin",
+        "sha256": "3d59627deb490dfeef1748fc3b9549088fe131eacfe0cbb1422f44e988e196a1",
+        "size": 16384
+      },
+      {
+        "name": "obj-0017.bin",
+        "sha256": "26c9aaa043568325db7cf8d2aa3be2d760eca27e41b35018edb7075be8da6ffd",
+        "size": 16384
+      },
+      {
+        "name": "obj-0018.bin",
+        "sha256": "c63fad53d2a8c6d172b93a6604aef0c1b5046deb77f55951023688e3e2e8ac21",
+        "size": 16384
+      },
+      {
+        "name": "obj-0019.bin",
+        "sha256": "fd66ec5ceb5e93d4178e9f12e52c5b238b41d53fd1e729ddc64ef378dfde4f97",
+        "size": 16384
+      },
+      {
+        "name": "obj-0020.bin",
+        "sha256": "6fd844b4c7d512ff0b4ba436ea3ea6b9f900d6e35c21aafeee29c19fa2ab24af",
+        "size": 16384
+      },
+      {
+        "name": "obj-0021.bin",
+        "sha256": "43ac44a4ad8d33eb02d8cf129805438b45d2350c3b9791847eac5c6bfcb6149a",
+        "size": 16384
+      },
+      {
+        "name": "obj-0022.bin",
+        "sha256": "3a366efee9ed2079e9dd97ddc625e5defd514ef073588f626b50a58a705a5af7",
+        "size": 16384
+      },
+      {
+        "name": "obj-0023.bin",
+        "sha256": "cc38eada9e4458331483ca6b88465d757bf63f7293c796586a4ca1c97d4f00d8",
+        "size": 16384
+      }
+    ],
+    "latencies": [
+      {
+        "directory_fsync_us": 332.565,
+        "name": "obj-0000.bin",
+        "publish_us": 113309.47,
+        "rename_us": 6041.759,
+        "write_fsync_close_us": 106935.146
+      },
+      {
+        "directory_fsync_us": 306.435,
+        "name": "obj-0001.bin",
+        "publish_us": 4238.926,
+        "rename_us": 1423.5,
+        "write_fsync_close_us": 2508.991
+      },
+      {
+        "directory_fsync_us": 298.639,
+        "name": "obj-0002.bin",
+        "publish_us": 4046.6670000000004,
+        "rename_us": 1385.954,
+        "write_fsync_close_us": 2362.074
+      },
+      {
+        "directory_fsync_us": 296.083,
+        "name": "obj-0003.bin",
+        "publish_us": 10674.684,
+        "rename_us": 6620.481,
+        "write_fsync_close_us": 3758.12
+      },
+      {
+        "directory_fsync_us": 289.815,
+        "name": "obj-0004.bin",
+        "publish_us": 3731.389,
+        "rename_us": 821.324,
+        "write_fsync_close_us": 2620.25
+      },
+      {
+        "directory_fsync_us": 323.556,
+        "name": "obj-0005.bin",
+        "publish_us": 3237.555,
+        "rename_us": 762.111,
+        "write_fsync_close_us": 2151.888
+      },
+      {
+        "directory_fsync_us": 281.88,
+        "name": "obj-0006.bin",
+        "publish_us": 3216.686,
+        "rename_us": 747.232,
+        "write_fsync_close_us": 2187.574
+      },
+      {
+        "directory_fsync_us": 278.62,
+        "name": "obj-0007.bin",
+        "publish_us": 3104.897,
+        "rename_us": 742.379,
+        "write_fsync_close_us": 2083.898
+      },
+      {
+        "directory_fsync_us": 279.473,
+        "name": "obj-0008.bin",
+        "publish_us": 3082.76,
+        "rename_us": 746.889,
+        "write_fsync_close_us": 2056.398
+      },
+      {
+        "directory_fsync_us": 282.463,
+        "name": "obj-0009.bin",
+        "publish_us": 3893.1760000000004,
+        "rename_us": 745.407,
+        "write_fsync_close_us": 2865.306
+      },
+      {
+        "directory_fsync_us": 277.213,
+        "name": "obj-0010.bin",
+        "publish_us": 3572.176,
+        "rename_us": 740.685,
+        "write_fsync_close_us": 2554.278
+      },
+      {
+        "directory_fsync_us": 278.055,
+        "name": "obj-0011.bin",
+        "publish_us": 3121.1099999999997,
+        "rename_us": 741.629,
+        "write_fsync_close_us": 2101.426
+      },
+      {
+        "directory_fsync_us": 276.306,
+        "name": "obj-0012.bin",
+        "publish_us": 3069.131,
+        "rename_us": 739.343,
+        "write_fsync_close_us": 2053.482
+      },
+      {
+        "directory_fsync_us": 279.435,
+        "name": "obj-0013.bin",
+        "publish_us": 3018.24,
+        "rename_us": 747.12,
+        "write_fsync_close_us": 1991.685
+      },
+      {
+        "directory_fsync_us": 322.805,
+        "name": "obj-0014.bin",
+        "publish_us": 3076.879,
+        "rename_us": 743.056,
+        "write_fsync_close_us": 2011.018
+      },
+      {
+        "directory_fsync_us": 323.157,
+        "name": "obj-0015.bin",
+        "publish_us": 3397.795,
+        "rename_us": 742.629,
+        "write_fsync_close_us": 2332.009
+      },
+      {
+        "directory_fsync_us": 277.389,
+        "name": "obj-0016.bin",
+        "publish_us": 3100.898,
+        "rename_us": 744.685,
+        "write_fsync_close_us": 2078.824
+      },
+      {
+        "directory_fsync_us": 281.611,
+        "name": "obj-0017.bin",
+        "publish_us": 3063.129,
+        "rename_us": 741.037,
+        "write_fsync_close_us": 2040.481
+      },
+      {
+        "directory_fsync_us": 276.824,
+        "name": "obj-0018.bin",
+        "publish_us": 3839.584,
+        "rename_us": 739.991,
+        "write_fsync_close_us": 2822.769
+      },
+      {
+        "directory_fsync_us": 278.861,
+        "name": "obj-0019.bin",
+        "publish_us": 4106.26,
+        "rename_us": 740.019,
+        "write_fsync_close_us": 3087.38
+      },
+      {
+        "directory_fsync_us": 281.806,
+        "name": "obj-0020.bin",
+        "publish_us": 3044.038,
+        "rename_us": 739.991,
+        "write_fsync_close_us": 2022.241
+      },
+      {
+        "directory_fsync_us": 276.861,
+        "name": "obj-0021.bin",
+        "publish_us": 3019.833,
+        "rename_us": 743.417,
+        "write_fsync_close_us": 1999.555
+      },
+      {
+        "directory_fsync_us": 276.63,
+        "name": "obj-0022.bin",
+        "publish_us": 3016.981,
+        "rename_us": 745.851,
+        "write_fsync_close_us": 1994.5
+      },
+      {
+        "directory_fsync_us": 284.157,
+        "name": "obj-0023.bin",
+        "publish_us": 3046.6940000000004,
+        "rename_us": 753.426,
+        "write_fsync_close_us": 2009.111
+      }
+    ],
+    "summary": {
+      "directory_fsync_latency": {
+        "avg_us": 290.026625,
+        "count": 24,
+        "max_us": 332.565,
+        "p50_us": 281.806,
+        "p95_us": 323.556,
+        "p99_us": 332.565
+      },
+      "objects": 24,
+      "objects_s": 117.21042184865948,
+      "payload_bytes_per_object": 16384,
+      "payload_mib_s": 1.8314128413853044,
+      "publish_latency": {
+        "avg_us": 8251.206583333334,
+        "count": 24,
+        "max_us": 113309.47,
+        "p50_us": 3216.686,
+        "p95_us": 10674.684,
+        "p99_us": 113309.47
+      },
+      "rename_latency": {
+        "avg_us": 1268.3297916666668,
+        "count": 24,
+        "max_us": 6620.481,
+        "p50_us": 745.407,
+        "p95_us": 6041.759,
+        "p99_us": 6620.481
+      },
+      "total_payload_bytes": 393216,
+      "workload_wall_us": 204759.949,
+      "write_fsync_close_latency": {
+        "avg_us": 6692.850166666666,
+        "count": 24,
+        "max_us": 106935.146,
+        "p50_us": 2151.888,
+        "p95_us": 3758.12,
+        "p99_us": 106935.146
+      }
+    }
+  },
+  "remount_verify": {
+    "errors": [],
+    "objects_verified": 24,
+    "pass": true,
+    "rows": [
+      {
+        "expected_sha256": "a7807f49397770038df5027e7ae05e727dc440dd34a4dab79dca3f9084897d15",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0000.bin",
+        "observed_sha256": "a7807f49397770038df5027e7ae05e727dc440dd34a4dab79dca3f9084897d15",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "b70b94de5ce4855bdc5029276c66a1064a6e5773de5530ce1bcdcde9657bbf2c",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0001.bin",
+        "observed_sha256": "b70b94de5ce4855bdc5029276c66a1064a6e5773de5530ce1bcdcde9657bbf2c",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "0d51102be0cc7647d82307395a435d9f8cb9544c400af4113b1823a273580be9",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0002.bin",
+        "observed_sha256": "0d51102be0cc7647d82307395a435d9f8cb9544c400af4113b1823a273580be9",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "f7e890e47c7ebedbdbc739ad0963a68c6db8d44c25427d118f000a264c02c4ed",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0003.bin",
+        "observed_sha256": "f7e890e47c7ebedbdbc739ad0963a68c6db8d44c25427d118f000a264c02c4ed",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "81849680cee47ca2fd3bb1733741734399b03fcd92454aa59adec25b64db48ae",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0004.bin",
+        "observed_sha256": "81849680cee47ca2fd3bb1733741734399b03fcd92454aa59adec25b64db48ae",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "dff2e8c78c944172256e9178e790fb4dca0e02417a7900dfc5f2537bf807003a",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0005.bin",
+        "observed_sha256": "dff2e8c78c944172256e9178e790fb4dca0e02417a7900dfc5f2537bf807003a",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "8e50c0f7c5a56a0b53fa5273627b1f3a282a5bcc1e3c3d3a82272871789135a2",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0006.bin",
+        "observed_sha256": "8e50c0f7c5a56a0b53fa5273627b1f3a282a5bcc1e3c3d3a82272871789135a2",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "34661bb354146377770932d3f09e2cca8a5996df0b71ff494e0906d333dfa885",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0007.bin",
+        "observed_sha256": "34661bb354146377770932d3f09e2cca8a5996df0b71ff494e0906d333dfa885",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "78af865c7e8e17a14b7d9d378dc2378ca5d4ac40f646d0f738ab3c43e0111319",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0008.bin",
+        "observed_sha256": "78af865c7e8e17a14b7d9d378dc2378ca5d4ac40f646d0f738ab3c43e0111319",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "80e8223287d1657a15f93770b308d8d7087b5d89ad6a0d37ec8b7e6d392c4680",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0009.bin",
+        "observed_sha256": "80e8223287d1657a15f93770b308d8d7087b5d89ad6a0d37ec8b7e6d392c4680",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "313b3027ce098476648a3174c6d72155af001fb3d38153412009a7d3e563a589",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0010.bin",
+        "observed_sha256": "313b3027ce098476648a3174c6d72155af001fb3d38153412009a7d3e563a589",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "0322eb7b1ae254717f8626fa6d9c48230a47bdc6bca5c1fad098d4d57dd83124",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0011.bin",
+        "observed_sha256": "0322eb7b1ae254717f8626fa6d9c48230a47bdc6bca5c1fad098d4d57dd83124",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "a1df4deab325dcf4fa760e0be5b242cdaa7f35527c605a5114e4df19fb8e1fe9",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0012.bin",
+        "observed_sha256": "a1df4deab325dcf4fa760e0be5b242cdaa7f35527c605a5114e4df19fb8e1fe9",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "e67acfc548c1d8d281b9130fb19518c3ccb4e94899a8ffc39302d237498d24b8",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0013.bin",
+        "observed_sha256": "e67acfc548c1d8d281b9130fb19518c3ccb4e94899a8ffc39302d237498d24b8",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "401324954b6ab331f62e16743e662f433f0640a732f9d0e37a798ee9a55b6cf1",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0014.bin",
+        "observed_sha256": "401324954b6ab331f62e16743e662f433f0640a732f9d0e37a798ee9a55b6cf1",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "2835fa9f9a75a382092a5891f4d3e35b37929e70c59d6cc0a74cab2036d11232",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0015.bin",
+        "observed_sha256": "2835fa9f9a75a382092a5891f4d3e35b37929e70c59d6cc0a74cab2036d11232",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "3d59627deb490dfeef1748fc3b9549088fe131eacfe0cbb1422f44e988e196a1",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0016.bin",
+        "observed_sha256": "3d59627deb490dfeef1748fc3b9549088fe131eacfe0cbb1422f44e988e196a1",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "26c9aaa043568325db7cf8d2aa3be2d760eca27e41b35018edb7075be8da6ffd",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0017.bin",
+        "observed_sha256": "26c9aaa043568325db7cf8d2aa3be2d760eca27e41b35018edb7075be8da6ffd",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "c63fad53d2a8c6d172b93a6604aef0c1b5046deb77f55951023688e3e2e8ac21",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0018.bin",
+        "observed_sha256": "c63fad53d2a8c6d172b93a6604aef0c1b5046deb77f55951023688e3e2e8ac21",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "fd66ec5ceb5e93d4178e9f12e52c5b238b41d53fd1e729ddc64ef378dfde4f97",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0019.bin",
+        "observed_sha256": "fd66ec5ceb5e93d4178e9f12e52c5b238b41d53fd1e729ddc64ef378dfde4f97",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "6fd844b4c7d512ff0b4ba436ea3ea6b9f900d6e35c21aafeee29c19fa2ab24af",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0020.bin",
+        "observed_sha256": "6fd844b4c7d512ff0b4ba436ea3ea6b9f900d6e35c21aafeee29c19fa2ab24af",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "43ac44a4ad8d33eb02d8cf129805438b45d2350c3b9791847eac5c6bfcb6149a",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0021.bin",
+        "observed_sha256": "43ac44a4ad8d33eb02d8cf129805438b45d2350c3b9791847eac5c6bfcb6149a",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "3a366efee9ed2079e9dd97ddc625e5defd514ef073588f626b50a58a705a5af7",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0022.bin",
+        "observed_sha256": "3a366efee9ed2079e9dd97ddc625e5defd514ef073588f626b50a58a705a5af7",
+        "observed_size": 16384
+      },
+      {
+        "expected_sha256": "cc38eada9e4458331483ca6b88465d757bf63f7293c796586a4ca1c97d4f00d8",
+        "expected_size": 16384,
+        "match": true,
+        "name": "obj-0023.bin",
+        "observed_sha256": "cc38eada9e4458331483ca6b88465d757bf63f7293c796586a4ca1c97d4f00d8",
+        "observed_size": 16384
+      }
+    ],
+    "verify_us": 5704.824
+  },
+  "schema": "aegisq.model_cache_manifest_workload.v1",
+  "scope": [
+    "Mounted application-style object cache publish workload.",
+    "Uses write/fsync/close, closed-file rename to a new target, directory fsync, remount, and hash verification.",
+    "Not a broad workload suite, full POSIX certification, AI-inference QoS claim, or crash-atomic multi-file rename proof."
+  ],
+  "supported_subset_exercised": {
+    "closed_file_rename_to_new_target": true,
+    "directory_fsync": true,
+    "remount_hash_verification": true,
+    "write_fsync_close": true
+  },
+  "unmount": {
+    "first": {
+      "fuse_rc": 8,
+      "unmount_rc": 0,
+      "unmount_stderr": ""
+    },
+    "remount": {
+      "fuse_rc": -2,
+      "unmount_rc": 0,
+      "unmount_stderr": ""
+    }
+  },
+  "workload": "model-cache manifest publish"
+}

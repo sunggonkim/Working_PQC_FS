@@ -1,0 +1,1 @@
+# pqc_admission_init: gpu_min_batch=4096 bytes, ai_qos_min_budget=1730000 ns, deadline_margin=100000 ns, producer_slack_stale=10000000000 ns, queue_threshold=0.80

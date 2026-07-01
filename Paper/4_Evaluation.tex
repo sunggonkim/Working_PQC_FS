@@ -13,7 +13,7 @@ Following the prior-paper style, the evaluation is organized as \emph{boundary f
   \item \textbf{RQ5: Cost boundaries and sensitivity.} What strict-publication cost appears against mode-aligned baselines, and which controller/key-plane/anchor mechanisms account for the result?
 \end{itemize}
 
-The design/evaluation contract is one closure per mechanism and each result is labeled by evidence type.  Mounted end-to-end evidence covers SQLite QoS, open-file rekey, append-log/cache-manifest remounts, generation/tamper/cut-point campaigns, and TPM replay-after-advance.  Primitive evidence covers AES-GCM and ML-KEM placement only; diagnostic evidence covers FUSE/barrier traces and lower-block interruption; future candidates cover GPU AES-GCM pipelines, broader databases, and kernel assistance.  The retained pipeline regenerates paper figures from structured JSON outputs, and the workload set remains scoped rather than a broad service suite.
+The design/evaluation contract is one closure per main mechanism and each result is labeled by evidence type.  Mounted end-to-end evidence covers SQLite QoS; the mounted rekey result comes from the key-plane workflow harness; other rows cover append-log/cache-manifest remounts, generation/tamper/cut-point campaigns, and TPM replay-after-advance.  Primitive evidence covers AES-GCM and ML-KEM placement only; diagnostic evidence covers FUSE/barrier traces and lower-block interruption; future candidates cover GPU AES-GCM pipelines, broader databases, and kernel assistance.  The retained pipeline regenerates paper figures from structured JSON outputs, and the workload set remains scoped rather than a broad service suite.
 
 The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, 1~TB NVMe, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result and is representative for placement/QoS, not cross-SoC evidence.  We use it as a representative Jetson-class accelerated UMA platform for Jetson-style accelerated UMA edge storage, not as evidence of cross-SoC portability.  Retained O4 tegrastats logs give same-run power/thermal observations, not energy-efficiency claims.
 
@@ -32,9 +32,9 @@ Figure~\ref{fig:evaluation_summary} is the spine: CPU-first data plane, slack-ga
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.88\textwidth]{Figures/fig_publication_cost_detail.pdf}
-  \caption{Graph-driven RQ5 cost boundary.  Panel~(a) shows daemon-side FUSE operation latency from retained traces; \texttt{fsync} dominates ordinary read/write/create costs.  Panel~(b) separates strict single-client publication from grouped epoch behavior: grouping can reduce traced sync-family operations, but the loss row shows why it is an admission rule rather than a replacement for strict publication.}
-  \Description{Two-panel chart. The first panel is a log-scale bar chart for FUSE operation latency. The second panel compares p99 latency and sync-family operation counts for strict single, strict grouped, epoch grouped, and an epoch loss row.}
+  \includegraphics[width=0.98\textwidth]{Figures/fig_gap_closeout.pdf}
+  \caption{Gap-closeout evidence.  Panel~(a) broadens workloads (SQLite, cache-manifest publish/remount, secure inference-log append).  Panel~(b) shows mounted key-plane GPU/CPU speedup versus file-batch size.  Panel~(c) reports kernel-QoS breadth with measured \texttt{ionice}, attempted \texttt{IOWeight}, and probed BFQ/\texttt{io.latency}/\texttt{io.cost}/blk-wbt status.}
+  \Description{Three-panel chart showing workload breadth p99 latency, key-plane speedup versus file batch size, and kernel QoS control status with measured and blocked rows.}
   \label{fig:publication_cost_detail}
 \end{figure*}
 
@@ -52,7 +52,7 @@ Figure~\ref{fig:verified_microbench} makes the placement rule explicit rather th
 
 The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes HMAC-protected envelopes through open-file envelope refresh.  CPU-only refresh takes 24.575~ms (41.7~K files/s); with explicit slack, admission selects the GPU and finishes in 20.729~ms (49.4~K files/s), a 1.186$\times$ median speedup; with zero slack and high memory pressure, fallback remains CPU-equivalent at 24.572~ms.  The X11 break-even model explains the bounded gain: primitive cuPQC is faster by batch~16, but mounted envelope/FUSE/admission overhead moves positive workflow break-even to roughly 760--812 refreshed files.  Thus AEGIS-Q keeps AES-GCM data writes on CPU and admits GPU only for elastic ML-KEM maintenance with producer slack and fresh telemetry.
 
-The same cost-boundary rule applies to publication optimization.  Figure~\ref{fig:publication_cost_detail} makes the performance limitation explicit instead of burying it in a table: local syscall substitution is not a valid baseline because replacing D/J/C barriers changes the crash-ordering obligation.  The implemented epoch/group path is a conditional hybrid: in the current grouped run it reduces sync-family operations from 8 to 6, improves p99 from 47.6 to 40.1~ms, and raises throughput from 9.05 to 9.72~MiB/s, but the plotted fault-matrix loss row shows that waiting can dominate.  We therefore treat it as an admission rule for batched/concurrent work, not a hidden replacement for strict mode.
+Figure~\ref{fig:publication_cost_detail} addresses three concerns in one place: workload breadth (panel~a), mounted PQC utility over file-batch size (panel~b), and kernel-QoS breadth with measured versus blocked controls (panel~c).  The intent is to separate measured rows from platform-blocked rows rather than silently omitting either.
 
 \subsection{Reliability and Recovery Boundary}
 \label{sec:eval_workloads}
@@ -77,6 +77,8 @@ The scoped mounted-application rows are not synthetic fio rows: append-log verif
 \label{sec:eval_qos}
 
 The tegrastats/CUPTI runs show platform pressure reaching the mounted daemon (8 and 5 daemon-throttled flushes), but this remains wiring evidence.  The app-level result uses SQLite transaction latency because it exercises mounted file encryption, foreground tail latency, and elastic background pressure together.  Figure~\ref{fig:evaluation_summary}(b) reports five-run hero medians and three-run kernel QoS controls: AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s.  Kernel controls preserve background throughput but not the tail here: \texttt{ionice} reports 16.22~ms p99 and \texttt{IOWeight} reports 12.57~ms.  This is bounded storage-visible control, not a uniqueness or non-storage QoS claim; the sensitivity bundle includes hysteresis records.
+
+fscrypt remains a supported-host measurement requirement: this host lacks prerequisites for a valid frozen-contract fscrypt row, so we retain blocked-with-proof artifacts and do not report an invented throughput number.
 
 Figure~\ref{fig:recovery_qos_detail}(b--c) splits the two controller questions.  The slack graph is the placement/admission rule for elastic GPU key-plane work: more slack increases GPU admission, while tight slack falls back to CPU.  The storage-tail graph is the foreground QoS envelope.  Bounded p99 improvement is possible only by controlling elastic pressure, because fixed mounted overheads and publication barriers remain.  The QoS panel varies budget, sampling interval, threshold, queue depth, and writer intensity.  Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain near 7.0/7.2~ms, high threshold disables throttling (8.8~ms), and two writers are fragile (12.3~ms).  Misclassification cost remains asymmetric: conservative decisions lose elastic progress, while aggressive decisions raise SQLite tail latency.  These rows are not telemetry-integrity evidence; they show the bounded effect of noisy or stale inputs on QoS/admission, with storage correctness still guarded by the CPU/D/J/C foreground path.
 

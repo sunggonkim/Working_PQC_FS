@@ -1,0 +1,470 @@
+{
+  "args": {
+    "background_chunk_bytes": 65536,
+    "background_fsync_every": 1,
+    "background_pressure_pattern": "",
+    "background_pressure_util": 0.85,
+    "background_warmup_ms": 100,
+    "background_writers": 1,
+    "cgroup_io_weight": 10,
+    "control": "ionice",
+    "controller_warmup_transactions": 2,
+    "daemon_throttle_sleep_us": 30000,
+    "deadline_ms": 10.0,
+    "enter_util": 0.7,
+    "exit_util": 0.6,
+    "harness_throttle_sleep_us": 5000,
+    "hold_samples": 1,
+    "inter_transaction_sleep_ms": 1.0,
+    "ionice_class": "3",
+    "ionice_level": null,
+    "overwrite": false,
+    "post_foreground_drain_ms": 150,
+    "repetitions": 3,
+    "rows_per_txn": 8,
+    "sqlite_payload_bytes": 256,
+    "telemetry_interval_ms": 20,
+    "telemetry_poll_ms": 10,
+    "telemetry_window": 12,
+    "thermal_interval_ms": 100,
+    "transactions": 24
+  },
+  "artifact": "sqlite_kernel_qos_baseline",
+  "artifacts": {
+    "json": "artifacts/validation/sqlite_kernel_qos_ionice/sqlite_kernel_qos_baseline.json",
+    "markdown": "artifacts/validation/sqlite_kernel_qos_ionice/sqlite_kernel_qos_baseline.md",
+    "raw_dir": "artifacts/validation/sqlite_kernel_qos_ionice",
+    "thermal_log": "artifacts/validation/sqlite_kernel_qos_ionice/thermal_tegrastats.log"
+  },
+  "kernel_control": {
+    "applied_rows": 3,
+    "class": "3",
+    "control": "ionice",
+    "details": [
+      {
+        "argv": [
+          "ionice",
+          "-c",
+          "3",
+          "-p",
+          "406847"
+        ],
+        "enabled": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "argv": [
+          "ionice",
+          "-c",
+          "3",
+          "-p",
+          "406879"
+        ],
+        "enabled": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "argv": [
+          "ionice",
+          "-c",
+          "3",
+          "-p",
+          "406898"
+        ],
+        "enabled": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": ""
+      }
+    ],
+    "failed_rows": 0,
+    "level": null,
+    "missing_rows": 0,
+    "successful_rows": 3,
+    "writer_start_rows": 3
+  },
+  "modes": [
+    {
+      "acceptable": true,
+      "admission": {
+        "deferrals": {},
+        "rows": 0,
+        "targets": {}
+      },
+      "background": {
+        "bytes_written": 11796480,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 22.525423409232523,
+        "write_events": 180,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 11796480,
+            "chunks_written": 180,
+            "elapsed_ns": 499435673,
+            "event": "writer_stop",
+            "harness_throttle_sleep_us_total": 0,
+            "harness_throttle_sleeps": 0,
+            "throughput_mb_s": 22.525423409232523,
+            "timestamp_ns": 1782947889421578784,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "kernel_ionice_idle",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "daemon_throttle": {
+        "open_rows": 0,
+        "rows": 0,
+        "sleep_us_total": 0,
+        "throttled_rows": 0
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 3,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+        "max_ms": 12.480324,
+        "mean_ms": 8.446615041666666,
+        "p50_ms": 7.9662915000000005,
+        "p95_ms": 11.0516452,
+        "p99_ms": 12.173229379999999,
+        "row_count": 192,
+        "rows_written": 192,
+        "samples": 24
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/background_writer.jsonl",
+        "foreground_csv": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/foreground_sqlite_latency.csv",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/mount_logs/pqc_fuse.stdout.txt",
+        "policy_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/policy_trace.jsonl",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/runtime_telemetry.txt",
+        "telemetry_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/telemetry_trace.jsonl"
+      },
+      "mode": "kernel_ionice_idle",
+      "policy": {
+        "events": {
+          "enter": 1,
+          "hold": 22
+        },
+        "rows": 23,
+        "states": {
+          "open": 5,
+          "throttled": 18
+        },
+        "throttle_rows": 18
+      },
+      "telemetry": {
+        "avg_cpu_utilization": 0.12175991893860232,
+        "avg_gpu_utilization": 0.1,
+        "gpu_utilization_sources": [
+          "telemetry_tensor_proxy"
+        ],
+        "high_pressure_rows": 18,
+        "rows": 23,
+        "zero_budget_rows": 16
+      }
+    },
+    {
+      "acceptable": true,
+      "admission": {
+        "deferrals": {},
+        "rows": 0,
+        "targets": {}
+      },
+      "background": {
+        "bytes_written": 12124160,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 23.36153342337365,
+        "write_events": 185,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 12124160,
+            "chunks_written": 185,
+            "elapsed_ns": 494937545,
+            "event": "writer_stop",
+            "harness_throttle_sleep_us_total": 0,
+            "harness_throttle_sleeps": 0,
+            "throughput_mb_s": 23.36153342337365,
+            "timestamp_ns": 1782947890161269488,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "kernel_ionice_idle",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "daemon_throttle": {
+        "open_rows": 0,
+        "rows": 0,
+        "sleep_us_total": 0,
+        "throttled_rows": 0
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 3,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+        "max_ms": 11.603565,
+        "mean_ms": 8.18587075,
+        "p50_ms": 7.807843,
+        "p95_ms": 11.087894599999998,
+        "p99_ms": 11.52369313,
+        "row_count": 192,
+        "rows_written": 192,
+        "samples": 24
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/background_writer.jsonl",
+        "foreground_csv": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/foreground_sqlite_latency.csv",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/mount_logs/pqc_fuse.stdout.txt",
+        "policy_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/policy_trace.jsonl",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/runtime_telemetry.txt",
+        "telemetry_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/telemetry_trace.jsonl"
+      },
+      "mode": "kernel_ionice_idle",
+      "policy": {
+        "events": {
+          "enter": 1,
+          "hold": 21
+        },
+        "rows": 22,
+        "states": {
+          "open": 5,
+          "throttled": 17
+        },
+        "throttle_rows": 17
+      },
+      "telemetry": {
+        "avg_cpu_utilization": 0.1285426179700241,
+        "avg_gpu_utilization": 0.1,
+        "gpu_utilization_sources": [
+          "telemetry_tensor_proxy"
+        ],
+        "high_pressure_rows": 17,
+        "rows": 22,
+        "zero_budget_rows": 12
+      }
+    },
+    {
+      "acceptable": true,
+      "admission": {
+        "deferrals": {},
+        "rows": 0,
+        "targets": {}
+      },
+      "background": {
+        "bytes_written": 11075584,
+        "harness_throttle_sleep_us_total": 0,
+        "harness_throttle_sleeps": 0,
+        "throughput_mb_s": 22.015962810099943,
+        "write_events": 169,
+        "writer_started": true,
+        "writer_stop_rows": [
+          {
+            "bytes_written": 11075584,
+            "chunks_written": 169,
+            "elapsed_ns": 479765527,
+            "event": "writer_stop",
+            "harness_throttle_sleep_us_total": 0,
+            "harness_throttle_sleeps": 0,
+            "throughput_mb_s": 22.015962810099943,
+            "timestamp_ns": 1782947890942666638,
+            "writer_id": 0
+          }
+        ]
+      },
+      "config": {
+        "background_writer": true,
+        "controller_label": "kernel_ionice_idle",
+        "daemon_throttle": false,
+        "harness_throttle": false
+      },
+      "daemon_throttle": {
+        "open_rows": 0,
+        "rows": 0,
+        "sleep_us_total": 0,
+        "throttled_rows": 0
+      },
+      "error": null,
+      "foreground": {
+        "deadline_misses": 0,
+        "deadline_ms": 10.0,
+        "integrity_check": "ok",
+        "latency_log": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+        "max_ms": 9.959584,
+        "mean_ms": 7.61750425,
+        "p50_ms": 7.443741,
+        "p95_ms": 9.5905534,
+        "p99_ms": 9.890588139999998,
+        "row_count": 192,
+        "rows_written": 192,
+        "samples": 24
+      },
+      "logs": {
+        "background_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/background_writer.jsonl",
+        "foreground_csv": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/foreground_sqlite_latency.csv",
+        "foreground_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/foreground_sqlite_latency.jsonl",
+        "fuse_stderr": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/mount_logs/pqc_fuse.stderr.txt",
+        "fuse_stdout": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/mount_logs/pqc_fuse.stdout.txt",
+        "policy_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/policy_trace.jsonl",
+        "runtime_fuse_admission_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/runtime_fuse_admission_trace.jsonl",
+        "runtime_fuse_throttle_trace": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/runtime_fuse_throttle_trace.jsonl",
+        "runtime_telemetry": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/runtime_telemetry.txt",
+        "telemetry_jsonl": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/telemetry_trace.jsonl"
+      },
+      "mode": "kernel_ionice_idle",
+      "policy": {
+        "events": {
+          "enter": 1,
+          "hold": 21
+        },
+        "rows": 22,
+        "states": {
+          "open": 5,
+          "throttled": 17
+        },
+        "throttle_rows": 17
+      },
+      "telemetry": {
+        "avg_cpu_utilization": 0.16750730284286086,
+        "avg_gpu_utilization": 0.1,
+        "gpu_utilization_sources": [
+          "telemetry_tensor_proxy"
+        ],
+        "high_pressure_rows": 17,
+        "rows": 22,
+        "zero_budget_rows": 0
+      }
+    }
+  ],
+  "non_claims": [
+    "not evidence that AEGIS-Q beats kernel QoS",
+    "not a complete kernel QoS comparison by itself",
+    "not foreground AI/TensorRT QoS recovery evidence"
+  ],
+  "overall_pass": true,
+  "platform": {
+    "cpu_count": 14,
+    "device_model": "NVIDIA Jetson AGX Thor Developer Kit",
+    "fuse_binary": {
+      "exists": true,
+      "path": "build/pqc_fuse",
+      "sha256": "81b9ac0c92c394ce5d09864491a7886b6e0c0197bd8bf2154a78db04b9b1f155"
+    },
+    "git_dirty_short": "M Paper/10_Discussion_and_Limitations.tex\n M Paper/4_Evaluation.tex\n M Paper/5_Related_Works.tex\n M Paper/Figures/fig_first_page_qos.pdf\n M Paper/main.pdf\n M artifacts/reports/case_study_takeaway/case_study_takeaway.json\n M artifacts/reports/case_study_takeaway/case_study_takeaway.md\n M artifacts/reports/recurring_review_elimination/recurring_review_elimination.json\n M artifacts/reports/review_acceptance_structure_audit/review_acceptance_structure_audit.json\n M artifacts/reports/review_acceptance_structure_audit/review_acceptance_structure_audit.md\n M artifacts/reports/review_response_strategy/review_response_strategy.json\n M artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json\n?? artifacts/validation/sqlite_kernel_qos_ionice/",
+    "git_head": "691f209c0e687996680b7400fd0105c948cd7bd7",
+    "kernel": "Linux thor 6.8.12-tegra #1 SMP PREEMPT Tue Dec 30 15:40:41 PST 2025 aarch64 aarch64 aarch64 GNU/Linux",
+    "machine": "aarch64",
+    "nvcc": {
+      "argv": [
+        "nvcc",
+        "--version"
+      ],
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jul_16_07:31:19_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.48\nBuild cuda_13.0.r13.0/compiler.36260728_0"
+    },
+    "python": "3.12.3",
+    "system": "Linux-6.8.12-tegra-aarch64-with-glibc2.39",
+    "timestamp_utc": "2026-07-01T23:18:11.033133+00:00"
+  },
+  "repetitions": 3,
+  "rows": [
+    {
+      "acceptable": true,
+      "background_bytes_written": 11796480,
+      "background_throughput_mb_s": 22.525423409232523,
+      "deadline_misses": 3,
+      "foreground_p95_ms": 11.0516452,
+      "foreground_p99_ms": 12.173229379999999,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_ionice/rep_00/kernel_ionice_idle/mode_summary.json",
+      "repetition": 0
+    },
+    {
+      "acceptable": true,
+      "background_bytes_written": 12124160,
+      "background_throughput_mb_s": 23.36153342337365,
+      "deadline_misses": 3,
+      "foreground_p95_ms": 11.087894599999998,
+      "foreground_p99_ms": 11.52369313,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_ionice/rep_01/kernel_ionice_idle/mode_summary.json",
+      "repetition": 1
+    },
+    {
+      "acceptable": true,
+      "background_bytes_written": 11075584,
+      "background_throughput_mb_s": 22.015962810099943,
+      "deadline_misses": 0,
+      "foreground_p95_ms": 9.5905534,
+      "foreground_p99_ms": 9.890588139999998,
+      "mode_summary": "artifacts/validation/sqlite_kernel_qos_ionice/rep_02/kernel_ionice_idle/mode_summary.json",
+      "repetition": 2
+    }
+  ],
+  "scope": [
+    "First kernel-control baseline for SQLite foreground p99 under mounted secure-storage pressure.",
+    "Applies the selected Linux kernel control only to the background secure-storage writer.",
+    "Does not close Gate B3 by itself because the parent gate requires at least two kernel-level baselines plus paper text."
+  ],
+  "summary": {
+    "background_throughput_mb_s": {
+      "max": 23.36153342337365,
+      "median": 22.525423409232523,
+      "min": 22.015962810099943,
+      "samples": 3
+    },
+    "deadline_misses": {
+      "max": 3.0,
+      "median": 3.0,
+      "min": 0.0,
+      "samples": 3
+    },
+    "foreground_p99_ms": {
+      "max": 12.173229379999999,
+      "median": 11.52369313,
+      "min": 9.890588139999998,
+      "samples": 3
+    }
+  },
+  "thermal_logging": {
+    "available": true,
+    "command": [
+      "tegrastats",
+      "--interval",
+      "100"
+    ],
+    "line_count": 24,
+    "nonempty": true,
+    "path": "artifacts/validation/sqlite_kernel_qos_ionice/thermal_tegrastats.log",
+    "returncode": -15,
+    "started": true
+  },
+  "timestamp_utc": "2026-07-01T23:18:11.033052+00:00",
+  "verdict": "measured"
+}
