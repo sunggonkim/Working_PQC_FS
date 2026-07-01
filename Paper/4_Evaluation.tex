@@ -4,7 +4,7 @@
 \subsection{Methodology and claim scope}
 \label{sec:eval_setup}
 
-The evaluation follows the same spine as the design: RQ1 and RQ2 test the edge-runtime thesis, while RQ3--RQ5 bound the storage, recovery, and cost claims that make the placement result meaningful.  It answers five research questions:
+Following the prior-paper style, the evaluation is organized as \emph{boundary first, mechanism second, scope third}.  RQ1--RQ2 test the main edge-runtime thesis, while RQ3--RQ5 close correctness, recovery, and cost boundaries that keep the thesis honest.  It answers five research questions:
 \begin{itemize}
   \item \textbf{RQ1: CPU/GPU/PQC placement.} When should a UMA edge runtime keep AES-GCM file encryption on the CPU, and when can ML-KEM/cuPQC key-plane maintenance use the GPU?
   \item \textbf{RQ2: Mounted QoS and edge-storage behavior.} Does storage-visible admission recover SQLite latency under secure-storage pressure, and do scoped append-log/cache-manifest workloads survive remount?
@@ -13,9 +13,7 @@ The evaluation follows the same spine as the design: RQ1 and RQ2 test the edge-r
   \item \textbf{RQ5: Cost boundaries and sensitivity.} What strict-publication cost appears against mode-aligned baselines, and which controller/key-plane/anchor mechanisms account for the result?
 \end{itemize}
 
-The design/evaluation contract is one closure per main mechanism: CPU/GPU/PQC placement through data-plane negative controls and key-plane measurements; QoS through SQLite recovery and kernel-control comparisons; managed-memory scope through executor-local diagnostics; format through generation/tamper checks; D/J/C publication through oracle-labeled cut points; and TPM replay checks through replay-after-advance.
-
-Primitive-placement numbers come from the microbenchmark harness; the mounted rekey result comes from the key-plane workflow harness.  Both refuse unsupported configurations rather than extrapolating missing rows.  The retained reproduction flow rebuilds the FUSE runtime, runs the self-test, regenerates the QoS, key-plane, data-plane, and fault bundles from structured inputs, and then runs the paper-spine and recurring-review gates.  The paper tables are generated from those retained outputs rather than hand-copied values.  The workload set is scoped to edge-storage patterns: SQLite pressure, ordered append-log, cache-manifest publish/remount, and bounded multi-writer stress, not a broad RocksDB/NGINX suite.
+The design/evaluation contract is one closure per mechanism: placement by data-plane negative controls plus key-plane workflow; QoS by mounted SQLite recovery plus kernel-control rows; publication/recovery by generation, tamper, and cut-point crash campaigns; and replay by file witness versus TPM replay-after-advance.  Primitive-placement numbers come from dedicated microbenchmarks, while mounted behavior comes from workflow harnesses.  The retained pipeline regenerates figures/tables from structured JSON outputs rather than manual copy.  Workloads remain intentionally scoped (SQLite, append-log, cache-manifest, bounded multi-writer), not a broad service benchmark suite.
 
 The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result.  We use Thor as a representative Jetson-class accelerated UMA platform for the placement/QoS question, not as evidence of cross-SoC portability.  Retained O4 tegrastats logs give same-run power/thermal observations: mean VIN is 29.1~W for SQLite QoS, 27.5~W for key-plane rekey, and 28.4/27.4~W for AEGIS-Q/dm-crypt frozen rows, with max \texttt{tj}=49.0C.  These are observations, not energy-efficiency claims.
 
@@ -27,34 +25,9 @@ The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, 
   \label{fig:evaluation_summary}
 \end{figure*}
 
-Figure~\ref{fig:evaluation_summary} is the evaluation spine: AEGIS-Q keeps AES-GCM data on the CPU, uses the GPU only for a mounted maintenance workflow with explicit slack, and recovers bounded SQLite pressure while giving up background bandwidth.  The strict frozen-contract row is a cost boundary, not the headline claim.  Table~\ref{tab:benchmark_workloads} states what each experiment can establish.  The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \texttt{psync}, per-write \texttt{fdatasync}, queue depth~1, one client, a 1~GiB file, fixed mounts/platform, and five repetitions.  A same-profile attribution probe confirms that the strict path still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries per write-publication cycle.  The matched dm-crypt row runs on the same warm-cache contract: median throughput 9.03~MiB/s and median p99/p99.9 latency 264/823~\(\mu\)s; fscrypt remains environment-blocked because \texttt{CONFIG\_FS\_ENCRYPTION} is unset and the root ext4 encrypt feature is unavailable.
+Figure~\ref{fig:evaluation_summary} is the spine: CPU-first data plane, slack-gated GPU key plane, and storage-visible QoS recovery with explicit throughput tradeoff.  The strict frozen-contract row is a cost boundary, not the headline.  Its contract fixes 4~KiB 70/30 random read/write, \texttt{psync}, per-write \texttt{fdatasync}, queue depth~1, one client, 1~GiB, fixed mounts/platform, and five repetitions.  A same-profile attribution probe confirms that strict publication still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries.  The matched dm-crypt row uses the same warm-cache contract (9.03~MiB/s median; 264/823~\(\mu\)s p99/p99.9), while fscrypt remains environment-blocked by missing kernel/filesystem support.
 
-X6/O3 answer strict-path practicality without upgrading crash claims.  X6 changes marker/checkpoint publication from filesystem-wide \texttt{syncfs} to marker-file \texttt{fsync} (1,070 retained A2 calls), leaving data and journal barriers.  O3 keeps strict per-write publication as the D/J/C barrier boundary and admits hybrid epoch grouping only for concurrent or batched writes that can share a barrier.  The grouped row cuts four-client syncs from eight to six and improves p99 from 47.6 to 40.1~ms and throughput from 9.05 to 9.72~MiB/s; the fault-matrix row cuts syncs from eight to five but worsens p99 to 53.1~ms, so this is conditional admission, not a general fast path.  Single-client epoch still pays a data plus epoch-log barrier; kernel-assist remains future work.
-
-\begin{table}[t]
-\centering
-\caption{Evaluation scope by research question.}
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\begin{tabularx}{\columnwidth}{P{0.25\columnwidth}|Y|Y}
-\toprule
-\textbf{RQ / exp.} & \textbf{Establishes} & \textbf{Does not establish}\\
-\midrule
-RQ1 placement & CPU AES-GCM dominates managed-buffer GPU AES-GCM from 4~KiB to 1~MiB; cuPQC dominates batched ML-KEM & GPU acceleration for ordinary file writes\\
-RQ1 workflow & Mounted open-file envelope refresh benefits only when slack admits batched GPU work & Persistent KEM hierarchy or hardware-backed credential release\\
-RQ2 mounted telemetry & Telemetry reaches the FUSE write-throttle path & Application scheduler or non-storage p99 controller\\
-RQ2 stress & 4-writer tail-latency probe under pressure & Broad foreground workload suite\\
-RQ2/RQ4 mounted apps & Secure append-log remount plus cache-manifest object publish/remount & Broad workload suite or non-storage p99 recovery\\
-RQ3 FUSE & Format functions after clean remount & Full SQLite/crash certification\\
-RQ3 hash & CUDA and OpenSSL digests agree & Side-channel resistance\\
-RQ5 Frozen contract & Plain/gocryptfs/dm-crypt/AEGIS-Q warm; fscrypt unavailable by env. proof & fscrypt throughput and cold-cache rows remain unavailable\\
-RQ1/RQ5 UMA & Managed allocation and host/device prefetch complete & Storage-DMA or O\_DIRECT-to-UVM\\
-RQ5 eBPF & \texttt{nvme\_complete\_rq} diagnostic histogram & Mounted eBPF/io\_uring path\\
-RQ4 file anchor & File snapshot rollback remains visible & TPM-anchor replay protection\\
-\bottomrule
-\end{tabularx}
-\label{tab:benchmark_workloads}
-\end{table}
+X6/O3 test strict-path practicality without changing crash semantics.  X6 replaces filesystem-wide \texttt{syncfs} with marker-file \texttt{fsync} while preserving data/journal barriers; O3 allows epoch grouping only for concurrent batches that can safely share a barrier.  Grouping improves four-client p99 (47.6\(\rightarrow\)40.1~ms) and throughput (9.05\(\rightarrow\)9.72~MiB/s), but fault-matrix rows still expose regressions under some patterns.  We therefore treat it as conditional admission, not a universal fast path.
 
 \subsection{Dynamic placement: CPU data and GPU ML-KEM}
 \label{sec:eval_performance}
@@ -93,7 +66,15 @@ The tegrastats/CUPTI runs show platform pressure reaching the mounted daemon: th
 
 The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together.  Table~\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls.  AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s.  This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress.  Kernel controls preserve background throughput but not the tail here: \texttt{ionice} reports 16.22~ms p99 with six misses, and \texttt{IOWeight} reports 12.57~ms p99 with seven misses.  This is bounded storage-visible control, not a uniqueness or non-storage QoS claim.
 
-The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity.  The default storage-pressure controller uses 20~ms telemetry sampling, 0.70/0.60 enter/exit thresholds, and a two-sample hold; admission defaults are a 128~KiB minimum GPU byte gate, 1.73~ms minimum producer slack, 100~\(\mu\)s deadline margin, 250~ms telemetry-age limit, and 0.80 queue threshold.  The key-plane workflow additionally requires an envelope-count gate and reports its separate break-even above, so a 4~KiB foreground record is never promoted to GPU merely because admission exists.  Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain at 7.0/7.2~ms, high threshold disables throttling (0 sleeps, 8.8~ms), and two writers is fragile (12.3~ms, one miss).  No-throttle/no-slack fallbacks pass, and hysteresis records 9 transitions and 8 flips rather than per-sample oscillation.  We therefore interpret misclassification cost asymmetrically: a stale or conservative decision loses elastic background progress or ML-KEM speedup, while an aggressive threshold shows up as higher SQLite p99 and is bounded by the CPU/D/J/C foreground path.  This keeps the claim on mounted storage-visible control, not an external application scheduler.
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{Figures/fig_telemetry_sensitivity.pdf}
+  \caption{Admission sensitivity to foreground strictness budget (RQ2/RQ5 diagnostic).  Tighter latency budgets reduce GPU-admitted maintenance work, enforcing conservative fallback under pressure.}
+  \Description{Line plot of admitted PQC jobs versus strictness budget, showing reduced GPU admission as budget tightens.}
+  \label{fig:qos_diagnostics}
+\end{figure}
+
+The sensitivity bundle varies budget, sampling interval, threshold, queue depth, and writer intensity (Figure~\ref{fig:qos_diagnostics}, left).  Defaults are 20~ms sampling, 0.70/0.60 enter-exit thresholds, two-sample hold, 128~KiB minimum GPU-byte gate, 1.73~ms minimum producer slack, 100~\(\mu\)s deadline margin, 250~ms telemetry-age limit, and 0.80 queue threshold.  A 4~KiB foreground record is never promoted just because admission exists.  Baseline p99 is 6.4~ms; 80~ms sampling and 128~KiB chunks remain near 7.0/7.2~ms, high threshold disables throttling (8.8~ms), and two writers are fragile (12.3~ms).  Misclassification cost remains asymmetric: conservative decisions lose elastic progress, while aggressive decisions raise SQLite tail latency.  This keeps the claim on storage-visible control, not external application scheduling.
 
 The ablation manifest then attributes cost to the authenticated FUSE format, SQLite recovery to elastic-write throttling, key-plane speedup to slack-gated GPU maintenance, and replay refusal to the external anchor.
 

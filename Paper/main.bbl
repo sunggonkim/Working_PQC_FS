@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{19}
+\begin{thebibliography}{22}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -64,6 +64,18 @@
 \tempurl}
 
 
+\bibitem[Chen et~al\mbox{.}(2015)]%
+        {fscq}
+\bibfield{author}{\bibinfo{person}{Haogang Chen}, \bibinfo{person}{Daniel
+  Ziegler}, \bibinfo{person}{Tej Chajed}, \bibinfo{person}{Adam Chlipala},
+  \bibinfo{person}{M.~Frans Kaashoek}, {and} \bibinfo{person}{Nickolai
+  Zeldovich}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Using Crash Hoare Logic for Certifying the FSCQ
+  File System}. In \bibinfo{booktitle}{\emph{Proceedings of the 25th Symposium
+  on Operating Systems Principles (SOSP 15)}}.
+\newblock
+
+
 \bibitem[Eduardo et~al\mbox{.}(2019)]%
         {spec_gpu_cfs}
 \bibfield{author}{\bibinfo{person}{Vandeir Eduardo}, \bibinfo{person}{Luis C.
@@ -95,6 +107,16 @@
   Filesystem Encryption}.
 \newblock \bibinfo{journal}{\emph{Proceedings of the Linux Symposium}}
   (\bibinfo{year}{2015}).
+\newblock
+
+
+\bibitem[Halcrow(2007)]%
+        {ecryptfs}
+\bibfield{author}{\bibinfo{person}{Michael~A. Halcrow}.}
+  \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{eCryptfs: An Enterprise-class Encrypted Filesystem
+  for Linux}. In \bibinfo{booktitle}{\emph{Proceedings of the Linux
+  Symposium}}.
 \newblock
 
 
@@ -174,6 +196,18 @@
   Specification}. In \bibinfo{booktitle}{\emph{GlobalPlatform Technology
   Conference}}.
 \newblock
+
+
+\bibitem[{OpenZFS Project}(2024)]%
+        {zfs_encryption}
+\bibfield{author}{\bibinfo{person}{{OpenZFS Project}}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{OpenZFS Native Encryption}}.
+\newblock
+\urldef\tempurl%
+\url{https://openzfs.github.io/openzfs-docs/}
+\showURL{%
+\tempurl}
 
 
 \bibitem[Park et~al\mbox{.}(2022)]%

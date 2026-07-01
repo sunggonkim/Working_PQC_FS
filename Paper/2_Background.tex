@@ -12,7 +12,7 @@ The cryptographic roles are deliberately distinct.  AES-GCM encrypts and authent
 
 AEGIS-Q distinguishes itself by making placement and recovery policy visible at the same boundary as file encryption.  It is not merely gocryptfs/fscrypt plus CUDA/TPM scripts: the research question is whether one mounted runtime can keep authenticated-block publication, storage-visible QoS/admission, optional batched GPU key-plane work, and external replay-after-advance checks under one evidence contract.  The capability matrix on the first page and Figure~\ref{fig:problem_boundary} are not performance rankings.  They explain why AEGIS-Q is evaluated as a placement/QoS runtime rather than as a replacement for mature deployed filesystems: existing encryption layers protect bytes, GPU-storage systems optimize data movement, and kernel controls shape I/O priority, but none of those boundaries simultaneously sees file-encryption state, accelerator slack, UMA pressure, and replay-aware recovery exposure.
 
-\begin{figure}[H]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{Figures/fig_problem_boundary.pdf}
   \caption{Motivating boundary for AEGIS-Q.  The open systems problem is not encryption alone; it is the combination of authenticated publication, accelerator placement, foreground QoS, and replay-aware recovery in one mounted path.}
@@ -31,7 +31,7 @@ This scope separates API correctness from an optimization hypothesis.  Same-buff
 
 GPU acceleration is useful only when it amortizes launch, placement, and synchronization costs.  Prior out-of-core systems such as FlashNeuron and Fastensor focus on moving large GPU workloads through storage hierarchies~\cite{flashneuron, fastensor}; their complementary staging perspectives are relevant to the batch boundary considered here~\cite{fastensor, flashneuron}.  GPU-oriented work such as fscrypt-GPU and FlashNeuron motivates separating batch placement from the storage format~\cite{fscrypt_gpu, flashneuron}.  They do not validate this FUSE format or its durability protocol.  Likewise, storage-oriented systems such as SnuQS motivate explicit staging but do not make an NVMe/UVM correctness claim for AEGIS-Q~\cite{snuqs_storage}.  The evaluation therefore asks when a secure-storage runtime should use the CPU fast path, GPU elastic lane, or conservative fallback on the tested platform.
 
-\begin{figure}[H]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{Figures/fig_dataplane_negative_control.pdf}
   \caption{AES-GCM data-plane negative control from one 4~KiB authenticated block to 1~MiB.  The 4~KiB tick matches AEGIS-Q's logical block and the common OS page granularity; GPU managed-buffer offload remains slower across this mounted-write range.}
