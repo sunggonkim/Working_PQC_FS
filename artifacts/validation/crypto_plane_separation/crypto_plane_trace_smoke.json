@@ -1,13 +1,13 @@
 {
   "artifact": "crypto_plane_separation",
   "fuse_binary": "build/pqc_fuse",
-  "generated_at": "2026-07-01T13:04:33Z",
+  "generated_at": "2026-07-01T22:09:57Z",
   "generated_by": "code/experiments/run_crypto_plane_trace_smoke.py",
   "runs": {
     "forced_keyplane": {
       "force_rekey": true,
       "label": "forced_keyplane",
-      "mount_dir": "/tmp/aegisq_forced_keyplane_55d367lh/mnt",
+      "mount_dir": "/tmp/aegisq_forced_keyplane_5x7cclc_/mnt",
       "mounted": true,
       "rekey_log_seen": true,
       "stderr": "artifacts/validation/crypto_plane_separation/forced_keyplane.stderr.txt",
@@ -16,7 +16,7 @@
         "returncode": 0,
         "unmounted": true
       },
-      "storage_dir": "/tmp/aegisq_forced_keyplane_55d367lh/store",
+      "storage_dir": "/tmp/aegisq_forced_keyplane_5x7cclc_/store",
       "trace": {
         "data_aes_gcm_decrypt_blocks": 5,
         "data_aes_gcm_decrypt_bytes": 16512,
@@ -45,7 +45,7 @@
         "version": 1
       },
       "trace_path": "artifacts/validation/crypto_plane_separation/forced_keyplane.plane_trace.json",
-      "work_dir": "/tmp/aegisq_forced_keyplane_55d367lh",
+      "work_dir": "/tmp/aegisq_forced_keyplane_5x7cclc_",
       "workload": {
         "payload_bytes": 16512,
         "readback_bytes": 16512,
@@ -55,7 +55,7 @@
     "ordinary": {
       "force_rekey": false,
       "label": "ordinary",
-      "mount_dir": "/tmp/aegisq_ordinary_85mu5lxo/mnt",
+      "mount_dir": "/tmp/aegisq_ordinary_jeh3184z/mnt",
       "mounted": true,
       "rekey_log_seen": false,
       "stderr": "artifacts/validation/crypto_plane_separation/ordinary.stderr.txt",
@@ -64,7 +64,7 @@
         "returncode": 0,
         "unmounted": true
       },
-      "storage_dir": "/tmp/aegisq_ordinary_85mu5lxo/store",
+      "storage_dir": "/tmp/aegisq_ordinary_jeh3184z/store",
       "trace": {
         "data_aes_gcm_decrypt_blocks": 4,
         "data_aes_gcm_decrypt_bytes": 13824,
@@ -93,7 +93,7 @@
         "version": 1
       },
       "trace_path": "artifacts/validation/crypto_plane_separation/ordinary.plane_trace.json",
-      "work_dir": "/tmp/aegisq_ordinary_85mu5lxo",
+      "work_dir": "/tmp/aegisq_ordinary_jeh3184z",
       "workload": {
         "payload_bytes": 13824,
         "readback_bytes": 13824,

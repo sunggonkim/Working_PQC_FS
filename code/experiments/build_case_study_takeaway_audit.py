@@ -23,7 +23,7 @@ REQUIRED_TAKEAWAY_TERMS = [
     "append-log/cache-manifest remounts",
     "authenticated FUSE",
     "Figure~\\ref{fig:first_page_qos}",
-    "Table~\\ref{tab:qos_sqlite_recovery}",
+    "Figure~\\ref{fig:evaluation_summary}(b)",
     "not a separate deployment anecdote",
 ]
 
@@ -73,7 +73,6 @@ def build_report() -> dict[str, Any]:
     discussion = read_text(PAPER / "10_Discussion_and_Limitations.tex")
     intro = read_text(PAPER / "1_Introduction.tex")
     eval_text = read_text(PAPER / "4_Evaluation.tex")
-    generated_table = read_text(PAPER / "generated_qos_recovery_table.tex")
     takeaway = extract_subsection(discussion, "Deployment takeaway")
     hero = read_json(HERO_CONTRACT) if HERO_CONTRACT.exists() else {}
 
@@ -90,8 +89,8 @@ def build_report() -> dict[str, Any]:
         "hero_contract_pass": HERO_CONTRACT.exists() and hero.get("overall_pass") is True,
         "hero_artifact_present": artifact_present,
         "figure_label_present": "\\label{fig:first_page_qos}" in intro,
-        "table_label_present": "\\label{tab:qos_sqlite_recovery}" in generated_table,
-        "evaluation_uses_same_table": "Table~\\ref{tab:qos_sqlite_recovery}" in eval_text,
+        "evaluation_summary_label_present": "\\label{fig:evaluation_summary}" in eval_text,
+        "evaluation_uses_same_figure": "Figure~\\ref{fig:evaluation_summary}(b)" in eval_text,
         "paper_pages_le_13": (run_pdfinfo_pages(PAPER / "main.pdf") or 999) <= 13,
     }
     violations = [name for name, passed in checks.items() if not passed]

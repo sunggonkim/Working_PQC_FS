@@ -25,10 +25,10 @@
       "line": 24,
       "path": "Paper/7_Implementation_Details.tex",
       "pattern": "keyplane_rekey_rw_critical_path",
-      "text": "The key-envelope path is central to remount correctness.  The current path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before ciphertext is read.  ML-KEM is optional batched maintenance: ordinary mounts with no rekey trigger do not allocate an ML-KEM object, generate a KEM keypair, or start the background rekey worker.  They also do not preallocate the CUDA AES executor, initialize elastic admission/scheduler/QoS monitor policy, or update data-plane scheduler accounting unless rekey, QoS, telemetry, or admission tracing is configured; the external freshness anchor remains disabled unless configured; and the diagnostic GPU AES path allocates executor-owned managed buffers only if an explicit GPU batch is requested.  When forced or interval rekey is configured, the worker can refresh open-file DEK material and persist new HMAC envelopes, but the format does not pretend that a KEM benchmark is a persistent per-file key hierarchy."
+      "text": "The key-envelope path generates a random DEK, wraps it under the mount key, HMAC-authenticates the envelope, and rejects failed authentication before ciphertext is read.  ML-KEM is optional batched maintenance: ordinary mounts with no rekey trigger allocate no ML-KEM object, KEM keypair, background rekey worker, CUDA AES executor, elastic admission state, scheduler accounting, QoS monitor, external anchor, or managed GPU buffer.  Forced or interval rekey can refresh open-file DEK material and persist new HMAC envelopes, but the format does not pretend that a KEM benchmark is a persistent per-file key hierarchy.  The worker collects up to 128 envelopes with a 1~ms default window, skips admission setup until the candidate batch reaches the GPU byte gate, and suppresses successful per-batch logs unless diagnostic verbosity is requested."
     }
   ],
-  "generated_at": "2026-07-01T13:04:43Z",
+  "generated_at": "2026-07-01T22:10:58Z",
   "generated_by": "code/experiments/build_crypto_plane_claim_guard.py",
   "negative_claim_guard": "Bulk file data must remain described as AES-GCM block data. ML-KEM/Kyber may be described only as key/session/envelope-plane work, and ordinary read/write claims must not put rekey on the critical path or start key-plane machinery unless mounted trace evidence changes.",
   "overall_pass": true,

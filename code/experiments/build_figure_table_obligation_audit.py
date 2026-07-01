@@ -22,7 +22,6 @@ PAPER_SOURCES = [
     "Paper/7_Implementation_Details.tex",
     "Paper/8_Security_Analysis.tex",
     "Paper/4_Evaluation.tex",
-    "Paper/generated_qos_recovery_table.tex",
     "Paper/10_Discussion_and_Limitations.tex",
     "Paper/5_Related_Works.tex",
     "Paper/6_Conclusion.tex",
@@ -69,11 +68,6 @@ EXPECTED_OBLIGATIONS = {
         "obligation": "threat-model and recovery boundary",
         "caption_terms": ["Threat", "boundaries"],
     },
-    "tab:benchmark_workloads": {
-        "kind": "RQ1-RQ5",
-        "obligation": "evaluation scope by research question",
-        "caption_terms": ["Evaluation", "research question"],
-    },
     "fig:problem_boundary": {
         "kind": "motivation",
         "obligation": "problem boundary for the edge-runtime thesis",
@@ -89,10 +83,10 @@ EXPECTED_OBLIGATIONS = {
         "obligation": "evaluation spine across cost, QoS, and key-plane placement",
         "caption_terms": ["Evaluation summary", "RQ1", "RQ2", "RQ5"],
     },
-    "tab:qos_sqlite_recovery": {
+    "fig:recovery_qos_detail": {
         "kind": "RQ3",
-        "obligation": "SQLite QoS recovery hero result",
-        "caption_terms": ["SQLite", "p99", "medians"],
+        "obligation": "recovery oracle and QoS sensitivity detail",
+        "caption_terms": ["Recovery", "QoS", "sensitivity"],
     },
 }
 

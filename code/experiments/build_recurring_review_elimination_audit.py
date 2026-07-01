@@ -21,7 +21,7 @@ THEMES = [
         "first_page_source": ("Paper/main.tex", ["unthrottled secure-storage pressure reports", "9.62", "8.15"]),
         "first_page_pdf": ["SQLite p99", "9.6", "8.2"],
         "design": ("Paper/3_Design.tex", ["user.pqc\\_qos\\_class", "elastic files are throttle-eligible"]),
-        "evaluation": ("Paper/4_Evaluation.tex", ["Table~\\ref{tab:qos_sqlite_recovery}", "9.62", "8.15"]),
+        "evaluation": ("Paper/4_Evaluation.tex", ["Figure~\\ref{fig:evaluation_summary}(b)", "9.62", "8.15"]),
         "limits": ("Paper/10_Discussion_and_Limitations.tex", ["trades peak background throughput", "explicit publication, placement, QoS"]),
         "artifacts": [
             "artifacts/reports/hero_result_contract/hero_result_contract.json",
@@ -98,7 +98,7 @@ THEMES = [
     {
         "theme": "password-derived credential boundary",
         "first_page_source": ("Paper/1_Introduction.tex", ["key hierarchy that survives remount"]),
-        "first_page_pdf": ["ML-KEM establishes shared secrets", "AES-GCM remains"],
+        "first_page_pdf": ["durable authenticated format", "AES-GCM", "ML-KEM"],
         "design": ("Paper/3_Design.tex", ["password-derived mount key", "never hardware-released"]),
         "evaluation": ("Paper/4_Evaluation.tex", ["envelope tamper", "EKEYREJECTED"]),
         "limits": ("Paper/10_Discussion_and_Limitations.tex", ["mount password remains the root credential", "no hardware-backed credential release"]),

@@ -281,9 +281,8 @@
         {fscrypt_gpu}
 \bibfield{author}{\bibinfo{person}{Xingjun Zhang}, \bibinfo{person}{Longxiang
   Wang}, {et~al\mbox{.}}} \bibinfo{year}{2023}\natexlab{}.
-\newblock \showarticletitle{fscrypt-GPU: GPU-Accelerated Filesystem Encryption
-  for High-Throughput Secure Storage}. In \bibinfo{booktitle}{\emph{ACM
-  Symposium on Cloud Computing}}.
+\newblock \showarticletitle{fscrypt-GPU}. In \bibinfo{booktitle}{\emph{ACM
+  SoCC}}.
 \newblock
 
 

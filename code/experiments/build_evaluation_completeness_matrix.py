@@ -97,7 +97,7 @@ MATRIX_ROWS: list[dict[str, Any]] = [
         "required": True,
         "requirement": "scalability or pressure behavior",
         "status": "implemented_scoped",
-        "figure_table_labels": ["fig:first_page_qos", "tab:qos_sqlite_recovery"],
+        "figure_table_labels": ["fig:first_page_qos", "fig:evaluation_summary", "fig:recovery_qos_detail"],
         "evidence": [
             {
                 "path": "artifacts/reports/hero_result_contract/hero_result_contract.json",

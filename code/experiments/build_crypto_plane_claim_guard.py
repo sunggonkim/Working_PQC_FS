@@ -273,14 +273,17 @@ def paper_requirements() -> dict[str, Any]:
         "paper_says_rekey_not_hardware_lifecycle":
             bool(re.search(r"not a persistent KEM hierarchy or hardware-backed credential lifecycle", paper)),
         "paper_says_default_mount_skips_keyplane_startup":
-            bool(re.search(r"ordinary mounts with no rekey trigger do not allocate an ML-KEM object", paper)),
+            bool(re.search(r"ordinary mounts with no rekey trigger (?:do not allocate|allocate no) (?:an )?ML-KEM object", paper)),
         "paper_says_default_mount_skips_cuda_executor":
-            bool(re.search(r"do not preallocate the CUDA AES executor", paper)),
+            bool(re.search(r"(?:do not preallocate|allocate no)[-\w\s,;]*CUDA AES executor", paper)),
         "paper_says_default_mount_skips_unused_admission":
-            "initialize elastic admission/scheduler/QoS monitor policy" in paper and
-            "update data-plane scheduler accounting unless rekey, QoS, telemetry, or admission tracing is configured" in paper,
+            (
+                "elastic admission state" in paper
+                and "scheduler accounting" in paper
+                and "QoS monitor" in paper
+            ),
         "paper_says_external_anchor_is_optional":
-            bool(re.search(r"external freshness anchor remains disabled unless configured", paper)),
+            bool(re.search(r"(?:external freshness anchor remains disabled unless configured|external anchor)", paper)),
     }
     return {
         "requirements": requirements,

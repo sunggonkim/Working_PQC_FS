@@ -23,16 +23,16 @@
       {
         "calls": 5,
         "errors": 1,
-        "max_ns": 15463,
+        "max_ns": 16324,
         "op": "getattr",
-        "total_ns": 41564
+        "total_ns": 42064
       },
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 27028,
+        "max_ns": 14046,
         "op": "readdir",
-        "total_ns": 27028
+        "total_ns": 14046
       },
       {
         "calls": 0,
@@ -44,37 +44,37 @@
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 237648,
+        "max_ns": 228268,
         "op": "read",
-        "total_ns": 237648
+        "total_ns": 228268
       },
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 31389,
+        "max_ns": 45871,
         "op": "write",
-        "total_ns": 31389
+        "total_ns": 45871
       },
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 24223,
+        "max_ns": 9444,
         "op": "flush",
-        "total_ns": 24223
+        "total_ns": 9444
       },
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 110509441,
+        "max_ns": 113655141,
         "op": "fsync",
-        "total_ns": 110509441
+        "total_ns": 113655141
       },
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 295945,
+        "max_ns": 319130,
         "op": "create",
-        "total_ns": 295945
+        "total_ns": 319130
       },
       {
         "calls": 0,
@@ -114,16 +114,16 @@
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 789509,
+        "max_ns": 789324,
         "op": "release",
-        "total_ns": 789509
+        "total_ns": 789324
       },
       {
         "calls": 1,
         "errors": 0,
-        "max_ns": 2351,
+        "max_ns": 2621,
         "op": "lock",
-        "total_ns": 2351
+        "total_ns": 2621
       },
       {
         "calls": 0,
@@ -199,7 +199,7 @@
     "scope": "mounted FUSE operation latency counters",
     "version": 1
   },
-  "generated_utc": "2026-07-01T13:04:33Z",
+  "generated_utc": "2026-07-01T22:10:39Z",
   "non_claims": [
     "not proof of eBPF/io_uring bypass",
     "not a kernel context-switch count",
@@ -247,16 +247,16 @@
     "workload_passed": true
   },
   "publication_trace": {
-    "event_count": 27,
+    "event_count": 28,
     "exists": true,
     "malformed_line_count": 0,
     "path": "artifacts/validation/a4_hidden_overhead_accounting/publication_trace.jsonl",
-    "publication_count": 27,
-    "publication_data_fsync_count_total": 27,
-    "publication_elapsed_ns_total": 36355851,
+    "publication_count": 28,
+    "publication_data_fsync_count_total": 28,
+    "publication_elapsed_ns_total": 37573287,
     "publication_epoch_log_fsync_count_total": 0,
-    "publication_journal_fsync_count_total": 27,
-    "publication_sync_count_total": 54
+    "publication_journal_fsync_count_total": 28,
+    "publication_sync_count_total": 56
   },
   "schema": "a4-overhead-trace-smoke-v1",
   "scope": "This is daemon-side mounted-path overhead accounting. FUSE operation latency is a daemon-side proxy for the FUSE crossing; it is not a kernel scheduler context-switch trace.",

@@ -1,12 +1,13 @@
 # Review acceptance/structure audit
 
 - Same-review exact repeat: unlikely for generation robustness, closed-loop foreground non-storage QoS mismatch, ML-KEM break-even, energy/thermal, strict-path hybrid-barrier criticism, unsupported fscrypt-speedup claims, and baseline-deletion criticism; a reviewer may still prefer a measured fscrypt row for OSDI, but it no longer contradicts the scoped paper claim
-- Logic structure: clear and aligned
-- Accept readiness: defensible under scoped edge-runtime claims; SOSP/OSDI acceptance is still not guaranteed because breadth, measured fscrypt preference, power-loss, and deployment expectations are venue-dependent, but they are no longer contradictions in the current paper claim
-- Gates OK: `True`
+- Logic structure: mostly aligned but missing at least one first-page/claim-spine anchor
+- Accept readiness: not safe to call OSDI/SOSP-ready; the paper is defensible as a scoped edge-runtime result, but the latest review can still repeat the supported-fscrypt baseline objection until that row is implemented or the venue-level baseline claim is removed
+- Gates OK: `False`
 
 ## Remaining risks
 
+- `energy_thermal_missing`
 
 ## Review map
 
@@ -19,14 +20,14 @@
 - `qos_tradeoff`: low_repeat_risk_after_closeout
 - `mlkem_modest`: low_repeat_risk_after_closeout
 - `power_failure`: bounded_but_repeatable_if_reviewer_demands_deployment
-- `scoping_heavy`: low_repeat_risk_after_crisper_spine
-- `figures_tables_alignment`: low_repeat_risk_after_figure_table_alignment
+- `scoping_heavy`: medium_repeat_risk
+- `figures_tables_alignment`: medium_repeat_risk
 - `related_work_qos_logging`: low_repeat_risk_after_qos_related_work
 - `strict_fuse_impact`: low_repeat_risk_after_closeout
 - `closed_loop_foreground_nonstorage_core_motivation`: low_repeat_risk_after_claim_removal
 - `fscrypt_baseline_supported`: low_repeat_risk_after_closeout
-- `energy_thermal_missing`: low_repeat_risk_after_closeout
-- `kernel_integration_path`: low_repeat_risk_after_kernel_assist_roadmap
+- `energy_thermal_missing`: high_repeat_risk_for_osdi_until_claim_removed_or_new_evidence
+- `kernel_integration_path`: medium_repeat_risk_future_kernel_claim_only
 - `competitor_boundary`: low_repeat_risk_after_competitor_boundary
 
 ## Previous-paper pattern

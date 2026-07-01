@@ -95,18 +95,32 @@ FIGURE_TABLE_OBLIGATIONS = [
     {"label": "fig:djc_state_machine", "source": "Paper/3_Design.tex", "obligation": "publication protocol state machine"},
     {"label": "tab:impl_boundaries", "source": "Paper/7_Implementation_Details.tex", "obligation": "implementation boundary summary"},
     {"label": "tab:threat_boundary", "source": "Paper/8_Security_Analysis.tex", "obligation": "security threat boundary"},
-    {"label": "tab:benchmark_workloads", "source": "Paper/4_Evaluation.tex", "obligation": "evaluation provenance"},
     {"label": "fig:evaluation_summary", "source": "Paper/4_Evaluation.tex", "obligation": "evaluation spine"},
-    {"label": "tab:qos_sqlite_recovery", "source": "Paper/generated_qos_recovery_table.tex", "obligation": "SQLite QoS hero result"},
+    {"label": "fig:recovery_qos_detail", "source": "Paper/4_Evaluation.tex", "obligation": "recovery/QoS detail result"},
 ]
 
 ARCHITECTURE_COMPONENT_NEEDLES = [
     "overall architecture figure",
+    "Overview of AEGIS-Q's design",
     "Foreground CPU data plane and D/J/C publisher",
     "Elastic admission controller and GPU lane",
     "Storage-visible QoS controller",
     "Recovery oracle and external anchor",
     "The FUSE adapter is not expanded as a separate research mechanism",
+]
+
+PREVIOUS_SOURCE_STYLE_NEEDLES = [
+    "\\noindent\\textbf{Overview of AEGIS-Q's design.}",
+    "First, the \\textit{foreground CPU data plane and D/J/C publisher}",
+    "Second, the \\textit{elastic admission controller and GPU lane}",
+    "Third, the \\textit{storage-visible QoS controller}",
+    "Finally, the \\textit{recovery oracle and external anchor}",
+    "\\noindent\\textbf{Admission input.}",
+    "\\noindent\\textbf{Mounted throttle action.}",
+    "\\noindent\\textbf{Failure and tuning boundary.}",
+    "\\noindent\\textbf{Remount oracle.}",
+    "\\noindent\\textbf{External replay anchor.}",
+    "\\noindent\\textbf{Unsupported transitions.}",
 ]
 
 
@@ -185,6 +199,10 @@ def build_report() -> dict[str, Any]:
         design_text + "\n" + read_text(ROOT / "SUBMISSION_CHECKLIST.md"),
         ARCHITECTURE_COMPONENT_NEEDLES,
     )
+    previous_source_style_present = all_present(
+        design_text + "\n" + read_text(ROOT / "SUBMISSION_CHECKLIST.md"),
+        PREVIOUS_SOURCE_STYLE_NEEDLES,
+    )
 
     violations: list[str] = []
     for row in mechanism_rows:
@@ -207,6 +225,8 @@ def build_report() -> dict[str, Any]:
         violations.append("paper lacks explicit design/evaluation contract paragraph")
     if not architecture_component_map_present:
         violations.append("architecture overview does not name components before mechanism subsections")
+    if not previous_source_style_present:
+        violations.append("design section does not preserve previous-paper source structure")
     pages = run_pdfinfo_pages(PAPER / "main.pdf")
     if pages is None or pages > 13:
         violations.append("Paper/main.pdf exceeds 13 pages")
@@ -223,6 +243,7 @@ def build_report() -> dict[str, Any]:
         "figure_table_obligations": figure_table_rows,
         "mapping_text_present": mapping_text_present,
         "architecture_component_map_present": architecture_component_map_present,
+        "previous_source_style_present": previous_source_style_present,
         "duplicate_closures": duplicate_closures,
         "pages": run_pdfinfo_pages(PAPER / "main.pdf"),
         "violations": violations,
@@ -238,6 +259,7 @@ def write_markdown(report: dict[str, Any], path: Path) -> None:
         f"- Paper pages: `{report['pages']}`",
         f"- Mapping text present: `{report['mapping_text_present']}`",
         f"- Architecture component map present: `{report['architecture_component_map_present']}`",
+        f"- Previous-paper source style present: `{report['previous_source_style_present']}`",
         "",
         "## Mechanism closures",
         "",

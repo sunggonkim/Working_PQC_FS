@@ -59,13 +59,6 @@
       "source": "Paper/8_Security_Analysis.tex"
     },
     {
-      "label": "tab:benchmark_workloads",
-      "label_present": true,
-      "obligation": "evaluation provenance",
-      "referenced": true,
-      "source": "Paper/4_Evaluation.tex"
-    },
-    {
       "label": "fig:evaluation_summary",
       "label_present": true,
       "obligation": "evaluation spine",
@@ -73,11 +66,11 @@
       "source": "Paper/4_Evaluation.tex"
     },
     {
-      "label": "tab:qos_sqlite_recovery",
+      "label": "fig:recovery_qos_detail",
       "label_present": true,
-      "obligation": "SQLite QoS hero result",
+      "obligation": "recovery/QoS detail result",
       "referenced": true,
-      "source": "Paper/generated_qos_recovery_table.tex"
+      "source": "Paper/4_Evaluation.tex"
     }
   ],
   "mapping_text_present": true,
@@ -258,6 +251,7 @@
   ],
   "overall_pass": true,
   "pages": 13,
+  "previous_source_style_present": true,
   "schema_version": 1,
   "scope": [
     "six required design mechanisms from SUBMISSION_CHECKLIST.md",

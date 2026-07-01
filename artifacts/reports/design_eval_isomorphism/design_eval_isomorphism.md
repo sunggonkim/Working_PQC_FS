@@ -4,6 +4,7 @@
 - Paper pages: `13`
 - Mapping text present: `True`
 - Architecture component map present: `True`
+- Previous-paper source style present: `True`
 
 ## Mechanism closures
 
@@ -28,6 +29,5 @@
 | `fig:djc_state_machine` | publication protocol state machine | `True` | `True` |
 | `tab:impl_boundaries` | implementation boundary summary | `True` | `True` |
 | `tab:threat_boundary` | security threat boundary | `True` | `True` |
-| `tab:benchmark_workloads` | evaluation provenance | `True` | `True` |
 | `fig:evaluation_summary` | evaluation spine | `True` | `True` |
-| `tab:qos_sqlite_recovery` | SQLite QoS hero result | `True` | `True` |
+| `fig:recovery_qos_detail` | recovery/QoS detail result | `True` | `True` |

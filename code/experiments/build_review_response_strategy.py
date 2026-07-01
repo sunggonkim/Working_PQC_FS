@@ -192,7 +192,12 @@ def surface_hygiene() -> dict[str, Any]:
 
 def previous_paper_signals() -> dict[str, Any]:
     pdfs = sorted(PREVIOUS.glob("*.pdf"))
+    source_roots = [
+        PREVIOUS / "src_icdcs26",
+        PREVIOUS / "src_sigmetrics26",
+    ]
     papers: list[dict[str, Any]] = []
+    source_rows: list[dict[str, Any]] = []
     aggregate = {
         "front_page_figure_or_table_count": 0,
         "sota_comparison_count": 0,
@@ -219,17 +224,52 @@ def previous_paper_signals() -> dict[str, Any]:
             "title_guess": title[:180],
             "signals": signals,
         })
+    for root in source_roots:
+        design = root / "3.Design.tex"
+        evaluation = root / "4.Evaluation.tex"
+        design_text = read(design)
+        eval_text = read(evaluation)
+        design_subsections = re.findall(r"\\subsection\{([^}]*)\}", design_text)
+        design_figures = re.findall(r"\\caption\{([^}]*)\}", design_text)
+        eval_subsections = re.findall(r"\\subsection\{([^}]*)\}", eval_text)
+        eval_figures = re.findall(r"\\caption\{([^}]*)\}", eval_text)
+        source_rows.append({
+            "root": rel(root),
+            "design": rel(design),
+            "evaluation": rel(evaluation),
+            "design_subsections": design_subsections,
+            "design_figure_count": design_text.count("\\begin{figure"),
+            "design_captions": design_figures[:8],
+            "evaluation_subsections": eval_subsections,
+            "evaluation_figure_count": eval_text.count("\\begin{figure"),
+            "evaluation_captions": eval_figures[:10],
+            "style_signals": {
+                "design_opens_with_overall_procedure_or_architecture": has_any(
+                    design_text,
+                    ("Overall Procedure", "Architecture and procedure", "Overall architecture", "Overview"),
+                ),
+                "mechanism_subsections_after_overview": len(design_subsections) >= 4,
+                "evaluation_setup_first": bool(eval_subsections and "Evaluation Setup" in eval_subsections[0]),
+                "evaluation_uses_performance_time_sensitivity": has_all(
+                    eval_text,
+                    ("Performance", "Time Analysis"),
+                ) and has_any(eval_text, ("Sensitivity", "Stability", "Scalability")),
+            },
+        })
     return {
-        "paper_count": len(pdfs),
-        "papers": papers,
-        "aggregate": aggregate,
-        "derived_style": [
-            "front-load the problem and first quantitative signal",
-            "make the SOTA comparison table visible early",
-            "state a concrete bottleneck before mechanisms",
-            "tie each mechanism to a measurable result",
-            "use limitations as scoped boundaries, not as the main story",
-        ],
+        **{
+            "paper_count": len(pdfs),
+            "papers": papers,
+            "aggregate": aggregate,
+            "derived_style": [
+                "front-load the problem and first quantitative signal",
+                "make the SOTA comparison table visible early",
+                "state a concrete bottleneck before mechanisms",
+                "tie each mechanism to a measurable result",
+                "use limitations as scoped boundaries, not as the main story",
+            ],
+        },
+        "source_style_basis": source_rows,
     }
 
 
@@ -283,7 +323,7 @@ def strategy_rows() -> list[StrategyRow]:
             "The latest review repeats that fscrypt is an important missing baseline even when Thor is environment-blocked.",
             "Run the frozen filesystem contract on a supported fscrypt environment, or remove OSDI-level baseline completeness language.",
             "The current closeout is claim removal: the paper marks fscrypt unavailable with kernel/filesystem proof and does not imply a measured fscrypt speedup row.",
-            ("fscrypt", "environment-blocked", "CONFIG\\_FS\\_ENCRYPTION", "root ext4 encrypt feature"),
+            ("fscrypt", "environment-blocked", "missing kernel/filesystem support", "not an implied speedup"),
             (
                 "artifacts/validation/frozen_fscrypt_supported_contract/frozen_fscrypt_supported_contract.json",
                 "artifacts/validation/kernel_baseline_feasibility/paper_fscrypt_verdict.json",
@@ -295,9 +335,9 @@ def strategy_rows() -> list[StrategyRow]:
             "P0",
             "strict-path practicality beyond X6",
             "The latest review says the strict FUSE path is still too slow and asks whether kernel or hybrid barrier schedules could reduce the penalty.",
-            "Prototype or model a production-facing kernel-assist, log-structured, or hybrid strict/epoch path that reduces D/J/C barrier cost without changing the claim boundary.",
+            "Close the current claim by reporting X6 and conditional epoch grouping as strict-path practicality evidence while keeping strict single-client publication as the cost boundary.",
             "Close with O3 evidence: X6 removes marker syncfs, and epoch/group publication is the implemented hybrid barrier path for concurrent or batched writes; strict single-client publication remains the cost boundary.",
-            ("kernel-assist", "hybrid", "D/J/C barrier", "strict path"),
+            ("X6", "O3", "strict-path", "epoch grouping"),
             (
                 "artifacts/validation/strict_path_practicality/strict_path_practicality.json",
             ),

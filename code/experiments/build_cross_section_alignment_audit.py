@@ -64,7 +64,7 @@ SECTION_REQUIREMENTS = {
         "not by claiming application scheduling",
     ],
     "evaluation": [
-        "Table~\\ref{tab:qos_sqlite_recovery}",
+        "Figure~\\ref{fig:evaluation_summary}(b)",
         "9.62",
         "8.15",
         "3.02",
@@ -213,7 +213,7 @@ def build_report() -> dict[str, Any]:
         "abstract": find_first_line("Paper/main.tex", ["SQLite p99", "9.62", "8.15", "3.02"]),
         "introduction": find_first_line("Paper/1_Introduction.tex", ["Figure~\\ref{fig:first_page_qos}", "9.62", "8.15", "3.02"]),
         "design": find_first_line("Paper/3_Design.tex", ["SQLite", "9.62", "8.15", "3.02"]),
-        "evaluation": find_first_line("Paper/4_Evaluation.tex", ["Table~\\ref{tab:qos_sqlite_recovery}", "9.62", "8.15", "3.02"]),
+        "evaluation": find_first_line("Paper/4_Evaluation.tex", ["Figure~\\ref{fig:evaluation_summary}(b)", "9.62", "8.15", "3.02"]),
         "conclusion": find_first_line("Paper/6_Conclusion.tex", ["SQLite", "8.15", "ML-KEM"]),
     }
 

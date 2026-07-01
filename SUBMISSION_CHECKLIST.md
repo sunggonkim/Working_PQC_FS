@@ -51,16 +51,22 @@ Previous-paper design pattern to preserve:
 
 1. Motivation pressure first: show why static CPU-only, GPU-everything, and
    storage-agnostic acceleration fail on Jetson-class UMA edge workloads.
-2. Overall architecture/procedure figure at the beginning of Design, before
-   mechanism details.  This is mandatory: a reviewer should see the mounted
-   path, GPU lane, QoS lane, and recovery boundary before any algorithm.
+2. Design must open like `src_icdcs26/3.Design.tex` and
+   `src_sigmetrics26/3.Design.tex`: a short `Overview of ... Design` paragraph
+   names the key mechanisms, points to their subsection labels, and then shows
+   the overall architecture/procedure figure before mechanism details.
 3. Name each figure component in a component-contract table: component name,
    owned boundary, why it matters to the edge-runtime claim, and which
    evaluation row closes it.  The table is the design outline.
 4. Expand only the important named boxes into subsections.  Subsection titles
    must be component or algorithm names that a reader can find in the figure,
    not vague implementation buckets, flags, scripts, or review patches.
-5. Each design subsection must answer three questions: what boundary it owns,
+5. Inside each mechanism subsection, use the previous-paper style of bold
+   procedure blocks (`Logical State Partitioning`, `Per-Task Coordination`,
+   `Memory Hierarchy Provisioning`): for AEGIS-Q these blocks should name
+   concrete runtime transitions such as admission input, mounted throttle
+   action, remount oracle, and external replay anchor.
+6. Each design subsection must answer three questions: what boundary it owns,
    why it is necessary for the UMA edge thesis, and which evaluation row closes
    it.  A subsection that cannot point back to the architecture figure and
    forward to an evaluation row belongs in Implementation, Limitations, or the
@@ -111,8 +117,8 @@ Paper:
 
 - `Paper/main.pdf` is a 13-page architecture-first draft.
 - Section 3 starts with the overall architecture figure and `Overall procedure
-  and component contracts`, names the figure components in a
-  component-contract table, then
+  and component contracts`, opens with a previous-paper-style overview
+  paragraph, names the figure components in a component-contract table, then
   expands those names as mechanism subsections: foreground CPU data plane and
   D/J/C publisher, elastic admission controller and GPU lane, storage-visible
   QoS controller, and recovery oracle/external anchor.  The FUSE adapter is a

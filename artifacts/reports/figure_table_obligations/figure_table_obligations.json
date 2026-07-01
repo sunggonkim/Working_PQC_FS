@@ -14,12 +14,11 @@
     "fig:first_page_qos",
     "fig:overall_procedure",
     "fig:problem_boundary",
-    "tab:benchmark_workloads",
+    "fig:recovery_qos_detail",
     "tab:capability_matrix",
     "tab:component_contracts",
     "tab:design_goals",
     "tab:impl_boundaries",
-    "tab:qos_sqlite_recovery",
     "tab:threat_boundary"
   ],
   "figure_tables": [
@@ -39,10 +38,10 @@
       "obligation": "first-page SQLite pressure/hero result",
       "passes": true,
       "path": "Paper/1_Introduction.tex",
-      "reference_count": 3
+      "reference_count": 4
     },
     {
-      "caption": "Capability comparison that defines AEGIS-Q's design gap. ``Policy'' means storage-visible accelerator/QoS/replay policy, not implementation maturity.",
+      "caption": "Capability comparison that defines AEGIS-Q's design gap. ``Policy'' means storage-visible accelerator/QoS/replay policy, not implementation maturity; $\\triangle$ denotes partial or conditional evidence at that boundary.",
       "caption_terms": [
         "Capability",
         "design gap"
@@ -106,7 +105,7 @@
       "extra_labels": [],
       "kind": "design",
       "label": "fig:overall_procedure",
-      "line": 7,
+      "line": 10,
       "obligation": "architecture and plane-separation figure",
       "passes": true,
       "path": "Paper/3_Design.tex",
@@ -123,7 +122,7 @@
       "extra_labels": [],
       "kind": "design",
       "label": "tab:component_contracts",
-      "line": 21,
+      "line": 24,
       "obligation": "architecture-indexed component contract map",
       "passes": true,
       "path": "Paper/3_Design.tex",
@@ -140,7 +139,7 @@
       "extra_labels": [],
       "kind": "design",
       "label": "fig:djc_state_machine",
-      "line": 59,
+      "line": 60,
       "obligation": "D/J/C/xattr publication state machine",
       "passes": true,
       "path": "Paper/3_Design.tex",
@@ -157,7 +156,7 @@
       "extra_labels": [],
       "kind": "design",
       "label": "tab:design_goals",
-      "line": 135,
+      "line": 158,
       "obligation": "formal storage-protocol invariant table",
       "passes": true,
       "path": "Paper/3_Design.tex",
@@ -191,7 +190,7 @@
       "extra_labels": [],
       "kind": "RQ1/RQ4",
       "label": "tab:threat_boundary",
-      "line": 11,
+      "line": 13,
       "obligation": "threat-model and recovery boundary",
       "passes": true,
       "path": "Paper/8_Security_Analysis.tex",
@@ -210,46 +209,29 @@
       "extra_labels": [],
       "kind": "RQ2/RQ3/RQ5",
       "label": "fig:evaluation_summary",
-      "line": 22,
+      "line": 20,
       "obligation": "evaluation spine across cost, QoS, and key-plane placement",
       "passes": true,
       "path": "Paper/4_Evaluation.tex",
-      "reference_count": 2
+      "reference_count": 4
     },
     {
-      "caption": "Evaluation scope by research question.",
+      "caption": "Recovery/QoS boundary checks beyond the headline summary. Panel~(a) aggregates generation-fault, daemon-cutpoint, and TPM/replay-after-advance oracle verdicts; acceptable outcomes are latest committed, previous committed, or fail closed under the selected crash/replay model. Panel~(b) shows SQLite QoS sensitivity: most tuned variants remain below the 10~ms foreground p99 target, while queue depth~2 exposes the fragile boundary. White labels report background secure-writer progress in MB/s.",
       "caption_terms": [
-        "Evaluation",
-        "research question"
+        "Recovery",
+        "QoS",
+        "sensitivity"
       ],
       "caption_terms_present": true,
-      "environment": "table",
-      "extra_labels": [],
-      "kind": "RQ1-RQ5",
-      "label": "tab:benchmark_workloads",
-      "line": 34,
-      "obligation": "evaluation scope by research question",
-      "passes": true,
-      "path": "Paper/4_Evaluation.tex",
-      "reference_count": 1
-    },
-    {
-      "caption": "SQLite p99 under mounted secure-storage pressure. Hero rows are five-run medians; kernel rows are 3 retained runs each.",
-      "caption_terms": [
-        "SQLite",
-        "p99",
-        "medians"
-      ],
-      "caption_terms_present": true,
-      "environment": "table",
+      "environment": "figure*",
       "extra_labels": [],
       "kind": "RQ3",
-      "label": "tab:qos_sqlite_recovery",
-      "line": 1,
-      "obligation": "SQLite QoS recovery hero result",
+      "label": "fig:recovery_qos_detail",
+      "line": 42,
+      "obligation": "recovery oracle and QoS sensitivity detail",
       "passes": true,
-      "path": "Paper/generated_qos_recovery_table.tex",
-      "reference_count": 1
+      "path": "Paper/4_Evaluation.tex",
+      "reference_count": 3
     }
   ],
   "found_labels": [
@@ -259,12 +241,11 @@
     "fig:first_page_qos",
     "fig:overall_procedure",
     "fig:problem_boundary",
-    "tab:benchmark_workloads",
+    "fig:recovery_qos_detail",
     "tab:capability_matrix",
     "tab:component_contracts",
     "tab:design_goals",
     "tab:impl_boundaries",
-    "tab:qos_sqlite_recovery",
     "tab:threat_boundary"
   ],
   "overall_pass": true,

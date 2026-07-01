@@ -1,5 +1,5 @@
 {
-  "overall_pass": true,
+  "overall_pass": false,
   "pages": 13,
   "schema_version": 1,
   "scope": [
@@ -25,16 +25,16 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 124,
+        "line": 139,
         "path": "Paper/3_Design.tex",
         "present": true,
         "text": "The mounted interface exposes \\texttt{user.pqc\\_qos\\_class}: latency files are traced but never daemon-slept, elastic files are throttle-eligible, and SQLite sidecars inherit the base-file class. This is mounted-FUSE throttling, not an external application scheduler. Throttling can delay an elastic flush, but it cannot skip D/J/C publication, change generations, or make a GPU record visible earlier. Thus Figure~\\ref{fig:first_page_qos} is a storage-visible placement result: AEGIS-Q spends background progress to reduce foreground storage-tail pressure while keeping authenticated publication unchanged."
       },
       "evaluation": {
-        "line": 94,
+        "line": 61,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together. Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls. AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s. This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress. Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 with six misses, and \\texttt{IOWeight} reports 12.57~ms p99 with seven misses. This is bounded storage-visible control, not a uniqueness or non-storage QoS claim."
+        "text": "The tegrastats/CUPTI runs show platform pressure reaching the mounted daemon (8 and 5 daemon-throttled flushes), but this remains wiring evidence. The app-level result uses SQLite transaction latency because it exercises mounted file encryption, foreground tail latency, and elastic background pressure together. Figure~\\ref{fig:evaluation_summary}(b) reports five-run hero medians and three-run kernel QoS controls: AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s. Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 and \\texttt{IOWeight} reports 12.57~ms. This is bounded storage-visible control, not a uniqueness or non-storage QoS claim; the sensitivity bundle includes hysteresis records."
       },
       "first_page_pdf_needles": [
         "SQLite p99",
@@ -78,16 +78,16 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 84,
+        "line": 97,
         "path": "Paper/3_Design.tex",
         "present": true,
         "text": "The placement algorithm is a fast predicate rather than a general scheduler. Each job first becomes foreground-sensitive data-plane work, elastic key-plane work, or unsupported optimistic offload. For a job \\(j\\), AEGIS-Q chooses the GPU only when"
       },
       "evaluation": {
-        "line": 66,
+        "line": 37,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes their HMAC-protected envelopes. In the five-run methodology row, CPU-only refresh takes 24.575~ms (41.7~K files/s); with explicit slack, admission selects the GPU and finishes in 20.729~ms (49.4~K files/s), a 1.186$\\times$ median speedup; with zero slack and high memory-pressure telemetry, fallback remains CPU-equivalent at 24.572~ms. The same controller treats missing or stale slack as CPU fallback rather than extrapolating from old telemetry; the sensitivity bundle in Section~\\ref{sec:eval_qos} varies sampling, thresholds, queue depth, budget, and background intensity to expose the tuning envelope. The X11 break-even model explains the bounded workflow gain: primitive cuPQC is faster by batch~16, but mounted envelope/FUSE/admission overhead shifts the positive workflow break-even to roughly 760--812 refreshed files, and an added 5~ms of UMA or staging pressure shifts it to roughly 1.09--1.10K files. The result is therefore a maintenance-lane placement boundary, not a claim that PQC acceleration makes ordinary file writes faster, provides hardware-backed credential release, creates a persistent KEM hierarchy, or recovers non-storage foreground latency."
+        "text": "The mounted ML-KEM-768 key-plane workflow opens 1,024 encrypted files and refreshes HMAC-protected envelopes through open-file envelope refresh. CPU-only refresh takes 24.575~ms (41.7~K files/s); with explicit slack, admission selects the GPU and finishes in 20.729~ms (49.4~K files/s), a 1.186$\\times$ median speedup; with zero slack and high memory pressure, fallback remains CPU-equivalent at 24.572~ms. The X11 break-even model explains the bounded gain: primitive cuPQC is faster by batch~16, but mounted envelope/FUSE/admission overhead moves positive workflow break-even to roughly 760--812 refreshed files. Thus AEGIS-Q keeps AES-GCM data writes on CPU and admits GPU only for elastic ML-KEM maintenance with producer slack and fresh telemetry."
       },
       "first_page_pdf_needles": [
         "optional batched",
@@ -151,10 +151,10 @@
         "text": "Secure-storage systems choose a protection boundary as well as a cipher. Kernel filesystem encryption, user-space encrypted filesystems, block encryption, and TEEs occupy different boundaries and trust assumptions~\\cite{fscrypt, gocryptfs, dmcrypt, optee}. Those systems make encryption deployable at mature kernel, user, block, or hardware boundaries; AEGIS-Q asks a different runtime question at the mounted edge boundary. It protects files represented by its own backing format and depends on the kernel, FUSE daemon, OpenSSL/liboqs, and the mount credential. It is therefore evaluated as a placement/QoS/recovery runtime artifact, not as a replacement for fscrypt or dm-crypt."
       },
       "evaluation": {
-        "line": 30,
+        "line": 28,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "Figure~\\ref{fig:evaluation_summary} is the evaluation spine: AEGIS-Q keeps AES-GCM data on the CPU, uses the GPU only for a mounted maintenance workflow with explicit slack, and recovers bounded SQLite pressure while giving up background bandwidth. The strict frozen-contract row is a cost boundary, not the headline claim. Table~\\ref{tab:benchmark_workloads} states what each experiment can establish. The frozen filesystem contract fixes 4~KiB 70/30 random read/write, \\texttt{psync}, per-write \\texttt{fdatasync}, queue depth~1, one client, a 1~GiB file, fixed mounts/platform, and five repetitions. A same-profile attribution probe confirms that the strict path still pays data-sidecar, journal-sidecar, and marker/checkpoint durability boundaries per write-publication cycle. The matched dm-crypt row runs on the same warm-cache contract: median throughput 9.03~MiB/s and median p99/p99.9 latency 264/823~\\(\\mu\\)s; fscrypt remains environment-blocked because \\texttt{CONFIG\\_FS\\_ENCRYPTION} is unset and the root ext4 encrypt feature is unavailable."
+        "text": "Figure~\\ref{fig:evaluation_summary} is the spine: CPU-first data plane, slack-gated GPU key plane, and storage-visible QoS recovery with explicit throughput tradeoff. The frozen filesystem contract is a cost boundary under fixed 4~KiB 70/30 \\texttt{psync}/\\texttt{fdatasync}; the matched dm-crypt row uses the same warm-cache contract (9.03~MiB/s median; 264/823~\\(\\mu\\)s p99/p99.9), while fscrypt remains environment-blocked. X6/O3 reduce selected strict-path costs only when crash semantics and barrier sharing remain valid, so they are conditional admission rather than a universal fast path."
       },
       "first_page_pdf_needles": [
         "gocryptfs",
@@ -172,7 +172,7 @@
         "line": 8,
         "path": "Paper/10_Discussion_and_Limitations.tex",
         "present": true,
-        "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack. The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by proof and not reported as throughput. The matrix exposes authenticated-publication cost, not a full fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison."
+        "text": "Deployment scope is intentionally narrow. The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked, so the matched baseline claim is measured mode alignment rather than exhaustive kernel comparison. We evaluate read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, and bounded writer races, but AEGIS-Q is not a general POSIX filesystem and excludes shared \\texttt{mmap}/\\texttt{msync}, full POSIX edge cases, broad application concurrency, or full cross-SoC portability. The crash matrix covers selected daemon/app cut points and loopback lower-block faults, not physical power-loss or kernel-crash certification."
       },
       "passes": true,
       "theme": "incomplete baselines"
@@ -198,16 +198,16 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 124,
+        "line": 139,
         "path": "Paper/3_Design.tex",
         "present": true,
         "text": "The mounted interface exposes \\texttt{user.pqc\\_qos\\_class}: latency files are traced but never daemon-slept, elastic files are throttle-eligible, and SQLite sidecars inherit the base-file class. This is mounted-FUSE throttling, not an external application scheduler. Throttling can delay an elastic flush, but it cannot skip D/J/C publication, change generations, or make a GPU record visible earlier. Thus Figure~\\ref{fig:first_page_qos} is a storage-visible placement result: AEGIS-Q spends background progress to reduce foreground storage-tail pressure while keeping authenticated publication unchanged."
       },
       "evaluation": {
-        "line": 94,
+        "line": 61,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The app-level result uses SQLite transaction latency because it exercises the mounted file-encryption path, foreground tail latency, and elastic background pressure together. Table~\\ref{tab:qos_sqlite_recovery} reports five-run hero medians and three-run kernel QoS controls. AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s. This is a Pareto point rather than a free throughput improvement: the simple controller reaches 7.54~ms p99 but only 1.50~MB/s background progress. Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 with six misses, and \\texttt{IOWeight} reports 12.57~ms p99 with seven misses. This is bounded storage-visible control, not a uniqueness or non-storage QoS claim."
+        "text": "The tegrastats/CUPTI runs show platform pressure reaching the mounted daemon (8 and 5 daemon-throttled flushes), but this remains wiring evidence. The app-level result uses SQLite transaction latency because it exercises mounted file encryption, foreground tail latency, and elastic background pressure together. Figure~\\ref{fig:evaluation_summary}(b) reports five-run hero medians and three-run kernel QoS controls: AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background progress; unthrottled storage reports 9.62~ms and 6.98~MB/s. Kernel controls preserve background throughput but not the tail here: \\texttt{ionice} reports 16.22~ms p99 and \\texttt{IOWeight} reports 12.57~ms. This is bounded storage-visible control, not a uniqueness or non-storage QoS claim; the sensitivity bundle includes hysteresis records."
       },
       "first_page_pdf_needles": [
         "Figure 1",
@@ -222,10 +222,10 @@
         "text": "Figure~\\ref{fig:first_page_qos} is the paper's edge-runtime result. Unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling only elastic writes. The point is visible storage-layer policy with accelerator-independent format correctness, not peak filesystem throughput. The low frozen-contract throughput row is a known cost boundary, not a hidden general-purpose claim."
       },
       "limits": {
-        "line": 6,
+        "line": 11,
         "path": "Paper/10_Discussion_and_Limitations.tex",
         "present": true,
-        "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks. The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluation. TPM probes cover fail-closed replay-after-advance only, not persistent PCR-bound key release. The evaluated envelope is local: SQLite, elastic writes, append-log/cache-manifest remounts, authenticated FUSE, and Jetson/CUDA/TPM dependencies."
+        "text": "The evaluated envelope is local: authenticated FUSE storage with CPU AES-GCM publication, slack-gated PQC maintenance, executor-local managed memory, and kernel/FUSE-daemon trust. Figure~\\ref{fig:first_page_qos} and Figure~\\ref{fig:evaluation_summary}(b) reuse the same SQLite hero artifact; elastic background writes and append-log/cache-manifest remounts are the mounted behavior, not a separate deployment anecdote. Jetson/CUDA/TPM dependencies limit portability, TPM evidence is fail-closed replay-after-advance rather than persistent PCR-bound key release, and thermal logs remain observations rather than energy-efficiency claims. Future hardening is persistent rollback policy, wider QoS/workload comparison, and kernel-path acceleration only if authenticated publication and recovery oracles remain intact."
       },
       "passes": true,
       "theme": "wiring-only QoS"
@@ -250,16 +250,16 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 131,
+        "line": 151,
         "path": "Paper/3_Design.tex",
         "present": true,
         "text": "The external-anchor path is optional and narrower than full rollback protection. The file anchor is an authenticated on-disk record. Because an attacker able to restore the backing directory can restore that record as well, it is explicitly \\emph{not} rollback protection. The crash/replay harness treats this behavior as a negative control. The optional hardware backend refuses to mount when its TPM NV index was not provisioned by an administrator; it never creates persistent TPM state implicitly. In that backend, replay after the anchor advances fails closed. These are replay-after-advance checks, not a persistent freshness lifecycle. A stronger rollback-resistance claim requires a separately protected TPM policy, defined NV authorization, a recovery protocol, and power-loss results for that exact configuration."
       },
       "evaluation": {
-        "line": 81,
+        "line": 54,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The TPM runs record anchor latency, PCR reads, NV public attributes for index \\texttt{0x01500010}, and a transient PCR-policy probe. The hardware replay matrix labels stale disk/new TPM, new disk/stale TPM, missing index, changed PCRs, authorization failure, interrupted NV update, and normal replay-after-advance. This is replay-after-advance evidence, not a claim that the persistent filesystem anchor itself is PCR-sealed."
+        "text": "The broader crash/replay matrices in Figure~\\ref{fig:recovery_qos_detail}(a) are selected-boundary evidence, not complete app-level crash coverage. The daemon campaign kills the final binary at D/J/C, anchor, \\texttt{fsync}, remount, and authenticated-read cut points; the hardware replay matrix labels TPM replay-after-advance cases, and application rows cover SQLite and \\texttt{dbm.dumb} TPM replay. This is replay-after-advance evidence, not rollback certification. X1 adds three loopback ext4/device-mapper lower-block \\texttt{error} rows; after \\texttt{e2fsck}/remount, pre-commit rows recover the previous committed payload and the post-\\texttt{fsync} row recovers the latest committed payload. These rows interrupt block availability below the D/J/C contract; they are not a proof of device-cache flush ordering, physical power loss, kernel crash, arbitrary workloads, or multi-block raw-write behavior."
       },
       "first_page_pdf_needles": [
         "external-anchor",
@@ -273,12 +273,12 @@
         "text": "Unified-memory edge devices co-locate local databases, encrypted logs, cache-manifest updates, and encrypted state on shared DRAM/storage. A secure file-encryption runtime must place cryptographic work, not merely accelerate it: GPU work can steal bandwidth from foreground storage and durable publication. Its thesis is that secure edge storage should expose \\mbox{one durable authenticated format} with a CPU-first AES-GCM data plane and an elastic GPU/PQC maintenance lane. AEGIS-Q explores that boundary as a boundary-aware UMA FUSE runtime with optional batched PQC key-plane maintenance, executor-local managed-memory use, and fail-closed external-anchor replay-after-advance checks."
       },
       "limits": {
-        "line": 6,
+        "line": null,
         "path": "Paper/10_Discussion_and_Limitations.tex",
-        "present": true,
-        "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks. The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluation. TPM probes cover fail-closed replay-after-advance only, not persistent PCR-bound key release. The evaluated envelope is local: SQLite, elastic writes, append-log/cache-manifest remounts, authenticated FUSE, and Jetson/CUDA/TPM dependencies."
+        "present": false,
+        "text": null
       },
-      "passes": true,
+      "passes": false,
       "theme": "partial TPM replay"
     },
     {
@@ -296,16 +296,16 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 75,
+        "line": 88,
         "path": "Paper/3_Design.tex",
         "present": true,
-        "text": "Unsupported POSIX modes are part of the design boundary, not the research axis. The scope audit covers the ordinary read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard-link, symlink, and bounded writer subsets needed by the mounted workloads; it rejects or scopes out encrypted-file \\texttt{mmap}/\\texttt{msync}, open-subtree retargeting, arbitrary byte-range transactions, directory-entry crash durability, and full crash-time POSIX visibility."
+        "text": "Unsupported POSIX modes are boundary conditions, not the research axis. The scope audit covers ordinary read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard-link, symlink, and bounded writers for the mounted workloads; it scopes out encrypted-file \\texttt{mmap}/\\texttt{msync}, open-subtree retargeting, arbitrary byte-range transactions, directory-entry crash durability, and full crash-time POSIX visibility."
       },
       "evaluation": {
-        "line": 75,
+        "line": 52,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The POSIX-scope audit records a narrow mounted-workload interface: ordinary read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, symlinks, open-fd truncate/fallocate, user xattrs, and bounded writer races pass without mixed plaintext. Encrypted-file \\texttt{mmap}/\\texttt{msync}, open-subtree retargeting, arbitrary byte-range transactions, lower-filesystem xattr atomicity, and full crash-time POSIX visibility are rejected, scoped, or delegated."
+        "text": "The POSIX-scope audit records a narrow mounted-workload interface: ordinary read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, symlinks, open-fd truncate/fallocate, user xattrs, and bounded writer races pass without mixed plaintext. Encrypted-file \\texttt{mmap}/\\texttt{msync}, open-subtree retargeting, arbitrary byte-range transactions, lower-filesystem xattr atomicity, and full crash-time POSIX visibility are rejected, scoped, or delegated. Auxiliary storage/GPU diagnostics show same-buffer CPU/GPU checksum agreement and CUDA pointer diagnostics, but not UVM migration suppression or final FUSE data-path DMA."
       },
       "first_page_pdf_needles": [
         "FUSE runtime",
@@ -320,10 +320,10 @@
         "text": "AEGIS-Q & \\cmark & \\pmark & \\cmark & FUSE runtime with scoped evidence\\\\"
       },
       "limits": {
-        "line": 10,
+        "line": 8,
         "path": "Paper/10_Discussion_and_Limitations.tex",
         "present": true,
-        "text": "AEGIS-Q is not a general POSIX filesystem: read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, no-open hard links, symlinks, and bounded writer races are evaluated; shared \\texttt{mmap}, full link lifecycle, open-subtree retargeting, arbitrary byte-range transactions, and application-level concurrency are not deployment claims."
+        "text": "Deployment scope is intentionally narrow. The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked, so the matched baseline claim is measured mode alignment rather than exhaustive kernel comparison. We evaluate read/write/\\texttt{fsync}, scoped rename, directory \\texttt{fsync}, and bounded writer races, but AEGIS-Q is not a general POSIX filesystem and excludes shared \\texttt{mmap}/\\texttt{msync}, full POSIX edge cases, broad application concurrency, or full cross-SoC portability. The crash matrix covers selected daemon/app cut points and loopback lower-block faults, not physical power-loss or kernel-crash certification."
       },
       "passes": true,
       "theme": "narrow POSIX semantics"
@@ -348,20 +348,21 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 73,
+        "line": 86,
         "path": "Paper/3_Design.tex",
         "present": true,
         "text": "The envelope path is deliberately narrower than a full key-management system. New roots use OpenSSL scrypt in versioned \\texttt{.pqc\\_kdf} metadata (random 32-byte per-filesystem salt; \\(N=32768\\), \\(r=8\\), \\(p=1\\), 64~MiB max memory); roots lacking it use the legacy PBKDF2-HMAC-SHA256 compatibility path. The password-derived mount key is never hardware-released, and open-file rekey is an HMAC envelope refresh rather than a persistent credential-rotation protocol."
       },
       "evaluation": {
-        "line": 73,
+        "line": 50,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The GPU integrity test passes leaf, Merkle, and empty-tree parity cases against OpenSSL. The FUSE self-test covers journal/checkpoint/anchor units and a generation-replay regression. The retained generation fault matrix covers partial update, clean remount, torn tails, stale snapshots, journal loss, older-generation append, and duplicate-generation replay across strict and epoch modes; every row has an oracle verdict without silent-corruption or unexpected-liveness outcomes. X10 adds \\texttt{UINT64\\_MAX}/\\texttt{EFBIG} near-wrap refusal, publish-ticket reservation, and same-file/disjoint 4-thread/4-process mounted writer stress, but not arbitrary application-level concurrency. Clean remount byte-compares plaintext after \\texttt{fsync}, and envelope tamper returns \\texttt{EKEYREJECTED}."
+        "text": "Figure~\\ref{fig:recovery_qos_detail}(a) is the recovery boundary for the selected model. GPU integrity passes leaf, Merkle, and empty-tree parity against OpenSSL; the FUSE self-test covers journal/checkpoint/anchor units and generation replay; clean remount byte-compares plaintext after \\texttt{fsync}; and envelope tamper returns \\texttt{EKEYREJECTED}. The retained generation fault matrix covers partial update, remount, torn tails, stale snapshots, journal loss, older-generation append, and duplicate-generation replay without silent-corruption or unexpected-liveness outcomes. X10 adds near-wrap refusal, publish-ticket reservation, and same-file/disjoint bounded writer stress, but not arbitrary application-level concurrency."
       },
       "first_page_pdf_needles": [
-        "ML-KEM establishes shared secrets",
-        "AES-GCM remains"
+        "durable authenticated format",
+        "AES-GCM",
+        "ML-KEM"
       ],
       "first_page_pdf_present": true,
       "first_page_source": {
@@ -371,12 +372,12 @@
         "text": "Post-quantum key establishment is relevant to long-lived edge data, but it does not replace symmetric storage encryption. ML-KEM establishes shared secrets, whereas AES-GCM remains the appropriate mechanism for bulk data records~\\cite{mlkem}. SHA-256 can bind committed-prefix anchor material to persisted metadata~\\cite{sha256}. The systems challenge is therefore to compose ordinary storage invariants---a key hierarchy that survives remount, nonce/generation state that remains safe across crashes, ciphertext durability before metadata publication, and fail-closed recovery---with accelerator placement and shared-resource control. Table~\\ref{tab:capability_matrix} positions that gap against plaintext, gocryptfs, fscrypt, dm-crypt, fs-verity/dm-integrity, TPM/TEE-backed designs, and GPU-storage systems~\\cite{fscrypt, dmcrypt, gocryptfs, optee}; the missing cell is storage-visible policy at the edge encryption boundary."
       },
       "limits": {
-        "line": 6,
+        "line": null,
         "path": "Paper/10_Discussion_and_Limitations.tex",
-        "present": true,
-        "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks. The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluation. TPM probes cover fail-closed replay-after-advance only, not persistent PCR-bound key release. The evaluated envelope is local: SQLite, elastic writes, append-log/cache-manifest remounts, authenticated FUSE, and Jetson/CUDA/TPM dependencies."
+        "present": false,
+        "text": null
       },
-      "passes": true,
+      "passes": false,
       "theme": "password-derived credential boundary"
     },
     {
@@ -400,10 +401,10 @@
         "text": "AEGIS-Q is implemented in C/CUDA on FUSE3. The source tree splits the FUSE adapter, fd-context lifecycle, writeback/publication, epoch log, recovery, anchor, keyring/KDF, QoS, POSIX policy, and CUDA executors across \\texttt{code/}; \\texttt{pqc\\_fuse.c} is mount-facing. The build enables \\texttt{-Wall -Wextra -Werror} for C/C++ and builds CUDA targets only when cuPQC is present."
       },
       "evaluation": {
-        "line": 20,
+        "line": 18,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result. We use Thor as a representative Jetson-class accelerated UMA platform for the placement/QoS question, not as evidence of cross-SoC portability. Retained O4 tegrastats logs give same-run power/thermal observations: mean VIN is 29.1~W for SQLite QoS, 27.5~W for key-plane rekey, and 28.4/27.4~W for AEGIS-Q/dm-crypt frozen rows, with max \\texttt{tj}=49.0C. These are observations, not energy-efficiency claims."
+        "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, 1~TB NVMe, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result and is representative for placement/QoS, not cross-SoC evidence. Retained O4 tegrastats logs give same-run power/thermal observations, not energy-efficiency claims."
       },
       "first_page_pdf_needles": [
         "Jetson AGX",
@@ -417,10 +418,10 @@
         "text": "The core result is asymmetric placement under edge pressure. AES-GCM file records remain CPU-first; ML-KEM/cuPQC work uses the GPU only when it is independent, batched, and slack-tolerant; storage-visible QoS throttles elastic writes rather than weakening publication order. On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms. The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling. This is a scoped edge file-encryption runtime result, not deployed-filesystem or peak-throughput superiority."
       },
       "limits": {
-        "line": 6,
+        "line": 11,
         "path": "Paper/10_Discussion_and_Limitations.tex",
         "present": true,
-        "text": "The trust model is kernel/FUSE-daemon trust plus backing-format checks. The mount password remains the root credential; there is no hardware-backed credential release, audited rotation, privileged-attacker defense, or side-channel evaluation. TPM probes cover fail-closed replay-after-advance only, not persistent PCR-bound key release. The evaluated envelope is local: SQLite, elastic writes, append-log/cache-manifest remounts, authenticated FUSE, and Jetson/CUDA/TPM dependencies."
+        "text": "The evaluated envelope is local: authenticated FUSE storage with CPU AES-GCM publication, slack-gated PQC maintenance, executor-local managed memory, and kernel/FUSE-daemon trust. Figure~\\ref{fig:first_page_qos} and Figure~\\ref{fig:evaluation_summary}(b) reuse the same SQLite hero artifact; elastic background writes and append-log/cache-manifest remounts are the mounted behavior, not a separate deployment anecdote. Jetson/CUDA/TPM dependencies limit portability, TPM evidence is fail-closed replay-after-advance rather than persistent PCR-bound key release, and thermal logs remain observations rather than energy-efficiency claims. Future hardening is persistent rollback policy, wider QoS/workload comparison, and kernel-path acceleration only if authenticated publication and recovery oracles remain intact."
       },
       "passes": true,
       "theme": "single-platform evidence"
@@ -440,16 +441,16 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 53,
+        "line": 52,
         "path": "Paper/7_Implementation_Details.tex",
         "present": true,
         "text": "The admission logic is implemented as ordinary C state rather than a separate daemon that invents scheduling results. It records input queue depth, batch size, slack, telemetry age, and route decision. On the elastic path, cumulative route counters and telemetry samples are read through atomic snapshots, and trace emission first checks a cached trace-enabled gate before taking the trace lock. The mounted-FUSE throttle path reads a telemetry file and applies hysteresis before sleeping inside the write-flush path. The tegrastats and CUPTI harnesses differ only in how they populate that telemetry input. This shared path is the reason the evaluation can claim same-run telemetry-to-FUSE wiring; it is still a storage-runtime result rather than an external application scheduler."
       },
       "evaluation": {
-        "line": 20,
+        "line": 18,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, a 1~TB WD PC SN5000S NVMe device, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result. We use Thor as a representative Jetson-class accelerated UMA platform for the placement/QoS question, not as evidence of cross-SoC portability. Retained O4 tegrastats logs give same-run power/thermal observations: mean VIN is 29.1~W for SQLite QoS, 27.5~W for key-plane rekey, and 28.4/27.4~W for AEGIS-Q/dm-crypt frozen rows, with max \\texttt{tj}=49.0C. These are observations, not energy-efficiency claims."
+        "text": "The platform was an NVIDIA Jetson AGX Thor Developer Kit with 14 ARM CPU cores, 1~TB NVMe, Linux~6.8.12-tegra, CUDA~13.0.48, liboqs~0.15.0, FUSE3~3.14.0, and cuPQC; it is not an Orin Nano result and is representative for placement/QoS, not cross-SoC evidence. Retained O4 tegrastats logs give same-run power/thermal observations, not energy-efficiency claims."
       },
       "first_page_pdf_needles": [
         "Jetson AGX",
@@ -463,12 +464,12 @@
         "text": "The core result is asymmetric placement under edge pressure. AES-GCM file records remain CPU-first; ML-KEM/cuPQC work uses the GPU only when it is independent, batched, and slack-tolerant; storage-visible QoS throttles elastic writes rather than weakening publication order. On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms. The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling. This is a scoped edge file-encryption runtime result, not deployed-filesystem or peak-throughput superiority."
       },
       "limits": {
-        "line": 8,
+        "line": null,
         "path": "Paper/10_Discussion_and_Limitations.tex",
-        "present": true,
-        "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack. The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by proof and not reported as throughput. The matrix exposes authenticated-publication cost, not a full fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison."
+        "present": false,
+        "text": null
       },
-      "passes": true,
+      "passes": false,
       "theme": "energy/thermal missing"
     },
     {
@@ -493,16 +494,16 @@
       ],
       "artifacts_ok": true,
       "design": {
-        "line": 42,
+        "line": 93,
         "path": "Paper/3_Design.tex",
         "present": true,
-        "text": "This decomposition is deliberately asymmetric. Foreground components are synchronous and format-defining; maintenance components are elastic and format-preserving; recovery components are exposure gates. Placement is therefore subordinate to storage correctness. It may change where elastic maintenance work executes, but it cannot change the durable format, nonce rule, publication order, or replay oracle. Managed memory appears only inside the CUDA executor, so placement can change maintenance locality but not the storage format or recovery contract. The following subsections therefore expand the named boxes in Figure~\\ref{fig:overall_procedure}: Section~\\ref{sec:design_pipeline} defines the foreground CPU data plane and D/J/C publisher, Section~\\ref{sec:design_uma} defines the elastic admission controller and GPU lane, Section~\\ref{sec:design_qos} defines the storage-visible QoS controller, and Section~\\ref{sec:design_security} defines the recovery oracle and external anchor."
+        "text": "The elastic placement controller expands the orange path in Figure~\\ref{fig:overall_procedure}. AEGIS-Q keeps CPU/GPU placement dynamic, but only for work whose semantics permit delay and fallback. Placement is therefore subordinate to storage correctness. Foreground AES-GCM records are immediately classified as CPU work because Figure~\\ref{fig:dataplane_negative_control} shows that 4~KiB--1~MiB managed-buffer GPU AES-GCM loses to CPU on the mounted-write range. GPU use is therefore not removed; it is constrained to the GPU lane: independent, batched, slack-tolerant maintenance work where cuPQC can amortize launch and staging."
       },
       "evaluation": {
-        "line": 62,
+        "line": 33,
         "path": "Paper/4_Evaluation.tex",
         "present": true,
-        "text": "The diagnostic placement harness explains the key asymmetry behind Figure~\\ref{fig:evaluation_summary}(a) and Figure~\\ref{fig:dataplane_negative_control}. For a 16~MiB AES-256-GCM input, CPU/OpenSSL reaches 1.61~GB/s (observed 1.59--1.63~GB/s), whereas the managed-buffer GPU path reaches 0.172~GB/s (0.172--0.172~GB/s). The GPU result includes managed-buffer staging and stream synchronization. The retained 4~KiB--1~MiB data-plane negative-control rows amplify the same effect, with the current CUDA path 20.1--2057$\\times$ slower than CPU. This is why AEGIS-Q's data plane is CPU-first; a GPU label alone is not a performance result."
+        "text": "Figure~\\ref{fig:evaluation_summary}(a) and Figure~\\ref{fig:dataplane_negative_control} explain the key placement asymmetry. The diagnostic placement harness shows that, for a 16~MiB AES-256-GCM input, CPU/OpenSSL reaches 1.61~GB/s whereas the managed-buffer GPU path reaches 0.172~GB/s. The GPU result includes managed-buffer staging and stream synchronization. The retained 4~KiB--1~MiB data-plane negative-control rows amplify the same effect, with the current CUDA path 20.1--2057$\\times$ slower than CPU. This is why AEGIS-Q's data plane is CPU-first; a GPU label alone is not a performance result."
       },
       "first_page_pdf_needles": [
         "same mounted path"
@@ -515,14 +516,19 @@
         "text": "The core result is asymmetric placement under edge pressure. AES-GCM file records remain CPU-first; ML-KEM/cuPQC work uses the GPU only when it is independent, batched, and slack-tolerant; storage-visible QoS throttles elastic writes rather than weakening publication order. On a Jetson AGX Thor Developer Kit, unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99, zero median misses, and 3.02~MB/s background writes, while app-only is 7.25~ms. The same mounted path exercises remount/tamper checks, generation faults, rekey fallback, selected app-crash timing, and telemetry-to-FUSE throttling. This is a scoped edge file-encryption runtime result, not deployed-filesystem or peak-throughput superiority."
       },
       "limits": {
-        "line": 8,
+        "line": null,
         "path": "Paper/10_Discussion_and_Limitations.tex",
-        "present": true,
-        "text": "The primitive measurements cannot establish steady-state throughput, energy efficiency, or portability beyond one Jetson-class accelerated UMA stack. The frozen matrix covers plaintext, gocryptfs, dm-crypt, and AEGIS-Q; fscrypt is environment-blocked by proof and not reported as throughput. The matrix exposes authenticated-publication cost, not a full fscrypt, fs-verity, dm-integrity, OP-TEE, SPDK, or GPUDirect Storage comparison."
+        "present": false,
+        "text": null
       },
-      "passes": true,
+      "passes": false,
       "theme": "microbenchmark-only methodology"
     }
   ],
-  "violations": []
+  "violations": [
+    "partial TPM replay",
+    "password-derived credential boundary",
+    "energy/thermal missing",
+    "microbenchmark-only methodology"
+  ]
 }

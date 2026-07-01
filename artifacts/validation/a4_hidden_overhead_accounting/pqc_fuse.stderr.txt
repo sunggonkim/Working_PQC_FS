@@ -4,21 +4,21 @@
   │  CPU data plane; optional batch GPU helpers         │
   └─────────────────────────────────────────────────────┘
 
-[PQC-FUSE 2026-07-01 22:04:33.384] ════════════════════════════════════════════════════════════
-[PQC-FUSE 2026-07-01 22:04:33.384]   PQC-FUSE Session Started
-[PQC-FUSE 2026-07-01 22:04:33.384]   Storage dir : /tmp/aegisq_a4_overhead_mjeuxte8/storage
-[PQC-FUSE 2026-07-01 22:04:33.384]   Mount point : /tmp/aegisq_a4_overhead_mjeuxte8/mnt
-[PQC-FUSE 2026-07-01 22:04:33.384] ════════════════════════════════════════════════════════════
-[PQC-FUSE 2026-07-01 22:04:33.384] Elastic admission controller disabled for this mount
-[PQC-FUSE 2026-07-01 22:04:33.384] Elastic scheduler policy reload skipped for this mount
-[PQC-FUSE 2026-07-01 22:04:33.385] PQC key-plane rekey disabled for this mount
-[PQC-FUSE 2026-07-01 22:04:33.446] Master Key derived successfully (scrypt)
-[PQC-FUSE 2026-07-01 22:04:33.446] QoS monitor startup skipped for this mount
-[PQC-FUSE 2026-07-01 22:04:33.446] Freshness anchor worker started
-[PQC-FUSE 2026-07-01 22:04:33.446] Starting FUSE main loop...
+[PQC-FUSE 2026-07-02 07:10:38.996] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 07:10:38.996]   PQC-FUSE Session Started
+[PQC-FUSE 2026-07-02 07:10:38.996]   Storage dir : /tmp/aegisq_a4_overhead_40lmf4y5/storage
+[PQC-FUSE 2026-07-02 07:10:38.996]   Mount point : /tmp/aegisq_a4_overhead_40lmf4y5/mnt
+[PQC-FUSE 2026-07-02 07:10:38.996] ════════════════════════════════════════════════════════════
+[PQC-FUSE 2026-07-02 07:10:38.996] Elastic admission controller disabled for this mount
+[PQC-FUSE 2026-07-02 07:10:38.996] Elastic scheduler policy reload skipped for this mount
+[PQC-FUSE 2026-07-02 07:10:38.997] PQC key-plane rekey disabled for this mount
+[PQC-FUSE 2026-07-02 07:10:39.057] Master Key derived successfully (scrypt)
+[PQC-FUSE 2026-07-02 07:10:39.057] QoS monitor startup skipped for this mount
+[PQC-FUSE 2026-07-02 07:10:39.057] Freshness anchor worker started
+[PQC-FUSE 2026-07-02 07:10:39.057] Starting FUSE main loop...
 Ignoring invalid max threads value 4294967295 > max (100000).
-[PQC-FUSE 2026-07-01 22:04:33.601] Shutting down PQC-FUSE filesystem...
-[PQC-FUSE 2026-07-01 22:04:33.601] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
-[PQC-FUSE 2026-07-01 22:04:33.601] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0
-[PQC-FUSE 2026-07-01 22:04:33.601] Durability sync stats: fdatasync=3 failures=0 total_ns=2727195 fsync=2 failures=0 total_ns=379825 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=2 parent_dir=0 other=0
-[PQC-FUSE 2026-07-01 22:04:33.601] Durability mounted-operation sync stats: fdatasync=2 failures=0 total_ns=781417 fsync=1 failures=0 total_ns=130778 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=0 parent_dir=0 other=0
+[PQC-FUSE 2026-07-02 07:10:39.217] Shutting down PQC-FUSE filesystem...
+[PQC-FUSE 2026-07-02 07:10:39.217] Rekey queue stats: accepted=0 duplicate=0 invalid_fd=0 queue_full=0
+[PQC-FUSE 2026-07-02 07:10:39.217] Scheduler stats: submitted=0 cpu=0 gpu=0 bytes_cpu=0 bytes_gpu=0 migration_ns=0
+[PQC-FUSE 2026-07-02 07:10:39.217] Durability sync stats: fdatasync=3 failures=0 total_ns=2062759 fsync=2 failures=0 total_ns=823555 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=2 parent_dir=0 other=0
+[PQC-FUSE 2026-07-02 07:10:39.217] Durability mounted-operation sync stats: fdatasync=2 failures=0 total_ns=1121925 fsync=1 failures=0 total_ns=583157 syncfs=0 failures=0 total_ns=0 user_file=0 data_sidecar=1 journal_sidecar=1 epoch_log=0 anchor_file=0 marker_metadata=1 keyring_metadata=0 parent_dir=0 other=0

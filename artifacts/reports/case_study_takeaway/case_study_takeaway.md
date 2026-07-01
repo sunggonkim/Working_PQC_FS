@@ -7,7 +7,7 @@
 
 ## Takeaway
 
-The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies. The SQLite point is the same storage-pressure case summarized by Figure~\ref{fig:first_page_qos} and Table~\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote. The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory, with recovery exposure through an explicit oracle.
+The evaluated envelope is local: authenticated FUSE storage with CPU AES-GCM publication, slack-gated PQC maintenance, executor-local managed memory, and kernel/FUSE-daemon trust. Figure~\ref{fig:first_page_qos} and Figure~\ref{fig:evaluation_summary}(b) reuse the same SQLite hero artifact; elastic background writes and append-log/cache-manifest remounts are the mounted behavior, not a separate deployment anecdote. Jetson/CUDA/TPM dependencies limit portability, TPM evidence is fail-closed replay-after-advance rather than persistent PCR-bound key release, and thermal logs remain observations rather than energy-efficiency claims. Future hardening is persistent rollback policy, wider QoS/workload comparison, and kernel-path acceleration only if authenticated publication and recovery oracles remain intact.
 
 ## Required Terms
 
@@ -19,7 +19,7 @@ The evaluated envelope is local: SQLite, elastic background writes, append-log/c
 | `append-log/cache-manifest remounts` | `True` |
 | `authenticated FUSE` | `True` |
 | `Figure~\ref{fig:first_page_qos}` | `True` |
-| `Table~\ref{tab:qos_sqlite_recovery}` | `True` |
+| `Figure~\ref{fig:evaluation_summary}(b)` | `True` |
 | `not a separate deployment anecdote` | `True` |
 
 ## Boundary Terms
@@ -42,6 +42,6 @@ The evaluated envelope is local: SQLite, elastic background writes, append-log/c
 | `hero_contract_pass` | `True` |
 | `hero_artifact_present` | `True` |
 | `figure_label_present` | `True` |
-| `table_label_present` | `True` |
-| `evaluation_uses_same_table` | `True` |
+| `evaluation_summary_label_present` | `True` |
+| `evaluation_uses_same_figure` | `True` |
 | `paper_pages_le_13` | `True` |

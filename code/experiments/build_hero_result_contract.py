@@ -148,7 +148,7 @@ def build_report() -> dict[str, Any]:
     paper_locations = {
         "abstract": find_line(PAPER / "main.tex", ["unthrottled secure-storage pressure", "9.62", "8.15", "3.02"]),
         "introduction": find_line(PAPER / "1_Introduction.tex", ["Figure~\\ref{fig:first_page_qos}", "9.62", "8.15", "3.02"]),
-        "evaluation": find_line(PAPER / "4_Evaluation.tex", ["Table~\\ref{tab:qos_sqlite_recovery}", "9.62", "8.15", "3.02"]),
+        "evaluation": find_line(PAPER / "4_Evaluation.tex", ["Figure~\\ref{fig:evaluation_summary}(b)", "9.62", "8.15", "3.02"]),
         "scope_boundary": find_line(PAPER / "4_Evaluation.tex", ["bounded storage-visible control", "not a uniqueness or non-storage QoS claim"]),
     }
 

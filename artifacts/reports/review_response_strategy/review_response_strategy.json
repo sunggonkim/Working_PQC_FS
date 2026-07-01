@@ -33,7 +33,7 @@
       "related_work_applicability": true
     }
   },
-  "generated_utc": "2026-07-01T13:02:10Z",
+  "generated_utc": "2026-07-01T22:24:14Z",
   "paper_strategy": [
     "Lead with the runtime-boundary thesis, not the artifact ledger.",
     "Use previous-paper pattern: early figure/table, concrete SOTA gap, named mechanism, quantitative outcome.",
@@ -131,11 +131,113 @@
         },
         "title_guess": "1"
       }
+    ],
+    "source_style_basis": [
+      {
+        "design": "Paper/Previous paper/src_icdcs26/3.Design.tex",
+        "design_captions": [
+          "Architecture and procedure of \\AURORA.",
+          "Asynchronous execution pipeline of \\AURORA.",
+          "Two-level cache management of \\AURORA.",
+          "Memory Hierarchy Provisioning.",
+          "Context-aware Runtime Control."
+        ],
+        "design_figure_count": 3,
+        "design_subsections": [
+          "Tiered Memory State Layout",
+          "Asynchronous Execution Pipeline",
+          "Two-level Cache Management",
+          "Two-level Cache Hierarchy",
+          "Adaptive Resource Control",
+          "\\AURORA Implementation"
+        ],
+        "evaluation": "Paper/Previous paper/src_icdcs26/4.Evaluation.tex",
+        "evaluation_captions": [
+          "Memory requirement and minimal node count for \\AURORA (38--42 qubits).",
+          "Our benchmark circuits and their size (\\# of gates).",
+          "1 Nodes (4 GPUs).",
+          "2 Nodes (8 GPUs).",
+          "4 Nodes (16 GPUs).",
+          "8 Nodes (32 GPUs).",
+          "Performance comparison between \\AURORA, \\textit{ScaleQsim",
+          "qv.",
+          "vqc.",
+          "qsvm."
+        ],
+        "evaluation_figure_count": 9,
+        "evaluation_subsections": [
+          "Evaluation Setup",
+          "Performance with SOTA",
+          "Scalability with SOTA",
+          "Time Analysis",
+          "Sensitivity Analysis"
+        ],
+        "root": "Paper/Previous paper/src_icdcs26",
+        "style_signals": {
+          "design_opens_with_overall_procedure_or_architecture": true,
+          "evaluation_setup_first": true,
+          "evaluation_uses_performance_time_sensitivity": true,
+          "mechanism_subsections_after_overview": true
+        }
+      },
+      {
+        "design": "Paper/Previous paper/src_sigmetrics26/3.Design.tex",
+        "design_captions": [
+          "Overall procedure of \\ScaleQsim.",
+          "The structure of the partitioned full state vector across multiple nodes and GPUs.",
+          "The procedure of \\texttt{Target Index",
+          "The procedure for translating a \\texttt{Target Index",
+          "Adaptive kernel parameter adjustment."
+        ],
+        "design_figure_count": 4,
+        "design_subsections": [
+          "Overall Procedure",
+          "Two-phase State Space Partitioning",
+          "Task-based Qubit State Management",
+          "Two-phase Mapping and Kernel Execution",
+          "Adaptive Kernel Parameter Adjustment",
+          "\\ScaleQsim Implementation"
+        ],
+        "evaluation": "Paper/Previous paper/src_sigmetrics26/4.Evaluation.tex",
+        "evaluation_captions": [
+          "\\changjong{Our benchmark circuits and their size (number of gates).",
+          "Scale-in: Multi-GPU support enables simulation of a higher number of qubits (log-scale).",
+          "qft.",
+          "vqc.",
+          "qsvm.",
+          "ghz.",
+          "Weak scalability of \\ScaleQsim and SOTA across diverse circuits and GPU scales (log-scale).",
+          "16 GPUs.",
+          "32 GPUs.",
+          "64 GPUs."
+        ],
+        "evaluation_figure_count": 7,
+        "evaluation_subsections": [
+          "Evaluation Setup",
+          "Performance in Single-Node with SOTA",
+          "Multi-Node Scalability",
+          "Performance and Scalability in Diverse Circuit Comparison with SOTA (\\textit{cusvaer",
+          "Extreme Scale-out: Multiple-Nodes",
+          "Time Analysis",
+          "Fidelity Analysis",
+          "Performance Variability and Stability"
+        ],
+        "root": "Paper/Previous paper/src_sigmetrics26",
+        "style_signals": {
+          "design_opens_with_overall_procedure_or_architecture": true,
+          "evaluation_setup_first": true,
+          "evaluation_uses_performance_time_sensitivity": true,
+          "mechanism_subsections_after_overview": true
+        }
+      }
     ]
   },
   "priority_summary": {
-    "p0_complete": true,
-    "p0_next": [],
+    "p0_complete": false,
+    "p0_next": [
+      "O2",
+      "O3"
+    ],
     "p1_complete": true,
     "p1_next": [],
     "p2_complete": true,
@@ -217,9 +319,9 @@
       "title": "closed-loop foreground impact or claim removal"
     },
     {
-      "claim_boundary_closed": true,
+      "claim_boundary_closed": false,
       "claim_removed": null,
-      "complete_now": true,
+      "complete_now": false,
       "completion_kind": "platform_dependent_or_claim_removed",
       "evidence": {
         "artifacts/validation/frozen_fscrypt_supported_contract/frozen_fscrypt_supported_contract.json": [],
@@ -230,11 +332,11 @@
       "evidence_present_count": 1,
       "id": "O2",
       "new_work_required": false,
-      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "next_action": "Keep fscrypt as unavailable with kernel/filesystem proof, or run the frozen contract later on a supported host before adding any measured fscrypt claim.",
       "paper_strategy": "The current closeout is claim removal: the paper marks fscrypt unavailable with kernel/filesystem proof and does not imply a measured fscrypt speedup row.",
       "primary_artifact_pass": false,
       "priority": "P0",
-      "required_terms_present": true,
+      "required_terms_present": false,
       "review_pressure": "The latest review repeats that fscrypt is an important missing baseline even when Thor is environment-blocked.",
       "target": "Run the frozen filesystem contract on a supported fscrypt environment, or remove OSDI-level baseline completeness language.",
       "title": "fscrypt on a supported kernel"
@@ -242,7 +344,7 @@
     {
       "claim_boundary_closed": null,
       "claim_removed": null,
-      "complete_now": true,
+      "complete_now": false,
       "completion_kind": "new_experiment_required",
       "evidence": {
         "artifacts/validation/strict_path_practicality/strict_path_practicality.json": [
@@ -252,13 +354,13 @@
       "evidence_present_count": 1,
       "id": "O3",
       "new_work_required": true,
-      "next_action": "Keep guarded; no immediate implementation needed unless claims expand.",
+      "next_action": "Implement or model a production-facing strict-path cost reduction beyond X6, such as kernel-assist or hybrid barrier scheduling.",
       "paper_strategy": "Close with O3 evidence: X6 removes marker syncfs, and epoch/group publication is the implemented hybrid barrier path for concurrent or batched writes; strict single-client publication remains the cost boundary.",
       "primary_artifact_pass": true,
       "priority": "P0",
-      "required_terms_present": true,
+      "required_terms_present": false,
       "review_pressure": "The latest review says the strict FUSE path is still too slow and asks whether kernel or hybrid barrier schedules could reduce the penalty.",
-      "target": "Prototype or model a production-facing kernel-assist, log-structured, or hybrid strict/epoch path that reduces D/J/C barrier cost without changing the claim boundary.",
+      "target": "Close the current claim by reporting X6 and conditional epoch grouping as strict-path practicality evidence while keeping strict single-client publication as the cost boundary.",
       "title": "strict-path practicality beyond X6"
     },
     {
@@ -558,7 +660,7 @@
   },
   "verdict": {
     "answer_to_user": "Defensible for the scoped edge-runtime claim. O1 is closed by claim removal, O2 by fscrypt baseline-claim removal with kernel/filesystem proof, O3 by the hybrid strict/epoch barrier closeout, O4 by retained power/thermal observations, and X13 by preserving measured baselines while separating GPU-storage/PQC competitors as boundary comparisons. OSDI acceptance is still not guaranteed, but the repeated review no longer maps to an unsupported paper claim.",
-    "osdi_strengthening_complete": true,
+    "osdi_strengthening_complete": false,
     "submission_defense_ready": true
   }
 }

@@ -8,12 +8,12 @@
   },
   "checks": {
     "boundary_terms_present": true,
-    "evaluation_uses_same_table": true,
+    "evaluation_summary_label_present": true,
+    "evaluation_uses_same_figure": true,
     "figure_label_present": true,
     "hero_artifact_present": true,
     "hero_contract_pass": true,
     "paper_pages_le_13": true,
-    "table_label_present": true,
     "takeaway_subsection_present": true,
     "takeaway_terms_present": true
   },
@@ -35,15 +35,15 @@
     "case-study boundaries against unrelated deployment claims"
   ],
   "takeaway_terms": {
+    "Figure~\\ref{fig:evaluation_summary}(b)": true,
     "Figure~\\ref{fig:first_page_qos}": true,
     "SQLite": true,
-    "Table~\\ref{tab:qos_sqlite_recovery}": true,
     "append-log/cache-manifest remounts": true,
     "authenticated FUSE": true,
     "elastic background writes": true,
     "evaluated envelope is local": true,
     "not a separate deployment anecdote": true
   },
-  "takeaway_text": "The evaluated envelope is local: SQLite, elastic background writes, append-log/cache-manifest remounts, authenticated FUSE, kernel/FUSE-daemon trust, and Jetson/CUDA/TPM dependencies. The SQLite point is the same storage-pressure case summarized by Figure~\\ref{fig:first_page_qos} and Table~\\ref{tab:qos_sqlite_recovery}, not a separate deployment anecdote. The portable lesson is the policy split: CPU AES-GCM publication, slack-gated PQC maintenance, and executor-local managed memory, with recovery exposure through an explicit oracle.",
+  "takeaway_text": "The evaluated envelope is local: authenticated FUSE storage with CPU AES-GCM publication, slack-gated PQC maintenance, executor-local managed memory, and kernel/FUSE-daemon trust. Figure~\\ref{fig:first_page_qos} and Figure~\\ref{fig:evaluation_summary}(b) reuse the same SQLite hero artifact; elastic background writes and append-log/cache-manifest remounts are the mounted behavior, not a separate deployment anecdote. Jetson/CUDA/TPM dependencies limit portability, TPM evidence is fail-closed replay-after-advance rather than persistent PCR-bound key release, and thermal logs remain observations rather than energy-efficiency claims. Future hardening is persistent rollback policy, wider QoS/workload comparison, and kernel-path acceleration only if authenticated publication and recovery oracles remain intact.",
   "violations": []
 }
