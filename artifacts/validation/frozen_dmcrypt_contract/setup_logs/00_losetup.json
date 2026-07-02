@@ -9,7 +9,7 @@
       "losetup",
       "--find",
       "--show",
-      "/tmp/dmcrypt_frozen_root_khmoav28/dmcrypt.img"
+      "/tmp/dmcrypt_frozen_root_gd1izn3a/dmcrypt.img"
     ],
     "available": true,
     "password_supplied": true,

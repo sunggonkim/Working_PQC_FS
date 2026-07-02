@@ -5,13 +5,13 @@
     "-init",
     "-passfile",
     "${PASSFILE}",
-    "/tmp/gocryptfs_frozen_cipher_ycuvhpze"
+    "/tmp/gocryptfs_frozen_cipher_lpkmaxmr"
   ],
   "cwd": "/home/thor/skim/pqc_encrpyted_fs",
-  "end_realtime_ns": 1782544702680890636,
+  "end_realtime_ns": 1782949944678869421,
   "returncode": 0,
-  "start_realtime_ns": 1782544702534005362,
+  "start_realtime_ns": 1782949944531394194,
   "stderr": "artifacts/validation/frozen_gocryptfs_contract/mount_logs/gocryptfs_init.stderr.txt",
   "stdout": "artifacts/validation/frozen_gocryptfs_contract/mount_logs/gocryptfs_init.stdout.txt",
-  "wall_seconds": 0.146885274
+  "wall_seconds": 0.147475227
 }

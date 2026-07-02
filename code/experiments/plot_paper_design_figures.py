@@ -16,7 +16,12 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
 ROOT = Path(__file__).resolve().parents[2]
 FIG = ROOT / "Paper" / "Figures"
-QOS_CLOSEOUT = ROOT / "artifacts/validation/sqlite_hero_validity_closeout/sqlite_hero_validity_closeout.json"
+FROZEN_BASELINES = {
+    "Plaintext": ROOT / "artifacts/validation/frozen_plaintext_contract/frozen_plaintext_contract.json",
+    "gocryptfs": ROOT / "artifacts/validation/frozen_gocryptfs_contract/frozen_gocryptfs_contract.json",
+    "dm-crypt": ROOT / "artifacts/validation/frozen_dmcrypt_contract/frozen_dmcrypt_contract.json",
+    "AEGIS-Q": ROOT / "artifacts/validation/frozen_aegisq_contract/frozen_aegisq_contract.json",
+}
 
 BLUE = "#3b6fb6"
 TEAL = "#197278"
@@ -73,39 +78,38 @@ def arrow(ax, start, end, *, color=GRAY, dashed=False, lw=1.2, rad=0.0):
 
 
 def first_page_qos() -> None:
-    payload = json.loads(QOS_CLOSEOUT.read_text(encoding="utf-8"))
-    summaries = payload["repeated_methodology_summary"]["mode_summaries"]
-    modes = [
-        ("App", "app_only", GRAY),
-        ("Pressure", "unthrottled_storage", RED),
-        ("Simple", "simple_controller", "#8a8f98"),
-        ("AEGIS-Q", "aegis_policy", TEAL),
-    ]
-    labels = [m[0] for m in modes]
-    p99 = [summaries[m[1]]["p99_ms"]["median"] for m in modes]
-    lo = [summaries[m[1]]["p99_ms"]["ci95_low"] for m in modes]
-    hi = [summaries[m[1]]["p99_ms"]["ci95_high"] for m in modes]
-    bg = [summaries[m[1]]["storage_mb_s"]["median"] for m in modes]
-    misses = [summaries[m[1]]["deadline_misses"]["median"] for m in modes]
-    colors = [m[2] for m in modes]
+    colors = [GRAY, BLUE, ORANGE, TEAL]
+    labels = list(FROZEN_BASELINES.keys())
+    throughput = []
+    lo = []
+    hi = []
+    p99_ms = []
+    for label in labels:
+        payload = json.loads(FROZEN_BASELINES[label].read_text(encoding="utf-8"))
+        metrics = payload["warm_cache_summary"]["metrics"]
+        thr = metrics["throughput_mib_s"]
+        p99 = metrics["latency_p99_us"]
+        throughput.append(float(thr["median"]))
+        lo.append(float(thr["ci95_low"]))
+        hi.append(float(thr["ci95_high"]))
+        p99_ms.append(float(p99["median"]) / 1000.0)
 
     plt.rcParams.update({"font.size": 7.3, "pdf.fonttype": 42, "ps.fonttype": 42})
-    fig, ax = plt.subplots(figsize=(3.15, 1.6))
+    fig, ax = plt.subplots(figsize=(3.15, 1.65))
     x = range(len(labels))
-    yerr = [[v - l for v, l in zip(p99, lo)], [h - v for v, h in zip(p99, hi)]]
-    bars = ax.bar(x, p99, width=0.66, color=colors, yerr=yerr, capsize=2.4)
-    ax.axhline(10.0, color=INK, linewidth=0.8, linestyle="--")
-    ax.text(3.15, 10.25, "10 ms SLO", fontsize=6.2, ha="right")
-    ax.set_ylabel("SQLite p99 (ms)")
+    yerr = [[v - l for v, l in zip(throughput, lo)], [h - v for v, h in zip(throughput, hi)]]
+    bars = ax.bar(x, throughput, width=0.66, color=colors, yerr=yerr, capsize=2.2)
+    ax.set_ylabel("Write throughput (MiB/s)")
     ax.set_xticks(list(x), labels)
-    ax.set_ylim(0, max(hi) + 1.4)
+    ax.set_yscale("log")
+    ax.set_ylim(min(throughput) * 0.65, max(throughput) * 1.7)
     style_axes(ax)
-    for bar, value, miss, mb_s in zip(bars, p99, misses, bg):
-        ax.text(bar.get_x() + bar.get_width() / 2, value + 0.25, f"{value:.1f}",
+    for bar, value, tail in zip(bars, throughput, p99_ms):
+        ax.text(bar.get_x() + bar.get_width() / 2, value * 1.08, f"{value:.2f}",
                 ha="center", va="bottom", fontsize=6.5)
-        ax.text(bar.get_x() + bar.get_width() / 2, 0.38,
-                f"{miss:.0f} miss\n{mb_s:.1f} MB/s", ha="center", va="bottom",
-                fontsize=5.7, color="white")
+        ax.text(bar.get_x() + bar.get_width() / 2, max(min(throughput) * 0.75, value * 0.2),
+                f"p99 {tail:.2f} ms", ha="center", va="bottom", fontsize=5.6, color="white")
+    ax.set_title("Frozen write baseline comparison (warm cache)", fontsize=6.5)
     fig.tight_layout(pad=0.25)
     save(fig, "fig_first_page_qos")
 

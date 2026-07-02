@@ -17,17 +17,17 @@
     "--time_based",
     "--runtime=60",
     "--ramp_time=10",
-    "--directory=/tmp/dmcrypt_frozen_root_khmoav28/mnt/contract",
+    "--directory=/tmp/dmcrypt_frozen_root_gd1izn3a/mnt/contract",
     "--output-format=json"
   ],
   "cwd": "/home/thor/skim/pqc_encrpyted_fs",
-  "end_realtime_ns": 1782798442024423561,
+  "end_realtime_ns": 1782950748753551043,
   "label": "warm_rep_03",
   "returncode": 0,
-  "start_realtime_ns": 1782798371754065852,
+  "start_realtime_ns": 1782950678479269198,
   "stderr": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.stderr.txt",
   "stdout_json": "artifacts/validation/frozen_dmcrypt_contract/fio_raw/warm_rep_03.json",
   "timed_out": false,
   "timeout_s": null,
-  "wall_seconds": 70.270357709
+  "wall_seconds": 70.274281845
 }

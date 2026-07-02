@@ -8,7 +8,7 @@
       "",
       "mkfs.ext4",
       "-q",
-      "/dev/mapper/aegisq_dmcrypt_4157957"
+      "/dev/mapper/aegisq_dmcrypt_417336"
     ],
     "available": true,
     "password_supplied": true,

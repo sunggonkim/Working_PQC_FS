@@ -1,24 +1,28 @@
 {
-  "file_count": 4,
+  "file_count": 5,
   "files": [
     {
       "bytes": 88,
       "path": ".anchor"
     },
     {
+      "bytes": 112,
+      "path": ".pqc_kdf"
+    },
+    {
       "bytes": 1073741824,
       "path": "contract/frozen_randrw_4k_fdatasync.0.0"
     },
     {
-      "bytes": 72699904,
+      "bytes": 187359232,
       "path": "contract/frozen_randrw_4k_fdatasync.0.0.pqcdata"
     },
     {
-      "bytes": 1703904,
+      "bytes": 8782464,
       "path": "contract/frozen_randrw_4k_fdatasync.0.0.pqcmeta"
     }
   ],
-  "storage_dir": "/tmp/aegisq_frozen_storage_ha0hyw4h",
-  "total_file_bytes": 1148145720,
+  "storage_dir": "/tmp/aegisq_frozen_storage_q7ctztns",
+  "total_file_bytes": 1269883720,
   "truncated_to_files": 200
 }

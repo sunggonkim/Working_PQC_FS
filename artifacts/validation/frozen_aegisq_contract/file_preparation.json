@@ -1,12 +1,12 @@
 {
-  "end_realtime_ns": 1782603875185270368,
+  "end_realtime_ns": 1782950753084417587,
   "error": null,
   "method": "posix_fallocate",
   "observed_size_bytes": 1073741824,
-  "path": "/tmp/aegisq_frozen_mnt_735aaca5/contract/frozen_randrw_4k_fdatasync.0.0",
+  "path": "/tmp/aegisq_frozen_mnt_d_mgb1k8/contract/frozen_randrw_4k_fdatasync.0.0",
   "requested_size_bytes": 1073741824,
   "returncode": 0,
-  "start_realtime_ns": 1782603875182999164,
+  "start_realtime_ns": 1782950753083969559,
   "valid": true,
-  "wall_seconds": 0.002271204
+  "wall_seconds": 0.000448028
 }

@@ -17,17 +17,17 @@
     "--time_based",
     "--runtime=60",
     "--ramp_time=10",
-    "--directory=/tmp/plaintext_frozen_root_6o5vb81o/contract",
+    "--directory=/tmp/plaintext_frozen_root_wvtr4zl0/contract",
     "--output-format=json"
   ],
   "cwd": "/home/thor/skim/pqc_encrpyted_fs",
-  "end_realtime_ns": 1782546178655521067,
+  "end_realtime_ns": 1782950027895225525,
   "label": "warm_rep_04",
   "returncode": 0,
-  "start_realtime_ns": 1782546108377343654,
+  "start_realtime_ns": 1782949957618871469,
   "stderr": "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_04.stderr.txt",
   "stdout_json": "artifacts/validation/frozen_plaintext_contract/fio_raw/warm_rep_04.json",
   "timed_out": false,
-  "timeout_s": 180.0,
-  "wall_seconds": 70.278177413
+  "timeout_s": null,
+  "wall_seconds": 70.276354056
 }

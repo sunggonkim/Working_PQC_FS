@@ -9,9 +9,9 @@
       "cryptsetup",
       "open",
       "--key-file",
-      "/tmp/dmcrypt_frozen_root_khmoav28/luks.key",
+      "/tmp/dmcrypt_frozen_root_gd1izn3a/luks.key",
       "/dev/loop9",
-      "aegisq_dmcrypt_4157957"
+      "aegisq_dmcrypt_417336"
     ],
     "available": true,
     "password_supplied": true,

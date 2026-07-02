@@ -6,8 +6,8 @@ Edge devices increasingly run local databases, encrypted logs, cache-manifest up
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.98\columnwidth]{Figures/fig_first_page_qos.pdf}
-  \caption{SQLite pressure result for RQ2; labels show deadline misses and background throughput.}
-  \Description{Bar chart of foreground SQLite p99 latency for app-only, unthrottled pressure, simple-controller, and AEGIS-Q policy modes.}
+  \caption{Frozen-contract write comparison for the baseline set (warm cache, 4~KiB randrw 70/30 with \texttt{fdatasync}).  Bars report median throughput with 95\% CI; labels report p99 latency.}
+  \Description{Log-scale bar chart comparing write throughput for plaintext, gocryptfs, dm-crypt, and AEGIS-Q under the same frozen mixed-write contract; each bar includes p99 latency annotation.}
   \label{fig:first_page_qos}
 \end{figure}
 
@@ -35,7 +35,7 @@ AEGIS-Q & \cmark & \pmark & \cmark & FUSE runtime with scoped evidence\\
 
 Post-quantum key establishment is relevant to long-lived edge data, but it does not replace symmetric storage encryption.  ML-KEM establishes shared secrets, whereas AES-GCM remains the appropriate mechanism for bulk data records~\cite{mlkem}.  SHA-256 can bind committed-prefix anchor material to persisted metadata~\cite{sha256}.  The systems challenge is therefore to compose ordinary storage invariants---a key hierarchy that survives remount, nonce/generation state that remains safe across crashes, ciphertext durability before metadata publication, and fail-closed recovery---with accelerator placement and shared-resource control.  Table~\ref{tab:capability_matrix} positions that gap against plaintext, gocryptfs, dm-crypt, fs-verity/dm-integrity, TPM/TEE-backed designs, and GPU-storage systems~\cite{dmcrypt, gocryptfs, optee}; the missing cell is storage-visible policy at the edge encryption boundary.
 
-Figure~\ref{fig:first_page_qos} is the paper's edge-runtime result.  Unthrottled secure-storage pressure reports 9.62~ms SQLite p99 and 6.98~MB/s background writes; AEGIS-Q reports 8.15~ms p99 and 3.02~MB/s by throttling only elastic writes.  This is a Pareto point rather than a free throughput improvement: visible storage-layer policy with accelerator-independent format correctness, not peak filesystem throughput.  The low frozen-contract throughput row is a known cost boundary, not a hidden general-purpose claim.
+Figure~\ref{fig:first_page_qos} is the first-page baseline anchor: under the same frozen write contract, plaintext reports 30.24~MiB/s median, gocryptfs 21.71~MiB/s, dm-crypt 9.95~MiB/s, and AEGIS-Q 0.079~MiB/s.  This is an explicit cost boundary, not a speedup claim.  The point is to make implementation and publication costs visible before discussing QoS and recovery benefits elsewhere in the paper.
 
 AEGIS-Q explores this gap as a UMA-aware secure file-encryption runtime.  It adds executor-local managed-memory use and an external-anchor path that can fail closed on replayed state.  The claim ties placement to format invariants, QoS policy, and recovery behavior rather than to a GPU microbenchmark or a general-purpose encrypted-filesystem replacement.
 
@@ -48,7 +48,7 @@ This paper makes four contributions.
 \item \textbf{C1: Placement-safe storage format.}  AEGIS-Q implements authenticated envelopes, generation-bound AEAD, durable mapping publication, and CPU/GPU rules that do not alter the persistent record format.
 \item \textbf{C2: CPU data lane, GPU/PQC maintenance lane.}  Measurements explain why AES-GCM writes stay on the CPU, while independent ML-KEM envelope-refresh batches can enter the GPU lane only with slack and telemetry permission.
 \item \textbf{C3: Recovery and replay boundary.}  AEGIS-Q separates replayable file witnesses from externally anchored replay-after-advance checks and labels clean-remount, tamper, stale-replay, selected app-crash, and non-claimed power-loss outcomes.
-\item \textbf{C4: Storage-visible QoS control.}  AEGIS-Q includes deterministic admission, platform telemetry to mounted-FUSE throttling, and the bounded mounted SQLite result in Figure~\ref{fig:first_page_qos}.
+\item \textbf{C4: Storage-visible QoS control.}  AEGIS-Q includes deterministic admission, platform telemetry to mounted-FUSE throttling, and bounded mounted SQLite-tail recovery under secure-storage pressure.
 \end{enumerate}
 
 The claim boundary excludes \texttt{O\_DIRECT} NVMe-to-UVM DMA, \texttt{io\_uring}/eBPF completion bypass, GPU constant-time execution, persistent PCR-bound freshness, physical power-loss certification, and portability outside Jetson-style accelerated UMA edge storage.
